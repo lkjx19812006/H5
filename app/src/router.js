@@ -2,6 +2,7 @@ import login from './views/login'
 import hello from './components/Hello'
 import main from './views/main'
 import menu from './components/menu'
+import home from './views/home'
 
 module.exports = {
   mode: 'hash',
@@ -16,6 +17,7 @@ module.exports = {
           { name: 'menu', path: '/menu', component: menu }
       ]
     },
-    { path: '*', redirect: '/login' }
+    { name: 'home', path: '/home', component: home },
+    { path: '*', redirect: '/home' }
   ]
 }

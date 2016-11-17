@@ -37,6 +37,7 @@ router.beforeEach((to, from, next) => {
   } else {
     if (!getCookie('no')) {
       console.log('login')
+      next()
     } else {
       next()
     }
