@@ -3,7 +3,10 @@ import App from './App'
 import VueRouter from 'vue-router'
 import configRouter from './router'
 import VueResource from 'vue-resource'
+import Mint from 'mint-ui'
+import 'mint-ui/lib/style.css'
 
+Vue.use(Mint);
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
