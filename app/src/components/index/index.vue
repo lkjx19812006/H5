@@ -1,25 +1,39 @@
 <template>
     <div class="page-swipe">
         <mt-swipe :auto="4000">
-            <mt-swipe-item >
-            	<img src="/static/images/1.jpg">
+            <mt-swipe-item>
+                <img src="/static/images/1.jpg">
             </mt-swipe-item>
-            <mt-swipe-item >
-            	<img src="/static/images/2.jpg">
+            <mt-swipe-item>
+                <img src="/static/images/2.jpg">
             </mt-swipe-item>
-            <mt-swipe-item >
-            	<img src="/static/images/3.jpg">
+            <mt-swipe-item>
+                <img src="/static/images/3.jpg">
             </mt-swipe-item>
         </mt-swipe>
     </div>
 </template>
 <script>
+import common from '../../common/common.js'
 export default {
     data() {
-        return {
-            msg: 'Welcome to Your Vue.js App'
+            return {
+                msg: 'Welcome to Your Vue.js App'
+            }
+        },
+        created() {
+             common.$emit('show-load');
+
+            this.$http.get(common.apiUrl.list).then((response) => {
+                console.log(response.data);
+                  common.$emit('close-load');
+
+            }, (err) => {
+                console.log(err);
+                  common.$emit('close-load');
+                  common.$emit('message',response.data.msg);
+            });
         }
-    }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -36,8 +50,7 @@ export default {
     line-height: 200px;
 }
 
-img{
-	width: 100%;
+img {
+    width: 100%;
 }
-
 </style>

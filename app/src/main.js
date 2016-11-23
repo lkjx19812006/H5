@@ -5,12 +5,15 @@ import configRouter from './router'
 import VueResource from 'vue-resource'
 import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import './assets/css/style.css'
 
 Vue.use(Mint);
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
 Vue.config.debug = true
+
+document.getElementsByTagName("html")[0].style.fontSize=Math.floor(document.documentElement.clientWidth*100000/64)/100000+"px";
 
 const router = new VueRouter(
     configRouter // （缩写）相当于 routes: routes

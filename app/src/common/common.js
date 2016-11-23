@@ -3,7 +3,10 @@ import { Indicator, Toast, MessageBox } from 'mint-ui'
 
 let common = new Vue({
     data: {
-        show: true
+        show: true,
+        apiUrl:{
+            list:'/static/data/list.json'
+        }
     }
 })
 

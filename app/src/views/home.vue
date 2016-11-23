@@ -2,31 +2,31 @@
     <div class="page-tabbar">
         <div class="page-wrap">
             <mt-tab-container class="page-tabbar-container" v-model="selected">
-                <mt-tab-container-item id="外卖">
+                <mt-tab-container-item id="index">
                     <index></index>
                 </mt-tab-container-item>
-                <mt-tab-container-item id="订单">
+                <mt-tab-container-item id="resource">
                     <arrondi></arrondi>
                 </mt-tab-container-item>
-                <mt-tab-container-item id="发现">
+                <mt-tab-container-item id="purchase">
                     <find></find>
                 </mt-tab-container-item>
-                <mt-tab-container-item id="我的">
+                <mt-tab-container-item id="mine">
                     <mine></mine>
                 </mt-tab-container-item>
             </mt-tab-container>
         </div>
         <mt-tabbar v-model="selected" fixed>
-            <mt-tab-item id="外卖">
-                <img slot="icon" src="/static/images/100x100.png"> 外卖
+            <mt-tab-item id="index">
+                <img slot="icon" src="/static/images/100x100.png"> 首页
             </mt-tab-item>
-            <mt-tab-item id="订单">
-                <img slot="icon" src="/static/images/100x100.png"> 订单
+            <mt-tab-item id="resource">
+                <img slot="icon" src="/static/images/100x100.png"> 资源
             </mt-tab-item>
-            <mt-tab-item id="发现">
-                <img slot="icon" src="/static/images/100x100.png"> 发现
+            <mt-tab-item id="purchase">
+                <img slot="icon" src="/static/images/100x100.png"> 求购
             </mt-tab-item>
-            <mt-tab-item id="我的">
+            <mt-tab-item id="mine">
                 <img slot="icon" src="/static/images/100x100.png"> 我的
             </mt-tab-item>
         </mt-tabbar>
@@ -41,7 +41,7 @@ export default {
     data() {
             return {
                 msg: 'Welcome to Your Vue.js App',
-                selected: '外卖'
+                selected: 'index'
             }
         },
         components: {
