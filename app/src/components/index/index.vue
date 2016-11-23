@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
     <div class="whole">
         <div class="header">
               <select>
@@ -151,6 +152,20 @@
                </ul>
           </div>
 
+=======
+    <div class="page-swipe">
+        <mt-swipe :auto="4000">
+            <mt-swipe-item>
+                <img src="/static/images/1.jpg">
+            </mt-swipe-item>
+            <mt-swipe-item>
+                <img src="/static/images/2.jpg">
+            </mt-swipe-item>
+            <mt-swipe-item>
+                <img src="/static/images/3.jpg">
+            </mt-swipe-item>
+        </mt-swipe>
+>>>>>>> 5274ded178ac91cd5d5390b4dd8fe5a2df64d4b4
     </div>
      
 
@@ -162,6 +177,7 @@
    
 </template>
 <script>
+<<<<<<< HEAD
 
 export default {
     data() {
@@ -179,6 +195,28 @@ export default {
 
     
     
+=======
+import common from '../../common/common.js'
+export default {
+    data() {
+            return {
+                msg: 'Welcome to Your Vue.js App'
+            }
+        },
+        created() {
+             common.$emit('show-load');
+
+            this.$http.get(common.apiUrl.list).then((response) => {
+                console.log(response.data);
+                  common.$emit('close-load');
+
+            }, (err) => {
+                console.log(err);
+                  common.$emit('close-load');
+                  common.$emit('message',response.data.msg);
+            });
+        }
+>>>>>>> 5274ded178ac91cd5d5390b4dd8fe5a2df64d4b4
 }
 
 
@@ -414,8 +452,7 @@ ul li{
     line-height: 200px;
 }
 
-img{
-	width: 100%;
+img {
+    width: 100%;
 }
-
 </style>
