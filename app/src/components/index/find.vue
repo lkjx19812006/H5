@@ -1,10 +1,20 @@
 <template>
   <div class="hello">
-      Find
+
+     <mt-search v-model="value">
+	  <mt-cell
+	    v-for="item in result"
+	    :title="item.title"
+	    :value="item.value">
+	  </mt-cell>
+	</mt-search>
+  
+   
   </div>
 </template>
 
 <script>
+
 export default {
   data () {
     return {
@@ -16,4 +26,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+
 </style>
