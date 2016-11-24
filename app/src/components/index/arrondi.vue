@@ -1,6 +1,6 @@
 <template>
-<<<<<<< HEAD
-  <div class="hello" >
+
+ <!--  <div class="hello" >
      <mt-navbar v-model="active">
 	  <mt-tab-item id="tab-container1">选项一</mt-tab-item>
 	  <mt-tab-item id="tab-container2">选项二</mt-tab-item>
@@ -20,9 +20,9 @@
    </mt-tab-container>
 
    
-  </div>
+  </div> -->
 
-=======
+
     <div class="content">
         <h1 class="page-title">Pull down</h1>
         <p class="page-loadmore-desc">在列表顶端, 按住 - 下拉 - 释放可以获取更多数据</p>
@@ -47,19 +47,19 @@
             </mt-loadmore>
         </div>
     </div>
->>>>>>> 5274ded178ac91cd5d5390b4dd8fe5a2df64d4b4
+
 </template>
 <script>
 
 export default {
-<<<<<<< HEAD
-  data () {
+
+  /*data () {
     return {
       msg: 'Welcome to Your Vue.js App',
       active: 'tab-container1'
     }
-  }
-=======
+  }*/
+
     data() {
             return {
                 list: [],
@@ -112,15 +112,12 @@ export default {
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
->>>>>>> 5274ded178ac91cd5d5390b4dd8fe5a2df64d4b4
+
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-<<<<<<< HEAD
 
- 
-=======
 .content {
     padding-bottom: 100px;
 }
@@ -166,5 +163,5 @@ export default {
     transition: .2s linear;
     vertical-align: middle;
 }
->>>>>>> 5274ded178ac91cd5d5390b4dd8fe5a2df64d4b4
+
 </style>
