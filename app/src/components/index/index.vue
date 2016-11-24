@@ -1,5 +1,4 @@
 <template>
- 
       <div class="whole">
         <div class="header">
               <div class="select">
@@ -40,10 +39,12 @@
                 <img  src="/static/images/market.png">
                 <p>市场行情</p>
               </div>
-              <div class="tab4">
-               <img  src="/static/images/drugType.png">
-                <p>药性表</p>
-              </div>
+            
+                <div class="tab4" @click="drugClick()">
+                 <img  src="/static/images/drugType.png">
+                  <p>药性表</p>
+                </div>
+              
             </div>
        
            <div class="supply_demond">
@@ -74,6 +75,7 @@
            
         <div class="goodPrice">
            <p>药材指导价</p>
+           <p class="moreContent"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
            <mt-swipe :auto="4000" :showIndicators="false">
            
            <mt-swipe-item  v-for="todo in todos">
@@ -114,6 +116,7 @@
 
             <div class="recommend">
                  <p>推荐资源</p>
+                 <p class="moreContent"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
                  <ul>
                      <li v-for="todo in todos" style="background:url(/static/images/bao.png) no-repeat 0rem center;background-size: 3rem 3rem;" >
                         <p class="goodP" >{{todo.name}}</p>
@@ -129,6 +132,7 @@
    
           <div class="urgent">
                <p>紧急求购</p>
+               <p class="moreContent"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
                <ul>
                   <li v-for="todo in todos" style="background:url(/static/images/zheng.png) no-repeat 0rem center;background-size: 3rem 3rem;">
                         <p class="goodP">{{todo.name}}</p>
@@ -143,32 +147,31 @@
           </div>          
 
 
-   
-     
-
-    
-    
-   
-    
-
-   
 </template>
 <script>
 
-
-
-
-
+import common from '../../common/common.js'
 
 
 export default {
-    data() {
+      data() {
             return {
                 msg: 'Welcome to Your Vue.js App',
                 selected: 'tab-container1',
-                todos:{}
+                todos:{},
+                drugParam:{
+                  show:false
+                }
             }
+            
         },
+
+        methods:{
+
+
+
+        },
+
         created() {
 
              common.$emit('show-load');
@@ -369,6 +372,7 @@ ul li{
     height:28rem;
     box-sizing:border-box;
     margin-bottom: 1.7067rem;
+    position: relative;
 }
 .wayP input{
   height:4.0984rem;
@@ -384,45 +388,7 @@ ul li{
   margin-top:1.7067rem;
   margin-bottom: 1.7067rem;
 }
-/*
-.goodPrice ul{
-    display:flex;
-    flex-direction:row;
-    margin-top: 0.8533rem;
-    margin-left: 0.8533rem;
-}
 
-.goodPrice ul li{
-    flex:1;
-    background:#EDFAD8;
-    height:13.6528rem;
-    border-radius: 0.4267rem;
-    
-    padding: 0.8533rem;
-    box-sizing: border-box;
-
-}
-
-#leftLi{
-    margin-right: 1.7067rem;
-}
-.goodPrice ul li div{
-    display:flex;
-    flex-direction:row;
-}
-
-.goodPrice ul li>p{
-    margin-bottom: 0.4267rem;
-    font-size: 2.5599rem;
-    margin-bottom: 1.2799rem;
-}
-.goodPrice ul li div p{
-     flex:1;
-     font-size: 2.5599rem;
-     color:gray;
-     line-height: 3rem;
-}
-*/
 
 #goodPrice-swipeOne .mint-swipe {
     
@@ -496,6 +462,17 @@ ul li{
     min-height:10.2396rem;
     box-sizing:border-box;
     margin-bottom: 1.7067rem; 
+    position: relative;
+}
+
+.recommend .moreContent,.urgent .moreContent,.goodPrice .moreContent{
+  position: absolute;
+  right: 1.877rem;
+  top: 1.877rem;
+  font-size: 1.877rem;
+}
+.recommend .moreContent img,.urgent .moreContent img,.goodPrice .moreContent img{
+  width:0.8533rem;
 }
 .recommend p,.urgent p{
     margin-bottom: 0.8533rem;

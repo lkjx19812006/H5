@@ -4,6 +4,7 @@ import main from './views/main'
 import menu from './components/menu'
 import home from './views/home'
 
+
 module.exports = {
   mode: 'hash',
   base: __dirname,
