@@ -18,16 +18,20 @@
         </div>
         <mt-tabbar v-model="selected" fixed>
             <mt-tab-item id="index">
-                <img slot="icon" src="/static/images/100x100.png"> 首页
+                <img slot="icon" src="/static/icons/index_selected.png" v-if="selected=='index'">
+                <img slot="icon" src="/static/icons/index.png" v-else> 首页
             </mt-tab-item>
             <mt-tab-item id="resource">
-                <img slot="icon" src="/static/images/100x100.png"> 资源
+                <img slot="icon" src="/static/icons/resource_selected.png" v-if="selected=='resource'">
+                <img slot="icon" src="/static/icons/resource.png" v-else> 资源
             </mt-tab-item>
             <mt-tab-item id="purchase">
-                <img slot="icon" src="/static/images/100x100.png"> 求购
+                <img slot="icon" src="/static/icons/buy_selected.png" v-if="selected=='purchase'">
+                <img slot="icon" src="/static/icons/buy.png" v-else> 求购
             </mt-tab-item>
             <mt-tab-item id="mine">
-                <img slot="icon" src="/static/images/100x100.png"> 我的
+             <img slot="icon" src="/static/icons/mine_selected.png" v-if="selected=='mine'">
+                <img slot="icon" src="/static/icons/mine.png" v-else> 我的
             </mt-tab-item>
         </mt-tabbar>
     </div>
@@ -64,5 +68,8 @@ export default {
     overflow: auto;
     height: 100%;
     padding-bottom: 100px;
+}
+.mint-tabbar > .mint-tab-item.is-selected {
+    color: #FA6750;
 }
 </style>
