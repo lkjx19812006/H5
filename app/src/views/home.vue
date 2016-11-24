@@ -11,6 +11,7 @@
                 </mt-tab-container-item>
                 <mt-tab-container-item id="求购"> -->
 
+
                 <mt-tab-container-item id="index">
                     <index></index>
                 </mt-tab-container-item>
@@ -18,6 +19,7 @@
                     <arrondi></arrondi>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="purchase">
+
 
                     <find></find>
                 </mt-tab-container-item>
@@ -28,6 +30,7 @@
         </div>
         <mt-tabbar v-model="selected" fixed>
 
+
             <!-- <mt-tab-item id="首页">
                 <img slot="icon" src="/static/images/100x100.png"> 首页
             </mt-tab-item>
@@ -35,6 +38,15 @@
                 <img slot="icon" src="/static/images/100x100.png"> 商城
             </mt-tab-item>
             <mt-tab-item id="求购"> -->
+
+            <!-- <mt-tab-item id="index">
+                <img slot="icon" src="/static/images/100x100.png"> 首页
+            </mt-tab-item>
+            <mt-tab-item id="resource">
+                <img slot="icon" src="/static/images/100x100.png"> 资源
+            </mt-tab-item>
+            <mt-tab-item id="purchase"> -->
+
 
             <mt-tab-item id="index">
                 <img slot="icon" src="/static/images/100x100.png"> 首页
@@ -62,9 +74,13 @@ export default {
             return {
                 msg: 'Welcome to Your Vue.js App',
 
-                /*selected: '首页'*/
+
+                
 
                 selected: 'index'
+
+
+                
 
             }
         },

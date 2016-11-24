@@ -55,9 +55,7 @@
               <div class="newsLogo" style="background: url('../../../static/images/neWs.png') no-repeat 1.7066rem center;background-size: 6rem 6rem;"></div>
               <div class="newsContent">
                <ul>   
-                   <!-- <li v-for="todo in todos">
-                          <p v-for="todo in todos">{{todo.good_name}}</p>
-                   </li> -->
+          
                     <li v-for="todo in todos">
                         <p class="goodP">{{todo.name}}</p>
                         <p>{{todo.spec}}</p>
@@ -67,53 +65,12 @@
                         <p class="wayP">{{todo.time}}</p>
                     </li>
 
-                   <!--  <li>
-                        <p class="goodP">人参</p>
-                        <p>统货</p>
-                        <p>上海</p>
-                        <p class="priceP">180元/kg</p>
-                        <p class="phoneP">15971484216</p>
-                        <p class="wayP">采购</p>
-                    </li> -->
                </ul>
               </div>
 
            </div>  
 
-          <!--  <div class="goodPrice">
-               <p>药材指导价</p>
-               <ul>
-                  <li id="leftLi" v-for="todo in todos">
-                      <p>{{todo.name}}</p>
-                      <div>
-                         <p>规格:<span>{{todo.spec}}</span></p>
-                         <p>{{todo.price}}</p>
-                      </div>
-
-                      <div>
-                         <p>规格:<span>{{todo.spec}}</span></p>
-                         <p>{{todo.price}}</p>
-                      </div>
-                  </li>
-                  
-
-           <mt-swipe :auto="4000">
-                <mt-swipe-item>
-                    
-                </mt-swipe-item>
-                
-            </mt-swipe> -->
-
-                  <!-- <li>
-                      <p>人参</p>
-                      <div>
-                         <p>规格:<span>统货</span></p>
-                         <p>180元/kg</p>
-                      </div>
-                  </li> -->
-<!-- 
-               </ul>
-           </div> -->
+          
            
         <div class="goodPrice">
            <p>药材指导价</p>
@@ -122,8 +79,7 @@
            <mt-swipe-item  v-for="todo in todos">
            <div class="goodPriceBox">
                <div class="goodPrice-swipe" id="goodPrice-swipeOne" >
-                <!-- <mt-swipe :auto="4000">
-                    <mt-swipe-item  v-for="todo in todos"> -->
+                
                         <p class="priceSwiperName">{{todo.name}}</p>
                       <div class="priceSwiperDiv">
                          <p>规格:<span>{{todo.spec}}</span></p>
@@ -134,19 +90,11 @@
                          <p>规格:<span>{{todo.spec}}</span></p>
                          <p><img src="/static/images/up.png">&nbsp;{{todo.upPrice}}</p>
                       </div>
-                    <!-- </mt-swipe-item> -->
-                    <!-- <mt-swipe-item >
-                        <img src="/static/images/2.jpg">
-                    </mt-swipe-item>
-                    <mt-swipe-item >
-                        <img src="/static/images/3.jpg">
-                    </mt-swipe-item> -->
-                <!-- </mt-swipe> -->
+                   
               </div>
 
               <div class="goodPrice-swipe" id="goodPrice-swipeTwo" >
-                <!-- <mt-swipe :auto="4000">
-                    <mt-swipe-item v-for="todo in todos"> -->
+                
                          <p class="priceSwiperName">{{todo.name}}</p>
                       <div class="priceSwiperDiv">
                          <p>规格:<span>{{todo.spec}}</span></p>
@@ -157,9 +105,7 @@
                          <p>规格:<span>{{todo.spec}}</span></p>
                          <p><img src="/static/images/down.png">&nbsp;{{todo.downPrice}}</p>
                       </div>
-                    <!-- </mt-swipe-item>
-                    
-                </mt-swipe> -->
+                   
               </div>
           </div>
              </mt-swipe-item>
@@ -177,14 +123,7 @@
                         <p class="phoneP">{{todo.phone}}</p>
                         <p class="wayP"><input type="button" value="我要购买"></p>
                      </li>
-                     <!-- <li>
-                        <p class="goodP">人参大妈</p>
-                        <p>统货</p>
-                        <p>上海</p>
-                        <p class="priceP">180元/kg</p>
-                        <p class="phoneP">15971484216</p>
-                        <p class="wayP"><input type="button" value="我要购买"></p>
-                     </li> -->
+                     
                  </ul>
             </div>
    
@@ -199,32 +138,12 @@
                         <p class="phoneP">{{todo.phone}}</p>
                         <p class="wayP"><input type="button" value="我要购买"></p>
                  </li>
-                 <!-- <li>
-                        <p class="goodP">人参大妈</p>
-                        <p>统货</p>
-                        <p>上海</p>
-                        <p class="priceP">180元/kg</p>
-                        <p class="phoneP">15971484216</p>
-                        <p class="wayP"><input type="button" value="我要购买"></p>
-                 </li>      -->  
+                
                </ul>
           </div>          
 
 
-    <!-- <div class="page-swipe">
-        <mt-swipe :auto="4000">
-            <mt-swipe-item>
-                <img src="/static/images/1.jpg">
-            </mt-swipe-item>
-            <mt-swipe-item>
-                <img src="/static/images/2.jpg">
-            </mt-swipe-item>
-            <mt-swipe-item>
-                <img src="/static/images/3.jpg">
-            </mt-swipe-item>
-        </mt-swipe>
-
-    </div> -->
+   
      
 
     
@@ -235,58 +154,45 @@
    
 </template>
 <script>
-import common from "../../common/common.js"
+
+
+
+
+
 
 
 export default {
     data() {
-        return {
-            msg: 'Welcome to Your Vue.js App',
-            selected: 'tab-container1',
-            todos:{}
-        }
-    },
-      
-    created() {
+            return {
+                msg: 'Welcome to Your Vue.js App',
+                selected: 'tab-container1',
+                todos:{}
+            }
+        },
+        created() {
+
              common.$emit('show-load');
 
             this.$http.get(common.apiUrl.list).then((response) => {
                 console.log(response.data);
                   common.$emit('close-load');
 
+
                   let data = response.data.biz_result.list;
                   console.log(data);
                   this.todos = data;
                   
                  
+
             }, (err) => {
                 console.log(err);
                   common.$emit('close-load');
                   common.$emit('message',response.data.msg);
             });
         }
-    
+   
 
 
-/*export default {
-    data() {
-            return {
-                msg: 'Welcome to Your Vue.js App'
-            }
-        },
-        created() {
-             common.$emit('show-load');
-
-              this.$http.get(common.apiUrl.list).then((response) => {
-                console.log(response.data);
-                  common.$emit('close-load');
-
-            }, (err) => {
-                console.log(err);
-                  common.$emit('close-load');
-                  common.$emit('message',response.data.msg);
-            });
-        }*/
 
 }
 
@@ -653,6 +559,7 @@ ul li{
 
 }
 
+<<<<<<< HEAD
 #page-swipe .mint-swipe-item {
 
     line-height: 17.066rem;
@@ -661,4 +568,5 @@ ul li{
 img {
     width: 100%;
 }
+
 </style>
