@@ -5,7 +5,7 @@
                   <p>上海</p>
                   
               </div>
-              <input type="text" placeholder="输入你想要的内容" >  
+              <input type="text" placeholder="输入你想要的内容"  disabled="true">  
               <img src="/static/images/search.png" class="search">
         </div>
          
@@ -25,25 +25,30 @@
         
         
    
-            <div class="tabList">
-              <div class="tab1">
+            <div class="entrance">
+              <div class="entrance_low_price">
                  <img  src="/static/images/lowPrice.png">
                
                 <p>低价资源</p>
               </div>
-              <div class="tab2">
+              <div class="entrance_urgent_need">
               <img  src="/static/images/urgentSupply.png">
                 <p>紧急求购</p>
               </div>
-              <div class="tab3">
+
+            <router-link to="marketQuotation"> 
+              <div class="entrance_market_quotation">
                 <img  src="/static/images/market.png">
                 <p>市场行情</p>
               </div>
+            </router-link>
             
-                <div class="tab4" @click="drugClick()">
+            <router-link to="drugResTable">
+                <div class="entrance_drugrestable" >
                  <img  src="/static/images/drugType.png">
                   <p>药性表</p>
                 </div>
+            </router-link>
               
             </div>
        
@@ -52,18 +57,18 @@
                 <p style="background: url('../../../static/images/myDemond.png') no-repeat 80% center; background-size: 5.9731rem 5.9731rem;">我要采购</p>
            </div>
            
-           <div class="realNews">
-              <div class="newsLogo" style="background: url('../../../static/images/neWs.png') no-repeat 1.7066rem center;background-size: 6rem 6rem;"></div>
-              <div class="newsContent">
+           <div class="real_news">
+              <div class="news_logo" style="background: url('../../../static/images/neWs.png') no-repeat 1.7066rem center;background-size: 6rem 6rem;"></div>
+              <div class="news_content">
                <ul>   
           
                     <li v-for="todo in todos">
-                        <p class="goodP">{{todo.name}}</p>
+                        <p class="good_p">{{todo.name}}</p>
                         <p>{{todo.spec}}</p>
                         <p>{{todo.place}}</p>
-                        <p class="priceP">{{todo.price}}</p>
-                        <p class="phoneP">{{todo.phone}}</p>
-                        <p class="wayP">{{todo.time}}</p>
+                        <p class="price_P">{{todo.price}}</p>
+                        <p class="phone_p">{{todo.phone}}</p>
+                        <p class="way_p">{{todo.time}}</p>
                     </li>
 
                </ul>
@@ -73,39 +78,39 @@
 
           
            
-        <div class="goodPrice">
+        <div class="good_price">
            <p>药材指导价</p>
-           <p class="moreContent"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
+           <p class="more_content"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
            <mt-swipe :auto="4000" :showIndicators="false">
            
            <mt-swipe-item  v-for="todo in todos">
-           <div class="goodPriceBox">
-               <div class="goodPrice-swipe" id="goodPrice-swipeOne" >
+           <div class="good_price_box">
+               <div class="good_price_swipe" id="good_price_swipe_one" >
                 
-                        <p class="priceSwiperName">{{todo.name}}</p>
-                      <div class="priceSwiperDiv">
+                        <p class="price_swiper_name">{{todo.name}}</p>
+                      <div class="price_swiper_div">
                          <p>规格:<span>{{todo.spec}}</span></p>
                          <p>{{todo.price}}</p>
                       </div>
 
-                      <div class="priceSwiperDiv">
+                      <div class="price_swiper_div">
                          <p>规格:<span>{{todo.spec}}</span></p>
-                         <p><img src="/static/images/up.png">&nbsp;{{todo.upPrice}}</p>
+                         <p><img src="/static/images/up.png">&nbsp;{{todo.up_price}}</p>
                       </div>
                    
               </div>
 
-              <div class="goodPrice-swipe" id="goodPrice-swipeTwo" >
+              <div class="good_price_swipe" id="good_price_swipe_two" >
                 
-                         <p class="priceSwiperName">{{todo.name}}</p>
-                      <div class="priceSwiperDiv">
+                         <p class="price_swiper_name">{{todo.name}}</p>
+                      <div class="price_swiper_div">
                          <p>规格:<span>{{todo.spec}}</span></p>
                          <p>{{todo.price}}</p>
                       </div>
 
-                      <div class="priceSwiperDiv">
+                      <div class="price_swiper_div">
                          <p>规格:<span>{{todo.spec}}</span></p>
-                         <p><img src="/static/images/down.png">&nbsp;{{todo.downPrice}}</p>
+                         <p><img src="/static/images/down.png">&nbsp;{{todo.down_price}}</p>
                       </div>
                    
               </div>
@@ -116,15 +121,15 @@
 
             <div class="recommend">
                  <p>推荐资源</p>
-                 <p class="moreContent"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
+                 <p class="more_content"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
                  <ul>
                      <li v-for="todo in todos" style="background:url(/static/images/bao.png) no-repeat 0rem center;background-size: 3rem 3rem;" >
-                        <p class="goodP" >{{todo.name}}</p>
+                        <p class="good_p" >{{todo.name}}</p>
                         <p>{{todo.spec}}</p>
                         <p>{{todo.place}}</p>
-                        <p class="priceP">{{todo.price}}</p>
-                        <p class="phoneP">{{todo.phone}}</p>
-                        <p class="wayP"><input type="button" value="我要购买"></p>
+                        <p class="price_p">{{todo.price}}</p>
+                        <p class="phone_p">{{todo.phone}}</p>
+                        <p class="way_p"><input type="button" value="我要购买"></p>
                      </li>
                      
                  </ul>
@@ -132,15 +137,15 @@
    
           <div class="urgent">
                <p>紧急求购</p>
-               <p class="moreContent"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
+               <p class="more_content"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
                <ul>
                   <li v-for="todo in todos" style="background:url(/static/images/zheng.png) no-repeat 0rem center;background-size: 3rem 3rem;">
-                        <p class="goodP">{{todo.name}}</p>
+                        <p class="good_p">{{todo.name}}</p>
                         <p>{{todo.spec}}</p>
                         <p>{{todo.place}}</p>
-                        <p class="priceP">{{todo.price}}</p>
-                        <p class="phoneP">{{todo.phone}}</p>
-                        <p class="wayP"><input type="button" value="我要购买"></p>
+                        <p class="price_p">{{todo.price}}</p>
+                        <p class="phone_p">{{todo.phone}}</p>
+                        <p class="way_p"><input type="button" value="我要购买"></p>
                  </li>
                 
                </ul>
@@ -257,7 +262,7 @@ ul li{
   top:2.5166rem;
 }
 
-.tabList{
+.entrance{
     background:white;
     position: relative;
     height:15.3594rem;
@@ -265,28 +270,28 @@ ul li{
     margin-top: 1.7067rem;
     padding-bottom:1.7067rem;
 }
-.tab1{
+.entrance_low_price{
   position: absolute;
   left:1.7067rem;
   top:1.7067rem;
 }
-.tab2{
+.entrance_urgent_need{
   position: absolute;
   left:18.6025rem;
   top:1.7067rem;
 }
-.tab3{
+.entrance_market_quotation{
   position: absolute;
   left:35.498rem;
   top:1.7067rem;
 }
-.tab4{
+.entrance_drugrestable{
   position: absolute;
   left:52.3938rem;
   top:1.7067rem;
 }
 
-.tabList img{
+.entrance img{
     /*border-radius: 50%;
     width:80%;
     border:1px solid red;*/
@@ -322,7 +327,7 @@ ul li{
 
 }
 
-.realNews{
+.real_news{
     position: relative;
     display:flex;
     flex-direction:row;
@@ -333,38 +338,39 @@ ul li{
     line-height: 3.4133rem;
     padding: 1.7067rem 0;
 }
-.realNews ul{
+.real_news ul{
   margin-right:1.7067rem;
 }
-.realNews ul li p{
+.real_news ul li p{
      font-size: 1.7067rem;
      line-height: 3.4133rem;
 }
-.realNews .newsLogo{
+.real_news .news_logo{
     flex:1;
 }
 
-.realNews .newsContent{
+.real_news .news_content{
     flex:6;
 }
 
 
 
-.newsContent ul li{
+.news_content ul li{
     display:flex;
     flex-direction:row;
-    line-height: 1.7067rem;
+    line-height: 3rem;
 }
 
-.newsContent ul li p{
+.news_content ul li p{
     flex:2;
     font-size: 1.7067rem;
 }
-.newsContent ul li .priceP,.newsContent ul li .phoneP,.newsContent ul li .goodP,.newsContent ul li .wayP{
-    flex:3;
+.news_content ul li .price_p,.news_content ul li .phone_p,.news_content ul li .good_p,.news_content ul li .way_p{
+    /*flex:3;*/
+
 }
 
-.goodPrice{
+.good_price{
     padding: 0.8533rem;
     background:white;
     text-align: left;
@@ -374,7 +380,7 @@ ul li{
     margin-bottom: 1.7067rem;
     position: relative;
 }
-.wayP input{
+.way_p input{
   height:4.0984rem;
   width:10.2396rem;
   background:#EC6817;
@@ -382,7 +388,7 @@ ul li{
   color: #ffffff;
   border:0;
 }
-.goodPrice>p{
+.good_price>p{
   font-size: 2.7306rem;
   margin-left: 0.8533rem;
   margin-top:1.7067rem;
@@ -390,7 +396,7 @@ ul li{
 }
 
 
-#goodPrice-swipeOne .mint-swipe {
+#good_price_swipe_one .mint-swipe {
     
     height: 13.6528rem;
     
@@ -401,7 +407,7 @@ ul li{
 
 
 
-#goodPrice-swipeTwo .mint-swipe {
+#good_price_swipe_two .mint-swipe {
     
     height: 13.6528rem;
    
@@ -410,34 +416,34 @@ ul li{
 
 }
 
-.priceSwiperName{
+.price_swiper_name{
     margin-top: 0.8533rem;
     font-size: 2.5599rem;
     margin-bottom: 1.7067rem;
 } 
 
-.priceSwiperDiv{
+.price_swiper_div{
   display:flex;
   flex-direction:row;
 }
 
-.priceSwiperDiv>p{ 
+.price_swiper_div>p{ 
      flex:1;
      font-size: 2.5599rem;
      color:gray;
      line-height: 3rem;
 }
-.priceSwiperDiv>p img{
+.price_swiper_div>p img{
      width: 1.2rem;
 }
-.goodPriceBox{
+.good_price_box{
     display:flex;
     flex-direction:row;
     margin-top: 0.8533rem;
     margin-left: 0.8533rem;
 }
 
-#goodPrice-swipeOne{
+#good_price_swipe_one{
    flex:1;
    background:#EDFAD8;
    padding: 1.7067rem; 
@@ -445,7 +451,7 @@ ul li{
   
 }
 
-#goodPrice-swipeTwo{
+#good_price_swipe_two{
   flex:1;
   margin-left:1.7067rem; 
   margin-right: 1.7067rem;
@@ -465,13 +471,13 @@ ul li{
     position: relative;
 }
 
-.recommend .moreContent,.urgent .moreContent,.goodPrice .moreContent{
+.recommend .more_content,.urgent .more_content,.good_price .more_content{
   position: absolute;
   right: 1.877rem;
   top: 1.877rem;
   font-size: 1.877rem;
 }
-.recommend .moreContent img,.urgent .moreContent img,.goodPrice .moreContent img{
+.recommend .more_content img,.urgent .more_content img,.good_price .more_content img{
   width:0.8533rem;
 }
 .recommend p,.urgent p{
@@ -507,7 +513,7 @@ ul li{
     flex:2;
     font-size: 2.0479rem;
 }
-.recommend ul li .priceP,.recommend ul li .phoneP,.recommend ul li .goodP,.recommend ul li .wayP{
+.recommend ul li .price_p,.recommend ul li .phone_p,.recommend ul li .good_p,.recommend ul li .way_p{
     flex:3;
 }
 
@@ -524,7 +530,7 @@ ul li{
     flex:2;
     font-size: 2.0479rem;
 }
-.urgent ul li .priceP,.urgent ul li .phoneP,.urgent ul li .goodP,.urgent ul li .wayP{
+.urgent ul li .price_p,.urgent ul li .phone_p,.urgent ul li .good_p,.urgent ul li .way_p{
     flex:3;
 }
 #page-swipe .mint-swipe {

@@ -3,6 +3,9 @@ import hello from './components/Hello'
 import main from './views/main'
 import menu from './components/menu'
 import home from './views/home'
+import drugResTable from './views/drugResTable'
+import marketQuotation from './views/marketQuotation'
+
 
 
 module.exports = {
@@ -19,6 +22,8 @@ module.exports = {
       ]
     },
     { name: 'home', path: '/home', component: home },
+    { name: 'drugResTable', path: '/drugResTable', component: drugResTable },
+    { name: 'marketQuotation', path: '/marketQuotation', component: marketQuotation },
     { path: '*', redirect: '/home' }
   ]
 }

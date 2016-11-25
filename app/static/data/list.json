@@ -6,18 +6,22 @@
   	"spec":"统货",
   	"place":"上海",
   	"price":"98.9元/kg",
-    "upPrice":"8元/kg",
-    "downPrice":"8元/kg",
+    "up_price":"9元/kg",
+    "down_price":"9元/kg",
   	"phone":"15301546832",
   	"time":"12:26:33"
+    
+
   },{
 	"name":"人参",
   	"spec":"统货",
   	"place":"上海",
   	"price":"98.9元/kg",
-    "upPrice":"8元/kg",
-    "downPrice":"8元/kg",
+    "up_price":"8元/kg",
+    "down_price":"8元/kg",
   	"phone":"15301546832",
   	"time":"12:26:33"
+    
+    
   }]}
 }
