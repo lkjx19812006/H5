@@ -53,10 +53,20 @@
             </div>
        
            <div class="supply_demond">
+             <div class="supply_demond_path">
+              <router-link to="mySupply">
                 <p style="background: url('../../../static/images/mySupply.png') no-repeat 80% center;background-size: 5.9731rem 5.9731rem; ">我要供应</p>
+              </router-link>
+            </div>
+
+            <div class="supply_demond_path">
+            <router-link  to="myDemond">
                 <p style="background: url('../../../static/images/myDemond.png') no-repeat 80% center; background-size: 5.9731rem 5.9731rem;">我要采购</p>
+             </router-link>
+
+            </div>
            </div>
-           
+
            <div class="real_news">
               <div class="news_logo" style="background: url('../../../static/images/neWs.png') no-repeat 1.7066rem center;background-size: 6rem 6rem;"></div>
               <div class="news_content">
@@ -315,8 +325,9 @@ ul li{
     position: relative;
 }
 
-.supply_demond p{
+.supply_demond .supply_demond_path{
     flex:1;
+    
     text-align: left;
     line-height: 10.24rem;
     box-sizing: border-box;
@@ -324,6 +335,7 @@ ul li{
     color:orange;
     font-weight: 500;
     font-size: 2.7306rem;
+    
 
 }
 
@@ -512,9 +524,14 @@ ul li{
 .recommend ul li p{
     flex:2;
     font-size: 2.0479rem;
+    text-align: center;
 }
-.recommend ul li .price_p,.recommend ul li .phone_p,.recommend ul li .good_p,.recommend ul li .way_p{
+.recommend ul li .price_p,.recommend ul li .good_p,.recommend ul li .way_p{
     flex:3;
+}
+
+.recommend ul li .phone_p{
+  flex:5;
 }
 
 .recommend ul li,.urgent ul li{
@@ -529,9 +546,13 @@ ul li{
 .urgent ul li p{
     flex:2;
     font-size: 2.0479rem;
+    text-align: center;
 }
-.urgent ul li .price_p,.urgent ul li .phone_p,.urgent ul li .good_p,.urgent ul li .way_p{
+.urgent ul li .price_p,.urgent ul li .good_p,.urgent ul li .way_p{
     flex:3;
+}
+.urgent ul li .phone_p{
+  flex:5;
 }
 #page-swipe .mint-swipe {
     

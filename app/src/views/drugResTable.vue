@@ -17,7 +17,12 @@
 
    <div class="drug_show">
        <img  src="/static/images/1.jpg">
-
+       <div class="drug_introduce">
+          <p class="drug_name">柏树</p>
+          <p class="drug_chinese_name">中文别名：东叔，冬白书，洋伞啊，央视，书中，这书，甘薯，山及，闪联，砂奴
+            ，三枪就，七厘散，天是。</p>
+          <p class="drug_english_name">英文名：RHIZOMA,ATRACTYLODISMACROCEPHALAE</p>  
+       </div>
    </div>
 
    <div class="hot_search_drug">
@@ -102,11 +107,19 @@ export default{
   height:27.3056rem;
   padding: 2.5599rem;
   background:white;
+  position:relative;
+  
 }
 
 .drug_show img{
   width:27.3056rem;
   height:22.1858rem;
   float:left;
+}
+.drug_introduce{
+  width:41.8117rem;
+  height:22.1858rem;
+  background:red;
+  float:right;
 }
 </style>

@@ -23,7 +23,7 @@
 
              <ul id="first_level_content"  >
                  <li v-for="(todo,index) in todos">
-                      <div class="second_level" v-on:click="firstLevel(index)">
+                      <div class="second_level" v-on:click="firstLevel(index,todo)">
                            <p>{{todo.name}}</p>
                            <p>{{todo.spec}}</p>
                            <p>{{todo.place}}</p>
@@ -32,9 +32,14 @@
                       </div>
                         
                         <ul class="second_level_content" v-show="todo.show">
-                          <li>1111111</li>
-                          <li>1111111</li>
-                          <li>1111111</li>
+                          <li v-for="item in todos_li">
+                               <p>{{item.name}}</p>
+                               <p>{{item.spec}}</p>
+                               <p>{{item.place}}</p>
+                               <p>{{item.price}}</p>
+                               <p>{{item.upordown_price}}&nbsp;<img src="/static/images/up.png"></p> 
+                          </li>
+                          
                        </ul>
                  </li>
              </ul>
@@ -56,16 +61,19 @@ export default{
                 msg: 'Welcome to Your Vue.js App',
                 onOrOff:false,
                 todos:{},
+                todos_li:{},
                 show:false
             }
         },
 
 
         methods:{
-            firstLevel:function(sub){
-                 console.log(this.todos[sub].show)
-                  this.todos[sub].show = !this.todos[sub].show; 
-
+            firstLevel:function(sub,item){
+                 //console.log(this.todos[sub].show)
+                 this.todos[sub].show = !this.todos[sub].show; 
+                 //console.log(item.list_li);
+                 this.todos_li = item.list_li;
+                
             }
         },
 
@@ -74,20 +82,21 @@ export default{
 
             common.$emit('show-load');
 
-            this.$http.get(common.apiUrl.list).then((response) => {
+            this.$http.get(common.apiUrl.market_list).then((response) => {
                 //console.log(response.data);
                   common.$emit('close-load');
                     
                  let data = response.data.biz_result.list;
-                 
+                 let data_li = response.data.biz_result.list_li;
+                 console.log(data_li);
                   
                   for(var item in data){
-                      console.log(data[item]);
+                      //console.log(data[item]);
                       data[item].show = false;
                       
                   }
                   this.todos = data;
-                  
+                  this.todos_li = data_li;
 
 
             }, (err) => {
@@ -200,6 +209,17 @@ export default{
   font-size: 2.04792rem;
   color:#666666;
   line-height: 8.533rem;
+  display:flex;
+  flex-direction:row;
+}
+.second_level_content li p{
+  flex:1;
+  font-size: 2.04792rem;
+  color:#666666;
+  line-height: 8.533rem;
+}
+.second_level_content li p img{
+  height:2.04792rem;
 }
 
 </style>
