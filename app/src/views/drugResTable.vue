@@ -15,18 +15,30 @@
        <p>热门药材</p>
    </div>
 
-   <div class="drug_show">
+   <div class="drug_show" v-for="todo in todos">
        <img  src="/static/images/1.jpg">
        <div class="drug_introduce">
-          <p class="drug_name">柏树</p>
-          <p class="drug_chinese_name">中文别名：东叔，冬白书，洋伞啊，央视，书中，这书，甘薯，山及，闪联，砂奴
-            ，三枪就，七厘散，天是。</p>
-          <p class="drug_english_name">英文名：RHIZOMA,ATRACTYLODISMACROCEPHALAE</p>  
+          <p class="drug_name">{{todo.name}}</p>
+          <p class="drug_chinese_name">中文别名：{{todo.chinese_name}}</p>
+          <p class="drug_english_name">英文名：{{todo.english_name}}</p>  
        </div>
    </div>
 
    <div class="hot_search_drug">
        <p>热搜药材</p>
+       <div class="hot_drugs">
+         <p v-for="todo in hot_drug">{{todo.hot_drug}}</p>
+        <!--  <p class="long_hot">千年人参</p>
+         <p class="short_hot">人参</p>
+         <p class="long_hot">千年人参</p>
+         <p class="short_hot">人参</p>
+         <p class="long_hot">千年人参</p>
+         <p class="short_hot">人参</p>
+         <p class="long_hot">千年人参</p>
+         <p class="short_hot">人参</p>
+         <p class="long_hot">千年人参</p>
+         <p class="short_hot">人参</p> -->
+       </div>
    </div>
 
   </div>
@@ -35,13 +47,38 @@
 
 
 <script> 
+
+import common from '../common/common.js'
 export default{
 	
 	data() {
             return {
-                msg: 'Welcome to Your Vue.js App'
-                
+                msg: 'Welcome to Your Vue.js App',
+                todos:{},
+                hot_drug:{}
             }
+        },
+
+        created() {
+
+            common.$emit('show-load');
+
+            this.$http.get(common.apiUrl.drug_table_list).then((response) => {
+                //console.log(response.data);
+                  common.$emit('close-load');
+                   let data = response.data.biz_result.list; 
+                //console.log(data);
+                   let hotDrugData =  response.data.biz_result.hot_drug_list;
+                   //console.log(hotDrugData); 
+                 this.todos = data;
+                 this.hot_drug = hotDrugData;
+
+
+            }, (err) => {
+                //console.log(err);
+                  common.$emit('close-load');
+                  common.$emit('message',response.data.msg);
+            });
         }
 }
 
@@ -102,6 +139,7 @@ export default{
   margin-left: 2.5599rem;
 }
 
+
 .drug_show{
   width:100%;
   height:27.3056rem;
@@ -112,14 +150,65 @@ export default{
 }
 
 .drug_show img{
-  width:27.3056rem;
+  width:22.1858rem;
   height:22.1858rem;
   float:left;
 }
 .drug_introduce{
-  width:41.8117rem;
+  width:36.69rem;
   height:22.1858rem;
-  background:red;
-  float:right;
+  float:left;
+  text-align: left;
+  padding:1.27995rem 0rem 1.27995rem 2.5599rem ;
+
 }
+.drug_name{
+  font-size:2.21858rem;
+  color:#31323;
+}
+.drug_chinese_name{
+  font-size:1.87726rem;
+  color:#666666;
+  margin-top:1.7066rem;
+  word-break:break-all;
+  line-height: 2.7rem;
+}
+
+.drug_english_name{
+  font-size:1.87726rem;
+  color:#666666;
+  margin-top:1.7066rem;
+  word-break:break-all;
+  line-height: 2.7rem;
+}
+.hot_drugs{
+  width:100%;
+  padding: 2.5599rem 0 2.5599rem 0;
+
+}
+.hot_drugs p{
+  text-align: center;
+  float:left;
+  border:1px solid #E7E7E7;
+  height:5.9731rem;
+  line-height:5.9731rem;
+  padding: 0rem 2.5599rem;
+  margin-bottom: 2.5599rem; 
+}
+/*.short_hot{
+  width:10rem;
+  height:5.9731rem;
+  border:1px solid #E7E7E7;
+  float:left;
+  margin-bottom: 2.5599rem;
+  
+}
+.long_hot{
+  width:15.5rem;
+  height:5.9731rem;
+  border:1px solid #E7E7E7;
+  float:left;
+  margin-bottom: 2.5599rem;
+
+}*/
 </style>
