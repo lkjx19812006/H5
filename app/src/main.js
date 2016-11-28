@@ -19,6 +19,9 @@ const router = new VueRouter(
     configRouter // （缩写）相当于 routes: routes
 )
 
+
+
+
 function getCookie (name) {
   var search = name + '='
   var offset = document.cookie.indexOf(search)
@@ -55,6 +58,8 @@ Vue.http.interceptors.push((request, next) => {
     return response
   })
 })
+
+
 
 new Vue({
   router,

@@ -1,4 +1,5 @@
 <template>
+
     <div class="content">
         <h1 class="page-title">Pull down</h1>
         <p class="page-loadmore-desc">在列表顶端, 按住 - 下拉 - 释放可以获取更多数据</p>
@@ -23,9 +24,12 @@
             </mt-loadmore>
         </div>
     </div>
+
 </template>
 <script>
+
 export default {
+
     data() {
             return {
                 list: [],
@@ -78,10 +82,12 @@ export default {
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
+
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .content {
     padding-bottom: 100px;
 }
@@ -127,4 +133,5 @@ export default {
     transition: .2s linear;
     vertical-align: middle;
 }
+
 </style>

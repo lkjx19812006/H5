@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
     <div class="hello">
         Find
       
@@ -9,6 +10,20 @@
             </div>
         </div>
     </div>
+=======
+  <div class="hello">
+
+     <mt-search v-model="value">
+	  <mt-cell
+	    v-for="item in result"
+	    :title="item.title"
+	    :value="item.value">
+	  </mt-cell>
+	</mt-search>
+  
+   
+  </div>
+>>>>>>> 2f7731b4eb2b04c54b5db7026c69afcbc9a82d30
 </template>
 <script>
 
@@ -104,6 +119,7 @@ export default {
 }
 </script>
 <style scoped>
+<<<<<<< HEAD
 @-webkit-keyframes scrollText {
    0% {
         transform: translateY(0px);
@@ -169,4 +185,8 @@ export default {
     animation-play-state: paused;
     -webkit-animation-play-state: paused;
 }
+=======
+
+
+>>>>>>> 2f7731b4eb2b04c54b5db7026c69afcbc9a82d30
 </style>
