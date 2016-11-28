@@ -16,12 +16,14 @@
    </div>
 
    <div class="drug_show" v-for="todo in todos">
+     <router-link to="drugResTableNav">
        <img  src="/static/images/1.jpg">
        <div class="drug_introduce">
           <p class="drug_name">{{todo.name}}</p>
           <p class="drug_chinese_name">中文别名：{{todo.chinese_name}}</p>
           <p class="drug_english_name">英文名：{{todo.english_name}}</p>  
        </div>
+     </router-link> 
    </div>
 
    <div class="hot_search_drug">
@@ -69,7 +71,7 @@ export default{
                    let data = response.data.biz_result.list; 
                 //console.log(data);
                    let hotDrugData =  response.data.biz_result.hot_drug_list;
-                   //console.log(hotDrugData); 
+                   console.log(hotDrugData); 
                  this.todos = data;
                  this.hot_drug = hotDrugData;
 
