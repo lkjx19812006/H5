@@ -5,7 +5,10 @@ let common = new Vue({
     data: {
         show: true,
         apiUrl:{
-            list:'/static/data/list.json'
+            list:'/static/data/list.json',
+            market_list:'/static/data/market_list.json',
+            drug_table_list:'/static/data/drug_table_list.json',
+            drug_information_list:'/static/data/drug_information_list.json'
         }
     }
 })

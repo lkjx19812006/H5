@@ -57,13 +57,10 @@
                 <img slot="icon" src="/static/icons/resource.png" v-else> 资源
             </mt-tab-item>
             <mt-tab-item id="purchase">
-<<<<<<< HEAD
+
                 <img slot="icon" src="/static/icons/buy_selected.png" v-if="selected=='purchase'">
                 <img slot="icon" src="/static/icons/buy.png" v-else> 求购
-=======
 
-                <img slot="icon" src="/static/images/100x100.png"> 求购
->>>>>>> 2f7731b4eb2b04c54b5db7026c69afcbc9a82d30
             </mt-tab-item>
             <mt-tab-item id="mine">
              <img slot="icon" src="/static/icons/mine_selected.png" v-if="selected=='mine'">
