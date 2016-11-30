@@ -23,9 +23,8 @@
 
       <div class="good_spec">
           <p>规格：</p>
-          <div>
-            <img src="../../static/images/drop-down.png">
-            <select>
+          <div >
+            <select style="background:url('../../static/images/drop-down.png') no-repeat 13.3rem center;background-size:1.067rem 1.067rem;" >
                 <option>统货</option>
             </select>
           </div>
@@ -33,9 +32,9 @@
 
       <div class="good_place">
           <p>产地：</p>
-          <div>
-            <img src="../../static/images/drop-down.png">
-            <select>
+          <div >
+            
+            <select style="background:url('../../static/images/drop-down.png') no-repeat 13.3rem center;background-size:1.067rem 1.067rem;">
                 <option>上海</option>
             </select>
           </div>
@@ -176,6 +175,7 @@ border-radius: 0;
   color:#333333; 
 
 }
+
 .contact_name p,.contact_phone p{
   margin-right:2.47rem;
 }
@@ -194,13 +194,7 @@ border-radius: 0;
   border:1px solid #D2D2D2;
   
 }
-.good_spec div  img,.good_place div  img{
-  position: absolute;
-  width:1.067rem;
-  height:1.067rem;
-  right:0.64rem;
-  top:0.9165rem;
-}
+
 .good_name div .select p{
    height:2.9rem;
    width:14.847rem;

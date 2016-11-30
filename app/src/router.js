@@ -8,7 +8,8 @@ import marketQuotation from './views/marketQuotation'
 import mySupply from './views/mySupply'
 import myDemond from './views/myDemond'
 import drugResTableNav from './views/drugResTableNav'
-
+import provenanceSelection from './views/provenanceSelection'
+import accountInfo from './views/accountInfo'
 
 
 module.exports = {
@@ -30,6 +31,8 @@ module.exports = {
     { name: 'mySupply', path: '/mySupply', component: mySupply },
     { name: 'myDemond', path: '/myDemond', component: myDemond },
     { name: 'drugResTableNav', path: '/drugResTableNav', component: drugResTableNav },
+    { name: 'provenanceSelection', path: '/provenanceSelection', component: provenanceSelection },
+    { name: 'accountInfo', path: '/accountInfo', component: accountInfo },
     { path: '*', redirect: '/home' }
   ]
 }
