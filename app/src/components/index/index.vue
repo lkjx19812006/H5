@@ -1,10 +1,12 @@
 <template>
     <div>
         <mt-header fixed>
-            <router-link to="/" slot="left">
+            <router-link to="/search" slot="left">
                 <mt-button>北京</mt-button>
-                <span>dsds</span>
-                <div class="search_div">请输入您想要的货物资源</div>
+                <div class="search_div">
+                请输入您想要的货物资源
+                <img src="/static/icons/search.png">
+                </div>
             </router-link>
         </mt-header>
         <div class="swipe_height">
@@ -17,22 +19,20 @@
             </mt-swipe>
         </div>
         <div class="entrance">
-            <router-link to="item.router" v-for="item in categoryArr">
+        <a v-for="item in categoryArr" @click="jump(item.router)">
                 <div>
                     <img v-bind:src="item.image">
                     <p>{{item.name}}</p>
                 </div>
-            </router-link>
+            </a>
         </div>
         <div class="supply_demond">
-            <div class="supply_demond_path" v-for="item in supplyDemandArray">
-                <router-link to="item.router">
+            <div class="supply_demond_path" v-for="item in supplyDemandArray" @click="jump(item.router)">
                     <p>{{item.name}}</p>
                     <img v-bind:src="item.image">
-                </router-link>
             </div>
         </div>
-        <div class="real_news">
+        <div class="real_news"  @click="jump('transaction')">
             <div class="news_logo">
                 <img src="../../../static/images/neWs.png">
             </div>
@@ -123,7 +123,7 @@
                 <div class="mint-cell cell_class">
                     <div class="mint-cell-wrapper cell_class" v-for="todo in todos">
                         <div class="list_image">
-                            <img src="/static/images/bao.png" class="first_image">
+                            <img src="/static/icons/impatient.png" class="first_image">
                             <img src="/static/images/zheng.png">
                         </div>
                         <div class="list_image">{{todo.name}}</div>
@@ -132,7 +132,7 @@
                         <div class="list_font">{{todo.time}}</div>
                         <div class="list_font">
                             <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list">
-                                我要购买
+                                我要报价
                             </button>
                         </div>
                     </div>
@@ -198,6 +198,10 @@ export default {
 
         },
         methods: {
+            jump:function(router){
+                console.log(router);
+                this.$router.push(router);
+            }
 
         },
         created() {
@@ -205,7 +209,6 @@ export default {
             common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
-                _self.listData = response.data.biz_result;
                 let data = response.data.biz_result.list;
                 this.todos = data;
             }, (err) => {
@@ -263,6 +266,11 @@ export default {
 }
 </script>
 <style scoped>
+.mint-header{
+    background-color: #FA6705;
+    border: none;
+    color: #fff;
+}
 ul li {
     list-style: none;
 }
@@ -278,6 +286,12 @@ ul li {
         color: #999;
     line-height: 30px;
     text-indent: 1rem;
+}
+.search_div img{
+    float: right;
+    max-height: 20px;
+    margin-top: 5px;
+    margin-right: 10px;
 }
 
 .swipe_height {
