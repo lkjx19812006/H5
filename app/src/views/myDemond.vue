@@ -12,7 +12,7 @@
           <p>产品：</p>
           <div>
              <div class="select">
-                <p>请输入你需要的药材名称</p>
+                <p>请填写你需要的药材名称</p>
             </div>
           </div>
          
@@ -24,6 +24,7 @@
       <div class="good_spec">
           <p>规格：</p>
           <div>
+            <img src="../../static/images/drop-down.png">
             <select>
                 <option>统货</option>
             </select>
@@ -33,6 +34,7 @@
       <div class="good_place">
           <p>产地：</p>
           <div>
+            <img src="../../static/images/drop-down.png">
             <select>
                 <option>上海</option>
             </select>
@@ -56,7 +58,7 @@
    </div>
      
     <div class="contact">
-        <p class="contact_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">联系方式</p>
+        <p class="contact_header" style="background:url('../../static/images/contact.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">联系方式</p>
         <div class="contact_name">
              <P>姓名：</P>
              <div><input type="text" placeholder="请输入您的姓名"></div>
@@ -66,7 +68,7 @@
              <div><input type="text" placeholder="请输入您的手机号"></div>
         </div>
     </div> 
-
+    <div class="confirm">确认发布</div>
   
   </div>
    
@@ -134,6 +136,11 @@ export default{
     background: #F1EFEF;
    
 }
+input[type="text"], input[type="submit"], input[type="reset"],select,textarea{
+
+-webkit-appearance: none;
+border-radius: 0;
+}
 
 .mint-header{
   background-color:white;
@@ -167,13 +174,14 @@ export default{
   line-height:2.99rem;
   font-size: 1.024rem;
   color:#333333; 
+
 }
 .contact_name p,.contact_phone p{
   margin-right:2.47rem;
 }
 .good_name div,.good_spec div,.good_place div,.good_number div{
   float:right;
-  
+  position:relative;
 }
 .good_name div .select,.good_spec div select,.good_place div select,.contact_name div input,.contact_phone div input{
   outline: none;
@@ -184,24 +192,43 @@ export default{
   text-align: center;
   outline: none;
   border:1px solid #D2D2D2;
+  
 }
-
+.good_spec div  img,.good_place div  img{
+  position: absolute;
+  width:1.067rem;
+  height:1.067rem;
+  right:0.64rem;
+  top:0.9165rem;
+}
+.good_name div .select p{
+   height:2.9rem;
+   width:14.847rem;
+   text-align: center;
+   font-size: 1.024rem;
+   color:#999999;
+}
 .good_number div{
   height:2.9rem;
   width:14.847rem;
+  border:1px solid #D2D2D2;
 }
 .good_number div input{
   outline: none;
   font-size: 1.024rem;
-  height:2.9rem;
+  height:2.73rem;
   width:11.178rem;
   text-align: center;
   float:left;
+  outline: none;
+  border:0;
+  
 }
 .good_number div p{
-  height:2.9rem;
-  width:3.6rem;
-  border:1px solid #D2D2D2;
+  height:2.73rem;
+  width:3.2rem;
+  border-left:1px solid #D2D2D2;
+
 }
 
 .remarks_content textarea{
@@ -209,5 +236,15 @@ export default{
   width:92%;
   margin-top: 1.279rem;
   padding: 1.279rem;
+  border:1px solid #D2D2D2;
+}
+.confirm{
+  width:100%;
+  height:4.267rem;
+  margin-top:4.69rem;
+  background:#FA6705;
+  font-size: 1.536rem;
+  color:white;
+  line-height: 4.267rem;
 }
 </style>
