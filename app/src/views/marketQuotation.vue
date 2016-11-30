@@ -124,35 +124,33 @@ export default{
 .mint-header{
   background-color:white;
   color:#313232;
-  font-size: 2.73056rem;
 }
+
 
 .search{
-  height:8.533rem;
-  background: #f5f5f5;
+  height:4.27rem;
+  background: white;
   position: relative;
+  padding-top:0.855rem;
+  background: #F2F2F2;
 }
 .search input{
-    width:53.7579rem;
-    height:5.12rem;
-    padding-left:2.56rem;
-    border-radius: 5.12rem;
-    position: absolute;
-    left:5.1198rem;
-    top:1.7066rem;
-    outline:none;
-    border: 0;
-    font-size: 2.048rem;
-
+    width:80%;
+    height:2.56rem;
+    border-radius: 1.28rem;
+    border:0;
+    outline: none;
+    padding-left:5%;
+    background: #F1EFEF;
+    background: white;
 } 
 .search_image{
-  width:3.5rem;
-  height:3.5rem;
+  width:2rem;
+  height:2rem;
   position: absolute;
-  left:53.344rem;
-  top:2.5166rem;
+  right:13%;
+  top:1.135rem;
 }
-
 .good_list{
   width:100%;
   position: relative;
@@ -160,12 +158,12 @@ export default{
 
 .good_list_header{
   width:100%;
-  margin:3.4132rem auto;
-  font-size: 2.21858rem;
+  margin:1.7066rem auto;
+  font-size: 1.10929rem;
   color:#FA6705;
 }
 .good_list_content{
-  margin-top: 3.4132rem;
+  margin-top: 1.7066rem;
   width:100%;
   
 }
@@ -173,18 +171,18 @@ export default{
 .list_content_header{
   display:flex;
   flex-direction:row;
-  margin-bottom:0.42665rem;
+  margin-bottom:0.213rem;
 }
 .list_content_header p{
        flex:1;
-       font-size: 2.21858rem;
+       font-size: 1.11rem;
 }
 
 .list_content_header .good_upordown input{
     outline:none;
     border: 0;
-    width:10.66625rem;
-    height: 4.2665rem;
+    width:5.333rem;
+    height: 2.133rem;
     background: #FA6705;
     color:white;
 }
@@ -192,34 +190,34 @@ export default{
     width:100%;
     display:flex;
     flex-direction:row;
-    height:8.533rem;
+    height:4.267rem;
     border-top: 1px solid #CCCCCC;
 }
 .second_level p{
   flex:1;
-  font-size: 2.04792rem;
+  font-size: 1.02396rem;
   color:#666666;
-  line-height: 8.533rem;
+  line-height: 4.267rem;
 }
 .second_level_content{
   border-top: 1px solid #DFDFDF;
   background: #CCCCCC;
 }
 .second_level_content li{
-  font-size: 2.04792rem;
+  font-size: 1.024rem;
   color:#666666;
-  line-height: 8.533rem;
+  line-height: 4.267rem;
   display:flex;
   flex-direction:row;
 }
 .second_level_content li p{
   flex:1;
-  font-size: 2.04792rem;
+  font-size: 1.024rem;
   color:#666666;
-  line-height: 8.533rem;
+  line-height: 4.267rem;
 }
 .second_level_content li p img{
-  height:2.04792rem;
+  height:1.024rem;
 }
 
 </style>

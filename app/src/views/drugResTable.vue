@@ -89,113 +89,112 @@ export default{
 <style scoped>
 .whole{
     position: relative;
-    background: #F1EFEF;
+   
 }
 
 .mint-header{
   background-color:white;
   color:#313232;
-  font-size: 2.73056rem;
 }
 
 .search{
-  height:8.533rem;
+  height:4.27rem;
   background: white;
   position: relative;
+  padding-top:0.855rem;
+  background: #F2F2F2;
 }
 .search input{
-    width:53.7579rem;
-    height:5.12rem;
-    padding-left:2.56rem;
-    border-radius: 5.12rem;
-    position: absolute;
-    left:5.1198rem;
-    top:1.7066rem;
-    outline:none;
-    border: 0;
-    font-size: 2.048rem;
+    width:80%;
+    height:2.56rem;
+    border-radius: 1.28rem;
+    border:0;
+    outline: none;
+    padding-left:5%;
     background: #F1EFEF;
-
+    background: white;
 } 
 .search_image{
-  width:3.5rem;
-  height:3.5rem;
+  width:2rem;
+  height:2rem;
   position: absolute;
-  left:50.344rem;
-  top:2.5166rem;
+  right:13%;
+  top:1.135rem;
 }
 .hot_drug{
   width:100%;
-  height:7.509rem;
+  height:4rem;
 }
 
 .hot_search_drug{
   width:100%;
-  height:7.509rem;
+  height:4rem;
 }
 .hot_drug p,.hot_search_drug p{
-  font-size: 2.38924rem;
-  height:7.509rem;
-  line-height: 7.509rem;
+  font-size: 1.19462rem;
+  height:4rem;
+  line-height: 4rem;
   text-align: left;
-  margin-left: 2.5599rem;
+  margin-left: 1.27995rem;
 }
 
 
 .drug_show{
   width:100%;
-  height:27.3056rem;
-  padding: 2.5599rem;
+  height:13.6528rem;
+  padding: 1.27995rem;
   background:white;
   position:relative;
   
 }
 
 .drug_show img{
-  width:22.1858rem;
-  height:22.1858rem;
+  width:38%;
+  height:11.0929rem;
   float:left;
 }
 .drug_introduce{
-  width:36.69rem;
-  height:22.1858rem;
+  width:60%;
+  height:11.0929rem;
   float:left;
   text-align: left;
-  padding:1.27995rem 0rem 1.27995rem 2.5599rem ;
-
+  padding:0.64rem 0rem 0.64rem 1.27995rem;
+}
+.drug_introduce p{
+  font-size:1.10929rem;
 }
 .drug_name{
-  font-size:2.21858rem;
   color:#31323;
 }
 .drug_chinese_name{
   font-size:1.87726rem;
   color:#666666;
-  margin-top:1.7066rem;
+  margin-top:0.42665rem;
   word-break:break-all;
-  line-height: 2.7rem;
+  line-height: 1.35rem;
 }
 
 .drug_english_name{
-  font-size:1.87726rem;
+  font-size:0.93863rem;
   color:#666666;
-  margin-top:1.7066rem;
+  margin-top:0.42665rem;
   word-break:break-all;
-  line-height: 2.7rem;
+  line-height: 1.35rem;
 }
 .hot_drugs{
   width:100%;
-  padding: 2.5599rem 0 2.5599rem 0;
+  padding: 1.27995rem 0 1.27995rem 0;
 
 }
 .hot_drugs p{
   text-align: center;
   float:left;
   border:1px solid #E7E7E7;
-  height:5.9731rem;
-  line-height:5.9731rem;
-  padding: 0rem 2.5599rem;
-  margin-bottom: 2.5599rem; 
+  height:2.99rem;
+  line-height:2.99rem;
+  padding: 0rem 1.27995rem;
+  margin-bottom: 1.27995rem; 
+  font-size: 1.10929rem;
 }
 /*.short_hot{
   width:10rem;

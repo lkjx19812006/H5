@@ -130,13 +130,13 @@ export default{
 .mint-header{
   background-color:white;
   color:#313232;
-  font-size: 2.73056rem;
+  font-size: 1.36528rem;
 }
 .mint-navbar{
   background: #F7F5F5;
 }
 .mint-tab-item-label{
-  font-size: 2.04792rem;
+  font-size: 1.02396rem;
   color:#333333;
 }
 
@@ -146,29 +146,29 @@ export default{
 .drug_name{
   width:92%;
   text-align: left;
-  font-size: 2.38924rem;
+  font-size: 1.19462rem;
   border-bottom: 1px solid #C9C9C9;
-  padding:3.8398rem 0rem;
-  margin-left: 2.5599rem;
+  padding:1.9199rem 0rem;
+  margin-left: 1.27995rem;
 }
 
 .drug_name .name_type{
   word-break:break-all;
   display:flex;
   flex-direction:row;
-  margin-bottom:2.5599rem; 
+  margin-bottom:1.27995rem; 
 }
 .what_name{
-  font-size: 2.38924rem;
+  font-size: 1.19462rem;
   color:#333333;
   flex:2;
-  line-height: 3rem;
+  line-height: 1.5rem;
 }
 .answer_name{
   flex:12;
-  font-size: 2.04792rem;
+  font-size: 1.02396rem;
   color:#666666;
-  line-height: 3rem;
+  line-height: 1.5rem;
 
 }
 #last_name_type{
@@ -178,29 +178,29 @@ export default{
 .drug_effect{
   width:92%;
   text-align: left;
-  font-size: 2.38924rem;
+  font-size: 1.19462rem;
   border-bottom: 1px solid #C9C9C9;
-  padding:3.8398rem 0rem;
-  margin-left: 2.5599rem;
+  padding:1.9199rem 0rem;
+  margin-left: 1.27995rem;
 }
 
 .drug_effect .drug_effect_type{
   word-break:break-all;
   display:flex;
   flex-direction:row;
-  margin-bottom:2.5599rem; 
+  margin-bottom:1.27995rem; 
 }
 .what_effect{
-  font-size: 2.38924rem;
+  font-size: 1.19462rem;
   color:#333333;
   flex:2;
-  line-height: 3rem;
+  line-height: 1.5rem;
 }
 .effect_content{
   flex:12;
-  font-size: 2.04792rem;
+  font-size: 1.02396rem;
   color:#666666;
-  line-height: 3rem;
+  line-height: 1.5rem;
 }
 #last_effect_type{
   margin-bottom:0;
@@ -208,27 +208,27 @@ export default{
 .spec{
   width:92%;
   text-align: left;
-  font-size: 2.38924rem;
+  font-size: 1.19462rem;
  
-  padding:3.8398rem 0rem;
-  margin-left: 2.5599rem;
+  padding:1.9199rem 0rem;
+  margin-left: 1.27995rem;
 }
 .spec_type{
   word-break:break-all;
   display:flex;
   flex-direction:row;
-  margin-bottom:2.5599rem; 
+  margin-bottom:1.27995rem; 
 }
 .what_spec{
-  font-size: 2.38924rem;
+  font-size: 1.19462rem;
   color:#333333;
   flex:2;
-  line-height: 3rem;
+  line-height: 1.5rem;
 }
 .spec_content{
   flex:7;
-  font-size: 2.04792rem;
+  font-size: 1.02396rem;
   color:#666666;
-  line-height: 3rem;
+  line-height: 1.5rem;
 }
 </style>
