@@ -254,3 +254,15 @@ a {
   font-size: 24px;
   line-height: 40px;
 }
+
+.bg_white{
+  background-color: #fff; 
+  float: left;
+  width: 100%;
+  margin-bottom: 0.8rem;
+}
+
+.mint-header{
+  background-color:#FA6705; 
+}
+

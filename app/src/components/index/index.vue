@@ -1,20 +1,18 @@
 <template>
     <div>
-        <mt-header fixed title="固定在顶部">
+        <mt-header fixed>
             <router-link to="/" slot="left">
-                <mt-button icon="back">北京</mt-button>
+                <mt-button>北京</mt-button>
+                <span>dsds</span>
+                <div class="search_div">请输入您想要的货物资源</div>
             </router-link>
         </mt-header>
-        <div class="page-swipe">
+        <div class="swipe_height">
             <mt-swipe :auto="4000">
-                <mt-swipe-item>
-                    <img src="/static/images/1.jpg">
-                </mt-swipe-item>
-                <mt-swipe-item>
-                    <img src="/static/images/2.jpg">
-                </mt-swipe-item>
-                <mt-swipe-item>
-                    <img src="/static/images/3.jpg">
+                <mt-swipe-item v-for="item in imgArray">
+                    <div>
+                        <img v-bind:src="item.url">
+                    </div>
                 </mt-swipe-item>
             </mt-swipe>
         </div>
@@ -36,96 +34,137 @@
         </div>
         <div class="real_news">
             <div class="news_logo">
-                <img src="../../../static/images/neWs.png" >
+                <img src="../../../static/images/neWs.png">
             </div>
             <div class="news_content">
-                <ul>
+                <ul id="scrollText">
                     <li v-for="todo in todos">
-                        <p class="good_p">{{todo.name}}</p>
-                        <p>{{todo.spec}}</p>
-                        <p>{{todo.place}}</p>
-                        <p class="price_P">{{todo.price}}</p>
-                        <p class="phone_p">{{todo.phone}}</p>
-                        <p class="way_p">{{todo.time}}</p>
+                        <div>{{todo.name+' '+todo.spec+' '+todo.place+' '+todo.price+' '+todo.phone+' '+todo.time}}</div>
+                    </li>
+                    <li v-if="todos[0]">
+                        <div>{{todos[0].name+' '+todos[0].spec+' '+todos[0].place+' '+todos[0].price+' '+todos[0].phone+' '+todos[0].time}}</div>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="good_price">
-            <p>药材指导价</p>
-            <p class="more_content"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
+        <div class="bg_white">
+            <p class="index_title">药材指导价</p>
+            <div class="more_content">
+                <p>更多</p><img src="/static/images/right.png">
+            </div>
             <mt-swipe :auto="4000" :showIndicators="false">
-                <mt-swipe-item v-for="todo in todos">
-                    <div class="good_price_box">
-                        <div class="good_price_swipe" id="good_price_swipe_one">
-                            <p class="price_swiper_name">{{todo.name}}</p>
-                            <div class="price_swiper_div">
-                                <p>规格:<span>{{todo.spec}}</span></p>
-                                <p>{{todo.price}}</p>
-                            </div>
-                            <div class="price_swiper_div">
-                                <p>规格:<span>{{todo.spec}}</span></p>
-                                <p><img src="/static/images/up.png">&nbsp;{{todo.up_price}}</p>
+                <mt-swipe-item v-for="(todo,index) in todos" v-if="index%2==0">
+                    <div class="drug_price_box">
+                        <div class="drug_price_swipe">
+                            <div class="drug_price_swipe_left">
+                                <p class="price_swiper_name">{{todo.name}}</p>
+                                <div class="price_swiper_div">
+                                    <span>规格:<span>{{todo.spec}}</span></span>
+                                    <span class="price_swiper_right_span">{{todo.price}}</span>
+                                </div>
+                                <div class="price_swiper_div price_swiper_place_div">
+                                    <span>产地:<span>{{todo.place}}</span></span>
+                                    <span class="price_swiper_right_span"><img src="/static/images/up.png">&nbsp;{{todo.up_price}}</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="good_price_swipe" id="good_price_swipe_two">
-                            <p class="price_swiper_name">{{todo.name}}</p>
-                            <div class="price_swiper_div">
-                                <p>规格:<span>{{todo.spec}}</span></p>
-                                <p>{{todo.price}}</p>
-                            </div>
-                            <div class="price_swiper_div">
-                                <p>规格:<span>{{todo.spec}}</span></p>
-                                <p><img src="/static/images/down.png">&nbsp;{{todo.down_price}}</p>
+                        <div class=" drug_price_swipe " v-if="todos[index+1]">
+                            <div class="drug_price_swipe_right">
+                                <p class="price_swiper_name">{{todos[index+1].name}}</p>
+                                <div class="price_swiper_div">
+                                    <span>规格:<span>{{todos[index+1].spec}}</span></span>
+                                    <span class="price_swiper_right_span">{{todos[index+1].price}}</span>
+                                </div>
+                                <div class="price_swiper_div price_swiper_place_div">
+                                    <span>产地:<span>{{todos[index+1].place}}</span></span>
+                                    <span class="price_swiper_right_span"><img src="/static/images/up.png">&nbsp;{{todos[index+1].up_price}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </mt-swipe-item>
             </mt-swipe>
         </div>
-        <div class="recommend">
-            <p>推荐资源</p>
-            <p class="more_content"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
-            <ul>
-                <li v-for="todo in todos" style="background:url(/static/images/bao.png) no-repeat 0rem center;background-size: 3rem 3rem;">
-                    <p class="good_p">{{todo.name}}</p>
-                    <p>{{todo.spec}}</p>
-                    <p>{{todo.place}}</p>
-                    <p class="price_p">{{todo.price}}</p>
-                    <p class="phone_p">{{todo.phone}}</p>
-                    <p class="way_p">
-                        <input type="button" value="我要购买">
-                    </p>
-                </li>
-            </ul>
+        <div class="bg_white">
+            <div>
+                <p class="index_title">推荐资源</p>
+                <div class="more_content">
+                    <p>更多</p><img src="/static/images/right.png">
+                </div>
+            </div>
+            <div class="list_content">
+                <div class="mint-cell cell_class">
+                    <div class="mint-cell-wrapper cell_class" v-for="todo in todos">
+                        <div class="list_image">
+                            <img src="/static/images/bao.png" class="first_image">
+                            <img src="/static/images/zheng.png">
+                        </div>
+                        <div class="list_image">{{todo.name}}</div>
+                        <div class="list_font">{{todo.spec}}</div>
+                        <div class="list_font">{{todo.place}}</div>
+                        <div class="list_font">{{todo.price}}</div>
+                        <div class="list_font">
+                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list">
+                                我要购买
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="urgent">
-            <p>紧急求购</p>
-            <p class="more_content"><span>更多</span>&nbsp;<img src="/static/images/right.png"></p>
-            <ul>
-                <li v-for="todo in todos" style="background:url(/static/images/zheng.png) no-repeat 0rem center;background-size: 3rem 3rem;">
-                    <p class="good_p">{{todo.name}}</p>
-                    <p>{{todo.spec}}</p>
-                    <p>{{todo.place}}</p>
-                    <p class="price_p">{{todo.price}}</p>
-                    <p class="phone_p">{{todo.phone}}</p>
-                    <p class="way_p">
-                        <input type="button" value="我要购买">
-                    </p>
-                </li>
-            </ul>
+        <div class="bg_white">
+            <div>
+                <p class="index_title">紧急求购</p>
+                <div class="more_content">
+                    <p>更多</p><img src="/static/images/right.png">
+                </div>
+            </div>
+            <div class="list_content">
+                <div class="mint-cell cell_class">
+                    <div class="mint-cell-wrapper cell_class" v-for="todo in todos">
+                        <div class="list_image">
+                            <img src="/static/images/bao.png" class="first_image">
+                            <img src="/static/images/zheng.png">
+                        </div>
+                        <div class="list_image">{{todo.name}}</div>
+                        <div class="list_font">{{todo.spec}}</div>
+                        <div class="list_font">{{todo.place}}</div>
+                        <div class="list_font">{{todo.time}}</div>
+                        <div class="list_font">
+                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list">
+                                我要购买
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 </template>
 <script>
 import common from '../../common/common.js'
-
 
 export default {
     data() {
             return {
                 msg: 'Welcome to Your Vue.js App',
                 selected: 'tab-container1',
-                todos: {},
+                imgArray: [{
+                    url: '/static/images/1.jpg'
+                }, {
+                    url: '/static/images/2.jpg'
+                }, {
+                    url: '/static/images/3.jpg'
+                }],
+                todos: [{
+                    "name": "人参",
+                    "spec": "统货",
+                    "place": "东北",
+                    "price": "98.9元/kg",
+                    "up_price": "9元/kg",
+                    "down_price": "9元/kg",
+                    "phone": "15301546832",
+                    "time": "12:26"
+                }],
                 drugParam: {
                     show: false
                 },
@@ -158,89 +197,104 @@ export default {
             }
 
         },
-
         methods: {
 
         },
-
         created() {
             let _self = this;
-
             common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
-                console.log(response.data);
                 common.$emit('close-load');
                 _self.listData = response.data.biz_result;
-
-
                 let data = response.data.biz_result.list;
-                console.log(data);
                 this.todos = data;
-
-
-
             }, (err) => {
-                console.log(err);
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
             });
+        },
+        computed: {
+            drugArray: function() {
+                let arr = [];
+                for (let i = 0; i++; i < this.todos.length) {
+                    if (i % 2 == 0) {
+                        arr.push(this.todos[i]);
+                    }
+                }
+                return arr;
+            }
+        },
+        mounted() {
+
+            function startmarquee(lh, speed, delay) {
+                var count = 1;
+                var t;
+                var o = document.getElementById("scrollText");
+                var top = 0;
+                o.style.marginTop = 0;
+
+                function start() {
+                    t = setInterval(scrolling, speed);
+                }
+
+                function scrolling() {
+                    if (top % lh != 0 || top == 0) {
+                        if (count == 6) {
+                            o.style.marginTop = 0;
+                            clearInterval(t);
+                            setTimeout(start, delay);
+                            count = 1;
+                            top = 0;
+                        } else {
+                            o.style.marginTop = parseInt(o.style.marginTop) - 1 + "px";
+                            top++;
+                        }
+                    } else {
+                        top = 0;
+                        count++;
+                        clearInterval(t);
+                        setTimeout(start, delay);
+                    }
+                }
+                setTimeout(start, delay);
+            }
+            startmarquee(50, 20, 1500);
         }
-
-
-
-
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 ul li {
     list-style: none;
 }
 
-.header {
+.search_div {
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    height: 30px;
+    position: absolute;
+    top: 5px;
+    left: 62px;
+    right: 15px;
+        color: #999;
+    line-height: 30px;
+    text-indent: 1rem;
+}
+
+.swipe_height {
+    margin-top: 40px;
+    height: 15rem;
+}
+
+.swipe_height img {
     width: 100%;
-    height: 8.534rem;
-    background: #FA6705;
-    position: relative;
-}
-
-.header .select {
-    position: absolute;
-    left: 1.7066rem;
-    border: none;
-    background: #FA6705;
-    top: 2.73rem;
-    color: white;
-    outline: none;
-    border: 0;
-}
-
-.header input {
-    width: 42.667rem;
-    height: 5.12rem;
-    padding-left: 2.56rem;
-    border-radius: 5.12rem;
-    position: absolute;
-    left: 12.799rem;
-    top: 1.7066rem;
-    outline: none;
-    border: 0;
-    font-size: 2.048rem;
-}
-
-.header .search {
-    width: 3.5rem;
-    height: 3.5rem;
-    position: absolute;
-    left: 50.344rem;
-    top: 2.5166rem;
 }
 
 .entrance {
     background: white;
     position: relative;
-    height: 10rem;
+    height: 9rem;
     margin: 10px 0;
+    max-height: 90px;
 }
 
 .entrance div {
@@ -250,12 +304,13 @@ ul li {
 }
 
 .entrance div img {
-    max-width: 80px;
+    max-width: 50px;
 }
 
 .entrance div p {
     margin-top: 5px;
     color: #333;
+    font-size: 1.1rem
 }
 
 .supply_demond {
@@ -266,12 +321,12 @@ ul li {
     position: relative;
 }
 
-.supply_demond div{
+.supply_demond div {
     width: 50%;
 }
 
-.supply_demond div:first-child{
-    border-right: 1px solid #ddd; 
+.supply_demond div:first-child {
+    border-right: 1px solid #ddd;
 }
 
 .supply_demond p {
@@ -295,12 +350,13 @@ ul li {
 
 .real_news {
     position: relative;
-    height: 4.2rem;
+    height: 50px;
     margin: 1rem 0;
-    background-color: #fff; 
+    background-color: #fff;
+    overflow: hidden;
 }
 
-.real_news .news_logo{
+.real_news .news_logo {
     text-align: center;
     width: 4.3rem;
     border-right: 1px solid #ddd;
@@ -308,237 +364,151 @@ ul li {
     float: left;
 }
 
-.real_news .news_logo img{
+.real_news .news_logo img {
     width: 2.8rem;
     margin: 0.8rem;
 }
 
-.real_news .news_content{
-    float: left;
+.real_news .news_content {
     margin-left: 0.3rem;
+    float: left;
+    width: 82%;
 }
 
 .real_news .news_content ul li {
-    display: flex;
-    flex-direction: row;
-    line-height: 2rem;
+    line-height: 14px;
+    font-size: 1.2rem;
+    padding-top: 10px;
+    height: 50px;
+}
+
+.real_news .news_content ul li div {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.real_news .news_content ul li p {
+    margin-left: 0.2rem;
+}
+
+.bg_white .index_title {
+    font-size: 1.6rem;
+    color: #333;
+    border-left: 2px solid #FA6705;
+    padding: 0 0.8rem;
+    margin: 0.8rem 0;
+    text-align: left;
+    float: left;
+}
+
+.bg_white .more_content {
+    float: right;
     font-size: 1.1rem;
+    margin-right: 0.8rem;
 }
 
-
-.good_price {
-    padding: 0.8533rem;
-    background: white;
-    text-align: left;
-    font-size: 1.7067rem;
-    height: 28rem;
-    box-sizing: border-box;
-    margin-bottom: 1.7067rem;
-    position: relative;
+.bg_white .more_content p {
+    float: left;
+    margin-top: 1.1rem;
 }
 
-.way_p input {
-    height: 4.0984rem;
-    width: 10.2396rem;
-    background: #EC6817;
-    line-height: 4.0984rem;
-    color: #ffffff;
-    border: 0;
+.bg_white .more_content img {
+    margin: 1.1rem 0 0 0.5rem;
+    width: 0.7rem;
 }
 
-.good_price>p {
-    font-size: 2.7306rem;
-    margin-left: 0.8533rem;
-    margin-top: 1.7067rem;
-    margin-bottom: 1.7067rem;
-}
-
-.good_price_swipe_one .mint-swipe {
-    height: 13.6528rem;
-}
-
-.price_swiper_name {
-    margin-top: 0.8533rem;
-    font-size: 2.5599rem;
-    margin-bottom: 1.7067rem;
-}
-
-.price_swiper_div {
-    display: flex;
-    flex-direction: row;
-}
-
-.price_swiper_div>p {
-    flex: 1;
-    font-size: 2.5599rem;
-    color: gray;
-    line-height: 3rem;
-}
-
-.price_swiper_div>p img {
-    width: 1.2rem;
-}
-
-.good_price_box {
-    display: flex;
-    flex-direction: row;
-    margin-top: 0.8533rem;
-    margin-left: 0.8533rem;
-}
-
-.recommend,
-.urgent {
-    padding: 0.8533rem;
-    background: white;
-    text-align: left;
-    font-size: 2.0479rem;
-    min-height: 10.2396rem;
-    box-sizing: border-box;
-    margin-bottom: 1.7067rem;
-    position: relative;
-}
-
-.recommend .more_content,
-.urgent .more_content,
-.good_price .more_content {
-    position: absolute;
-    right: 1.877rem;
-    top: 1.877rem;
-    font-size: 1.877rem;
-}
-
-.recommend .more_content img,
-.urgent .more_content img,
-.good_price .more_content img {
-    width: 0.8533rem;
-}
-
-.recommend p,
-.urgent p {
-    margin-bottom: 0.8533rem;
-}
-
-.recommend>p,
-.urgent>p {
-    font-size: 2.73rem;
-    margin: 1.7067rem 0 1.7067rem 0.8533rem;
-}
-
-.recommend ul,
-.urgent ul {
-    display: flex;
-    flex-direction: column;
-}
-
-.recommend ul li,
-.urgent ul li {
-    flex: 1;
-    border-top: 1px solid gray;
-    height: 7.509rem;
-    font-size: 2.0479rem;
-    color: #333333;
-    margin: 0 0.8533rem;
-}
-
-.recommend ul li {
-    display: flex;
-    flex-direction: row;
-    line-height: 7.509rem;
-}
-
-.recommend ul li p {
-    flex: 2;
-    font-size: 2.0479rem;
-    text-align: center;
-}
-
-.recommend ul li .price_p,
-.recommend ul li .good_p,
-.recommend ul li .way_p {
-    flex: 3;
-}
-
-.recommend ul li .phone_p {
-    flex: 5;
-}
-
-.recommend ul li,
-.urgent ul li {
-    padding-left: 5.1198rem;
-}
-
-.urgent ul li {
-    display: flex;
-    flex-direction: row;
-    line-height: 7.509rem;
-}
-
-.urgent ul li p {
-    flex: 2;
-    font-size: 2.0479rem;
-    text-align: center;
-}
-
-.urgent ul li .price_p,
-.urgent ul li .good_p,
-.urgent ul li .way_p {
-    flex: 3;
-}
-
-.urgent ul li .phone_p {
-    flex: 5;
-}
-
-img {
+.bg_white .mint-swipe {
+    height: 8rem;
     width: 100%;
 }
 
-.mint-swipe {
-    overflow: hidden;
-    position: relative;
-    height: 100%;
+.bg_white .drug_price_box {
+    width: 100%;
+    float: left;
 }
 
-.mint-swipe-items-wrap {
-    position: relative;
-    overflow: hidden;
-    height: 100%;
+.bg_white .drug_price_box .drug_price_swipe {
+    width: 50%;
+    float: left;
 }
 
-.mint-swipe-items-wrap div {
-    position: absolute;
-    transform: translateX(-100%);
-    size: 100% 100%;
-    display: none;
+.bg_white .drug_price_box .drug_price_swipe_right {
+    background-color: #FFF0D7;
+    margin: 0.8rem 0.8rem 0.8rem 0.4rem;
+    border-radius: 10px;
 }
 
-.mint-swipe-items-wrap div:active {
-    display: block;
-    transform: none;
+.bg_white .drug_price_box .drug_price_swipe .drug_price_swipe_left {
+    margin: 0.8rem 0.4rem 0.8rem 0.8rem;
+    background-color: #EDFAD8;
+    border-radius: 10px;
 }
 
-.mint-swipe-indicators {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+.bg_white .drug_price_box .drug_price_swipe div .price_swiper_name {
+    text-align: left;
+    color: #333;
+    padding: 0.5rem;
+    font-size: 1.3rem;
 }
 
-.mint-swipe-indicator {
-    size: 8px 8px;
-    display: inline-block;
-    border-radius: 100%;
-    background: #000;
-    opacity: 0.2;
-    margin: 0 3px;
+.bg_white .drug_price_box .drug_price_swipe div .price_swiper_div {
+    margin: 0;
+    padding: 0 0.5rem;
+    text-align: left;
+    font-size: 1.1rem;
 }
 
-.mint-swipe-indicator:active {
-    background: #fff;
+.bg_white .drug_price_box .drug_price_swipe div .price_swiper_div img {
+    max-height: 1rem;
 }
 
-.page-swipe {
-    height: 14rem;
-    margin-top: 40px;
+.bg_white .drug_price_box .drug_price_swipe div .price_swiper_place_div {
+    padding: 0.3rem 0.5rem 0.5rem 0.5rem;
+    font-size: 1.1rem;
+}
+
+.bg_white .drug_price_box .drug_price_swipe div .price_swiper_div .price_swiper_right_span {
+    float: right;
+}
+
+.bg_white .cell_class {
+    float: left;
+    width: 100%;
+    min-height: 40px;
+    padding: 0;
+}
+
+.bg_white .list_content {
+    padding: 0 0.8rem;
+    float: left;
+    width: 100%;
+}
+
+.bg_white .list_content .button_list {
+    max-height: 28px;
+    font-size: 1.1rem;
+    color: #fff;
+    background-color: #EC6817;
+}
+
+.bg_white .list_content .cell_class .list_font {
+    font-size: 1.1rem;
+    text-align: center;
+    width: 20%;
+}
+
+.bg_white .list_content .cell_class .list_image {
+    font-size: 1.1rem;
+    text-align: center;
+    width: 10%;
+}
+
+.bg_white .list_content .cell_class .list_image img {
+    float: left;
+    max-width: 49%;
+}
+
+.bg_white .list_content .cell_class .list_image .first_image {
+    margin-right: 2%;
 }
 </style>

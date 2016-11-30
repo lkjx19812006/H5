@@ -1,31 +1,24 @@
 <template>
-<!-- <<<<<<< HEAD
     <div class="hello">
         Find
-      
         <div class="scrollbox">
-            <div class="scrollborder">
+            <div class="scrollborder" id="marqueebox">
                 <div v-for="item in listData">{{item.name}}</div>
-                <div >{{listData[0].name}}</div>
             </div>
         </div>
     </div>
-======= -->
-  <div class="hello">
+    <!-- <div class="hello">
 
      <mt-search v-model="value">
-	  <mt-cell
-	    v-for="item in result"
-	    :title="item.title"
-	    :value="item.value">
-	  </mt-cell>
-	</mt-search>
-  
-   
-  </div>
+      <mt-cell
+        v-for="item in result"
+        :title="item.title"
+        :value="item.value">
+      </mt-cell>
+    </mt-search> -->
+    </div>
 </template>
 <script>
-
 export default {
     data() {
             return {
@@ -44,21 +37,21 @@ export default {
                     "price": "98.9元/kg",
                     "phone": "15301546832",
                     "time": "12:26:33"
-                },{
+                }, {
                     "name": "人参3",
                     "spec": "统货",
                     "place": "上海",
                     "price": "98.9元/kg",
                     "phone": "15301546832",
                     "time": "12:26:33"
-                },{
+                }, {
                     "name": "人参4",
                     "spec": "统货",
                     "place": "上海",
                     "price": "98.9元/kg",
                     "phone": "15301546832",
                     "time": "12:26:33"
-                },{
+                }, {
                     "name": "人参5",
                     "spec": "统货",
                     "place": "上海",
@@ -89,21 +82,21 @@ export default {
                     "price": "98.9元/kg",
                     "phone": "15301546832",
                     "time": "12:26:33"
-                },{
+                }, {
                     "name": "人参8",
                     "spec": "统货",
                     "place": "上海",
                     "price": "98.9元/kg",
                     "phone": "15301546832",
                     "time": "12:26:33"
-                },{
+                }, {
                     "name": "人参9",
                     "spec": "统货",
                     "place": "上海",
                     "price": "98.9元/kg",
                     "phone": "15301546832",
                     "time": "12:26:33"
-                },{
+                }, {
                     "name": "人参10",
                     "spec": "统货",
                     "place": "上海",
@@ -113,75 +106,9 @@ export default {
                 }];
             }
             setInterval(updateData, 24000);
+              console.log('dddd');
         }
-
 }
 </script>
 <style scoped>
-@-webkit-keyframes scrollText {
-   0% {
-        transform: translateY(0px);
-    }
-    20% {
-        transform: translateY(-40px);
-    }
-    40% {
-        transform: translateY(-80px);
-    }
-    60% {
-        transform: translateY(-120px);
-    }
-    80% {
-        transform: translateY(-160px);
-    }
-    100% {
-        transform: translateY(-200px);
-    }
-}
-
-@keyframes scrollText {
-    0% {
-        transform: translateY(0px);
-    }
-    20% {
-        transform: translateY(-40px);
-    }
-    40% {
-        transform: translateY(-80px);
-    }
-    60% {
-        transform: translateY(-120px);
-    }
-    80% {
-        transform: translateY(-160px);
-    }
-    100% {
-        transform: translateY(-200px);
-    }
-}
-
-.scrollbox {
-    position: relative;
-    top: 20px;
-    left: 20px;
-    width: 200px;
-    height: 40px;
-    overflow: hidden;
-}
-
-.scrollborder {
-    top: 0px;
-    -webkit-animation: scrollText 24s infinite cubic-bezier(1, 0, 0.5, 0);
-    animation: scrollText 24s infinite cubic-bezier(1, 0, 0.5, 0);
-}
-
-.scrollborder div {
-    height: 40px;
-}
-
-.scrollborder:hover {
-    animation-play-state: paused;
-    -webkit-animation-play-state: paused;
-}
-
 </style>
