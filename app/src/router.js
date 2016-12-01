@@ -10,7 +10,7 @@ import myDemond from './views/myDemond'
 import drugResTableDetail from './views/drugResTableDetail'
 import transaction from './views/transaction'
 import search from './views/search'
-
+import lowPriceRes from './views/lowPriceRes'
 
 
 module.exports = {
@@ -34,6 +34,7 @@ module.exports = {
     { name: 'drugResTableDetail', path: '/drugResTableDetail/:drugId', component: drugResTableDetail },
     { name: 'transaction', path: '/transaction', component: transaction },
     { name: 'search', path: '/search', component: search },
+    { name: 'lowPriceRes', path: '/lowPriceRes', component: lowPriceRes },
     { path: '*', redirect: '/home' }
   ]
 }

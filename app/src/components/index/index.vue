@@ -88,9 +88,11 @@
         <div class="bg_white">
             <div>
                 <p class="index_title">推荐资源</p>
+                  <router-link to="/lowPriceRes" >
                 <div class="more_content">
                     <p>更多</p><img src="/static/images/right.png">
                 </div>
+                </router-link>
             </div>
             <div class="list_content">
                 <div class="mint-cell cell_class">

@@ -151,7 +151,7 @@ export default {
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
                     console.log('dssdsdsd');
-                }, 1000)
+                }, 500)
             }
         },
         created() {
@@ -168,7 +168,7 @@ export default {
 
             _self.time = setTimeout(() => {
                 console.log('dssdsdsd');
-            }, 1000)
+            }, 500)
 
         }
 }
