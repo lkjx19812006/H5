@@ -19,13 +19,19 @@
               <p class="name">姓名</p>
               <p class="name_content"><input type="text" :placeholder="personal_data.name"></p>
            </li>
-           <li style="background:white url(/static/images/down-arrow.png) 96% center no-repeat;background-size:1.024rem 0.67rem;">
+           <li style="background:white url(/static/images/down-arrow.png) 96% center no-repeat;background-size:1.024rem 0.67rem;" >
               <p class="name">生日</p>
-              <p class="name_content"><input type="text" :placeholder="personal_data.birth"></p>
+              <div class="name_content">
+                <input type="text" :placeholder="personal_data.birth" >
+                
+                
+              </div>
            </li>
            <li style="background:white url(/static/images/down-arrow.png) 96% center no-repeat;background-size:1.024rem 0.67rem;">
               <p class="name">性别</p>
-              <p class="name_content"><img :src="personal_data.sex"></p>
+              <p class="name_content">
+                <img :src="personal_data.sex">
+              </p>
            </li>
            <li>
               <p class="other">电话</p>
@@ -37,7 +43,7 @@
            </li>
         </ul>
    </div>
-
+                
     <div class="company_data">
         <p class="company_data_title">企业信息</p>
         <ul>
@@ -74,6 +80,7 @@
 <script>
 
 export default {
+
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
@@ -94,8 +101,13 @@ export default {
         company:'已认证'
       }
       
+      
+      
 
     }
+  },
+  methods:{
+     
   }
 
  
@@ -162,20 +174,14 @@ export default {
   border-bottom:0.0427rem solid #E5E5E5;
   background:white;
 }
-.name_content input{
-  height:4.1rem;
+.name_content input,.other_content input{
+  height:2.5rem;
   text-align: right;
   outline: none;
   border:0;
-  line-height:4.267rem; 
+  line-height:2.5rem; 
 }
-.other_content input{
-  height:3.9rem;
-  text-align: right;
-  outline: none;
-  border:0;
-  line-height:4.267rem; 
-}
+
 .name,.other{
   float: left;
   color:#666666;
@@ -184,6 +190,7 @@ export default {
   float:right;
   height:4.267rem;
   color:#999999;
+
 }
 .name_content img{
   height:1.536rem;

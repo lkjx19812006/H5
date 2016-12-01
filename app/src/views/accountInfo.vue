@@ -4,7 +4,7 @@
       <router-link to="/" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
-    <mt-button  slot="right">编辑</mt-button> 
+    <mt-button  slot="right"><router-link to="accountInfoFinish">编辑</router-link></mt-button> 
    </mt-header>
    <div class="header_photo" style="background:white url(/static/images/right-arrow.png) 96% center no-repeat;background-size:0.6826rem 1.024rem;">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
@@ -17,7 +17,7 @@
         <ul>
            <li>
               <p class="name">姓名</p>
-              <p class="name_content"><input type="text"></p>
+              <p class="name_content">{{personal_data.name}}</p>
            </li>
            <li>
               <p class="name">生日</p>
