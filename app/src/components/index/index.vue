@@ -4,8 +4,8 @@
             <router-link to="/search" slot="left">
                 <mt-button>北京</mt-button>
                 <div class="search_div">
-                请输入您想要的货物资源
-                <img src="/static/icons/search.png">
+                    请输入您想要的货物资源
+                    <img src="/static/icons/search.png">
                 </div>
             </router-link>
         </mt-header>
@@ -19,7 +19,7 @@
             </mt-swipe>
         </div>
         <div class="entrance">
-        <a v-for="item in categoryArr" @click="jump(item.router)">
+            <a v-for="item in categoryArr" @click="jump(item.router)">
                 <div>
                     <img v-bind:src="item.image">
                     <p>{{item.name}}</p>
@@ -28,11 +28,11 @@
         </div>
         <div class="supply_demond">
             <div class="supply_demond_path" v-for="item in supplyDemandArray" @click="jump(item.router)">
-                    <p>{{item.name}}</p>
-                    <img v-bind:src="item.image">
+                <p>{{item.name}}</p>
+                <img v-bind:src="item.image">
             </div>
         </div>
-        <div class="real_news"  @click="jump('transaction')">
+        <div class="real_news" @click="jump('transaction')">
             <div class="news_logo">
                 <img src="../../../static/images/neWs.png">
             </div>
@@ -88,10 +88,10 @@
         <div class="bg_white">
             <div>
                 <p class="index_title">推荐资源</p>
-                  <router-link to="/lowPriceRes" >
-                <div class="more_content">
-                    <p>更多</p><img src="/static/images/right.png">
-                </div>
+                <router-link to="/lowPriceRes">
+                    <div class="more_content">
+                        <p>更多</p><img src="/static/images/right.png">
+                    </div>
                 </router-link>
             </div>
             <div class="list_content">
@@ -172,7 +172,7 @@ export default {
                 },
                 categoryArr: [{
                     name: '低价资源',
-                    router: 'drugResTable',
+                    router: 'lowPriceRes',
                     image: '/static/images/lowPrice.png'
                 }, {
                     name: '紧急求购',
@@ -200,7 +200,7 @@ export default {
 
         },
         methods: {
-            jump:function(router){
+            jump: function(router) {
                 console.log(router);
                 this.$router.push(router);
             }
@@ -268,11 +268,12 @@ export default {
 }
 </script>
 <style scoped>
-.mint-header{
+.mint-header {
     background-color: #FA6705;
     border: none;
     color: #fff;
 }
+
 ul li {
     list-style: none;
 }
@@ -282,14 +283,16 @@ ul li {
     border-radius: 10px;
     height: 30px;
     position: absolute;
-    top: 5px;
+    top: 15px;
     left: 62px;
     right: 15px;
-        color: #999;
+    color: #999;
     line-height: 30px;
     text-indent: 1rem;
+    font-size: 14px;
 }
-.search_div img{
+
+.search_div img {
     float: right;
     max-height: 20px;
     margin-top: 5px;
@@ -297,7 +300,7 @@ ul li {
 }
 
 .swipe_height {
-    margin-top: 40px;
+    margin-top: 60px;
     height: 15rem;
 }
 

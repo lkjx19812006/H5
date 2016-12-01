@@ -160,8 +160,8 @@ export default {
     text-align: center;
     color: #FA6705;
     font-size: 1.1rem;
-    height: 40px;
-    line-height: 40px;
+    height: 60px;
+    line-height: 60px;
 }
 
 .transaction .bg_white .list_head {

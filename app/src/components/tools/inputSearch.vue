@@ -26,7 +26,7 @@ export default {
 }
 
 .search_input .search_div {
-    height: 40px;
+    height: 50px;
     background: #fff;
     border-bottom: 1px solid #ccc;
     width: 100%;
@@ -37,7 +37,7 @@ export default {
 .search_input .search_div .search_content {
     background: #F1EFEF;
     height: 30px;
-    margin: 5px 30px 5px 30px;
+    margin: 10px 30px;
     border-radius: 10px;
 }
 

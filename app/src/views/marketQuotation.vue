@@ -13,10 +13,10 @@
             <p class="good_list_header">*数据仅供参考！</p>
             <div class="good_list_content">
                 <div class="list_content_header">
-                    <p >品名</p>
-                    <p >规格</p>
-                    <p >产地</p>
-                    <p >价格</p>
+                    <p>品名</p>
+                    <p>规格</p>
+                    <p>产地</p>
+                    <p>价格</p>
                     <input type="button" value="跌涨(元)">
                 </div>
                 <ul class="first_ul">
@@ -98,23 +98,22 @@ export default {
 }
 
 .search {
-    height: 4.27rem;
+    height: 60px;
     background: white;
     position: relative;
-    padding-top: 0.855rem;
     background: #F2F2F2;
 }
 
 .search input {
     width: 80%;
-    height: 2.56rem;
+    height: 30px;
     border-radius: 1.28rem;
     border: 0;
     outline: none;
     padding-left: 5%;
     background: #fff;
     border: 1px solid #ddd;
-
+    margin-top: 15px;
 }
 
 .search_image {
@@ -122,7 +121,7 @@ export default {
     height: 2rem;
     position: absolute;
     right: 13%;
-    top: 1.135rem;
+    top: 18px;
 }
 
 .good_list {
@@ -142,8 +141,8 @@ export default {
     width: 100%;
 }
 
-.good_list_content .first_ul{
-   border-bottom: 1px solid #CCCCCC;
+.good_list_content .first_ul {
+    border-bottom: 1px solid #CCCCCC;
 }
 
 .list_content_header {
@@ -158,7 +157,7 @@ export default {
     font-size: 1.11rem;
 }
 
-.list_content_header  input {
+.list_content_header input {
     outline: none;
     border: 0;
     width: 5.333rem;
