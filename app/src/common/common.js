@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Indicator, Toast, MessageBox } from 'mint-ui'
+import { Indicator, Toast, MessageBox,DatetimePicker } from 'mint-ui'
 
 let common = new Vue({
     data: {
@@ -38,6 +38,15 @@ common.$on('confirm', () => {
         console.log(action);
     }, action => {
         console.log(action)
+    });
+
+})
+
+common.$on('myDrugMoney', () => {
+    MessageBox.confirm('请下载app?').then(action => {
+        console.log(action);
+    }, action => {
+        MessageBox.confirm('再考虑考虑？');
     });
 
 })

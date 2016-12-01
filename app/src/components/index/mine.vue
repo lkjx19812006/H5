@@ -1,70 +1,71 @@
 <template>
   <div class="whole">
-      <div class="header">
-           <div class="header_top" style="background:url(/static/images/right-arrow.png) right center no-repeat;background-size:1.024rem 1.024rem;">
-                <div class="header_photo"></div>
-                <div class="information">
-                     <div class="information_center">
-                     	<div class="main_content">
-                             <p class="name" id="name">{{content.name}}</p>
-                             <p class="sex"><img :src="content.img_src"></p>
+    
+      <div class="mine_header">
+           <div class="mine_header_top" style="">
+                <div class="mine_header_photo"></div>
+                <div class="mine_information">
+                     <div class="mine_information_center">
+                     	<div class="mine_main_content">
+                             <p class="mine_name" id="mine_name">{{content.name}}</p>
+                             <p class="mine_sex"><img :src="content.img_src"></p>
                      	</div>
                          
                          <!-- <p class="money">储值：￥31232.89</p> -->
-                        <p class="company">{{content.company}}</p>
+                        <p class="mine_company">{{content.company}}</p>
                      </div>
                      
-                     <div class="information_right">
-                         <p class="money">储值：￥{{content.money}}</p>
-                         <p class="integration">积分：{{content.integration}}</p>
+                     <div class="mine_information_right">
+                         <p class="mine_money">储值：￥{{content.money}}</p>
+                         <p class="mine_integration">积分：{{content.integration}}</p>
                      </div>
                      
                 </div> 
                 <!-- <img src="/static/images/right-arrow.png" class="right-arrow"> -->
            </div>
 
-           <div class="header_bottom">
-               <p class="my_service">{{content.my_service}}</p>
-               <p class="his_name">{{content.his_name}}</p>
-               <router-link to="accountInfo"><p class="details">{{content.details}}</p></router-link>
+           <div class="mine_header_bottom">
+               <p class="mine_my_service">{{content.my_service}}</p>
+               <p class="mine_his_name">{{content.his_name}}</p>
+               <router-link to="accountInfo"><p class="mine_details">{{content.details}}</p></router-link>
            </div>
       </div>
       
-       <div class="entrance">
-             <div class="order" style="background:url(../../../static/icons/All-orders.png) no-repeat center 1.621rem;background-size:2.048rem 2.048rem;">
+       <div class="mine_entrance">
+             <div class="mine_order">
                  <p>{{entrance.order}}</p>
              </div>
-             <div class="obligation" style="background:url(../../../static/icons/Pending-payment.png) no-repeat center 1.621rem;background-size:2.048rem 2.048rem;">
+             <div class="mine_obligation">
                  <p>{{entrance.obligation}}</p>
              </div>
-             <div class="send" style="background:url(../../../static/icons/To-be-shipped.png) no-repeat center 1.621rem;background-size:2.048rem 2.048rem;">
+             <div class="mine_send">
                  <p>{{entrance.send}}</p>
              </div>
-             <div class="receive" style="background:url(../../../static/icons/Receipt-of-goods.png) no-repeat center 1.621rem;background-size:2.048rem 2.048rem;">
+             <div class="mine_receive">
                 <p>{{entrance.receive}}</p>
              </div>
        </div>
       
-         <div class="my_list">
+         <div class="mine_my_list">
              <ul>
-                 <li class="my_drugmoney" style="background:white url(../../../static/icons/I-Yaokuan.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;">
+                 <li class="mine_my_drugmoney"  v-on:click="drugMoney">
                  	<p>{{my_list.my_drugmoney}}</p>
                  </li>
-                 <li class="my_resouce" style="background:white url(../../../static/icons/My-resources.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;">
+                 <li class="mine_my_resouce" >
                  	<p>{{my_list.my_resouce}}</p>
                  </li>
-                 <li style="background:white url(../../../static/icons/My-purchase.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;">
+                 <li class="mine_my_demond" >
                  	<p>{{my_list.my_demond}}</p>
                  </li> 
              </ul>
              <ul>   
-                 <li class="my_price" style="background:white url(../../../static/icons/My-offer.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;">
+                 <li class="mine_my_price" style="">
                  	<p>{{my_list.my_price}}</p>
                  </li>
-                 <li class="my_attention" style="background:white url(../../../static/icons/My-concern.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;">
+                 <li class="mine_my_attention" style="">
                  	<p>{{my_list.my_attention}}</p>
                  </li>
-                 <li style="background:white url(../../../static/icons/Set-up.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;">
+                 <li class="mine_my_set" >
                  	<p>{{my_list.set}}</p>
                  </li>
              </ul>
@@ -73,7 +74,7 @@
 </template>
 
 <script>
-
+import common from '../../common/common.js'
 export default {
   data () {
     return {
@@ -101,9 +102,25 @@ export default {
          my_price:'我的报价',
          my_attention:'我的关注',
          set:'设置'
-      }
+      },
+      sheetVisible: false,
+        actions: [{
+          name: '展示 Toast',
+          method: this.showToast
+        }, {
+          name: '展示 Message Box',
+          method: this.showMsgbox
+        }]
     }
+  },
+  methods:{
+    drugMoney:function(){
+        common.$emit('myDrugMoney');
+    } 
+       
+
   }
+
 
  
 }
@@ -114,20 +131,20 @@ export default {
 .whole{
 	background:#F0F0F0;
 }
-.header{
+.mine_header{
     height:17.537rem;
     width:100%;
     background:#cccccc;
     padding-top:3.7rem;
 }
-.header_top{
+.mine_header_top{
 	width:88%;
 	height:6.4rem;
-	
+	background:url(/static/images/right-arrow.png) right center no-repeat;background-size:1.024rem 1.024rem;
 	margin-left: 6%;
 	
 }
-.header_photo{
+.mine_header_photo{
 	background:#FFD779;
 	width:6.4rem;
 	height:6.4rem;
@@ -135,7 +152,7 @@ export default {
 	margin-right: 4%;
 	float:left;
 }
-.information{
+.mine_information{
 	width:65.4%;
 	height:6.4rem;
 	padding: 1.38rem 0;
@@ -145,49 +162,49 @@ export default {
 	font-size: 1.024rem;
 	
 }
-.information_center{
+.mine_information_center{
 	flex:4;
 	display: flex;
 	flex-direction:column;
 	text-align: left;
 }
-.information_center div{
+.mine_information_center div{
 	flex:1;
 }
-.company{
+.mine_company{
 	flex:1;
 
 	
 }
-.information_right{
+.mine_information_right{
 	display:flex;
 	flex-direction:column;
 	text-align: left;
 	flex:6;
 }
-.money{
+.mine_money{
 	flex:1;
 }
-.integration{
+.mine_integration{
 	flex:1;
 }
-#name{
+#mine_name{
 	font-size: 1.365rem;
 	color:#FB761E;
 	float:left;
 }
-.sex img{
+.mine_sex img{
 	height:1.024rem;
 	margin-left: 3%;
 	margin-top: 0.1705rem;
 	float:left;
 }
-.right-arrow{
+.mine_right-arrow{
 	width:1.024rem;
 	height:1.024rem;
     margin-top:1.308rem;
 }
-.header_bottom{
+.mine_header_bottom{
 	width:85%;
 	height:1.27995rem;
 	line-height: 1.27995rem;
@@ -198,43 +215,43 @@ export default {
 	margin-right:6%;
 	margin-top:1.96rem;
 }
-.my_service{
+.mine_my_service{
 	flex:47;
 	text-align: left;
 }
-.his_name{
+.mine_his_name{
 	flex:26;
     text-align: left;
 }
-.details{
+.mine_details{
 	flex:27;
 	text-align: right;
 }
-.entrance{
+.mine_entrance{
 	display:flex;
 	flex-direction:row;
 	height:7.253rem;
 	margin-top: 0.8533rem;
 	background: white;
 }
-.entrance div{
+.mine_entrance div{
 	flex:1;
 	box-sizing: border-box;
 	height:7.253rem;
 	padding-top:4.48rem;
 }
-.entrance div p{
+.mine_entrance div p{
 	font-size: 1.109rem;
 	color:#333333;
 }
-.my_list{
+.mine_my_list{
 	width:100%;
 	height:17.066rem;
 	display: flex;
 	flex-direction:column;
 	margin-top:0.8533rem;
 }
-.my_list ul{
+.mine_my_list ul{
 	width:100%;
 	height:17.066rem;
 	flex:1;
@@ -242,17 +259,47 @@ export default {
 	display:flex;
 	flex-direction:row;
 }
-.my_list ul li{
+.mine_my_list ul li{
 	flex:1;
 	box-sizing: border-box;
 	padding-top:5.46rem;
 	
 }
-.my_list ul li p{
+.mine_my_list ul li p{
 	font-size: 1.024rem;
 	color:#333333;
 }
-.my_drugmoney,.my_resouce,.my_price,.my_attention{
+.mine_my_drugmoney,.mine_my_resouce,.mine_my_price,.mine_my_attention{
 	margin-right:0.213rem;
+}
+.mine_order{
+  background:url(/static/icons/All-orders.png) no-repeat center 1.621rem;background-size:2.048rem 2.048rem;
+}
+.mine_obligation{
+  background:url(/static/icons/Pending-payment.png) no-repeat center 1.621rem;background-size:2.048rem 2.048rem;
+}
+.mine_send{
+  background:url(/static/icons/To-be-shipped.png) no-repeat center 1.621rem;background-size:2.048rem 2.048rem;
+}
+.mine_receive{
+  background:url(/static/icons/Receipt-of-goods.png) no-repeat center 1.621rem;background-size:2.048rem 2.048rem;
+}
+.mine_my_drugmoney{
+  background:white url(/static/icons/I-Yaokuan.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;
+}
+.mine_my_resouce{
+  background:white url(/static/icons/My-resources.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;
+}
+.mine_my_demond{
+  background:white url(/static/icons/My-purchase.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;
+}
+.mine_my_price{
+  background:white url(/static/icons/My-offer.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;
+}
+.mine_my_attention{
+  background:white url(/static/icons/My-concern.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;
+}
+.mine_my_set{
+  background:white url(/static/icons/Set-up.png) no-repeat center 2.133rem;background-size:2.5599rem 2.5599rem;
 }
 </style>
