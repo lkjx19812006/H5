@@ -1,7 +1,7 @@
 <template>
    <div class="whole">
     <mt-header title="药性表">
-      <router-link to="/" slot="left">
+      <router-link to="/drugResTable" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link> 
    </mt-header>

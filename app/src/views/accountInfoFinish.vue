@@ -4,7 +4,7 @@
       <router-link to="/" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
-    <mt-button  slot="right">编辑</mt-button> 
+    <mt-button  slot="right" style="color:red">完成</mt-button> 
    </mt-header>
    <div class="header_photo" style="background:white url(/static/images/right-arrow.png) 96% center no-repeat;background-size:0.6826rem 1.024rem;">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
@@ -17,19 +17,19 @@
         <ul>
            <li>
               <p class="name">姓名</p>
-              <p class="name_content"><input type="text"></p>
+              <p class="name_content"><input type="text" :placeholder="personal_data.name"></p>
            </li>
-           <li>
+           <li style="background:white url(/static/images/down-arrow.png) 96% center no-repeat;background-size:1.024rem 0.67rem;">
               <p class="name">生日</p>
-              <p class="name_content">{{personal_data.birth}}</p>
+              <p class="name_content"><input type="text" :placeholder="personal_data.birth"></p>
            </li>
-           <li>
+           <li style="background:white url(/static/images/down-arrow.png) 96% center no-repeat;background-size:1.024rem 0.67rem;">
               <p class="name">性别</p>
               <p class="name_content"><img :src="personal_data.sex"></p>
            </li>
            <li>
               <p class="other">电话</p>
-              <p class="other_content">{{personal_data.phone}}</p>
+              <p class="other_content"><input type="text" :placeholder="personal_data.phone"></p>
            </li>
            <li style="background:white url(/static/images/right-arrow.png) 96% center no-repeat;background-size:0.6826rem 1.024rem;">
               <p class="other">个人认证</p>
@@ -43,23 +43,23 @@
         <ul>
            <li>
               <p class="name">公司</p>
-              <p class="name_content">{{conpany_data.name}}</p>
+              <p class="name_content"><input type="text" :placeholder="conpany_data.name"></p>
            </li>
            <li>
               <p class="name">公司简称</p>
-              <p class="name_content">{{conpany_data.short_name}}</p>
+              <p class="name_content"><input type="text" :placeholder="conpany_data.short_name"></p>
            </li>
            <li>
               <p class="name">职位</p>
-              <p class="name_content">{{conpany_data.job}}</p>
+              <p class="name_content"><input type="text" :placeholder="conpany_data.job"></p>
            </li>
            <li>
               <p class="other">主营品类</p>
-              <p class="other_content">{{conpany_data.major}}</p>
+              <p class="other_content"><input type="text" :placeholder="conpany_data.major"></p>
            </li>
            <li>
               <p class="other">开票信息</p>
-              <p class="other_content">{{conpany_data.open_data}}</p>
+              <p class="other_content"><input type="text" :placeholder="conpany_data.open_data"></p>
            </li>
            <li style="background:white url(/static/images/right-arrow.png) 96% center no-repeat;background-size:0.6826rem 1.024rem;">
               <p class="other">企业认证</p>
@@ -123,6 +123,7 @@ export default {
   line-height: 7.253rem;
 
 }
+
 .header_word{
   font-size: 1.024rem;
   color:#666666;
@@ -160,6 +161,20 @@ export default {
   line-height: 4.267rem;
   border-bottom:0.0427rem solid #E5E5E5;
   background:white;
+}
+.name_content input{
+  height:4.1rem;
+  text-align: right;
+  outline: none;
+  border:0;
+  line-height:4.267rem; 
+}
+.other_content input{
+  height:3.9rem;
+  text-align: right;
+  outline: none;
+  border:0;
+  line-height:4.267rem; 
 }
 .name,.other{
   float: left;

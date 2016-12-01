@@ -7,9 +7,16 @@ import drugResTable from './views/drugResTable'
 import marketQuotation from './views/marketQuotation'
 import mySupply from './views/mySupply'
 import myDemond from './views/myDemond'
-import drugResTableNav from './views/drugResTableNav'
+
+
 import provenanceSelection from './views/provenanceSelection'
 import accountInfo from './views/accountInfo'
+import accountInfoFinish from './views/accountInfoFinish'
+import drugResTableDetail from './views/drugResTableDetail'
+import transaction from './views/transaction'
+import search from './views/search'
+
+
 
 
 module.exports = {
@@ -30,9 +37,15 @@ module.exports = {
     { name: 'marketQuotation', path: '/marketQuotation', component: marketQuotation },
     { name: 'mySupply', path: '/mySupply', component: mySupply },
     { name: 'myDemond', path: '/myDemond', component: myDemond },
-    { name: 'drugResTableNav', path: '/drugResTableNav', component: drugResTableNav },
+
+    
     { name: 'provenanceSelection', path: '/provenanceSelection', component: provenanceSelection },
     { name: 'accountInfo', path: '/accountInfo', component: accountInfo },
+    { name: 'accountInfoFinish', path: '/accountInfoFinish', component: accountInfoFinish },
+    { name: 'drugResTableDetail', path: '/drugResTableDetail/:drugId', component: drugResTableDetail },
+    { name: 'transaction', path: '/transaction', component: transaction },
+    { name: 'search', path: '/search', component: search },
+
     { path: '*', redirect: '/home' }
   ]
 }

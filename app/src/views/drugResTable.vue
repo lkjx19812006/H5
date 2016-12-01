@@ -1,7 +1,7 @@
 <template>
    <div class="whole">
     <mt-header title="药性表">
-      <router-link to="/" slot="left">
+      <router-link to="/home" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link> 
    </mt-header>
@@ -15,31 +15,21 @@
        <p>热门药材</p>
    </div>
 
-   <div class="drug_show" v-for="todo in todos">
-     <router-link to="drugResTableNav">
+   <div class="drug_show" v-for="(todo,index) in todos">
+    <a @click="jump(index)">
        <img  src="/static/images/1.jpg">
        <div class="drug_introduce">
           <p class="drug_name">{{todo.name}}</p>
           <p class="drug_chinese_name">中文别名：{{todo.chinese_name}}</p>
           <p class="drug_english_name">英文名：{{todo.english_name}}</p>  
        </div>
-     </router-link> 
+    </a>
    </div>
 
    <div class="hot_search_drug">
        <p>热搜药材</p>
        <div class="hot_drugs">
-         <p v-for="todo in hot_drug">{{todo.hot_drug}}</p>
-        <!--  <p class="long_hot">千年人参</p>
-         <p class="short_hot">人参</p>
-         <p class="long_hot">千年人参</p>
-         <p class="short_hot">人参</p>
-         <p class="long_hot">千年人参</p>
-         <p class="short_hot">人参</p>
-         <p class="long_hot">千年人参</p>
-         <p class="short_hot">人参</p>
-         <p class="long_hot">千年人参</p>
-         <p class="short_hot">人参</p> -->
+         <p v-for="(todo,index) in hot_drug" @click="jump(index)">{{todo.hot_drug}}</p>
        </div>
    </div>
 
@@ -60,27 +50,23 @@ export default{
                 hot_drug:{}
             }
         },
-
         created() {
-
             common.$emit('show-load');
-
             this.$http.get(common.apiUrl.drug_table_list).then((response) => {
-                //console.log(response.data);
                   common.$emit('close-load');
                    let data = response.data.biz_result.list; 
-                //console.log(data);
                    let hotDrugData =  response.data.biz_result.hot_drug_list;
-                   console.log(hotDrugData); 
                  this.todos = data;
                  this.hot_drug = hotDrugData;
-
-
             }, (err) => {
-                //console.log(err);
                   common.$emit('close-load');
                   common.$emit('message',response.data.msg);
             });
+        },
+        methods:{
+          jump:function (router){
+            this.$router.push('drugResTableDetail/'+router);
+          }
         }
 }
 

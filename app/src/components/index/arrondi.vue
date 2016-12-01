@@ -1,5 +1,4 @@
 <template>
-
     <div class="content">
         <h1 class="page-title">Pull down</h1>
         <p class="page-loadmore-desc">在列表顶端, 按住 - 下拉 - 释放可以获取更多数据</p>
@@ -11,23 +10,17 @@
                 </ul>
                 <div slot="top" class="mint-loadmore-top">
                     <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
-                    <span v-show="topStatus === 'loading'">
-            <mt-spinner type="snake"></mt-spinner>
-          </span>
+                    <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                 </div>
                 <div slot="bottom" class="mint-loadmore-bottom">
                     <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
-                    <span v-show="bottomStatus === 'loading'">
-            <mt-spinner type="snake"></mt-spinner>
-          </span>
+                    <span v-show="bottomStatus === 'loading'"> <mt-spinner type="snake"></mt-spinner> </span>
                 </div>
             </mt-loadmore>
         </div>
     </div>
-
 </template>
 <script>
-
 export default {
 
     data() {
@@ -87,7 +80,6 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .content {
     padding-bottom: 100px;
 }
@@ -133,5 +125,4 @@ export default {
     transition: .2s linear;
     vertical-align: middle;
 }
-
 </style>
