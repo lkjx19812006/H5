@@ -16,7 +16,6 @@ import search from './views/search'
 import lowPriceRes from './views/lowPriceRes'
 import payMoney from './views/payMoney'
 
-
 module.exports = {
   mode: 'hash',
   base: __dirname,

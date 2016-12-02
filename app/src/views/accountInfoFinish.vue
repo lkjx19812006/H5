@@ -8,69 +8,75 @@
    </mt-header>
    <div class="account_overview_finish_header_photo_box">
         <p class="account_overview_finish_header_word">头像<span>(点击更改头像)</span></p>
-        <div class="account_overview_finish_header_photo"></div>
+        <img src="/static/images/touxiang.png" class="account_overview_finish_header_photo">
    
    </div>
 
    <div class="account_overview_finish_basic_data">
         <p class="account_overview_finish_basic_data_title">基础信息</p>
         <ul>
-           <li>
-              <p class="account_overview_finish_name">姓名</p>
-              <p class="account_overview_finish_name_content"><input type="text" :placeholder="personal_data.name"></p>
-           </li>
-           <li class="account_overview_finish_birthday">
-              <p class="account_overview_finish_name">生日</p>
-              <div class="account_overview_finish_name_content">
-                <input type="text" :placeholder="personal_data.birth" >
-                
-                
-              </div>
-           </li>
-           <li class="account_overview_finish__sex">
-              <p class="account_overview_finish_name">性别</p>
-              <p class="account_overview_finish_name_content">
-                <img :src="personal_data.sex">
+           <li v-for="(item,index) in personalDataArr" v-if="index==0">
+              <p class="account_overview_finish_name account_overview_finish_name_smart_size" >{{item.name}}</p>
+              <p class="account_overview_finish_name_content" >
+                 <input type="text" :placeholder="item.content">
               </p>
            </li>
-           <li>
-              <p class="account_overview_finish_other">电话</p>
-              <p class="account_overview_finish_other_content"><input type="text" :placeholder="personal_data.phone"></p>
+
+           <li v-for="(item,index) in personalDataArr" v-if="index>=1 && index<=2">
+              <p class="account_overview_finish_name account_overview_finish_name_smart_size">{{item.name}}</p>
+              <p class="account_overview_finish_name_content" v-if="index==1">
+                 <input type="text" :placeholder="item.content">
+              </p>
+              <p class="account_overview_finish_name_content" v-if="index==2">
+                 <img :src="item.img_src" v-if="index==2">
+              </p>
+              <img src="/static/images/down-arrow.png" class="account_overview_finish_down-arrow">
            </li>
-           <li class="account_overview_finish_personal_authentication">
-              <p class="account_overview_finish_other">个人认证</p>
-              <p class="account_overview_finish_other_content">{{personal_data.personal}}</p>
+          
+            <li v-for="(item,index) in personalDataArr" v-if="index==3">
+                <p class="account_overview_finish_name account_overview_finish_name_big_size" >{{item.name}}</p>
+
+                <p class="account_overview_finish_name_content" >
+                   <input type="text" :placeholder="item.content">
+                </p>
+             </li>
+
+             <li v-for="(item,index) in personalDataArr" v-if="index==4">
+              <p class="account_overview_finish_name account_overview_finish_name_big_size" >{{item.name}}</p>
+              <p class="account_overview_finish_name_content" >
+                 <input type="text" :placeholder="item.content">
+              </p>
+              <img src="/static/images/right-arrow.png" class="account_overview_finish_right-arrow">
            </li>
+        
         </ul>
    </div>
                 
     <div class="account_overview_finish_company_data">
         <p class="account_overview_finish_company_data_title">企业信息</p>
         <ul>
-           <li>
-              <p class="account_overview_finish_name">公司</p>
-              <p class="account_overview_finish_name_content"><input type="text" :placeholder="conpany_data.name"></p>
+           <li v-for="(item,index) in companyDataArr" v-if="index < 2">
+              <p class="account_overview_finish_name">{{item.name}}</p>
+              <p class="account_overview_finish_name_content"><input type="text" :placeholder="item.content"></p>
            </li>
-           <li>
-              <p class="account_overview_finish_name">公司简称</p>
-              <p class="account_overview_finish_name_content"><input type="text" :placeholder="conpany_data.short_name"></p>
+
+           <li v-for="(item,index) in companyDataArr" v-if="index == 2">
+              <p class="account_overview_finish_name">{{item.name}}</p>
+              <p class="account_overview_finish_name_content"><input type="text" :placeholder="item.content"></p>
+              <img src="/static/images/down-arrow.png" class="account_overview_finish_down-arrow">
            </li>
-           <li>
-              <p class="account_overview_finish_name">职位</p>
-              <p class="account_overview_finish_name_content"><input type="text" :placeholder="conpany_data.job"></p>
+
+           <li v-for="(item,index) in companyDataArr" v-if="index > 2 && index < 5">
+              <p class="account_overview_finish_name">{{item.name}}</p>
+              <p class="account_overview_finish_name_content"><input type="text" :placeholder="item.content"></p>
            </li>
-           <li>
-              <p class="account_overview_finish_other">主营品类</p>
-              <p class="account_overview_finish_other_content"><input type="text" :placeholder="conpany_data.major"></p>
+           
+           <li v-for="(item,index) in companyDataArr" v-if="index == 5">
+              <p class="account_overview_finish_name">{{item.name}}</p>
+              <p class="account_overview_finish_name_content"><input type="text" :placeholder="item.content"></p>
+              <img src="/static/images/right-arrow.png" class="account_overview_finish_right-arrow">
            </li>
-           <li>
-              <p class="account_overview_finish_other">开票信息</p>
-              <p class="account_overview_finish_other_content"><input type="text" :placeholder="conpany_data.open_data"></p>
-           </li>
-           <li class="account_overview_finish_company_authentication">
-              <p class="account_overview_finish_other">企业认证</p>
-              <p class="account_overview_finish_other_content">{{conpany_data.company}}</p>
-           </li>
+           
         </ul>
    </div>
 
@@ -99,7 +105,43 @@ export default {
         major:'枸杞、龙胆、白术',
         open_data:'枸杞、龙胆、白术',
         company:'已认证'
-      }
+      },
+      personalDataArr:[{
+           name:'姓名',
+           content:'杨帆帆'
+      },{
+           name:'生日',
+           content:'1993.10.23'
+      },{
+           name:'性别',
+           img_src:'/static/images/woman.png'
+      },{
+           name:'电话',
+           content:'15971484216'
+      },{
+           name:'个人认证',
+           content:'已认证'
+      }],
+
+      companyDataArr:[{
+           name:'公司',
+           content:'上海冕冠电子商务有限公司'
+      },{
+           name:'公司简称',
+           content:'上海冕冠'
+      },{
+           name:'职位',
+           content:'采购人员'
+      },{
+           name:'主营品类',
+           content:'枸杞、龙胆、白术'
+      },{
+           name:'开票信息',
+           content:'枸杞、龙胆、白术'
+      },{
+           name:'企业认证',
+           content:'已认证'
+      }]
       
       
       
@@ -120,9 +162,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.whole{
-	
-}
+
 input[type="text"], input[type="submit"], input[type="reset"],select,textarea{
 
 -webkit-appearance: none;
@@ -162,6 +202,7 @@ border-radius: 0;
   float:right;
   margin-top:1.0666rem;
   margin-right: 6%;
+
 }
 .account_overview_finish_basic_data,.account_overview_finish_company_data{
   width:100%;
@@ -183,10 +224,11 @@ border-radius: 0;
   line-height: 4.267rem;
   border-bottom:0.0427rem solid #E5E5E5;
   background:white;
+  position:relative;
 }
 
 
-.account_overview_finish_name_content input,.account_overview_finish_other_content input{
+.account_overview_finish_name_content input{
   height:2.5rem;
   text-align: right;
   outline: none;
@@ -194,11 +236,11 @@ border-radius: 0;
   line-height:2.5rem; 
 }
 
-.account_overview_finish_name,.account_overview_finish_other{
+.account_overview_finish_name{
   float: left;
   color:#666666;
 }
-.account_overview_finish_name_content,.account_overview_finish_other_content{
+.account_overview_finish_name_content{
   float:right;
   height:4.267rem;
   color:#999999;
@@ -212,25 +254,26 @@ border-radius: 0;
 .account_overview_finish_name_content{
   font-size: 1.024rem;
 }
-.account_overview_finish_other_content{
+
+.account_overview_finish_name_big_size{
   font-size: 1.195rem;
 }
-.account_overview_finish_basic_data .account_overview_finish_birthday{
-  background:white url(/static/images/down-arrow.png) 96% center no-repeat;
-  background-size:1.024rem 0.67rem;
+.account_overview_finish_name_smart_size{
+  font-size: 1.024rem;
 }
-.account_overview_finish_basic_data .account_overview_finish_sex{
-  background:white url(/static/images/down-arrow.png) 96% center no-repeat;
-  background-size:1.024rem 0.67rem;
 
+.account_overview_finish_right-arrow{
+  position:absolute;
+  right:4%;
+  top:1.6215rem;
+  width:0.6826rem;
+  height:1.024rem;
 }
-.account_overview_finish_basic_data .account_overview_finish_personal_authentication{
-  background:white url(/static/images/right-arrow.png) 96% center no-repeat;
-  background-size:0.6826rem 1.024rem;
-}
-.account_overview_finish_company_data .account_overview_finish_company_authentication{
-  background:white url(/static/images/right-arrow.png) 96% center no-repeat;
-  background-size:0.6826rem 1.024rem;
-  
+.account_overview_finish_down-arrow{
+  position:absolute;
+  right:4%;
+  top:1.79rem;
+  height:0.6826rem;
+  width:1.024rem;
 }
 </style>
