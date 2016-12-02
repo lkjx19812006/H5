@@ -2,7 +2,6 @@
     <div class="page-tabbar">
         <div class="page-wrap">
             <mt-tab-container class="page-tabbar-container" v-model="selected">
-
                 <!-- <mt-tab-container-item id="首页">
                     <index></index>
                 </mt-tab-container-item>
@@ -10,18 +9,14 @@
                     <arrondi></arrondi>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="求购"> -->
-
-
                 <mt-tab-container-item id="index">
                     <index></index>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="resource">
-                    <arrondi></arrondi>
+                    <resource></resource>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="purchase">
-
-
-                    <find></find>
+                    <need></need>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="mine">
                     <mine></mine>
@@ -29,8 +24,6 @@
             </mt-tab-container>
         </div>
         <mt-tabbar v-model="selected" fixed>
-
-
             <!-- <mt-tab-item id="首页">
                 <img slot="icon" src="/static/images/100x100.png"> 首页
             </mt-tab-item>
@@ -38,7 +31,6 @@
                 <img slot="icon" src="/static/images/100x100.png"> 商城
             </mt-tab-item>
             <mt-tab-item id="求购"> -->
-
             <!-- <mt-tab-item id="index">
                 <img slot="icon" src="/static/images/100x100.png"> 首页
             </mt-tab-item>
@@ -46,8 +38,6 @@
                 <img slot="icon" src="/static/images/100x100.png"> 资源
             </mt-tab-item>
             <mt-tab-item id="purchase"> -->
-
-
             <mt-tab-item id="index">
                 <img slot="icon" src="/static/icons/index_selected.png" v-if="selected=='index'">
                 <img slot="icon" src="/static/icons/index.png" v-else> 首页
@@ -57,13 +47,11 @@
                 <img slot="icon" src="/static/icons/resource.png" v-else> 资源
             </mt-tab-item>
             <mt-tab-item id="purchase">
-
                 <img slot="icon" src="/static/icons/buy_selected.png" v-if="selected=='purchase'">
                 <img slot="icon" src="/static/icons/buy.png" v-else> 求购
-
             </mt-tab-item>
             <mt-tab-item id="mine">
-             <img slot="icon" src="/static/icons/mine_selected.png" v-if="selected=='mine'">
+                <img slot="icon" src="/static/icons/mine_selected.png" v-if="selected=='mine'">
                 <img slot="icon" src="/static/icons/mine.png" v-else> 我的
             </mt-tab-item>
         </mt-tabbar>
@@ -71,28 +59,19 @@
 </template>
 <script>
 import index from '../components/index/index'
-import arrondi from '../components/index/arrondi'
-import find from '../components/index/find'
+import resource from '../components/index/resource'
+import need from '../components/index/need'
 import mine from '../components/index/mine'
 export default {
     data() {
             return {
-                msg: 'Welcome to Your Vue.js App',
-
-
-                
-
                 selected: 'index'
-
-
-                
-
             }
         },
         components: {
             index,
-            arrondi,
-            find,
+            resource,
+            need,
             mine
 
         }
@@ -100,7 +79,6 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .page-tabbar {
     overflow: hidden;
     height: 100vh;
@@ -111,6 +89,7 @@ export default {
     height: 100%;
     padding-bottom: 60px;
 }
+
 .mint-tabbar > .mint-tab-item.is-selected {
     color: #FA6750;
 }

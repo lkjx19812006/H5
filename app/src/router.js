@@ -14,6 +14,7 @@ import drugResTableDetail from './views/drugResTableDetail'
 import transaction from './views/transaction'
 import search from './views/search'
 import lowPriceRes from './views/lowPriceRes'
+import urgentNeed from './views/urgentNeed'
 import payMoney from './views/payMoney'
 
 module.exports = {
@@ -41,6 +42,7 @@ module.exports = {
     { name: 'transaction', path: '/transaction', component: transaction },
     { name: 'search', path: '/search', component: search },
     { name: 'lowPriceRes', path: '/lowPriceRes', component: lowPriceRes },
+    { name: 'urgentNeed', path: '/urgentNeed', component: urgentNeed },
     { name: 'payMoney', path: '/payMoney', component: payMoney },
     { path: '*', redirect: '/home' }
   ]

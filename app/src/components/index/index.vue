@@ -176,7 +176,7 @@ export default {
                     image: '/static/images/lowPrice.png'
                 }, {
                     name: '紧急求购',
-                    router: 'drugResTable',
+                    router: 'urgentNeed',
                     image: '/static/images/urgentSupply.png'
                 }, {
                     name: '市场行情',

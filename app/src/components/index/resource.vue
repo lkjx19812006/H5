@@ -1,12 +1,9 @@
 <template>
-    <div class="content low_price">
-        <mt-header title="低价资源">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header>
-        <search-input></search-input>
-        <sort></sort>
+    <div class="content resource">
+        <div class="fixed">
+            <search-input></search-input>
+            <sort></sort>
+        </div>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -21,8 +18,8 @@
                                     <p class="time_font">发布时间：<span>{{todo.time}}</span></p>
                                 </div>
                                 <div class="res_content_right">
-                                <p>{{todo.price}}</p>
-                                <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
+                                    <p>{{todo.price}}</p>
+                                    <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
                                 </div>
                             </div>
                         </li>
@@ -41,9 +38,9 @@
     </div>
 </template>
 <script>
-import common from '../common/common.js'
-import searchInput from '../components/tools/inputSearch'
-import sort from '../components/tools/sort'
+import common from '../../common/common.js'
+import searchInput from '../../components/tools/inputSearch'
+import sort from '../../components/tools/sort'
 export default {
     data() {
             return {
@@ -111,7 +108,7 @@ export default {
             });
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-130;
         }
 
 }
@@ -156,15 +153,26 @@ export default {
     vertical-align: middle;
 }
 
-.low_price {}
+.resource {}
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
+.resource .fixed {
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+    background: #fff;
+}
+
+.resource .bg_white {
+    margin-top: 90px;
+}
+
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
     min-height: 100px;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
     height: 80px;
     max-width: 100px;
     left: 10px;
@@ -172,7 +180,7 @@ export default {
     position: absolute;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
     float: left;
     text-align: left;
     line-height: 20px;
@@ -180,12 +188,12 @@ export default {
     margin-bottom: 8px;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
     max-height: 15px;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
     width: 100%;
     padding-right: 90px;
@@ -195,13 +203,13 @@ export default {
     color: #666;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
     width: 100%;
     padding-left: 120px;
     padding-top: 10px;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right{
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
     max-width: 80px;
     height: 90px;
@@ -209,24 +217,24 @@ export default {
     right: 10px;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
     font-size: 1.25rem;
     margin-top: 10px;
     color: #EC6817;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button{
-  position: absolute;
-  bottom: 10px;
-  background: #EC6817;
-  font-size: 10px;
-  min-width: 60px;
-  right: 0px;
-  max-height: 25px;
-  padding: 0 5px;
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
+    position: absolute;
+    bottom: 10px;
+    background: #EC6817;
+    font-size: 10px;
+    min-width: 60px;
+    right: 0px;
+    max-height: 25px;
+    padding: 0 5px;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {
     font-size: 1.1rem;
     color: #999;
 }
