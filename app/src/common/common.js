@@ -33,22 +33,26 @@ common.$on('message', message => {
     Toast(message);
 })
 
-common.$on('confirm', () => {
-    MessageBox.confirm('确定执行此操作?').then(action => {
+common.$on('confirm', (first_item,second_item) => {
+    MessageBox.confirm(first_item).then(action => {
         console.log(action);
     }, action => {
-        console.log(action)
+        MessageBox.confirm(second_item).then(action => {
+              console.log(action);
+        },action => {
+              console.log(action);
+        });
     });
 
 })
 
-common.$on('myDrugMoney', () => {
+/*common.$on('myDrugMoney', () => {
     MessageBox.confirm('请下载app?').then(action => {
         console.log(action);
     }, action => {
         MessageBox.confirm('再考虑考虑？');
     });
 
-})
+})*/
 
 module.exports = common;

@@ -18,6 +18,9 @@ import urgentNeed from './views/urgentNeed'
 import payMoney from './views/payMoney'
 import needDetail from './views/needDetail'
 import resourceDetail from './views/resourceDetail'
+import myAttention from './views/myAttention'
+import myResource from './views/myResource'
+import register from './views/register'
 
 module.exports = {
   mode: 'hash',
@@ -48,6 +51,9 @@ module.exports = {
     { name: 'payMoney', path: '/payMoney', component: payMoney },
     { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
     { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
+    { name: 'myAttention', path: '/myAttention', component: myAttention },
+    { name: 'myResource', path: '/myResource', component: myResource },
+    { name: 'register', path: '/register', component: register },
     { path: '*', redirect: '/home' }
   ]
 }
