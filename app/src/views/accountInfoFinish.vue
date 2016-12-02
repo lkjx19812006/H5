@@ -1,75 +1,75 @@
 <template>
   <div class="whole">
-     <mt-header title="产地选择" class="header">
+     <mt-header title="账户信息" class="account_overview_finish_header">
       <router-link to="/" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
-    <mt-button  slot="right" style="color:red">完成</mt-button> 
+    <mt-button  slot="right" ><router-link to="accountInfo" id="account_overview_finish_right">完成</router-link></mt-button> 
    </mt-header>
-   <div class="header_photo" style="background:white url(/static/images/right-arrow.png) 96% center no-repeat;background-size:0.6826rem 1.024rem;">
-        <p class="header_word">头像<span>(点击更改头像)</span></p>
-        <div class="photo"></div>
+   <div class="account_overview_finish_header_photo_box">
+        <p class="account_overview_finish_header_word">头像<span>(点击更改头像)</span></p>
+        <div class="account_overview_finish_header_photo"></div>
    
    </div>
 
-   <div class="basic_data">
-        <p class="basic_data_title">基础信息</p>
+   <div class="account_overview_finish_basic_data">
+        <p class="account_overview_finish_basic_data_title">基础信息</p>
         <ul>
            <li>
-              <p class="name">姓名</p>
-              <p class="name_content"><input type="text" :placeholder="personal_data.name"></p>
+              <p class="account_overview_finish_name">姓名</p>
+              <p class="account_overview_finish_name_content"><input type="text" :placeholder="personal_data.name"></p>
            </li>
-           <li style="background:white url(/static/images/down-arrow.png) 96% center no-repeat;background-size:1.024rem 0.67rem;" >
-              <p class="name">生日</p>
-              <div class="name_content">
+           <li class="account_overview_finish_birthday">
+              <p class="account_overview_finish_name">生日</p>
+              <div class="account_overview_finish_name_content">
                 <input type="text" :placeholder="personal_data.birth" >
                 
                 
               </div>
            </li>
-           <li style="background:white url(/static/images/down-arrow.png) 96% center no-repeat;background-size:1.024rem 0.67rem;">
-              <p class="name">性别</p>
-              <p class="name_content">
+           <li class="account_overview_finish__sex">
+              <p class="account_overview_finish_name">性别</p>
+              <p class="account_overview_finish_name_content">
                 <img :src="personal_data.sex">
               </p>
            </li>
            <li>
-              <p class="other">电话</p>
-              <p class="other_content"><input type="text" :placeholder="personal_data.phone"></p>
+              <p class="account_overview_finish_other">电话</p>
+              <p class="account_overview_finish_other_content"><input type="text" :placeholder="personal_data.phone"></p>
            </li>
-           <li style="background:white url(/static/images/right-arrow.png) 96% center no-repeat;background-size:0.6826rem 1.024rem;">
-              <p class="other">个人认证</p>
-              <p class="other_content">{{personal_data.personal}}</p>
+           <li class="account_overview_finish_personal_authentication">
+              <p class="account_overview_finish_other">个人认证</p>
+              <p class="account_overview_finish_other_content">{{personal_data.personal}}</p>
            </li>
         </ul>
    </div>
                 
-    <div class="company_data">
-        <p class="company_data_title">企业信息</p>
+    <div class="account_overview_finish_company_data">
+        <p class="account_overview_finish_company_data_title">企业信息</p>
         <ul>
            <li>
-              <p class="name">公司</p>
-              <p class="name_content"><input type="text" :placeholder="conpany_data.name"></p>
+              <p class="account_overview_finish_name">公司</p>
+              <p class="account_overview_finish_name_content"><input type="text" :placeholder="conpany_data.name"></p>
            </li>
            <li>
-              <p class="name">公司简称</p>
-              <p class="name_content"><input type="text" :placeholder="conpany_data.short_name"></p>
+              <p class="account_overview_finish_name">公司简称</p>
+              <p class="account_overview_finish_name_content"><input type="text" :placeholder="conpany_data.short_name"></p>
            </li>
            <li>
-              <p class="name">职位</p>
-              <p class="name_content"><input type="text" :placeholder="conpany_data.job"></p>
+              <p class="account_overview_finish_name">职位</p>
+              <p class="account_overview_finish_name_content"><input type="text" :placeholder="conpany_data.job"></p>
            </li>
            <li>
-              <p class="other">主营品类</p>
-              <p class="other_content"><input type="text" :placeholder="conpany_data.major"></p>
+              <p class="account_overview_finish_other">主营品类</p>
+              <p class="account_overview_finish_other_content"><input type="text" :placeholder="conpany_data.major"></p>
            </li>
            <li>
-              <p class="other">开票信息</p>
-              <p class="other_content"><input type="text" :placeholder="conpany_data.open_data"></p>
+              <p class="account_overview_finish_other">开票信息</p>
+              <p class="account_overview_finish_other_content"><input type="text" :placeholder="conpany_data.open_data"></p>
            </li>
-           <li style="background:white url(/static/images/right-arrow.png) 96% center no-repeat;background-size:0.6826rem 1.024rem;">
-              <p class="other">企业认证</p>
-              <p class="other_content">{{conpany_data.company}}</p>
+           <li class="account_overview_finish_company_authentication">
+              <p class="account_overview_finish_other">企业认证</p>
+              <p class="account_overview_finish_other_content">{{conpany_data.company}}</p>
            </li>
         </ul>
    </div>
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-
+import common from '../common/common.js'
 export default {
 
   data () {
@@ -107,7 +107,11 @@ export default {
     }
   },
   methods:{
-     
+     openPicker() {
+        this.$refs.picker.open();
+
+      }
+
   }
 
  
@@ -119,13 +123,19 @@ export default {
 .whole{
 	
 }
-.header{
+input[type="text"], input[type="submit"], input[type="reset"],select,textarea{
+
+-webkit-appearance: none;
+border-radius: 0;
+}
+.account_overview_finish_header{
 	color:#313232;
 }
-.header_right{
-	color:#313232;
+#account_overview_finish_right{
+  color:#EC6817;
 }
-.header_photo{
+
+.account_overview_finish_header_photo_box{
   height:7.253rem;
   width:100%;
   padding:0 4%;
@@ -133,18 +143,18 @@ export default {
   text-align: left;
   background:white;
   line-height: 7.253rem;
-
+  background:white url(/static/images/right-arrow.png) 96% center no-repeat;background-size:0.6826rem 1.024rem;
 }
 
-.header_word{
+.account_overview_finish_header_word{
   font-size: 1.024rem;
   color:#666666;
   float:left;
 }
-.header_word span{
+.account_overview_finish_header_word span{
   color:#999999;
 }
-.photo{
+.account_overview_finish_header_photo{
   width:5.1198rem;
   height:5.1198rem;
   border-radius: 50%;
@@ -153,28 +163,30 @@ export default {
   margin-top:1.0666rem;
   margin-right: 6%;
 }
-.basic_data,.company_data{
+.account_overview_finish_basic_data,.account_overview_finish_company_data{
   width:100%;
   text-align: left;
 }
-.company_data{
+.account_overview_finish_company_data{
   margin-bottom: 2.5599rem;
 }
-.basic_data_title,.company_data_title{
+.account_overview_finish_basic_data_title,.account_overview_finish_company_data_title{
   height:2.99rem;
   border-top:0.0427rem solid #E5E5E5;
   border-bottom:0.0427rem solid #E5E5E5;
   padding: 0 8.8% 0 4%;
   line-height:2.99rem; 
 }
-.basic_data ul li,.company_data ul li{
+.account_overview_finish_basic_data ul li,.account_overview_finish_company_data ul li{
   padding: 0 8.8% 0 4%;
   height:4.267rem;
   line-height: 4.267rem;
   border-bottom:0.0427rem solid #E5E5E5;
   background:white;
 }
-.name_content input,.other_content input{
+
+
+.account_overview_finish_name_content input,.account_overview_finish_other_content input{
   height:2.5rem;
   text-align: right;
   outline: none;
@@ -182,26 +194,43 @@ export default {
   line-height:2.5rem; 
 }
 
-.name,.other{
+.account_overview_finish_name,.account_overview_finish_other{
   float: left;
   color:#666666;
 }
-.name_content,.other_content{
+.account_overview_finish_name_content,.account_overview_finish_other_content{
   float:right;
   height:4.267rem;
   color:#999999;
 
 }
-.name_content img{
+.account_overview_finish_name_content img{
   height:1.536rem;
   margin-top:1.36rem;
 
 }
-.name_content{
+.account_overview_finish_name_content{
   font-size: 1.024rem;
 }
-.other_content{
+.account_overview_finish_other_content{
   font-size: 1.195rem;
 }
+.account_overview_finish_basic_data .account_overview_finish_birthday{
+  background:white url(/static/images/down-arrow.png) 96% center no-repeat;
+  background-size:1.024rem 0.67rem;
+}
+.account_overview_finish_basic_data .account_overview_finish_sex{
+  background:white url(/static/images/down-arrow.png) 96% center no-repeat;
+  background-size:1.024rem 0.67rem;
 
+}
+.account_overview_finish_basic_data .account_overview_finish_personal_authentication{
+  background:white url(/static/images/right-arrow.png) 96% center no-repeat;
+  background-size:0.6826rem 1.024rem;
+}
+.account_overview_finish_company_data .account_overview_finish_company_authentication{
+  background:white url(/static/images/right-arrow.png) 96% center no-repeat;
+  background-size:0.6826rem 1.024rem;
+  
+}
 </style>
