@@ -1,6 +1,6 @@
 <template>
-    <div class="content low_price">
-        <mt-header title="低价资源">
+    <div class="content urgent_need">
+        <mt-header title="紧急求购">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
@@ -12,18 +12,24 @@
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                            <img src="/static/images/1.jpg" class="list_images">
-                            <div class="res_content">
-                                <div class="res_content_center">
-                                    <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.name}}</div>
-                                    <p>规格：<span>{{todo.spec}}</span></p>
-                                    <p>产地：<span>{{todo.place}}</span></p>
-                                    <p class="time_font">发布时间：<span>{{todo.time}}</span></p>
+                            <div class="flag"><img src="/static/icons/england.png"><span>英国</span></div>
+                            <div class="center">
+                                <div class="title">
+                                    <div><img src="/static/icons/impatient.png"><span>{{todo.name}}</span></div>
+                                    <p>发布时间：{{todo.time}}</p>
                                 </div>
-                                <div class="res_content_right">
-                                <p>{{todo.price}}</p>
-                                <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
+                                <div class="detail">
+                                    <p>规格：{{todo.spec}}</p>
+                                    <p>剩余：<span>26</span>天</p>
                                 </div>
+                                <div class="detail">
+                                    <p>产地：{{todo.place}}</p>
+                                    <p>需求数量：100kg</p>
+                                </div>
+                            </div>
+                            <div class="bottom">
+                                <p>已报价<span>10</span>人</p>
+                                <button class="mint-button mint-button--primary mint-button--small">我要报价</button>
                             </div>
                         </li>
                     </ul>
@@ -156,78 +162,111 @@ export default {
     vertical-align: middle;
 }
 
-.low_price {}
+.urgent_need {}
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
     min-height: 100px;
+    padding: 10px;
+    height: auto;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    height: 80px;
-    max-width: 100px;
-    left: 10px;
-    margin: 10px 10px 10px 0;
-    position: absolute;
-}
-
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
-    float: left;
-    text-align: left;
-    line-height: 20px;
-    font-size: 1.3rem;
-    margin-bottom: 8px;
-}
-
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
-    float: left;
-    max-height: 15px;
-}
-
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag {
     float: left;
     width: 100%;
-    padding-right: 90px;
-    line-height: 18px;
+    padding-bottom: 10px;
+    line-height: 17px;
     text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag img {
+    max-height: 15px;
+    float: left;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag span {
+    margin-left: 5px;
+    color: #666;
+    font-size: 1rem;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom {
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom p {
+    line-height: 24px;
+    float: left;
     font-size: 1.2rem;
     color: #666;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom span{
+    color:  #EC6817;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom button {
+    float: right;
+    background: #EC6817;
+    font-size: 10px;
+    min-width: 60px;
+    max-height: 25px;
+    padding: 0 5px;
+    border: none;
+    color: #fff;
+    line-height: 0;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center{
+    float: left;
     width: 100%;
-    padding-left: 120px;
-    padding-top: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center div{
+    float: left;
+
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right{
-    position: absolute;
-    max-width: 80px;
-    height: 90px;
-    margin: 0;
-    right: 10px;
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title {
+    width: 100%;
+    font-size: 1.3rem;
+    color: #333;
+    line-height: 15px;
+    margin: 10px 0;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
-    font-size: 1.25rem;
-    margin-top: 10px;
-    color: #EC6817;
-}
-
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button{
-  position: absolute;
-  bottom: 10px;
-  background: #EC6817;
-  font-size: 10px;
-  min-width: 60px;
-  right: 0px;
-  max-height: 25px;
-  padding: 0 5px;
-}
-
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{
-    font-size: 1.1rem;
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title p{
+    float: right;
+    font-size: 1rem;
     color: #999;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img{
+    max-height: 15px;
+}
+
+
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail{
+    width: 100%;
+    line-height: 18px;
+}
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail p{
+    float: left;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail span{
+    color:  #EC6817;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail p:last-child{
+    float: right;
 }
 </style>
