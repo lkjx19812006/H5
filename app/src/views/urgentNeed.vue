@@ -29,7 +29,7 @@
                             </div>
                             <div class="bottom">
                                 <p>已报价<span>10</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small">我要报价</button>
+                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail()">我要报价</button>
                             </div>
                         </li>
                     </ul>
@@ -74,6 +74,9 @@ export default {
             sort
         },
         methods: {
+            jumpDetail() {
+                this.$router.push('needDetail/1');
+            },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
@@ -205,8 +208,8 @@ export default {
     color: #666;
 }
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom span{
-    color:  #EC6817;
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom span {
+    color: #EC6817;
 }
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom button {
@@ -221,15 +224,15 @@ export default {
     line-height: 0;
 }
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center{
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center {
     float: left;
     width: 100%;
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
 }
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center div{
-    float: left;
 
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center div {
+    float: left;
 }
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title {
@@ -240,33 +243,32 @@ export default {
     margin: 10px 0;
 }
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title p{
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title p {
     float: right;
     font-size: 1rem;
     color: #999;
 }
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img{
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img {
     max-height: 15px;
 }
 
-
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail{
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail {
     width: 100%;
     line-height: 18px;
 }
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail p{
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail p {
     float: left;
     font-size: 1.2rem;
     color: #666;
 }
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail span{
-    color:  #EC6817;
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail span {
+    color: #EC6817;
 }
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail p:last-child{
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail p:last-child {
     float: right;
 }
 </style>

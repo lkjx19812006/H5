@@ -22,7 +22,7 @@
                                 </div>
                                 <div class="res_content_right">
                                 <p>{{todo.price}}</p>
-                                <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
+                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail()">立即购买</button>
                                 </div>
                             </div>
                         </li>
@@ -68,6 +68,9 @@ export default {
             sort
         },
         methods: {
+            jumpDetail(){
+                this.$router.push('resourceDetail/1');
+            },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },

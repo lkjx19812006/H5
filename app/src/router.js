@@ -16,6 +16,8 @@ import search from './views/search'
 import lowPriceRes from './views/lowPriceRes'
 import urgentNeed from './views/urgentNeed'
 import payMoney from './views/payMoney'
+import needDetail from './views/needDetail'
+import resourceDetail from './views/resourceDetail'
 
 module.exports = {
   mode: 'hash',
@@ -44,6 +46,8 @@ module.exports = {
     { name: 'lowPriceRes', path: '/lowPriceRes', component: lowPriceRes },
     { name: 'urgentNeed', path: '/urgentNeed', component: urgentNeed },
     { name: 'payMoney', path: '/payMoney', component: payMoney },
+    { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
+    { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
     { path: '*', redirect: '/home' }
   ]
 }

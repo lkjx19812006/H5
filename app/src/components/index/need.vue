@@ -26,7 +26,7 @@
                             </div>
                             <div class="bottom">
                                 <p>已报价<span>10</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small">我要报价</button>
+                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail()">我要报价</button>
                             </div>
                         </li>
                     </ul>
@@ -71,6 +71,9 @@ export default {
             sort
         },
         methods: {
+            jumpDetail(id){
+                this.$router.push('needDetail/1');
+            },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
