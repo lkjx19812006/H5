@@ -16,6 +16,9 @@ import search from './views/search'
 import lowPriceRes from './views/lowPriceRes'
 import urgentNeed from './views/urgentNeed'
 import payMoney from './views/payMoney'
+import myAttention from './views/myAttention'
+import myResource from './views/myResource'
+import register from './views/register'
 
 module.exports = {
   mode: 'hash',
@@ -43,7 +46,9 @@ module.exports = {
     { name: 'search', path: '/search', component: search },
     { name: 'lowPriceRes', path: '/lowPriceRes', component: lowPriceRes },
     { name: 'urgentNeed', path: '/urgentNeed', component: urgentNeed },
-    { name: 'payMoney', path: '/payMoney', component: payMoney },
+    { name: 'myAttention', path: '/myAttention', component: myAttention },
+    { name: 'myResource', path: '/myResource', component: myResource },
+    { name: 'register', path: '/register', component: register },
     { path: '*', redirect: '/home' }
   ]
 }

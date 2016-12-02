@@ -53,19 +53,19 @@
                       <img :src="todo.img_src" class="mine_my_list_part_img">
                      	<p>{{todo.name}}</p>
                  </li>
-                 <li class="mine_my_list_part" v-for="(todo,index) in my_list" v-if="index == 2">
+                 <li class="mine_my_list_part" v-for="(todo,index) in my_list" v-if="index == 2" @click="jump(todo.router)">
                       <img :src="todo.img_src" class="mine_my_list_part_img">
                       <p>{{todo.name}}</p>
                  </li>
                 
              </ul>
              <ul>   
-                 <li class="mine_my_list_part mine_my_list_part_norlast" v-for="(todo,index) in my_list" v-if="index > 2 && index <5">
+                 <li class="mine_my_list_part mine_my_list_part_norlast" v-for="(todo,index) in my_list" v-if="index > 2 && index <5"  @click="jump(todo.router)">
                   <img :src="todo.img_src" class="mine_my_list_part_img">
                  	<p>{{todo.name}}</p>
                  </li>
 
-                 <li class="mine_my_list_part" v-for="(todo,index) in my_list" v-if="index == 5">
+                 <li class="mine_my_list_part" v-for="(todo,index) in my_list" v-if="index == 5" @click="jump(todo.router)">
                   <img :src="todo.img_src" class="mine_my_list_part_img">
                   <p>{{todo.name}}</p>
                  </li>
@@ -138,7 +138,7 @@ export default {
   },
   methods:{
     drugMoney:function(){
-        common.$emit('myDrugMoney');
+        common.$emit('confirm','请下载App！','再考虑考虑？');
     },
     jump: function(router) {
                 console.log(router);
