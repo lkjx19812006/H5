@@ -63,7 +63,7 @@
                                 <div class="list_header">
                                     <div>
                                         <p class="time_font"><span>{{todo.time}}</span></p>
-                                        <p>订单编号：<span>DD11123333</span></p>
+                                        <p class="order">订单编号：<span>DD11123333</span></p>
                                         <p class="audit_state">{{todo.state}}</p>
                                     </div>
                                 </div>
@@ -306,6 +306,11 @@ export default {
     width:100%;
     height:100%;
     line-height: 40px;
+}
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .time_font{
+    font-size: 1.25rem;
+    color:#9C9C9C;
+    float:left;
 }
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .time_font{
     font-size: 1.25rem;
