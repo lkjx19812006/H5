@@ -6,13 +6,14 @@
             </router-link>
         </mt-header>
         <div class="swipe_height">
-            <mt-swipe :auto="4000" :showIndicators="false" :prevent="true">
-                <mt-swipe-item v-for="(item,index) in imgArray">
+            <swiper :options="swiperOption" class="swipe_height">
+                <swiper-slide v-for="(item,index) in imgArray">
                     <div>
-                        <img v-bind:src="item.url" v-bind:id="index">
+                        <img v-bind:src="item.url">
                     </div>
-                </mt-swipe-item>
-            </mt-swipe>
+                </swiper-slide>
+            </swiper>
+            <div class="swipe_number"><span>{{number}}</span>/{{imgArray.length}}</div>
         </div>
         <div class="top">
             <p>发布时间：<span>2016-11-10</span></p>
@@ -57,8 +58,14 @@
 </template>
 <script>
 import common from '../common/common.js'
+import {
+    swiper,
+    swiperSlide,
+    swiperPlugins
+} from 'vue-awesome-swiper'
 export default {
     data() {
+            let _self = this;
             return {
                 imgArray: [{
                     url: '/static/images/1.jpg'
@@ -78,14 +85,31 @@ export default {
                     "time": "12:26"
                 }],
                 showButton: true,
-                imageShow: true
+                imageShow: true,
+                number: 0,
+                swiperOption: {
+                    name: 'currentSwiper',
+                    autoplay: 3000,
+                    setWrapperSize: true,
+                    debugger: true,
+                    loop: true,
+                    autoplayDisableOnInteraction: false,
+                    onTransitionStart: function(swiper) {
+                        _self.number = parseInt(swiper.realIndex) + 1;
+                    }
+                }
             }
+        },
+        components: {
+            swiper,
+            swiperSlide
         },
         methods: {
             back() {
                 this.$router.go(-1);
-            },
+            }
         },
+
         created() {
             let _self = this;
             common.$emit('show-load');
@@ -101,20 +125,6 @@ export default {
             _self.time = setTimeout(() => {
                 _self.imageShow = false;
             }, 2450);
-
-
-        },
-        mounted() {
-       
-            // let o = document.getElementById("0");
-            // let pos = o.getBoundingClientRect()
-            // setInterval(function() {
-            //     console.log(getElementViewLeft(o));
-            //     console.log(document.documentElement.clientWidth)
-            // }, 1000)
-
-
-
         }
 }
 </script>
@@ -125,10 +135,28 @@ export default {
 .resource_detail .swipe_height {
     height: 16rem;
     max-height: 160px;
+    position: relative;
 }
 
 .resource_detail .swipe_height img {
     width: 100%;
+}
+
+.resource_detail .swipe_height .swipe_number {
+    position: absolute;
+    right: 10px;
+    z-index: 99;
+    bottom: 10px;
+    color: #fff;
+    opacity: 0.5;
+    background: #000;
+    padding: 2px 12px;
+    border-radius: 10px;
+}
+
+.resource_detail .swipe_height .swipe_number span {
+    color: #FA6705;
+    font-size: 1.1rem;
 }
 
 .resource_detail .top {

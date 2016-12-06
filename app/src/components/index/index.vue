@@ -106,7 +106,7 @@
                         <div class="list_font">{{todo.place}}</div>
                         <div class="list_font">{{todo.price}}</div>
                         <div class="list_font">
-                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list">
+                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jump('resourceDetail/1')">
                                 我要购买
                             </button>
                         </div>
@@ -117,9 +117,11 @@
         <div class="bg_white">
             <div>
                 <p class="index_title">紧急求购</p>
+                <router-link to="/urgentNeed">
                 <div class="more_content">
                     <p>更多</p><img src="/static/images/right.png">
                 </div>
+                </router-link>
             </div>
             <div class="list_content">
                 <div class="mint-cell cell_class">
@@ -133,7 +135,7 @@
                         <div class="list_font">{{todo.place}}</div>
                         <div class="list_font">{{todo.time}}</div>
                         <div class="list_font">
-                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list">
+                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jump('needDetail/1')">
                                 我要报价
                             </button>
                         </div>
@@ -188,11 +190,11 @@ export default {
                 }],
                 supplyDemandArray: [{
                     name: '我要供应',
-                    router: 'mySupply',
+                    router: 'supplyRelease',
                     image: '../../../static/images/mySupply.png'
                 }, {
                     name: '我要采购',
-                    router: 'myDemond',
+                    router: 'needRelease',
                     image: '../../../static/images/myDemond.png'
                 }]
             }
