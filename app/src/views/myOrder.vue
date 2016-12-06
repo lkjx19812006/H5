@@ -16,7 +16,7 @@
         
        <mt-tab-container v-model="selected" >
         <mt-tab-container-item id="1">
-             <mt-navbar v-model="first_act">
+             <mt-navbar v-model="first_act" class="second_nav">
               <mt-tab-item id="1">全部订单</mt-tab-item>
               <mt-tab-item id="2">待确认</mt-tab-item>
               <mt-tab-item id="3">待付款</mt-tab-item>
@@ -27,7 +27,7 @@
             </mt-navbar>
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
-             <mt-navbar v-model="second_act">
+             <mt-navbar v-model="second_act" class="second_nav">
               <mt-tab-item id="1">订单</mt-tab-item>
               <mt-tab-item id="2">待确认</mt-tab-item>
               <mt-tab-item id="3">待付款</mt-tab-item>
@@ -39,34 +39,20 @@
         </mt-tab-container-item>
       </mt-tab-container> 
 
-
-     <!--  <mt-tab-container v-model="act">
-        <mt-tab-container-item id="1">
-             <mt-navbar v-model="act">
-                wosjhi 
-            </mt-navbar>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="2">
-          
-        </mt-tab-container-item>
-      </mt-tab-container>  -->
-
-
-
-                <div class="bg_white">
+      
+       <div class="bg_white">
                 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                 <mt-tab-container v-model="first_act">
-                    <mt-tab-container-item id="1">
+                 
                         <ul class="page-loadmore-list">
-                            <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                                <div class="list_header">
-                                    <div>
-                                        <p class="time_font"><span>{{todo.time}}</span></p>
-                                        <p class="order">订单编号：<span>DD11123333</span></p>
-                                        <p class="audit_state">{{todo.state}}</p>
-                                    </div>
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
+                            <div class="list_header">
+                                <div>
+                                    <p class="time_font"><span>{{todo.time}}</span></p>
+                                    <p class="order">订单编号：<span>DD123446678</span></p>
+                                    <p class="audit_state">{{todo.state}}</p>
                                 </div>
+                            </div>
                             
                             <img src="/static/images/1.jpg" class="list_images">
                             <div class="res_content">
@@ -78,51 +64,21 @@
                                 </div>
                                 <div class="res_content_right">
                                 <p>{{todo.price}}</p>
-                                <button class="mint-button mint-button--primary mint-button--small">编辑</button>
+                                <!-- <button class="mint-button mint-button--primary mint-button--small">编辑</button> -->
+                                
                                 </div>
+                                <p class="num">数量：<span>50</span>kg</p>
                             </div>
-                            </li>
-                        </ul>
-                     </mt-tab-container-item> 
 
-
-                     <mt-tab-container-item id="2">  
-                    <ul class="page-loadmore-list_second">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                            <div class="flag"><img src="/static/icons/england.png"><span>英国</span></div>
-                            <div class="center">
-                                <div class="title">
-                                    <div><img src="/static/icons/impatient.png"><span>{{todo.name}}</span></div>
-                                    <p>发布时间：{{todo.time}}</p>
-                                </div>
-                                <div class="detail">
-                                    <p>规格：{{todo.spec}}</p>
-                                    <p>剩余：<span>26</span>天</p>
-                                </div>
-                                <div class="detail">
-                                    <p>产地：{{todo.place}}</p>
-                                    <p>需求数量：100kg</p>
-                                </div>
-                            </div>
-                            <div class="bottom">
-                                <p>已报价<span>10</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small">我要报价</button>
+                            <div class="sum">
+                                <p>合计：￥<span>6800</span>.00(含运费￥0.00)</p>
+                                <p >
+                                   <button>物流查询</button>
+                                   <button class="last-one">确认收货</button>
+                                </p>
                             </div>
                         </li>
                     </ul>
-                     </mt-tab-container-item> 
-
-                     
-
-                     <mt-tab-container v-model="second_act">
-                    <mt-tab-container-item id="1">
-                        111111
-                     </mt-tab-container-item> 
-
-
-                     <mt-tab-container-item id="2">  
-                         2222
-                     </mt-tab-container-item> 
 
                         <div slot="top" class="mint-loadmore-top">
                             <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
@@ -135,11 +91,10 @@
                     </mt-loadmore>
                 </div>
                 </div>
-         
 
+   
          
-          
-        </mt-tab-container>
+        
         
   </div>
 </template>
@@ -158,7 +113,7 @@ export default {
                     "spec": "统货",
                     "place": "东北",
                     "price": "98.9元/kg",
-                    "state": "待审核",
+                    "state": "待收货",
                     "phone": "15301546832",
                     "time": "2012-11-26"
                 }],
@@ -265,6 +220,34 @@ export default {
 }
 
 .low_price {}
+
+.my_order .select_box{
+    border-bottom: 1px solid #DFDFDF;
+    font-size: 2.5rem;
+    background-color: white;
+    padding: 1rem;
+}
+.my_order .select_box .first_nav{
+    width: 70%;
+    margin-left: 15%;
+}
+.my_order .select_box .first_nav .mint-tab-item{
+    padding: 1.2rem 0;
+    line-height: 0 !important;
+    border: 1px solid #FA6705;
+}
+
+.my_order .select_box .first_nav .mint-tab-item.is-selected{
+    background-color: #FA6705;
+    color: white;
+    margin: 0;
+} 
+.my_order .second_nav{
+    width:150%;
+}
+.my_order .second_nav .mint-tab-item.is-selected{
+    color:#FA6705;
+}
 .my_order .bg_white{
     margin-top: 0.5rem;
 }
@@ -281,9 +264,11 @@ export default {
     margin-bottom: 1rem;
 
 }
+
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li{
     margin-bottom: 1rem;
     background:white;
+    height:17rem;
 }
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
     height: 80px;
@@ -291,41 +276,74 @@ export default {
     left: 10px;
     margin: 50px 10px 10px 0;
     position: absolute;
+    
+    z-index:20000;
 }
 
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header{
     width:100%;
-    height:40px;
-    
+    height:30px;
+    position: relative;
     padding:0 10px;
 }
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header>div{
-    border-bottom: 1px solid #C6C6C5;
+    /*border-bottom: 1px solid #C6C6C5;
     width:100%;
     height:100%;
+    line-height: 40px;*/
     line-height: 40px;
 }
+
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .time_font{
-    font-size: 1.25rem;
-    color:#9C9C9C;
+    font-size: 1rem;
+    color:#333333;
     float:left;
 }
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .time_font{
-    font-size: 1.25rem;
-    color:#9C9C9C;
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .order{
+    font-size: 1rem;
+    color:#333333;
     float:left;
+    margin-left: 1.3rem;
 }
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .audit_state{
-    font-size: 1.25rem;
+    font-size: 1rem;
     color:#FA6705;
-    float:right;
+    position:absolute;
+    right:10px;
     
 }
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum{
+    float:right;
+    margin-right:10px;
+}
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum p{
+    font-size: 1rem;
+    color:#333333;
+    margin-top:0.5rem;
+    margin-bottom: 0;
+    text-align: right;
 
-
-
+}
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum p span{
+    font-size: 1.2rem;
+}
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum p button{
+    font-size: 1rem;
+    color:black;
+    background: white;
+    border:1px solid #B5B5B5;
+    border-radius: 4px;
+    width:5.5rem;
+    height:2rem;
+    outline: none;
+}
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum p .last-one{
+    color:white;
+    background: #FA6705;
+    border:0;
+}
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
     float: left;
     text-align: left;
@@ -335,6 +353,7 @@ export default {
 }
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
+
     float: left;
     max-height: 15px;
 }
@@ -352,7 +371,11 @@ export default {
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
     width: 100%;
     padding-left: 120px;
-    padding-top: 10px;
+    padding-top: 20px;
+    background:#F5F5F5;
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 0;
 }
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right{
@@ -361,6 +384,7 @@ export default {
     height: 90px;
     margin: 0;
     right: 10px;
+
 }
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
@@ -369,18 +393,18 @@ export default {
     color: #EC6817;
 }
 
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button{
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content  .num{
   position: absolute;
-  bottom: 10px;
-  background: white;
-  font-size: 10px;
-  min-width: 60px;
-  right: 0px;
-  max-height: 25px;
-  padding: 0 5px;
-  color:black;
-  border:1px solid #BDBDBD;
-  border-radius: 5px;
+  bottom: 20px;
+  
+  font-size: 1.2rem;
+  
+  right: 10px;
+  
+  
+  color:#666666;
+  
+  
 }
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{
@@ -391,113 +415,5 @@ export default {
 
 .urgent_need {}
 
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem {
-    float: left;
-    width: 100%;
-    min-height: 100px;
-    padding: 10px;
-    height: auto;
-    background: white;
-}
 
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .flag {
-    float: left;
-    width: 100%;
-    padding-bottom: 10px;
-    line-height: 17px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-.my_order .bg_white{
-   padding-bottom: 0;
-   margin-bottom: 0;
-}
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .flag img {
-    max-height: 15px;
-    float: left;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .flag span {
-    margin-left: 5px;
-    color: #666;
-    font-size: 1rem;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom {
-    float: left;
-    width: 100%;
-    margin-top: 10px;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom p {
-    line-height: 24px;
-    float: left;
-    font-size: 1.2rem;
-    color: #666;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom span{
-    color:  #EC6817;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom button {
-    float: right;
-    background: #EC6817;
-    font-size: 10px;
-    min-width: 60px;
-    max-height: 25px;
-    padding: 0 5px;
-    border: none;
-    color: #fff;
-    line-height: 0;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center{
-    float: left;
-    width: 100%;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-}
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center div{
-    float: left;
-
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title {
-    width: 100%;
-    font-size: 1.3rem;
-    color: #333;
-    line-height: 15px;
-    margin: 10px 0;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title p{
-    float: right;
-    font-size: 1rem;
-    color: #999;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title img{
-    max-height: 15px;
-}
-
-
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail{
-    width: 100%;
-    line-height: 18px;
-}
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail p{
-    float: left;
-    font-size: 1.2rem;
-    color: #666;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail span{
-    color:  #EC6817;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail p:last-child{
-    float: right;
-}
 </style>
