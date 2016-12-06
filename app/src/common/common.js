@@ -33,15 +33,11 @@ common.$on('message', message => {
     Toast(message);
 })
 
-common.$on('confirm', (first_item,second_item) => {
-    MessageBox.confirm(first_item).then(action => {
+common.$on('confirm', (item) => {
+    MessageBox.confirm(item).then(action => {
         console.log(action);
     }, action => {
-        MessageBox.confirm(second_item).then(action => {
-              console.log(action);
-        },action => {
-              console.log(action);
-        });
+        console.log(action);
     });
 
 })

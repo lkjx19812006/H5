@@ -15,10 +15,12 @@ import transaction from './views/transaction'
 import search from './views/search'
 import lowPriceRes from './views/lowPriceRes'
 import urgentNeed from './views/urgentNeed'
-import payMoney from './views/payMoney'
 import myAttention from './views/myAttention'
 import myResource from './views/myResource'
 import register from './views/register'
+import findPassWord from './views/findPassWord'
+import mySet from './views/mySet'
+import revisePassWord from './views/revisePassWord'
 
 module.exports = {
   mode: 'hash',
@@ -49,6 +51,9 @@ module.exports = {
     { name: 'myAttention', path: '/myAttention', component: myAttention },
     { name: 'myResource', path: '/myResource', component: myResource },
     { name: 'register', path: '/register', component: register },
+    { name: 'findPassWord', path: '/findPassWord', component: findPassWord },
+    { name: 'mySet', path: '/mySet', component: mySet },
+    { name: 'revisePassWord', path: '/revisePassWord', component: revisePassWord },
     { path: '*', redirect: '/home' }
   ]
 }

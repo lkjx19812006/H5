@@ -1,72 +1,72 @@
 <template>
-  <div class="whole">
+  <div class="mine">
     
-      <div class="mine_header" v-for="todo in content">
-           <div class="mine_header_top">
-                <div class="mine_header_photo"></div>
-                <div class="mine_information">
-                     <div class="mine_information_center">
-                     	<div class="mine_main_content">
-                             <p class="mine_name" id="mine_name">{{todo.name}}</p>
-                             <p class="mine_sex"><img :src="todo.img_src"></p>
+      <div class="header" v-for="todo in content">
+           <div class="header_top">
+                <div class="header_photo"></div>
+                <div class="information">
+                     <div class="information_center">
+                     	<div class="main_content">
+                             <p class="name" id="mine_name">{{todo.name}}</p>
+                             <p class="sex"><img :src="todo.img_src"></p>
                      	</div>
                          
                         
-                        <p class="mine_company">{{todo.company}}</p>
+                        <p class="company">{{todo.company}}</p>
                      </div>
                      
-                     <div class="mine_information_right">
-                         <p class="mine_money">储值：￥{{todo.money}}</p>
-                         <p class="mine_integration">积分：{{todo.integration}}</p>
+                     <div class="information_right">
+                         <p class="money">储值：￥{{todo.money}}</p>
+                         <p class="integration">积分：{{todo.integration}}</p>
                      </div>
                      
                 </div> 
                 <router-link to="accountInfo">
-                    <img src="/static/images/right-arrow.png" class="mine_header_top_right-arrow">
+                    <img src="/static/images/right-arrow.png" class="header_top_right-arrow">
                 </router-link>    
            </div>
 
-           <div class="mine_header_bottom">
-               <p class="mine_my_service">{{todo.my_service}}</p>
-               <p class="mine_his_name">{{todo.his_name}}</p>
-               <p class="mine_details">{{todo.details}}</p>
+           <div class="header_bottom">
+               <p class="my_service">{{todo.my_service}}</p>
+               <p class="his_name">{{todo.his_name}}</p>
+               <p class="details">{{todo.details}}</p>
            </div>
       </div>
       
-       <div class="mine_entrance" >
+       <div class="entrance" >
              <div v-for="todo in entrance" @click="jump(todo.router)">
-                 <img :src="todo.img_src" class="mine_entrance_img">
+                 <img :src="todo.img_src" class="entrance_img">
                  <p>{{todo.name}}</p>
              </div>
             
        </div>
       
-         <div class="mine_my_list">
+         <div class="my_list">
              <ul >
-                 <li class="mine_my_list_part mine_my_list_part_norlast" 
+                 <li class="my_list_part  my_list_part_norlast" 
                  v-for="(todo,index) in my_list" v-if="index == 0" @click="drugMoney">
-                      <img :src="todo.img_src" class="mine_my_list_part_img">
+                      <img :src="todo.img_src" class="my_list_part_img">
                       <p>{{todo.name}}</p>
                  </li>
-                 <li class="mine_my_list_part mine_my_list_part_norlast" 
+                 <li class="my_list_part  my_list_part_norlast" 
                  v-for="(todo,index) in my_list" v-if="index == 1" @click="jump(todo.router)">
-                      <img :src="todo.img_src" class="mine_my_list_part_img">
+                      <img :src="todo.img_src" class="my_list_part_img">
                      	<p>{{todo.name}}</p>
                  </li>
-                 <li class="mine_my_list_part" v-for="(todo,index) in my_list" v-if="index == 2" @click="jump(todo.router)">
-                      <img :src="todo.img_src" class="mine_my_list_part_img">
+                 <li class="my_list_part" v-for="(todo,index) in my_list" v-if="index == 2" @click="jump(todo.router)">
+                      <img :src="todo.img_src" class="my_list_part_img">
                       <p>{{todo.name}}</p>
                  </li>
                 
              </ul>
              <ul>   
-                 <li class="mine_my_list_part mine_my_list_part_norlast" v-for="(todo,index) in my_list" v-if="index > 2 && index <5"  @click="jump(todo.router)">
-                  <img :src="todo.img_src" class="mine_my_list_part_img">
+                 <li class="my_list_part  my_list_part_norlast" v-for="(todo,index) in my_list" v-if="index > 2 && index <5"  @click="jump(todo.router)">
+                  <img :src="todo.img_src" class="my_list_part_img">
                  	<p>{{todo.name}}</p>
                  </li>
 
-                 <li class="mine_my_list_part" v-for="(todo,index) in my_list" v-if="index == 5" @click="jump(todo.router)">
-                  <img :src="todo.img_src" class="mine_my_list_part_img">
+                 <li class="my_list_part" v-for="(todo,index) in my_list" v-if="index == 5" @click="jump(todo.router)">
+                  <img :src="todo.img_src" class="my_list_part_img">
                   <p>{{todo.name}}</p>
                  </li>
                  
@@ -113,6 +113,7 @@ export default {
          img_src:'/static/icons/I-Yaokuan.png'
        },{
          name:'我的资源',
+         router:'myResource',
          img_src:'/static/icons/My-resources.png'
        },{
          name:'我的采购',
@@ -126,6 +127,7 @@ export default {
          img_src:'/static/icons/My-concern.png'
        },{
          name:'设置',
+         router:'mySet',
          img_src:'/static/icons/Set-up.png'
        }]
          
@@ -155,16 +157,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.whole{
+.mine{
 	background:#F0F0F0;
 }
-.mine_header{
+.mine .header{
     height:17.537rem;
     width:100%;
     background:#cccccc;
     padding-top:3.7rem;
 }
-.mine_header_top{
+.mine .header_top{
 	width:88%;
 	height:6.4rem;
 	/*background:url(/static/images/right-arrow.png) right center no-repeat;background-size:1.024rem 1.024rem;*/
@@ -172,7 +174,7 @@ export default {
   position: relative;
 	
 }
-.mine_header_photo{
+.mine .header_photo{
 	background:#FFD779;
 	width:6.4rem;
 	height:6.4rem;
@@ -180,7 +182,7 @@ export default {
 	margin-right: 4%;
 	float:left;
 }
-.mine_information{
+.mine .information{
 	width:65.4%;
 	height:6.4rem;
 	padding: 1.38rem 0;
@@ -190,30 +192,30 @@ export default {
 	font-size: 1.024rem;
 	
 }
-.mine_information_center{
+.mine .information_center{
 	flex:4;
 	display: flex;
 	flex-direction:column;
 	text-align: left;
 }
-.mine_information_center div{
+.mine .information_center div{
 	flex:1;
 }
-.mine_company{
+.mine .company{
 	flex:1;
 
 	
 }
-.mine_information_right{
+.mine .information_right{
 	display:flex;
 	flex-direction:column;
 	text-align: left;
 	flex:6;
 }
-.mine_money{
+.mine .money{
 	flex:1;
 }
-.mine_integration{
+.mine .integration{
 	flex:1;
 }
 #mine_name{
@@ -221,18 +223,18 @@ export default {
 	color:#FB761E;
 	float:left;
 }
-.mine_sex img{
+.mine .sex img{
 	height:1.024rem;
 	margin-left: 3%;
 	margin-top: 0.1705rem;
 	float:left;
 }
-.mine_right-arrow{
+.mine .right-arrow{
 	width:1.024rem;
 	height:1.024rem;
     margin-top:1.308rem;
 }
-.mine_header_bottom{
+.mine .header_bottom{
 	width:85%;
 	height:1.27995rem;
 	line-height: 1.27995rem;
@@ -243,45 +245,45 @@ export default {
 	margin-right:6%;
 	margin-top:1.96rem;
 }
-.mine_my_service{
+.mine .my_service{
 	flex:47;
 	text-align: left;
 }
-.mine_his_name{
+.mine .his_name{
 	flex:26;
     text-align: left;
 }
-.mine_details{
+.mine .details{
 	flex:27;
 	text-align: right;
 }
-.mine_entrance{
+.mine .entrance{
 	display:flex;
 	flex-direction:row;
 	height:7.253rem;
 	margin-top: 0.8533rem;
 	background: white;
 }
-.mine_entrance div{
+.mine .entrance div{
 	flex:1;
 	box-sizing: border-box;
 	height:7.253rem;
 	/*padding-top:4.48rem;*/
   position: relative;
 }
-.mine_entrance div p{
+.mine .entrance div p{
 	font-size: 1.109rem;
 	color:#333333;
   margin-top: 4.48rem;
 }
-.mine_my_list{
+.mine .my_list{
 	width:100%;
 	height:17.066rem;
 	display: flex;
 	flex-direction:column;
 	margin-top:0.8533rem;
 }
-.mine_my_list ul{
+.mine .my_list ul{
 	width:100%;
 	height:17.066rem;
 	flex:1;
@@ -289,21 +291,21 @@ export default {
 	display:flex;
 	flex-direction:row;
 }
-.mine_my_list ul li{
+.mine .my_list ul li{
 	flex:1;
 	box-sizing: border-box;
 	padding-top:5.46rem;
   position: relative;
 	
 }
-.mine_my_list ul li p{
+.mine .my_list ul li p{
 	font-size: 1.024rem;
 	color:#333333;
 }
-.mine_my_list_part_norlast{
+.mine .my_list_part_norlast{
 	margin-right:0.213rem;
 }
-.mine_entrance_img{
+.mine .entrance_img{
    position: absolute;
    width:2.048rem;
    height:2.048rem;
@@ -311,11 +313,11 @@ export default {
    left:50%;
    top:1.621rem;
 }
-.mine_my_list_part{
+.mine .my_list_part{
   background:white;
   
 }
-.mine_my_list_part_img{
+.mine .my_list_part_img{
   position: absolute;
   width:2.5599rem;
   height:2.5599rem;
@@ -323,7 +325,7 @@ export default {
   left:50%;
   top:2.133rem;
 }
-.mine_header_top_right-arrow{
+.mine .header_top_right-arrow{
   position:absolute;
   width:1.024rem;
   height:1.024rem;
