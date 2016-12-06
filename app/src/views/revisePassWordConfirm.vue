@@ -1,7 +1,7 @@
 <template>
-    <div class="revise_password">
+    <div class="revise_password_confirm">
         <mt-header title="修改密码">
-            <router-link to="/mySet" slot="left">
+            <router-link to="/revisePassWord" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
         </mt-header>
@@ -10,14 +10,17 @@
                <p >手机号：</p>
                <input type="text" class='top_text' id="ephone">
             </li>
-            <li class="bottom_li">
-               <p>验证码：</p>
-               <input type="text" placeholder="请输入你的验证码" class="bottom_text">
-               <button v-on:click="nextStep">{{code}}</button>
+            <li>
+               <p >新密码：</p>
+               <input type="text" class='top_text' id="ephone">
+            </li>
+            <li class="last_li">
+               <p >&nbsp;&nbsp;&nbsp;&nbsp;密码：</p>
+               <input type="text" class='top_text' id="ephone">
             </li>
         </ul>
 
-        <router-link to="revisePassWordConfirm">
+        <router-link to="">
             <div class="next_step">下一步</div>
         </router-link>
     </div>
@@ -66,48 +69,35 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.revise_password .fill_in{
+.revise_password_confirm .fill_in{
    
    background:white;
    padding:2rem 0 5rem 4.7%;
 }
-.revise_password .fill_in li{
+.revise_password_confirm .fill_in li{
   height:3.5rem;
-  
+  margin:0 0 1.3rem 0;
 }
-.revise_password .fill_in p{
+
+.revise_password_confirm .fill_in li.last_li{
+  margin-bottom: 0;
+}
+.revise_password_confirm .fill_in p{
    float:left;
    font-size: 1.2rem;
    color:#333333;
    line-height: 3.5rem;
 }
-.revise_password .fill_in input{
+.revise_password_confirm .fill_in input{
    float:left;
    height:3.5rem;
    border-radius: 1.75rem;
    border:1px solid #C9C9C9;
    padding:0 1.75rem;
-}
-.revise_password .fill_in .top_text{
    width:75%;
-   margin-left:0.5rem;
 }
-.revise_password .fill_in .bottom_text{
-   width:45.9%;
-}
-.revise_password .fill_in button{
-  width:30%;
-  height:3.5rem;
-  border-radius: 1.75rem;
-  border:1px solid #C9C9C9;
-  float:left;
-  margin-left:0.5rem;
-  outline:none;
-}
-.revise_password .fill_in .bottom_li{
-  margin-top: 2rem;
-}
-.revise_password .next_step{
+
+.revise_password_confirm .next_step{
   width:78%;
   height:3.5rem;
   background:#FA6705;

@@ -55,6 +55,7 @@ export default {
                 },{
                     first_img:'/static/images/address_administration.png',
                     left_word:'地址管理',
+                    router:'addressManage',
                     second_img:'/static/images/right-arrow.png'
                 },{
                     first_img:'/static/images/about.png',
@@ -62,6 +63,7 @@ export default {
                 },{
                     first_img:'/static/images/ider.png',
                     left_word:'意见反馈',
+                    router:'feedBack',
                     second_img:'/static/images/right-arrow.png'
                 },{
                     first_img:'/static/images/customer-service.png',

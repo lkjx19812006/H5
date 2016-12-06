@@ -21,6 +21,13 @@ import register from './views/register'
 import findPassWord from './views/findPassWord'
 import mySet from './views/mySet'
 import revisePassWord from './views/revisePassWord'
+import revisePassWordConfirm  from './views/revisePassWordConfirm'
+import addressManage from './views/addressManage'
+import addressRevise from './views/addressRevise'
+import feedBack from './views/feedBack'
+import myOrder from './views/myOrder'
+
+
 
 module.exports = {
   mode: 'hash',
@@ -54,6 +61,11 @@ module.exports = {
     { name: 'findPassWord', path: '/findPassWord', component: findPassWord },
     { name: 'mySet', path: '/mySet', component: mySet },
     { name: 'revisePassWord', path: '/revisePassWord', component: revisePassWord },
+    { name: 'revisePassWordConfirm', path: '/revisePassWordConfirm', component: revisePassWordConfirm },
+    { name: 'addressManage', path: '/addressManage', component: addressManage },
+    { name: 'addressRevise', path: '/addressRevise', component: addressRevise },
+    { name: 'feedBack', path: '/feedBack', component: feedBack },
+    { name: 'myOrder', path: '/myOrder', component: myOrder },
     { path: '*', redirect: '/home' }
   ]
 }

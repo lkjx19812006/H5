@@ -93,7 +93,7 @@ export default {
       }],
       entrance:[{
       	 name:'全部订单',
-         router:'',
+         router:'myOrder',
          img_src:'/static/icons/All-orders.png'
        },{
          name:'待付款',
