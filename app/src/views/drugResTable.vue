@@ -1,6 +1,6 @@
 <template>
     <div class="whole">
-        <mt-header title="药性表">
+        <mt-header title="药材百科">
             <router-link to="/home" slot="left">
                 <mt-button icon="back" @click="iosBack()"></mt-button>
             </router-link>

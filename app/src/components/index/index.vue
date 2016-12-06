@@ -10,7 +10,7 @@
             </router-link>
         </mt-header>
         <div class="swipe_height">
-            <mt-swipe :auto="4000">
+            <mt-swipe :auto="4000" :prevent="true">
                 <mt-swipe-item v-for="item in imgArray">
                     <div>
                         <img v-bind:src="item.url">
@@ -52,7 +52,7 @@
             <div class="more_content">
                 <p>更多</p><img src="/static/images/right.png">
             </div>
-            <mt-swipe :auto="4000" :showIndicators="false">
+            <mt-swipe :auto="4000" :showIndicators="false" :prevent="true">
                 <mt-swipe-item v-for="(todo,index) in todos" v-if="index%2==0">
                     <div class="drug_price_box">
                         <div class="drug_price_swipe">
@@ -106,7 +106,7 @@
                         <div class="list_font">{{todo.place}}</div>
                         <div class="list_font">{{todo.price}}</div>
                         <div class="list_font">
-                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list">
+                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jump('resourceDetail/1')">
                                 我要购买
                             </button>
                         </div>
@@ -117,9 +117,11 @@
         <div class="bg_white">
             <div>
                 <p class="index_title">紧急求购</p>
+                <router-link to="/urgentNeed">
                 <div class="more_content">
                     <p>更多</p><img src="/static/images/right.png">
                 </div>
+                </router-link>
             </div>
             <div class="list_content">
                 <div class="mint-cell cell_class">
@@ -133,7 +135,7 @@
                         <div class="list_font">{{todo.place}}</div>
                         <div class="list_font">{{todo.time}}</div>
                         <div class="list_font">
-                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list">
+                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jump('needDetail/1')">
                                 我要报价
                             </button>
                         </div>
@@ -148,7 +150,6 @@ import common from '../../common/common.js'
 export default {
     data() {
             return {
-                msg: 'Welcome to Your Vue.js App',
                 selected: 'tab-container1',
                 imgArray: [{
                     url: '/static/images/1.jpg'
@@ -183,17 +184,17 @@ export default {
                     router: 'marketQuotation',
                     image: '/static/images/market.png'
                 }, {
-                    name: '药性表',
+                    name: '药材百科',
                     router: 'drugResTable',
                     image: '/static/images/drugType.png'
                 }],
                 supplyDemandArray: [{
                     name: '我要供应',
-                    router: 'mySupply',
+                    router: 'supplyRelease',
                     image: '../../../static/images/mySupply.png'
                 }, {
                     name: '我要采购',
-                    router: 'myDemond',
+                    router: 'needRelease',
                     image: '../../../static/images/myDemond.png'
                 }]
             }

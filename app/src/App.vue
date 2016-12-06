@@ -1,19 +1,15 @@
 <template>
     <div id="app">
-     <!--    <h1>Hello App!</h1> -->
         <router-view></router-view>
     </div>
 </template>
 <script>
-
-
-
 export default {
     data() {
-            return {
-              
-            }
+        return {
+
         }
+    }
 
 }
 </script>
@@ -25,6 +21,4 @@ export default {
     text-align: center;
     color: #2c3e50;
 }
-
-
 </style>

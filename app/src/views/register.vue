@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
     <div class="register">
         <mt-header title="注册">
             <router-link to="/login" slot="left">
@@ -127,4 +128,36 @@ export default {
     border-radius: 1.75rem;
     margin-top: 9rem;
 }
+=======
+    <div class="content resource_information">
+        <div class="search_div">
+           
+        </div>
+    </div>
+</template>
+<script>
+export default {
+    data() {
+            return {
+
+            }
+        },
+        props:{
+            information:{
+
+            }
+        },
+
+        created() {
+
+        }
+}
+</script>
+<style scoped>
+.resource_information {
+    float: left;
+    width: 100%;
+}
+
+>>>>>>> ae1d5b00e4edfeb8ea58bcb61f8bf1ba3aaa14f3
 </style>
