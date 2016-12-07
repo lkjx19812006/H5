@@ -45,7 +45,7 @@
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                  
                         <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jump(todo.router)">
                             <div class="list_header">
                                 <div>
                                     <p class="time_font"><span>{{todo.time}}</span></p>
@@ -115,7 +115,8 @@ export default {
                     "price": "98.9元/kg",
                     "state": "待收货",
                     "phone": "15301546832",
-                    "time": "2012-11-26"
+                    "time": "2012-11-26",
+                    "router":"myOrderDetail"
                 }],
                 topStatus: '',
                 wrapperHeight: 0,
@@ -129,6 +130,9 @@ export default {
             
         },
         methods: {
+            jump:function(router){
+                 this.$router.push(router);
+            },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },

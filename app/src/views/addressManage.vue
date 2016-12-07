@@ -39,6 +39,9 @@
                 </div>
            </li>
         </ul>
+        <router-link to="addAddress">
+         <div class="add_address">添加新地址</div>
+        </router-link> 
     </div>
 </template>
 <script>
@@ -97,9 +100,13 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .address_manage ul li{
   background:white;
   margin-top: 1rem;
+}
+.address_manage ul li{
+  position: relative;
 }
 .address_manage ul li .address_top{
     padding: 2.5rem 1.5rem 2rem 1.5rem;
@@ -108,6 +115,7 @@ export default {
 }
 .address_manage ul li .address_top .receiver_left{
     float:left;
+
 }
 .address_manage ul li .address_top .receiver_right{
     float:right;
@@ -120,9 +128,14 @@ export default {
    color:#666666;
 }
 .address_manage ul li .address_top .address{
-    float:left;
-    margin-top: 1.5rem;
+    /*float:left;*/
+    /*margin-top: 1.5rem;*/
+    /*text-align: left;*/
+    
+    position: absolute;
+    top:5rem;
 }
+
 .address_manage ul li .address_bottom{
    border-top:1px solid #DCDCDC;
    height:3.7rem;
@@ -164,5 +177,15 @@ export default {
 .address_manage ul li .address_bottom .bottom_p{
    float:right;
    margin:0 1.9rem 0 0;
+}
+.address_manage .add_address{
+   width:100%;
+   background:#FA6705;
+   font-size: 1.7rem;
+   color:white;
+   line-height: 5rem;
+   position: fixed;
+   bottom: 0;
+   
 }
 </style>

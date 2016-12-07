@@ -32,6 +32,8 @@
               <p class="last_word">{{todo.right_word}}</p>
            </li>
         </ul>
+
+        <div class="quit">退出当前账号</div>
     </div>
 </template>
 <script>
@@ -128,5 +130,15 @@ export default {
   line-height: 4.4rem;
   margin-left: 1.2rem;
   color:#666666;
+}
+.my_set .quit{
+   width:100%;
+   background:#FA6705;
+   font-size: 1.7rem;
+   color:white;
+   line-height: 5rem;
+   position: fixed;
+   bottom: 0;
+   
 }
 </style>

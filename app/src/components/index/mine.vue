@@ -29,7 +29,9 @@
            <div class="header_bottom">
                <p class="my_service">{{todo.my_service}}</p>
                <p class="his_name">{{todo.his_name}}</p>
-               <p class="details">{{todo.details}}</p>
+               <router-link to="detailsPage">
+                   <p class="details">{{todo.details}}</p>
+                </router-link>   
            </div>
       </div>
       
@@ -117,6 +119,7 @@ export default {
          img_src:'/static/icons/My-resources.png'
        },{
          name:'我的采购',
+         router:'myPurchase',
          img_src:'/static/icons/My-purchase.png'
        },{
          name:'我的报价',

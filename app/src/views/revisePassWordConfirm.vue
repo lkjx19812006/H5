@@ -21,7 +21,7 @@
         </ul>
 
         <router-link to="">
-            <div class="next_step">下一步</div>
+            <div class="next_step">确定</div>
         </router-link>
     </div>
 </template>

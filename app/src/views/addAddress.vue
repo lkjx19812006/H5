@@ -1,6 +1,6 @@
 <template>
-    <div class="address_revise">
-        <mt-header title="地址管理">
+    <div class="add_address">
+        <mt-header title="添加地址">
             <router-link to="/addressManage" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
@@ -9,12 +9,12 @@
            <li v-for="todo in todos">
                <div class="address_top">
                   <div class="receiver">
-                    <p class="receiver_left">收货人：<span><input type="text" :placeholder="todo.name"></span></p>
-                    <p class="receiver_right">{{todo.number}}</p> 
+                    <p class="receiver_left">收货人：<span><input type="text" placeholder="请填写收货人"></span></p>
+                    <!-- <p class="receiver_right">{{todo.number}}</p> --> 
                   </div> 
 
                   <div class="address">
-                    <p>地址：<span><input type="text" :placeholder="todo.address"></span></p>
+                    <p>地址：<span><input type="text" placeholder="请填写地址"></span></p>
                   </div> 
                </div>
                 
@@ -39,9 +39,6 @@
                 </div>
            </li>
         </ul>
-       <router-link to="addressManage">
-        <div class="confirm">确认</div>
-        <router-link>
     </div>
 </template>
 <script>
@@ -69,90 +66,79 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.address_revise ul li{
+.add_address ul li{
   background:white;
   margin-top: 1rem;
-  position: relative;
+  position:relative;
 }
-.address_revise ul li .address_top{
+.add_address ul li .address_top{
     padding: 2.5rem 1.5rem 2rem 1.5rem;
     
     height:8.5rem;
 }
-.address_revise ul li .address_top .receiver_left{
+.add_address ul li .address_top .receiver_left{
     float:left;
 }
-.address_revise ul li .address_top .receiver_right{
+.add_address ul li .address_top .receiver_right{
     float:right;
 }
-.address_revise ul li .address_top p{
+.add_address ul li .address_top p{
     font-size: 1.2rem;
     color:#333333;
 }
-.address_revise ul li .address_top input{
+.add_address ul li .address_top input{
    border:0;
    outline: none;
 }
-.address_revise ul li .address_top p span{
+.add_address ul li .address_top p span{
    color:#666666;
 }
-.address_revise ul li .address_top .address{
+.add_address ul li .address_top .address{
     /*float:left;
     margin-top: 1.5rem;*/
     position: absolute;
     top:5rem;
 }
-.address_revise ul li .address_bottom{
+.add_address ul li .address_bottom{
    border-top:1px solid #DCDCDC;
    height:3.7rem;
    position: relative;
    line-height: 3.7rem;
 }
-.address_revise ul li .address_bottom img{
+.add_address ul li .address_bottom img{
    height:1.75rem;
 }
-.address_revise ul li .address_bottom .first_img{
+.add_address ul li .address_bottom .first_img{
    position: absolute;
    left:1.5rem;
    top:0.975rem;
 }
-.address_revise ul li .address_bottom .second_img{
+.add_address ul li .address_bottom .second_img{
    position: absolute;
    right:11.8rem;
    top:0.975rem;
 }
-.address_revise ul li .address_bottom .last_img{
+.add_address ul li .address_bottom .last_img{
    position: absolute;
    right:4.4rem;
    top:0.975rem;
 }
-.address_revise ul li .address_bottom .top_p{
+.add_address ul li .address_bottom .top_p{
    float:left;
    margin:0 0 0 3.5rem;
 }
-.address_revise ul li .address_bottom .address_box{
+.add_address ul li .address_bottom .address_box{
    float: right;
    height: 3.7rem;
    width:13.55rem;
 }
-.address_revise ul li .address_bottom .center_p{
+.add_address ul li .address_bottom .center_p{
    float:left;
    margin:0 0 0 1.75rem;
 
 }
-.address_revise ul li .address_bottom .bottom_p{
+.add_address ul li .address_bottom .bottom_p{
    float:right;
    margin:0 1.9rem 0 0;
-}
-.address_revise .confirm{
-   width:100%;
-   background:#FA6705;
-   font-size: 1.7rem;
-   color:white;
-   line-height: 5rem;
-   position: fixed;
-   bottom: 0;
-   
-
 }
 </style>
