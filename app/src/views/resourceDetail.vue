@@ -50,9 +50,9 @@
                 <img src="/static/icons/follow.png">
                 <p>关注</p>
             </button>
-            <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="showButton">无样品</button>
-            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="!showButton">购买样品</button>
-            <button class="mint-button mint-button--primary mint-button--normal orange_button">立即购买</button>
+            <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!showButton">无样品</button>
+            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="showButton" @click="jump('/sampleConfirm/1')" >购买样品</button>
+            <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump('/orderConfirm/1')">立即购买</button>
         </div>
     </div>
 </template>
@@ -107,6 +107,11 @@ export default {
         methods: {
             back() {
                 this.$router.go(-1);
+            },
+            jump(param) {
+                console.log(param);
+                this.$router.push(param);
+                
             }
         },
 
@@ -156,7 +161,7 @@ export default {
 
 .resource_detail .swipe_height .swipe_number span {
     color: #FA6705;
-    font-size: 1.1rem;
+    font-size: 14px;
 }
 
 .resource_detail .top {

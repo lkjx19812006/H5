@@ -23,6 +23,8 @@ import myResource from './views/myResource'
 import register from './views/register'
 import needReleaseSuccess from './views/needReleaseSuccess'
 import supplyReleaseSuccess from './views/supplyReleaseSuccess'
+import orderConfirm from './views/orderConfirm'
+import sampleConfirm from './views/sampleConfirm'
 
 module.exports = {
     mode: 'hash',
@@ -58,6 +60,8 @@ module.exports = {
         { name: 'register', path: '/register', component: register },
         { name: 'needReleaseSuccess', path: '/needReleaseSuccess', component: needReleaseSuccess },
         { name: 'supplyReleaseSuccess', path: '/supplyReleaseSuccess', component: supplyReleaseSuccess },
+        { name: 'orderConfirm', path: '/orderConfirm/:sourceId', component: orderConfirm },
+        { name: 'sampleConfirm', path: '/sampleConfirm/:sourceId', component: sampleConfirm },
         { path: '*', redirect: '/home' }
     ]
 }

@@ -1,14 +1,15 @@
 <template>
     <div>
-        <mt-header fixed>
-            <router-link to="/search" slot="left">
+    <div style="position:fixed;top:0;">sdfdfgdfgdfgdfg</div>
+       <!--  <mt-header fixed title="固定在顶部">
+             <router-link to="/search" slot="left">
                 <mt-button>北京</mt-button>
                 <div class="search_div">
                     请输入您想要的货物资源
                     <img src="/static/icons/search.png">
                 </div>
             </router-link>
-        </mt-header>
+        </mt-header> -->
         <div class="swipe_height">
             <mt-swipe :auto="4000" :prevent="true">
                 <mt-swipe-item v-for="item in imgArray">
@@ -34,7 +35,7 @@
         </div>
         <div class="real_news" @click="jump('transaction')">
             <div class="news_logo">
-                <img src="../../../static/images/neWs.png">
+                <img src="../../../static/images/news.png">
             </div>
             <div class="news_content">
                 <ul id="scrollText">
@@ -118,9 +119,9 @@
             <div>
                 <p class="index_title">紧急求购</p>
                 <router-link to="/urgentNeed">
-                <div class="more_content">
-                    <p>更多</p><img src="/static/images/right.png">
-                </div>
+                    <div class="more_content">
+                        <p>更多</p><img src="/static/images/right.png">
+                    </div>
                 </router-link>
             </div>
             <div class="list_content">
@@ -143,6 +144,7 @@
                 </div>
             </div>
         </div>
+    </div>
 </template>
 <script>
 import common from '../../common/common.js'
@@ -269,11 +271,13 @@ export default {
 }
 </script>
 <style scoped>
-.mint-header {
+/* .mint-header {
     background-color: #FA6705;
     border: none;
     color: #fff;
-}
+    position: fixed;
+    top: 0;
+} */
 
 ul li {
     list-style: none;

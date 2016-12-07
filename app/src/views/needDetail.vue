@@ -64,7 +64,7 @@ export default {
         methods: {
             back() {
                 this.$router.go(-1);
-            },
+            }
         },
         created() {
             let _self = this;
