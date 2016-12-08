@@ -15,16 +15,34 @@ import transaction from './views/transaction'
 import search from './views/search'
 import lowPriceRes from './views/lowPriceRes'
 import urgentNeed from './views/urgentNeed'
-import payMoney from './views/payMoney'
-import needDetail from './views/needDetail'
-import resourceDetail from './views/resourceDetail'
 import myAttention from './views/myAttention'
 import myResource from './views/myResource'
 import register from './views/register'
+import findPassWord from './views/findPassWord'
+import mySet from './views/mySet'
+import revisePassWord from './views/revisePassWord'
+import revisePassWordConfirm from './views/revisePassWordConfirm'
+import addressManage from './views/addressManage'
+import addressRevise from './views/addressRevise'
+import feedBack from './views/feedBack'
+import myOrder from './views/myOrder'
+import needDetail from './views/needDetail'
+import resourceDetail from './views/resourceDetail'
 import needReleaseSuccess from './views/needReleaseSuccess'
 import supplyReleaseSuccess from './views/supplyReleaseSuccess'
+<<<<<<< HEAD
 import orderConfirm from './views/orderConfirm'
 import sampleConfirm from './views/sampleConfirm'
+=======
+import detailsPage from './views/detailsPage'
+import myOrderDetail from './views/myOrderDetail'
+import goodDetail from './views/goodDetail'
+import addAddress from './views/addAddress'
+import myPurchase from './views/myPurchase'
+import purchaseDetail from './views/purchaseDetail'
+import companyAuthentication from './views/companyAuthentication'
+import personalAuthentication from './views/personalAuthentication'
+>>>>>>> 45d3ec63e1e5e1bf99b34ca368c5f35a96103c32
 
 module.exports = {
     mode: 'hash',
@@ -52,16 +70,35 @@ module.exports = {
         { name: 'search', path: '/search', component: search },
         { name: 'lowPriceRes', path: '/lowPriceRes', component: lowPriceRes },
         { name: 'urgentNeed', path: '/urgentNeed', component: urgentNeed },
-        { name: 'payMoney', path: '/payMoney', component: payMoney },
-        { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
-        { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
         { name: 'myAttention', path: '/myAttention', component: myAttention },
         { name: 'myResource', path: '/myResource', component: myResource },
         { name: 'register', path: '/register', component: register },
+        { name: 'findPassWord', path: '/findPassWord', component: findPassWord },
+        { name: 'mySet', path: '/mySet', component: mySet },
+        { name: 'myOrderDetail', path: '/myOrderDetail', component: myOrderDetail },
+        { name: 'detailsPage', path: '/detailsPage', component: detailsPage },
+        { name: 'revisePassWord', path: '/revisePassWord', component: revisePassWord },
+        { name: 'revisePassWordConfirm', path: '/revisePassWordConfirm', component: revisePassWordConfirm },
+        { name: 'addressManage', path: '/addressManage', component: addressManage },
+        { name: 'addressRevise', path: '/addressRevise', component: addressRevise },
+        { name: 'feedBack', path: '/feedBack', component: feedBack },
+        { name: 'goodDetail', path: '/goodDetail', component: goodDetail },
+        { name: 'addAddress', path: '/addAddress', component: addAddress },
+        { name: 'myOrder', path: '/myOrder', component: myOrder },
+        { name: 'companyAuthentication', path: '/companyAuthentication', component: companyAuthentication },
+        { name: 'personalAuthentication', path: '/personalAuthentication', component: personalAuthentication },
+        { name: 'myPurchase', path: '/myPurchase', component: myPurchase },
+        { name: 'purchaseDetail', path: '/purchaseDetail', component: purchaseDetail },
         { name: 'needReleaseSuccess', path: '/needReleaseSuccess', component: needReleaseSuccess },
         { name: 'supplyReleaseSuccess', path: '/supplyReleaseSuccess', component: supplyReleaseSuccess },
+<<<<<<< HEAD
         { name: 'orderConfirm', path: '/orderConfirm/:sourceId', component: orderConfirm },
         { name: 'sampleConfirm', path: '/sampleConfirm/:sourceId', component: sampleConfirm },
+=======
+        { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
+        { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
+
+>>>>>>> 45d3ec63e1e5e1bf99b34ca368c5f35a96103c32
         { path: '*', redirect: '/home' }
     ]
 }

@@ -1,6 +1,6 @@
 <template>
-    <div class="register">
-        <mt-header title="注册">
+    <div class="find_password">
+        <mt-header title="找回密码">
             <router-link to="/login" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
@@ -11,18 +11,16 @@
                   <p>手机号：</p><input type="text" placeholder="请输入手机号码" id="ephone"/>
                </li>
                <li>
-                  <p>密码：</p><input type="text" placeholder="请设置密码"/>
+                  <p>验证码：</p><input type="text" placeholder="请输入验证码"/>
+                  <div  id="identify_code">{{identify_code}}</div>
+                  <input class="get_code" v-on:click="confirm" :value="code">
                </li>
                <li>
-                  <p>确认密码：</p><input type="text" placeholder="请再次输入密码" >
-               </li>
-               <li>
-                  <p>验证码：</p><input type="text" placeholder="请输入验证码" />
-                  <input class="get_code" v-on:click="confirm"  type="button" :value="code">
+                  <p>新密码：</p><input type="text" placeholder="请输入新密码" />
                </li>
             </ul>
             
-            <div class="confirm_register" >注册</div>
+            <div class="confirm" >确定</div>
        </form>
     </div>
 </template>
@@ -40,9 +38,8 @@ export default {
         methods:{
                
                 confirm:function(){
-                  
-                    let phone=document.getElementById("ephone").value;
-                    let pattern = /^1[34578]\d{9}$/;    
+                    var phone=document.getElementById("ephone").value;
+                    var pattern = /^1[34578]\d{9}$/;    
                     if(!pattern.test(phone)) {          
                         alert('请输入有效的手机号！');
                     }else{
@@ -70,53 +67,54 @@ export default {
 <style scoped>
 
 
-.register .fill_in{
+.find_password .fill_in{
     padding: 0 4.6%;
     margin-top:1rem;
     background:white;
 }
 
-.register .fill_in li{
+.find_password .fill_in li{
     height:5rem;
     font-size: 1.2rem;
     color:#333333;
     border-bottom: 1px solid #E0E0E0;
     line-height: 2rem;
-    padding:1.5rem 0;
+    padding: 1.5rem 0;
     
 }
-.register .fill_in li input{
+.find_password .fill_in li input{
     outline: none;
     border:0;
     height:2rem;
     float: left;
-    font-size: 1.2rem;
+    
     padding-left:0.5rem;
     width:47%;
 }
-.register .fill_in li p{
-    width:23.5%;
+.find_password .fill_in li p{
+    width:17.5%;
     text-align: right;
     float:left;
 }
-/*.register .fill_in li div{
+.find_password .fill_in li div{
     border-left: 1px solid #E0E0E0;
     width:70px;
     float:right;
     font-size: 1.4rem;
-}*/
-.register .fill_in li .get_code{
+}
+.find_password .fill_in li .get_code{
     width:100px;
     border: 1px solid #BFBFBF;
     height:2.3rem;
     border-radius: 5px;
     background: #F5F5F5;
+    padding: 0;
     float:right;
     line-height: 2.3rem;
-    padding: 0;
+    text-align:center;
 
 }
-.register .confirm_register{
+.find_password .confirm{
     width:90%;
     height:3.5rem;
     margin-left:5%;
@@ -125,7 +123,6 @@ export default {
     line-height: 3.5rem;
     text-align: center;
     border-radius: 1.75rem;
-    margin-top: 9rem;
+    margin-top: 5.5rem;
 }
-
 </style>

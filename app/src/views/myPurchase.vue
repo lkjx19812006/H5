@@ -1,6 +1,6 @@
 <template>
-    <div class="content my_resource">
-        <mt-header title="我的资源">
+    <div class="content my_purchase">
+        <mt-header title="我的求购">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
@@ -11,25 +11,26 @@
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jump(todo.router)">
-                            <div class="list_header">
-                                <div>
-                                    <p class="time_font">发布时间：<span>{{todo.time}}</span></p>
-                                    <p class="audit_state">{{todo.state}}</p>
-                                </div>
+                            <div class="header_list">
+                                <p class="left_p">发布日期：2016-11-26</p>
+                                <p class="right_p">待审核</p>
                             </div>
-                            
-                            <img src="/static/images/1.jpg" class="list_images">
-                            <div class="res_content">
-                                <div class="res_content_center">
-                                    <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.name}}</div>
-                                    <p>规格：<span>{{todo.spec}}</span></p>
-                                    <p>产地：<span>{{todo.place}}</span></p>
-                                    <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
-                                </div>
-                                <div class="res_content_right">
-                                <p>{{todo.price}}</p>
-                                <button class="mint-button mint-button--primary mint-button--small">编辑</button>
-                                </div>
+                            <div class="first_line">
+                                <p class="left">人参</p>
+                                <p class="right"><span>12</span>人已报价</p>
+                            </div>
+                            <div class="second_line">
+                                <p class="left">规格：统货</p>
+                                <p class="right">剩余：20天</p>
+                            </div>
+                            <div class="third_line">
+                                <p class="left">产地：安徽</p>
+                                <p class="right">需求数量：100天</p>
+                            </div>
+
+                            <div class="button">
+                               <p class="first_button">编辑</p>
+                               <p class="second_button">查看报价</p>
                             </div>
                         </li>
                     </ul>
@@ -57,11 +58,12 @@ export default {
                     "name": "人参",
                     "spec": "统货",
                     "place": "东北",
-                    "price": "98.9元/kg",
-                    "state": "待审核",
+                    "num": "12",
+                    "state": "已审核",
                     "phone": "15301546832",
                     "time": "12-11-26",
-                    "router":"goodDetail"
+                    "router":"purchaseDetail"
+
                     
                 }],
                 topStatus: '',
@@ -168,121 +170,122 @@ export default {
 }
 
 .low_price {}
-.my_resource .bg_white{
+.my_purchase .bg_white{
     margin-top: 0.5rem;
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .mint-loadmore{
+.my_purchase .bg_white .page-loadmore-wrapper .mint-loadmore{
     background:#F5F5F5;
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
-    min-height: 150px;
+    min-height: 170px;
     border:0;
     margin-bottom: 1rem;
 
 }
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li{
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li{
     margin-bottom: 1rem;
     background:white;
+    padding: 0 1.5rem;
 }
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    height: 80px;
-    max-width: 100px;
-    left: 10px;
-    margin: 50px 10px 10px 0;
-    position: absolute;
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list{
+    height:2.9rem;
+    text-align: left;
+    border-bottom:1px solid #E4E4E4;
+    line-height: 2.9rem;
 }
-
-
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header{
-    width:100%;
-    height:40px;
-    
-    padding:0 10px;
-}
-
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header>div{
-    border-bottom: 1px solid #C6C6C5;
-    width:100%;
-    height:100%;
-    line-height: 40px;
-}
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .time_font{
-    font-size: 1.25rem;
-    color:#9C9C9C;
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .left_p{
     float:left;
+    font-size: 0.9rem;
+    color:#999999;
 }
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .audit_state{
-    font-size: 1.25rem;
-    color:#FA6705;
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .right_p{
     float:right;
+    font-size: 1rem;
+    color:#FA6705;
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li  .first_line{
+    /*border: 1px solid red;*/
+    /*width:100%;
+    text-align: left;*/
+    height:4.4rem;
+
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .left{
+    float:left;
+    text-align: left;
+    font-size: 1.4rem;
+    color:#333333;
+    /*border: 1px solid red;*/
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .right{
+    float:right;
+    text-align: right;
+    font-size: 1.1rem;
+    color:#666666;
+    /*border: 1px solid red;*/
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .right span{
+    color:#FA6705;
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li  .second_line{ 
+    height:1rem;
+    margin-bottom: 0.5rem;
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li  .third_line{
+    height:1rem;
+    margin-bottom: 1.5rem;
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .second_line .left,.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line .left{
+    float:left;
+    text-align: left;
+    font-size: 1rem;
+    line-height: 1rem;
+    color:#666666;
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .second_line .right,.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line .right{
+    float:right;
+    text-align: right;
+    font-size: 1rem;
+    color:#666666;
+    line-height: 1rem;
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button{
+    float:right;
+    height:2rem;
+    /*border:1px solid red;*/
+    text-align: center;
+    line-height: 2rem;
+    font-size: 1.1rem;
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button .first_button{
+    width:3.6rem;
+    height:2rem;
+    border:1px solid #BFBFBF;
+    border-radius: 3px;
+    float:left;
+    margin-right: 1rem;
     
 }
-
-
-
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
-    float: left;
-    text-align: left;
-    line-height: 20px;
-    font-size: 1.3rem;
-    margin-bottom: 8px;
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button .second_button{
+    width:5.5rem;
+    height:2rem;
+    border:1px solid #BFBFBF;
+    float:right;
+    border-radius: 3px;
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
-    float: left;
-    max-height: 15px;
-}
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
-    float: left;
-    width: 100%;
-    padding-right: 90px;
-    line-height: 18px;
-    text-align: left;
-    font-size: 1.2rem;
-    color: #666;
-}
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
-    width: 100%;
-    padding-left: 120px;
-    padding-top: 10px;
-}
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right{
-    position: absolute;
-    max-width: 80px;
-    height: 90px;
-    margin: 0;
-    right: 10px;
-}
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
-    font-size: 1.25rem;
-    margin-top: 0px;
-    color: #EC6817;
-}
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button{
-  position: absolute;
-  bottom: 10px;
-  background: white;
-  font-size: 10px;
-  min-width: 60px;
-  right: 0px;
-  max-height: 25px;
-  padding: 0 5px;
-  color:black;
-  border:1px solid #BDBDBD;
-  border-radius: 5px;
-}
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{
-    font-size: 1.1rem;
-    color: #999;
-}
+
+
+
+
 </style>
