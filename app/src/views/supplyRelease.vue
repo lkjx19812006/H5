@@ -1,108 +1,111 @@
 <template>
     <div class="whole supply_release">
-        <mt-header title="资源发布">
+        <mt-header fixed title="资源发布">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <div class="good_information">
-            <p class="good_infor_header">货物基本信息</p>
-            <div class="good_name">
-                <p>产品：</p>
-                <div>
-                    <div class="select">
-                        <p>请填写你需要的药材名称</p>
+        <div class="page-loadmore-wrapper" >
+            <mt-loadmore >
+                <div class="good_information">
+                    <p class="good_infor_header">货物基本信息</p>
+                    <div class="good_name">
+                        <p>产品：</p>
+                        <div>
+                            <div class="select">
+                                <p>请填写你需要的药材名称</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="good_spec">
+                        <p>规格：</p>
+                        <div>
+                            <select>
+                                <option>统货</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="good_place">
+                        <p>产地：</p>
+                        <div>
+                            <select>
+                                <option>上海</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="good_spec">
-                <p>规格：</p>
-                <div>
-                    <select>
-                        <option>统货</option>
-                    </select>
+                <div class="good_information">
+                    <p class="good_delivery_header">货物交收信息</p>
+                    <div class="good_number">
+                        <p>数量：</p>
+                        <div>
+                            <input type="text" placeholder="你需要的药材数量" />
+                            <p>kg/份</p>
+                        </div>
+                    </div>
+                    <div class="good_number">
+                        <p>销售价格：</p>
+                        <div>
+                            <input type="text" placeholder="什么价格销售" />
+                            <p>元/份</p>
+                        </div>
+                    </div>
+                    <div class="good_number">
+                        <p>交货地：</p>
+                        <div>
+                            <input type="text" placeholder="药材在哪里" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="good_place">
-                <p>产地：</p>
-                <div>
-                    <select>
-                        <option>上海</option>
-                    </select>
+                <div class="good_information">
+                    <p class="good_sample_header">样品信息</p>
+                    <div class="good_number">
+                        <p>是否提供样品：</p>
+                        <button>是</button>
+                        <button>否</button>
+                    </div>
+                    <div class="good_number">
+                        <p>样品重量：</p>
+                        <div>
+                            <input type="text" placeholder="100" />
+                            <p>kg</p>
+                        </div>
+                    </div>
+                    <div class="good_number">
+                        <p>样品价格：</p>
+                        <div>
+                            <input type="text" placeholder="500" />
+                            <p>元</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="good_information">
+                    <p class="good_photo_header">上传货物图片</p>
+                </div>
+                <div class="remarks">
+                    <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">备注</p>
+                    <div class="remarks_content">
+                        <textarea placeholder="请根据实际情况填写药材资源卖点"></textarea>
+                    </div>
+                </div>
+                <div class="contact">
+                    <p class="contact_header" style="background:url('../../static/images/contact.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">联系方式</p>
+                    <div class="contact_name">
+                        <P>姓名：</P>
+                        <div>
+                            <input type="text" placeholder="请输入您的姓名">
+                        </div>
+                    </div>
+                    <div class="contact_phone">
+                        <P>手机：</P>
+                        <div>
+                            <input type="text" placeholder="请输入您的手机号">
+                        </div>
+                    </div>
+                </div>
+                <div class="confirm" @click="release()">确认发布</div>
+            </mt-loadmore>
         </div>
-
-        <div class="good_information">
-            <p class="good_delivery_header">货物交收信息</p>
-            <div class="good_number">
-                <p>数量：</p>
-                <div>
-                    <input type="text" placeholder="你需要的药材数量" />
-                    <p>kg/份</p>
-                </div>
-            </div>
-            <div class="good_number">
-                <p>销售价格：</p>
-                <div>
-                    <input type="text" placeholder="什么价格销售" />
-                    <p>元/份</p>
-                </div>
-            </div>
-            <div class="good_number">
-                <p>交货地：</p>
-                <div>
-                    <input type="text" placeholder="药材在哪里" />
-                </div>
-            </div>
-        </div>
-        <div class="good_information">
-            <p class="good_sample_header">样品信息</p>
-            <div class="good_number">
-                <p>是否提供样品：</p>
-                <button>是</button>
-                <button>否</button>
-            </div>
-            <div class="good_number">
-                <p>样品重量：</p>
-                <div>
-                    <input type="text" placeholder="100" />
-                    <p>kg</p>
-                </div>
-            </div>
-            <div class="good_number">
-                <p>样品价格：</p>
-                <div>
-                    <input type="text" placeholder="500" />
-                    <p>元</p>
-                </div>
-            </div>
-        </div>
-        <div class="good_information">
-            <p class="good_photo_header">上传货物图片</p>
-        </div>
-        <div class="remarks">
-            <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">备注</p>
-            <div class="remarks_content">
-                <textarea placeholder="请根据实际情况填写药材资源卖点"></textarea>
-            </div>
-        </div>
-        <div class="contact">
-            <p class="contact_header" style="background:url('../../static/images/contact.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">联系方式</p>
-            <div class="contact_name">
-                <P>姓名：</P>
-                <div>
-                    <input type="text" placeholder="请输入您的姓名">
-                </div>
-            </div>
-            <div class="contact_phone">
-                <P>手机：</P>
-                <div>
-                    <input type="text" placeholder="请输入您的手机号">
-                </div>
-            </div>
-        </div>
-        <div class="confirm" @click="release()">确认发布</div>
     </div>
 </template>
 <script>

@@ -1,19 +1,23 @@
 <template>
     <div class="whole sample_confirm">
-        <mt-header title="样品订单确认">
+        <mt-header fixed title="样品订单确认">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
         </mt-header>
-        <orderAddress></orderAddress>
-        <div class="content">
-            <orderItem></orderItem>
-            <div class="total">
-                <orderTotal></orderTotal>
-            </div>
-            <div class="fix_bottom">
-                提交订单
-            </div>
+        <div class="page-loadmore-wrapper">
+            <mt-loadmore>
+                <orderAddress></orderAddress>
+                <div class="content">
+                    <orderItem></orderItem>
+                    <div class="total">
+                        <orderTotal></orderTotal>
+                    </div>
+                    <div class="fix_bottom">
+                        提交订单
+                    </div>
+                </div>
+            </mt-loadmore>
         </div>
     </div>
 </template>
@@ -54,14 +58,6 @@ export default {
 .sample_confirm {
     float: left;
     width: 100%;
-    margin-bottom: 5rem;
-    margin-top: 60px;
-}
-
-.sample_confirm .mint-header{
-  position: fixed;
-  z-index: 2;
-  top: 0;
 }
 
 .sample_confirm .content {

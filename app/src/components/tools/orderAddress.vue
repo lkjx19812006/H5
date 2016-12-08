@@ -1,5 +1,5 @@
 <template>
-    <div class="whole address_confirm">
+    <div class=" address_confirm">
         <div class="left_district">
             <div class="content">
                 <div class="left_content"><img src="/static/icons/consignee.png">收货人：</div>

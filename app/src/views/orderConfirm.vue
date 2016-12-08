@@ -1,19 +1,23 @@
 <template>
     <div class="whole  order_confirm">
-        <mt-header title="订单确认">
+        <mt-header fixed title="订单确认">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
         </mt-header>
-        <orderAddress></orderAddress>
-        <div class="content">
-            <orderItem></orderItem>
-            <div class="total">
-                <orderTotal></orderTotal>
-            </div>
-            <div class="fix_bottom">
-                提交订单
-            </div>
+        <div class="page-loadmore-wrapper">
+            <mt-loadmore>
+                <orderAddress></orderAddress>
+                <div class="content">
+                    <orderItem></orderItem>
+                    <div class="total">
+                        <orderTotal></orderTotal>
+                    </div>
+                    <div class="fix_bottom">
+                        提交订单
+                    </div>
+                </div>
+            </mt-loadmore>
         </div>
     </div>
 </template>
@@ -54,14 +58,7 @@ export default {
 .order_confirm {
     float: left;
     width: 100%;
-    margin-bottom: 5rem;
-    margin-top: 60px;
-}
 
-.order_confirm .mint-header{
-  position: fixed;
-  z-index: 2;
-  top: 0;
 }
 
 .order_confirm .content {
@@ -70,7 +67,6 @@ export default {
     float: left;
     width: 100%;
     padding: 10px;
-
 }
 
 .order_confirm .content .total {

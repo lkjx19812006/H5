@@ -1,45 +1,49 @@
 <template>
     <div class="whole">
-        <mt-header title="市场行情">
+        <mt-header fixed title="市场行情">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <div class="search">
-            <input type="text" placeholder="输入你想要的货物资源" disabled="true">
-            <img src="/static/images/search.png" class="search_image">
-        </div>
-        <div class="good_list">
-            <p class="good_list_header">*数据仅供参考！</p>
-            <div class="good_list_content">
-                <div class="list_content_header">
-                    <p>品名</p>
-                    <p>规格</p>
-                    <p>产地</p>
-                    <p>价格</p>
-                    <input type="button" value="跌涨(元)">
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <mt-loadmore>
+                <div class="search">
+                    <input type="text" placeholder="输入你想要的货物资源" disabled="true">
+                    <img src="/static/images/search.png" class="search_image">
                 </div>
-                <ul class="first_ul">
-                    <li v-for="(todo,index) in todos">
-                        <div class="second_level" v-on:click="firstLevel(index,todo)">
-                            <p>{{todo.name}}</p>
-                            <p>{{todo.spec}}</p>
-                            <p>{{todo.place}}</p>
-                            <p>{{todo.price}}</p>
-                            <p>{{todo.up_price}}&nbsp;<img src="/static/images/up.png"></p>
+                <div class="good_list">
+                    <p class="good_list_header">*数据仅供参考！</p>
+                    <div class="good_list_content">
+                        <div class="list_content_header">
+                            <p>品名</p>
+                            <p>规格</p>
+                            <p>产地</p>
+                            <p>价格</p>
+                            <input type="button" value="跌涨(元)">
                         </div>
-                        <ul class="second_level_content" v-show="todo.show">
-                            <li v-for="item in todos_li">
-                                <p>{{item.name}}</p>
-                                <p>{{item.spec}}</p>
-                                <p>{{item.place}}</p>
-                                <p>{{item.price}}</p>
-                                <p>{{item.upordown_price}}&nbsp;<img src="/static/images/up.png"></p>
+                        <ul class="first_ul">
+                            <li v-for="(todo,index) in todos">
+                                <div class="second_level" v-on:click="firstLevel(index,todo)">
+                                    <p>{{todo.name}}</p>
+                                    <p>{{todo.spec}}</p>
+                                    <p>{{todo.place}}</p>
+                                    <p>{{todo.price}}</p>
+                                    <p>{{todo.up_price}}&nbsp;<img src="/static/images/up.png"></p>
+                                </div>
+                                <ul class="second_level_content" v-show="todo.show">
+                                    <li v-for="item in todos_li">
+                                        <p>{{item.name}}</p>
+                                        <p>{{item.spec}}</p>
+                                        <p>{{item.place}}</p>
+                                        <p>{{item.price}}</p>
+                                        <p>{{item.upordown_price}}&nbsp;<img src="/static/images/up.png"></p>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                </div>
+            </mt-loadmore>
         </div>
     </div>
 </template>
@@ -48,7 +52,7 @@ import common from '../common/common.js'
 export default {
     data() {
             return {
-                msg: 'Welcome to Your Vue.js App',
+                wrapperHeight: 0,
                 onOrOff: false,
                 todos: {},
                 todos_li: {},
@@ -76,6 +80,10 @@ export default {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
             });
+        },
+        mounted() {
+
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -99,8 +107,6 @@ export default {
 
 .search {
     height: 60px;
-    background: white;
-    position: relative;
     background: #F2F2F2;
 }
 

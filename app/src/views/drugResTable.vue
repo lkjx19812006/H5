@@ -1,6 +1,6 @@
 <template>
     <div class="whole">
-        <mt-header title="药材百科">
+        <mt-header fixed title="药材百科">
             <router-link to="/home" slot="left">
                 <mt-button icon="back" @click="iosBack()"></mt-button>
             </router-link>
@@ -9,24 +9,28 @@
             <input type="text" placeholder="输入你想要的货物资源" disabled="true">
             <img src="/static/images/search.png" class="search_image">
         </div>
-        <div class="hot_drug">
-            <p>热门药材{{title}}</p>
-        </div>
-        <div class="drug_show" v-for="(todo,index) in todos">
-            <a @click="jump(index)">
-                <img src="/static/images/1.jpg">
-                <div class="drug_introduce">
-                    <p class="drug_name">{{todo.name}}</p>
-                    <p class="drug_chinese_name">中文别名：{{todo.chinese_name}}</p>
-                    <p class="drug_english_name">英文名：{{todo.english_name}}</p>
+        <div class="page-loadmore-wrapper" >
+            <mt-loadmore >
+                <div class="hot_drug">
+                    <p>热门药材{{title}}</p>
                 </div>
-            </a>
-        </div>
-        <div class="hot_search_drug">
-            <p>热搜药材</p>
-            <div class="hot_drugs">
-                <p v-for="(todo,index) in hot_drug" @click="jump(index)">{{todo.hot_drug}}</p>
-            </div>
+                <div class="drug_show" v-for="(todo,index) in todos">
+                    <a @click="jump(index)">
+                        <img src="/static/images/1.jpg">
+                        <div class="drug_introduce">
+                            <p class="drug_name">{{todo.name}}</p>
+                            <p class="drug_chinese_name">中文别名：{{todo.chinese_name}}</p>
+                            <p class="drug_english_name">英文名：{{todo.english_name}}</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="hot_search_drug">
+                    <p>热搜药材</p>
+                    <div class="hot_drugs">
+                        <p v-for="(todo,index) in hot_drug" @click="jump(index)">{{todo.hot_drug}}</p>
+                    </div>
+                </div>
+            </mt-loadmore>
         </div>
     </div>
 </template>

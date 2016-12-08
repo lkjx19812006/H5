@@ -1,73 +1,77 @@
 <template>
     <div class="whole need_release">
-        <mt-header title="求购发布">
+        <mt-header fixed title="求购发布">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <div class="good_information">
-            <p class="good_infor_header">求购货物信息</p>
-            <div class="good_name">
-                <p>产品：</p>
-                <div>
-                    <div class="select">
-                        <p>请填写你需要的药材名称</p>
+        <div class="page-loadmore-wrapper"  >
+            <mt-loadmore >
+                <div class="good_information">
+                    <p class="good_infor_header">求购货物信息</p>
+                    <div class="good_name">
+                        <p>产品：</p>
+                        <div>
+                            <div class="select">
+                                <p>请填写你需要的药材名称</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="good_spec">
+                        <p>规格：</p>
+                        <div>
+                            <select>
+                                <option>统货</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="good_place">
+                        <p>产地：</p>
+                        <div>
+                            <select>
+                                <option>上海</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="good_number">
+                        <p>数量：</p>
+                        <div>
+                            <input type="text" placeholder="你需要的药材数量" />
+                            <p>kg</p>
+                        </div>
+                    </div>
+                    <div class="good_number">
+                        <p>求购有效期：</p>
+                        <div>
+                            <input type="number" placeholder="30" />
+                            <p>天</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="good_spec">
-                <p>规格：</p>
-                <div>
-                    <select >
-                        <option>统货</option>
-                    </select>
+                <div class="remarks">
+                    <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">求购货物信息</p>
+                    <div class="remarks_content">
+                        <textarea placeholder="请根据实际情况填写药材资源卖点"></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="good_place">
-                <p>产地：</p>
-                <div>
-                    <select>
-                        <option>上海</option>
-                    </select>
+                <div class="contact">
+                    <p class="contact_header" style="background:url('../../static/images/contact.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">联系方式</p>
+                    <div class="contact_name">
+                        <P>姓名：</P>
+                        <div>
+                            <input type="text" placeholder="请输入您的姓名">
+                        </div>
+                    </div>
+                    <div class="contact_phone">
+                        <P>手机：</P>
+                        <div>
+                            <input type="text" placeholder="请输入您的手机号">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="good_number">
-                <p>数量：</p>
-                <div>
-                    <input type="text" placeholder="你需要的药材数量" />
-                    <p>kg</p>
-                </div>
-            </div>
-            <div class="good_number">
-                <p>求购有效期：</p>
-                <div>
-                    <input type="number" placeholder="30" />
-                    <p>天</p>
-                </div>
-            </div>
+                <div class="confirm" @click="release()">确认发布</div>
+            </mt-loadmore>
         </div>
-        <div class="remarks">
-            <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">求购货物信息</p>
-            <div class="remarks_content">
-                <textarea placeholder="请根据实际情况填写药材资源卖点"></textarea>
-            </div>
-        </div>
-        <div class="contact">
-            <p class="contact_header" style="background:url('../../static/images/contact.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">联系方式</p>
-            <div class="contact_name">
-                <P>姓名：</P>
-                <div>
-                    <input type="text" placeholder="请输入您的姓名">
-                </div>
-            </div>
-            <div class="contact_phone">
-                <P>手机：</P>
-                <div>
-                    <input type="text" placeholder="请输入您的手机号">
-                </div>
-            </div>
-        </div>
-        <div class="confirm" @click="release()">确认发布</div>
     </div>
 </template>
 <script>
@@ -80,8 +84,8 @@ export default {
             }
         },
         methods: {
-            release(){
-              this.$router.push('needReleaseSuccess');
+            release() {
+                this.$router.push('needReleaseSuccess');
             }
         },
         created() {
@@ -103,7 +107,7 @@ export default {
     background: #F1EFEF;
 }
 
-.need_release {}
+.need_release{}
 
 input[type="text"],
 input[type="submit"],
@@ -161,13 +165,13 @@ textarea {
     margin-top: 0.8533rem;
 }
 
-.need_release  .good_place select {
+.need_release .good_place select {
     background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
     background-size: 1.067rem 1.067rem;
     text-align: center;
 }
 
-.need_release  .good_spec select {
+.need_release .good_spec select {
     background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
     background-size: 1.067rem 1.067rem;
     text-align: center;

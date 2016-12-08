@@ -180,11 +180,12 @@ export default {
 
 .search .search_div {
     height: 40px;
-    position: absolute;
+    position: fixed;
     background: #fff;
     border-bottom: 1px solid #ccc;
     top: 0;
     width: 100%;
+    z-index: 2;
 }
 
 .search .search_result {
