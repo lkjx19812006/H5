@@ -7,6 +7,9 @@ import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import './assets/css/style.css'
 
+
+
+
 Vue.use(Mint);
 Vue.use(VueRouter)
 Vue.use(VueResource)

@@ -5,31 +5,35 @@
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
         </mt-header>
-        <div class="center">
-            <div class="title">
-                <img src="/static/icons/impatient.png">
-                <p>人参</p>
-            </div>
-            <div class="detail ">
-                <p>规格：<span>统货</span></p>
-                <p class="right">发布时间：<span>2016-11-10</span></p>
-            </div>
-            <div class="detail">
-                <p>产地：<span>安徽</span></p>
-                <p class="right">剩余：<span>20天</span></p>
-            </div class="detail">
-            <div class="detail">
-                <p>需求数量：<span>20kg</span></p>
-            </div>
-            <div class="detail">
-                 <p>备注：<span>干度好，无走油，2015版药典标，干度好，无走油</span></p>
-            </div>
-            <div class="detail">
-                <p>已报价：<span class="orange_font">12</span>人</p>
-            </div>
-            <div class="detail">
-                <p>平均价格：<span class="orange_font">20.6元/kg</span></p>
-            </div>
+        <div class="page-loadmore-wrapper">
+            <mt-loadmore>
+                <div class="center">
+                    <div class="title">
+                        <img src="/static/icons/impatient.png">
+                        <p>人参</p>
+                    </div>
+                    <div class="detail ">
+                        <p>规格：<span>统货</span></p>
+                        <p class="right">发布时间：<span>2016-11-10</span></p>
+                    </div>
+                    <div class="detail">
+                        <p>产地：<span>安徽</span></p>
+                        <p class="right">剩余：<span>20天</span></p>
+                    </div class="detail">
+                    <div class="detail">
+                        <p>需求数量：<span>20kg</span></p>
+                    </div>
+                    <div class="detail">
+                        <p>备注：<span>干度好，无走油，2015版药典标，干度好，无走油</span></p>
+                    </div>
+                    <div class="detail">
+                        <p>已报价：<span class="orange_font">12</span>人</p>
+                    </div>
+                    <div class="detail">
+                        <p>平均价格：<span class="orange_font">20.6元/kg</span></p>
+                    </div>
+                </div>
+            </mt-loadmore>
         </div>
         <div class="fix_bottom">
             <button class="mint-button mint-button--primary mint-button--normal small_button">
@@ -64,7 +68,7 @@ export default {
         methods: {
             back() {
                 this.$router.go(-1);
-            },
+            }
         },
         created() {
             let _self = this;
@@ -89,6 +93,7 @@ export default {
     position: fixed;
     bottom: 0;
     width: 100%;
+    z-index: 2;
 }
 
 .need_detail .fix_bottom .small_button {
@@ -112,53 +117,56 @@ export default {
     width: 66%;
     float: left;
 }
-.need_detail .center{
+
+.need_detail .center {
     padding: 20px;
     position: relative;
     background: #fff;
     float: left;
     width: 100%;
 }
-.need_detail .center .title{
+
+.need_detail .center .title {
     float: left;
     width: 100%;
     margin-bottom: 20px;
 }
 
-.need_detail .center .title img{
+.need_detail .center .title img {
     float: left;
-    max-height:40px;
-    height: 1.7rem; 
+    max-height: 40px;
+    height: 1.7rem;
 }
-.need_detail .center .title p{
+
+.need_detail .center .title p {
     float: left;
     margin-left: 10px;
     font-size: 1.8rem;
     line-height: 1.7rem;
     color: #333;
-
 }
 
-.need_detail .detail{
+.need_detail .detail {
     float: left;
     width: 100%;
     margin-bottom: 15px;
     text-align: left;
 }
 
-.need_detail .detail p{
+.need_detail .detail p {
     float: left;
 }
 
-.need_detail .detail p span{
+.need_detail .detail p span {
     color: #666;
     font-size: 1.1rem;
 }
-.need_detail .detail .right{
+
+.need_detail .detail .right {
     float: right;
 }
 
-.need_detail .detail p .orange_font{
+.need_detail .detail p .orange_font {
     color: #EC6817;
 }
 </style>

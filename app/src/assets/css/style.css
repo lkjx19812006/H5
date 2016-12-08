@@ -265,11 +265,12 @@ h6 {
 html,
 body {
     background-color: #fafafa;
-    -webkit-overflow-scrolling: touch;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 a {
@@ -307,6 +308,22 @@ a {
     font-size: 20px;
 }
 
-.mintui{
+.mintui {
     font-size: 24px;
 }
+
+.whole {
+    margin-top: 60px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.page-loadmore-wrapper {
+    overflow: scroll;
+    width: 100%;
+    overflow-y: visible;
+   margin-bottom: -6px;
+}
+
+
+
