@@ -30,10 +30,8 @@ import needDetail from './views/needDetail'
 import resourceDetail from './views/resourceDetail'
 import needReleaseSuccess from './views/needReleaseSuccess'
 import supplyReleaseSuccess from './views/supplyReleaseSuccess'
-<<<<<<< HEAD
 import orderConfirm from './views/orderConfirm'
 import sampleConfirm from './views/sampleConfirm'
-=======
 import detailsPage from './views/detailsPage'
 import myOrderDetail from './views/myOrderDetail'
 import goodDetail from './views/goodDetail'
@@ -42,7 +40,7 @@ import myPurchase from './views/myPurchase'
 import purchaseDetail from './views/purchaseDetail'
 import companyAuthentication from './views/companyAuthentication'
 import personalAuthentication from './views/personalAuthentication'
->>>>>>> 45d3ec63e1e5e1bf99b34ca368c5f35a96103c32
+
 
 module.exports = {
     mode: 'hash',
@@ -91,14 +89,10 @@ module.exports = {
         { name: 'purchaseDetail', path: '/purchaseDetail', component: purchaseDetail },
         { name: 'needReleaseSuccess', path: '/needReleaseSuccess', component: needReleaseSuccess },
         { name: 'supplyReleaseSuccess', path: '/supplyReleaseSuccess', component: supplyReleaseSuccess },
-<<<<<<< HEAD
         { name: 'orderConfirm', path: '/orderConfirm/:sourceId', component: orderConfirm },
         { name: 'sampleConfirm', path: '/sampleConfirm/:sourceId', component: sampleConfirm },
-=======
         { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
-
->>>>>>> 45d3ec63e1e5e1bf99b34ca368c5f35a96103c32
         { path: '*', redirect: '/home' }
     ]
 }
