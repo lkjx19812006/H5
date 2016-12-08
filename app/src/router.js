@@ -37,7 +37,9 @@ import addAddress from './views/addAddress'
 import myPurchase from './views/myPurchase'
 import purchaseDetail from './views/purchaseDetail'
 import companyAuthentication from './views/companyAuthentication'
-import personalAuthentication from './views/personalAuthentication'
+import certification from './views/certification'
+import reviseResource from './views/reviseResource'
+import revisePurchase from './views/revisePurchase'
 
 module.exports = {
     mode: 'hash',
@@ -80,8 +82,10 @@ module.exports = {
         { name: 'goodDetail', path: '/goodDetail', component: goodDetail },
         { name: 'addAddress', path: '/addAddress', component: addAddress },
         { name: 'myOrder', path: '/myOrder', component: myOrder },
+        { name: 'revisePurchase', path: '/revisePurchase', component: revisePurchase },
+        { name: 'reviseResource', path: '/reviseResource', component: reviseResource },
         { name: 'companyAuthentication', path: '/companyAuthentication', component: companyAuthentication },
-        { name: 'personalAuthentication', path: '/personalAuthentication', component: personalAuthentication },
+        { name: 'certification', path: '/certification', component: certification },
         { name: 'myPurchase', path: '/myPurchase', component: myPurchase },
         { name: 'purchaseDetail', path: '/purchaseDetail', component: purchaseDetail },
         { name: 'needReleaseSuccess', path: '/needReleaseSuccess', component: needReleaseSuccess },

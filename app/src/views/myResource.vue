@@ -9,8 +9,8 @@
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                    <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jump(todo.router)">
+                    <ul class="page-loadmore-list" >
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" >
                             <div class="list_header">
                                 <div>
                                     <p class="time_font">发布时间：<span>{{todo.time}}</span></p>
@@ -18,8 +18,8 @@
                                 </div>
                             </div>
                             
-                            <img src="/static/images/1.jpg" class="list_images">
-                            <div class="res_content">
+                            <img src="/static/images/1.jpg" class="list_images" @click="jump(todo.router)">
+                            <div class="res_content" >
                                 <div class="res_content_center">
                                     <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.name}}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
@@ -28,9 +28,10 @@
                                 </div>
                                 <div class="res_content_right">
                                 <p>{{todo.price}}</p>
-                                <button class="mint-button mint-button--primary mint-button--small">编辑</button>
+                                <button class="mint-button mint-button--primary mint-button--small" @click="jump(todo.other_router)">编辑</button>
                                 </div>
                             </div>
+
                         </li>
                     </ul>
                     <div slot="top" class="mint-loadmore-top">
@@ -61,7 +62,8 @@ export default {
                     "state": "待审核",
                     "phone": "15301546832",
                     "time": "12-11-26",
-                    "router":"goodDetail"
+                    "router":"goodDetail",
+                    "other_router":"reviseResource"
                     
                 }],
                 topStatus: '',
@@ -79,6 +81,7 @@ export default {
             jump:function(router){
                 this.$router.push(router);
             },
+            
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
@@ -279,6 +282,7 @@ export default {
   color:black;
   border:1px solid #BDBDBD;
   border-radius: 5px;
+  z-index: 100000;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{

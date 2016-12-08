@@ -1,0 +1,226 @@
+<template>
+  <div class="certification">
+        <mt-header title="实名认证">
+            <router-link to="/home" slot="left">
+                <mt-button icon="back"></mt-button>
+            </router-link>
+        </mt-header>
+             <div class="main">
+
+                    <div class="personal_info">
+                     <div class="info_header">
+                         <p class="left">个人信息</p>
+                         <p class="right">暂未通过审核</p>
+                     </div>
+                     <div>
+                         <p class="left">姓名</p>
+                         <p class="right">扬帆</p>
+                     </div>
+                     <div>
+                         <p class="left">性别</p>
+                         <p class="right"><img src="/static/images/woman.png"></p>
+                     </div>
+                     <div>
+                         <p class="left">电话</p>
+                         <p class="right">15971484216</p>
+                     </div>
+                 </div>
+     
+      
+                <div class="first_item">
+                    <div v-for="(todo,index) in todos" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
+                       <p class="title">{{todo.title}}</p>
+                       <div class="photo"></div>
+                       <p class="point">{{todo.point}}</p>
+                    </div>  
+                </div>
+
+                <div class="other_item">
+                      <p>已通过审核照片</p>
+                      <div></div>
+                </div>
+
+             </div>
+                 
+              
+              
+                
+      
+                
+       <div class="common_problem">
+          
+          
+            <img src="/static/images/common-problem.png">
+            <p><span>认证常见问题</span></p>
+         
+       </div>
+        <div class="confirm">申请认证</div>
+  </div>
+</template>
+
+<script>
+import common from '../common/common.js'
+
+export default {
+    data() {
+            return {
+                isActive: true,
+                hasError: false,
+                todos:[{
+                    title:'身份证正面',
+                    point:'暂未认证'
+                },{
+                    title:'身份证反面',
+                    point:'等待审核'
+                }],
+
+                
+            }
+        },
+        
+        
+        created() {
+            let _self = this;
+            common.$emit('show-load');
+            this.$http.get(common.apiUrl.list).then((response) => {
+                common.$emit('close-load');
+                let data = response.data.biz_result.list;
+                /*this.todos = data;*/
+            }, (err) => {
+                common.$emit('close-load');
+                common.$emit('message', response.data.msg);
+            });
+        }
+
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+.certification .first_item{
+    padding: 1.5rem 0;
+    border-top: 1px solid #BFBFBF;
+    border-bottom: 1px solid #BFBFBF;
+    min-height: 17.9rem;
+    margin: 1rem 0 0 0;
+}
+.certification .other_item{
+    
+}
+.certification .other_item p{
+    text-align: left;
+    font-size: 1.2rem;
+    color:#333232;
+    margin: 1.5rem 0 0 0;
+    line-height: 1.2rem;
+    
+}
+.certification .other_item  div{
+    width:68.75%;
+    height:13rem;
+    background:#E1DDDA;
+    margin:1.5rem 0 0 15.625%;
+}
+.certification .main{
+    padding:0 1.5rem;
+    height:51rem;
+    background:white;
+}
+.certification .main .personal_info>div{
+    position: relative;
+    height:1.2rem;
+    line-height: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color:#313232;
+}
+.certification .main .personal_info img{
+    height:1.5rem;
+}
+.certification .main .personal_info .info_header{
+    padding: 1.5rem 0 2rem 0;
+}
+.certification .main .personal_info .info_header .left{
+    font-size: 1.4rem;
+}
+.certification .main .personal_info .info_header .right{
+    color:#FA6705;
+}
+.certification .main .personal_info .left{
+    position: absolute;
+    left:0;
+}
+.certification .main .personal_info .right{
+    position: absolute;
+    right:0;
+}
+.certification .first_item .maxbox{
+    width:50%;
+    height:14rem;
+    float:left;
+    padding-right: 7%;
+    text-align: left;
+    margin-bottom: 3rem;
+}
+.certification .first_item .otherbox{
+    width:50%;
+    height:14rem;
+    float:left;
+    text-align: left;
+    padding-left: 7%;
+    /*border:1px solid red;*/
+    margin-bottom: 3rem;
+    
+}
+.certification .first_item>div .title{
+    font-size: 1.2rem;
+    color:#333232;
+    margin-bottom: 1.5rem;
+}
+.certification .first_item>div .photo{
+    height:9rem;
+    width:100%;
+    background:#E1DDDA;
+} 
+.certification .first_item>div .point{
+    font-size: 1rem;
+    margin-top:1rem;
+    text-align: center;
+    width:100%;
+    color:#999999;
+}
+
+.certification .common_problem{
+    width:8.6rem;
+    height:1.4rem;
+    margin-left: -4.3rem;
+    position: absolute;
+    left: 50%;
+    text-align: center;
+    margin-bottom: 5rem;
+    padding-top: 2.2rem;
+}
+.certification .common_problem img{
+    width: 1.4rem;
+    float:left;
+    margin-right:1rem;
+}
+.certification .common_problem p{
+    font-size: 1rem;
+    line-height: 1.4rem;
+    height:1.4rem;
+    /*border:1px solid red;*/
+    float:left;
+    color:#FA6705;
+}
+.certification .confirm{
+    width:100%;
+    height:5rem;
+    background:#FA6705;
+    color:white;
+    line-height: 5rem;
+    text-align: center;
+    margin-top:7.5rem;
+}
+</style>

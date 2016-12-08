@@ -1,5 +1,5 @@
 <template>
-    <div class="whole">
+    <div class="market_quotation">
         <mt-header title="市场行情">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
@@ -80,31 +80,25 @@ export default {
 }
 </script>
 <style scoped>
-.active {
-    display: none;
-}
 
-.text-danger {
-    display: block;
-}
 
-.whole {
+.market_quotation {
     position: relative;
 }
 
-.mint-header {
+.market_quotation .mint-header {
     background-color: white;
     color: #313232;
 }
 
-.search {
+.market_quotation .search {
     height: 60px;
     background: white;
     position: relative;
     background: #F2F2F2;
 }
 
-.search input {
+.market_quotation .search input {
     width: 80%;
     height: 30px;
     border-radius: 1.28rem;
@@ -116,7 +110,7 @@ export default {
     margin-top: 15px;
 }
 
-.search_image {
+.market_quotation .search .search_image {
     width: 2rem;
     height: 2rem;
     position: absolute;
@@ -124,40 +118,40 @@ export default {
     top: 18px;
 }
 
-.good_list {
+.market_quotation .good_list {
     width: 100%;
     position: relative;
 }
 
-.good_list_header {
+.market_quotation .good_list .good_list_header {
     width: 100%;
     margin: 1.7066rem auto;
     font-size: 1.10929rem;
     color: #FA6705;
 }
 
-.good_list_content {
+.market_quotation .good_list .good_list_content {
     margin-top: 1.7066rem;
     width: 100%;
 }
 
-.good_list_content .first_ul {
+.market_quotation .good_list .good_list_content .first_ul {
     border-bottom: 1px solid #CCCCCC;
 }
 
-.list_content_header {
+.market_quotation .list_content_header {
     display: flex;
     flex-direction: row;
     margin-bottom: 0.213rem;
     padding-right: 0.8rem;
 }
 
-.list_content_header p {
+.market_quotation .list_content_header p {
     flex: 1;
     font-size: 1.11rem;
 }
 
-.list_content_header input {
+.market_quotation .list_content_header input {
     outline: none;
     border: 0;
     width: 5.333rem;
@@ -167,7 +161,7 @@ export default {
     border-radius: 4px;
 }
 
-.second_level {
+.market_quotation .second_level {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -176,19 +170,19 @@ export default {
     padding-right: 0.8rem;
 }
 
-.second_level p {
+.market_quotation .second_level p {
     flex: 1;
     font-size: 1.02396rem;
     color: #666666;
     line-height: 4.267rem;
 }
 
-.second_level_content {
+.market_quotation .second_level_content {
     border-top: 1px solid #DFDFDF;
     background: #fff;
 }
 
-.second_level_content li {
+.market_quotation .second_level_content li {
     font-size: 1.024rem;
     color: #666666;
     line-height: 4.267rem;
@@ -196,14 +190,14 @@ export default {
     flex-direction: row;
 }
 
-.second_level_content li p {
+.market_quotation .second_level_content li p {
     flex: 1;
     font-size: 1.024rem;
     color: #666666;
     line-height: 4.267rem;
 }
 
-.second_level_content li p img {
+.market_quotation .second_level_content li p img {
     height: 1.024rem;
 }
 </style>

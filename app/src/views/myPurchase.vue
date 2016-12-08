@@ -10,7 +10,7 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jump(todo.router)">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" >
                             <div class="header_list">
                                 <p class="left_p">发布日期：2016-11-26</p>
                                 <p class="right_p">待审核</p>
@@ -29,8 +29,8 @@
                             </div>
 
                             <div class="button">
-                               <p class="first_button">编辑</p>
-                               <p class="second_button">查看报价</p>
+                               <p class="first_button" @click="jump(todo.other_router)">编辑</p>
+                               <p class="second_button" @click="jump(todo.router)">查看报价</p>
                             </div>
                         </li>
                     </ul>
@@ -54,6 +54,7 @@ import otherSort from '../components/tools/otherSort'
 export default {
     data() {
             return {
+                
                 todos: [{
                     "name": "人参",
                     "spec": "统货",
@@ -62,7 +63,8 @@ export default {
                     "state": "已审核",
                     "phone": "15301546832",
                     "time": "12-11-26",
-                    "router":"purchaseDetail"
+                    "router":"purchaseDetail",
+                    "other_router":"revisePurchase"
 
                     
                 }],

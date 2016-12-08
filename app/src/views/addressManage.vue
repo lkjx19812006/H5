@@ -1,7 +1,7 @@
 <template>
     <div class="address_manage">
         <mt-header title="地址管理">
-            <router-link to="/revisePassWord" slot="left">
+            <router-link to="/mySet" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
         </mt-header>

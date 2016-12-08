@@ -1,5 +1,5 @@
 <template>
-    <div class="whole">
+    <div class="drug_table">
         <mt-header title="药材百科">
             <router-link to="/home" slot="left">
                 <mt-button icon="back" @click="iosBack()"></mt-button>
@@ -124,18 +124,18 @@ export default {
 }
 </script>
 <style scoped>
-.whole {
+.drug_table {
     position: relative;
 }
 
-.search {
+.drug_table .search {
     height: 60px;
     background: white;
     position: relative;
     background: #F2F2F2;
 }
 
-.search input {
+.drug_table .search input {
     width: 80%;
     height: 30px;
     border-radius: 1.28rem;
@@ -147,7 +147,7 @@ export default {
     margin-top: 15px;
 }
 
-.search_image {
+.drug_table .search_image {
     width: 2rem;
     height: 2rem;
     position: absolute;
@@ -155,17 +155,17 @@ export default {
     top: 18px;
 }
 
-.hot_drug {
+.drug_table .hot_drug {
     width: 100%;
     height: 4rem;
 }
 
-.hot_search_drug {
+.drug_table .hot_search_drug {
     width: 100%;
     height: 4rem;
 }
 
-.hot_drug p,
+.drug_table .hot_drug p,
 .hot_search_drug p {
     font-size: 1.19462rem;
     height: 4rem;
@@ -174,7 +174,7 @@ export default {
     margin-left: 1.27995rem;
 }
 
-.drug_show {
+.drug_table .drug_show {
     width: 100%;
     height: 13.6528rem;
     padding: 1.27995rem;
@@ -182,13 +182,13 @@ export default {
     position: relative;
 }
 
-.drug_show img {
+.drug_table .drug_show img {
     width: 38%;
     height: 11.0929rem;
     float: left;
 }
 
-.drug_introduce {
+.drug_table .drug_introduce {
     width: 60%;
     height: 11.0929rem;
     float: left;
@@ -196,15 +196,15 @@ export default {
     padding: 0.64rem 0rem 0.64rem 1.27995rem;
 }
 
-.drug_introduce p {
+.drug_table .drug_introduce p {
     font-size: 1.10929rem;
 }
 
-.drug_name {
+.drug_table .drug_name {
     color: #31323;
 }
 
-.drug_chinese_name {
+.drug_table .drug_chinese_name {
     font-size: 1.87726rem;
     color: #666666;
     margin-top: 0.42665rem;
@@ -212,7 +212,7 @@ export default {
     line-height: 1.35rem;
 }
 
-.drug_english_name {
+.drug_table .drug_english_name {
     font-size: 0.93863rem;
     color: #666666;
     margin-top: 0.42665rem;
@@ -220,12 +220,12 @@ export default {
     line-height: 1.35rem;
 }
 
-.hot_drugs {
+.drug_table .hot_drugs {
     width: 100%;
     padding: 1.27995rem 0 1.27995rem 0;
 }
 
-.hot_drugs p {
+.drug_table .hot_drugs p {
     text-align: center;
     float: left;
     border: 1px solid #E7E7E7;

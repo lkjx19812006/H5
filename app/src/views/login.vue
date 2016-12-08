@@ -204,7 +204,8 @@ export default {
     float:right;
     font-size: 1.4rem;
 }
-.login .fast_register,.login .forget_password{
+.login .fast_register,
+.forget_password{
     font-size: 1.1rem;
     color:#FA6705;
 }

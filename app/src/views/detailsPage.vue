@@ -1,7 +1,7 @@
 <template>
     <div class="details_page">
         <mt-header title="详情">
-            <router-link to="/mySet" slot="left">
+            <router-link to="/home" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
         </mt-header>

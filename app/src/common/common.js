@@ -33,12 +33,20 @@ common.$on('message', message => {
     Toast(message);
 })
 
-common.$on('confirm', (item) => {
-    MessageBox.confirm(item).then(action => {
+common.$on('confirm', (first_item,second_item,third_item,fourth_item) => {
+    /*MessageBox.confirm(item).then(action => {
         console.log(action);
     }, action => {
         console.log(action);
-    });
+    });*/
+   MessageBox({
+      
+      showCancelButton: true,
+      confirmButtonText:first_item,
+      cancelButtonText:second_item,
+      message:third_item,
+      title:fourth_item
+   });
 
 })
 

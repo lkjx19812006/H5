@@ -1,7 +1,7 @@
 <template>
   <div class="good_detail">
         <mt-header title="商品详情">
-            <router-link to="/myOder" slot="left">
+            <router-link to="/myResource" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>

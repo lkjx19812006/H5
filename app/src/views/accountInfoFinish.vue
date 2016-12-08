@@ -1,80 +1,80 @@
 <template>
-  <div class="whole">
-     <mt-header title="账户信息" class="account_overview_finish_header">
+  <div class="account_overview_finish">
+     <mt-header title="账户信息" class="header">
       <router-link to="/" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
     <mt-button  slot="right" ><router-link to="accountInfo" id="account_overview_finish_right">完成</router-link></mt-button> 
    </mt-header>
-   <div class="account_overview_finish_header_photo_box">
-        <p class="account_overview_finish_header_word">头像<span>(点击更改头像)</span></p>
-        <img src="/static/images/touxiang.png" class="account_overview_finish_header_photo">
+   <div class="header_photo_box">
+        <p class="header_word">头像<span>(点击更改头像)</span></p>
+        <img src="/static/images/touxiang.png" class="header_photo">
    
    </div>
 
-   <div class="account_overview_finish_basic_data">
-        <p class="account_overview_finish_basic_data_title">基础信息</p>
+   <div class="basic_data">
+        <p class="basic_data_title">基础信息</p>
         <ul>
            <li v-for="(item,index) in personalDataArr" v-if="index==0">
-              <p class="account_overview_finish_name account_overview_finish_name_smart_size" >{{item.name}}</p>
-              <p class="account_overview_finish_name_content" >
+              <p class="name name_smart_size" >{{item.name}}</p>
+              <p class="name_content" >
                  <input type="text" :placeholder="item.content">
               </p>
            </li>
 
            <li v-for="(item,index) in personalDataArr" v-if="index>=1 && index<=2">
-              <p class="account_overview_finish_name account_overview_finish_name_smart_size">{{item.name}}</p>
-              <p class="account_overview_finish_name_content" v-if="index==1">
+              <p class="name name_smart_size">{{item.name}}</p>
+              <p class="name_content" v-if="index==1">
                  <input type="text" :placeholder="item.content">
               </p>
-              <p class="account_overview_finish_name_content" v-if="index==2">
+              <p class="name_content" v-if="index==2">
                  <img :src="item.img_src" v-if="index==2">
               </p>
-              <img src="/static/images/down-arrow.png" class="account_overview_finish_down-arrow">
+              <img src="/static/images/down-arrow.png" class="down-arrow">
            </li>
           
             <li v-for="(item,index) in personalDataArr" v-if="index==3">
-                <p class="account_overview_finish_name account_overview_finish_name_big_size" >{{item.name}}</p>
+                <p class="name name_big_size" >{{item.name}}</p>
 
-                <p class="account_overview_finish_name_content" >
+                <p class="name_content" >
                    <input type="text" :placeholder="item.content">
                 </p>
              </li>
 
              <li v-for="(item,index) in personalDataArr" v-if="index==4">
-              <p class="account_overview_finish_name account_overview_finish_name_big_size" >{{item.name}}</p>
-              <p class="account_overview_finish_name_content" >
+              <p class="name name_big_size" >{{item.name}}</p>
+              <p class="name_content" >
                  <input type="text" :placeholder="item.content">
               </p>
-              <img src="/static/images/right-arrow.png" class="account_overview_finish_right-arrow">
+              <img src="/static/images/right-arrow.png" class="right-arrow">
            </li>
         
         </ul>
    </div>
                 
-    <div class="account_overview_finish_company_data">
-        <p class="account_overview_finish_company_data_title">企业信息</p>
+    <div class="company_data">
+        <p class="company_data_title">企业信息</p>
         <ul>
            <li v-for="(item,index) in companyDataArr" v-if="index < 2">
-              <p class="account_overview_finish_name">{{item.name}}</p>
-              <p class="account_overview_finish_name_content"><input type="text" :placeholder="item.content"></p>
+              <p class="name">{{item.name}}</p>
+              <p class="name_content"><input type="text" :placeholder="item.content"></p>
            </li>
 
            <li v-for="(item,index) in companyDataArr" v-if="index == 2">
-              <p class="account_overview_finish_name">{{item.name}}</p>
-              <p class="account_overview_finish_name_content"><input type="text" :placeholder="item.content"></p>
-              <img src="/static/images/down-arrow.png" class="account_overview_finish_down-arrow">
+              <p class="name">{{item.name}}</p>
+              <p class="name_content"><input type="text" :placeholder="item.content"></p>
+              <img src="/static/images/down-arrow.png" class="down-arrow">
            </li>
 
            <li v-for="(item,index) in companyDataArr" v-if="index > 2 && index < 5">
-              <p class="account_overview_finish_name">{{item.name}}</p>
-              <p class="account_overview_finish_name_content"><input type="text" :placeholder="item.content"></p>
+              <p class="name">{{item.name}}</p>
+              <p class="name_content"><input type="text" :placeholder="item.content"></p>
            </li>
            
            <li v-for="(item,index) in companyDataArr" v-if="index == 5">
-              <p class="account_overview_finish_name">{{item.name}}</p>
-              <p class="account_overview_finish_name_content"><input type="text" :placeholder="item.content"></p>
-              <img src="/static/images/right-arrow.png" class="account_overview_finish_right-arrow">
+              <p class="name">{{item.name}}</p>
+              <p class="name_content"><input type="text" :placeholder="item.content"></p>
+              <img src="/static/images/right-arrow.png" class="right-arrow">
            </li>
            
         </ul>
@@ -168,14 +168,14 @@ input[type="text"], input[type="submit"], input[type="reset"],select,textarea{
 -webkit-appearance: none;
 border-radius: 0;
 }
-.account_overview_finish_header{
+.account_overview_finish .header{
 	color:#313232;
 }
 #account_overview_finish_right{
   color:#EC6817;
 }
 
-.account_overview_finish_header_photo_box{
+.account_overview_finish .header_photo_box{
   height:7.253rem;
   width:100%;
   padding:0 4%;
@@ -186,15 +186,15 @@ border-radius: 0;
   background:white url(/static/images/right-arrow.png) 96% center no-repeat;background-size:0.6826rem 1.024rem;
 }
 
-.account_overview_finish_header_word{
+.account_overview_finish .header_word{
   font-size: 1.024rem;
   color:#666666;
   float:left;
 }
-.account_overview_finish_header_word span{
+.account_overview_finish .header_word span{
   color:#999999;
 }
-.account_overview_finish_header_photo{
+.account_overview_finish .header_photo{
   width:5.1198rem;
   height:5.1198rem;
   border-radius: 50%;
@@ -204,21 +204,24 @@ border-radius: 0;
   margin-right: 6%;
 
 }
-.account_overview_finish_basic_data,.account_overview_finish_company_data{
+.account_overview_finish .basic_data,
+.company_data{
   width:100%;
   text-align: left;
 }
-.account_overview_finish_company_data{
+.account_overview_finish .company_data{
   margin-bottom: 2.5599rem;
 }
-.account_overview_finish_basic_data_title,.account_overview_finish_company_data_title{
+.account_overview_finish .basic_data_title,
+.company_data_title{
   height:2.99rem;
   border-top:0.0427rem solid #E5E5E5;
   border-bottom:0.0427rem solid #E5E5E5;
   padding: 0 8.8% 0 4%;
   line-height:2.99rem; 
 }
-.account_overview_finish_basic_data ul li,.account_overview_finish_company_data ul li{
+.account_overview_finish .basic_data ul li,
+.company_data ul li{
   padding: 0 8.8% 0 4%;
   height:4.267rem;
   line-height: 4.267rem;
@@ -228,7 +231,7 @@ border-radius: 0;
 }
 
 
-.account_overview_finish_name_content input{
+.account_overview_finish .name_content input{
   height:2.5rem;
   text-align: right;
   outline: none;
@@ -236,40 +239,40 @@ border-radius: 0;
   line-height:2.5rem; 
 }
 
-.account_overview_finish_name{
+.account_overview_finish .name{
   float: left;
   color:#666666;
 }
-.account_overview_finish_name_content{
+.account_overview_finish .name_content{
   float:right;
   height:4.267rem;
   color:#999999;
 
 }
-.account_overview_finish_name_content img{
+.account_overview_finish .name_content img{
   height:1.536rem;
   margin-top:1.36rem;
 
 }
-.account_overview_finish_name_content{
+.account_overview_finish .name_content{
   font-size: 1.024rem;
 }
 
-.account_overview_finish_name_big_size{
+.account_overview_finish .name_big_size{
   font-size: 1.195rem;
 }
-.account_overview_finish_name_smart_size{
+.account_overview_finish .name_smart_size{
   font-size: 1.024rem;
 }
 
-.account_overview_finish_right-arrow{
+.account_overview_finish .right-arrow{
   position:absolute;
   right:4%;
   top:1.6215rem;
   width:0.6826rem;
   height:1.024rem;
 }
-.account_overview_finish_down-arrow{
+.account_overview_finish .down-arrow{
   position:absolute;
   right:4%;
   top:1.79rem;

@@ -1,5 +1,5 @@
 <template>
-   <div class="whole">
+   <div class="drug_table_detail">
     <mt-header title="药性表">
       <router-link to="/drugResTable" slot="left">
         <mt-button icon="back"></mt-button>
@@ -119,7 +119,7 @@ export default{
 </script>
 
 <style scoped>
-.whole{
+.drug_table_detail{
     position: relative;
     background: white;
     width:100%;
@@ -127,23 +127,23 @@ export default{
 
 }
 
-.mint-header{
+.drug_table_detail .mint-header{
   background-color:white;
   color:#313232;
   font-size: 1.36528rem;
 }
-.mint-navbar{
+.drug_table_detail .mint-navbar{
   background: #F7F5F5;
 }
-.mint-tab-item-label{
+.drug_table_detail .mint-tab-item-label{
   font-size: 1.02396rem;
   color:#333333;
 }
 
-.mint-navbar .mint-tab-item.is-selected{
+.drug_table_detail .mint-navbar .mint-tab-item.is-selected{
   color:#FA6705;
 }
-.drug_name{
+.drug_table_detail .drug_name{
   width:92%;
   text-align: left;
   font-size: 1.19462rem;
@@ -152,30 +152,30 @@ export default{
   margin-left: 1.27995rem;
 }
 
-.drug_name .name_type{
+.drug_table_detail .drug_name .name_type{
   word-break:break-all;
   display:flex;
   flex-direction:row;
   margin-bottom:1.27995rem; 
 }
-.what_name{
+.drug_table_detail .what_name{
   font-size: 1.19462rem;
   color:#333333;
   flex:2;
   line-height: 1.5rem;
 }
-.answer_name{
+.drug_table_detail .answer_name{
   flex:12;
   font-size: 1.02396rem;
   color:#666666;
   line-height: 1.5rem;
 
 }
-#last_name_type{
+.drug_table_detail #last_name_type{
   margin-bottom:0;
 
 }
-.drug_effect{
+.drug_table_detail .drug_effect{
   width:92%;
   text-align: left;
   font-size: 1.19462rem;
@@ -184,28 +184,28 @@ export default{
   margin-left: 1.27995rem;
 }
 
-.drug_effect .drug_effect_type{
+.drug_table_detail .drug_effect .drug_effect_type{
   word-break:break-all;
   display:flex;
   flex-direction:row;
   margin-bottom:1.27995rem; 
 }
-.what_effect{
+.drug_table_detail .what_effect{
   font-size: 1.19462rem;
   color:#333333;
   flex:2;
   line-height: 1.5rem;
 }
-.effect_content{
+.drug_table_detail .effect_content{
   flex:12;
   font-size: 1.02396rem;
   color:#666666;
   line-height: 1.5rem;
 }
-#last_effect_type{
+.drug_table_detail #last_effect_type{
   margin-bottom:0;
 }
-.spec{
+.drug_table_detail .spec{
   width:92%;
   text-align: left;
   font-size: 1.19462rem;
@@ -213,19 +213,19 @@ export default{
   padding:1.9199rem 0rem;
   margin-left: 1.27995rem;
 }
-.spec_type{
+.drug_table_detail .spec_type{
   word-break:break-all;
   display:flex;
   flex-direction:row;
   margin-bottom:1.27995rem; 
 }
-.what_spec{
+.drug_table_detail .what_spec{
   font-size: 1.19462rem;
   color:#333333;
   flex:2;
   line-height: 1.5rem;
 }
-.spec_content{
+.drug_table_detail .spec_content{
   flex:7;
   font-size: 1.02396rem;
   color:#666666;

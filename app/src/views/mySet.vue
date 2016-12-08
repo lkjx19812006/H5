@@ -47,7 +47,7 @@ export default {
                     first_img:'/static/images/my-news.png',
                     left_word:'我的消息',
                     right_word:'3',
-                    router:'revisePassWord',
+                    router:'',
                     second_img:'/static/images/right-arrow.png'
                 },{
                     first_img:'/static/images/password-modification.png',

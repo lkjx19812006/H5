@@ -18,17 +18,19 @@
            <mt-tab-container v-model="selected">
               <mt-tab-container-item id="1">
                 <div class="first_item">
-                    <div v-for="todo in todos" class='maxbox'>
+                    <div v-for="(todo,index) in todos" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                        <p class="title">{{todo.title}}</p>
                        <div class="photo"></div>
                        <p class="point">{{todo.point}}</p>
                     </div>
+
+                   
                      
                 </div>
               </mt-tab-container-item>
               <mt-tab-container-item id="2">
                 <div class="second_item">
-                    <div v-for="todo in datas" class='maxbox'>
+                    <div v-for="(todo,index) in datas" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                        <p class="title">{{todo.title}}</p>
                        <div class="photo"></div>
                        <p class="point">{{todo.point}}</p>
@@ -57,23 +59,25 @@ export default {
     data() {
             return {
                 selected:"1",
+                isActive: true,
+                hasError: false,
                 todos:[{
-                    title:'工商营业执照',
+                    title:'1工商营业执照',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'工商营业执照',
+                    title:'2工商营业执照',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'工商营业执照',
+                    title:'3工商营业执照',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'工商营业执照',
+                    title:'4工商营业执照',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'工商营业执照',
+                    title:'5工商营业执照',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'工商营业执照',
+                    title:'6工商营业执照',
                     point:'请使用原件拍照或扫描'
                 }],
 
@@ -91,9 +95,7 @@ export default {
                     point:'请使用原件拍照或扫描'
                 }]
             }
-        },
-        
-        
+        }, 
         created() {
             let _self = this;
             common.$emit('show-load');
@@ -104,7 +106,9 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            })
+            
+
         }
 
 }
@@ -150,14 +154,24 @@ export default {
     min-height: 37rem;
     margin-top: 1rem;
 }
-.company_authentication .first_item>div,.company_authentication .second_item>div{
+.company_authentication .first_item .maxbox,.company_authentication .second_item .maxbox{
     width:50%;
     height:14rem;
     float:left;
+    padding-right: 7%;
     text-align: left;
-    /*border:1px solid red;*/
     margin-bottom: 3rem;
 }
+.company_authentication .first_item .otherbox,.company_authentication .second_item .otherbox{
+    width:50%;
+    height:14rem;
+    float:left;
+    padding-left: 7%;
+    text-align: left;
+    margin-bottom: 3rem;
+}
+
+
 .company_authentication .first_item>div .title,.company_authentication .second_item>div .title{
     font-size: 1.2rem;
     color:#333232;
@@ -165,14 +179,14 @@ export default {
 }
 .company_authentication .first_item>div .photo,.company_authentication .second_item>div .photo{
     height:9rem;
-    width:12.5rem;
+    width:100%;
     background:#E1DDDA;
 } 
 .company_authentication .first_item>div .point,.company_authentication .second_item>div .point{
     font-size: 1rem;
     margin-top:1rem;
     text-align: center;
-    width:12.5rem;
+    width:100%;
     color:#999999;
 }
 .company_authentication .content{

@@ -143,7 +143,7 @@ export default {
   },
   methods:{
     drugMoney:function(){
-        common.$emit('confirm','请下载App！','再考虑考虑？');
+        common.$emit('confirm','去下载app','再考虑考虑？');
     },
     jump: function(router) {
                 console.log(router);
