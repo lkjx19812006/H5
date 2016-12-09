@@ -51,8 +51,9 @@ router.beforeEach((to, from, next) => {
 
 Vue.http.interceptors.push((request, next) => {
   next((response) => {
-    if (response.json() && response.json().code === 100070) {
-      return console.log('login')
+    console.log(response.status)
+    if (response.status==403) {
+      return router.push('login');
     }
     return response
   })

@@ -87,7 +87,6 @@ export default {
                     this.$refs.loadmore.onBottomLoaded(id);
                 }, 1500);
             },
-
             handleTopChange(status) {
                 this.topStatus = status;
             },

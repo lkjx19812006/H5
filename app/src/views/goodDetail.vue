@@ -5,22 +5,17 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        
        <div class="swipe_height" >
-            <mt-swipe :auto="4000" :prevent="true" :show-indicators="false">
-              
+            <mt-swipe :auto="4000" :prevent="true" :show-indicators="false">        
               <mt-swipe-item v-for="(item,index) in imgArray" >
                    <img :src="item.url">
                    <div class="index"><span>{{index+1}}</span>/5</div>
-                   
-              </mt-swipe-item>
-                
+              </mt-swipe-item>   
             </mt-swipe>
         </div>
         <div class="release_time">
             <p>发布时间：<span>2016-11-26</span></p>
         </div>
-
         <div class="drug_info">
             <div class="first_level">
                 <img src="/static/images/bao.png">
@@ -42,19 +37,15 @@
                     <p class="the_left">样品：<span>不提供</span></p> 
                 </div>
            </div>
-           
-
             <div class="fifth_level">
                 <p class="left">卖点：</p>
                 <p class="right"><span>甘都好无走油，甘都好无走油，甘都好无走油，甘都好无走油，甘都好无走油，</span></p>
             </div>
         </div>
-
         <div class="flowsheet">
             <p>流程图</p>
             <img src="/static/images/progress_1.png">
-        </div>
-        
+        </div>  
   </div>
 </template>
 
@@ -73,12 +64,8 @@ export default {
                 }],
             }
         }
-        
-
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .good_detail .swipe_height{

@@ -19,7 +19,6 @@
                <input type="text" placeholder="请填写您的手机号！">
              </div>
         </div>
-
         <div class="confirm_submit">确认提交</div>
     </div>
 </template>
@@ -29,14 +28,10 @@ import common from '../common/common.js'
 export default {
     data() {
             return {
-                msg: 'Welcome to Your Vue.js App',
                 
             }
-        }
-       
-        
+        }  
     }
-
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
