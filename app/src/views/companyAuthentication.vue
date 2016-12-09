@@ -43,9 +43,11 @@
                 
        <div class="common_problem">
           
-          
-            <img src="/static/images/common-problem.png">
-            <p><span>认证常见问题</span></p>
+          <div class="common_problem_inner">
+                <img src="/static/images/common-problem.png">
+                <p><span>认证常见问题</span></p>
+          </div>
+            
          
        </div>
         <div class="confirm">申请认证</div>
@@ -190,23 +192,35 @@ export default {
     color:#999999;
 }
 .company_authentication .content{
-    margin-bottom: 2.2rem;
+    /*margin-bottom: 2.2rem;*/
 }
 .company_authentication .common_problem{
-    width:8.6rem;
+    /*width:8.6rem;
     height:1.4rem;
     margin-left: -4.3rem;
     position: absolute;
     left: 50%;
     text-align: center;
-    margin-bottom: 5rem;
+    margin-bottom: 5rem;*/
+   
+    height:8.2rem;
+    width:100%;
+    position: relative;
 }
-.company_authentication .common_problem img{
+.company_authentication .common_problem .common_problem_inner{
+    width:8.6rem;
+    height:1.4rem;
+    margin-left: -4.3rem;
+    position: absolute;
+    left: 50%;
+    top:2.2rem;
+}
+.company_authentication .common_problem .common_problem_inner img{
     width: 1.4rem;
     float:left;
     margin-right:1rem;
 }
-.company_authentication .common_problem p{
+.company_authentication .common_problem .common_problem_inner p{
     font-size: 1rem;
     line-height: 1.4rem;
     height:1.4rem;
@@ -221,6 +235,6 @@ export default {
     color:white;
     line-height: 5rem;
     text-align: center;
-    margin-top:7.5rem;
+    /*margin-top:7.5rem;*/
 }
 </style>

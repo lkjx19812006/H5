@@ -6,7 +6,7 @@
             </router-link>
         </mt-header>
         <search-input></search-input>
-
+      
       <div class="select_box">
         <mt-navbar v-model="selected">
           <mt-tab-item id="1">资源关注</mt-tab-item>
@@ -257,7 +257,7 @@ export default {
 
 }
 .my_attention .bg_white{
-    position: fixed;
+    /*position: fixed;*/
 
 }
 .my_attention .mint-navbar {

@@ -13,7 +13,7 @@
                <li>
                   <p>验证码：</p><input type="text" placeholder="请输入验证码"/>
                   <div  id="identify_code">{{identify_code}}</div>
-                  <input class="get_code" v-on:click="confirm" :value="code">
+                  <input class="get_code" id="get_code" v-on:click="confirm" :value="code" type="button">
                </li>
                <li>
                   <p>新密码：</p><input type="text" placeholder="请输入新密码" />
@@ -39,9 +39,13 @@ export default {
                
                 confirm:function(){
                     var phone=document.getElementById("ephone").value;
-                    var pattern = /^1[34578]\d{9}$/;    
+                    var pattern = /^1[34578]\d{9}$/;
+
+                    let button = document.getElementById("get_code");
+                    button.disabled = true;    
                     if(!pattern.test(phone)) {          
                         alert('请输入有效的手机号！');
+                        button.disabled = !button.disabled
                     }else{
                        let wait = 10;
                        let this_ = this;
@@ -53,6 +57,7 @@ export default {
                                 if(wait == 0){
                                    clearInterval(time);
                                    this_.code = '获取验证码';
+                                   button.disabled = false;
                                 }
                               },1000);
                     }

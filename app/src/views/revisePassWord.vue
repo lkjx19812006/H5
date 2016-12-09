@@ -13,7 +13,7 @@
             <li class="bottom_li">
                <p>验证码：</p>
                <input type="text" placeholder="请输入你的验证码" class="bottom_text">
-               <button v-on:click="nextStep">{{code}}</button>
+               <button v-on:click="nextStep" id="get_code">{{code}}</button>
             </li>
         </ul>
 
@@ -38,9 +38,12 @@ export default {
                
                 nextStep:function(){
                     var phone=document.getElementById("ephone").value;
-                    var pattern = /^1[34578]\d{9}$/;    
+                    var pattern = /^1[34578]\d{9}$/;
+                    let button = document.getElementById("get_code");
+                    button.disabled = true;     
                     if(!pattern.test(phone)) {          
                         alert('请输入有效的手机号！');
+                        button.disabled = false;
                     }else{
                        let wait = 10;
                        let this_ = this;
@@ -51,7 +54,10 @@ export default {
                                 this_.code = wait;
                                  if(wait == 0){
                                    clearInterval(time);
+
                                    this_.code = '获取验证码';
+                                   button.disabled = false; 
+
                                 }
                               },1000);
 
