@@ -209,6 +209,8 @@ textarea {
 
 .supply_release .good_information .upload_image{
     width: 20%;
+    float: left;
+    margin-top: 1rem;
 }
 
 .supply_release .good_infor_header,

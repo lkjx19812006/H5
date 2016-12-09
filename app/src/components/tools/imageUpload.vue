@@ -9,6 +9,7 @@
     </div>
 </template>
 <script>
+import common from '../../common/common.js'
 export default {
     data() {
             return {
@@ -82,8 +83,9 @@ export default {
                 this.showurl = '';
             },
             upload: function(data, url) {
+                 // common.$emit('show-load');
                 console.log('sdfsdfsfdsfdsdf');
-               this.$emit("postUrl");
+               this.$emit("postUrl",'dfdfdf');
 
             }
         }
@@ -103,6 +105,7 @@ export default {
 
 .img_upload .image_show {
     width: 100%;
+    height: 4rem;
 }
 
 .img_upload .close_image {
