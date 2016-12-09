@@ -31,7 +31,7 @@
                     <div v-for="(todo,index) in todos" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                        <p class="title">{{todo.title}}</p>
                        <div class="photo"></div>
-                       <p class="point">{{todo.point}}</p>
+                       <p  v-bind:class="{point:index == 0,'nor_point':index == 1}">{{todo.point}}</p>
                     </div>  
                 </div>
 
@@ -48,11 +48,10 @@
       
                 
        <div class="common_problem">
-          
-          
-            <img src="/static/images/common-problem.png">
-            <p><span>认证常见问题</span></p>
-         
+          <div class="common_problem_inner">
+                <img src="/static/images/common-problem.png">
+                <p><span>认证常见问题</span></p>
+          </div>    
        </div>
         <div class="confirm">申请认证</div>
   </div>
@@ -64,8 +63,7 @@ import common from '../common/common.js'
 export default {
     data() {
             return {
-                isActive: true,
-                hasError: false,
+                
                 todos:[{
                     title:'身份证正面',
                     point:'暂未认证'
@@ -173,6 +171,7 @@ export default {
     margin-bottom: 3rem;
     
 }
+
 .certification .first_item>div .title{
     font-size: 1.2rem;
     color:#333232;
@@ -190,23 +189,32 @@ export default {
     width:100%;
     color:#999999;
 }
-
+.certification .first_item>div .nor_point{
+    font-size: 1rem;
+    margin-top:1rem;
+    text-align: center;
+    width:100%;
+    color:#FF0000;
+}
 .certification .common_problem{
+    height:8.2rem;
+    width:100%;
+    position: relative;
+}
+.certification .common_problem .common_problem_inner{
     width:8.6rem;
     height:1.4rem;
     margin-left: -4.3rem;
     position: absolute;
     left: 50%;
-    text-align: center;
-    margin-bottom: 5rem;
-    padding-top: 2.2rem;
+    top:2.2rem;
 }
-.certification .common_problem img{
+.certification .common_problem .common_problem_inner img{
     width: 1.4rem;
     float:left;
     margin-right:1rem;
 }
-.certification .common_problem p{
+.certification .common_problem .common_problem_inner p{
     font-size: 1rem;
     line-height: 1.4rem;
     height:1.4rem;
@@ -221,6 +229,6 @@ export default {
     color:white;
     line-height: 5rem;
     text-align: center;
-    margin-top:7.5rem;
+    /*margin-top:7.5rem;*/
 }
 </style>

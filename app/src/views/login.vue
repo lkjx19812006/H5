@@ -23,7 +23,7 @@
                        <li>
                           <p>验证码：</p>
                           <input type="text" placeholder="请输入验证码"/>
-                          <div class="get_code" v-on:click="confirmLogin">{{code}}</div>
+                          <button class="get_code" id="get_code" v-on:click="confirmLogin()" >{{code}}</button>
                        </li>
                     </ul>
                 </mt-tab-container-item>
@@ -66,7 +66,8 @@ export default {
                 msg: 'Welcome to Your Vue.js App',
                 selected:'1',
                 identify_code:'',
-                code:'获取验证码'
+                code:'获取验证码',
+                off:false
             }
         },
         created() {
@@ -93,26 +94,37 @@ export default {
                      this.identify_code = res;
                },
                 confirmLogin:function(){
+                    clearInterval(time);
                     var phone=document.getElementById("ephone").value;
+                    var button = document.getElementById("get_code");
+                    button.disabled = true;
                     var pattern = /^1[34578]\d{9}$/;    
-                    if(!pattern.test(phone)) {          
+                    if(!pattern.test(phone)) { 
+
                         alert('请输入有效的手机号！');
+                        button.disabled = !button.disabled;
                     }else{
-                       let wait = 10;
-                       let this_ = this;
-                       let time = setInterval(function(){
+                       
+                       this.code = '获取验证码';
+
+                       var this_ = this;
+                       var wait = 5;
+                       var time = setInterval(function(){
                                 
                                 wait--;
                                 console.log(wait);
                                 this_.code = wait;
+
                                  if(wait == 0){
                                    clearInterval(time);
                                    this_.code = '获取验证码';
+                                   button.disabled = false;
                                 }
                               },1000);
-
+                        
 
                     }
+
                 }    
             
 
