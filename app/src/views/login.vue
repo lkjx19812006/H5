@@ -107,17 +107,17 @@ export default {
                        
                        this.code = '获取验证码';
 
-                       var this_ = this;
+                       var _self = this;
                        var wait = 5;
-                       var time = setInterval(function(){
+                       var time = setTimeout(function(){
                                 
                                 wait--;
                                 console.log(wait);
-                                this_.code = wait;
+                                _self.code = wait;
 
                                  if(wait == 0){
-                                   clearInterval(time);
-                                   this_.code = '获取验证码';
+                                   /*clearInterval(time);*/
+                                   _self.code = '获取验证码';
                                    button.disabled = false;
                                 }
                               },1000);

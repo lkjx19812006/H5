@@ -57,13 +57,13 @@
                             <img src="/static/images/1.jpg" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.name}}</div>
+                                    <div>{{todo.name}}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.place}}</span></p>
                                     <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
                                 </div>
                                 <div class="res_content_right">
-                                <p>{{todo.price}}</p>
+                                <p>{{todo.price}}<span>元/kg</span></p>
                                 <!-- <button class="mint-button mint-button--primary mint-button--small">编辑</button> -->
                                 
                                 </div>
@@ -112,7 +112,7 @@ export default {
                     "name": "人参",
                     "spec": "统货",
                     "place": "东北",
-                    "price": "98.9元/kg",
+                    "price": "98",
                     "state": "待收货",
                     "phone": "15301546832",
                     "time": "2012-11-26",
@@ -272,7 +272,7 @@ export default {
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li{
     margin-bottom: 1rem;
     background:white;
-    height:17rem;
+    height:17.3rem;
 }
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
     height: 80px;
@@ -361,14 +361,16 @@ export default {
     float: left;
     max-height: 15px;
 }
-
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center div{
+    font-size: 1.5rem;
+}
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
     width: 100%;
     padding-right: 90px;
     line-height: 18px;
     text-align: left;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #666;
 }
 
@@ -392,16 +394,18 @@ export default {
 }
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     margin-top: 0px;
     color: #EC6817;
 }
-
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p span{
+    font-size: 1rem;
+}
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content  .num{
   position: absolute;
   bottom: 20px;
   
-  font-size: 1.2rem;
+  font-size: 1rem;
   
   right: 10px;
   

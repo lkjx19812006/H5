@@ -110,6 +110,7 @@
 </template>
 <script>
 import common from '../common/common.js'
+import sort from '../components/tools/sort'
 export default {
     data() {
             return {

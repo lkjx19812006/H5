@@ -21,13 +21,13 @@
                             <img src="/static/images/1.jpg" class="list_images" @click="jump(todo.router)">
                             <div class="res_content" >
                                 <div class="res_content_center">
-                                    <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.name}}</div>
+                                    <div><img src="/static/icons/sample.png">{{todo.name}}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.place}}</span></p>
                                     <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
                                 </div>
                                 <div class="res_content_right">
-                                <p>{{todo.price}}</p>
+                                <p>{{todo.price}}<span>元/kg</span></p>
                                 <button class="mint-button mint-button--primary mint-button--small" @click="jump(todo.other_router)">编辑</button>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@ export default {
                     "name": "人参",
                     "spec": "统货",
                     "place": "东北",
-                    "price": "98.9元/kg",
+                    "price": "65",
                     "state": "待审核",
                     "phone": "15301546832",
                     "time": "12-11-26",
@@ -237,16 +237,18 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
     float: left;
-    max-height: 15px;
+    max-height: 1.4rem;
 }
-
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center div{
+    font-size: 1.4rem;
+}
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
     width: 100%;
     padding-right: 90px;
     line-height: 18px;
     text-align: left;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #666;
 }
 
@@ -265,11 +267,13 @@ export default {
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     margin-top: 0px;
     color: #EC6817;
 }
-
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p span{
+    font-size: 1rem;
+}
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button{
   position: absolute;
   bottom: 10px;
@@ -283,6 +287,7 @@ export default {
   border:1px solid #BDBDBD;
   border-radius: 5px;
   z-index: 100000;
+  font-size: 1.1rem;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{

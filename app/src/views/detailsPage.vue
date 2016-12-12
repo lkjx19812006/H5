@@ -87,7 +87,7 @@ export default {
    height:1.5rem;
    position: absolute;
    left:0;
-   top:1.45rem;
+   top:1.3rem;
 }
 .details_page .info_list li .name{
    color:#333333;
@@ -108,7 +108,7 @@ export default {
    height:1.5rem;
    position: absolute;
    left:1.5rem;
-   top:1.45rem;
+   top:1.55rem;
 }
 .details_page .advantage p{
    float:left;

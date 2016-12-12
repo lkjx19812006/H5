@@ -26,6 +26,7 @@
               <p class="name name_smart_size">{{item.name}}</p>
               <p class="name_content" v-if="index==1">
                  <input type="text" :placeholder="item.content">
+              
               </p>
               <p class="name_content" v-if="index==2">
                  <img :src="item.img_src" v-if="index==2">
@@ -56,23 +57,26 @@
         <p class="company_data_title">企业信息</p>
         <ul>
            <li v-for="(item,index) in companyDataArr" v-if="index < 2">
-              <p class="name">{{item.name}}</p>
+              <p class="name  name_smart_size" >{{item.name}}</p>
               <p class="name_content"><input type="text" :placeholder="item.content"></p>
            </li>
 
-           <li v-for="(item,index) in companyDataArr" v-if="index == 2">
-              <p class="name">{{item.name}}</p>
-              <p class="name_content"><input type="text" :placeholder="item.content"></p>
+           <li v-for="(item,index) in companyDataArr" v-if="index == 2" >
+              <p class="name  name_smart_size">{{item.name}}</p>
+              <p class="name_content"><input type="text" :placeholder="item.content">
+                      
+              </p>
+              <!--  -->
               <img src="/static/images/down-arrow.png" class="down-arrow">
            </li>
 
            <li v-for="(item,index) in companyDataArr" v-if="index > 2 && index < 5">
-              <p class="name">{{item.name}}</p>
+              <p class="name  name_big_size">{{item.name}}</p>
               <p class="name_content"><input type="text" :placeholder="item.content"></p>
            </li>
            
            <li v-for="(item,index) in companyDataArr" v-if="index == 5">
-              <p class="name">{{item.name}}</p>
+              <p class="name  name_big_size">{{item.name}}</p>
               <p class="name_content"><input type="text" :placeholder="item.content"></p>
               <img src="/static/images/right-arrow.png" class="right-arrow">
            </li>
@@ -153,7 +157,6 @@ export default {
         this.$refs.picker.open();
 
       }
-
   }
 
  
@@ -239,6 +242,7 @@ border-radius: 0;
   line-height:2.5rem; 
 }
 
+
 .account_overview_finish .name{
   float: left;
   color:#666666;
@@ -257,7 +261,10 @@ border-radius: 0;
 .account_overview_finish .name_content{
   font-size: 1.024rem;
 }
-
+/*.account_overview_finish .name_content>div{
+  height: 2rem;
+  width:100px;
+}*/
 .account_overview_finish .name_big_size{
   font-size: 1.195rem;
 }

@@ -69,6 +69,7 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .address_revise ul li{
   background:white;
   margin-top: 1rem;
@@ -90,8 +91,9 @@ export default {
     color:#333333;
 }
 .address_revise ul li .address_top input{
-   border:0;
+   border:none;
    outline: none;
+   margin-top:-0.3rem;
 }
 .address_revise ul li .address_top p span{
    color:#666666;
@@ -114,17 +116,17 @@ export default {
 .address_revise ul li .address_bottom .first_img{
    position: absolute;
    left:1.5rem;
-   top:0.975rem;
+   top:0.8rem;
 }
 .address_revise ul li .address_bottom .second_img{
    position: absolute;
-   right:11.8rem;
-   top:0.975rem;
+   right:11.9rem;
+   top:0.8rem;
 }
 .address_revise ul li .address_bottom .last_img{
    position: absolute;
    right:4.4rem;
-   top:0.975rem;
+   top:0.8rem;
 }
 .address_revise ul li .address_bottom .top_p{
    float:left;

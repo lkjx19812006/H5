@@ -29,8 +29,7 @@ import common from '../common/common.js'
 export default {
     data() {
             return {
-                msg: 'Welcome to Your Vue.js App',
-                
+      
             }
         }
        
@@ -40,6 +39,7 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .feed_back .main{
    padding: 2rem 1.5rem 0 1.5rem;
    background:white;
@@ -68,13 +68,15 @@ export default {
 .feed_back .info div{
    margin-top: 1rem;
    height:3.5rem;
-   line-height: 3.5rem;
 }
 .feed_back .info p{
-  font-size:1.2rem;
+   font-size:1.2rem;
    width:6rem;
-  text-align: right;
-  float:left;
+   height:3.5rem;
+   line-height: 3.5rem;
+   text-align: right;
+   float:left;
+
 }
 .feed_back .info input{
   float:left;
@@ -82,6 +84,8 @@ export default {
   height:3.4rem;
   text-align: center;
   width:50%;
+  font-size:1.2rem;
+  
 }
 .feed_back .confirm_submit{
   height:5rem;

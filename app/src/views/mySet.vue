@@ -33,7 +33,7 @@
            </li>
         </ul>
 
-        <div class="quit">退出当前账号</div>
+        <router-link to="login"><div class="quit">退出当前账号</div></router-link>
     </div>
 </template>
 <script>
@@ -73,7 +73,7 @@ export default {
                     right_word:'400-820-7181'
                 },{
                     first_img:'/static/images/current-version.png',
-                    left_word:'联系客服',
+                    left_word:'当前版本',
                     right_word:'V 2.1'
                 }]
                 
@@ -103,7 +103,7 @@ export default {
 .my_set .mylist li .herder{
    float:left;
    height:1.5rem;
-   margin-top: 1.45rem;
+   margin-top: 1.3rem;
 }
 .my_set .mylist li .arrow{
    position: absolute;

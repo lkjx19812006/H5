@@ -89,6 +89,7 @@ export default {
 .add_address ul li .address_top input{
    border:0;
    outline: none;
+   margin-top: -0.3rem;
 }
 .add_address ul li .address_top p span{
    color:#666666;
@@ -111,17 +112,17 @@ export default {
 .add_address ul li .address_bottom .first_img{
    position: absolute;
    left:1.5rem;
-   top:0.975rem;
+   top:0.8rem;
 }
 .add_address ul li .address_bottom .second_img{
    position: absolute;
-   right:11.8rem;
-   top:0.975rem;
+   right:11.9rem;
+   top:0.8rem;
 }
 .add_address ul li .address_bottom .last_img{
    position: absolute;
    right:4.4rem;
-   top:0.975rem;
+   top:0.8rem;
 }
 .add_address ul li .address_bottom .top_p{
    float:left;

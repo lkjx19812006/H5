@@ -6,15 +6,22 @@
             </router-link>
         </mt-header>
         <ul>
-           <li v-for="(todo,index) in todos" v-show="show">
+           <li v-for="(todo,index) in todos" v-show="todo.show">
                <div class="address_top" >
                   <div class="receiver">
-                    <p class="receiver_left">收货人：<span>{{todo.name}}</span></p>
+                    <p class="receiver_left">
+                       <span>收货人：{{todo.name}}</span>
+                       <!-- <span v-show="todo.reviseShow">收货人：<input type="text" :placeholder="todo.name"></span> -->
+                     </p>
                     <p class="receiver_right">{{todo.number}}</p> 
                   </div> 
 
                   <div class="address">
-                    <p>地址：<span>{{todo.address}}</span></p>
+                    <p>
+                      <span>地址：{{todo.address}}</span>
+                      <!-- <span v-show="todo.reviseShow">地址：<input type="text" :placeholder="todo.address"></span> -->
+
+                    </p>
                   </div> 
                </div>
                 
@@ -27,11 +34,11 @@
                    <div class="address_box">
                      <p class="center_p">
                         <img :src="todo.second_img"  class="second_img">
-                        <span v-on:click="jump(todo.router)">修改</span>
+                        <span v-on:click="revise(todo.router)">修改</span>
                      </p>
                      <p class="bottom_p">
                         <img :src="todo.last_img"  class="last_img">
-                        <span v-on:click="delet(todo,index)">删除</span>
+                        <span v-on:click="delet(todo)">删除</span>
                      </p>
                    
                    </div>
@@ -50,10 +57,9 @@ import common from '../common/common.js'
 export default {
     data() {
             return {
-                msg: 'Welcome to Your Vue.js App',
-                show:true,
-          
                 todos:[{
+                    show:true,
+                    reviseShow:false,
                     name:'扬帆',
                     number:'1234465469798',
                     address:'上海宝隆一方大厦',
@@ -62,6 +68,8 @@ export default {
                     last_img:'/static/images/delet.png',
                     router:'addressRevise'
                 },{
+                    show:true,
+                    reviseShow:false,
                     name:'小黄毛',
                     number:'1234465469798',
                     address:'上海宝隆一方大厦',
@@ -74,9 +82,10 @@ export default {
             }
         },
         methods:{
-          delet:function(todo,index){
-                let deletLi = document.getElementsByTagName('li')[index];
-                deletLi.style.display = "none";
+          delet:function(todo){
+                /*let deletLi = document.getElementsByTagName('li')[index];
+                deletLi.style.display = "none";*/
+                todo.show = !todo.show;
           },
           changeColor:function(todos,todo,index){
                 
@@ -89,8 +98,9 @@ export default {
 
 
           },
-          jump:function(router){
+          revise:function(router){
                 this.$router.push(router);
+                /*todo.reviseShow = !todo.reviseShow;*/
           }
         }
        
@@ -115,25 +125,36 @@ export default {
 }
 .address_manage ul li .address_top .receiver_left{
     float:left;
-
 }
 .address_manage ul li .address_top .receiver_right{
     float:right;
 }
 .address_manage ul li .address_top p{
     font-size: 1.2rem;
+    line-height: 1.2rem;
     color:#333333;
 }
 .address_manage ul li .address_top p span{
+   padding: 0;
+   line-height: 1.2rem;
+   height:1.2rem;
+   top:0;
+   
+}
+.address_manage ul li .address_top p span input{
+   border:none;
+   outline: none;
    color:#666666;
+   padding: 0;
+   margin:0;
+   height:1.2rem;
+   line-height: 1.2rem;
+   margin-top: -0.1rem;
 }
 .address_manage ul li .address_top .address{
-    /*float:left;*/
-    /*margin-top: 1.5rem;*/
-    /*text-align: left;*/
-    
     position: absolute;
     top:5rem;
+    
 }
 
 .address_manage ul li .address_bottom{
@@ -142,23 +163,24 @@ export default {
    position: relative;
    line-height: 3.7rem;
 }
+
 .address_manage ul li .address_bottom img{
    height:1.75rem;
 }
 .address_manage ul li .address_bottom .first_img{
    position: absolute;
    left:1.5rem;
-   top:0.975rem;
+   top:0.8rem;
 }
 .address_manage ul li .address_bottom .second_img{
    position: absolute;
-   right:11.8rem;
-   top:0.975rem;
+   right:11.9rem;
+   top:0.8rem;
 }
 .address_manage ul li .address_bottom .last_img{
    position: absolute;
    right:4.4rem;
-   top:0.975rem;
+   top:0.8rem;
 }
 .address_manage ul li .address_bottom .top_p{
    float:left;
