@@ -81,7 +81,8 @@
                 </div>
                 <div class="good_information">
                     <p class="good_photo_header">上传货物图片</p>
-                    <div class="upload_image"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
+                    <div class="upload_image" >
+                    <imageUpload :param="param" v-on:postUrl="getUrl" ></imageUpload></div>
                 </div>
                 <div class="remarks">
                     <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">备注</p>
@@ -118,7 +119,7 @@ export default {
                 selected: '1',
                 todos: {},
                 param:{
-                    name:'sdfsdf'
+                    name:'intention'
                 }
             }
         },

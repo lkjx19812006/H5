@@ -17,11 +17,14 @@ let common = new Vue({
             drug_information_list: '/static/data/drug_information_list.json',
             login: '/account/login.do',
             getDate: '/system/date.do',
-            queryUserInfo: '/handle/control.do'
+            most:'/handle/control.do'
         }
     },
     methods: {
         addSID(url) {
+            if(!this.SID){
+               this.SID='test'; 
+            }
             return url + ';jsessionid=' + this.SID;
         },
         getDate() {
@@ -40,6 +43,9 @@ let common = new Vue({
         },
         getSign(str) {
             let _self = this;
+            if(!_self.KEY){
+               _self.KEY='test';
+            }
             let signStr = CryptoJS.HmacSHA1(str,_self.KEY).toString(CryptoJS.enc.Base64);
             console.log(signStr);
             return signStr;

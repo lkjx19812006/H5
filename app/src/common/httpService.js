@@ -1,6 +1,5 @@
 import Vue from 'vue'
 
-
 let httpService = new Vue({
     methods: {
         login(url, body, suc, err) {
@@ -17,11 +16,12 @@ let httpService = new Vue({
                 err(res);
             });
         },
-        put(url) {
-
-        },
-        del(url) {
-
+        getQiniuToken(url, body, suc, err) {
+            this.$http.post(url, body).then((response) => {
+                suc(response.data);
+            }, (res) => {
+                err(res);
+            });
         }
     }
 })

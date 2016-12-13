@@ -43,9 +43,8 @@ import certification from './views/certification'
 import reviseResource from './views/reviseResource'
 import revisePurchase from './views/revisePurchase'
 
-
 module.exports = {
-    mode: 'hash',
+    mode: 'history',
     base: __dirname,
     routes: [
         { name: 'login', path: '/login', component: login }, {

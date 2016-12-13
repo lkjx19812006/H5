@@ -129,18 +129,27 @@ export default {
                 this.$router.push(router);
             }
         },
-        created(){
-          common.$emit('show-load');
-          let url=common.addSID(common.urlCommon+common.apiUrl.queryUserInfo);
-          let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
-          console.log(common.difTime);
-          body.time=Date.parse(new Date())+parseInt(common.difTime);
-          body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-          httpService.queryUserInfo(url,body,function(suc){
-            common.$emit('close-load');
-          },function(err){
-            common.$emit('close-load');
-          })
+        created() {
+            let url = common.addSID(common.urlCommon + common.apiUrl.most);
+            let body = {
+                biz_module: 'userService',
+                biz_method: 'queryUserInfo',
+                version: 1,
+                time: 0,
+                sign: '',
+                biz_param: {}
+            };
+            console.log(common.difTime);
+            body.time = Date.parse(new Date()) + parseInt(common.difTime);
+            body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+            if (common.KEY) {
+                common.$emit('show-load');
+                httpService.queryUserInfo(url, body, function(suc) {
+                    common.$emit('close-load');
+                }, function(err) {
+                    common.$emit('close-load');
+                })
+            }
         }
 }
 </script>
