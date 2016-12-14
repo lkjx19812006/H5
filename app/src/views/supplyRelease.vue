@@ -81,8 +81,9 @@
                 </div>
                 <div class="good_information">
                     <p class="good_photo_header">上传货物图片</p>
-                    <div class="upload_image" >
-                    <imageUpload :param="param" v-on:postUrl="getUrl" ></imageUpload></div>
+                    <div class="upload_image">
+                        <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
+                    </div>
                 </div>
                 <div class="remarks">
                     <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">备注</p>
@@ -118,16 +119,18 @@ export default {
             return {
                 selected: '1',
                 todos: {},
-                param:{
-                    name:'intention'
-                }
+                param: {
+                    name: 'intention',
+                    index:0
+                },
+                pickerValue: '1'
             }
         },
         methods: {
             release() {
                 this.$router.push('supplyReleaseSuccess');
             },
-            getUrl(param){
+            getUrl(param) {
                 console.log('dddddd');
                 console.log(param);
             }
@@ -208,7 +211,7 @@ textarea {
     background-size: 1.11rem 1.11rem;
 }
 
-.supply_release .good_information .upload_image{
+.supply_release .good_information .upload_image {
     width: 20%;
     float: left;
     margin-top: 1rem;

@@ -2,9 +2,8 @@
     <div class="img_upload">
         <form>
             <input type="file" @change="previewImg" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
-            <img v-bind:src="image" class="image_show" v-if="!showurl">
-            <img v-bind:src="showurl" class="image_show" v-if="showurl">
-            <img src="/static/icons/close_selected.png" v-show="showurl" @click="delImage" class="close_image">
+            <img v-bind:src="image" class="image_show">
+            <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
         </form>
     </div>
 </template>
@@ -16,15 +15,15 @@ export default {
             return {
                 image: "/static/images/default_image.png",
                 close: false,
-                size: 0
+                size: 0,
+                key: '',
+                domain:''
             }
         },
         props: {
             param: {
                 default: null
-            },
-            value: '',
-            showurl: ''
+            }
         },
         methods: {
             previewImg: function(e) {
@@ -39,13 +38,10 @@ export default {
                             img.src = e.target.result;
                             img.onload = function() {
                                 _self.image = _self.compress(img);
-
-                                _self.close = true;
                                 _self.upload(_self.image);
                             }
                         } else {
                             _self.image = e.target.result;
-                            _self.close = true;
                             _self.upload(_self.image);
                         }
                     }
@@ -73,29 +69,60 @@ export default {
                 ctx.fillStyle = "#fff";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 0, 0, width, height);
-
                 let ndata = canvas.toDataURL(img.src.split(';')[0].split(':')[1], 1);
-                if (ndata.length > 3000000) {
-                    ndata = canvas.toDataURL(img.src.split(';')[0].split(':')[1], 3000000 / ndata.length);
+                if (ndata.length > 2500000) {
+                    ndata = canvas.toDataURL(img.src.split(';')[0].split(':')[1], 2500000 / ndata.length);
                 }
-
-                function convertBase64UrlToBlob(urlData) {
-
-                    var bytes = window.atob(urlData.split(',')[1]); //去掉url的头，并转换为byte
-                    var ab = new ArrayBuffer(bytes.length);
-                    var ia = new Uint8Array(ab);
-                    for (var i = 0; i < bytes.length; i++) {
-                        ia[i] = bytes.charCodeAt(i);
+                function newBlob(data, datatype) {
+                    var out
+                    try {
+                        out = new Blob([data], {
+                            type: datatype
+                        })
+                    } catch (e) {
+                        window.BlobBuilder = window.BlobBuilder ||
+                            window.WebKitBlobBuilder ||
+                            window.MozBlobBuilder ||
+                            window.MSBlobBuilder
+                        if (e.name == 'TypeError' && window.BlobBuilder) {
+                            var bb = new BlobBuilder()
+                            bb.append(data)
+                            out = bb.getBlob(datatype)
+                        } else if (e.name == 'InvalidStateError') {
+                            out = new Blob([data], {
+                                type: datatype
+                            })
+                        } else {
+                            throw new Error('Your browser does not support Blob & BlobBuilder!')
+                        }
                     }
-
-                    return new Blob([ab], {
-                        type: 'image/png'
-                    });
+                    return out
                 }
 
-                console.log(convertBase64UrlToBlob(ndata));
-                 _self.size = convertBase64UrlToBlob(ndata).size;
-
+                function dataURL2Blob(dataURI) {
+                    var byteStr
+                    var intArray
+                    var ab
+                    var i
+                    var mimetype
+                    var parts
+                    parts = dataURI.split(',')
+                    parts[1] = parts[1].replace(/\s/g, '')
+                    if (~parts[0].indexOf('base64')) {
+                        byteStr = atob(parts[1])
+                    } else {
+                        byteStr = decodeURIComponent(parts[1])
+                    }
+                    ab = new ArrayBuffer(byteStr.length)
+                    intArray = new Uint8Array(ab)
+                    for (i = 0; i < byteStr.length; i++) {
+                        intArray[i] = byteStr.charCodeAt(i)
+                    }
+                    mimetype = parts[0].split(':')[1].split(';')[0]
+                    return new newBlob(ab, mimetype)
+                }
+                var compressedImageBlob = dataURL2Blob(ndata)
+                _self.size = compressedImageBlob.size; // 压缩图像文件的大小  
                 canvas.width = canvas.height = 0;
                 return ndata;
             },
@@ -103,11 +130,9 @@ export default {
                 e.target.parentElement.reset();
                 this.close = false;
                 this.image = "/static/images/default_image.png";
-                this.value = '';
-                this.showurl = '';
             },
             upload: function(file) {
-                // common.$emit('show-load');
+                common.$emit('show-load');
                 file = file.split(',')[1];
                 let _self = this;
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -121,24 +146,29 @@ export default {
                         bucketName: _self.param.name
                     }
                 };
-                console.log(common.difTime);
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.getQiniuToken(url, body, function(res) {
-                    console.log(res);
                     if (res.code == '1c01') {
                         var timestamp = new Date().getTime();
-                        var data = new FormData();
-                        data.append("file", file);
-                        data.append("key", timestamp);
-                        data.append("token", res.biz_result.token);
                         var pic = file;
                         var url = 'http://upload.qiniu.com' + '/putb64/' + _self.size;
                         var xhr = new XMLHttpRequest();
                         xhr.onreadystatechange = function() {
+                            common.$emit('close-load');
                             if (xhr.readyState == 4) {
-                                let res = JSON.parse(xhr.response);
-                                console.log(res.key);
+                                let response = JSON.parse(xhr.response);
+                                if (response.key) {
+                                    _self.key = response.key;
+                                    _self.close = true;
+                                    _self.$emit("postUrl", {
+                                        index: _self.param.index,
+                                        url:res.biz_result.url+'/'+_self.key
+                                    });
+                                } else {
+                                    common.$emit('message', '图片上传失败');
+                                    _self.image = "/static/images/default_image.png";
+                                }
                             }
                         }
                         xhr.open("POST", url, true);
@@ -146,13 +176,16 @@ export default {
                         xhr.setRequestHeader("Authorization", "UpToken " + res.biz_result.token);
                         xhr.send(pic);
                     } else {
-
+                        common.$emit('close-load');
+                        common.$emit('message', '图片上传失败');
+                        _self.image = "/static/images/default_image.png";
                     }
                 }, function(err) {
+                    _self.image = "/static/images/default_image.png";
+                    common.$emit('close-load');
+                    common.$emit('message', '图片上传失败');
                     console.log(err);
                 })
-                this.$emit("postUrl", 'dfdfdf');
-
             }
         }
 }
