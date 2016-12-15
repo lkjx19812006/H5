@@ -10,6 +10,7 @@ let httpService = new Vue({
                 err(response);
             });
         },
+
         register(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
@@ -31,6 +32,7 @@ let httpService = new Vue({
                 err(response);
             });
         },
+
         queryUserInfo(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
@@ -38,6 +40,7 @@ let httpService = new Vue({
                 err(res);
             });
         },
+
         queryEmployeeInfo(url, body, suc, err){
             this.$http.post(url, body).then((response) => {
                 suc(response);
@@ -70,6 +73,14 @@ let httpService = new Vue({
 
         },
         del(url) {
+
+         },
+        getQiniuToken(url, body, suc, err) {
+            this.$http.post(url, body).then((response) => {
+                suc(response.data);
+            }, (res) => {
+                err(res);
+            });
 
         }
     }

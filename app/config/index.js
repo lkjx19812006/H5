@@ -25,6 +25,9 @@ module.exports = {
          '/front/**': {
                 // target: 'http://192.168.1.108:8080',
                 target: 'http://192.168.1.141',
+
+                // target: 'http://192.168.1.115',
+
                 /*target: 'http://192.168.1.133:8081',*/
                /*target: 'http://192.168.1.188:8080',*/
                 changeOrigin: true

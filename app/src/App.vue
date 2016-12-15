@@ -1,6 +1,8 @@
 <template>
     <div id="app" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-        <router-view></router-view>
+        <keep-alive>
+            <router-view></router-view>
+        </keep-alive>
     </div>
 </template>
 <script>

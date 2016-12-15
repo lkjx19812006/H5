@@ -7,8 +7,9 @@ import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import './assets/css/style.css'
 
-
-
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.FastClick) window.FastClick.attach(document.body);
+}, false);
 
 Vue.use(Mint);
 Vue.use(VueRouter)
@@ -36,7 +37,15 @@ function getCookie (name) {
   }
 }
 
+let indexScrollTop = 0;
 router.beforeEach((to, from, next) => {
+
+  if (to.path !== '/home') {
+    indexScrollTop = document.body.scrollTop;
+  }
+
+  console.log(to.path);
+
   if (to.name === 'login') {
     next()
   } else {
@@ -49,12 +58,27 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+router.afterEach(route => {
+  console.log(route.path);
+  if (route.path !== '/home') {
+    document.body.scrollTop = 0;
+  } else {
+    console.log(indexScrollTop);
+    Vue.nextTick(() => {
+      document.body.scrollTop = indexScrollTop;
+    });
+  }
+});
+
+
 Vue.http.interceptors.push((request, next) => {
   next((response) => {
     console.log(response.status)
-    // if (response.status==403) {
-    //   return router.push('login');
-    // }
+
+    if (response.status==403) {
+      return router.push('login');
+    }
+
     return response
   })
 })

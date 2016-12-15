@@ -19,7 +19,9 @@
                <input type="text" placeholder="请填写您的手机号！" v-model="param.phone">
              </div>
         </div>
+
         <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
+
     </div>
 </template>
 <script>
@@ -29,6 +31,7 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+
                param:{
                    content:'',
                    name:'',
@@ -80,7 +83,11 @@ export default {
                      common.$emit('message',err.data.msg);
                 })
             }
-        }  
+
+                
+            }
+
+         
     }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -2,15 +2,19 @@
     <div class="mine">
         <div class="header" v-for="todo in content">
             <div class="header_top">
+
                 <div class="header_photo"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
+
                 <div class="information">
                     <div class="information_center">
                         <div class="main_content">
                             <p class="name" id="mine_name">{{todo.name}}</p>
+
                             <p class="sex">
                                 <img src="/static/images/woman.png" v-if="todo.gender == ''">
                                 <img src="/static/images/woman.png" v-if="todo.gender == '1'"> <!-- 判断性别 -->
                             </p>
+
                         </div>
                         <p class="company">{{todo.company}}</p>
                     </div>
@@ -24,6 +28,7 @@
                 </router-link>
             </div>
             <div class="header_bottom">
+
                 <p class="my_service" v-if="todo.customerGender == '0 || 1'">{{todo.my_service}}</p>
                 <p class="my_service">{{todo.my_apply}}</p>
                 <p class="his_name">{{todo.customer}}<span>
@@ -44,6 +49,7 @@
                      <img src="/static/images/right-arrow.png">
                 </div>
        </div>
+
         <div class="entrance">
             <div v-for="todo in entrance" @click="jump(todo.router)">
                 <img :src="todo.img_src" class="entrance_img">
@@ -81,7 +87,9 @@
 <script>
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
+
 import imageUpload from '../../components/tools/imageUpload'
+
 export default {
     data() {
             return {
@@ -90,6 +98,7 @@ export default {
                     company: '康美药业',
                     money: '31232.89',
                     integration: '1223',
+
                     customer: '余鹏飞',
                     customerGender:'',
                     my_service: '我的专属客服',
@@ -100,6 +109,16 @@ export default {
                 entrance: [{
                     name: '待审核',
                     router: '',
+
+                    his_name: '余鹏飞',
+                    my_service: '我的专属客服',
+                    details: '点击详情',
+                    img_src: '/static/images/woman.png'
+                }],
+                entrance: [{
+                    name: '全部订单',
+                    router: 'myOrder',
+
                     img_src: '/static/icons/All-orders.png'
                 }, {
                     name: '待付款',
@@ -147,6 +166,7 @@ export default {
                 console.log('dddddd');
                 console.log(param);
             },
+
             drugMoney: function() {
                 common.$emit('confirm', '去下载app', '再考虑考虑？');
             },
@@ -155,6 +175,7 @@ export default {
                 this.$router.push(router);
             }
         },
+
         created(){
           let _self = this;
           let customer_id = '';
@@ -200,6 +221,7 @@ export default {
 
 
           
+
         }
 }
 </script>
@@ -231,7 +253,9 @@ export default {
     border-radius: 50%;
     margin-right: 4%;
     float: left;
+
     overflow: hidden;
+
 }
 
 .mine .information {
@@ -247,6 +271,7 @@ export default {
     flex: 4;
     display: flex;
     flex-direction: column;
+
     text-align: left;
 }
 
@@ -368,9 +393,94 @@ export default {
     /*padding-top:4.48rem;*/
     position: relative;
 }
-.mine .entrance{
 
+
+.mine .information_center div {
+    flex: 1;
 }
+
+.mine .company {
+    flex: 1;
+}
+
+.mine .information_right {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    flex: 6;
+}
+
+.mine .money {
+    flex: 1;
+}
+
+.mine .integration {
+    flex: 1;
+}
+
+#mine_name {
+    font-size: 1.365rem;
+    color: #FB761E;
+    float: left;
+}
+
+.mine .sex img {
+    height: 1.024rem;
+    margin-left: 3%;
+    margin-top: 0.1705rem;
+    float: left;
+}
+
+.mine .right-arrow {
+    width: 1.024rem;
+    height: 1.024rem;
+    margin-top: 1.308rem;
+}
+
+.mine .header_bottom {
+    width: 85%;
+    height: 1.27995rem;
+    line-height: 1.27995rem;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.024rem;
+    float: right;
+    margin-right: 6%;
+    margin-top: 1.96rem;
+}
+
+.mine .my_service {
+    flex: 47;
+    text-align: left;
+}
+
+.mine .his_name {
+    flex: 26;
+    text-align: left;
+}
+
+.mine .details {
+    flex: 27;
+    text-align: right;
+}
+
+.mine .entrance {
+    display: flex;
+    flex-direction: row;
+    height: 7.253rem;
+    margin-top: 0.8533rem;
+    background: white;
+}
+
+.mine .entrance div {
+    flex: 1;
+    box-sizing: border-box;
+    height: 7.253rem;
+    /*padding-top:4.48rem;*/
+    position: relative;
+}
+
+
 .mine .entrance div p {
     font-size: 1.109rem;
     color: #333333;

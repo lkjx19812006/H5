@@ -6,7 +6,9 @@ import { Indicator, Toast, MessageBox, DatetimePicker } from 'mint-ui'
 let common = new Vue({
     data: {
         show: true,
+
         urlCommon: 'front',
+
         KEY: window.localStorage.KEY,
         SID: window.localStorage.SID,
         difTime: window.localStorage.difTime,
@@ -17,11 +19,14 @@ let common = new Vue({
             drug_information_list: '/static/data/drug_information_list.json',
             login: '/account/login.do',
             getDate: '/system/date.do',
-            most: '/handle/control.do'
+
+            most:'/handle/control.do'
+
         }
     },
     methods: {
         addSID(url) {
+
             return url + ';jsessionid=' + this.SID;
         },
         getDate() {
@@ -40,6 +45,7 @@ let common = new Vue({
         },
         getSign(str) {
             let _self = this;
+
             let signStr = CryptoJS.HmacSHA1(str,_self.KEY).toString(CryptoJS.enc.Base64);
             console.log(signStr);
             return signStr;

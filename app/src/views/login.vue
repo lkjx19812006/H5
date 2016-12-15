@@ -24,7 +24,11 @@
                         <li>
                             <p>验证码：</p>
                             <input type="text" placeholder="请输入验证码" v-model="param.code" />
+
                             <button v-bind:class="{ get_code: !buttonDisabled, 'get_code_nor': buttonDisabled }" id="get_code" v-on:click="confirmLogin()" v-bind:disabled="buttonDisabled">{{code}}</button>
+
+                            <!-- <button class="get_code" id="get_code" v-on:click="confirmLogin()" v-bind:disabled="buttonDisabled">{{code}}</button> -->
+
                         </li>
                     </ul>
                 </mt-tab-container-item>
@@ -110,6 +114,7 @@ export default {
                 }
 
 
+
                 httpService.register(common.urlCommon + common.apiUrl.most, {
                         biz_module:'userSmsService',
                         biz_method:'getLoginCode',
@@ -126,6 +131,7 @@ export default {
                             
                             common.$emit('message', err.data.msg);
                         })
+
             },
             login() {
                 var checkArr = [];
@@ -133,8 +139,10 @@ export default {
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
                 if (_self.selected == 'identiCode') {
+
                      
                     let checkCode = validation.checkCode(_self.param.code, '666000');
+
                     checkArr.push(checkCode);
                 } else {
                     let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
@@ -148,13 +156,15 @@ export default {
                         return;
                     }
 
+
                 }
 
 
+                
                 common.$emit('show-load');
                 httpService.login(common.urlCommon + common.apiUrl.login, {
-                    
-                    biz_param: {    
+                    biz_param: {
+
                         phone: _self.param.phone,
                         password: _self.param.password
                     }
@@ -166,11 +176,13 @@ export default {
                         common.KEY = window.localStorage.KEY;
                         common.SID = window.localStorage.SID;
                         common.getDate();
+
                         common.$emit('message', response.data.msg);
                     } else {
                         common.$emit('message', response.data.msg);
 
-                    }
+
+                    } 
 
 
                 }, function(err) {
@@ -247,6 +259,7 @@ export default {
     float: right;
     line-height: 2.3rem;
 }
+
 .login .selected_box .fill_in_first li .get_code_nor{
     width: 100px;
     border: 1px solid #BFBFBF;
@@ -257,6 +270,7 @@ export default {
     line-height: 2.3rem;
     color:#CECEBF;
 }
+
 .login .selected_box .fill_in_second {
     padding: 0 4.6%;
     margin-top: 1rem;

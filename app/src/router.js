@@ -42,9 +42,11 @@ import companyAuthentication from './views/companyAuthentication'
 import certification from './views/certification'
 import reviseResource from './views/reviseResource'
 import revisePurchase from './views/revisePurchase'
+
 import selectPlace from './views/selectPlace'
 import cityName from './views/cityName'
 import areaName from './views/areaName'
+
 
 module.exports = {
     mode: 'hash',
