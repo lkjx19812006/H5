@@ -4,7 +4,7 @@
    <router-link to="/" slot="left">
    <mt-button icon="back"></mt-button>
  </router-link>
- <mt-button  slot="right"><router-link to="accountInfoFinish">编辑</router-link></mt-button> 
+ <mt-button  slot="right"><div v-on:click="upData(router)">编辑</div></mt-button> 
 </mt-header>
 <div class="header_photo_box">
   <p class="header_word">头像<span>(点击更改头像)</span></p>
@@ -19,7 +19,8 @@
     <p class="name  name_big_size" v-if="index > 2">{{item.name}}</p>
     <p class="name  name_smart_size" v-if="index <= 2">{{item.name}}</p>
     <p class="name_content" v-if="index !== 2">{{item.content}}</p>
-    <p class="name_content" v-if="index == 2"><img :src="item.img_src"></p>
+    <p class="name_content" v-if="index == 2 && item.content == ''"><img src="/static/images/woman.png"></p>
+    <p class="name_content" v-if="index == 2 && item.content == '1'"><img src="/static/images/woman.png"></p>
   </li>
   <li v-for="(item,index) in personalDataArr" v-if="index == 4" id="personal_authentication"> 
     <p class="name  name_big_size">{{item.name}}</p>
@@ -50,11 +51,13 @@
 </template>
 
 <script>
-
+import common from '../common/common.js'
+import validation from '../validation/validation.js'
+import httpService from '../common/httpService.js'
 export default {
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      router:'accountInfoFinish',
       personalDataArr:[{
        name:'姓名',
        content:'杨帆帆'
@@ -63,7 +66,7 @@ export default {
        content:'1993.10.23'
      },{
        name:'性别',
-       img_src:'/static/images/woman.png'
+       content:''
      },{
        name:'电话',
        content:'15971484216'
@@ -94,7 +97,48 @@ export default {
      
 
    }
- }
+ },
+ created(){
+          let _self = this;
+          common.$emit('show-load');
+          let url=common.addSID(common.urlCommon+common.apiUrl.most);
+          let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
+          console.log(common.difTime);
+          body.time=Date.parse(new Date())+parseInt(common.difTime);
+          body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+          httpService.queryUserInfo(url,body,function(suc){
+            common.$emit('close-load');
+             console.log(suc.data.biz_result);
+            _self.personalDataArr[0].content = suc.data.biz_result.name;
+            _self.personalDataArr[1].content = suc.data.biz_result.birthday;
+            _self.personalDataArr[2].content = suc.data.biz_result.gender;
+            _self.personalDataArr[3].content = suc.data.biz_result.phone;
+            _self.personalDataArr[4].content = suc.data.biz_result.ucomment;
+            
+            _self.companyDataArr[0].content = suc.data.biz_result.company;
+            _self.companyDataArr[1].content = suc.data.biz_result.companyShort;
+            _self.companyDataArr[2].content = suc.data.biz_result.companyJob;
+            _self.companyDataArr[3].content = suc.data.biz_result.bizMain;
+            _self.companyDataArr[4].content = suc.data.biz_result.invoice;
+            _self.companyDataArr[5].content = suc.data.biz_result.ccomment;
+            
+          },function(err){
+            common.$emit('close-load');
+          })
+ },
+ methods:{
+
+      upData:function(router){
+           this.$router.push(router);
+           
+        
+     }
+
+
+
+
+  }     
+ 
 
  
 }

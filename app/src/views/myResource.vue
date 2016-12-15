@@ -1,6 +1,6 @@
 <template>
     <div class="content my_resource">
-        <mt-header title="我的资源">
+        <mt-header title="我的资源" class="title">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
@@ -13,7 +13,7 @@
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" >
                             <div class="list_header">
                                 <div>
-                                    <p class="time_font">发布时间：<span>{{todo.time}}</span></p>
+                                    <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
                                     <p class="audit_state">{{todo.state}}</p>
                                 </div>
                             </div>
@@ -21,9 +21,9 @@
                             <img src="/static/images/1.jpg" class="list_images" @click="jump(todo.router)">
                             <div class="res_content" >
                                 <div class="res_content_center">
-                                    <div><img src="/static/icons/sample.png">{{todo.name}}</div>
+                                    <div><img src="/static/icons/sample.png">{{todo.breedName}}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
-                                    <p>产地：<span>{{todo.place}}</span></p>
+                                    <p>产地：<span>{{todo.location}}</span></p>
                                     <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
                                 </div>
                                 <div class="res_content_right">
@@ -51,17 +51,19 @@
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
 import otherSort from '../components/tools/otherSort'
+import validation from '../validation/validation.js'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
                 todos: [{
-                    "name": "人参",
+                    "breedName": "人参",
                     "spec": "统货",
-                    "place": "东北",
+                    "location": "东北",
                     "price": "65",
                     "state": "待审核",
-                    "phone": "15301546832",
-                    "time": "12-11-26",
+                    "customerPhone": "15301546832",
+                    "pubdate": "12-11-26",
                     "router":"goodDetail",
                     "other_router":"reviseResource"
                     
@@ -72,11 +74,11 @@ export default {
                 bottomStatus: '',
             }
         },
+
         components: {
             searchInput,
             otherSort
         },
-
         methods: {
             jump:function(router){
                 this.$router.push(router);
@@ -113,7 +115,9 @@ export default {
             }
         },
         created() {
-            let _self = this;
+            console.log(this)
+            console.log(this.otherSort)
+            /*let _self = this;
             common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
@@ -122,7 +126,27 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/ /*let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'mySupplyIntentionList',version:1,time:0,sign:'',biz_param:{
+                        sort:{"pubdate":"0","duedate":"0"},
+                        onSell:"0",
+                        sampling:"0",
+                        pn:"1",
+                        pSize:"20"
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc);
+                    
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })*/
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -174,7 +198,10 @@ export default {
 .my_resource .bg_white{
     margin-top: 0.5rem;
 }
+.my_resource .title{
+    font-size: 1.7rem;
 
+}
 .my_resource .bg_white .page-loadmore-wrapper .mint-loadmore{
     background:#F5F5F5;
 }
@@ -192,8 +219,8 @@ export default {
     background:white;
 }
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    height: 80px;
-    max-width: 100px;
+    height: 9rem;
+    width: 8.5rem;
     left: 10px;
     margin: 50px 10px 10px 0;
     position: absolute;
@@ -237,10 +264,10 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
     float: left;
-    max-height: 1.4rem;
+    max-height: 1.6rem;
 }
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center div{
-    font-size: 1.4rem;
+    font-size: 1.6rem;
 }
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
@@ -248,7 +275,7 @@ export default {
     padding-right: 90px;
     line-height: 18px;
     text-align: left;
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #666;
 }
 
@@ -287,7 +314,7 @@ export default {
   border:1px solid #BDBDBD;
   border-radius: 5px;
   z-index: 100000;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{

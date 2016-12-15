@@ -51,6 +51,7 @@
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
 import otherSort from '../components/tools/otherSort'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
@@ -114,7 +115,7 @@ export default {
             }
         },
         created() {
-            let _self = this;
+            /*let _self = this;
             common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
@@ -123,7 +124,26 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/
+                  let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'myBegIntentionList',version:1,time:0,sign:'',biz_param:{
+                        
+                        
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc);
+                    
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

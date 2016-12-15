@@ -6,36 +6,82 @@
             </router-link>
         </mt-header>
         <div class="main">
-             <textarea placeholder="请填写您的反馈内容"></textarea>
+             <textarea placeholder="请填写您的反馈内容" v-model="param.content"></textarea>
              <p>您的反馈对我们至关重要！</p>
         </div>
         <div class="info">
              <div class="info_top">
                <p>姓名：</p>
-               <input type="text" placeholder="请填写您的名字！">
+               <input type="text" placeholder="请填写您的名字！" v-model="param.name">
              </div>
              <div class="info_bottom">
                <p>联系方式：</p>
-               <input type="text" placeholder="请填写您的手机号！">
+               <input type="text" placeholder="请填写您的手机号！" v-model="param.phone">
              </div>
         </div>
-
-        <div class="confirm_submit">确认提交</div>
+        <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
-
+import validation from '../validation/validation.js'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-      
-            }
-        }
-       
-        
-    }
+               param:{
+                   content:'',
+                   name:'',
+                   phone:''
+               }
 
+            }
+        },
+        methods:{
+            confirmSubmit:function(){
+                let _self = this;
+                let checkArr = [];
+                let checkContent = validation.checkNull(_self.param.content, '反馈内容为空！');
+                checkArr.push(checkContent);
+                let checkName = validation.checkNull(_self.param.name, '姓名为空！');
+                checkArr.push(checkName);
+                let checkPhone = validation.checkPhone(_self.param.phone);
+                checkArr.push(checkPhone);
+
+                for(var i=0; i<checkArr.length; i++){
+                     if(checkArr[i]){
+                          common.$emit('message',checkArr[i]);
+                          return
+                     }
+                }
+
+                common.$emit('show-load');
+                httpService.queryUserInfo(common.urlCommon + common.apiUrl.most,{
+                    biz_module:'userSuggestService',
+                    biz_method:'submitSuggest',
+                    biz_param:{
+                        name:_self.param.name,
+                        content:_self.param.content,
+                        phone:_self.param.phone
+                    }
+                },function(response){
+                        common.$emit('close-load');
+                        if(response.data.code == '1c01'){
+                            window.localStorage.KEY = response.data.biz_result.KEY;
+                            window.localStorage.SID = response.data.biz_result.SID;
+                            common.KEY = window.localStorage.KEY;
+                            common.SID = window.localStorage.SID;
+                            common.getDate();
+                        }else{
+                            common.$emit('message',response.data.msg);
+                        }
+                },function(err){
+                     common.$emit('close-load');
+                     common.$emit('message',err.data.msg);
+                })
+            }
+        }  
+    }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

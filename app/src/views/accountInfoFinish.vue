@@ -4,7 +4,7 @@
       <router-link to="/" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
-    <mt-button  slot="right" ><router-link to="accountInfo" id="account_overview_finish_right">完成</router-link></mt-button> 
+    <mt-button  slot="right" ><div id="right" v-on:click="upData">完成</div></mt-button> 
    </mt-header>
    <div class="header_photo_box">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
@@ -15,37 +15,47 @@
    <div class="basic_data">
         <p class="basic_data_title">基础信息</p>
         <ul>
-           <li v-for="(item,index) in personalDataArr" v-if="index==0">
-              <p class="name name_smart_size" >{{item.name}}</p>
+           <li >  <!-- v-for="(item,index) in personalDataArr" v-if="index==0" -->
+              <p class="name name_smart_size" >姓名</p>
               <p class="name_content" >
-                 <input type="text" :placeholder="item.content">
+                 <input type="text" :placeholder="arr.name" v-model="arr.name">
               </p>
            </li>
 
-           <li v-for="(item,index) in personalDataArr" v-if="index>=1 && index<=2">
-              <p class="name name_smart_size">{{item.name}}</p>
-              <p class="name_content" v-if="index==1">
-                 <input type="text" :placeholder="item.content">
+           <li > <!-- v-for="(item,index) in personalDataArr" v-if="index>=1 && index<=2" -->
+              <p class="name name_smart_size" >生日</p>
+              <p class="name_content"> <!-- @click.native="open('picker')" size="large" -->
+                {{pickerValue}}
+                 <!-- <input type="text" :placeholder="arr.birthday" v-model="arr.birthday" disabled = fasle > -->
+                  
+              </p>
+              <mt-button @click.native="open('picker')" size="large" class="button" ></mt-button>
+              <!-- <img src="/static/images/down-arrow.png" class="down-arrow"> -->
+           </li>
+           <li > 
+              <p class="name name_smart_size">性别</p>
               
+              <p class="name_content" > <!-- v-if="arr.gender == 1" -->
+                 <img src="/static/images/woman.png" >
+                 
+                  
               </p>
-              <p class="name_content" v-if="index==2">
-                 <img :src="item.img_src" v-if="index==2">
-              </p>
+
+             
               <img src="/static/images/down-arrow.png" class="down-arrow">
            </li>
-          
-            <li v-for="(item,index) in personalDataArr" v-if="index==3">
-                <p class="name name_big_size" >{{item.name}}</p>
+            <li ><!-- v-for="(item,index) in personalDataArr" v-if="index==3" -->
+                <p class="name name_big_size" >电话</p>
 
                 <p class="name_content" >
-                   <input type="text" :placeholder="item.content">
+                   <input type="text" :placeholder="arr.phone" v-model="arr.phone">
                 </p>
              </li>
 
-             <li v-for="(item,index) in personalDataArr" v-if="index==4">
-              <p class="name name_big_size" >{{item.name}}</p>
+             <li ><!--  v-for="(item,index) in personalDataArr" v-if="index==4" -->
+              <p class="name name_big_size" >个人认证</p>
               <p class="name_content" >
-                 <input type="text" :placeholder="item.content">
+                 <input type="text" :placeholder="arr.ucomment" v-model="arr.ucomment">
               </p>
               <img src="/static/images/right-arrow.png" class="right-arrow">
            </li>
@@ -56,60 +66,83 @@
     <div class="company_data">
         <p class="company_data_title">企业信息</p>
         <ul>
-           <li v-for="(item,index) in companyDataArr" v-if="index < 2">
-              <p class="name  name_smart_size" >{{item.name}}</p>
-              <p class="name_content"><input type="text" :placeholder="item.content"></p>
+           <li ><!-- v-for="(item,index) in companyDataArr" v-if="index < 2" -->
+              <p class="name  name_smart_size" >公司</p>
+              <p class="name_content"><input type="text" :placeholder="arr.company" v-model="arr.company"></p>
            </li>
-
-           <li v-for="(item,index) in companyDataArr" v-if="index == 2" >
-              <p class="name  name_smart_size">{{item.name}}</p>
-              <p class="name_content"><input type="text" :placeholder="item.content">
+           <li >
+              <p class="name  name_smart_size" >公司简称</p>
+              <p class="name_content"><input type="text" :placeholder="arr.companyShort" v-model='arr.companyShort'></p>
+           </li>
+           <li > <!-- v-for="(item,index) in companyDataArr" v-if="index == 2"  -->
+              <p class="name  name_smart_size">职位</p>
+              <p class="name_content"><input type="text" :placeholder="arr.companyJob" v-model="arr.companyJob">
                       
               </p>
-              <!--  -->
+              
               <img src="/static/images/down-arrow.png" class="down-arrow">
            </li>
 
-           <li v-for="(item,index) in companyDataArr" v-if="index > 2 && index < 5">
-              <p class="name  name_big_size">{{item.name}}</p>
-              <p class="name_content"><input type="text" :placeholder="item.content"></p>
+           <li > <!-- v-for="(item,index) in companyDataArr" v-if="index > 2 && index < 5" -->
+              <p class="name  name_big_size">主营品类</p>
+              <p class="name_content"><input type="text" :placeholder="arr.bizMain" v-model="arr.bizMain"></p>
            </li>
-           
-           <li v-for="(item,index) in companyDataArr" v-if="index == 5">
-              <p class="name  name_big_size">{{item.name}}</p>
-              <p class="name_content"><input type="text" :placeholder="item.content"></p>
+           <li > <!-- v-for="(item,index) in companyDataArr" v-if="index > 2 && index < 5" -->
+              <p class="name  name_big_size">开票信息</p>
+              <p class="name_content"><input type="text" :placeholder="arr.invoice" v-model="arr.invoice"></p>
+           </li>
+           <li > <!-- v-for="(item,index) in companyDataArr" v-if="index == 5" -->
+              <p class="name  name_big_size">企业认证</p>
+              <p class="name_content"><input type="text" :placeholder="arr.ccomment" v-model="arr.ccomment"></p>
               <img src="/static/images/right-arrow.png" class="right-arrow">
            </li>
            
         </ul>
    </div>
+                 
+                    <!-- <mt-datetime-picker
+                      v-model="pickerVisible"
+                      
+                      ref="picker"
+                      type="date"
+                      year-format="{value} 年"
+                      month-format="{value} 月"
+                      date-format="{value} 日">
+                    </mt-datetime-picker> -->
+                 
+                 <mt-datetime-picker ref="picker" type="date"  v-model="pickerValue">
+                 </mt-datetime-picker>
+        
+        <!-- <mt-button @click.native="open('picker')" size="large">点击弹出 DateTime Picker</mt-button> -->
+      
+
 
   </div>
 </template>
 
 <script>
 import common from '../common/common.js'
+import httpService from '../common/httpService.js'
 export default {
 
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
-      personal_data:{
-         name:'杨帆帆',
-         birth:'1993.10.23',
-         sex:'/static/images/woman.png',
-         phone:'15971484216',
-         personal:'已认证'
+      pickerValue:'',
+      arr:{
+        name:'',
+        birthday:'',
+        gender:'',
+        phone:'',
+        ucomment:'',
+        company:'',
+        companyShort:'',
+        companyJob:'',
+        bizMain:'',
+        invoice:'',
+        ccomment:''
+
       },
 
-      conpany_data:{
-        name:'上海冕冠电子商务有限公司',
-        short_name:'上海冕冠',
-        job:'采购人员',
-        major:'枸杞、龙胆、白术',
-        open_data:'枸杞、龙胆、白术',
-        company:'已认证'
-      },
       personalDataArr:[{
            name:'姓名',
            content:'杨帆帆'
@@ -152,10 +185,72 @@ export default {
 
     }
   },
-  methods:{
-     openPicker() {
-        this.$refs.picker.open();
+  
+  created(){
+          let _self = this;
 
+          common.$emit('show-load');
+          let url=common.addSID(common.urlCommon+common.apiUrl.most);
+          let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
+          console.log(common.difTime);
+          body.time=Date.parse(new Date())+parseInt(common.difTime);
+          body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+          httpService.queryUserInfo(url,body,function(suc){
+            common.$emit('close-load');
+             //console.log(_self.currentValue);
+              console.log(_self.pickerValue);  
+            _self.arr.name = suc.data.biz_result.name;
+            /*_self.pickerValue = suc.data.biz_result.birthday;*/
+            _self.arr.gender = suc.data.biz_result.gender;
+            _self.arr.phone = suc.data.biz_result.phone;
+            _self.arr.ucomment = suc.data.biz_result.ucomment;
+            
+            _self.arr.company = suc.data.biz_result.company;
+            _self.arr.companyShort = suc.data.biz_result.companyShort;
+            _self.arr.companyJob = suc.data.biz_result.companyJob;
+            _self.arr.bizMain = suc.data.biz_result.bizMain;
+            _self.arr.invoice = suc.data.biz_result.invoice;
+            _self.arr.ccomment = suc.data.biz_result.ccomment;
+            
+          },function(err){
+            common.$emit('close-load');
+          })
+ },
+  methods:{
+     
+      open(picker) {
+          this.$refs[picker].open();
+          
+      },
+      
+      upData(){
+
+          let _self = this;
+          
+          common.$emit('show-load');
+          let url=common.addSID(common.urlCommon+common.apiUrl.most);
+          let body={biz_module:'userService',biz_method:'updateUserInfo',version:1,time:0,sign:'',biz_param:{
+               name:_self.arr.name,
+               gender: _self.arr.gender,
+               fullname: _self.arr.name,
+               phone: _self.arr.phone,
+               birthday: _self.pickerValue,
+               company:_self.arr.company,
+               companyShort:_self.arr.companyShort,
+               bizMain:_self.arr.bizMain,
+               invoice:_self.arr.invoice,
+          }};
+          console.log(common.difTime);
+          body.time=Date.parse(new Date())+parseInt(common.difTime);
+          body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+          httpService.queryUserInfo(url,body,function(suc){
+            common.$emit('close-load');
+            _self.$router.push('accountInfo');
+            
+            
+          },function(err){
+            common.$emit('close-load');
+          })
       }
   }
 
@@ -174,10 +269,14 @@ border-radius: 0;
 .account_overview_finish .header{
 	color:#313232;
 }
-#account_overview_finish_right{
+.account_overview_finish #right{
   color:#EC6817;
 }
-
+.birthday{
+   width:100px;
+   height:100px;
+   background:red;
+}
 .account_overview_finish .header_photo_box{
   height:7.253rem;
   width:100%;
@@ -240,6 +339,7 @@ border-radius: 0;
   outline: none;
   border:0;
   line-height:2.5rem; 
+  background: white;
 }
 
 
@@ -253,6 +353,7 @@ border-radius: 0;
   color:#999999;
 
 }
+
 .account_overview_finish .name_content img{
   height:1.536rem;
   margin-top:1.36rem;
@@ -279,6 +380,16 @@ border-radius: 0;
   width:0.6826rem;
   height:1.024rem;
 }
+.account_overview_finish  .button{
+  position: absolute;
+  right:4%;
+  background:url(/static/images/down-arrow.png ) no-repeat right center;
+  background-size:1.024rem 0.6826rem;
+  width:1.024rem;
+  height:100%;
+  box-shadow: none;
+}
+
 .account_overview_finish .down-arrow{
   position:absolute;
   right:4%;

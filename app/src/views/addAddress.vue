@@ -1,44 +1,34 @@
 <template>
     <div class="add_address">
-        <mt-header title="添加地址">
+        <mt-header title="添加新地址">
             <router-link to="/addressManage" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
         </mt-header>
         <ul>
-           <li v-for="todo in todos">
-               <div class="address_top">
-                  <div class="receiver">
-                    <p class="receiver_left">收货人：<span><input type="text" placeholder="请填写收货人"></span></p>
-                    <!-- <p class="receiver_right">{{todo.number}}</p> --> 
-                  </div> 
+           <li>
+              <p>收货人</p>
+              <input type="text" placeholder="请输入您的名字">
+           </li>
 
-                  <div class="address">
-                    <p>地址：<span><input type="text" placeholder="请填写地址"></span></p>
-                  </div> 
-               </div>
-                
+           <li>
+              <p>联系电话</p>
+              <input type="text" placeholder="请输入您的联系电话">
+           </li>
 
-                <div class="address_bottom">
-                     <p class="top_p">
-                        <img :src="todo.first_img" class="first_img">
-                        <span>默认地址</span>
-                     </p>
-                   <div class="address_box">
-                     <p class="center_p">
-                        <img :src="todo.second_img"  class="second_img">
-                        <span>修改</span>
-                     </p>
-                     <p class="bottom_p">
-                        <img :src="todo.last_img"  class="last_img">
-                        <span>删除</span>
-                     </p>
-                   
-                   </div>
-                     
-                </div>
+           <li>
+              <p>省市区(县)</p>
+              <p class="selectPlace">请选择</p>  
+              <img src="/static/images/right-arrow.png" @click="selectPlace">
+           </li>
+           <li class="last">
+              <textarea placeholder="详细地址"></textarea>
            </li>
         </ul>
+
+  <!-- <mt-picker :slots="slots" @change="onValuesChange" v-show="active" class="place" textAlign="center"></mt-picker> -->
+<!-- <mt-picker :slots="slots" @change="onValuesChange"></mt-picker> -->
+
     </div>
 </template>
 <script>
@@ -47,18 +37,16 @@ import common from '../common/common.js'
 export default {
     data() {
             return {
-                msg: 'Welcome to Your Vue.js App',
-                todos:[{
-                    name:'扬帆',
-                    number:'1234465469798',
-                    address:'上海宝隆一方大厦',
-                    first_img:'/static/images/default_nor.png',
-                    second_img:'/static/images/modify.png',
-                    last_img:'/static/images/delet.png'
-                }]
+                
                 
             }
+        },
+    methods: {
+          
+        selectPlace(){
+            this.$router.push('selectPlace');
         }
+    }
        
         
     }
@@ -66,80 +54,59 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.add_address ul{
+   padding: 0 1.5rem;
+   background:white;
+   width:100%;
+   color:#333333;
+}
 .add_address ul li{
-  background:white;
-  margin-top: 1rem;
-  position:relative;
+   height:4.4rem;
+   border-bottom:1px solid #DADADA;
+   position: relative;
 }
-.add_address ul li .address_top{
-    padding: 2.5rem 1.5rem 2rem 1.5rem;
-    
-    height:8.5rem;
+.add_address ul .last{
+   height:8.5rem;
+   color:#666666;
+   font-size: 1.2rem;
+   padding: 1rem 0;
+   border-bottom: none;
 }
-.add_address ul li .address_top .receiver_left{
-    float:left;
-}
-.add_address ul li .address_top .receiver_right{
-    float:right;
-}
-.add_address ul li .address_top p{
-    font-size: 1.2rem;
-    color:#333333;
-}
-.add_address ul li .address_top input{
+.add_address ul .last textarea{
+   width:100%;
+   height:100%;
    border:0;
-   outline: none;
-   margin-top: -0.3rem;
-}
-.add_address ul li .address_top p span{
    color:#666666;
 }
-.add_address ul li .address_top .address{
-    /*float:left;
-    margin-top: 1.5rem;*/
-    position: absolute;
-    top:5rem;
-}
-.add_address ul li .address_bottom{
-   border-top:1px solid #DCDCDC;
-   height:3.7rem;
-   position: relative;
-   line-height: 3.7rem;
-}
-.add_address ul li .address_bottom img{
-   height:1.75rem;
-}
-.add_address ul li .address_bottom .first_img{
+.add_address ul li p{
    position: absolute;
-   left:1.5rem;
-   top:0.8rem;
+   left:0;
+   font-size: 1.2rem;
+   color:#333333;
+   line-height: 4.4rem;
 }
-.add_address ul li .address_bottom .second_img{
+.add_address ul li input{
    position: absolute;
-   right:11.9rem;
-   top:0.8rem;
+   right:10%;
+   text-align: right;
+   border:none;
+   outline: none;
+   font-size: 1.2rem;
+   height:4.2rem;
+   color:#666666;
+   line-height: 4.4rem;
 }
-.add_address ul li .address_bottom .last_img{
+.add_address ul li .selectPlace{
+   position:absolute;
+   right:10%;
+   text-align: right;
+   font-size: 1.2rem;
+   color:#666666;
+}
+.add_address ul li img{
    position: absolute;
-   right:4.4rem;
-   top:0.8rem;
-}
-.add_address ul li .address_bottom .top_p{
-   float:left;
-   margin:0 0 0 3.5rem;
-}
-.add_address ul li .address_bottom .address_box{
-   float: right;
-   height: 3.7rem;
-   width:13.55rem;
-}
-.add_address ul li .address_bottom .center_p{
-   float:left;
-   margin:0 0 0 1.75rem;
-
-}
-.add_address ul li .address_bottom .bottom_p{
-   float:right;
-   margin:0 1.9rem 0 0;
+   right:0;
+   height:1rem;
+   top:1.7rem;
 }
 </style>

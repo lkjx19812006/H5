@@ -80,6 +80,7 @@
         </div>
         <div class="good_information">
             <p class="good_photo_header">上传货物图片</p>
+            <div class="upload_image"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
         </div>
         <div class="remarks">
             <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">备注</p>
@@ -107,17 +108,29 @@
 </template>
 <script>
 import common from '../common/common.js'
+import imageUpload from '../components/tools/imageUpload'
 export default {
     data() {
             return {
                 selected: '1',
-                todos: {}
+                todos: {},
+                param:{
+                    name:'sdfsdf'
+                }
             }
+        },
+        components: {
+            imageUpload
         },
         methods: {
             release() {
                 /*this.$router.push('supplyReleaseSuccess');*/
                 common.$emit('confirm','确定修改','取消修改','确认修改信息后,将等待审核！','确定修改');
+                
+            }
+           ,getUrl(param){
+                console.log('dddddd');
+                console.log(param);
             }
         },
         created() {
@@ -201,7 +214,11 @@ textarea {
     text-align: left;
     padding-left: 1.536rem;
 }
-
+.revise_resource .good_information .upload_image{
+    width: 20%;
+    float: left;
+    margin-top: 1rem;
+}
 .revise_resource .good_name,
 .good_spec,
 .good_place,

@@ -43,10 +43,10 @@
                             <div class="news_content">
                                 <ul id="scrollText">
                                     <li v-for="todo in todos">
-                                        <div>{{todo.name+' '+todo.spec+' '+todo.place+' '+todo.price+' '+todo.phone+' '+todo.time}}</div>
+                                        <div>{{todo.name+' '+todo.spec+' '+todo.place+' '+todo.price+' '+todo.time}}</div>
                                     </li>
                                     <li v-if="todos[0]">
-                                        <div>{{todos[0].name+' '+todos[0].spec+' '+todos[0].place+' '+todos[0].price+' '+todos[0].phone+' '+todos[0].time}}</div>
+                                        <div>{{todos[0].name+' '+todos[0].spec+' '+todos[0].place+' '+todos[0].price+' '+todos[0].time}}</div>
                                     </li>
                                 </ul>
                             </div>
@@ -402,9 +402,8 @@ export default {
 }
 
 .real_news .news_content ul li {
-    line-height: 14px;
+    line-height: 50px;
     font-size: 1.2rem;
-    padding-top: 10px;
     height: 50px;
 }
 

@@ -42,7 +42,9 @@ import companyAuthentication from './views/companyAuthentication'
 import certification from './views/certification'
 import reviseResource from './views/reviseResource'
 import revisePurchase from './views/revisePurchase'
-
+import selectPlace from './views/selectPlace'
+import cityName from './views/cityName'
+import areaName from './views/areaName'
 
 module.exports = {
     mode: 'hash',
@@ -85,6 +87,9 @@ module.exports = {
         { name: 'goodDetail', path: '/goodDetail', component: goodDetail },
         { name: 'addAddress', path: '/addAddress', component: addAddress },
         { name: 'myOrder', path: '/myOrder', component: myOrder },
+        { name: 'cityName', path: '/cityName', component: cityName },
+        { name: 'areaName', path: '/areaName', component: areaName },
+        { name: 'selectPlace', path: '/selectPlace', component: selectPlace },
         { name: 'revisePurchase', path: '/revisePurchase', component: revisePurchase },
         { name: 'reviseResource', path: '/reviseResource', component: reviseResource },
         { name: 'companyAuthentication', path: '/companyAuthentication', component: companyAuthentication },

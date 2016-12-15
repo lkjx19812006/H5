@@ -5,8 +5,15 @@
                 <mt-button icon="back" ></mt-button>
             </router-link>
         </mt-header>
+
         <ul class="info_list">
-           <li  v-for="todo in todos">
+           <li  v-for="(todo,index) in todos" v-if="index == 0" class="header_phone">
+              <img :src="todo.img_src">
+              
+              <p class="name_content">{{todo.content}}</p>
+           </li>
+
+           <li  v-for="(todo,index) in todos" v-if="index > 0">
               <img :src="todo.img_src">
               <p class="name">{{todo.name}}</p>
               <p class="name_content">{{todo.content}}</p>
@@ -25,14 +32,15 @@
 </template>
 <script>
 import common from '../common/common.js'
-
+import httpService from '../common/httpService.js'
+import imageUpload from '../components/tools/imageUpload'
 export default {
     data() {
             return {
                 msg: 'Welcome to Your Vue.js App',
                 todos:[{
-                   img_src:'/static/images/my-name.png',
-                   name:'姓名',
+                   img_src:'/static/images/girl.png',
+                   
                    content:'丽丽'
                 },{
                    img_src:'/static/images/sex.png',
@@ -63,6 +71,26 @@ export default {
                 }]
                 
             }
+        },
+        created(){
+                  let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userService',biz_method:'queryEmployeeInfo',version:1,time:0,sign:'',biz_param:{
+                      
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.queryEmployeeInfo(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc.data.biz_result);
+                    
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+
         }
        
         
@@ -82,6 +110,17 @@ export default {
    position: relative;
    font-size: 1.2rem;
    line-height: 4.4rem;
+}
+.details_page .info_list .header_phone{
+   height:8.5rem;
+   line-height:8.5rem;
+}
+.details_page .info_list .header_phone img{
+   width:6.5rem;
+   height:6.5rem;
+   position: absolute;
+   left:0;
+   top:1rem;
 }
 .details_page .info_list li img{
    height:1.5rem;
@@ -103,6 +142,7 @@ export default {
    background: white;
    position: relative;
    min-height: 11rem;
+   margin-bottom: 100px;
 }
 .details_page .advantage img{
    height:1.5rem;
@@ -124,5 +164,6 @@ export default {
   font-size: 1rem;
   color:#666666;
   line-height: 1.5rem;
+
 }
 </style>

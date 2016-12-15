@@ -1,6 +1,5 @@
 <template>
-    
-    <div class="content other_sort">
+    <div class="content mypurchase_sort">
         <div class="sort_content">
             <div v-bind:class="item.class" v-for="(item,index) in arr" @click="showTable(item,index)">
                 {{item.name}}<img v-bind:src="item.url">
@@ -18,7 +17,6 @@
 </template>
 <script>
 export default {
-    
     data() {
             return {
                 arr: [{
@@ -41,17 +39,17 @@ export default {
                         show: false
                     }]
                 }, {
-                    name: '剩余时间',
+                    name: '报价人数',
                     asc: 'top',
                     url: '/static/icons/drop_down.png',
-                    saveName: '剩余时间',
+                    saveName: '报价人数',
                     class: 'sort_content_detail',
                     sortArr: [{
-                        name: '由短到长',
+                        name: '由少到多',
                         asc: 'low',
                         show: false
                     }, {
-                        name: '由长到短',
+                        name: '由多到少',
                         asc: 'top',
                         show: false
                     }, {
@@ -60,17 +58,17 @@ export default {
                         show: false
                     }]
                 }, {
-                    name: '可否供样',
+                    name: '剩余时间',
                     asc: 'top',
                     url: '/static/icons/drop_down.png',
-                    saveName: '可否样品',
+                    saveName: '剩余时间',
                     class: 'sort_content_detail',
                     sortArr: [{
-                        name: '可供样',
+                        name: '由少到多',
                         asc: 'low',
                         show: false
                     }, {
-                        name: '不可供样',
+                        name: '由多到少',
                         asc: 'top',
                         show: false
                     }, {
@@ -103,11 +101,6 @@ export default {
                 selectIndex: 0
             }
         },
-        props: {
-            
-            value: '',
-            showurl: ''
-        },
         methods: {
             showTable: function(item, index) {
                 if (item.asc == 'location') {
@@ -119,8 +112,6 @@ export default {
                 }
             },
             getAsc: function(item) {
-                   console.log(item)
-                   
                 if (!item.asc) {
                     this.arr[this.selectIndex].name = this.arr[this.selectIndex].saveName;
                     this.arr[this.selectIndex].url = '/static/icons/drop_down.png';
@@ -143,18 +134,18 @@ export default {
 }
 </script>
 <style scoped>
-.other_sort {
+.mypurchase_sort {
     float: left;
     width: 100%;
 }
 
-.other_sort .sort_content {
+.mypurchase_sort .sort_content {
     width: 100%;
     float: left;
     border-bottom: 1px solid #ddd;
 }
 
-.other_sort .sort_content .sort_content_detail {
+.mypurchase_sort .sort_content .sort_content_detail {
     float: left;
     width: 25%;
     min-height: 40px;
@@ -163,7 +154,7 @@ export default {
     font-size: 1.1rem;
 }
 
-.other_sort .sort_content .sort_content_detail_select {
+.mypurchase_sort .sort_content .sort_content_detail_select {
     float: left;
     width: 25%;
     min-height: 40px;
@@ -172,19 +163,19 @@ export default {
     font-size: 1.1rem;
 }
 
-.other_sort .sort_content .sort_content_detail_select img {
+.mypurchase_sort .sort_content .sort_content_detail_select img {
     max-height: 9px;
     margin-left: 5px;
     margin-top: 5px;
 }
 
-.other_sort .sort_content .sort_content_detail img {
+.mypurchase_sort .sort_content .sort_content_detail img {
     max-height: 9px;
     margin-left: 5px;
     margin-top: 5px;
 }
 
-.other_sort .sort_content .sort_cell {
+.mypurchase_sort .sort_content .sort_cell {
     width: 100%;
     float: left;
     position: absolute;
@@ -192,13 +183,13 @@ export default {
     margin-top: 40px;
 }
 
-.other_sort .sort_content .sort_cell .cell_p {
+.mypurchase_sort .sort_content .sort_cell .cell_p {
     position: absolute;
     left: 10px;
     font-size: 1.1rem;
 }
 
-.other_sort .sort_content .sort_cell .cell_img {
+.mypurchase_sort .sort_content .sort_cell .cell_img {
     max-height: 15px;
     float: right;
 }

@@ -44,6 +44,8 @@
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
 import sort from '../components/tools/sort'
+import validation from '../validation/validation.js'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
@@ -87,7 +89,6 @@ export default {
                     this.$refs.loadmore.onBottomLoaded(id);
                 }, 1500);
             },
-
             handleTopChange(status) {
                 this.topStatus = status;
             },
@@ -102,7 +103,7 @@ export default {
             }
         },
         created() {
-            let _self = this;
+            /*let _self = this;
             common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
@@ -111,7 +112,25 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/
+            /*let _self = this;
+            httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'querySupplyList',
+              
+                            biz_param: {
+                                keyWord:  
+                            }
+                        }, function(response) {
+                            
+                            common.$emit('message', response.data.msg);
+
+
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })*/
+            
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

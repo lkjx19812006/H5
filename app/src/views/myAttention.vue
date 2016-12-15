@@ -25,7 +25,7 @@
                                 <img src="/static/images/1.jpg" class="list_images">
                                 <div class="res_content">
                                     <div class="res_content_center">
-                                        <div><img src="/static/icons/bao.png">{{todo.name}}</div>
+                                        <div><img src="/static/icons/bao.png">{{todo.breedName}}</div>
                                         <p>规格：<span>{{todo.spec}}</span></p>
                                         <p>产地：<span>{{todo.place}}</span></p>
                                         <p class="time_font">发布时间：<span>{{todo.time}}</span></p>
@@ -46,7 +46,7 @@
                             <div class="flag"><img src="/static/icons/england.png"><span>英国</span></div>
                             <div class="center">
                                 <div class="title">
-                                    <div><img src="/static/icons/impatient.png"><span>{{todo.name}}</span></div>
+                                    <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
                                     <p>发布时间：{{todo.time}}</p>
                                 </div>
                                 <div class="detail">
@@ -90,17 +90,17 @@
 <script>
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
+import validation from '../validation/validation.js'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
                 selected:"1",
                 todos: [{
-                    "name": "人参",
+                    "breedName": "人参",
                     "spec": "统货",
-                    "place": "东北",
+                    "location": "东北",
                     "price": "65",
-                    "up_price": "9元/kg",
-                    "down_price": "9元/kg",
                     "phone": "15301546832",
                     "time": "12:26"
                 }],
@@ -147,17 +147,66 @@ export default {
             }
         },
         created() {
-            let _self = this;
+            /*let _self = this;
             common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
                 let data = response.data.biz_result.list;
-                /*this.todos = data;*/
+                
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/
+                  let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'attentionIntentionList',version:1,time:0,sign:'',biz_param:{
+                        
+                        pn:"1",
+                        pSize:"20",
+                        intentionType:"1"
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc);
+                    
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })
         },
+        /*created(){
+            let _self = this;
+            common.$emit('show-load');
+                    httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                    biz_module:'userService',
+                    biz_method:'userAttention',
+                    biz_param: {  
+                        intentionId:
+                        type:
+                        breedName:  
+                        intentionType:
+                    }
+                }, function(response) {
+                    common.$emit('close-load');
+                    if (response.data.code == '1c01') {
+                        common.$emit('message', response.data.msg);
+                        common.getDate();
+                    } else {
+                        common.$emit('message', response.data.msg);
+
+                    }
+
+
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+
+        },*/
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
 

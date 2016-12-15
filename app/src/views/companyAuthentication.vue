@@ -20,7 +20,7 @@
                 <div class="first_item">
                     <div v-for="(todo,index) in todos" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                        <p class="title">{{todo.title}}</p>
-                       <div class="photo"></div>
+                       <div class="photo"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
                        <p class="point">{{todo.point}}</p>
                     </div>
 
@@ -32,7 +32,7 @@
                 <div class="second_item">
                     <div v-for="(todo,index) in datas" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                        <p class="title">{{todo.title}}</p>
-                       <div class="photo"></div>
+                       <div class="photo"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
                        <p class="point">{{todo.point}}</p>
                     </div>
                      
@@ -56,13 +56,16 @@
 
 <script>
 import common from '../common/common.js'
-
+import imageUpload from '../components/tools/imageUpload'
 export default {
     data() {
             return {
                 selected:"1",
                 isActive: true,
                 hasError: false,
+                param:{
+                    name:'sdfsdf'
+                },
                 todos:[{
                     title:'1工商营业执照',
                     point:'请使用原件拍照或扫描'
@@ -97,7 +100,17 @@ export default {
                     point:'请使用原件拍照或扫描'
                 }]
             }
-        }, 
+        },
+        components: {
+            imageUpload
+        },
+        methods: {
+            getUrl(param){
+                console.log('dddddd');
+                console.log(param);
+            }
+            
+        },
         created() {
             let _self = this;
             common.$emit('show-load');
@@ -237,4 +250,5 @@ export default {
     text-align: center;
     /*margin-top:7.5rem;*/
 }
+
 </style>

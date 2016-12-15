@@ -46,14 +46,14 @@
                 </div>
            </li>
         </ul>
-        <router-link to="addAddress">
-         <div class="add_address">添加新地址</div>
-        </router-link> 
+        
+         <div class="add_address" v-on:click="addAddress">添加新地址</div>
+         
     </div>
 </template>
 <script>
 import common from '../common/common.js'
-
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
@@ -61,7 +61,7 @@ export default {
                     show:true,
                     reviseShow:false,
                     name:'扬帆',
-                    number:'1234465469798',
+                    number:'15971484216',
                     address:'上海宝隆一方大厦',
                     first_img:'/static/images/default_nor.png',
                     second_img:'/static/images/modify.png',
@@ -71,7 +71,7 @@ export default {
                     show:true,
                     reviseShow:false,
                     name:'小黄毛',
-                    number:'1234465469798',
+                    number:'15971484216',
                     address:'上海宝隆一方大厦',
                     first_img:'/static/images/default_nor.png',
                     second_img:'/static/images/modify.png',
@@ -98,9 +98,30 @@ export default {
 
 
           },
+          addAddress:function(){
+               this.$router.push('addAddress');
+          },
           revise:function(router){
                 this.$router.push(router);
                 /*todo.reviseShow = !todo.reviseShow;*/
+                 /*let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userAddressService',biz_method:'updateUserAddressInfo',version:1,time:0,sign:'',biz_param:{
+                       contactName:todo.name,
+                       contactPhone:todo.number
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.queryEmployeeInfo(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc);
+                    
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })*/
           }
         }
        

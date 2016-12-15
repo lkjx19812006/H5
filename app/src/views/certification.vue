@@ -30,14 +30,14 @@
                 <div class="first_item">
                     <div v-for="(todo,index) in todos" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                        <p class="title">{{todo.title}}</p>
-                       <div class="photo"></div>
+                       <div class="photo"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
                        <p  v-bind:class="{point:index == 0,'nor_point':index == 1}">{{todo.point}}</p>
                     </div>  
                 </div>
 
                 <div class="other_item">
                       <p>已通过审核照片</p>
-                      <div></div>
+                      <div><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
                 </div>
 
              </div>
@@ -59,7 +59,7 @@
 
 <script>
 import common from '../common/common.js'
-
+import imageUpload from '../components/tools/imageUpload'
 export default {
     data() {
             return {
@@ -75,7 +75,16 @@ export default {
                 
             }
         },
-        
+        components: {
+            imageUpload
+        },
+        methods: {
+            getUrl(param){
+                console.log('dddddd');
+                console.log(param);
+            }
+            
+        },
         
         created() {
             let _self = this;

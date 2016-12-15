@@ -172,7 +172,7 @@ export default {
 .sort .sort_content .sort_cell .cell_p {
     position: absolute;
     left: 10px;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .sort .sort_content .sort_cell .cell_img {

@@ -5,8 +5,8 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <div class="page-loadmore-wrapper" >
-            <mt-loadmore >
+        <div class="page-loadmore-wrapper">
+            <mt-loadmore>
                 <div class="good_information">
                     <p class="good_infor_header">货物基本信息</p>
                     <div class="good_name">
@@ -81,6 +81,7 @@
                 </div>
                 <div class="good_information">
                     <p class="good_photo_header">上传货物图片</p>
+                    <div class="upload_image"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
                 </div>
                 <div class="remarks">
                     <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">备注</p>
@@ -110,18 +111,32 @@
 </template>
 <script>
 import common from '../common/common.js'
-import sort from '../components/tools/sort'
+
+/*import sort from '../components/tools/sort'*/
+
+import imageUpload from '../components/tools/imageUpload'
+
 export default {
     data() {
             return {
                 selected: '1',
-                todos: {}
+                todos: {},
+                param:{
+                    name:'sdfsdf'
+                }
             }
         },
         methods: {
             release() {
                 this.$router.push('supplyReleaseSuccess');
+            },getUrl(param){
+                console.log('dddddd');
+                console.log(param);
             }
+            
+        },
+        components: {
+            imageUpload
         },
         created() {
             common.$emit('show-load');
@@ -194,6 +209,12 @@ textarea {
 .supply_release .good_photo_header {
     background: url('../../static/images/upload.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
+}
+
+.supply_release .good_information .upload_image{
+    width: 20%;
+    float: left;
+    margin-top: 1rem;
 }
 
 .supply_release .good_infor_header,

@@ -2,13 +2,6 @@
     <div class="page-tabbar">
         <div class="page-wrap">
             <mt-tab-container class="page-tabbar-container" v-model="selected">
-                <!-- <mt-tab-container-item id="首页">
-                    <index></index>
-                </mt-tab-container-item>
-                <mt-tab-container-item id="商城">
-                    <arrondi></arrondi>
-                </mt-tab-container-item>
-                <mt-tab-container-item id="求购"> -->
                 <mt-tab-container-item id="index">
                     <index></index>
                 </mt-tab-container-item>
@@ -24,20 +17,6 @@
             </mt-tab-container>
         </div>
         <mt-tabbar v-model="selected" fixed>
-            <!-- <mt-tab-item id="首页">
-                <img slot="icon" src="/static/images/100x100.png"> 首页
-            </mt-tab-item>
-            <mt-tab-item id="商城">
-                <img slot="icon" src="/static/images/100x100.png"> 商城
-            </mt-tab-item>
-            <mt-tab-item id="求购"> -->
-            <!-- <mt-tab-item id="index">
-                <img slot="icon" src="/static/images/100x100.png"> 首页
-            </mt-tab-item>
-            <mt-tab-item id="resource">
-                <img slot="icon" src="/static/images/100x100.png"> 资源
-            </mt-tab-item>
-            <mt-tab-item id="purchase"> -->
             <mt-tab-item id="index">
                 <img slot="icon" src="/static/icons/index_selected.png" v-if="selected=='index'">
                 <img slot="icon" src="/static/icons/index.png" v-else> 首页
@@ -73,23 +52,20 @@ export default {
             resource,
             need,
             mine
-
         }
+
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .page-tabbar {
     overflow: hidden;
     height: 100vh;
 }
-
 .page-wrap {
     overflow: auto;
     height: 100%;
     padding-bottom: 60px;
 }
-
 .mint-tabbar > .mint-tab-item.is-selected {
     color: #FA6750;
 }

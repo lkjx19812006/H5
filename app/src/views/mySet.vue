@@ -52,7 +52,7 @@ export default {
                 },{
                     first_img:'/static/images/password-modification.png',
                     left_word:'修改密码',
-                    router:'revisePassWord',
+                    router:'revisePassWordConfirm',
                     second_img:'/static/images/right-arrow.png'
                 },{
                     first_img:'/static/images/address_administration.png',
