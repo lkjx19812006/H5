@@ -2,40 +2,28 @@
     <div class="img_upload">
         <form>
             <input type="file" @change="previewImg" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
-
-            <!-- <img v-bind:src="image" class="image_show" v-if="!showurl">
-            <img v-bind:src="showurl" class="image_show" v-if="showurl">
-            <img src="/static/icons/close_selected.png" v-show="showurl" @click="delImage" class="close_image"> -->
-
             <img v-bind:src="image" class="image_show">
             <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
-
         </form>
     </div>
 </template>
 <script>
 import common from '../../common/common.js'
-
 import httpService from '../../common/httpService.js'
 export default {
     data() {
             return {
                 image: "/static/images/default_image.png",
-
                 close: false,
                 size: 0,
                 key: '',
                 domain:''
-
             }
         },
         props: {
             param: {
                 default: null
-
             }
-            
-
         },
         methods: {
             previewImg: function(e) {
@@ -43,40 +31,26 @@ export default {
                 let input = e.target;
                 if (input.files && input.files[0]) {
                     let reader = new FileReader();
-
                     _self.size = input.files[0].size;
-
                     let img = new Image();
                     reader.onload = function(e) {
                         if (input.files[0].size > 204800) { //图片大于200kb则压缩
                             img.src = e.target.result;
                             img.onload = function() {
                                 _self.image = _self.compress(img);
-
-                                _self.close = true;
-                                _self.upload(_self.image, 'base64');
+                                _self.upload(_self.image);
                             }
                         } else {
                             _self.image = e.target.result;
-                            _self.close = true;
-                            _self.upload(_self.image, 'base64');
-
-                                _self.upload(_self.image);
-                            }
-                        } /*else {
-                            _self.image = e.target.result;
                             _self.upload(_self.image);
-
-                        }*/
+                        }
                     }
                     reader.readAsDataURL(input.files[0]);
                     return 1;
                 }
             },
             compress: function(img) {
-
                 let _self = this;
-
                 let initSize = img.src.length;
                 let width = img.width;
                 let height = img.height;
@@ -213,7 +187,7 @@ export default {
                     console.log(err);
                 })
             }
-       
+        }
 }
 </script>
 <style scoped>
@@ -226,11 +200,13 @@ export default {
     width: 100%;
     height: 100%;
     position: absolute;
+   
 }
 
 .img_upload .image_show {
     width: 100%;
-    height: 4rem;
+    height: 100%;
+   
 }
 
 .img_upload .close_image {
@@ -238,5 +214,7 @@ export default {
     top: -16px;
     right: -14px;
     width: 30px;
+    
 }
 </style>
+

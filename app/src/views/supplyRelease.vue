@@ -145,9 +145,7 @@ export default {
         components: {
             imageUpload
         },
-        components: {
-            imageUpload
-        },
+        
         created() {
             common.$emit('show-load');
             this.$http.get(common.apiUrl.drug_information_list).then((response) => {

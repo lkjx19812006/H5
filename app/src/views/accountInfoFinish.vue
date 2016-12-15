@@ -8,8 +8,7 @@
    </mt-header>
    <div class="header_photo_box">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
-        <img src="/static/images/touxiang.png" class="header_photo">
-   
+        <div class="header_photo"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
    </div>
 
    <div class="basic_data">
@@ -123,10 +122,17 @@
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import imageUpload from '../components/tools/imageUpload'
+
 export default {
 
   data () {
     return {
+      
+      param: {
+          name: 'intention',
+          index:0
+      },
       pickerValue:'',
       arr:{
         name:'',
@@ -185,7 +191,9 @@ export default {
 
     }
   },
-  
+  components: {
+            imageUpload
+        },
   created(){
           let _self = this;
 
@@ -217,7 +225,10 @@ export default {
           })
  },
   methods:{
-     
+      getUrl(param){
+                console.log('dddddd');
+                console.log(param);
+            },
       open(picker) {
           this.$refs[picker].open();
           
@@ -286,6 +297,7 @@ border-radius: 0;
   background:white;
   line-height: 7.253rem;
   background:white url(/static/images/right-arrow.png) 96% center no-repeat;background-size:0.6826rem 1.024rem;
+  position: relative;
 }
 
 .account_overview_finish .header_word{
@@ -296,14 +308,16 @@ border-radius: 0;
 .account_overview_finish .header_word span{
   color:#999999;
 }
-.account_overview_finish .header_photo{
+.account_overview_finish  .header_photo_box .header_photo{
   width:5.1198rem;
   height:5.1198rem;
   border-radius: 50%;
   background:#FED77A;
-  float:right;
-  margin-top:1.0666rem;
-  margin-right: 6%;
+  right:10%;
+  margin-top:1.0666rem; 
+  overflow: hidden;
+  position: absolute;
+  z-index: 10000000;
 
 }
 .account_overview_finish .basic_data,

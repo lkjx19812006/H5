@@ -29,16 +29,16 @@
             </div>
             <div class="header_bottom">
 
-                <p class="my_service" v-if="todo.customerGender == '0 || 1'">{{todo.my_service}}</p>
-                <p class="my_service">{{todo.my_apply}}</p>
-                <p class="his_name">{{todo.customer}}<span>
-                    <div v-if="todo.customerGender == ''"></div>
+                <p class="my_service" v-if="todo.customerGender == '0' || todo.customerGender == '1'">{{todo.my_service}}</p>
+                <p class="my_service" v-if="todo.customerGender != '0' && todo.customerGender != '1' ">{{todo.my_apply}}</p>
+                <p class="his_name" v-if="todo.customerGender == '0' || todo.customerGender == '1'">{{todo.customer}}<span>
+                    
 
                     <img src="/static/images/woman.png" v-if="todo.customerGender == '0'">
                     <img src="/static/images/woman.png" v-if="todo.customerGender == '1'"> <!-- 判断性别 -->
                 </span></p>
                 <router-link to="detailsPage">
-                    <p class="details" v-if="todo.customerGender == '0 || 1'">{{todo.details}}</p>
+                    <p class="details" v-if="todo.customerGender == '0' || todo.customerGender == '1'">{{todo.details}}</p>
                 </router-link>
             </div>
         </div>
@@ -87,12 +87,15 @@
 <script>
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
-
 import imageUpload from '../../components/tools/imageUpload'
 
 export default {
     data() {
             return {
+                param: {
+                    name: 'intention',
+                    index:0
+                },
                 content: [{
                     name: '扬帆',
                     company: '康美药业',
@@ -207,8 +210,10 @@ export default {
                   httpService.queryEmployeeInfo(otherurl,otherbody,function(suc){
                     common.$emit('close-load');
                     console.log(suc.data.biz_result);
+                    console.log(suc.data.biz_result.gender);
                     
                     _self.content[0].customer = suc.data.biz_result.name;
+                    _self.content[0].customerGender = suc.data.biz_result.gender;
                   },function(err){
                     common.$emit('close-load');
                   })
@@ -253,7 +258,7 @@ export default {
     border-radius: 50%;
     margin-right: 4%;
     float: left;
-
+   
     overflow: hidden;
 
 }

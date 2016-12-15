@@ -8,7 +8,7 @@
 
         <ul class="info_list">
            <li  v-for="(todo,index) in todos" v-if="index == 0" class="header_phone">
-              <img :src="todo.img_src">
+              <div><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
               
               <p class="name_content">{{todo.content}}</p>
            </li>
@@ -37,6 +37,10 @@ import imageUpload from '../components/tools/imageUpload'
 export default {
     data() {
             return {
+                param: {
+                    name: 'intention',
+                    index:0
+                },
                 msg: 'Welcome to Your Vue.js App',
                 todos:[{
                    img_src:'/static/images/girl.png',
@@ -72,6 +76,15 @@ export default {
                 
             }
         },
+        methods:{
+            getUrl(param){
+                console.log('dddddd');
+                console.log(param);
+            }
+        },
+        components: {
+            imageUpload
+        },
         created(){
                   let _self = this;
                   common.$emit('show-load');
@@ -85,8 +98,13 @@ export default {
                   httpService.queryEmployeeInfo(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc.data.biz_result);
-                    
-                    
+                    _self.todos[0].content = suc.data.biz_result.name;
+                    _self.todos[1].content = suc.data.biz_result.gender;
+                    _self.todos[2].content = suc.data.biz_result.mobile;
+                    _self.todos[3].content = suc.data.biz_result.extno;
+                    _self.todos[4].content = suc.data.biz_result.qq;
+                    _self.todos[5].content = suc.data.biz_result.wechat;
+                    _self.data[0].content = suc.data.biz_result.goodfield
                   },function(err){
                     common.$emit('close-load');
                   })
@@ -115,12 +133,13 @@ export default {
    height:8.5rem;
    line-height:8.5rem;
 }
-.details_page .info_list .header_phone img{
+.details_page .info_list .header_phone div{
    width:6.5rem;
    height:6.5rem;
    position: absolute;
    left:0;
    top:1rem;
+   overflow: hidden;
 }
 .details_page .info_list li img{
    height:1.5rem;
