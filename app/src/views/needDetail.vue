@@ -50,19 +50,13 @@
 </template>
 <script>
 import common from '../common/common.js'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                todos: [{
-                    "name": "人参",
-                    "spec": "统货",
-                    "place": "东北",
-                    "price": "98.9元/kg",
-                    "up_price": "9元/kg",
-                    "down_price": "9元/kg",
-                    "phone": "15301546832",
-                    "time": "12:26"
-                }]
+                obj:{
+
+                }
             }
         },
         methods: {
@@ -72,15 +66,26 @@ export default {
         },
         created() {
             let _self = this;
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });
+            var str = _self.$route.fullPath;
+            var id = str.substring(12,str.length);
+            httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result;
+                            console.log(result);
+                            
+                             /*_self.obj = result;*/
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
         }
 
 }

@@ -14,32 +14,32 @@
             </mt-swipe>
         </div>
         <div class="release_time">
-            <p>发布时间：<span>2016-11-26</span></p>
+            <p>发布时间：<span>{{obj.pubdate}}</span></p>
         </div>
         <div class="drug_info">
             <div class="first_level">
                 <img src="/static/images/bao.png">
-                <p>人参</p>
-                <p class="price"><span>65</span>元/kg</p>
+                <p>{{obj.drug_name}}</p>
+                <p class="price"><span>{{obj.price}}</span>元/kg</p>
             </div>
            <div class="box">
                 <div class="second_level">
-                    <p class="the_left">产地：<span>安徽</span></p>
-                    <p class="the_right">规格：<span>统货</span></p>
+                    <p class="the_left">产地：<span>{{obj.place}}</span></p>
+                    <p class="the_right">规格：<span>{{obj.spec}}</span></p>
                 </div>
 
                 <div class="third_level">
-                    <p class="the_left">库存：<span>100</span>kg</p>
-                    <p class="the_right">起订量：<span>20</span>kg</p>
+                    <p class="the_left">库存：<span>{{obj.number}}</span>{{obj.number_unit}}</p>
+                    <p class="the_right">起订量：<span>{{obj.moq}}</span>kg</p>
                 </div>
                 
                 <div class="fourth_level">
-                    <p class="the_left">样品：<span>不提供</span></p> 
+                    <p class="the_left">样品：<span>{{obj.sampling}}</span></p> 
                 </div>
            </div>
             <div class="fifth_level">
                 <p class="left">卖点：</p>
-                <p class="right"><span>甘都好无走油，甘都好无走油，甘都好无走油，甘都好无走油，甘都好无走油，</span></p>
+                <p class="right"><span>{{obj.selling_point}}</span></p>
             </div>
         </div>
         <div class="flowsheet">
@@ -51,18 +51,86 @@
 
 <script>
 import common from '../common/common.js'
-
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
                imgArray: [{
-                    url: '/static/images/1.jpg'
-                }, {
-                    url: '/static/images/2.jpg'
-                }, {
-                    url: '/static/images/3.jpg'
-                }],
+                    url:''
+               },{
+                    url:''
+               },{
+                    url:''
+               },{
+                    url:''
+               },{
+                    url:''
+               }],
+
+                obj:{
+                    drug_name:'白术',
+                    spec:'',
+                    place:'',
+                    number:'',
+                    number_unit:'kg',
+                    selling_point:'',
+                    offer:'',
+                    duedate:'',
+                    pubdate:'',
+                    moq:'',
+                    sampling:'',
+                    price:'',
+                    id:''
+
+                }
             }
+        },
+        created(){
+            var _self = this;
+            var str = _self.$route.fullPath;
+            var id = str.substring(12,str.length);
+            _self.obj.id = id;
+            console.log(id)
+            httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                            
+                            console.log(suc.data.biz_result);
+                            let result = suc.data.biz_result;
+                            console.log(result.sampling);
+                            if(result.sampling == 1){
+                               result.sampling = '提供'
+                            }
+                            if(result.sampling == 0){
+                               result.sampling = '不提供'
+                            }
+                            _self.obj.drug_name = result.breedName;
+                            _self.obj.spec = result.spec;
+                            _self.obj.place = result.location;
+                            _self.obj.number = result.number;
+                            _self.obj.number_unit = result.unit;
+                            _self.obj.selling_point = result.description;
+                            _self.obj.sampling = result.sampling;
+                            _self.obj.offer = result.offer;
+                            _self.obj.pubdate = result.pubdate;
+                            _self.obj.moq = result.moq;
+                            _self.obj.price = result.price;
+                            let imageArr = result.image;
+                            for(var item in imageArr){
+                                 console.log(imageArr[item]);
+                                 _self.imgArray[item].url = imageArr[item];
+                            }
+                            
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
         }
 }
 </script>

@@ -8,27 +8,27 @@
         <div class="center">
             <div class="title">
                 <!-- <img src="/static/icons/impatient.png"> -->
-                <p>人参</p>
+                <p>{{obj.drug_name}}</p>
             </div>
             <div class="detail ">
-                <p>规格：<span>统货</span></p>
-                <p class="right">发布时间：<span>2016-11-10</span></p>
+                <p>规格：<span>{{obj.spec}}</span></p>
+                <p class="right">发布时间：<span>{{obj.pubdate}}</span></p>
             </div>
             <div class="detail">
-                <p>产地：<span>安徽</span></p>
-                <p class="right">剩余：<span>20天</span></p>
+                <p>产地：<span>{{obj.place}}</span></p>
+                <p class="right">剩余：<span>{{obj.duedate}}天</span></p>
             </div class="detail">
             <div class="detail">
-                <p>需求数量：<span>20kg</span></p>
+                <p>需求数量：<span>{{obj.number}}{{obj.number_unit}}</span></p>
             </div>
             <div class="detail">
-                 <p>备注：<span>干度好，无走油，2015版药典标，干度好，无走油</span></p>
+                 <p>备注：<span>{{obj.selling_point}}</span></p>
             </div>
             <div class="detail">
-                <p>已报价：<span class="orange_font">12</span>人</p>
+                <p>已报价：<span class="orange_font">{{obj.offer}}</span>人</p>
             </div>
             <div class="detail">
-                <p>平均价格：<span class="orange_font">20.6元/kg</span></p>
+                <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
             </div>
         </div>
         
@@ -42,9 +42,24 @@
 </template>
 <script>
 import common from '../common/common.js'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                obj:{
+                    drug_name:'白术',
+                    spec:'',
+                    place:'',
+                    number:'',
+                    number_unit:'kg',
+                    selling_point:'',
+                    offer:'',
+                    duedate:'',
+                    pubdate:'',
+                    offerVprice:'',
+                    id:''
+
+                },
                 todos: [{
                     "name": "人参",
                     "spec": "统货",
@@ -63,16 +78,52 @@ export default {
             },
         },
         created() {
-            let _self = this;
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });
+            var _self = this;
+            var str = _self.$route.fullPath;
+            var id = str.substring(16,str.length);
+            _self.obj.id = id;
+
+            httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                            
+                            console.log(suc.data.biz_result);
+                            let result = suc.data.biz_result;
+
+                            var duedateDate = new Date(result.duedate);
+                            var pubdateDate = new Date(result.pubdate);
+                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                            var days=Math.floor(dateValue/(24*3600*1000));
+                            var pubdate = result.pubdate.substring(0,10);
+
+
+                            _self.obj.drug_name = result.breedName;
+                            _self.obj.spec = result.spec;
+                            _self.obj.place = result.location;
+                            _self.obj.number = result.number;
+                            _self.obj.number_unit = result.unit;
+                            _self.obj.selling_point = result.description;
+                            _self.obj.name = result.customerName;
+                            _self.obj.phone = result.customerPhone;
+                            _self.obj.offer = result.offer;
+                            _self.obj.offerVprice = result.offerVprice;
+                            _self.obj.pubdate = pubdate;
+                            _self.obj.duedate = days;
+
+                            //console.log(result.image);
+                            
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+
+
         }
 
 }

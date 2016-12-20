@@ -21,6 +21,7 @@ export default {
     
     data() {
             return {
+                
                 arr: [{
                     name: '发布日期',
                     asc: 'top',
@@ -30,15 +31,18 @@ export default {
                     sortArr: [{
                         name: '由新到旧',
                         asc: 'low',
-                        show: false
+                        show: false,
+                        id:'2'
                     }, {
                         name: '由旧到新',
                         asc: 'top',
-                        show: false
+                        show: false,
+                        id:'1'
                     }, {
                         name: '全部',
                         asc: '',
-                        show: false
+                        show: false,
+                        id:'0'
                     }]
                 }, {
                     name: '剩余时间',
@@ -100,7 +104,8 @@ export default {
                 }],
                 selectShow: false,
                 selectArr: [],
-                selectIndex: 0
+                selectIndex: 0,
+                sort:{}
             }
         },
         props: {
@@ -110,6 +115,7 @@ export default {
         },
         methods: {
             showTable: function(item, index) {
+
                 if (item.asc == 'location') {
                     this.$router.push('provenanceSelection');
                 } else {
@@ -119,8 +125,8 @@ export default {
                 }
             },
             getAsc: function(item) {
-                   console.log(item)
-                   
+
+                 
                 if (!item.asc) {
                     this.arr[this.selectIndex].name = this.arr[this.selectIndex].saveName;
                     this.arr[this.selectIndex].url = '/static/icons/drop_down.png';
@@ -135,6 +141,8 @@ export default {
                     }
                 }
                 this.selectShow = false;
+
+                
             }
         },
         created() {

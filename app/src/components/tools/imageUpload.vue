@@ -2,7 +2,8 @@
     <div class="img_upload">
         <form>
             <input type="file" @change="previewImg" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
-            <img v-bind:src="image" class="image_show">
+            <img v-bind:src="image" class="image_show" v-show="!param.url">
+             <img v-bind:src="param.url" class="image_show" v-show="param.url">
             <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
         </form>
     </div>
@@ -39,9 +40,11 @@ export default {
                             img.onload = function() {
                                 _self.image = _self.compress(img);
                                 _self.upload(_self.image);
+                                 _self.param.url =_self.image;
                             }
                         } else {
                             _self.image = e.target.result;
+                            _self.param.url = _self.image;
                             _self.upload(_self.image);
                         }
                     }
@@ -159,6 +162,7 @@ export default {
                             if (xhr.readyState == 4) {
                                 let response = JSON.parse(xhr.response);
                                 if (response.key) {
+
                                     _self.key = response.key;
                                     _self.close = true;
                                     _self.$emit("postUrl", {

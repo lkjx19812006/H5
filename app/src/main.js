@@ -17,6 +17,7 @@ Vue.use(VueResource)
 
 Vue.config.debug = true
 
+
 document.getElementsByTagName("html")[0].style.fontSize=Math.floor(document.documentElement.clientWidth*100000/32)/100000+"px";
 const router = new VueRouter(
     configRouter // （缩写）相当于 routes: routes
@@ -82,6 +83,11 @@ Vue.http.interceptors.push((request, next) => {
     return response
   })
 })
+
+
+
+
+
 
 
 

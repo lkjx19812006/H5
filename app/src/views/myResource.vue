@@ -18,7 +18,7 @@
                                 </div>
                             </div>
                             
-                            <img src="/static/images/1.jpg" class="list_images" @click="jump(todo.router)">
+                            <img src="/static/images/1.jpg" class="list_images" @click="jump(todo.router,todo.id)">
                             <div class="res_content" >
                                 <div class="res_content_center">
                                     <div><img src="/static/icons/sample.png">{{todo.breedName}}</div>
@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="res_content_right">
                                 <p>{{todo.price}}<span>元/kg</span></p>
-                                <button class="mint-button mint-button--primary mint-button--small" @click="jump(todo.other_router)">编辑</button>
+                                <button class="mint-button mint-button--primary mint-button--small" @click="jump(todo.other_router,todo.id)">编辑</button>
                                 </div>
                             </div>
 
@@ -56,7 +56,7 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                todos: [{
+                todos: [/*{
                     "breedName": "人参",
                     "spec": "统货",
                     "location": "东北",
@@ -67,7 +67,7 @@ export default {
                     "router":"goodDetail",
                     "other_router":"reviseResource"
                     
-                }],
+                }*/],
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -80,15 +80,18 @@ export default {
             otherSort
         },
         methods: {
-            jump:function(router){
-                this.$router.push(router);
+            jump:function(router,id){
+                
+                this.$router.push(router+ '/' + id);
+                console.log(router+ '/' + id)
+                
             },
             
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                setTimeout(() => {
+                /*setTimeout(() => {
                     let lastValue = this.todos[0];
                     if (this.todos.length <= 40) {
                         for (let i = 1; i <= 10; i++) {
@@ -98,7 +101,7 @@ export default {
                         this.allLoaded = true;
                     }
                     this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);
+                }, 1500);*/
             },
 
             handleTopChange(status) {
@@ -115,8 +118,14 @@ export default {
             }
         },
         created() {
-            console.log(this)
-            console.log(this.otherSort)
+             
+                /*var result={};
+                chrome.cookies.get(function(cookie){
+                        result=cookie;
+                    });
+                }
+                return result;*/
+
             /*let _self = this;
             common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
@@ -126,13 +135,14 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });*/ /*let _self = this;
+            });*/ 
+                  let _self = this;
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'intentionService',biz_method:'mySupplyIntentionList',version:1,time:0,sign:'',biz_param:{
                         sort:{"pubdate":"0","duedate":"0"},
                         onSell:"0",
-                        sampling:"0",
+                        sampling:"1",
                         pn:"1",
                         pSize:"20"
                   }};
@@ -141,12 +151,19 @@ export default {
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.myResource(url,body,function(suc){
                     common.$emit('close-load');
-                    console.log(suc);
-                    
+                    common.$emit('message', suc.data.msg);
+                    console.log(suc.data.biz_result.list);
+                    _self.todos = suc.data.biz_result.list;
+                    for(var item in _self.todos){
+                        _self.todos[item].router = "goodDetail";
+                        _self.todos[item].other_router = "reviseResource";
+                        //console.log(_self.todos[item].id);
+                    }
                     
                   },function(err){
                     common.$emit('close-load');
-                  })*/
+                    common.$emit('message', err.data.msg);
+                  })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

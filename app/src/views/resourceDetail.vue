@@ -18,29 +18,29 @@
                     <div class="swipe_number"><span>{{number}}</span>/{{imgArray.length}}</div>
                 </div>
                 <div class="top">
-                    <p>发布时间：<span>2016-11-10</span></p>
+                    <p>发布时间：<span>{{obj.pubdate}}</span></p>
                     <img src="/static/icons/xique.gif" v-show="imageShow">
                     <img src="/static/icons/xique.png" v-show="!imageShow">
                 </div>
                 <div class="center">
                     <div class="title">
                         <img src="/static/icons/impatient.png">
-                        <p>人参</p>
-                        <p class="price_right"><span>65</span>元/kg</p>
+                        <p>{{obj.breedName}}</p>
+                        <p class="price_right"><span>{{obj.price}}</span>元/kg</p>
                     </div>
                     <div class="detail ">
-                        <p>产地：<span>安徽</span></p>
-                        <p class="right">规格：<span>统货</span></p>
+                        <p>产地：<span>{{obj.location}}</span></p>
+                        <p class="right">规格：<span>{{obj.spec}}</span></p>
                     </div>
                     <div class="detail">
-                        <p>库存：<span>100kg</span></p>
-                        <p class="right">起订量：<span>20kg</span></p>
+                        <p>库存：<span>{{obj.number}}kg</span></p>
+                        <p class="right">起订量：<span>{{obj.moq}}kg</span></p>
                     </div class="detail">
                     <div class="detail">
-                        <p>样品：<span v-if="showButton">不提供</span><span v-if="!showButton">提供</span></p>
+                        <p>样品：<span v-if="obj.sampling == 0">不提供</span><span v-if="obj.sampling == 1">提供</span></p>
                     </div>
                     <div class="detail">
-                        <p>卖点：<span>干度好，无走油，2015版药典标，干度好，无走油</span></p>
+                        <p>卖点：<span>{{obj.description}}</span></p>
                     </div>
                 </div>
             </mt-loadmore>
@@ -50,18 +50,19 @@
                 <img src="/static/icons/tel.png">
                 <p>电话</p>
             </button>
-            <button class="mint-button mint-button--primary mint-button--normal small_button">
+            <button class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention">
                 <img src="/static/icons/follow.png">
                 <p>关注</p>
             </button>
-            <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!showButton">无样品</button>
-            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="showButton" @click="jump('/sampleConfirm/1')">购买样品</button>
-            <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump('/orderConfirm/1')">立即购买</button>
+            <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="obj.sampling == 0">无样品</button>
+            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling == 1" @click="jump('/sampleConfirm/1')">购买样品</button>
+            <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
         </div>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
+import httpService from '../common/httpService.js'
 import {
     swiper,
     swiperSlide,
@@ -78,19 +79,10 @@ export default {
                 }, {
                     url: '/static/images/3.jpg'
                 }],
-                todos: [{
-                    "name": "人参",
-                    "spec": "统货",
-                    "place": "东北",
-                    "price": "98.9元/kg",
-                    "up_price": "9元/kg",
-                    "down_price": "9元/kg",
-                    "phone": "15301546832",
-                    "time": "12:26"
-                }],
-                showButton: true,
-                imageShow: true,
-                number: 0,
+                obj:{
+
+                },
+                id:'',
                 swiperOption: {
                     name: 'currentSwiper',
                     autoplay: 3000,
@@ -112,16 +104,40 @@ export default {
             back() {
                 this.$router.go(-1);
             },
-            jump(param) {
-                console.log(param);
-                this.$router.push(param);
+            jump(id) {
+                
+                this.$router.push('/orderConfirm/' + id);
 
+            },
+            myAttention(){
+                let _self = this;
+
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userService',biz_method:'userAttention',version:1,time:0,sign:'',biz_param:{
+                        intentionId:_self.id,
+                        type:1,
+                        breedName:_self.obj.breedName,
+                        intentionType:_self.obj.type
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.addAddress(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc.data);
+                    common.$emit('message', suc.data.msg);
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                  })
             }
         },
 
         created() {
             let _self = this;
-            common.$emit('show-load');
+            /*common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
                 let data = response.data.biz_result.list;
@@ -133,7 +149,39 @@ export default {
 
             _self.time = setTimeout(() => {
                 _self.imageShow = false;
-            }, 2450);
+            }, 2450);*/
+            
+            var str = _self.$route.fullPath;
+            var id = str.substring(16,str.length);
+            _self.id = id;
+            httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result;
+                            console.log(result);
+                            /*if(result.sampling == 0){
+                               result.sampling = '不提供' 
+                            }else{
+                                result.sampling = '提供'
+                            }*/
+                             _self.obj = result;
+                            
+                             
+                            
+                               
+                           
+
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
         }
 }
 </script>

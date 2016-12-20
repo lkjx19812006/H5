@@ -132,14 +132,20 @@ export default {
 .details_page .info_list .header_phone{
    height:8.5rem;
    line-height:8.5rem;
+   position: relative;
+   padding: 1rem 0 0 0;
 }
 .details_page .info_list .header_phone div{
    width:6.5rem;
    height:6.5rem;
    position: absolute;
    left:0;
-   top:1rem;
+   border-radius: 50%;
+   z-index:200000;
    overflow: hidden;
+}
+.details_page .info_list .header_phone  .name_content{
+   line-height: 6.5rem;
 }
 .details_page .info_list li img{
    height:1.5rem;

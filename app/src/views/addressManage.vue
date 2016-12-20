@@ -10,10 +10,10 @@
                <div class="address_top" >
                   <div class="receiver">
                     <p class="receiver_left">
-                       <span>收货人：{{todo.name}}</span>
+                       <span>收货人：{{todo.contactName}}</span>
                        <!-- <span v-show="todo.reviseShow">收货人：<input type="text" :placeholder="todo.name"></span> -->
                      </p>
-                    <p class="receiver_right">{{todo.number}}</p> 
+                    <p class="receiver_right">{{todo.contactPhone}}</p> 
                   </div> 
 
                   <div class="address">
@@ -57,7 +57,8 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                todos:[{
+                id:'',
+                todos:[/*{
                     show:true,
                     reviseShow:false,
                     name:'扬帆',
@@ -77,9 +78,70 @@ export default {
                     second_img:'/static/images/modify.png',
                     last_img:'/static/images/delet.png',
                     router:'addressRevise'
-                }]
+                }*/]
                 
             }
+        },
+        created(){
+                 let _self = this;
+
+
+                 common.$emit('show-load');
+                  let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let otherbody={biz_module:'userAddressService',biz_method:'queryDefaultAddress',version:1,time:0,sign:'',biz_param:{
+                        
+                  }};
+                  
+                  otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
+                  otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
+                   httpService.addressManage(otherurl,otherbody,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc.data.biz_result);
+                    _self.id = suc.data.biz_result.id;
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+
+
+
+
+
+
+
+
+
+
+             common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userAddressService',biz_method:'queryUserAddressList',version:1,time:0,sign:'',biz_param:{
+                        
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.addressManage(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc.data.biz_result.list);
+                    let listArr = suc.data.biz_result.list;
+                    for(var item in listArr){
+                         listArr[item].show = true;
+                         listArr[item].reviseShow = false;
+                         listArr[item].first_img = '/static/images/default_nor.png';
+                         listArr[item].second_img = '/static/images/modify.png';
+                         listArr[item].last_img = '/static/images/delet.png';
+                         listArr[item].router = 'addressRevise';
+                         if(listArr[item].id == _self.id){
+                              listArr[item].first_img = '/static/images/default.png';
+                         }
+                         
+                    }
+                    _self.todos = listArr;
+                    
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })
         },
         methods:{
           delet:function(todo){
@@ -87,14 +149,28 @@ export default {
                 deletLi.style.display = "none";*/
                 todo.show = !todo.show;
           },
-          changeColor:function(todos,todo,index){
-                
-                
+          changeColor:function(todos,todo,index){     
                 for(var item in todos){
                     todos[item].first_img = '/static/images/default_nor.png';
                     todos[index].first_img = '/static/images/default.png';
                 }
-                
+                  console.log(todo.id)
+                let _self = this;
+                common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userAddressService',biz_method:'setDefaultAddress',version:1,time:0,sign:'',biz_param:{
+                        id:todo.id
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.addressManage(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc);
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })
 
 
           },
@@ -131,7 +207,9 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.address_manage ul{
+  margin-bottom: 100px;
+}
 .address_manage ul li{
   background:white;
   margin-top: 1rem;

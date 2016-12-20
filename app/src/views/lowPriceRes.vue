@@ -11,18 +11,18 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
+                        <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item">
                             <img src="/static/images/1.jpg" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.name}}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
-                                    <p>产地：<span>{{todo.place}}</span></p>
-                                    <p class="time_font">发布时间：<span>{{todo.time}}</span></p>
+                                    <p>产地：<span>{{todo.location}}</span></p>
+                                    <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
                                 </div>
                                 <div class="res_content_right">
-                                <p>{{todo.price}}</p>
-                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail()">立即购买</button>
+                                <p>{{todo.price}}<!-- {{todo.unit}} -->kg/元</p>
+                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail(todo.id)">立即购买</button>
                                 </div>
                             </div>
                         </li>
@@ -49,7 +49,8 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                todos: [{
+
+                todos: [/*{
                     "name": "人参",
                     "spec": "统货",
                     "place": "东北",
@@ -58,7 +59,7 @@ export default {
                     "down_price": "9元/kg",
                     "phone": "15301546832",
                     "time": "12:26"
-                }],
+                }*/],
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -70,14 +71,14 @@ export default {
             sort
         },
         methods: {
-            jumpDetail(){
-                this.$router.push('resourceDetail/1');
+            jumpDetail(id){
+                this.$router.push('resourceDetail/' + id);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                setTimeout(() => {
+                /*setTimeout(() => {
                     let lastValue = this.todos[0];
                     if (this.todos.length <= 40) {
                         for (let i = 1; i <= 10; i++) {
@@ -87,7 +88,7 @@ export default {
                         this.allLoaded = true;
                     }
                     this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);
+                }, 1500);*/
             },
             handleTopChange(status) {
                 this.topStatus = status;
@@ -103,33 +104,40 @@ export default {
             }
         },
         created() {
-            /*let _self = this;
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
-            /*let _self = this;
+            let _self = this;
             httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'querySupplyList',
               
                             biz_param: {
-                                keyWord:  
+                                /*keyWord: */
+                                sort:{"shelve_time":"0","price":"0"},
+                                /*location: 
+                                sampling:
+                                pn:1,
+                                pSize:20*/
                             }
-                        }, function(response) {
-                            
-                            common.$emit('message', response.data.msg);
+                        }, function(suc) {
+                            console.log(suc)
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            _self.todos = result;
+                            for(var item in result){
+                                
+                                /*console.log(result[item].pubdate.substring(0,11));*/
+                                
 
+                            }
+                            let 
+                            
+                               
+                           
 
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
-                        })*/
+                        })
+
             
         },
         mounted() {

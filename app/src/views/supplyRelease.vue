@@ -13,14 +13,15 @@
                         <p>产品：</p>
                         <div>
                             <div class="select">
-                                <p>请填写你需要的药材名称</p>
+                                <!-- <p>请填写你需要的药材名称</p> -->
+                                <input text="text" disable="false" placeholder="请填写你需要的药材名称" v-model="obj.drug_name">
                             </div>
                         </div>
                     </div>
                     <div class="good_spec">
                         <p>规格：</p>
                         <div>
-                            <select>
+                            <select v-model="obj.spec">
                                 <option>统货</option>
                             </select>
                         </div>
@@ -28,7 +29,7 @@
                     <div class="good_place">
                         <p>产地：</p>
                         <div>
-                            <select>
+                            <select v-model="obj.place">
                                 <option>上海</option>
                             </select>
                         </div>
@@ -39,21 +40,26 @@
                     <div class="good_number">
                         <p>数量：</p>
                         <div>
-                            <input type="text" placeholder="你需要的药材数量" />
-                            <p>kg/份</p>
+                            <input type="text" placeholder="你需要的药材数量" v-model="obj.number"/>
+                            <p>
+                                <select v-model="obj.number_unit" class="number_unit">
+                                   <option>kg</option>
+                                   <option>g</option>
+                                </select>
+                            </p>
                         </div>
                     </div>
                     <div class="good_number">
                         <p>销售价格：</p>
                         <div>
-                            <input type="text" placeholder="什么价格销售" />
+                            <input type="text" placeholder="什么价格销售" v-model="obj.sales_price"/>
                             <p>元/份</p>
                         </div>
                     </div>
                     <div class="good_number">
                         <p>交货地：</p>
                         <div>
-                            <input type="text" placeholder="药材在哪里" />
+                            <input type="text" placeholder="药材在哪里" v-model="obj.where"/>
                         </div>
                     </div>
                 </div>
@@ -61,20 +67,28 @@
                     <p class="good_sample_header">样品信息</p>
                     <div class="good_number">
                         <p>是否提供样品：</p>
-                        <button>是</button>
-                        <button>否</button>
+                        <div class="sample_button">
+                            <button  v-on:click="judgeTrue"  v-bind:class="{ 'left_button': isA, 'another_button_active': isB }">是</button>
+                            <button  v-on:click="judgeFalse"  v-bind:class="{ 'button_active': isA, 'right_button': isB }">否</button>
+                        </div>
                     </div>
                     <div class="good_number">
                         <p>样品重量：</p>
                         <div>
-                            <input type="text" placeholder="100" />
-                            <p>kg</p>
+                            <input type="text" placeholder="100" v-model="obj.weight"/>
+                            <p>
+                                <!-- <select v-model="obj.weight_unit" class="number_unit">
+                                   <option>kg</option>
+                                   <option>g</option>
+                                </select> -->
+                                {{obj.number_unit}}
+                            </p>
                         </div>
                     </div>
                     <div class="good_number">
                         <p>样品价格：</p>
                         <div>
-                            <input type="text" placeholder="500" />
+                            <input type="text" placeholder="500" v-model="obj.price"/>
                             <p>元</p>
                         </div>
                     </div>
@@ -89,7 +103,7 @@
                 <div class="remarks">
                     <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">备注</p>
                     <div class="remarks_content">
-                        <textarea placeholder="请根据实际情况填写药材资源卖点"></textarea>
+                        <textarea placeholder="请根据实际情况填写药材资源卖点" v-model="obj.selling_point"></textarea>
                     </div>
                 </div>
                 <div class="contact">
@@ -97,13 +111,13 @@
                     <div class="contact_name">
                         <P>姓名：</P>
                         <div>
-                            <input type="text" placeholder="请输入您的姓名">
+                            <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
                         </div>
                     </div>
                     <div class="contact_phone">
                         <P>手机：</P>
                         <div>
-                            <input type="text" placeholder="请输入您的手机号">
+                            <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
                         </div>
                     </div>
                 </div>
@@ -116,29 +130,97 @@
 import common from '../common/common.js'
 
 import imageUpload from '../components/tools/imageUpload'
-
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                isA:true,
+                isB:false,
+                judge:0,
+                img_src:'/static/images/3.jpg',
+                obj:{
+                    drug_name:'',
+                    spec:'',
+                    place:'',
+                    number:'',
+                    number_unit:'kg',
+                    sales_price:'',
+                    where:'',
+                    weight:'',
+                    price:'',
+                    selling_point:'',
+                    name:'',
+                    phone:'',
+                    duedate:'30'
+
+                },
                 selected: '1',
                 todos: {},
 
                 param: {
                     name: 'intention',
-                    index:0
+                    index:0,
+                    url:''
                 },
                 pickerValue: '1'
 
             }
         },
         methods: {
+            judgeTrue(){
+                 this.judge = 1; 
+                 this.isA = !this.isA;
+                 this.isB = !this.isB;
+            },
+            judgeFalse(){
+                 this.judge = 0;
+                 this.isA = !this.isA;
+                 this.isB = !this.isB;
+            },
             release() {
-                this.$router.push('supplyReleaseSuccess');
+                
+                  let _self = this;
+                  console.log(_self.obj.number  + _self.obj.number_unit);
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'editSupplyInfo',version:1,time:0,sign:'',biz_param:{
+                         customerId:"",
+                         breedName:_self.obj.drug_name,
+                         spec:_self.obj.spec,
+                         location:_self.obj.place,
+                         number:_self.obj.number,
+                         price:_self.obj.sales_price,
+                         address:_self.obj.where,
+                         sampling:_self.judge,
+                         description:_self.obj.selling_point,
+                         customerName:_self.obj.name,
+                         customerPhone:_self.obj.phone,
+                         editImage:['','','',''],
+                         descriptions:"",
+                         sampleNumber:_self.obj.weight,
+                         sampleAmount:_self.obj.price,
+                         duedate:_self.obj.duedate,
+                         breedId:"",
+                         unit:_self.obj.number_unit
+                        
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.supplyRelease(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc);
+                    _self.$router.push('supplyReleaseSuccess');
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                    common.$emit()
+                  })
 
             },
             getUrl(param) {
                 console.log('dddddd');
-                console.log(param);
+                console.log(param.url);
             }
             
         },
@@ -249,6 +331,16 @@ textarea {
     margin-top: 0.8533rem;
 }
 
+
+.supply_release .good_number .number_unit{
+    width:100%;
+    height:100%;
+    outline: none;
+    border:0;
+    float:left;
+    text-align: center;
+    padding-left:10px;
+}
 .supply_release .good_place select {
     background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
     background-size: 1.067rem 1.067rem;
@@ -300,6 +392,41 @@ textarea {
     outline: none;
     border: 1px solid #D2D2D2;
 }
+.supply_release .good_name div .select input{
+    text-align: center;
+    outline: none;
+    border:0;
+    height:100%;
+    width:100%;
+}
+
+
+.supply_release .good_number button{  
+    height:100%;
+    width:6.5rem;
+    background:white;
+    border:1px solid #D2D2D2;
+    outline: none;
+}
+.supply_release .good_number .sample_button{
+    border:none;
+}
+.supply_release .good_number .sample_button .left_button{
+    float:left;
+}
+.supply_release .good_number .sample_button .button_active{
+    float:right;
+    background:#FA6705;
+}
+.supply_release .good_number .sample_button .right_button{
+    float:right;
+}
+.supply_release .good_number .sample_button .another_button_active{
+    float:left;
+    background:#FA6705;
+}
+
+
 
 .supply_release .good_name div .select p {
     height: 2.9rem;

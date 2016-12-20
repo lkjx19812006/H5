@@ -169,7 +169,7 @@ export default {
                   
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.myResource(url,body,function(suc){
+                  httpService.myAttention(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc);
                     

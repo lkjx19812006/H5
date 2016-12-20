@@ -3,13 +3,25 @@
         <div class="title">
             {{name}}
         </div>
-        <div class="detail" v-for="(item,index) in data">
-            <p class="p_left">{{title[index]}}</p>
-            <p class="p_right">￥{{item}}</p>
+        <div class="detail" >
+            <p class="p_left">{{title[0]}}</p>
+            <p class="p_right">￥{{Number(order.sampleNumber)}}</p>
+        </div>
+        <div class="detail" >
+            <p class="p_left">{{title[1]}}</p>
+            <p class="p_right">￥{{Number(order.sampleAmount)}}</p>
+        </div>
+        <div class="detail" >
+            <p class="p_left">{{title[2]}}</p>
+            <p class="p_right">￥{{Number(order.sampleNumber + order.sampleAmount)}}</p>
+        </div>
+        <div class="detail" >
+            <p class="p_left">{{title[3]}}</p>
+            <p class="p_right">￥{{Number(data[3])}}</p>
         </div>
         <div class="count">
             <p>合计</p>
-            <p class="p_right">￥{{count}}</p>
+            <p class="p_right">￥{{Number(order.sampleNumber + order.sampleAmount + data[3])}}</p>
         </div>
     </div>
 </template>
@@ -25,9 +37,12 @@ export default {
                 title: ['样品单价', '样品数量', '商品总价', '运输价格']
             }
         },
-        created() {
-
+        props: {
+            order: {
+                
+            }
         },
+        
         methods: {
 
         }

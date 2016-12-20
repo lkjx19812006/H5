@@ -258,7 +258,9 @@ export default {
     border-radius: 50%;
     margin-right: 4%;
     float: left;
-   
+    border: 1px solid red;
+    position: absolute;
+    z-index: 200000;
     overflow: hidden;
 
 }
@@ -270,13 +272,15 @@ export default {
     display: flex;
     flex-direction: row;
     font-size: 1.024rem;
+    position: absolute;
+    left:35%;
 }
 
 .mine .information_center {
     flex: 4;
     display: flex;
     flex-direction: column;
-
+         
     text-align: left;
 }
 

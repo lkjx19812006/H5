@@ -12,25 +12,25 @@
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" >
                             <div class="header_list">
-                                <p class="left_p">发布日期：2016-11-26</p>
-                                <p class="right_p">待审核</p>
+                                <p class="left_p">发布日期：{{todo.pubdate}}</p>
+                                <p class="right_p">{{todo.onSell}}</p>
                             </div>
                             <div class="first_line">
-                                <p class="left">人参</p>
-                                <p class="right"><span>12</span>人已报价</p>
+                                <p class="left">{{todo.breedName}}</p>
+                                <p class="right"><span>{{todo.offer}}</span>人已报价</p>
                             </div>
                             <div class="second_line">
-                                <p class="left">规格：统货</p>
-                                <p class="right">剩余：20天</p>
+                                <p class="left">规格：{{todo.spec}}</p>
+                                <p class="right">剩余：{{todo.days}}天</p>
                             </div>
                             <div class="third_line">
-                                <p class="left">产地：安徽</p>
-                                <p class="right">需求数量：100天</p>
+                                <p class="left">产地：{{todo.location}}</p>
+                                <p class="right">需求数量：{{todo.number}}{{todo.unit}}</p>
                             </div>
 
                             <div class="button">
-                               <p class="first_button" @click="jump(todo.other_router)">编辑</p>
-                               <p class="second_button" @click="jump(todo.router)">查看报价</p>
+                               <p class="first_button" @click="jump(other_router,todo.id)">编辑</p>
+                               <p class="second_button" @click="jump(router,todo.id)">查看报价</p>
                             </div>
                         </li>
                     </ul>
@@ -55,8 +55,9 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                
-                todos: [{
+                router:"purchaseDetail",
+                other_router:"revisePurchase",
+                todos: [/*{
                     "name": "人参",
                     "spec": "统货",
                     "place": "东北",
@@ -68,7 +69,7 @@ export default {
                     "other_router":"revisePurchase"
 
                     
-                }],
+                }*/],
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -81,14 +82,14 @@ export default {
         },
 
         methods: {
-            jump:function(router){
-                this.$router.push(router);
+            jump:function(router,id){
+                this.$router.push(router + '/' + id);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                setTimeout(() => {
+                /*setTimeout(() => {
                     let lastValue = this.todos[0];
                     if (this.todos.length <= 40) {
                         for (let i = 1; i <= 10; i++) {
@@ -98,7 +99,7 @@ export default {
                         this.allLoaded = true;
                     }
                     this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);
+                }, 1500);*/
             },
 
             handleTopChange(status) {
@@ -129,17 +130,35 @@ export default {
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'intentionService',biz_method:'myBegIntentionList',version:1,time:0,sign:'',biz_param:{
-                        
-                        
+                        sort:{"pubdate":"0","duedate":"0"},
+                        onSell:0,
+                        pn:1,
+                        pSize:20         
                   }};
                   
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.myResource(url,body,function(suc){
                     common.$emit('close-load');
-                    console.log(suc);
-                    
-                    
+                    console.log(suc.data.biz_result.list);
+                    let listArr = suc.data.biz_result.list;
+                    for(var item in listArr){
+                        
+                        var duedateDate = new Date(listArr[item].duedate);
+                        var pubdateDate = new Date(listArr[item].pubdate);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days=Math.floor(dateValue/(24*3600*1000));
+                        if(listArr[item].onSell == 1){
+                            listArr[item].onSell = '未审核'
+                        }
+                        if(listArr[item].onSell == 2){
+                            listArr[item].onSell = '已审核'
+                        }
+                        listArr[item].days = days;
+                        console.log(listArr[item].id);
+                    }
+                    _self.todos = listArr;
+                     
                   },function(err){
                     common.$emit('close-load');
                   })

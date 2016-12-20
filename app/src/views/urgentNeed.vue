@@ -12,24 +12,24 @@
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                            <div class="flag"><img src="/static/icons/england.png"><span>英国</span></div>
+                            <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div>
                             <div class="center">
                                 <div class="title">
-                                    <div><img src="/static/icons/impatient.png"><span>{{todo.name}}</span></div>
-                                    <p>发布时间：{{todo.time}}</p>
+                                    <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
+                                    <p>发布时间：{{todo.pubdate}}</p>
                                 </div>
                                 <div class="detail">
                                     <p>规格：{{todo.spec}}</p>
-                                    <p>剩余：<span>26</span>天</p>
+                                    <p>剩余：<span>{{todo.days}}</span>天</p>
                                 </div>
                                 <div class="detail">
-                                    <p>产地：{{todo.place}}</p>
-                                    <p>需求数量：100kg</p>
+                                    <p>产地：{{todo.location}}</p>
+                                    <p>需求数量：{{todo.number}}{{todo.unit}}</p>
                                 </div>
                             </div>
                             <div class="bottom">
-                                <p>已报价<span>10</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail()">我要报价</button>
+                                <p>已报价<span>{{todo.offer}}</span>人</p>
+                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail(todo.id)">我要报价</button>
                             </div>
                         </li>
                     </ul>
@@ -50,10 +50,11 @@
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
 import sort from '../components/tools/sort'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                todos: [{
+                todos: [/*{
                     "name": "人参",
                     "spec": "统货",
                     "place": "东北",
@@ -62,7 +63,7 @@ export default {
                     "down_price": "9元/kg",
                     "phone": "15301546832",
                     "time": "12:26"
-                }],
+                }*/],
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -74,14 +75,14 @@ export default {
             sort
         },
         methods: {
-            jumpDetail() {
-                this.$router.push('needDetail/1');
+            jumpDetail(id) {
+                this.$router.push('needDetail/' + id);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                setTimeout(() => {
+                /*setTimeout(() => {
                     let lastValue = this.todos[0];
                     if (this.todos.length <= 40) {
                         for (let i = 1; i <= 10; i++) {
@@ -91,7 +92,7 @@ export default {
                         this.allLoaded = true;
                     }
                     this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);
+                }, 1500);*/
             },
 
             handleTopChange(status) {
@@ -109,15 +110,47 @@ export default {
         },
         created() {
             let _self = this;
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });
+            httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryBegBuyList',
+              
+                            biz_param: {
+                                /*keyWord: */
+                                sort:{"shelve_time":"0","price":"0"},
+                                /*location: 
+                                sampling:
+                                pn:1,
+                                pSize:20*/
+                            }
+                        }, function(suc) {
+                            console.log(suc)
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            /**/
+                            
+                    for(var item in result){
+                        
+                        var duedateDate = new Date(result[item].duedate);
+                        var pubdateDate = new Date(result[item].pubdate);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days=Math.floor(dateValue/(24*3600*1000));
+                        if(result[item].onSell == 1){
+                            result[item].onSell = '未审核'
+                        }
+                        if(result[item].onSell == 2){
+                            result[item].onSell = '已审核'
+                        }
+                        result[item].days = days;
+                        
+                    }
+                            
+                        _self.todos = result;       
+                           
+
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

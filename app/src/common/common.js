@@ -3,6 +3,11 @@ import CryptoJS from "crypto-js"
 import crypto from "crypto"
 import { Indicator, Toast, MessageBox, DatetimePicker } from 'mint-ui'
 
+
+
+
+
+
 let common = new Vue({
     data: {
         show: true,
@@ -87,5 +92,7 @@ common.$on('confirm', (confirmButtonText, cancelButtonText, message, title) => {
         title: title
     });
 })
+
+
 
 module.exports = common;

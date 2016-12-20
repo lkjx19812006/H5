@@ -69,6 +69,69 @@ let httpService = new Vue({
                 err(res);
             });
         },
+        urgentNeed(url, body, suc, err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        addressManage(url, body, suc, err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        addressRevise(url, body, suc, err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        addAddress(url, body, suc, err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        supplyRelease(url, body, suc, err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        getIntentionDetails(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        needRelease(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        myPurchase(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        intentResOrder(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
         put(url) {
 
         },
