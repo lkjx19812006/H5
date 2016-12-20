@@ -132,9 +132,9 @@ export default {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                   })
+            
             }
-        },
-
+         },
         created() {
             let _self = this;
             /*common.$emit('show-load');
