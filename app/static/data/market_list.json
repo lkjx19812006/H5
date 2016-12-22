@@ -21,7 +21,7 @@
   {
     "name":"枸杞",
     "spec":"统货",
-    "place":"河北安国",
+    "place":"meiguo",
     "price":"27元/kg",
     "upordown_price":"8",
     "src":"../../static/images/down.png"

@@ -55,7 +55,7 @@
                 <p>关注</p>
             </button>
             <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="obj.sampling == 0">无样品</button>
-            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling == 1" @click="jump('/sampleConfirm/1')">购买样品</button>
+            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling == 1" @click="jumpBuy(obj.id)">购买样品</button>
             <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
         </div>
     </div>
@@ -108,6 +108,9 @@ export default {
                 
                 this.$router.push('/orderConfirm/' + id);
 
+            },
+            jumpBuy(id){
+                this.$router.push('/sampleConfirm/' + id);
             },
             myAttention(){
                 let _self = this;

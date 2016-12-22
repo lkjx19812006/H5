@@ -18,11 +18,11 @@
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                            <div class="list_font">{{todo.name}}</div>
-                            <div class="list_font">{{todo.spec}}</div>
-                            <div class="list_font">{{todo.place}}</div>
-                            <div class="list_font">{{todo.time}}</div>
-                            <div class="list_font">{{todo.time}}</div>
+                            <div class="list_font">{{todo.breedName}}</div>
+                            <div class="list_font">{{todo.breedSpec}}</div>
+                            <div class="list_font">{{todo.number}}</div>
+                            <div class="list_font">{{todo.location}}</div>
+                            <div class="list_font">{{todo.successTime}}</div>
                         </li>
                     </ul>
                     <div slot="top" class="mint-loadmore-top">
@@ -40,11 +40,12 @@
 </template>
 <script>
 import common from '../common/common.js'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
                 msg: 'Welcome to Your Vue.js App',
-                todos: [{
+                todos: [/*{
                     "name": "人参",
                     "spec": "统货",
                     "place": "东北",
@@ -53,7 +54,7 @@ export default {
                     "down_price": "9元/kg",
                     "phone": "15301546832",
                     "time": "12:26"
-                }],
+                }*/],
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -67,7 +68,7 @@ export default {
             loadBottom(id) {
                 console.log('sdfsdfsdf');
                 console.log(this.allLoaded);
-                setTimeout(() => {
+                /*setTimeout(() => {
                     let lastValue = this.todos[0];
                      console.log(this.allLoaded);
                      console.log(this.todos.length);
@@ -80,7 +81,7 @@ export default {
                     }
                       console.log(this.allLoaded);
                     this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);
+                }, 1500);*/
             },
 
             handleTopChange(status) {
@@ -98,7 +99,7 @@ export default {
         },
         created() {
             let _self = this;
-            common.$emit('show-load');
+            /*common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
                 let data = response.data.biz_result.list;
@@ -106,7 +107,26 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/
+            httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'tradeNewService',
+                        biz_method:'currentTradeList',
+              
+                            biz_param: {
+                                
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            console.log(result)
+                            _self.todos = result;
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -176,15 +196,19 @@ export default {
 .transaction .bg_white .list_head .list_font {
     width: 20%;
     float: left;
+
 }
 
 .transaction .bg_white  .list_font {
-    width: 20%;
-    float: left;
+    /*width: 20%;
+    float: left;*/
+    flex:1;
 }
 
 .transaction .bg_white  .list_content_item {
     font-size: 1.1rem;
     color: #666;
+    display:flex;
+    flex-direction:row;
 }
 </style>

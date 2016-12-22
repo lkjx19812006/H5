@@ -5,7 +5,7 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <search-input></search-input>
+        <search-input ></search-input>
       
       <div class="select_box">
         <mt-navbar v-model="selected">
@@ -20,15 +20,15 @@
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                  <mt-tab-container v-model="selected">
                     <mt-tab-container-item id="1">
-                        <ul class="page-loadmore-list">
-                            <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
+                    <ul class="page-loadmore-list">
+                        <li v-for="todo in resourceArr" class="page-loadmore-listitem list_content_item">
                                 <img src="/static/images/1.jpg" class="list_images">
                                 <div class="res_content">
                                     <div class="res_content_center">
                                         <div><img src="/static/icons/bao.png">{{todo.breedName}}</div>
                                         <p>规格：<span>{{todo.spec}}</span></p>
-                                        <p>产地：<span>{{todo.place}}</span></p>
-                                        <p class="time_font">发布时间：<span>{{todo.time}}</span></p>
+                                        <p>产地：<span>{{todo.location}}</span></p>
+                                        <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
                                     </div>
                                     <div class="res_content_right">
                                     <p>{{todo.price}}<span>元/kg</span></p>
@@ -42,24 +42,24 @@
 
                      <mt-tab-container-item id="2">  
                     <ul class="page-loadmore-list_second">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                            <div class="flag"><img src="/static/icons/england.png"><span>英国</span></div>
+                        <li v-for="todo in needArr" class="page-loadmore-listitem list_content_item">
+                            <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div>
                             <div class="center">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
-                                    <p>发布时间：{{todo.time}}</p>
+                                    <p>发布时间：{{todo.pubdate}}</p>
                                 </div>
                                 <div class="detail">
                                     <p>规格：{{todo.spec}}</p>
-                                    <p>剩余：<span>26</span>天</p>
+                                    <p>剩余：<span>{{todo.days}}</span>天</p>
                                 </div>
                                 <div class="detail">
-                                    <p>产地：{{todo.place}}</p>
-                                    <p>需求数量：100kg</p>
+                                    <p>产地：{{todo.location}}</p>
+                                    <p>需求数量：{{todo.number}}{{todo.unit}}</p>
                                 </div>
                             </div>
                             <div class="bottom">
-                                <p>已报价<span>10</span>人</p>
+                                <p>已报价<span>{{todo.offer}}</span>人</p>
                                 <button class="mint-button mint-button--primary mint-button--small">我要报价</button>
                             </div>
                         </li>
@@ -96,6 +96,8 @@ export default {
     data() {
             return {
                 selected:"1",
+                resourceArr:[],
+                needArr:[],
                 todos: [{
                     "breedName": "人参",
                     "spec": "统货",
@@ -171,8 +173,37 @@ export default {
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.myAttention(url,body,function(suc){
                     common.$emit('close-load');
-                    console.log(suc);
+                    console.log(suc.data.biz_result.list);
+                    _self.resourceArr = suc.data.biz_result.list;
                     
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+
+
+                  common.$emit('show-load');
+                  let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let otherbody={biz_module:'intentionService',biz_method:'attentionIntentionList',version:1,time:0,sign:'',biz_param:{
+                        
+                        pn:"1",
+                        pSize:"20",
+                        intentionType:"0"
+                  }};
+                  
+                  otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
+                  otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
+                  httpService.myAttention(otherurl,otherbody,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc.data.biz_result.list);
+                    let result = suc.data.biz_result.list;
+                    for(var item in result){
+                            var duedateDate = new Date(result[item].duedate);
+                            var pubdateDate = new Date(result[item].pubdate);
+                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                            var days=Math.floor(dateValue/(24*3600*1000));
+                            result[item].days = days;
+                    }
+                    _self.needArr = result;
                     
                   },function(err){
                     common.$emit('close-load');

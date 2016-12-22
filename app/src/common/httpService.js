@@ -132,6 +132,41 @@ let httpService = new Vue({
                 err(res);
             });
         },
+        realTimeTurnover(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        searchWord(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        hotSearch(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        marketQuotation(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        drugResTable(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
         put(url) {
 
         },

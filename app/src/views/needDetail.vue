@@ -10,27 +10,27 @@
                 <div class="center">
                     <div class="title">
                         <img src="/static/icons/impatient.png">
-                        <p>人参</p>
+                        <p>{{obj.breedName}}</p>
                     </div>
                     <div class="detail ">
-                        <p>规格：<span>统货</span></p>
-                        <p class="right">发布时间：<span>2016-11-10</span></p>
+                        <p>规格：<span>{{obj.spec}}</span></p>
+                        <p class="right">发布时间：<span>{{obj.pubdate}}</span></p>
                     </div>
                     <div class="detail">
-                        <p>产地：<span>安徽</span></p>
-                        <p class="right">剩余：<span>20天</span></p>
+                        <p>产地：<span>{{obj.location}}</span></p>
+                        <p class="right">剩余：<span>{{obj.days}}天</span></p>
                     </div class="detail">
                     <div class="detail">
-                        <p>需求数量：<span>20kg</span></p>
+                        <p>需求数量：<span>{{obj.number}}{{obj.unit}}</span></p>
                     </div>
                     <div class="detail">
-                        <p>备注：<span>干度好，无走油，2015版药典标，干度好，无走油</span></p>
+                        <p>备注：<span>{{obj.description}}</span></p>
                     </div>
                     <div class="detail">
-                        <p>已报价：<span class="orange_font">12</span>人</p>
+                        <p>已报价：<span class="orange_font">{{obj.offer}}</span>人</p>
                     </div>
                     <div class="detail">
-                        <p>平均价格：<span class="orange_font">20.6元/kg</span></p>
+                        <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
                     </div>
                 </div>
             </mt-loadmore>
@@ -40,7 +40,7 @@
                 <img src="/static/icons/tel.png">
                 <p>电话</p>
             </button>
-            <button class="mint-button mint-button--primary mint-button--normal small_button">
+            <button class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention">
                 <img src="/static/icons/follow.png">
                 <p>关注</p>
             </button>
@@ -54,6 +54,7 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                id:'',
                 obj:{
 
                 }
@@ -62,12 +63,38 @@ export default {
         methods: {
             back() {
                 this.$router.go(-1);
+            },
+            myAttention(){
+                let _self = this;
+
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userService',biz_method:'userAttention',version:1,time:0,sign:'',biz_param:{
+                        intentionId:_self.id,
+                        type:1,
+                        breedName:_self.obj.breedName,
+                        intentionType:_self.obj.type
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.addAddress(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc.data);
+                    common.$emit('message', suc.data.msg);
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                  })
+            
             }
         },
         created() {
             let _self = this;
             var str = _self.$route.fullPath;
             var id = str.substring(12,str.length);
+            _self.id = id;
             httpService.myAttention(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
@@ -79,9 +106,13 @@ export default {
                             
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result;
-                            console.log(result);
-                            
-                             /*_self.obj = result;*/
+                            var duedateDate = new Date(result.duedate);
+                            var pubdateDate = new Date(result.pubdate);
+                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                            var days=Math.floor(dateValue/(24*3600*1000));
+                            result.days = days;
+                            result.pubdate = result.pubdate.substring(0,10);
+                             _self.obj = result;
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);

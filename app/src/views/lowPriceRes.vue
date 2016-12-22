@@ -5,7 +5,8 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <search-input></search-input>
+        <div  @click="jumpSearch"><search-input></search-input></div>
+
         <sort></sort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -15,7 +16,7 @@
                             <img src="/static/images/1.jpg" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.name}}</div>
+                                    <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.breedName}}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                     <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
@@ -49,7 +50,7 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-
+                key:'',
                 todos: [/*{
                     "name": "人参",
                     "spec": "统货",
@@ -64,12 +65,14 @@ export default {
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
+                show:''
             }
         },
         components: {
             searchInput,
             sort
         },
+        
         methods: {
             jumpDetail(id){
                 this.$router.push('resourceDetail/' + id);
@@ -101,21 +104,52 @@ export default {
                     }
                     this.$refs.loadmore.onTopLoaded(id);
                 }, 1500);
+            },
+            jumpSearch(){
+                this.$router.push('search');
             }
+           /* getValue(obj){
+                let _self = this;
+                httpService.searchWord(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'searchKeywordService',
+                        biz_method:'querySearchKeyword',
+              
+                            biz_param: {
+                                keyWord:obj.value,
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            
+                            console.log(suc.data.biz_result.list)
+                            let result = suc.data.biz_result.list;
+                            
+                            
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            }*/
         },
         created() {
             let _self = this;
-            httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+           
+            
+            
+            
+              httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'querySupplyList',
               
                             biz_param: {
-                                /*keyWord: */
+                                /*keyWord: key,*/
                                 sort:{"shelve_time":"0","price":"0"},
                                 /*location: 
-                                sampling:
+                                sampling:*/
                                 pn:1,
-                                pSize:20*/
+                                pSize:20
                             }
                         }, function(suc) {
                             console.log(suc)
@@ -123,21 +157,43 @@ export default {
                             let result = suc.data.biz_result.list;
                             _self.todos = result;
                             for(var item in result){
-                                
-                                /*console.log(result[item].pubdate.substring(0,11));*/
-                                
-
+                        
                             }
-                            
-                            
-                               
-                           
-
+        
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
                         })
 
+
+            common.$on('id-selected', function (key) {
+                  
+                  httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'querySupplyList',
+              
+                            biz_param: {
+                                keyWord: key,
+                                sort:{"shelve_time":"0","price":"0"},
+                                /*location: 
+                                sampling:*/
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            console.log(suc)
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            _self.todos = result;
+                            for(var item in result){
+                        
+                            }
+        
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            })
             
         },
         mounted() {

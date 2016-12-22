@@ -12,14 +12,14 @@
                             <img src="/static/images/1.jpg" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.name}}</div>
+                                    <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.breedName}}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
-                                    <p>产地：<span>{{todo.place}}</span></p>
-                                    <p class="time_font">发布时间：<span>{{todo.time}}</span></p>
+                                    <p>产地：<span>{{todo.location}}</span></p>
+                                    <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
                                 </div>
                                 <div class="res_content_right">
-                                    <p>{{todo.price}}</p>
-                                    <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail()">立即购买</button>
+                                    <p>{{todo.price}}元/kg</p>
+                                    <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail(todo.id)">立即购买</button>
                                 </div>
                             </div>
                         </li>
@@ -41,10 +41,11 @@
 import common from '../../common/common.js'
 import searchInput from '../../components/tools/inputSearch'
 import sort from '../../components/tools/sort'
+import httpService from '../../common/httpService.js'
 export default {
     data() {
             return {
-                todos: [{
+                todos: [/*{
                     "name": "人参",
                     "spec": "统货",
                     "place": "东北",
@@ -53,7 +54,7 @@ export default {
                     "down_price": "9元/kg",
                     "phone": "15301546832",
                     "time": "12:26"
-                }],
+                }*/],
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -65,8 +66,8 @@ export default {
             sort
         },
         methods: {
-            jumpDetail(){
-                this.$router.push('resourceDetail/1');
+            jumpDetail(id){
+                this.$router.push('resourceDetail/' + id);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -100,7 +101,7 @@ export default {
         },
         created() {
             let _self = this;
-            common.$emit('show-load');
+            /*common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
                 let data = response.data.biz_result.list;
@@ -108,7 +109,40 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/
+
+            httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'querySupplyList',
+              
+                            biz_param: {
+                                /*keyWord: */
+                                sort:{"shelve_time":"0","price":"0"},
+                                /*location: 
+                                sampling:
+                                pn:1,
+                                pSize:20*/
+                            }
+                        }, function(suc) {
+                            console.log(suc)
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            _self.todos = result;
+                            for(var item in result){
+                                
+                                /*console.log(result[item].pubdate.substring(0,11));*/
+                                
+
+                            }
+                            
+                            
+                               
+                           
+
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-130;

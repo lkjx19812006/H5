@@ -26,9 +26,9 @@
                         <ul class="first_ul">
                             <li v-for="(todo,index) in todos">
                                 <div class="second_level" v-on:click="firstLevel(index,todo)">
-                                    <p>{{todo.name}}</p>
+                                    <p>{{todo.breedName}}</p>
                                     <p>{{todo.spec}}</p>
-                                    <p>{{todo.place}}</p>
+                                    <p>{{todo.location}}</p>
                                     <p>{{todo.price}}</p>
                                     <p>{{todo.up_price}}&nbsp;<img src="/static/images/up.png"></p>
                                 </div>
@@ -51,6 +51,7 @@
 </template>
 <script>
 import common from '../common/common.js'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
@@ -73,6 +74,7 @@ export default {
                 common.$emit('close-load');
                 let data = response.data.biz_result.list;
                 let data_li = response.data.biz_result.list_li;
+                //console.log(response.data.biz_result.list_li)
                 for (var item in data) {
                     data[item].show = false;
                 }
@@ -82,6 +84,30 @@ export default {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
             });
+
+           /* let _self = this;
+            httpService.marketQuotation(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'breedService',
+                        biz_method:'queryBreedPrice',
+                        biz_param: {
+                               
+                            }
+                        }, function(suc) {
+                            //console.log(suc);
+                            let data = suc.data.biz_result.list;
+                            let data_li = suc.data.biz_result.list_li;
+                            console.log(data_li)
+                            for (var item in data) {
+                                data[item].show = false;
+                            }
+                            this.todos = data;
+                            this.todos_li = data_li; 
+             
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })*/
+            
         },
         mounted() {
 

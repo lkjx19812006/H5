@@ -2,21 +2,44 @@
     <div class="content search_input">
         <div class="search_div">
             <div class="search_content">
-                <input type="text" placeholder="请输入您想要的货物资源" disabled="true" >
-                <img src="/static/images/search.png" class="search_image">
+                <input type="text" placeholder="请输入您想要的货物资源" disabled ="true" >
+                <img src="/static/images/search.png" class="search_image" v-show="!show">
+                <img src="/static/images/false.png" class="search_image"  v-show="show">
             </div>
         </div>
     </div>
 </template>
 <script>
+import httpService from '../../common/httpService.js'
+import common from '../../common/common.js'
 export default {
     data() {
-            return {}
-        },
+            return {
+                value:'',
+                
+                prop:{
+                       show:true
+                    }
+                }
+                
+           },
+           /*watch: {
+            value: function(newValue, oldValue) {
+                //console.log(newValue);
+                //console.log(oldValue);
+                let _self = this;
+                window.clearTimeout(this.time);
+                this.time = setTimeout(() => {
+                    //console.log('dssdsdsd');
 
-        created() {
-
-        }
+                    _self.$emit('postValue',{
+                         value:_self.value 
+                    });
+                    
+                }, 0)
+            }
+        },*/
+        
 }
 </script>
 <style scoped>

@@ -3,7 +3,7 @@
         <div class="search_div">
             <div class="search_content">
                 <input type="text" placeholder="请输入关键字" v-model="keyword">
-                <img src="/static/images/search.png" class="search_image">
+                <img src="/static/images/search.png" class="search_image" v-on:click="search">
             </div>
             <span @click="back()">取消</span>
         </div>
@@ -14,7 +14,7 @@
                         热门搜索
                     </div>
                     <div class="history_search_content_result_detail">
-                        <button class="mint-button mint-button--default mint-button--small" v-for="item in todos">{{item.name}}</button>
+                        <button class="mint-button mint-button--default mint-button--small" v-for="item in todos">{{item.keyWord}}</button>
                     </div>
                 </div>
             </div>
@@ -38,10 +38,10 @@
         <div v-show="keyword">
             <div class="search_result">
                 <ul class="page-loadmore-list">
-                    <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                        <div>
+                    <li v-for="todo in datas" class="page-loadmore-listitem list_content_item">
+                        <div @click = "jump(todo.keyWord)">
                             <img src="/static/icons/search.png">
-                            <p>{{todo.name}}</p>
+                            <p>{{todo.keyWord}}</p>
                         </div>
                     </li>
                 </ul>
@@ -57,55 +57,10 @@ export default {
     data() {
             return {
                 keyword: '',
-                historyArr: [{
-                    name: '人参'
-                }, {
-                    name: '千年人参'
-                }, {
-                    name: '人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参'
-                }, {
-                    name: '千年人参'
-                }, {
-                    name: '人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }, {
-                    name: '人参人参'
-                }],
-                todos: [{
-                    "name": "人参",
-                    "spec": "统货",
-                    "place": "东北",
-                    "price": "98.9元/kg",
-                    "up_price": "9元/kg",
-                    "down_price": "9元/kg",
-                    "phone": "15301546832",
-                    "time": "12:26"
-                }],
+                historyArr: [],
+                todos: [],
+                datas:[],
+                customerId:'',
                 searchArr: [{
                     "name": "人参",
                     "spec": "统货",
@@ -143,21 +98,79 @@ export default {
             },
             clearResult: function() {
                 this.historyArr = [];
+            },
+            jump(key){
+                this.$router.push('lowPriceRes');
+                let _self = this;
+
+                common.$emit('id-selected', key)
+            },
+            search(){
+                let _self = this;
+                //搜索分词接口
+                
+                 //搜索记录保存接口
+                 /*httpService.searchWord(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'searchKeywordService',
+                        biz_method:'saveSearchRecord',
+              
+                            biz_param: {
+                                uid:_self.customerId,
+                                keyWord:_self.keyword,
+                                type:0,
+                                isResult:
+
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            
+                            
+                            
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })*/
+
             }
         },
         watch: {
             keyword: function(newValue, oldValue) {
-                console.log(newValue);
-                console.log(oldValue);
+                //console.log(newValue);
+                //console.log(oldValue);
+                let _self = this;
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
-                    console.log('dssdsdsd');
-                }, 500)
+                    //console.log('dssdsdsd');
+
+                   //搜索分词
+                    httpService.searchWord(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'searchKeywordService',
+                        biz_method:'querySearchKeyword',
+              
+                            biz_param: {
+                                keyWord:_self.keyword,
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            
+                            console.log(suc.data.biz_result.list)
+                            let result = suc.data.biz_result.list;
+                            _self.datas = result;
+                            
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+                }, 0)
             }
         },
         created() {
             let _self = this;
-            common.$emit('show-load');
+            /*common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
                 let data = response.data.biz_result.list;
@@ -169,8 +182,48 @@ export default {
 
             _self.time = setTimeout(() => {
                 console.log('dssdsdsd');
-            }, 500)
+            }, 500)*/
+                //热搜接口
+                httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'searchKeywordService',
+                        biz_method:'queryHotKeyword',
+              
+                            biz_param: {
+                                
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            //console.log(result)
+                            _self.todos = result;
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
 
+                
+                /*common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.queryUserInfo(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc.data);
+                    let result = suc.data.biz_result;
+                    _self.customerId = result.customerId;
+                    common.$emit('message', suc.data.msg);
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                  })
+*/
         }
 }
 </script>

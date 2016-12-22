@@ -9,24 +9,24 @@
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                            <div class="flag"><img src="/static/icons/england.png"><span>英国</span></div>
+                            <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div>
                             <div class="center">
                                 <div class="title">
-                                    <div><img src="/static/icons/impatient.png"><span>{{todo.name}}</span></div>
-                                    <p>发布时间：{{todo.time}}</p>
+                                    <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
+                                    <p>发布时间：{{todo.pubdate}}</p>
                                 </div>
                                 <div class="detail">
                                     <p>规格：{{todo.spec}}</p>
-                                    <p>剩余：<span>26</span>天</p>
+                                    <p>剩余：<span>{{todo.days}}</span>天</p>
                                 </div>
                                 <div class="detail">
-                                    <p>产地：{{todo.place}}</p>
-                                    <p>需求数量：100kg</p>
+                                    <p>产地：{{todo.location}}</p>
+                                    <p>需求数量：{{todo.number}}{{todo.unit}}</p>
                                 </div>
                             </div>
                             <div class="bottom">
-                                <p>已报价<span>10</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail()">我要报价</button>
+                                <p>已报价<span>{{todo.offer}}</span>人</p>
+                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail(todo.id)">我要报价</button>
                             </div>
                         </li>
                     </ul>
@@ -47,10 +47,11 @@
 import common from '../../common/common.js'
 import searchInput from '../../components/tools/inputSearch'
 import sort from '../../components/tools/sort'
+import httpService from '../../common/httpService.js'
 export default {
     data() {
             return {
-                todos: [{
+                todos: [/*{
                     "name": "人参",
                     "spec": "统货",
                     "place": "东北",
@@ -59,7 +60,7 @@ export default {
                     "down_price": "9元/kg",
                     "phone": "15301546832",
                     "time": "12:26"
-                }],
+                }*/],
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -72,7 +73,7 @@ export default {
         },
         methods: {
             jumpDetail(id){
-                this.$router.push('needDetail/1');
+                this.$router.push('needDetail/' + id);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -106,7 +107,7 @@ export default {
         },
         created() {
             let _self = this;
-            common.$emit('show-load');
+            /*common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
                 let data = response.data.biz_result.list;
@@ -114,7 +115,44 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/
+
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'myBegIntentionList',version:1,time:0,sign:'',biz_param:{
+                        sort:{"pubdate":"0","duedate":"0"},
+                        onSell:0,
+                        pn:1,
+                        pSize:20         
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    //console.log(suc.data.biz_result.list);
+                    let listArr = suc.data.biz_result.list;
+                    for(var item in listArr){
+                        
+                        var duedateDate = new Date(listArr[item].duedate);
+                        var pubdateDate = new Date(listArr[item].pubdate);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days=Math.floor(dateValue/(24*3600*1000));
+                        if(listArr[item].onSell == 1){
+                            listArr[item].onSell = '未审核'
+                        }
+                        if(listArr[item].onSell == 2){
+                            listArr[item].onSell = '已审核'
+                        }
+                        listArr[item].days = days;
+                        
+                    }
+                    console.log(listArr);
+                    _self.todos = listArr;
+                     
+                  },function(err){
+                    common.$emit('close-load');
+                  })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-130;
