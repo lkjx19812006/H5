@@ -167,6 +167,13 @@ let httpService = new Vue({
                 err(res);
             });
         },
+        myOrder(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
         put(url) {
 
         },

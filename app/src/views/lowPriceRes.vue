@@ -7,7 +7,7 @@
         </mt-header>
         <div  @click="jumpSearch"><search-input></search-input></div>
 
-        <sort></sort>
+        <sort v-on:postId="getId"></sort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -51,6 +51,7 @@ export default {
     data() {
             return {
                 key:'',
+                word:'',
                 todos: [/*{
                     "name": "人参",
                     "spec": "统货",
@@ -74,6 +75,9 @@ export default {
         },
         
         methods: {
+            getId(id){
+                console.log(id)
+            },
             jumpDetail(id){
                 this.$router.push('resourceDetail/' + id);
             },
@@ -133,21 +137,31 @@ export default {
                         })
             }*/
         },
+        beforeCreate(){
+            
+        },
         created() {
+
             let _self = this;
            
+          /*  common.$on('post-keyword', function (word){
+                 _self.word = word;
+            })
+            common.$on('id-selected', function (key){
+                 _self.key = key;
+            })*/
             
-            
-            
-              httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+             
+             common.$on('post-lowprice', function (word){
+
+                         httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'querySupplyList',
               
                             biz_param: {
-                                /*keyWord: key,*/
+                                keyWord:word,
                                 sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:*/
+                                
                                 pn:1,
                                 pSize:20
                             }
@@ -165,8 +179,9 @@ export default {
                             common.$emit('message', err.data.msg);
                         })
 
-
-            common.$on('id-selected', function (key) {
+             })
+            
+            common.$on('id-lowprice', function (key) {
                   
                   httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
@@ -175,8 +190,7 @@ export default {
                             biz_param: {
                                 keyWord: key,
                                 sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:*/
+                                
                                 pn:1,
                                 pSize:20
                             }
@@ -194,10 +208,54 @@ export default {
                             common.$emit('message', err.data.msg);
                         })
             })
+                   httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'querySupplyList',
+              
+                            biz_param: {
+                                
+                                sort:{"shelve_time":"0","price":"0"},
+                                
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            console.log(suc)
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            /*for(var i=0;i<result.length;i++){
+
+                                var item = result[i];
+                                var duedate = item.duedate;
+                                var pubdate = item.duedate;
+                                 
+                                      duedate =  duedate.replace(/-/g,'/'); 
+                                      pubdate =  pubdate.replace(/-/g,'/');
+                                      duedate = duedate.substring(0,10);
+                                      pubdate = pubdate.substring(0,10);
+                                
+                                var duedateDate = new Date(duedate);
+                                var pubdateDate = new Date(pubdate);
+                                var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                                var days=Math.floor(dateValue/(24*3600*1000));
+                                item.days = days; 
+                                item.duedate = duedate;
+                                item.pubdate = pubdate;
+                            }*/
+                            _self.todos = result;
+                            
+        
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
             
         },
+        
+       
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+
         }
 
 }

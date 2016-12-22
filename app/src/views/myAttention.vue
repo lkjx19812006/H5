@@ -1,26 +1,30 @@
 <template>
   <div class="my_attention">
-        <mt-header title="我的关注">
+        <mt-header :title="more">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
+            <mt-button  slot="right" class="right_text" @click="tabAttention">
+                   {{more}}
+           </mt-button>
+
         </mt-header>
         <search-input ></search-input>
       
-      <div class="select_box">
+      <!-- <div class="select_box">
         <mt-navbar v-model="selected">
           <mt-tab-item id="1">资源关注</mt-tab-item>
           <mt-tab-item id="2">求购关注</mt-tab-item>
         </mt-navbar>
-      </div>
+      </div> -->
         
         
                 <div class="bg_white">
                 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                 <mt-tab-container v-model="selected">
-                    <mt-tab-container-item id="1">
-                    <ul class="page-loadmore-list">
+                 <!-- <mt-tab-container v-model="selected">
+                    <mt-tab-container-item id="1"> -->
+                    <ul class="page-loadmore-list" v-show="show">
                         <li v-for="todo in resourceArr" class="page-loadmore-listitem list_content_item">
                                 <img src="/static/images/1.jpg" class="list_images">
                                 <div class="res_content">
@@ -37,11 +41,11 @@
                                 </div>
                             </li>
                         </ul>
-                     </mt-tab-container-item> 
+                     <!-- </mt-tab-container-item>  -->
 
 
-                     <mt-tab-container-item id="2">  
-                    <ul class="page-loadmore-list_second">
+                     <!-- <mt-tab-container-item id="2">   -->
+                    <ul class="page-loadmore-list_second" v-show="!show">
                         <li v-for="todo in needArr" class="page-loadmore-listitem list_content_item">
                             <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div>
                             <div class="center">
@@ -64,7 +68,7 @@
                             </div>
                         </li>
                     </ul>
-                     </mt-tab-container-item> 
+                     <!-- </mt-tab-container-item>  -->
 
 
                         <div slot="top" class="mint-loadmore-top">
@@ -95,6 +99,8 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                more:"求购关注",
+                show:true,
                 selected:"1",
                 resourceArr:[],
                 needArr:[],
@@ -146,7 +152,17 @@ export default {
                     }
                     this.$refs.loadmore.onTopLoaded(id);
                 }, 1500);
+            },
+            tabAttention(){
+                let _self = this;
+                this.show = !this.show;
+                if(this.show == true){
+                    _self.more = '求购关注';
+                }else{
+                    _self.more = '资源关注';
+                }
             }
+
         },
         created() {
             /*let _self = this;
@@ -159,6 +175,8 @@ export default {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
             });*/
+
+                 //供应接口
                   let _self = this;
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
@@ -174,13 +192,33 @@ export default {
                   httpService.myAttention(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc.data.biz_result.list);
-                    _self.resourceArr = suc.data.biz_result.list;
+                    let result = suc.data.biz_result.list;
+                    for(var i=0;i<result.length;i++){
+
+                        var item = result[i];
+                        var duedate = item.duedate;
+                        var pubdate = item.duedate;
+                         
+                              duedate =  duedate.replace(/-/g,'/'); 
+                              pubdate =  pubdate.replace(/-/g,'/');
+                              duedate = duedate.substring(0,10);
+                              pubdate = pubdate.substring(0,10);
+                        
+                        var duedateDate = new Date(duedate);
+                        var pubdateDate = new Date(pubdate);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days=Math.floor(dateValue/(24*3600*1000));
+                        item.days = days; 
+                        item.duedate = duedate;
+                        item.pubdate = pubdate;
+                    }
+                    _self.resourceArr = result;
                     
                   },function(err){
                     common.$emit('close-load');
                   })
 
-
+                  //求购接口
                   common.$emit('show-load');
                   let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
                   let otherbody={biz_module:'intentionService',biz_method:'attentionIntentionList',version:1,time:0,sign:'',biz_param:{
@@ -196,12 +234,24 @@ export default {
                     common.$emit('close-load');
                     console.log(suc.data.biz_result.list);
                     let result = suc.data.biz_result.list;
-                    for(var item in result){
-                            var duedateDate = new Date(result[item].duedate);
-                            var pubdateDate = new Date(result[item].pubdate);
-                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                            var days=Math.floor(dateValue/(24*3600*1000));
-                            result[item].days = days;
+                    for(var i=0;i<result.length;i++){
+
+                        var item = result[i];
+                        var duedate = item.duedate;
+                        var pubdate = item.duedate;
+                         
+                              duedate =  duedate.replace(/-/g,'/'); 
+                              pubdate =  pubdate.replace(/-/g,'/');
+                              duedate = duedate.substring(0,10);
+                              pubdate = pubdate.substring(0,10);
+                        
+                        var duedateDate = new Date(duedate);
+                        var pubdateDate = new Date(pubdate);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days=Math.floor(dateValue/(24*3600*1000));
+                        item.days = days; 
+                        item.duedate = duedate;
+                        item.pubdate = pubdate;
                     }
                     _self.needArr = result;
                     
@@ -287,6 +337,29 @@ export default {
 }
 
 .low_price {}
+/*.my_attention .right_header{
+    height:100%;
+    width:100%;
+    border:1px solid red;
+}
+.my_attention .right_header .tab{
+    position: absolute;
+    width:1.2rem;
+    height:1.2rem;
+    top:0.8rem;
+    left:0;
+}
+.my_attention .right_header .right_text{
+    padding-left: 2rem;
+    font-size: 1.2rem;
+    line-height: 4rem;
+}*/
+.my_attention .right_text{
+    
+    font-size: 1.2rem;
+    padding-left: 2rem;
+    background: url(/static/images/tab.png) no-repeat left center;
+}
 .my_attention .select_box{
     /*position: relative;
     top:50px;*/

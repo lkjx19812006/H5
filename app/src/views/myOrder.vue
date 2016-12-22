@@ -4,10 +4,13 @@
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
+             <mt-button  slot="right" class="right_text" @click="tabOrder">
+                   {{more}}
+            </mt-button>
         </mt-header>
         
 
-      <div class="select_box">
+      <!-- <div class="select_box">
         <mt-navbar v-model="selected" class="first_nav">
           <mt-tab-item id="1">我的采购</mt-tab-item>
           <mt-tab-item id="2">我的销售</mt-tab-item>
@@ -16,7 +19,7 @@
         
        <mt-tab-container v-model="selected" >
         <mt-tab-container-item id="1">
-             <mt-navbar v-model="first_act" class="second_nav">
+             <mt-navbar v-model="first_act" class="second_nav" v-show = "show">
               <mt-tab-item id="1">全部订单</mt-tab-item>
               <mt-tab-item id="2">待确认</mt-tab-item>
               <mt-tab-item id="3">待付款</mt-tab-item>
@@ -27,7 +30,7 @@
             </mt-navbar>
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
-             <mt-navbar v-model="second_act" class="second_nav">
+             <mt-navbar v-model="second_act" class="second_nav" v-show ="!show">
               <mt-tab-item id="1">订单</mt-tab-item>
               <mt-tab-item id="2">待确认</mt-tab-item>
               <mt-tab-item id="3">待付款</mt-tab-item>
@@ -37,29 +40,37 @@
               <mt-tab-item id="7">已取消</mt-tab-item>
             </mt-navbar>
         </mt-tab-container-item>
-      </mt-tab-container> 
+      </mt-tab-container>  -->
 
-      
+      <mt-navbar v-model="first_act" class="second_nav" >
+              <mt-tab-item id="1">全部订单</mt-tab-item>
+              <mt-tab-item id="2">待确认</mt-tab-item>
+              <mt-tab-item id="3">待付款</mt-tab-item>
+              <mt-tab-item id="4">待发货</mt-tab-item>
+              <mt-tab-item id="5">待收货</mt-tab-item>
+              <mt-tab-item id="6">已完成</mt-tab-item>
+              <mt-tab-item id="7">已取消</mt-tab-item>
+     </mt-navbar>
        <div class="bg_white">
                 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                  
                         <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jump(todo.router)">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jump(todo.id,todo.no)">
                             <div class="list_header">
                                 <div>
-                                    <p class="time_font"><span>{{todo.time}}</span></p>
-                                    <p class="order">订单编号：<span>DD123446678</span></p>
-                                    <p class="audit_state">{{todo.state}}</p>
+                                    <p class="time_font"><span>{{todo.ctime}}</span></p>
+                                    <p class="order">订单编号：<span>{{todo.no}}</span></p>
+                                    <p class="audit_state">{{todo.orderStatus}}</p>
                                 </div>
                             </div>
                             
                             <img src="/static/images/1.jpg" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div>{{todo.name}}</div>
+                                    <div>{{todo.breedName}}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
-                                    <p>产地：<span>{{todo.place}}</span></p>
+                                    <p>产地：<span>{{todo.location}}</span></p>
                                     <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
                                 </div>
                                 <div class="res_content_right">
@@ -67,11 +78,15 @@
                                 <!-- <button class="mint-button mint-button--primary mint-button--small">编辑</button> -->
                                 
                                 </div>
-                                <p class="num">数量：<span>50</span>kg</p>
+                                <p class="num">数量：<span>{{todo.number}}</span>kg</p>
                             </div>
 
                             <div class="sum">
-                                <p>合计：￥<span>6800</span>.00(含运费￥0.00)</p>
+                                <div>
+                                    <p class="sum_left">合计：(含运费￥0.00)</p>
+                                    <p>￥<span>{{Number(todo.price) * Number(todo.number)}}</span>.00</p>
+                                </div>
+                                
                                 <p >
                                    <button>物流查询</button>
                                    <button class="last-one">确认收货</button>
@@ -101,14 +116,16 @@
 
 <script>
 import common from '../common/common.js'
-import searchInput from '../components/tools/inputSearch'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                more:'采购订单',
+            　　show:true,
                 selected:"1",
                 first_act:'1',
                 second_act:'2',
-                todos: [{
+                todos: [/*{
                     "name": "人参",
                     "spec": "统货",
                     "place": "东北",
@@ -117,7 +134,7 @@ export default {
                     "phone": "15301546832",
                     "time": "2012-11-26",
                     "router":"myOrderDetail"
-                }],
+                }*/],
                 topStatus: '',
                 wrapperHeight: 0,
                 ttwrapperHeight: 0,
@@ -126,12 +143,23 @@ export default {
             }
         },
         components: {
-            searchInput
+            
             
         },
         methods: {
-            jump:function(router){
-                 this.$router.push(router);
+            tabOrder(){
+                 let _self = this;
+                    this.show = !this.show;
+                    if(this.show == true){
+                        _self.more = '采购订单';
+                    }else{
+                        _self.more = '销售订单';
+                    }
+            },
+            jump:function(id,no){
+                 this.$router.push('myOrderDetail/' + id);
+                 
+                 common.$emit('post-no',no);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -164,16 +192,46 @@ export default {
             }
         },
         created() {
-            let _self = this;
-            common.$emit('show-load');
+           
+           /* common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
-                /*let data = response.data.biz_result.list;
-                this.todos = data;*/
+                
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/
+
+            let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'orderService',biz_method:'queryOrderList',version:1,time:0,sign:'',biz_param:{
+                        orderStatus:0,
+                        type:0,
+                        pn:1,
+                        pSize:20        
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    //console.log(suc.data.biz_result.list);
+                    let listArr = suc.data.biz_result.list;
+                    console.log(listArr);
+                    for(var item in listArr){
+                      //console.log(listArr[item].ctime);
+                      /*let str =  listArr[item].ctime;*/
+                      
+                      
+                    }
+                    //let aa = listArr[0].ctime;
+                    //console.log(aa.substring(0,10))
+                    _self.todos = listArr;
+                     
+                  },function(err){
+                    common.$emit('close-load');
+                  })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -225,7 +283,7 @@ export default {
 
 .low_price {}
 
-.my_order .select_box{
+/*.my_order .select_box{
     border-bottom: 1px solid #DFDFDF;
     font-size: 2.5rem;
     background-color: white;
@@ -245,15 +303,23 @@ export default {
     background-color: #FA6705;
     color: white;
     margin: 0;
-} 
+} */
+
+.my_order .right_text{
+    
+    font-size: 1.2rem;
+    padding-left: 2rem;
+    background: url(/static/images/tab.png) no-repeat left center;
+}
 .my_order .second_nav{
-    width:150%;
+    width:100%;
 }
 .my_order .second_nav .mint-tab-item.is-selected{
     color:#FA6705;
 }
 .my_order .bg_white{
-    margin-top: 0.5rem;
+    /*margin-top: 0.5rem;*/
+    margin-top: 1rem;
 }
 
 .my_order .bg_white .page-loadmore-wrapper .mint-loadmore{
@@ -321,6 +387,18 @@ export default {
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum{
     float:right;
     margin-right:10px;
+
+}
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum>div{
+    border: 1px solid #DEDEDE;
+    height:3rem;
+    width:100%;
+}
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum>div p{
+    float:right;
+}
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum .sum_left{
+    float:left;
 }
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum p{
     font-size: 1rem;
@@ -328,6 +406,7 @@ export default {
     margin-top:0.5rem;
     margin-bottom: 0;
     text-align: right;
+    
 
 }
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum p span{

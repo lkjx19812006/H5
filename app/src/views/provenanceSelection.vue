@@ -1,17 +1,17 @@
 <template>
-    <div class="whole provenance">
+    <div class="provenance">
         <mt-header title="产地选择" class="header">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
             <mt-button slot="right" @click="save()">确定</mt-button>
         </mt-header>
-        <div class="select_box">
+        <!-- <div class="select_box">
             <mt-navbar v-model="selected">
                 <mt-tab-item id="1">国内</mt-tab-item>
                 <mt-tab-item id="2">国外</mt-tab-item>
             </mt-navbar>
-        </div>
+        </div> -->
         <div class="history_box" v-show="selectArr.length>0">
             <div class="history">
                 <div v-for="(item,index) in selectArr">

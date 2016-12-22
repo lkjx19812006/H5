@@ -28,15 +28,18 @@ export default {
                     sortArr: [{
                         name: '由新到旧',
                         asc: 'low',
-                        show: false
+                        show: false,
+                        id:2
                     }, {
                         name: '由旧到新',
                         asc: 'top',
-                        show: false
+                        show: false,
+                        id:1
                     }, {
                         name: '全部',
                         asc: '',
-                        show: false
+                        show: false,
+                        id:0
                     }]
                 }, {
                     name: '价格排序',
@@ -112,6 +115,10 @@ export default {
                     }
                 }
                 this.selectShow = false;
+                let _self = this;
+                _self.$emit("postId", {
+                    value: item.id
+                });
             }
         },
         created() {

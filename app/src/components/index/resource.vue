@@ -1,7 +1,7 @@
 <template>
     <div class="content resource">
         <div class="fixed">
-            <search-input></search-input>
+            <div @click="jumpSearch"> <search-input></search-input> </div>
             <sort></sort>
         </div>
         <div class="bg_white">
@@ -66,6 +66,9 @@ export default {
             sort
         },
         methods: {
+            jumpSearch(){
+                this.$router.push('search');
+            },
             jumpDetail(id){
                 this.$router.push('resourceDetail/' + id);
             },
@@ -110,11 +113,78 @@ export default {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
             });*/
+             common.$on('post-resource', function (word){
+                 
+                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'querySupplyList',            
+                            biz_param: {
+                                keyWord: word,
+                                sort:{"shelve_time":"0","price":"0"},
+                                /*location: 
+                                sampling:
+                                pn:1,
+                                pSize:20*/
+                            }
+                        }, function(suc) {
+                            console.log(suc)
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            _self.todos = result;
+                           
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+
+             })
+            
+            common.$on('id-resource', function (key) {
+                  httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'querySupplyList',            
+                            biz_param: {
+                                keyWord: key,
+                                sort:{"shelve_time":"0","price":"0"},
+                                /*location: 
+                                sampling:
+                                pn:1,
+                                pSize:20*/
+                            }
+                        }, function(suc) {
+                            console.log(suc)
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            /*for(var i=0;i<result.length;i++){
+
+                                var item = result[i];
+                                var duedate = item.duedate;
+                                var pubdate = item.duedate;
+                                 
+                                      duedate =  duedate.replace(/-/g,'/'); 
+                                      pubdate =  pubdate.replace(/-/g,'/');
+                                      duedate = duedate.substring(0,10);
+                                      pubdate = pubdate.substring(0,10);
+                                    
+                                var duedateDate = new Date(duedate);
+                                var pubdateDate = new Date(pubdate);
+                                var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                                var days=Math.floor(dateValue/(24*3600*1000));
+                                item.days = days; 
+                                item.duedate = duedate;
+                                item.pubdate = pubdate;
+                            }*/
+                            _self.todos = result;
+                           
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            })
 
             httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
-                        biz_method:'querySupplyList',
-              
+                        biz_method:'querySupplyList',            
                             biz_param: {
                                 /*keyWord: */
                                 sort:{"shelve_time":"0","price":"0"},
@@ -128,17 +198,7 @@ export default {
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result.list;
                             _self.todos = result;
-                            for(var item in result){
-                                
-                                /*console.log(result[item].pubdate.substring(0,11));*/
-                                
-
-                            }
-                            
-                            
-                               
                            
-
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);

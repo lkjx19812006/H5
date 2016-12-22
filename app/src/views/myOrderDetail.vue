@@ -11,13 +11,13 @@
       <div class="word_info">
             <!-- <img src="/static/images/1.jpg"> -->
             <div  class="info_left">
-                <p>下单时间：<span>2016-11-23</span></p>
-                <p>订单号：<span>DD1111222233</span></p> 
-                <p>收件人：<span>杨帆</span>|<span>15971484216</span></p> 
-                <p class="last_p">收货地址：<span>上海</span></p>
+                <p>下单时间：<span>{{todo.ctime}}</span></p>
+                <p>订单号：<span>{{todo.no}}</span></p> 
+                <p>收件人：<span>{{todo.consignee}}</span>&nbsp;|&nbsp;<span>{{todo.onsigneePhone}}</span></p> 
+                <p class="last_p">收货地址：<span>{{todo.consigneeAddr}}</span></p>
             </div>
             <p class="info_right">
-              待付款   
+              {{todo.orderStatus}}   
             </p>
       </div> 
 
@@ -25,27 +25,27 @@
           <div class="drug_info_top">
                <img src="/static/images/1.jpg">
                <div class="info_top_center">
-                   <p class="drug_name">人参</p>
-                   <p class="drug_spec">规格：统货</p>
-                   <p>产地：安徽</p>
+                   <p class="drug_name">{{todo.breedName}}</p>
+                   <p class="drug_spec">规格：{{todo.spec}}</p>
+                   <p>产地：{{todo.location}}</p>
                </div>
                <div class="info_top_bottom">
-                   <p class="drug_money">20<span>元/kg</span></p>
-                   <p>数量：<span>100</span>kg</p>
+                   <p class="drug_money">{{todo.price}}<span>元/kg</span></p>
+                   <p>数量：<span>{{todo.number}}</span>{{todo.unit}}</p>
                </div>  
           </div>
           <div class="drug_info_bottom">
                <div class="good_sum_price">
                    <p>商品总价</p>
-                   <p class="price">￥2000</p>
+                   <p class="price">￥{{todo.amount}}</p>
                </div>
                <div class="transport_price">
                    <p>运输价格</p>
-                   <p class="price">￥10</p>
+                   <p class="price">￥{{todo.incidentals}}</p>
                </div>
                <div class="sum_price">
                  <p>合计</p>
-                 <p class="price">￥2010</p>
+                 <p class="price">￥{{Number(todo.amount) + Number(todo.incidentals)}}</p>
                </div>
           </div>
       </div> 
@@ -60,12 +60,43 @@
 
 <script>
 import common from '../common/common.js'
-
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-               
+               todo:{},
+               no:''
             }
+        },
+        created(){
+          let _self = this;
+            common.$on('post-no',function(no){
+                  _self.no = no;
+                  
+                 common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'orderService',biz_method:'queryOrderInfo',version:1,time:0,sign:'',biz_param:{
+                          no: no
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    
+                    let listObj = suc.data.biz_result;
+                    
+                    console.log(listObj)
+                    
+                    _self.todo = listObj;
+                     
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+            })
+
+               
+
         }
         
 

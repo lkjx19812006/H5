@@ -79,7 +79,7 @@ module.exports = {
         { name: 'register', path: '/register', component: register },
         { name: 'findPassWord', path: '/findPassWord', component: findPassWord },
         { name: 'mySet', path: '/mySet', component: mySet },
-        { name: 'myOrderDetail', path: '/myOrderDetail', component: myOrderDetail },
+        { name: 'myOrderDetail', path: '/myOrderDetail/:OrdeId', component: myOrderDetail },
         { name: 'detailsPage', path: '/detailsPage', component: detailsPage },
         { name: 'revisePassWord', path: '/revisePassWord', component: revisePassWord },
         { name: 'revisePassWordConfirm', path: '/revisePassWordConfirm', component: revisePassWordConfirm },

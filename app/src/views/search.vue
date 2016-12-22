@@ -14,7 +14,7 @@
                         热门搜索
                     </div>
                     <div class="history_search_content_result_detail">
-                        <button class="mint-button mint-button--default mint-button--small" v-for="item in todos">{{item.keyWord}}</button>
+                        <button class="mint-button mint-button--default mint-button--small" v-for="item in todos"  v-on:click="jumpRes(item.keyWord)">{{item.keyWord}}</button>
                     </div>
                 </div>
             </div>
@@ -56,6 +56,7 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                str:'',
                 keyword: '',
                 historyArr: [],
                 todos: [],
@@ -100,10 +101,29 @@ export default {
                 this.historyArr = [];
             },
             jump(key){
-                this.$router.push('lowPriceRes');
                 let _self = this;
+                /*if(_self.str == 0){
+                      _self.$router.push('lowPriceRes');
+                }else if(_self.str == 1){
+                      _self.$router.push('urgentNeed');
+                }*/
+               this.$router.go(-1);
+                
 
-                common.$emit('id-selected', key)
+                common.$emit('id-lowprice', key);
+                common.$emit('id-urgentneed', key);
+
+                common.$emit('id-resource', key);
+                common.$emit('id-need', key);
+            },
+            jumpRes(item){
+                this.$router.go(-1);
+                common.$emit('post-lowprice',item);
+                common.$emit('post-urgentneed',item);
+                
+                common.$emit('post-resource', item);
+                common.$emit('post-need', item);
+
             },
             search(){
                 let _self = this;
@@ -142,7 +162,7 @@ export default {
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
                     //console.log('dssdsdsd');
-
+                  
                    //搜索分词
                     httpService.searchWord(common.urlCommon + common.apiUrl.most, {
                         biz_module:'searchKeywordService',
@@ -170,6 +190,11 @@ export default {
         },
         created() {
             let _self = this;
+            
+            /*var str = _self.$route.fullPath;
+            var id = str.substring(8,str.length);
+            _self.str = id;
+               console.log(id)*/
             /*common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
