@@ -10,7 +10,7 @@
     "down_price":"9",
   	"phone":"15301546832",
   	"time":"12:26:33",
-    "list_li":[{
+    "list_li":[{  
     "name":"人参",
     "spec":"统货",
     "place":"河北安国",
@@ -18,7 +18,7 @@
     "upordown_price":"9",
     "src":"../../static/images/up.png"
   },
-  {
+  {    
     "name":"枸杞",
     "spec":"统货",
     "place":"meiguo",

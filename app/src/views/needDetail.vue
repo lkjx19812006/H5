@@ -117,6 +117,11 @@ export default {
                             
                             common.$emit('message', err.data.msg);
                         })
+                 
+                 common.$on('post-need-detail',function (obj){
+                        _self.obj = obj;
+                 })
+
         }
 
 }

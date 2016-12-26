@@ -40,7 +40,13 @@ let httpService = new Vue({
                 err(res);
             });
         },
-
+        begBuyList(url, body, suc, err) {
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        }, 
         queryEmployeeInfo(url, body, suc, err){
             this.$http.post(url, body).then((response) => {
                 suc(response);
@@ -168,6 +174,13 @@ let httpService = new Vue({
             });
         },
         myOrder(url,body,suc,err){
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        specifiedPlace(url,body,suc,err){
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {

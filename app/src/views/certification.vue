@@ -14,15 +14,20 @@
                      </div>
                      <div>
                          <p class="left">姓名</p>
-                         <p class="right">扬帆</p>
+                         <p class="right">{{obj.name}}</p>
                      </div>
                      <div>
                          <p class="left">性别</p>
-                         <p class="right"><img src="/static/images/woman.png"></p>
+                         <p class="right" v-if="obj.gender == 0">
+                            <img src="/static/images/woman.png">
+                         </p>
+                         <p class="right" v-if="obj.gender == 1">
+                            <img src="/static/images/man.png">
+                         </p>
                      </div>
                      <div>
                          <p class="left">电话</p>
-                         <p class="right">15971484216</p>
+                         <p class="right">{{obj.phone}}</p>
                      </div>
                  </div>
      
@@ -30,14 +35,17 @@
                 <div class="first_item">
                     <div v-for="(todo,index) in todos" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                        <p class="title">{{todo.title}}</p>
-                       <div class="photo"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
+                       <div class="photo" >
+                          <imageUpload :param="imgageArr[index]" v-on:postUrl="getUrl"></imageUpload>
+                       </div>
+                       
                        <p  v-bind:class="{point:index == 0,'nor_point':index == 1}">{{todo.point}}</p>
                     </div>  
                 </div>
 
                 <div class="other_item">
                       <p>已通过审核照片</p>
-                      <div><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
+                      <div><!-- <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload> --></div>
                 </div>
 
              </div>
@@ -53,17 +61,24 @@
                 <p><span>认证常见问题</span></p>
           </div>    
        </div>
-        <div class="confirm">申请认证</div>
+        <div class="confirm" @click="confirm">申请认证</div>
   </div>
 </template>
 
 <script>
 import common from '../common/common.js'
 import imageUpload from '../components/tools/imageUpload'
+import httpService from '../common/httpService.js'
+
 export default {
     data() {
             return {
-                
+                obj:{
+                    gender:'',
+                    phone:'',
+                    name:''
+                    
+                },
                 todos:[{
                     title:'身份证正面',
                     point:'暂未认证'
@@ -71,7 +86,20 @@ export default {
                     title:'身份证反面',
                     point:'等待审核'
                 }],
-
+                
+                imgageArr:[
+                      {
+                        name: 'intention',
+                        index:0,
+                        url: ''  
+                      },{
+                        name: 'intention',
+                        index:1,
+                        url: ''  
+                      }],
+                left_url:'',
+                right_url:'',
+                arr:['','']
                 
             }
         },
@@ -80,23 +108,70 @@ export default {
         },
         methods: {
             getUrl(param){
-                console.log('dddddd');
-                console.log(param);
+                let _self = this;
+                if(param.index == 0){
+                     _self.arr[0] = param.url;
+                }else if(param.index == 1){
+                     _self.arr[1] = param.url;
+                }
+                 
+                
+            },
+            confirm(){
+                  let _self = this;
+                  //console.log(_self.arr)
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userService',biz_method:'submitAuthen',version:1,time:0,sign:'',biz_param:{
+                         type:0,
+                        
+                         authenImage:_self.arr
+                  }};
+                  console.log(common.difTime);
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.queryUserInfo(url,body,function(suc){
+                     common.$emit('close-load');
+                     console.log(suc)
+
+                      
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+
+                    
+                   console.log();
             }
             
         },
         
         created() {
-            let _self = this;
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                /*this.todos = data;*/
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });
+          let _self = this;
+          common.$emit('show-load');
+          let url=common.addSID(common.urlCommon+common.apiUrl.most);
+          let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
+          console.log(common.difTime);
+          body.time=Date.parse(new Date())+parseInt(common.difTime);
+          body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+          httpService.queryUserInfo(url,body,function(suc){
+             common.$emit('close-load');
+             
+            _self.obj.name = suc.data.biz_result.name;
+            _self.obj.gender = suc.data.biz_result.gender;
+            _self.obj.phone = suc.data.biz_result.phone;
+              
+          },function(err){
+            common.$emit('close-load');
+          })
+
+            common.$on("post-my-info", function (obj){
+                console.log(obj.name)
+                _self.obj.name = obj.name;
+                _self.obj.phone = obj.phone;
+                _self.obj.gender = obj.gender;
+
+
+            })
         }
 
 }

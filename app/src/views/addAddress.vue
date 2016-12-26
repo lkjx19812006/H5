@@ -8,26 +8,28 @@
         <ul>
            <li>
               <p>收货人</p>
-              <input type="text" placeholder="请输入您的名字" v-model="name">
+              <input type="text" placeholder="请输入您的名字" v-model="obj.name">
            </li>
 
            <li>
               <p>联系电话</p>
-              <input type="text" placeholder="请输入您的联系电话" v-model="phone">
+              <input type="text" placeholder="请输入您的联系电话" v-model="obj.phone">
            </li>
 
            <li>
               <p>省市区(县)</p>
               <!-- <p class="selectPlace" v-if="">{{address}}</p>   -->
 
-              <p class="selectPlace" >{{ addressProvince }}，{{ addressCity }}</p>  
+              <p class="selectPlace" >{{ obj.addressProvince }},{{ obj.addressCity }},{{obj.addressDistrict}}</p>  
               <img src="/static/images/right-arrow.png" @click="selectPlace">
            </li>
            <li class="last">
-              <textarea placeholder="详细地址" v-model="detailAddr"></textarea>
+              <textarea placeholder="详细地址" v-model="obj.detailAddr"></textarea>
            </li>
         </ul>
         <div class="address_box" v-show="show">
+          <mt-button type="primary" class="left-button"  @click="cancel">取消</mt-button>
+          <mt-button type="primary" class="right-button" @click="confirmIt" >确定</mt-button>
           <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5"></mt-picker>
         </div>
 
@@ -54,11 +56,19 @@ export default {
                 province:'北京',
                 city:'北京',
                 area:'朝阳区',
-
-                addressSlots:[
+                obj:{
+                   name:'',
+                   phone:'',
+                    addressProvince: '北京',
+                    addressCity: '北京',
+                    addressDistrict:'朝阳区',
+                   
+                    detailAddr:''
+                },
+                addressSlots: [
                       {
                         flex: 1,
-                        values: ['北京'],
+                        values: ['北京','上海'],
                         className: 'slot1',
                         textAlign: 'center'
                       },{
@@ -67,7 +77,7 @@ export default {
                         className: 'slot2'
                       },{
                         flex: 1,
-                        values:['北京'] ,
+                        values:['北京','上海'] ,
                         className: 'slot3',
                         textAlign: 'center'
                       }, 
@@ -77,13 +87,11 @@ export default {
                         className: 'slot4'
                       }, {
                         flex: 1,
-                        values: ['朝阳区'],
+                        values: ['朝阳区','虹口区'],
                         className: 'slot5',
                         textAlign: 'center'
                       }
                     ],
-                    addressProvince: '北京',
-                    addressCity: '北京'
             }
 
 
@@ -97,33 +105,40 @@ export default {
         },
         onAddressChange(picker, values) {
              
-              picker.setSlotValues(1, address[values[0]]);
-
-              this.addressProvince = values[0];
-              this.addressCity = values[1];
+              this.obj.addressProvince = values[0];
+              this.obj.addressCity = values[1];
+              this.obj.addressDistrict=values[2];
               
               /*this.addressDistrict = values[]*/
-            },
+        },
+        cancel(){
+             this.show = false;
+        },
+        confirmIt(){
+             this.show = false;
+        },
         confirm(){
               let _self = this;
               common.$emit('show-load');
               let url=common.addSID(common.urlCommon+common.apiUrl.most);
               let body={biz_module:'userAddressService',biz_method:'addUserAddress',version:1,time:0,sign:'',biz_param:{
-                    contactName:_self.name,
-                    contactPhone:_self.phone,
-                    province:_self.province,
-                    city:_self.city,
-                    district:_self.area,
-                    detailAddr:_self.detailAddr
+                    contactName:_self.obj.name,
+                    contactPhone:_self.obj.phone,
+                    province:_self.obj.addressProvince,
+                    city:_self.obj.addressCity,
+                    district:_self.obj.addressDistrict,
+                    detailAddr:_self.obj.detailAddr
               }};
               
               body.time=Date.parse(new Date())+parseInt(common.difTime);
               body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
               httpService.addAddress(url,body,function(suc){
                 common.$emit('close-load');
-                console.log(suc.data);
+                console.log(suc);
+                /*_self.obj.id = suc.data.biz_result.id*/
                 common.$emit('message', suc.data.msg);
-                
+                common.$emit('post-add-address',_self.obj);
+                _self.$router.push('addressManage')
               },function(err){
                 common.$emit('close-load');
                 common.$emit('message', err.data.msg);
@@ -205,5 +220,34 @@ export default {
    font-size: 1.7rem;
    position: fixed;
    bottom: 0;
+}
+
+
+.add_address  .address_box{
+   position: relative;
+   padding-top: 4rem;
+   
+   background: white;
+   
+}
+.add_address  .address_box .left-button{
+  position: absolute;
+  left: 10%;
+  top:1rem;
+  width:60px;
+  height:30px;
+  font-size: 16px;
+}
+
+.add_address  .address_box .right-button{
+  position: absolute;
+  right:10%;
+  top:1rem;
+  width:60px;
+  height:30px;
+  font-size: 16px;
+}
+.add_address  .select-box{
+  background:white;
 }
 </style>

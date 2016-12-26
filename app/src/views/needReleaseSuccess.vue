@@ -14,7 +14,7 @@
                     <p class="index_title">备注</p>
                 </div>
                 <div class="more_content">
-                    <p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                    <p>{{obj.description}}</p>
                 </div>
             </div>
         </div>
@@ -40,12 +40,18 @@ export default {
             return {
                 todos: {},
                 information: {
-                    "name": "人参",
-                    "spec": "统货",
-                    "place": "东北",
-                    "price": "98.9元/kg",
-                    "sendPlace": "上海",
-                    "number": "100kg"
+                    name: "人参",
+                    spec: "统货",
+                    place: "东北",
+                    price: "98.9",
+                    sendPlace: "上海",
+                    number: "100",
+                    unit:"kg",
+                    name:"",
+                    phone:""
+                },
+                obj:{
+                    description:'hahhahah'
                 },
                 person: {
                     name: '杨帆',
@@ -72,6 +78,35 @@ export default {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
             });
+             /*var _self = this;
+            var str = _self.$route.fullPath;
+            var id = str.substring(16,str.length);
+            _self.obj.id = id;
+           
+           httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) { 
+                            console.log(suc.data.biz_result);
+                            let result = suc.data.biz_result;
+                            _self.person.name = result.customerName;
+                            _self.person.phone = result.customerPhone;
+                            _self.information.price = result.price;
+                            _self.information.name = result.breedName;
+                            _self.information.spec = result.spec;
+                            _self.information.place = result.location;
+                            _self.information.number = result.number;
+                            _self.information.unit = result.unit;
+                            _self.obj.description = result.description;
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })*/
+
         }
 }
 </script>

@@ -2,7 +2,7 @@
     <div class="content need">
         <div class="fixed">
             <div @click="jumpSearch"> <search-input></search-input> </div>
-            <sort></sort>
+            <urgentSort  v-on:postId="getId"></urgentSort>
         </div>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -46,7 +46,7 @@
 <script>
 import common from '../../common/common.js'
 import searchInput from '../../components/tools/inputSearch'
-import sort from '../../components/tools/sort'
+import urgentSort from '../../components/tools/urgentSort'
 import httpService from '../../common/httpService.js'
 export default {
     data() {
@@ -65,17 +65,103 @@ export default {
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
+                value: {
+                    time:0,
+                    price:0,
+                    sample:''
+                },      
+                keyword:'',
             }
         },
         components: {
             searchInput,
-            sort
+            urgentSort
         },
         methods: {
+            getHttp(word,shelve_time,price,sampling){
+
+                 let _self = this;
+                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryBegBuyList',
+              
+                            biz_param: {
+                                keyWord: word,
+                                sort:{"shelve_time":shelve_time,"price":price},
+                               
+                                sampling:sampling,
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            console.log(suc)
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            
+                    for(var i=0;i<result.length;i++){
+
+                        var item = result[i];
+                        var duedate = item.duedate;
+                        var pubdate = item.duedate;
+                         
+                              duedate =  duedate.replace(/-/g,'/'); 
+                              pubdate =  pubdate.replace(/-/g,'/');
+                              duedate = duedate.substring(0,10);
+                              pubdate = pubdate.substring(0,10);
+                        
+                        var duedateDate = new Date(duedate);
+                        var pubdateDate = new Date(pubdate);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days=Math.floor(dateValue/(24*3600*1000));
+                        item.days = days; 
+                        item.duedate = duedate;
+                        item.pubdate = pubdate;
+                    }
+                            
+                        _self.todos = result;       
+                           
+
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+                 
+            },
+            getId(param){
+                 let _self = this;
+                  
+                  _self.value[param.key] = param[param.key];
+                  _self.getHttp(_self.keyword,_self.value.time,_self.value.price,_self.value.sample)
+            },
             jumpSearch(){
                 this.$router.push('search');
             },
             jumpDetail(id){
+                let _self = this;
+                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result;
+                            var duedateDate = new Date(result.duedate);
+                            var pubdateDate = new Date(result.pubdate);
+                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                            var days=Math.floor(dateValue/(24*3600*1000));
+                            result.days = days;
+                            result.pubdate = result.pubdate.substring(0,10);
+                             _self.obj = result;
+
+                             common.$emit('post-need-detail',_self.obj);
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
                 this.$router.push('needDetail/' + id);
             },
             handleBottomChange(status) {
@@ -111,197 +197,21 @@ export default {
         },
         created() {
             let _self = this;
-            /*common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
-
-                  /*common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'intentionService',biz_method:'myBegIntentionList',version:1,time:0,sign:'',biz_param:{
-                        sort:{"pubdate":"0","duedate":"0"},
-                        onSell:0,
-                        pn:1,
-                        pSize:20         
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.myResource(url,body,function(suc){
-                    common.$emit('close-load');
-                    //console.log(suc.data.biz_result.list);
-                    let listArr = suc.data.biz_result.list;
-                    for(var item in listArr){
-                        
-                        var duedateDate = new Date(listArr[item].duedate);
-                        var pubdateDate = new Date(listArr[item].pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days=Math.floor(dateValue/(24*3600*1000));
-                        if(listArr[item].onSell == 1){
-                            listArr[item].onSell = '未审核'
-                        }
-                        if(listArr[item].onSell == 2){
-                            listArr[item].onSell = '已审核'
-                        }
-                        listArr[item].days = days;
-                        
-                    }
-                    console.log(listArr);
-                    _self.todos = listArr;
-                     
-                  },function(err){
-                    common.$emit('close-load');
-                  })*/
-                  
-
-                  common.$on('post-need', function (word){
-                     httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryBegBuyList',
-              
-                            biz_param: {
-                                keyWord: word,
-                                sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:
-                                pn:1,
-                                pSize:20*/
-                            }
-                        }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                    /*for(var i=0;i<result.length;i++){
-
-                        var item = result[i];
-                        var duedate = item.duedate;
-                        var pubdate = item.duedate;
-                         
-                              duedate =  duedate.replace(/-/g,'/'); 
-                              pubdate =  pubdate.replace(/-/g,'/');
-                              duedate = duedate.substring(0,10);
-                              pubdate = pubdate.substring(0,10);
-                        
-                        var duedateDate = new Date(duedate);
-                        var pubdateDate = new Date(pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days=Math.floor(dateValue/(24*3600*1000));
-                        item.days = days; 
-                        item.duedate = duedate;
-                        item.pubdate = pubdate;
-                    }*/
-                            
-                        _self.todos = result;       
-                           
-
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-                        
-
+            
+              common.$on('post-urgentneed', function (word){
+                     _self.keyword = word;                     
+                    _self.getHttp(word,0,0,'');
              })
             
-              
-
-
-
-            common.$on('id-need', function (key) {
-                  
-                  httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryBegBuyList',
-              
-                            biz_param: {
-                                keyWord: key,
-                                sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:
-                                pn:1,
-                                pSize:20*/
-                            }
-                        }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                    /*for(var i=0;i<result.length;i++){
-
-                        var item = result[i];
-                        var duedate = item.duedate;
-                        var pubdate = item.duedate;
-                         
-                              duedate =  duedate.replace(/-/g,'/'); 
-                              pubdate =  pubdate.replace(/-/g,'/');
-                              duedate = duedate.substring(0,10);
-                              pubdate = pubdate.substring(0,10);
-                        
-                        var duedateDate = new Date(duedate);
-                        var pubdateDate = new Date(pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days=Math.floor(dateValue/(24*3600*1000));
-                        item.days = days; 
-                        item.duedate = duedate;
-                        item.pubdate = pubdate;
-                    }*/
-                            
-                        _self.todos = result;       
-                           
-
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+  
+            common.$on('id-urgentneed', function (key) {
+                  _self.keyword = key;   
+                  _self.getHttp(key,0,0,'');
             })
+                  _self.getHttp('',0,0,'');
 
 
-                  httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryBegBuyList',
-              
-                            biz_param: {
-                                
-                                sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:
-                                pn:1,
-                                pSize:20*/
-                            }
-                        }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                    /*for(var i=0;i<result.length;i++){
 
-                        var item = result[i];
-                        var duedate = item.duedate;
-                        var pubdate = item.duedate;
-                         
-                              duedate =  duedate.replace(/-/g,'/'); 
-                              pubdate =  pubdate.replace(/-/g,'/');
-                              duedate = duedate.substring(0,10);
-                              pubdate = pubdate.substring(0,10);
-                        
-                        var duedateDate = new Date(duedate);
-                        var pubdateDate = new Date(pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days=Math.floor(dateValue/(24*3600*1000));
-                        item.days = days; 
-                        item.duedate = duedate;
-                        item.pubdate = pubdate;
-                    }*/
-                            
-                        _self.todos = result;       
-                           
-
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-130;

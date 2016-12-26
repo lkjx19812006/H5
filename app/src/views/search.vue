@@ -1,4 +1,4 @@
-<template>
+ <template>
     <div class="content search">
         <div class="search_div">
             <div class="search_content">
@@ -115,6 +115,7 @@ export default {
 
                 common.$emit('id-resource', key);
                 common.$emit('id-need', key);
+                common.$emit('id-attention',key);
             },
             jumpRes(item){
                 this.$router.go(-1);
@@ -127,30 +128,6 @@ export default {
             },
             search(){
                 let _self = this;
-                //搜索分词接口
-                
-                 //搜索记录保存接口
-                 /*httpService.searchWord(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'searchKeywordService',
-                        biz_method:'saveSearchRecord',
-              
-                            biz_param: {
-                                uid:_self.customerId,
-                                keyWord:_self.keyword,
-                                type:0,
-                                isResult:
-
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            
-                            
-                            
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })*/
 
             }
         },
@@ -190,24 +167,6 @@ export default {
         },
         created() {
             let _self = this;
-            
-            /*var str = _self.$route.fullPath;
-            var id = str.substring(8,str.length);
-            _self.str = id;
-               console.log(id)*/
-            /*common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });
-
-            _self.time = setTimeout(() => {
-                console.log('dssdsdsd');
-            }, 500)*/
                 //热搜接口
                 httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
                         biz_module:'searchKeywordService',
@@ -228,27 +187,8 @@ export default {
                             
                             common.$emit('message', err.data.msg);
                         })
-
-                
-                /*common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.queryUserInfo(url,body,function(suc){
-                    common.$emit('close-load');
-                    console.log(suc.data);
-                    let result = suc.data.biz_result;
-                    _self.customerId = result.customerId;
-                    common.$emit('message', suc.data.msg);
-                    
-                  },function(err){
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                  })
-*/
+       
+            
         }
 }
 </script>

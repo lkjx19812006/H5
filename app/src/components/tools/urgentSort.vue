@@ -1,5 +1,5 @@
 <template>
-    <div class="content sort">
+    <div class="content urgent-sort">
         <div class="sort_content">
             <div v-bind:class="item.class" v-for="(item,index) in arr" @click="showTable(item,index)">
                 {{item.name}}<img v-bind:src="item.url">
@@ -48,19 +48,19 @@ export default {
                         key:'time'
                     }]
                 }, {
-                    name: '价格排序',
+                    name: '报价人数',
                     asc: 'top',
                     url: '/static/icons/drop_down.png',
-                    saveName: '价格排序',
+                    saveName: '报价人数',
                     class: 'sort_content_detail',
                     sortArr: [{
-                        name: '由低到高',
+                        name: '由少到多',
                         asc: 'low',
                         show: false,
                         price:1,
                         key:'price'
                     }, {
-                        name: '由高到低',
+                        name: '由多到少',
                         asc: 'top',
                         show: false,
                         price:2,
@@ -73,19 +73,19 @@ export default {
                         key:'price'
                     }]
                 }, {
-                    name: '可否样品',
+                    name: '剩余时间',
                     asc: 'top',
                     url: '/static/icons/drop_down.png',
-                    saveName: '可否样品',
+                    saveName: '剩余时间',
                     class: 'sort_content_detail',
                     sortArr: [{
-                        name: '可提供',
+                        name: '由短到长',
                         asc: 'low',
                         show: false,
                         sample:1,
                         key:'sample'
                     }, {
-                        name: '不可提供',
+                        name: '由长到短',
                         asc: 'top',
                         show: false,
                         sample:0,
@@ -148,18 +148,18 @@ export default {
 }
 </script>
 <style scoped>
-.sort {
+.urgent-sort {
     float: left;
     width: 100%;
 }
 
-.sort .sort_content {
+.urgent-sort .sort_content {
     width: 100%;
     float: left;
     border-bottom: 1px solid #ddd;
 }
 
-.sort .sort_content .sort_content_detail {
+.urgent-sort .sort_content .sort_content_detail {
     float: left;
     width: 25%;
     min-height: 40px;
@@ -168,7 +168,7 @@ export default {
     font-size: 1.1rem;
 }
 
-.sort .sort_content .sort_content_detail_select {
+.urgent-sort .sort_content .sort_content_detail_select {
     float: left;
     width: 25%;
     min-height: 40px;
@@ -177,19 +177,19 @@ export default {
     font-size: 1.1rem;
 }
 
-.sort .sort_content .sort_content_detail_select img {
+.urgent-sort .sort_content .sort_content_detail_select img {
     max-height: 9px;
     margin-left: 5px;
     margin-top: 5px;
 }
 
-.sort .sort_content .sort_content_detail img {
+.urgent-sort .sort_content .sort_content_detail img {
     max-height: 9px;
     margin-left: 5px;
     margin-top: 5px;
 }
 
-.sort .sort_content .sort_cell {
+.urgent-sort .sort_content .sort_cell {
     width: 100%;
     float: left;
     position: absolute;
@@ -197,13 +197,13 @@ export default {
     margin-top: 40px;
 }
 
-.sort .sort_content .sort_cell .cell_p {
+.urgent-sort .sort_content .sort_cell .cell_p {
     position: absolute;
     left: 10px;
     font-size: 1.1rem;
 }
 
-.sort .sort_content .sort_cell .cell_img {
+.urgent-sort .sort_content .sort_cell .cell_img {
     max-height: 15px;
     float: right;
 }

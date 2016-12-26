@@ -137,9 +137,7 @@ export default {
                         if (response.data.code == '1c01') {
                             common.$emit('message', response.data.msg);
                         } else {
-                            common.$emit('message', response.data.msg);
-                            
-                            
+                            common.$emit('message', response.data.msg);          
                         }
 
 

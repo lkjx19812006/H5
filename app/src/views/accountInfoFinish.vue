@@ -8,7 +8,10 @@
    </mt-header>
    <div class="header_photo_box">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
-        <div class="header_photo"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
+        <div class="header_photo">
+            <imageUpload :param="param" v-on:postUrl="getUrl" ></imageUpload>
+           
+        </div>
    </div>
 
    <div class="basic_data">
@@ -24,7 +27,7 @@
            <li > <!-- v-for="(item,index) in personalDataArr" v-if="index>=1 && index<=2" -->
               <p class="name name_smart_size" >生日</p>
               <p class="name_content"> <!-- @click.native="open('picker')" size="large" -->
-                {{pickerValue}}
+                {{arr.birthday}}
                  <!-- <input type="text" :placeholder="arr.birthday" v-model="arr.birthday" disabled = fasle > -->
                   
               </p>
@@ -33,15 +36,20 @@
            </li>
            <li > 
               <p class="name name_smart_size">性别</p>
-              
-              <p class="name_content" > <!-- v-if="arr.gender == 1" -->
-                 <img src="/static/images/woman.png" >
-                 
-                  
-              </p>
+              <div >
+                   <p class="name_content" > <!-- v-if="arr.gender == 1" -->
+                      <select class="sex-select" v-model="arr.gender">
+                           <option>男</option>
+                           <option>女</option>
+                      </select>
+                     <!-- <img src="/static/images/woman.png" v-show="!arr.sex">  
+                     <img src="/static/images/man.png" v-show="arr.sex">   -->
+                  </p>
 
              
-              <img src="/static/images/down-arrow.png" class="down-arrow">
+              <!-- <img src="/static/images/down-arrow.png" class="down-arrow"> -->
+              </div>
+              
            </li>
             <li ><!-- v-for="(item,index) in personalDataArr" v-if="index==3" -->
                 <p class="name name_big_size" >电话</p>
@@ -52,7 +60,7 @@
              </li>
 
              <li ><!--  v-for="(item,index) in personalDataArr" v-if="index==4" -->
-              <p class="name name_big_size" >个人认证</p>
+              <p class="name name_big_size" @click="jump('certification')">个人认证</p>
               <p class="name_content" >
                  <input type="text" :placeholder="arr.ucomment" v-model="arr.ucomment">
               </p>
@@ -75,11 +83,14 @@
            </li>
            <li > <!-- v-for="(item,index) in companyDataArr" v-if="index == 2"  -->
               <p class="name  name_smart_size">职位</p>
-              <p class="name_content"><input type="text" :placeholder="arr.companyJob" v-model="arr.companyJob">
-                      
+              <p class="name_content"><!-- <input type="text" :placeholder="arr.companyJob" v-model="arr.companyJob"> -->
+                  <select class="sex-select" v-model="arr.companyJob">
+                           <option>业务员</option>
+                           <option>客服</option>
+                  </select>    
               </p>
               
-              <img src="/static/images/down-arrow.png" class="down-arrow">
+              <!-- <img src="/static/images/down-arrow.png" class="down-arrow"> -->
            </li>
 
            <li > <!-- v-for="(item,index) in companyDataArr" v-if="index > 2 && index < 5" -->
@@ -128,13 +139,17 @@ export default {
 
   data () {
     return {
+      sex:'',
       
       param: {
           name: 'intention',
-          index:0
+          index:0,
+          url:''
       },
+      birthday:'',
       pickerValue:'',
       arr:{
+        
         name:'',
         birthday:'',
         gender:'',
@@ -145,8 +160,8 @@ export default {
         companyJob:'',
         bizMain:'',
         invoice:'',
-        ccomment:''
-
+        ccomment:'',
+        url:''
       },
 
       personalDataArr:[{
@@ -196,7 +211,7 @@ export default {
         },
   created(){
           let _self = this;
-
+          
           common.$emit('show-load');
           let url=common.addSID(common.urlCommon+common.apiUrl.most);
           let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
@@ -205,11 +220,22 @@ export default {
           body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
           httpService.queryUserInfo(url,body,function(suc){
             common.$emit('close-load');
-             //console.log(_self.currentValue);
-              console.log(_self.pickerValue);  
+              
+              
+              let birthday = JSON.stringify(_self.pickerValue);
+              birthday = birthday.substring(1,11);
+              birthday = new Date(birthday).getTime() + (24*3600*1000);
+              birthday = JSON.stringify(new Date(birthday));
+              birthday = birthday.substring(1,11);
+              _self.birthday = birthday;
+              let gender = suc.data.biz_result.gender;
+
+              
+              
+              
             _self.arr.name = suc.data.biz_result.name;
-            /*_self.pickerValue = suc.data.biz_result.birthday;*/
-            _self.arr.gender = suc.data.biz_result.gender;
+            _self.pickerValue = _self.birthday;
+            _self.arr.gender = gender;
             _self.arr.phone = suc.data.biz_result.phone;
             _self.arr.ucomment = suc.data.biz_result.ucomment;
             
@@ -219,15 +245,40 @@ export default {
             _self.arr.bizMain = suc.data.biz_result.bizMain;
             _self.arr.invoice = suc.data.biz_result.invoice;
             _self.arr.ccomment = suc.data.biz_result.ccomment;
+            _self.param.url = suc.data.biz_result.avatar;
             
           },function(err){
             common.$emit('close-load');
           })
+              
+             
  },
+ watch: {
+            pickerValue: function(newValue, oldValue) {
+                console.log(newValue);
+                console.log(oldValue);
+                let _self = this;
+                window.clearTimeout(this.time);
+                this.time = setTimeout(() => {
+                    
+                    let birthday = JSON.stringify(_self.pickerValue);
+                    birthday = birthday.substring(1,11);
+                    birthday = new Date(birthday).getTime() + (24*3600*1000);
+                    birthday = JSON.stringify(new Date(birthday));
+                    birthday = birthday.substring(1,11);
+                    _self.arr.birthday = birthday;
+                    
+                }, 0)
+            }
+        },
   methods:{
+      jump(router){
+          this.$router.push(router);
+      },
+      
       getUrl(param){
-                console.log('dddddd');
-                console.log(param);
+               
+                this.arr.url = param.url;
             },
       open(picker) {
           this.$refs[picker].open();
@@ -237,6 +288,8 @@ export default {
       upData(){
 
           let _self = this;
+       
+          let birthday = new Date(_self.birthday).getTime();
           
           common.$emit('show-load');
           let url=common.addSID(common.urlCommon+common.apiUrl.most);
@@ -245,10 +298,12 @@ export default {
                gender: _self.arr.gender,
                fullname: _self.arr.name,
                phone: _self.arr.phone,
-               birthday: _self.pickerValue,
+               birthday: birthday,
                company:_self.arr.company,
                companyShort:_self.arr.companyShort,
                bizMain:_self.arr.bizMain,
+               avatar:_self.arr.url,
+               companyJob:_self.arr.companyJob,
                invoice:_self.arr.invoice,
           }};
           console.log(common.difTime);
@@ -256,9 +311,10 @@ export default {
           body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
           httpService.queryUserInfo(url,body,function(suc){
             common.$emit('close-load');
+
+            /*common.$emit('accountInfo',_self.arr);*/
+            
             _self.$router.push('accountInfo');
-            
-            
           },function(err){
             common.$emit('close-load');
           })
@@ -320,6 +376,7 @@ border-radius: 0;
   z-index: 10000000;
 
 }
+  
 .account_overview_finish .basic_data,
 .company_data{
   width:100%;
@@ -410,5 +467,16 @@ border-radius: 0;
   top:1.79rem;
   height:0.6826rem;
   width:1.024rem;
+}
+.account_overview_finish .sex-select{
+   border:none;
+   
+   height:4.1rem;
+   line-height:4.26rem;
+   position: absolute;
+   right:4%;
+   padding-right: 20px;
+   background:url(/static/images/down-arrow.png ) no-repeat right center;
+   background-size:1.024rem 0.6826rem;
 }
 </style>

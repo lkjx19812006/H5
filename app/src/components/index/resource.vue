@@ -2,7 +2,7 @@
     <div class="content resource">
         <div class="fixed">
             <div @click="jumpSearch"> <search-input></search-input> </div>
-            <sort></sort>
+            <sort v-on:postId="getId"></sort>
         </div>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -59,6 +59,12 @@ export default {
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
+                value: {
+                    time:0,
+                    price:0,
+                    sample:''
+                },
+                keyword:'' 
             }
         },
         components: {
@@ -66,10 +72,62 @@ export default {
             sort
         },
         methods: {
+            getHttp(word,shelve_time,price,sampling){
+                 let _self = this;
+                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'querySupplyList',            
+                            biz_param: {
+                                keyWord: word,
+                                sort:{"shelve_time":shelve_time,"price":price},
+                                 
+                                sampling:sampling,
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            console.log(suc)
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            _self.todos = result;
+                           
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            },
+            getId(param){
+                  let _self = this;
+                  _self.value[param.key] = param[param.key];
+
+                 _self.getHttp(_self.keyword,_self.value.time,_self.value.price,_self.value.sample);
+            },
             jumpSearch(){
                 this.$router.push('search');
             },
             jumpDetail(id){
+                let _self = this;
+                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result;
+                            console.log(result);
+                            
+                             _self.obj = result;
+                             common.$emit('post-res-detail',_self.obj);
+                       
+
+                        }, function(err) {
+                            
+                             common.$emit('message', err.data.msg);
+                        })
                 this.$router.push('resourceDetail/' + id);
             },
             handleBottomChange(status) {
@@ -104,105 +162,21 @@ export default {
         },
         created() {
             let _self = this;
-            /*common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
+            
              common.$on('post-resource', function (word){
+                 _self.keyword = word;
                  
-                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'querySupplyList',            
-                            biz_param: {
-                                keyWord: word,
-                                sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:
-                                pn:1,
-                                pSize:20*/
-                            }
-                        }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                            _self.todos = result;
-                           
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                     _self.getHttp(word,0,0,'');
 
              })
             
             common.$on('id-resource', function (key) {
-                  httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'querySupplyList',            
-                            biz_param: {
-                                keyWord: key,
-                                sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:
-                                pn:1,
-                                pSize:20*/
-                            }
-                        }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                            /*for(var i=0;i<result.length;i++){
-
-                                var item = result[i];
-                                var duedate = item.duedate;
-                                var pubdate = item.duedate;
-                                 
-                                      duedate =  duedate.replace(/-/g,'/'); 
-                                      pubdate =  pubdate.replace(/-/g,'/');
-                                      duedate = duedate.substring(0,10);
-                                      pubdate = pubdate.substring(0,10);
-                                    
-                                var duedateDate = new Date(duedate);
-                                var pubdateDate = new Date(pubdate);
-                                var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                                var days=Math.floor(dateValue/(24*3600*1000));
-                                item.days = days; 
-                                item.duedate = duedate;
-                                item.pubdate = pubdate;
-                            }*/
-                            _self.todos = result;
-                           
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                 
+                     _self.getHttp(key,0,0,'');
             })
 
-            httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'querySupplyList',            
-                            biz_param: {
-                                /*keyWord: */
-                                sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:
-                                pn:1,
-                                pSize:20*/
-                            }
-                        }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                            _self.todos = result;
-                           
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+            
+                        _self.getHttp('',0,0,'');
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-130;

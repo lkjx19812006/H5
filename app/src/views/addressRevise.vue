@@ -16,7 +16,7 @@
               <input type="text" :placeholder="obj.tel" v-model="obj.tel">
            </li>
 
-           <li>
+           <li  @click="selectPlace">
               <p>省市区(县)</p>
               <p class="selectPlace">
                   <!-- <span v-model="obj.province">{{obj.province}}</span>
@@ -26,10 +26,10 @@
                   <input type="text" v-model="obj.city" />
                   <input type="text" v-model="obj.area" /> -->
 
-                  {{ addressProvince }}，{{ addressCity }}
+                  {{ obj.addressProvince }}{{ obj.addressCity }},{{obj.addressDistrict}}
                   
               </p>  
-              <img src="/static/images/right-arrow.png" @click="selectPlace">
+              <img src="/static/images/right-arrow.png" >
            </li>
            <li class="last">
               <textarea :placeholder="obj.detailAddr" v-model="obj.detailAddr"></textarea>
@@ -40,7 +40,9 @@
 <!-- <mt-picker :slots="slots" @change="onValuesChange"></mt-picker> -->
 <!-- <mt-picker :slots="slots" @change="onAddressChange" class="address_picker"></mt-picker> -->
       <div class="address_box" v-show="show">
-          <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5"></mt-picker>
+          <mt-button type="primary" class="left-button"  @click="cancel">取消</mt-button>
+          <mt-button type="primary" class="right-button" @click="confirmIt" >确定</mt-button>
+          <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5" class="select-box"></mt-picker>
       </div>
       <div class="confirm" v-on:click="confirm">保存</div>
     </div>
@@ -55,17 +57,20 @@ export default {
     data() {
             return {
                 show:false,
+                post_id:'',
                 obj:{
                    name:'',
                    tel:'',
+                    addressProvince: '北京',
+                    addressCity: '北京',
+                    addressDistrict:'朝阳区',
                    
-                   area:'虹口区',
                    detailAddr:''
                 },
                 addressSlots: [
                       {
                         flex: 1,
-                        values: ['北京'],
+                        values: ['北京','上海'],
                         className: 'slot1',
                         textAlign: 'center'
                       },{
@@ -74,7 +79,7 @@ export default {
                         className: 'slot2'
                       },{
                         flex: 1,
-                        values:['北京'] ,
+                        values:['北京','上海'] ,
                         className: 'slot3',
                         textAlign: 'center'
                       }, 
@@ -84,43 +89,74 @@ export default {
                         className: 'slot4'
                       }, {
                         flex: 1,
-                        values: ['朝阳区'],
+                        values: ['朝阳区','虹口区'],
                         className: 'slot5',
                         textAlign: 'center'
                       }
                     ],
-                    addressProvince: '北京',
-                    addressCity: '北京',
                     
-                
             }
         },
     methods: {
            
             onAddressChange(picker, values) {
-             
-              picker.setSlotValues(1, address[values[0]]);
-
-              this.addressProvince = values[0];
-              this.addressCity = values[1];
-              
-              /*this.addressDistrict = values[]*/
+              //console.log(picker);
+              //console.log(values);
+              // picker.setSlotValues(1, address[values[0]]);
+              this.obj.addressProvince = values[0];
+              this.obj.addressCity = values[1];
+              this.obj.addressDistrict=values[2];
             },
+
         selectPlace(){
             /*this.$router.push('selectPlace');*/
-             this.show = !this.show;
+             this.show = true;
+        },
+        cancel(){
+             this.show = false;
+        },
+        confirmIt(){
+             this.show = false;
         },
         confirm(){
-                  /*let _self = this;
+                  let _self = this;
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'userAddressService',biz_method:'updateUserAddressInfo',version:1,time:0,sign:'',biz_param:{
                         contactName:_self.obj.name,
                         contactPhone:_self.obj.tel,
-                        province:_self.addressProvince,
-                        city:_self.addressCity,
-                        district:_self.obj.area,
-                        detailAddr:_self.obj.detailAddr
+                        province:_self.obj.addressProvince,
+                        city:_self.obj.addressCity,
+                        district:_self.obj.addressDistrict,
+                        detailAddr:_self.obj.detailAddr,
+                        id:_self.post_id
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.addressRevise(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc);
+                    /*var obj = _self.obj;*/
+                    common.$emit('post-revise-address',_self.obj);
+                    _self.$router.push('addressManage')
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+                
+        }
+    },
+     created(){
+               let _self = this;
+               /*common.$on('post-address-id', function (id){
+                    console.log(id);
+                    _self.post_id = id;
+                    console.log(id);
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userAddressService',biz_method:'queryAddressById',version:1,time:0,sign:'',biz_param:{
+                        id:id
                   }};
                   
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
@@ -128,15 +164,23 @@ export default {
                   httpService.addressRevise(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc.data.biz_result);
-                    
+                    let result = suc.data.biz_result;
+                        _self.obj.detailAddr = result.address;
+                        _self.obj.name = result.contactName;
+                        _self.obj.tel = result.contactPhone;
+                        _self.obj.addressProvince = result.province;
+                        _self.obj.addressCity = result.city;
+                        _self.obj.addressDistrict = result.district;
                   },function(err){
                     common.$emit('close-load');
-                  })*/
-                
-        }
-    },
-     created(){
-                  
+                  })
+
+             }) */
+
+             common.$on('post-address-id', function (obj){
+                   _self.obj = obj;
+             })
+             
      }
        
         
@@ -215,12 +259,31 @@ export default {
    width:100px;
    height:4.2rem;
 }*/
-.address_box{
+.address_revise .address_box{
+   position: relative;
+   padding-top: 4rem;
    
-   /*border:1px solid red;
-   height:4.2rem;
-   overflow: hidden;
-   font-size: 1.2rem;*/
+   background: white;
+   
+}
+.address_revise .address_box .left-button{
+  position: absolute;
+  left: 10%;
+  top:1rem;
+  width:60px;
+  height:30px;
+  font-size: 16px;
+}
 
+.address_revise .address_box .right-button{
+  position: absolute;
+  right:10%;
+  top:1rem;
+  width:60px;
+  height:30px;
+  font-size: 16px;
+}
+.address_revise .select-box{
+  background:white;
 }
 </style>

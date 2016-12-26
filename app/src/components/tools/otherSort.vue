@@ -32,17 +32,20 @@ export default {
                         name: '由新到旧',
                         asc: 'low',
                         show: false,
-                        id:'2'
+                        pubdate:2,
+                        key:'pubdate'
                     }, {
                         name: '由旧到新',
                         asc: 'top',
                         show: false,
-                        id:'1'
+                        pubdate:1,
+                        key:'pubdate'
                     }, {
                         name: '全部',
                         asc: '',
                         show: false,
-                        id:'0'
+                        pubdate:0,
+                        key:'pubdate'
                     }]
                 }, {
                     name: '剩余时间',
@@ -53,15 +56,21 @@ export default {
                     sortArr: [{
                         name: '由短到长',
                         asc: 'low',
-                        show: false
+                        show: false,
+                        duedate:2,
+                        key:'duedate'
                     }, {
                         name: '由长到短',
                         asc: 'top',
-                        show: false
+                        show: false,
+                        duedate:1,
+                        key:'duedate'
                     }, {
                         name: '全部',
                         asc: '',
-                        show: false
+                        show: false,
+                        duedate:'',
+                        key:'duedate'
                     }]
                 }, {
                     name: '可否供样',
@@ -72,15 +81,21 @@ export default {
                     sortArr: [{
                         name: '可供样',
                         asc: 'low',
-                        show: false
+                        show: false,
+                        sample:1,
+                        key:'sample'
                     }, {
                         name: '不可供样',
                         asc: 'top',
-                        show: false
+                        show: false,
+                        sample:0,
+                        key:'sample'
                     }, {
                         name: '全部',
                         asc: '',
-                        show: false
+                        show: false,
+                        sample:'',
+                        key:'sample'
                     }]
                 }, {
                     name: '审核状态',
@@ -89,17 +104,40 @@ export default {
                     saveName: '审核状态',
                     class: 'sort_content_detail',
                     sortArr: [{
-                        name: '未审核',
+                        name: '申请中',
                         asc: 'low',
-                        show: false
+                        show: false,
+                        text: 1,
+                        key:'text'
                     }, {
-                        name: '已审核',
+                        name: '上架失败',
+                        asc: 'low',
+                        show: false,
+                        text:-2,
+                        key:'text'
+                        
+                    },{
+                        name: '下架',
+                        asc: 'low',
+                        show: false,
+                        text:4,
+                        key:'text'
+                        
+                    }, {
+                        name: '上架',
                         asc: 'top',
-                        show: false
-                    }, {
+                        show: false,
+                        text:2,
+                        key:'text'
+
+                    },
+                    {
                         name: '全部',
                         asc: '',
-                        show: false
+                        show: false,
+                        text:'',
+                        key:'text'
+
                     }]
                 }],
                 selectShow: false,
@@ -141,7 +179,8 @@ export default {
                     }
                 }
                 this.selectShow = false;
-
+                 let _self = this;
+                _self.$emit("postId", item);
                 
             }
         },

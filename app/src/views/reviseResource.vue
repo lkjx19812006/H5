@@ -191,7 +191,7 @@ export default {
                 /*this.$router.push('supplyReleaseSuccess');*/
                 /*common.$emit('confirm','确定修改','取消修改','确认修改信息后,将等待审核！','确定修改');*/
                  
-                let _self = this;
+                  let _self = this;
                   //console.log(_self.obj.id);
                  
                   common.$emit('show-load');
@@ -239,7 +239,7 @@ export default {
             }
         },
         created() {
-            var _self = this;
+            /*var _self = this;
             var str = _self.$route.fullPath;
             var id = str.substring(16,str.length);
             _self.obj.id = id;
@@ -252,7 +252,7 @@ export default {
                                 id:id
                             }
                         }, function(suc) { 
-                            console.log(suc.data.biz_result);
+                            console.log(suc);
                             let result = suc.data.biz_result;
                             _self.obj.drug_name = result.breedName;
                             _self.obj.spec = result.spec;
@@ -267,17 +267,42 @@ export default {
                             _self.obj.selling_point = result.description;
                             _self.obj.name = result.customerName;
                             _self.obj.phone = result.customerPhone;
-                            //console.log(result.image);
+                            
                             let imageArr = result.image;
-                            for(var item in imageArr){
-                                _self.imgageArr[item].url = imageArr[item];
-                                console.log(_self.imgageArr[item].url)
-                            }
+                            
+                            
+                                _self.imgageArr[0].url = imageArr[0];
+                                _self.imgageArr[1].url = imageArr[1];
+                                _self.imgageArr[2].url = imageArr[2];
+                                _self.imgageArr[3].url = imageArr[3];
+                            
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
-                        })
-
+                        })*/
+                 let _self = this;
+                  common.$on('myResource-to-revisePurchase',function (obj){
+                            _self.obj.drug_name = obj.drug_name;
+                            _self.obj.spec = obj.spec;
+                            _self.obj.place = obj.place;
+                            _self.obj.number = obj.number;
+                            _self.obj.number_unit = obj.number_unit;
+                            _self.obj.sales_price = obj.sales_price;
+                            _self.obj.weight = obj.weight;
+                            _self.obj.price = obj.price;
+                            _self.obj.where = obj.where;
+                            _self.obj.judge = obj.judge;
+                            _self.obj.selling_point = obj.selling_point;
+                            _self.obj.name = obj.name;
+                            _self.obj.phone = obj.phone;
+                            console.log(obj.imgArr);
+                            _self.imgageArr[0].url = obj.imgArr[0];
+                            _self.imgageArr[1].url = obj.imgArr[1];
+                            _self.imgageArr[2].url = obj.imgArr[2];
+                            _self.imgageArr[3].url = obj.imgArr[3];
+                            
+                                
+                  })
             
                   
 

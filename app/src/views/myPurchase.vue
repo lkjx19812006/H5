@@ -5,7 +5,7 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <otherSort></otherSort>
+        <myPurchaseSort v-on:postId="getId"></myPurchaseSort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -50,7 +50,7 @@
 <script>
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
-import otherSort from '../components/tools/otherSort'
+import myPurchaseSort from '../components/tools/myPurchaseSort'
 import httpService from '../common/httpService.js'
 export default {
     data() {
@@ -74,14 +74,72 @@ export default {
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
+                value: {
+                    pubdate:0,
+                    number:0,
+                    duedate:0,
+                    text:0
+                }, 
             }
         },
         components: {
             searchInput,
-            otherSort
+            myPurchaseSort
         },
 
         methods: {
+            getHttp(pubdate,duedate,number,text){
+                let _self = this;
+                 common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'myBegIntentionList',version:1,time:0,sign:'',biz_param:{
+                        sort:{"pubdate":pubdate,"duedate":duedate,"offer":text},
+                        onSell:text,
+                        pn:1,
+                        pSize:20         
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc.data.biz_result.list);
+                    let listArr = suc.data.biz_result.list;
+                    for(var item in listArr){
+                        
+                        var duedateDate = new Date(listArr[item].duedate);
+                        var pubdateDate = new Date(listArr[item].pubdate);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days=Math.floor(dateValue/(24*3600*1000));
+                        if(listArr[item].onSell == 1){
+                            listArr[item].onSell = '未审核'
+                        }
+                        if(listArr[item].onSell == 2){
+                            listArr[item].onSell = '已审核'
+                        }
+                        if(listArr[item].onSell == -2){
+                            listArr[item].onSell = '审核失败'
+                        }
+                        if(listArr[item].onSell == 4){
+                            listArr[item].onSell = '已下架'
+                        }
+                        listArr[item].days = days;
+                        console.log(listArr[item].id);
+                    }
+                    _self.todos = listArr;
+                     
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+            },
+            getId(param){
+                 let _self = this;
+                  
+                  _self.value[param.key] = param[param.key];
+            _self.getHttp(_self.value.pubdate,_self.value.duedate,_self.value.number,_self.value.text);
+                  
+
+            },
             jump:function(router,id){
                 this.$router.push(router + '/' + id);
             },
@@ -116,52 +174,7 @@ export default {
             }
         },
         created() {
-            /*let _self = this;
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
-                  let _self = this;
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'intentionService',biz_method:'myBegIntentionList',version:1,time:0,sign:'',biz_param:{
-                        sort:{"pubdate":"0","duedate":"0"},
-                        onSell:0,
-                        pn:1,
-                        pSize:20         
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.myResource(url,body,function(suc){
-                    common.$emit('close-load');
-                    console.log(suc.data.biz_result.list);
-                    let listArr = suc.data.biz_result.list;
-                    for(var item in listArr){
-                        
-                        var duedateDate = new Date(listArr[item].duedate);
-                        var pubdateDate = new Date(listArr[item].pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days=Math.floor(dateValue/(24*3600*1000));
-                        if(listArr[item].onSell == 1){
-                            listArr[item].onSell = '未审核'
-                        }
-                        if(listArr[item].onSell == 2){
-                            listArr[item].onSell = '已审核'
-                        }
-                        listArr[item].days = days;
-                        console.log(listArr[item].id);
-                    }
-                    _self.todos = listArr;
-                     
-                  },function(err){
-                    common.$emit('close-load');
-                  })
+            this.getHttp(0,0,0,0);
 
         },
         mounted() {

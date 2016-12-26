@@ -9,8 +9,8 @@
 
       <div class="select_box">
         <mt-navbar v-model="selected">
-          <mt-tab-item id="1" class="word">三证合一</mt-tab-item>
-          <mt-tab-item id="2" class="word">传统三证</mt-tab-item>
+          <mt-tab-item id="1" class="word">传统三证</mt-tab-item>
+          <mt-tab-item id="2" class="word">三证合一</mt-tab-item>
         </mt-navbar>
       </div>
         
@@ -20,7 +20,9 @@
                 <div class="first_item">
                     <div v-for="(todo,index) in todos" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                        <p class="title">{{todo.title}}</p>
-                       <div class="photo"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
+                       <div class="photo">
+                           <imageUpload :param="personImgArr[index]" v-on:postUrl="getUrl"></imageUpload>
+                       </div>
                        <p class="point">{{todo.point}}</p>
                     </div>
 
@@ -32,7 +34,9 @@
                 <div class="second_item">
                     <div v-for="(todo,index) in datas" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                        <p class="title">{{todo.title}}</p>
-                       <div class="photo"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
+                       <div class="photo">
+                         <imageUpload :param="companyArr[index]" v-on:postUrl="getUrl"></imageUpload>
+                       </div>
                        <p class="point">{{todo.point}}</p>
                     </div>
                      
@@ -50,13 +54,14 @@
             
          
        </div>
-        <div class="confirm">申请认证</div>
+        <div class="confirm" @click="confirm">申请认证</div>
   </div>
 </template>
 
 <script>
 import common from '../common/common.js'
 import imageUpload from '../components/tools/imageUpload'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
@@ -66,62 +71,154 @@ export default {
                 param:{
                     name:'sdfsdf'
                 },
+                personImgArr:[
+                      {
+                        name: 'intention',
+                        index:0,
+                        url: ''  
+                      },{
+                        name: 'intention',
+                        index:1,
+                        url: ''  
+                      },{
+                        name: 'intention',
+                        index:2,
+                        url: ''  
+                      },{
+                        name: 'intention',
+                        index:3,
+                        url: ''  
+                      },{
+                        name: 'intention',
+                        index:4,
+                        url: ''  
+                      },{
+                        name: 'intention',
+                        index:5,
+                        url: ''  
+                      }],
+                companyArr:[
+                      {
+                        name: 'intention',
+                        index:6,
+                        url: ''  
+                      },{
+                        name: 'intention',
+                        index:7,
+                        url: ''  
+                      },{
+                        name: 'intention',
+                        index:8,
+                        url: ''  
+                      },{
+                        name: 'intention',
+                        index:9,
+                        url: ''  
+                      }],      
                 todos:[{
-                    title:'1工商营业执照',
+                    title:'工商营业执照',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'2工商营业执照',
+                    title:'组织机构代码证',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'3工商营业执照',
+                    title:'税务登记证',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'4工商营业执照',
+                    title:'GSM资质证书',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'5工商营业执照',
+                    title:'GPM资质证书',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'6工商营业执照',
+                    title:'银行开户许可证',
                     point:'请使用原件拍照或扫描'
                 }],
 
                 datas:[{
-                    title:'工商营业执照',
+                    title:'三证合一',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'工商营业执照',
+                    title:'GSM资质证书',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'工商营业执照',
+                    title:'GPM资质证书',
                     point:'请使用原件拍照或扫描'
                 },{
-                    title:'工商营业执照',
+                    title:'银行开户许可证',
                     point:'请使用原件拍照或扫描'
-                }]
+                }],
+                leftArr:['','','','','',''],
+                rightArr:['','','','']
             }
         },
         components: {
             imageUpload
         },
         methods: {
+            confirm(){
+                let _self = this;
+                if(_self.selected == 1){
+                    _self.authentication(_self.leftArr);
+
+                }
+                if(_self.selected == 2){
+                    /*_self.authentication(_self.rightArr);*/
+                    console.log(_self.rightArr)
+                }
+            },
             getUrl(param){
-                console.log('dddddd');
-                console.log(param);
+                let _self = this;
+                if(param.index == 0){
+                     _self.leftArr[0] = param.url;
+                }else if(param.index == 1){
+                     _self.leftArr[1] = param.url;
+                }else if(param.index == 2){
+                     _self.leftArr[2] = param.url;
+                }else if(param.index == 3){
+                     _self.leftArr[4] = param.url;
+                }else if(param.index == 4){
+                     _self.leftArr[4] = param.url;
+                }else if(param.index == 5){
+                     _self.leftArr[5] = param.url;
+                }else if(param.index == 6){
+                     _self.rightArr[0] = param.url;
+                }else if(param.index == 7){
+                     _self.rightArr[1] = param.url;
+                }else if(param.index == 8){
+                     _self.rightArr[2] = param.url;
+                }else if(param.index == 9){
+                     _self.rightArr[3] = param.url;
+                }
+                
+            },
+            authentication(arr){
+
+                  let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userService',biz_method:'submitAuthen',version:1,time:0,sign:'',biz_param:{
+                         type:1,
+                         
+                         authenImage:arr
+                  }};
+                  console.log(common.difTime);
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.queryUserInfo(url,body,function(suc){
+                     common.$emit('close-load');
+                     console.log(suc)
+
+                      
+                  },function(err){
+                    common.$emit('close-load');
+                  })
             }
             
         },
         created() {
             let _self = this;
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                /*this.todos = data;*/
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            })
+            
             
 
         }

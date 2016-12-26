@@ -1,6 +1,6 @@
 <template>
   <div class="my_attention">
-        <mt-header :title="more">
+        <mt-header :title="title">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
@@ -9,21 +9,14 @@
            </mt-button>
 
         </mt-header>
-        <search-input ></search-input>
+        <div @click="jumpSearch"><search-input></search-input></div>
       
-      <!-- <div class="select_box">
-        <mt-navbar v-model="selected">
-          <mt-tab-item id="1">资源关注</mt-tab-item>
-          <mt-tab-item id="2">求购关注</mt-tab-item>
-        </mt-navbar>
-      </div> -->
-        
+      
         
                 <div class="bg_white">
                 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                 <!-- <mt-tab-container v-model="selected">
-                    <mt-tab-container-item id="1"> -->
+                 
                     <ul class="page-loadmore-list" v-show="show">
                         <li v-for="todo in resourceArr" class="page-loadmore-listitem list_content_item">
                                 <img src="/static/images/1.jpg" class="list_images">
@@ -41,10 +34,7 @@
                                 </div>
                             </li>
                         </ul>
-                     <!-- </mt-tab-container-item>  -->
-
-
-                     <!-- <mt-tab-container-item id="2">   -->
+                   
                     <ul class="page-loadmore-list_second" v-show="!show">
                         <li v-for="todo in needArr" class="page-loadmore-listitem list_content_item">
                             <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div>
@@ -68,9 +58,7 @@
                             </div>
                         </li>
                     </ul>
-                     <!-- </mt-tab-container-item>  -->
-
-
+                  
                         <div slot="top" class="mint-loadmore-top">
                             <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
                             <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
@@ -82,11 +70,7 @@
                     </mt-loadmore>
                 </div>
                 </div>
-         
-
-        
-          
-       
+    
         
   </div>
 </template>
@@ -100,10 +84,12 @@ export default {
     data() {
             return {
                 more:"求购关注",
+                title:"资源关注",
                 show:true,
                 selected:"1",
                 resourceArr:[],
                 needArr:[],
+                keyword:'',
                 todos: [{
                     "breedName": "人参",
                     "spec": "统货",
@@ -124,64 +110,15 @@ export default {
             
         },
         methods: {
-            handleBottomChange(status) {
-                this.bottomStatus = status;
+            jumpSearch(){
+                this.$router.push('search');
             },
-            loadBottom(id) {
-                setTimeout(() => {
-                    let lastValue = this.todos[0];
-                    if (this.todos.length <= 40) {
-                        for (let i = 1; i <= 10; i++) {
-                            this.todos.push(this.todos[0]);
-                        }
-                    } else {
-                        this.allLoaded = true;
-                    }
-                    this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);
-            },
-
-            handleTopChange(status) {
-                this.topStatus = status;
-            },
-            loadTop(id) {
-                setTimeout(() => {
-                    let firstValue = this.todos[0];
-                    for (let i = 1; i <= 10; i++) {
-                        this.todos.unshift(firstValue);
-                    }
-                    this.$refs.loadmore.onTopLoaded(id);
-                }, 1500);
-            },
-            tabAttention(){
-                let _self = this;
-                this.show = !this.show;
-                if(this.show == true){
-                    _self.more = '求购关注';
-                }else{
-                    _self.more = '资源关注';
-                }
-            }
-
-        },
-        created() {
-            /*let _self = this;
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
-
-                 //供应接口
+            resorceHttp(key){
                   let _self = this;
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'intentionService',biz_method:'attentionIntentionList',version:1,time:0,sign:'',biz_param:{
-                        
+                        breedName:key,
                         pn:"1",
                         pSize:"20",
                         intentionType:"1"
@@ -217,12 +154,13 @@ export default {
                   },function(err){
                     common.$emit('close-load');
                   })
-
-                  //求购接口
-                  common.$emit('show-load');
+            },
+            needHttp(key){
+                let _self = this;
+                common.$emit('show-load');
                   let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
                   let otherbody={biz_module:'intentionService',biz_method:'attentionIntentionList',version:1,time:0,sign:'',biz_param:{
-                        
+                        breedName:key,
                         pn:"1",
                         pSize:"20",
                         intentionType:"0"
@@ -258,36 +196,68 @@ export default {
                   },function(err){
                     common.$emit('close-load');
                   })
-        },
-        /*created(){
-            let _self = this;
-            common.$emit('show-load');
-                    httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                    biz_module:'userService',
-                    biz_method:'userAttention',
-                    biz_param: {  
-                        intentionId:
-                        type:
-                        breedName:  
-                        intentionType:
-                    }
-                }, function(response) {
-                    common.$emit('close-load');
-                    if (response.data.code == '1c01') {
-                        common.$emit('message', response.data.msg);
-                        common.getDate();
+             },
+            handleBottomChange(status) {
+                this.bottomStatus = status;
+            },
+            loadBottom(id) {
+                setTimeout(() => {
+                    let lastValue = this.todos[0];
+                    if (this.todos.length <= 40) {
+                        for (let i = 1; i <= 10; i++) {
+                            this.todos.push(this.todos[0]);
+                        }
                     } else {
-                        common.$emit('message', response.data.msg);
-
+                        this.allLoaded = true;
                     }
+                    this.$refs.loadmore.onBottomLoaded(id);
+                }, 1500);
+            },
 
+            handleTopChange(status) {
+                this.topStatus = status;
+            },
+            loadTop(id) {
+                setTimeout(() => {
+                    let firstValue = this.todos[0];
+                    for (let i = 1; i <= 10; i++) {
+                        this.todos.unshift(firstValue);
+                    }
+                    this.$refs.loadmore.onTopLoaded(id);
+                }, 1500);
+            },
+            tabAttention(){
+                let _self = this;
+                this.show = !this.show;
+                if(this.show == true){
+                    _self.more = '求购关注';
+                    _self.title = '资源关注';
+                    _self.resorceHttp(_self.keyword);
+                }else{
+                    _self.more = '资源关注';
+                    _self.title = '求购关注';
+                    _self.needHttp(_self.keyword);
+                }
+            }
+            
 
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
+        },
+        created() {
 
-        },*/
+            let _self = this;  
+             common.$on('id-attention', function (key){
+                        _self.keyword = key;             
+                        _self.resorceHttp(key);
+                        _self.needHttp(key);
+             })
+             common.$on('post-attention', function (word) {
+                  _self.keyword = word;  
+                  _self.resorceHttp(word);
+                  _self.needHttp(word);
+            }) 
+             this.resorceHttp(_self.keyword);
+        },
+  
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
 

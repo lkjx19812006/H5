@@ -28,15 +28,21 @@ export default {
                     sortArr: [{
                         name: '由新到旧',
                         asc: 'low',
-                        show: false
+                        show: false,
+                        pubdate:1,
+                        key:'pubdate'
                     }, {
                         name: '由旧到新',
                         asc: 'top',
-                        show: false
+                        show: false,
+                        pubdate:2,
+                        key:'pubdate'
                     }, {
                         name: '全部',
                         asc: '',
-                        show: false
+                        show: false,
+                        pubdate:0,
+                        key:'pubdate'
                     }]
                 }, {
                     name: '报价人数',
@@ -47,15 +53,21 @@ export default {
                     sortArr: [{
                         name: '由少到多',
                         asc: 'low',
-                        show: false
+                        show: false,
+                        number:1,
+                        key:'number'
                     }, {
                         name: '由多到少',
                         asc: 'top',
-                        show: false
+                        show: false,
+                        number:2,
+                        key:'number'
                     }, {
                         name: '全部',
                         asc: '',
-                        show: false
+                        show: false,
+                        number:0,
+                        key:'number'
                     }]
                 }, {
                     name: '剩余时间',
@@ -66,15 +78,21 @@ export default {
                     sortArr: [{
                         name: '由少到多',
                         asc: 'low',
-                        show: false
+                        show: false,
+                        duedate:1,
+                        key:'duedate'
                     }, {
                         name: '由多到少',
                         asc: 'top',
-                        show: false
+                        show: false,
+                        duedate:0,
+                        key:'duedate'
                     }, {
                         name: '全部',
                         asc: '',
-                        show: false
+                        show: false,
+                        duedate:'',
+                        key:'duedate'
                     }]
                 }, {
                     name: '审核状态',
@@ -83,17 +101,40 @@ export default {
                     saveName: '审核状态',
                     class: 'sort_content_detail',
                     sortArr: [{
-                        name: '未审核',
+                        name: '申请中',
                         asc: 'low',
-                        show: false
+                        show: false,
+                        text: 1,
+                        key:'text'
                     }, {
-                        name: '已审核',
+                        name: '上架失败',
+                        asc: 'low',
+                        show: false,
+                        text:-2,
+                        key:'text'
+                        
+                    },{
+                        name: '下架',
+                        asc: 'low',
+                        show: false,
+                        text:4,
+                        key:'text'
+                        
+                    }, {
+                        name: '上架',
                         asc: 'top',
-                        show: false
-                    }, {
+                        show: false,
+                        text:2,
+                        key:'text'
+
+                    },
+                    {
                         name: '全部',
                         asc: '',
-                        show: false
+                        show: false,
+                        text:'',
+                        key:'text'
+
                     }]
                 }],
                 selectShow: false,
@@ -126,6 +167,9 @@ export default {
                     }
                 }
                 this.selectShow = false;
+                let _self = this;
+                _self.$emit("postId", item);
+                
             }
         },
         created() {

@@ -80,7 +80,14 @@ export default {
                     url: '/static/images/3.jpg'
                 }],
                 obj:{
-
+                    /*breedName:'',
+                    price:'',
+                    location:'',
+                    spec:'',
+                    number:'',
+                    moq:'',
+                    sampling:'',
+                    description:''*/
                 },
                 id:'',
                 swiperOption: {
@@ -157,6 +164,8 @@ export default {
             var str = _self.$route.fullPath;
             var id = str.substring(16,str.length);
             _self.id = id;
+            
+            
             httpService.myAttention(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
@@ -168,7 +177,7 @@ export default {
                             
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result;
-                            console.log(result);
+                            //console.log(result);
                             /*if(result.sampling == 0){
                                result.sampling = '不提供' 
                             }else{
@@ -176,8 +185,8 @@ export default {
                             }*/
                              _self.obj = result;
                             
-                             
                             
+                                            
                                
                            
 
@@ -185,6 +194,10 @@ export default {
                             
                             common.$emit('message', err.data.msg);
                         })
+
+                   common.$on('post-res-detail',function (obj){
+                        _self.obj = obj;
+                   })
         }
 }
 </script>

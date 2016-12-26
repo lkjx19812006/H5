@@ -4,11 +4,11 @@
    <router-link to="/" slot="left">
    <mt-button icon="back"></mt-button>
  </router-link>
- <mt-button  slot="right"><div v-on:click="upData(router)">编辑</div></mt-button> 
+ <mt-button  slot="right"><div v-on:click="upData('accountInfoFinish')">编辑</div></mt-button> 
 </mt-header>
 <div class="header_photo_box">
   <p class="header_word">头像<span>(点击更改头像)</span></p>
-  <div class="photo"></div>
+  <div class="photo-div"><img v-bind:src='url' class="photo"></div>
   
 </div>
 
@@ -19,10 +19,10 @@
     <p class="name  name_big_size" v-if="index > 2">{{item.name}}</p>
     <p class="name  name_smart_size" v-if="index <= 2">{{item.name}}</p>
     <p class="name_content" v-if="index !== 2">{{item.content}}</p>
-    <p class="name_content" v-if="index == 2 && item.content == ''"><img src="/static/images/woman.png"></p>
-    <p class="name_content" v-if="index == 2 && item.content == '1'"><img src="/static/images/woman.png"></p>
+    <p class="name_content" v-if="index == 2 && item.content == '女'"><img src="/static/images/woman.png"></p>
+    <p class="name_content" v-if="index == 2 && item.content == '男'"><img src="/static/images/man.png"></p>
   </li>
-  <li v-for="(item,index) in personalDataArr" v-if="index == 4" id="personal_authentication"> 
+  <li v-for="(item,index) in personalDataArr" v-if="index == 4" id="personal_authentication" @click="jumpPersonal"> 
     <p class="name  name_big_size">{{item.name}}</p>
     <p class="name_content">{{item.content}}</p>
   </li>
@@ -57,7 +57,6 @@ import httpService from '../common/httpService.js'
 export default {
   data () {
     return {
-      router:'accountInfoFinish',
       personalDataArr:[{
        name:'姓名',
        content:'杨帆帆'
@@ -93,12 +92,21 @@ export default {
      },{
        name:'企业认证',
        content:'已认证'
-     }]
+     }],
+     obj:{
+         name:'',
+         phone:'',
+         gender:'',
+         
+     },
+     url:''
      
 
    }
  },
  created(){
+
+      //用户信息
           let _self = this;
           common.$emit('show-load');
           let url=common.addSID(common.urlCommon+common.apiUrl.most);
@@ -107,10 +115,14 @@ export default {
           body.time=Date.parse(new Date())+parseInt(common.difTime);
           body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
           httpService.queryUserInfo(url,body,function(suc){
-            common.$emit('close-load');
-             console.log(suc.data.biz_result);
+             common.$emit('close-load');
+             
+             let birthday = suc.data.biz_result.birthday;
+             birthday = JSON.stringify(new Date(birthday));
+             birthday = birthday.substring(1,11);
+            
             _self.personalDataArr[0].content = suc.data.biz_result.name;
-            _self.personalDataArr[1].content = suc.data.biz_result.birthday;
+            _self.personalDataArr[1].content = birthday;
             _self.personalDataArr[2].content = suc.data.biz_result.gender;
             _self.personalDataArr[3].content = suc.data.biz_result.phone;
             _self.personalDataArr[4].content = suc.data.biz_result.ucomment;
@@ -121,14 +133,54 @@ export default {
             _self.companyDataArr[3].content = suc.data.biz_result.bizMain;
             _self.companyDataArr[4].content = suc.data.biz_result.invoice;
             _self.companyDataArr[5].content = suc.data.biz_result.ccomment;
+            _self.url = suc.data.biz_result.avatar;
             
           },function(err){
             common.$emit('close-load');
           })
+
+  //来自编辑完成页面传值
+          /*common.$on('accountInfo',function (obj){
+                 console.log(obj.gender)
+                
+                  console.log(obj.gender)
+               let birthday = obj.birthday;
+                   birthday = JSON.stringify(new Date(birthday));
+                   birthday = birthday.substring(1,11);
+                   
+                  _self.personalDataArr[0].content = obj.name;
+                  _self.personalDataArr[1].content = obj.birthday;
+                  _self.personalDataArr[2].content = obj.gender;
+                  _self.personalDataArr[3].content = obj.phone;
+                  _self.personalDataArr[4].content = obj.ucomment;
+                  
+                  _self.companyDataArr[0].content = obj.company;
+                  _self.companyDataArr[1].content = obj.companyShort;
+                  _self.companyDataArr[2].content = obj.companyJob;
+                  _self.companyDataArr[3].content = obj.bizMain;
+                  _self.companyDataArr[4].content = obj.invoice;
+                  _self.companyDataArr[5].content = obj.ccomment;
+                  _self.url = obj.url;
+
+                  _self.obj.name = obj.name;
+                  _self.obj.phone = obj.phone;
+                  _self.obj.gender = obj.gender;
+                
+          })*/
+
+     //认证查询
+          
+
  },
  methods:{
+      jumpPersonal(){
 
+           this.$router.push("certification");
+      },
+      
       upData:function(router){
+           /*common.$emit("post-my-info",this.url);*/
+           
            this.$router.push(router);
            
         
@@ -174,10 +226,18 @@ export default {
   width:5.1198rem;
   height:5.1198rem;
   border-radius: 50%;
+  
+  
+}
+.photo-div{
+  overflow: hidden;
   background:#FED77A;
   float:right;
   margin-top:1.0666rem;
   margin-right: 6%;
+  width:5.1198rem;
+  height:5.1198rem;
+  border-radius: 50%;
 }
 .account_overview  .basic_data,
 .company_data{

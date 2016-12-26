@@ -93,7 +93,7 @@ export default {
                                
                             }
                         }, function(suc) {
-                            //console.log(suc);
+                            console.log(suc);
                             let data = suc.data.biz_result.list;
                             let data_li = suc.data.biz_result.list_li;
                             console.log(data_li)
@@ -102,7 +102,7 @@ export default {
                             }
                             this.todos = data;
                             this.todos_li = data_li; 
-             
+                            
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);

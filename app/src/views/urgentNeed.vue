@@ -6,7 +6,7 @@
             </router-link>
         </mt-header>
         <div @click="jumpSearch"><search-input ></search-input></div>
-        <sort></sort>
+        <urgentSort  v-on:postId="getId"></urgentSort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -49,7 +49,7 @@
 <script>
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
-import sort from '../components/tools/sort'
+import urgentSort from '../components/tools/urgentSort'
 import httpService from '../common/httpService.js'
 export default {
     data() {
@@ -64,6 +64,13 @@ export default {
                     "phone": "15301546832",
                     "time": "12:26"
                 }*/],
+                
+                value: {
+                    time:0,
+                    price:0,
+                    sample:''
+                },      
+                keyword:'',
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -72,10 +79,89 @@ export default {
         },
         components: {
             searchInput,
-            sort
+            urgentSort
         },
         methods: {
+            getHttp(word,shelve_time,price,sampling){
+
+                 let _self = this;
+                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryBegBuyList',
+              
+                            biz_param: {
+                                keyWord: word,
+                                sort:{"shelve_time":shelve_time,"price":price},
+                                
+                                sampling:sampling,
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            console.log(suc)
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            for(var i=0;i<result.length;i++){
+
+                                var item = result[i];
+                                var duedate = item.duedate;
+                                var pubdate = item.duedate;
+                                 
+                                      duedate =  duedate.replace(/-/g,'/'); 
+                                      pubdate =  pubdate.replace(/-/g,'/');
+                                      duedate = duedate.substring(0,10);
+                                      pubdate = pubdate.substring(0,10);
+                                
+                                var duedateDate = new Date(duedate);
+                                var pubdateDate = new Date(pubdate);
+                                var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                                var days=Math.floor(dateValue/(24*3600*1000));
+                                item.days = days; 
+                                item.duedate = duedate;
+                                item.pubdate = pubdate;
+                            }
+                            
+                        _self.todos = result;       
+                           
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            },
+            getId(param){
+                 let _self = this;
+                  
+                  _self.value[param.key] = param[param.key];
+                  _self.getHttp(_self.keyword,_self.value.time,_self.value.price,_self.value.sample)
+                  
+
+            },
             jumpDetail(id) {
+                let _self = this;
+                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result;
+                            var duedateDate = new Date(result.duedate);
+                            var pubdateDate = new Date(result.pubdate);
+                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                            var days=Math.floor(dateValue/(24*3600*1000));
+                            result.days = days;
+                            result.pubdate = result.pubdate.substring(0,10);
+                             _self.obj = result;
+
+                             common.$emit('post-need-detail',_self.obj);
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
                 this.$router.push('needDetail/' + id);
             },
             handleBottomChange(status) {
@@ -109,151 +195,23 @@ export default {
             },
             jumpSearch(){
                 this.$router.push('search');
+                
             }
         },
         created() {
             let _self = this;
 
             common.$on('post-urgentneed', function (word){
-                     httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryBegBuyList',
-              
-                            biz_param: {
-                                keyWord: word,
-                                sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:
-                                pn:1,
-                                pSize:20*/
-                            }
-                        }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                    for(var i=0;i<result.length;i++){
-
-                        var item = result[i];
-                        var duedate = item.duedate;
-                        var pubdate = item.duedate;
-                         
-                              duedate =  duedate.replace(/-/g,'/'); 
-                              pubdate =  pubdate.replace(/-/g,'/');
-                              duedate = duedate.substring(0,10);
-                              pubdate = pubdate.substring(0,10);
-                        
-                        var duedateDate = new Date(duedate);
-                        var pubdateDate = new Date(pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days=Math.floor(dateValue/(24*3600*1000));
-                        item.days = days; 
-                        item.duedate = duedate;
-                        item.pubdate = pubdate;
-                    }
-                            
-                        _self.todos = result;       
-                           
-
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-                        
-
+                     _self.keyword = word;                     
+                    _self.getHttp(word,0,0,'');
              })
             
-              
-
-
-
+  
             common.$on('id-urgentneed', function (key) {
-                  
-                  httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryBegBuyList',
-              
-                            biz_param: {
-                                keyWord: key,
-                                sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:
-                                pn:1,
-                                pSize:20*/
-                            }
-                        }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                    for(var i=0;i<result.length;i++){
-
-                        var item = result[i];
-                        var duedate = item.duedate;
-                        var pubdate = item.duedate;
-                         
-                              duedate =  duedate.replace(/-/g,'/'); 
-                              pubdate =  pubdate.replace(/-/g,'/');
-                              duedate = duedate.substring(0,10);
-                              pubdate = pubdate.substring(0,10);
-                        
-                        var duedateDate = new Date(duedate);
-                        var pubdateDate = new Date(pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days=Math.floor(dateValue/(24*3600*1000));
-                        item.days = days; 
-                        item.duedate = duedate;
-                        item.pubdate = pubdate;
-                    }
-                            
-                        _self.todos = result;       
-                           
-
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                  _self.keyword = key;   
+                  _self.getHttp(key,0,0,'');
             })
-
-             httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryBegBuyList',
-              
-                            biz_param: {
-                                
-                                sort:{"shelve_time":"0","price":"0"},
-                                /*location: 
-                                sampling:
-                                pn:1,
-                                pSize:20*/
-                            }
-                        }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                            console.log(result);
-                    for(var i=0;i<result.length;i++){
-
-                        var item = result[i];
-                        var duedate = item.duedate;
-                        var pubdate = item.duedate;
-                         
-                              duedate =  duedate.replace(/-/g,'/'); 
-                              pubdate =  pubdate.replace(/-/g,'/');
-                              duedate = duedate.substring(0,10);
-                              pubdate = pubdate.substring(0,10);
-                          console.log(pubdate);
-                        var duedateDate = new Date(duedate);
-                        var pubdateDate = new Date(pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days=Math.floor(dateValue/(24*3600*1000));
-                        item.days = days; 
-                        item.duedate = duedate;
-                        item.pubdate = pubdate;
-                    }
-                        _self.todos = result;       
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                  _self.getHttp('',0,0,'');
              
         },
         mounted() {

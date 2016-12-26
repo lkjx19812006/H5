@@ -5,7 +5,7 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <otherSort></otherSort>
+        <otherSort  v-on:postId="getId"></otherSort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -18,7 +18,7 @@
                                 </div>
                             </div>
                             
-                            <img src="/static/images/1.jpg" class="list_images" @click="jump(todo.router,todo.id)">
+                            <img :src="todo.image[0]" class="list_images" @click="jump(todo.router,todo.id)">
                             <div class="res_content" >
                                 <div class="res_content_center">
                                     <div><img src="/static/icons/sample.png">{{todo.breedName}}</div>
@@ -68,10 +68,19 @@ export default {
                     "other_router":"reviseResource"
                     
                 }*/],
+                obj:{
+
+                },
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
+                value:{
+                    pubdate:0,
+                    duedate:0,
+                    sample:'',
+                    text:0
+                }
             }
         },
 
@@ -80,8 +89,82 @@ export default {
             otherSort
         },
         methods: {
+            getHttp(pubdate,duedate,sample,text){
+                  let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'mySupplyIntentionList',version:1,time:0,sign:'',biz_param:{
+                        sort:{"pubdate":pubdate,"duedate":duedate},
+                        onSell:text,
+                        sampling:sample,
+                        pn:"1",
+                        pSize:"20"
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    common.$emit('message', suc.data.msg);
+                    console.log(suc);
+                    _self.todos = suc.data.biz_result.list;
+
+                    for(var item in _self.todos){
+                        _self.todos[item].router = "goodDetail";
+                        _self.todos[item].other_router = "reviseResource";
+                        
+                    }
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                  })
+            },
+            ReviseHttp(id){
+                let _self = this;
+                httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) { 
+                            console.log(suc);
+                            let result = suc.data.biz_result;
+                            _self.obj.drug_name = result.breedName;
+                            _self.obj.spec = result.spec;
+                            _self.obj.place = result.location;
+                            _self.obj.number = result.number;
+                            _self.obj.number_unit = result.unit;
+                            _self.obj.sales_price = result.price;
+                            _self.obj.weight = result.sampleNumber;
+                            _self.obj.price = result.sampleAmount;
+                            _self.obj.where = result.address;
+                            _self.obj.judge = result.sampling;
+                            _self.obj.selling_point = result.description;
+                            _self.obj.name = result.customerName;
+                            _self.obj.phone = result.customerPhone;
+                            _self.obj.imgArr = result.image;
+                            
+                            common.$emit('myResource-to-revisePurchase',_self.obj)
+                            
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            },
+            getId(param){
+                 let _self = this;
+                  
+                  _self.value[param.key] = param[param.key];
+            _self.getHttp(_self.value.pubdate,_self.value.duedate,_self.value.sample,_self.value.text);
+                  
+
+            },
             jump:function(router,id){
-                
+                /*common.$emit('myResource-to-revisePurchase',)*/
+                this.ReviseHttp(id);
                 this.$router.push(router+ '/' + id);
                 console.log(router+ '/' + id)
                 
@@ -119,51 +202,7 @@ export default {
         },
         created() {
              
-                /*var result={};
-                chrome.cookies.get(function(cookie){
-                        result=cookie;
-                    });
-                }
-                return result;*/
-
-            /*let _self = this;
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/ 
-                  let _self = this;
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'intentionService',biz_method:'mySupplyIntentionList',version:1,time:0,sign:'',biz_param:{
-                        sort:{"pubdate":"0","duedate":"0"},
-                        onSell:"0",
-                        sampling:"1",
-                        pn:"1",
-                        pSize:"20"
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.myResource(url,body,function(suc){
-                    common.$emit('close-load');
-                    common.$emit('message', suc.data.msg);
-                    console.log(suc.data.biz_result.list);
-                    _self.todos = suc.data.biz_result.list;
-                    for(var item in _self.todos){
-                        _self.todos[item].router = "goodDetail";
-                        _self.todos[item].other_router = "reviseResource";
-                        //console.log(_self.todos[item].id);
-                    }
-                    
-                  },function(err){
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                  })
+                this.getHttp(0,0,'',0);
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

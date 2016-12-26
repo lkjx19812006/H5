@@ -7,7 +7,7 @@
         </mt-header>
         <div class="page-loadmore-wrapper">
             <mt-loadmore>
-                <orderAddress></orderAddress>
+                <orderAddress :param="person"></orderAddress>
                 <div class="content">
                     <orderItem :param="param" v-on:postValue="getValue"></orderItem>
                     <div class="total">
@@ -40,7 +40,10 @@ export default {
                 order:{
                     
                 },
-                value:''
+                value:'',
+                person:{
+
+                }
             }
         },
         created() {
@@ -67,7 +70,12 @@ export default {
                             }else{
                                 result.sampling = '提供'
                             }*/
-                           
+                            console.log(result)
+                           common.$on('post-res-detail',function (obj){
+                                 _self.param = obj;
+                                 _self.order = obj;
+                                 console.log(obj)
+                           });
                             _self.param = result;
                             _self.order = result;      
 

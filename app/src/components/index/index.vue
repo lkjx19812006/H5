@@ -42,11 +42,11 @@
                             </div>
                             <div class="news_content">
                                 <ul id="scrollText">
-                                    <li v-for="todo in todos">
-                                        <div>{{todo.name+' '+todo.spec+' '+todo.place+' '+todo.price+' '+todo.time}}</div>
+                                    <li v-for="todo in transaction">
+                                        <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+' '+todo.location+' '+todo.successTime}}</div>
                                     </li>
-                                    <li v-if="todos[0]">
-                                        <div>{{todos[0].name+' '+todos[0].spec+' '+todos[0].place+' '+todos[0].price+' '+todos[0].time}}</div>
+                                    <li v-if="transaction[0]">
+                                        <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+' '+transaction[0].location+' '+transaction[0].successTime}}</div>
                                     </li>
                                 </ul>
                             </div>
@@ -57,31 +57,42 @@
                                 <p>更多</p><img src="/static/images/right.png">
                             </div>
                             <mt-swipe :auto="4000" :showIndicators="false" :prevent="true">
-                                <mt-swipe-item v-for="(todo,index) in todos" v-if="index%2==0">
+                                <mt-swipe-item v-for="(todo,index) in drugGuidePrice" v-if="index%2==0">
                                     <div class="drug_price_box">
                                         <div class="drug_price_swipe">
                                             <div class="drug_price_swipe_left">
                                                 <p class="price_swiper_name">{{todo.name}}</p>
                                                 <div class="price_swiper_div">
                                                     <span>规格:<span>{{todo.spec}}</span></span>
-                                                    <span class="price_swiper_right_span">{{todo.price}}</span>
+                                                    <span class="price_swiper_right_span">{{todo.unitprice}}</span>
                                                 </div>
                                                 <div class="price_swiper_div price_swiper_place_div">
-                                                    <span>产地:<span>{{todo.place}}</span></span>
-                                                    <span class="price_swiper_right_span"><img src="/static/images/up.png">&nbsp;{{todo.up_price}}</span>
+                                                    <span>产地:<span>{{todo.area}}</span></span>
+                                                    <span class="price_swiper_right_span">
+                                                        <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
+                                                        <img src="/static/images/up.png" v-if="todo.weekdowns > 0">&nbsp;
+                                                        {{todo.weekdowns}}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class=" drug_price_swipe " v-if="todos[index+1]">
+                                        <div class=" drug_price_swipe " v-if="drugGuidePrice[index+1]">
                                             <div class="drug_price_swipe_right">
-                                                <p class="price_swiper_name">{{todos[index+1].name}}</p>
+                                                <p class="price_swiper_name">{{drugGuidePrice[index+1].name}}</p>
                                                 <div class="price_swiper_div">
-                                                    <span>规格:<span>{{todos[index+1].spec}}</span></span>
-                                                    <span class="price_swiper_right_span">{{todos[index+1].price}}</span>
+                                                     <span>规格:
+                                                        <span>{{drugGuidePrice[index+1].spec}}</span>
+                                                     </span>
+                                                    <span class="price_swiper_right_span">
+                                                        {{drugGuidePrice[index+1].unitprice}}</span>
                                                 </div>
                                                 <div class="price_swiper_div price_swiper_place_div">
-                                                    <span>产地:<span>{{todos[index+1].place}}</span></span>
-                                                    <span class="price_swiper_right_span"><img src="/static/images/up.png">&nbsp;{{todos[index+1].up_price}}</span>
+                                                    <span>产地:<span>{{drugGuidePrice[index+1].area}}</span></span>
+                                                    <span class="price_swiper_right_span">
+                                                        <img src="/static/images/down.png" v-if="drugGuidePrice[index+1].weekdowns < 0">
+                                                        <img src="/static/images/up.png" v-if="drugGuidePrice[index+1].weekdowns > 0">&nbsp;
+                                                        {{drugGuidePrice[index+1].weekdowns}}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -100,17 +111,17 @@
                             </div>
                             <div class="list_content">
                                 <div class="mint-cell cell_class">
-                                    <div class="mint-cell-wrapper cell_class" v-for="todo in todos">
+                                    <div class="mint-cell-wrapper cell_class" v-for="todo in supplyList">
                                         <div class="list_image">
                                             <img src="/static/images/bao.png" class="first_image">
                                             <img src="/static/images/zheng.png">
                                         </div>
-                                        <div class="list_image">{{todo.name}}</div>
+                                        <div class="list_image">{{todo.breedName}}</div>
                                         <div class="list_font">{{todo.spec}}</div>
-                                        <div class="list_font">{{todo.place}}</div>
+                                        <div class="list_font">{{todo.location}}</div>
                                         <div class="list_font">{{todo.price}}</div>
                                         <div class="list_font">
-                                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jump('resourceDetail/1')">
+                                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpRes('resourceDetail/',todo.id)">
                                                 我要购买
                                             </button>
                                         </div>
@@ -129,17 +140,17 @@
                             </div>
                             <div class="list_content">
                                 <div class="mint-cell cell_class">
-                                    <div class="mint-cell-wrapper cell_class" v-for="todo in todos">
+                                    <div class="mint-cell-wrapper cell_class" v-for="todo in begBuyList">
                                         <div class="list_image">
                                             <img src="/static/icons/impatient.png" class="first_image">
                                             <img src="/static/images/zheng.png">
                                         </div>
-                                        <div class="list_image">{{todo.name}}</div>
+                                        <div class="list_image" >{{todo.breedName}}</div>
                                         <div class="list_font">{{todo.spec}}</div>
-                                        <div class="list_font">{{todo.place}}</div>
-                                        <div class="list_font">{{todo.time}}</div>
+                                        <div class="list_font">{{todo.location}}</div>
+                                        <div class="list_font">{{todo.duedate}}</div>
                                         <div class="list_font">
-                                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jump('needDetail/1')">
+                                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/' + todo.id)">
                                                 我要报价
                                             </button>
                                         </div>
@@ -155,6 +166,7 @@
 </template>
 <script>
 import common from '../../common/common.js'
+import httpService from '../../common/httpService.js'
 export default {
     data() {
             return {
@@ -177,6 +189,10 @@ export default {
                     "phone": "15301546832",
                     "time": "12:26"
                 }],
+                drugGuidePrice:[],
+                transaction:[],
+                supplyList:[],
+                begBuyList:[],
                 drugParam: {
                     show: false
                 },
@@ -210,14 +226,137 @@ export default {
 
         },
         methods: {
+            drugGuidePrice(){
+                  let _self = this;
+                  httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'breedService',
+                        biz_method:'breedPriceGuide',
+              
+                            biz_param: {
+                                
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            console.log(suc)
+                            /*common.$emit('message', suc.data.msg);*/
+                            let result = suc.data.biz_result.list;
+                            
+                            _self.drugGuidePrice = result;
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        }) 
+            },
+            resourceHttp(){
+                let _self = this;
+                 common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'reconnendList',version:1,time:0,sign:'',biz_param:{
+                        pn:1,
+                        pSize:20
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.begBuyList(url,body,function(suc){
+                    common.$emit('close-load');
+                    //console.log(suc);
+                    let result = suc.data.biz_result;
+                    let begBuyList = result.begBuyList;
+                    let supplyList = result.supplyList;
+                    _self.begBuyList = begBuyList;
+                    _self.supplyList = supplyList;
+                    
+                    common.$emit('post-revise-address',_self.obj);
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+            },
+            transaction(){
+                let _self = this;
+                  httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'tradeNewService',
+                        biz_method:'currentTradeList',
+              
+                            biz_param: {
+                                
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            
+                            /*common.$emit('message', suc.data.msg);*/
+                            let result = suc.data.biz_result.list;
+                            console.log(result);
+                            _self.transaction = result;
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            },
             jump: function(router) {
                 console.log(router);
                 this.$router.push(router);
-            }
+            },
+            jumpRes(router,id){
+                let _self = this;
+                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result;
+                            console.log(result);
+                            
+                             _self.obj = result;
+                             common.$emit('post-res-detail',_self.obj);
+                       
+
+                        }, function(err) {
+                            
+                             common.$emit('message', err.data.msg);
+                        })
+                this.$router.push(router + id);
+            },
+            jumpNeed(router,id){
+                let _self = this;
+                
+                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                            /*common.$emit('message', suc.data.msg);*/
+                            let result = suc.data.biz_result;
+                            var duedateDate = new Date(result.duedate);
+                            var pubdateDate = new Date(result.pubdate);
+                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                            var days=Math.floor(dateValue/(24*3600*1000));
+                            result.days = days;
+                            result.pubdate = result.pubdate.substring(0,10);
+                             _self.obj = result;
+
+                             common.$emit('post-need-detail',_self.obj);
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+                this.$router.push(router + id);
+            },
 
         },
         created() {
-            let _self = this;
+            /*let _self = this;
             common.$emit('show-load');
             this.$http.get(common.apiUrl.list).then((response) => {
                 common.$emit('close-load');
@@ -226,7 +365,38 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/
+
+   
+
+                  let _self = this;
+                   this.resourceHttp()
+                   this.transaction();
+                   this.drugGuidePrice();
+                  /*common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'reconnendList',version:1,time:0,sign:'',biz_param:{
+                        pn:1,
+                        pSize:20
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.begBuyList(url,body,function(suc){
+                    common.$emit('close-load');
+                    
+                    let result = suc.data.biz_result;
+                    let begBuyList = result.begBuyList;
+                    let supplyList = result.supplyList;
+                    _self.begBuyList = begBuyList;
+                    _self.supplyList = supplyList;
+                    
+                    common.$emit('post-revise-address',_self.obj);
+                  },function(err){
+                    common.$emit('close-load');
+                  })*/
+
+                   
         },
         computed: {
             drugArray: function() {
@@ -450,7 +620,12 @@ export default {
 .bg_white .drug_price_box {
     width: 100%;
     float: left;
+
 }
+/*.bg_white .drug_price_box p{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}*/
 
 .bg_white .drug_price_box .drug_price_swipe {
     width: 50%;
@@ -502,7 +677,12 @@ export default {
     min-height: 40px;
     padding: 0;
 }
-
+.bg_white .supply-list{
+    height: 40px;
+    overflow: hidden;
+    word-break:keep-all; 
+    -ms-text-overflow: ellipsis;
+}
 .bg_white .list_content {
     padding: 0 0.8rem;
     float: left;
@@ -520,12 +700,21 @@ export default {
     font-size: 1.1rem;
     text-align: center;
     width: 20%;
+    
+    word-break:keep-all;
+    white-space:nowrap;
+    overflow:hidden; 
+    text-overflow:ellipsis; 
 }
 
 .bg_white .list_content .cell_class .list_image {
     font-size: 1.1rem;
     text-align: center;
     width: 10%;
+    word-break:keep-all;
+    white-space:nowrap;
+    overflow:hidden; 
+    text-overflow:ellipsis; 
 }
 
 .bg_white .list_content .cell_class .list_image img {

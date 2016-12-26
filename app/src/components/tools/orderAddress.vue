@@ -23,6 +23,11 @@ export default {
                 wrapperWidth:0
             }
         },
+        props:{
+            param:{
+
+            }
+        },
         created() {
 
         },

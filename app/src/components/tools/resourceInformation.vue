@@ -10,11 +10,11 @@
             </div>
             <div class="more_content">
                 <p>产地：{{information.place}}</p>
-                <p class="right_p">药材数量：{{information.number}}</p>
+                <p class="right_p">药材数量：{{information.number}}{{information.unit}}</p>
             </div>
             <div class="more_content" v-if="information.sendPlace">
                 <p>发货地：{{information.sendPlace}}</p>
-                <p class="right_p">销售价格：{{information.price}}</p>
+                <p class="right_p">销售价格：{{information.price}}元/kg</p>
             </div>
         </div>
     </div>

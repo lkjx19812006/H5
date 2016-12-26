@@ -34,11 +34,11 @@
                    <div class="address_box">
                      <p class="center_p">
                         <img :src="todo.second_img"  class="second_img">
-                        <span v-on:click="revise(todo.router)">修改</span>
+                        <span v-on:click="revise(todo.router,todo.id,index)">修改</span>
                      </p>
                      <p class="bottom_p">
                         <img :src="todo.last_img"  class="last_img">
-                        <span v-on:click="delet(todo)">删除</span>
+                        <span v-on:click="delet(todo,todo.id)" >删除</span>
                      </p>
                    
                    </div>
@@ -58,6 +58,7 @@ export default {
     data() {
             return {
                 id:'',
+                index:'',
                 todos:[/*{
                     show:true,
                     reviseShow:false,
@@ -78,41 +79,17 @@ export default {
                     second_img:'/static/images/modify.png',
                     last_img:'/static/images/delet.png',
                     router:'addressRevise'
-                }*/]
-                
+                }*/],
+                obj:{
+
+                }
             }
         },
+       
         created(){
                  let _self = this;
 
-
-                 common.$emit('show-load');
-                  let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let otherbody={biz_module:'userAddressService',biz_method:'queryDefaultAddress',version:1,time:0,sign:'',biz_param:{
-                        
-                  }};
-                  
-                  otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
-                  otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
-                   httpService.addressManage(otherurl,otherbody,function(suc){
-                    common.$emit('close-load');
-                    console.log(suc.data.biz_result);
-                    _self.id = suc.data.biz_result.id;
-                    
-                  },function(err){
-                    common.$emit('close-load');
-                  })
-
-
-
-
-
-
-
-
-
-
-             common.$emit('show-load');
+                  common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'userAddressService',biz_method:'queryUserAddressList',version:1,time:0,sign:'',biz_param:{
                         
@@ -122,7 +99,7 @@ export default {
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.addressManage(url,body,function(suc){
                     common.$emit('close-load');
-                    console.log(suc.data.biz_result.list);
+
                     let listArr = suc.data.biz_result.list;
                     for(var item in listArr){
                          listArr[item].show = true;
@@ -134,20 +111,94 @@ export default {
                          if(listArr[item].id == _self.id){
                               listArr[item].first_img = '/static/images/default.png';
                          }
-                         
+                        
                     }
+                    common.$on('post-revise-address',function (obj){
+                              
+                               // console.log(listArr[_self.index].contactPhone);
+                                //console.log(obj.tel);
+
+                                      listArr[_self.index].contactPhone = obj.tel;
+                                      listArr[_self.index].contactName = obj.name;
+                                      listArr[_self.index].province = obj.province;
+                                      listArr[_self.index].city = obj.city;
+                                      listArr[_self.index].district = obj.addressDistrict;
+                                      listArr[_self.index].address = obj.detailAddr
+                                
+                    }),
+                    console.log(listArr.length);
+                    common.$on('post-add-address',function (obj){
+                      console.log(1111);
+                      var temp = {};
+                      /*temp.id = obj.id;*/
+                      temp.contactPhone = obj.phone;
+                      temp.contactName = obj.name;
+                      temp.province = obj.province;
+                      temp.city = obj.city;
+                      temp.district = obj.addressDistrict;
+                      temp.address = obj.detailAddr;
+                      temp.show = true;
+                      temp.first_img = '/static/images/default_nor.png';
+                      temp.second_img = '/static/images/modify.png';
+                      temp.last_img = '/static/images/delet.png';
+                      temp.router = 'addressRevise';
+                      //后台要给一个id
+                      listArr.unshift(temp);
+                      
+                      
+                      
+                    })
                     _self.todos = listArr;
+
                     
                     
                   },function(err){
                     common.$emit('close-load');
                   })
+
+                   common.$emit('show-load');
+                  let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let otherbody={biz_module:'userAddressService',biz_method:'queryDefaultAddress',version:1,time:0,sign:'',biz_param:{
+                        
+                  }};
+                  
+                  otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
+                  otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
+                   httpService.addressManage(otherurl,otherbody,function(suc){
+                    common.$emit('close-load');
+                    //console.log(suc.data.biz_result);
+                    _self.id = suc.data.biz_result.id;
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+
+                   
+
+
         },
         methods:{
-          delet:function(todo){
+          delet:function(todo,id){
                 /*let deletLi = document.getElementsByTagName('li')[index];
                 deletLi.style.display = "none";*/
                 todo.show = !todo.show;
+                let _self = this;
+                common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userAddressService',biz_method:'deleteUserAddress',version:1,time:0,sign:'',biz_param:{
+                        id:id
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.addressManage(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc);
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+
           },
           changeColor:function(todos,todo,index){     
                 for(var item in todos){
@@ -177,8 +228,38 @@ export default {
           addAddress:function(){
                this.$router.push('addAddress');
           },
-          revise:function(router){
+          revise:function(router,id,index){
+                 let _self = this;
+                 common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userAddressService',biz_method:'queryAddressById',version:1,time:0,sign:'',biz_param:{
+                        id:id
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.addressRevise(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc.data.biz_result);
+                    let result = suc.data.biz_result;
+                        _self.obj.detailAddr = result.address;
+                        _self.obj.name = result.contactName;
+                        _self.obj.tel = result.contactPhone;
+                        _self.obj.addressProvince = result.province;
+                        _self.obj.addressCity = result.city;
+                        _self.obj.addressDistrict = result.district;
+
+                        common.$emit('post-address-id',_self.obj);
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+
+
+                
                 this.$router.push(router);
+                
+                console.log(index)
+                this.index = index;
                 /*todo.reviseShow = !todo.reviseShow;*/
                  /*let _self = this;
                   common.$emit('show-load');

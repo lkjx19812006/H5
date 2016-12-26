@@ -3,7 +3,7 @@
         <div class="header" v-for="todo in content">
             <div class="header_top">
 
-                <div class="header_photo"><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
+                <div class="header_photo"><!-- <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload> --><img :src="url"></div>
 
                 <div class="information">
                     <div class="information_center">
@@ -92,6 +92,7 @@ import imageUpload from '../../components/tools/imageUpload'
 export default {
     data() {
             return {
+                url:'',
                 param: {
                     name: 'intention',
                     index:0
@@ -196,6 +197,11 @@ export default {
             _self.content[0].money = suc.data.biz_result.normalMoney;
             _self.content[0].integration = suc.data.biz_result.score;
             _self.content[0].gender = suc.data.biz_result.gender;
+            _self.url = suc.data.biz_result.avatar;
+            /*common.$on('accountInfo',function (obj) {
+                   console.log(obj.url)
+                   _self.url = obj.url
+            })*/
             
              //业务员信息
                   
@@ -264,7 +270,10 @@ export default {
     overflow: hidden;
 
 }
-
+.mine .header_photo img{
+    width:100%;
+    height:100%;
+}
 .mine .information {
     width: 65.4%;
     height: 6.4rem;

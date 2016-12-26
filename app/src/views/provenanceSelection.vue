@@ -21,29 +21,31 @@
             </div>
         </div>
         <mt-index-list>
-            <div class="list" v-for="todo in home_list" v-if="selected==1">
+            <div class="list" v-for="todo in list" >
+                <mt-index-section :index="todo.key" class="index_name">
+                    <a @click="selectPlace(item)" v-for="item in todo.value">
+                        <mt-cell :title="item.name"></mt-cell>
+                    </a>
+                </mt-index-section>
+            </div>
+            <!-- <div class="list" v-for="todo in outer_list" v-if="selected==2">
                 <mt-index-section :index="todo.index" class="index_name">
                     <a @click="selectPlace(item)" v-for="item in todo.place_list">
                         <mt-cell :title="item.place"></mt-cell>
                     </a>
                 </mt-index-section>
-            </div>
-            <div class="list" v-for="todo in outer_list" v-if="selected==2">
-                <mt-index-section :index="todo.index" class="index_name">
-                    <a @click="selectPlace(item)" v-for="item in todo.place_list">
-                        <mt-cell :title="item.place"></mt-cell>
-                    </a>
-                </mt-index-section>
-            </div>
+            </div> -->
         </mt-index-list>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
                 selected: '1',
+                list:[],
                 home_list: [{
                     index: 'A',
                     place_list: [{
@@ -146,7 +148,7 @@ export default {
         },
 
         created() {
-            common.$emit('show-load');
+            /*common.$emit('show-load');
             this.$http.get(common.apiUrl.drug_information_list).then((response) => {
                 common.$emit('close-load');
                 let data = response.data.biz_result.list;
@@ -154,7 +156,29 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/
+            let  _self = this; 
+            common.$emit('show-load');
+                    httpService.specifiedPlace(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'breedService',
+                        biz_method:'queryBreedLocalList',
+
+                        biz_param: {
+                            breedId:1153,
+                           
+                        }
+                    }, function(suc) {
+                        
+                        common.$emit('close-load');
+                        
+                        console.log(suc);
+                        let result = suc.data.biz_result.list;
+                        _self.list = result;
+
+                    }, function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    }) 
         }
 }
 </script>

@@ -43,13 +43,13 @@
       </mt-tab-container>  -->
 
       <mt-navbar v-model="first_act" class="second_nav" >
-              <mt-tab-item id="1">全部订单</mt-tab-item>
-              <mt-tab-item id="2">待确认</mt-tab-item>
-              <mt-tab-item id="3">待付款</mt-tab-item>
-              <mt-tab-item id="4">待发货</mt-tab-item>
-              <mt-tab-item id="5">待收货</mt-tab-item>
-              <mt-tab-item id="6">已完成</mt-tab-item>
-              <mt-tab-item id="7">已取消</mt-tab-item>
+              <mt-tab-item id="1"><div @click="allOrder">全部订单</div></mt-tab-item>
+              <mt-tab-item id="2"><div @click="tbcOrder">待确认</div></mt-tab-item>
+              <mt-tab-item id="3"><div @click="waitMoneyOrder">待付款</div></mt-tab-item>
+              <mt-tab-item id="4"><div @click="waitSendOrder">待发货</div></mt-tab-item>
+              <mt-tab-item id="5"><div @click="waitGetGoodOrder"></div>待收货</mt-tab-item>
+              <mt-tab-item id="6"><div @click="confirmOrder">已完成</div></mt-tab-item>
+              <mt-tab-item id="7"><div @click="cancelOrder">已取消</div></mt-tab-item>
      </mt-navbar>
        <div class="bg_white">
                 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -125,21 +125,24 @@ export default {
                 selected:"1",
                 first_act:'1',
                 second_act:'2',
-                todos: [/*{
-                    "name": "人参",
+                todos: [{
+                    "breedName": "人参",
                     "spec": "统货",
-                    "place": "东北",
+                    "location": "东北",
                     "price": "98",
-                    "state": "待收货",
+                    "orderStatus": "待收货",
                     "phone": "15301546832",
-                    "time": "2012-11-26",
+                    "ctime": "2012-11-26",
                     "router":"myOrderDetail"
-                }*/],
+                }],
                 topStatus: '',
                 wrapperHeight: 0,
                 ttwrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
+                type:'1',
+                orderstatus:'0'
+
             }
         },
         components: {
@@ -147,15 +150,74 @@ export default {
             
         },
         methods: {
+            getHttp(orderstatus,type){
+                let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'orderService',biz_method:'queryOrderList',version:1,time:0,sign:'',biz_param:{
+                        orderStatus:orderstatus,
+                        type:type,
+                        pn:1,
+                        pSize:20        
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    console.log(suc)
+                    let listArr = suc.data.biz_result.list;
+                    
+                    
+                    _self.todos = listArr;
+                     
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+            },
             tabOrder(){
                  let _self = this;
                     this.show = !this.show;
                     if(this.show == true){
                         _self.more = '采购订单';
+                        _self.type = '0';
+                        _self.getHttp(_self.orderstatus,0);
                     }else{
                         _self.more = '销售订单';
+                        _self.type = '1';
+                        _self.getHttp(_self.orderstatus,1);
                     }
             },
+            allOrder(){
+                console.log(this.type)
+                this.getHttp(0,this.type);
+                this.orderstatus = 0;
+            },
+            tbcOrder(){
+                this.getHttp(10,this.type);
+                this.orderstatus = 10;
+            },
+            waitMoneyOrder(){
+                this.getHttp(20,this.type);
+                this.orderstatus = 20;
+            },
+            waitSendOrder(){
+                this.getHttp(40,this.type);
+                this.orderstatus = 40;
+            },
+            waitGetGoodOrder(){
+                this.getHttp(50,this.type);
+                this.orderstatus = 50;
+            },
+            confirmOrder(){
+                this.getHttp(60,this.type);
+                this.orderstatus = 60;
+            },
+            cancelOrder(){
+                this.getHttp(-1,this.type);
+                this.orderstatus = -1;
+            },
+            
             jump:function(id,no){
                  this.$router.push('myOrderDetail/' + id);
                  
@@ -165,7 +227,7 @@ export default {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                setTimeout(() => {
+                /*setTimeout(() => {
                     let lastValue = this.todos[0];
                     if (this.todos.length <= 40) {
                         for (let i = 1; i <= 10; i++) {
@@ -175,20 +237,20 @@ export default {
                         this.allLoaded = true;
                     }
                     this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);
+                }, 1500);*/
             },
 
             handleTopChange(status) {
                 this.topStatus = status;
             },
             loadTop(id) {
-                setTimeout(() => {
+                /*setTimeout(() => {
                     let firstValue = this.todos[0];
                     for (let i = 1; i <= 10; i++) {
                         this.todos.unshift(firstValue);
                     }
                     this.$refs.loadmore.onTopLoaded(id);
-                }, 1500);
+                }, 1500);*/
             }
         },
         created() {
@@ -202,36 +264,7 @@ export default {
                 common.$emit('message', response.data.msg);
             });*/
 
-            let _self = this;
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'orderService',biz_method:'queryOrderList',version:1,time:0,sign:'',biz_param:{
-                        orderStatus:0,
-                        type:0,
-                        pn:1,
-                        pSize:20        
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.myResource(url,body,function(suc){
-                    common.$emit('close-load');
-                    //console.log(suc.data.biz_result.list);
-                    let listArr = suc.data.biz_result.list;
-                    console.log(listArr);
-                    for(var item in listArr){
-                      //console.log(listArr[item].ctime);
-                      /*let str =  listArr[item].ctime;*/
-                      
-                      
-                    }
-                    //let aa = listArr[0].ctime;
-                    //console.log(aa.substring(0,10))
-                    _self.todos = listArr;
-                     
-                  },function(err){
-                    common.$emit('close-load');
-                  })
+                  this.getHttp(0,1);
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

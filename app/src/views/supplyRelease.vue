@@ -96,8 +96,9 @@
                 <div class="good_information">
                     <p class="good_photo_header">上传货物图片</p>
 
-                    <div class="upload_image">
-                        <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
+                    <div class="upload_image" v-for="(todo,index) in imageArr">
+                        <imageUpload :param="imageArr[index]" v-on:postUrl="getUrl"></imageUpload>
+                        <p class="img-name">{{imageName[index].name}}</p>
                     </div>
                 </div>
                 <div class="remarks">
@@ -154,14 +155,36 @@ export default {
                     duedate:'30'
 
                 },
+                imgArr:['','','',''],
                 selected: '1',
                 todos: {},
-
-                param: {
+                imageName:[{
+                    name:'大货照'
+                },{
+                    name:'样品照'
+                },{
+                    name:'细节照'
+                },{
+                    name:'随意照'
+                }],
+                imageArr: [{
                     name: 'intention',
                     index:0,
                     url:''
-                },
+
+                },{
+                    name: 'intention',
+                    index:1,
+                    url:''
+                },{
+                    name: 'intention',
+                    index:2,
+                    url:''
+                },{
+                    name: 'intention',
+                    index:3,
+                    url:''
+                }],
                 pickerValue: '1'
 
             }
@@ -178,7 +201,7 @@ export default {
                  this.isB = !this.isB;
             },
             release() {
-                
+                  
                   let _self = this;
                   console.log(_self.obj.number  + _self.obj.number_unit);
                   common.$emit('show-load');
@@ -195,7 +218,7 @@ export default {
                          description:_self.obj.selling_point,
                          customerName:_self.obj.name,
                          customerPhone:_self.obj.phone,
-                         editImage:['','','',''],
+                         editImage:_self.imgArr,
                          descriptions:"",
                          sampleNumber:_self.obj.weight,
                          sampleAmount:_self.obj.price,
@@ -210,7 +233,8 @@ export default {
                   httpService.supplyRelease(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc);
-                    _self.$router.push('supplyReleaseSuccess');
+                    let id = suc.data.biz_result.id;
+                   
                     
                   },function(err){
                     common.$emit('close-load');
@@ -218,9 +242,43 @@ export default {
                   })
 
             },
+            /*toMyResourceHttp(){
+                  let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'mySupplyIntentionList',version:1,time:0,sign:'',biz_param:{
+                        sort:{"pubdate":0,"duedate":0},
+                        onSell:0,
+                        sampling:'',
+                        pn:"1",
+                        pSize:"20"
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    
+                    
+                    _self.todos = suc.data.biz_result.list;
+                     
+                    
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                  })
+            }*/
             getUrl(param) {
-                console.log('dddddd');
-                console.log(param.url);
+                let _self = this;
+                if(param.index == 0){
+                    _self.imgArr[0] = param.url;
+                }else if(param.index == 1){
+                    _self.imgArr[1] = param.url;
+                }else if(param.index == 2){
+                    _self.imgArr[2] = param.url;
+                }else if(param.index == 3){
+                    _self.imgArr[3] = param.url;
+                }
             }
             
         },
@@ -474,5 +532,16 @@ textarea {
     font-size: 1.536rem;
     color: white;
     line-height: 4.267rem;
+}
+.supply_release .good_information .upload_image{
+    width: 20%;
+    float: left;
+    margin: 1rem 10px 0 0;
+
+}
+.supply_release .good_information .upload_image .img-name{
+    font-size: 1rem;
+    color:#333333;
+    padding-top: 1rem;
 }
 </style>
