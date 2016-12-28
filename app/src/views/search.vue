@@ -39,7 +39,7 @@
             <div class="search_result">
                 <ul class="page-loadmore-list">
                     <li v-for="todo in datas" class="page-loadmore-listitem list_content_item">
-                        <div @click = "jump(todo.keyWord)">
+                        <div @click = "jumpRes(todo.keyWord)">
                             <img src="/static/icons/search.png">
                             <p>{{todo.keyWord}}</p>
                         </div>
@@ -100,30 +100,42 @@ export default {
             clearResult: function() {
                 this.historyArr = [];
             },
-            jump(key){
-                let _self = this;
-                /*if(_self.str == 0){
-                      _self.$router.push('lowPriceRes');
-                }else if(_self.str == 1){
-                      _self.$router.push('urgentNeed');
-                }*/
-               this.$router.go(-1);
-                
-
-                common.$emit('id-lowprice', key);
-                common.$emit('id-urgentneed', key);
-
-                common.$emit('id-resource', key);
-                common.$emit('id-need', key);
-                common.$emit('id-attention',key);
-            },
+            
             jumpRes(item){
-                this.$router.go(-1);
-                common.$emit('post-lowprice',item);
-                common.$emit('post-urgentneed',item);
+                let _self = this;
+
+                if(common.pageParam.router == 'lowPriceRes'){
+                    common.$emit("setParam",'lowPrice',item);
+                    common.$emit("lowPriceRes",item);
+                    _self.$router.push(common.pageParam.router);
+                   
+                }else if(common.pageParam.router == 'urgentNeed'){
+                    console.log(111111)
+                    common.$emit("setParam",'Urgentneed',item);
+                    common.$emit("Urgentneed",item);
+                    
+                    _self.$router.push(common.pageParam.router);
+                }else if(common.pageParam.router == 'need'){
+                        common.$emit("need",item);
+                     history.go(-1);
+                }else if(common.pageParam.router == 'resource'){
+
+                     common.$emit("resource",item);
+                    history.go(-1);
+                }else if(common.pageParam.router == 'myAttention'){
+                     common.$emit("setParam",'myAttention',item);
+                     common.$emit("attention",item);
+                     _self.$router.push(common.pageParam.router);
+                }else if(common.pageParam.router == 'supplyRelease'){
+                     common.$emit("setParam",'supplyRelease',item);
+                     common.$emit("supplyRelease",item);
+                     _self.$router.push(common.pageParam.router);
+                }else if(common.pageParam.router == 'reviseResource'){
+                     common.$emit("setParam",'revResource',item);
+                     common.$emit("revResource",item);
+                    history.go(-1);
+                }
                 
-                common.$emit('post-resource', item);
-                common.$emit('post-need', item);
 
             },
             search(){
@@ -165,6 +177,7 @@ export default {
                 }, 0)
             }
         },
+
         created() {
             let _self = this;
                 //热搜接口
@@ -172,8 +185,7 @@ export default {
                         biz_module:'searchKeywordService',
                         biz_method:'queryHotKeyword',
               
-                            biz_param: {
-                                
+                            biz_param: {                               
                                 pn:1,
                                 pSize:20
                             }
@@ -183,12 +195,11 @@ export default {
                             let result = suc.data.biz_result.list;
                             //console.log(result)
                             _self.todos = result;
-                        }, function(err) {
-                            
+
+                        }, function(err) {                           
                             common.$emit('message', err.data.msg);
                         })
-       
-            
+                                                             
         }
 }
 </script>

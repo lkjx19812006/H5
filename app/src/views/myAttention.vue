@@ -111,6 +111,7 @@ export default {
         },
         methods: {
             jumpSearch(){
+                common.$emit('setParam','router','myAttention')
                 this.$router.push('search');
             },
             resorceHttp(key){
@@ -244,18 +245,17 @@ export default {
         },
         created() {
 
-            let _self = this;  
-             common.$on('id-attention', function (key){
-                        _self.keyword = key;             
-                        _self.resorceHttp(key);
-                        _self.needHttp(key);
-             })
-             common.$on('post-attention', function (word) {
-                  _self.keyword = word;  
-                  _self.resorceHttp(word);
-                  _self.needHttp(word);
-            }) 
-             this.resorceHttp(_self.keyword);
+            let _self = this; 
+            /*this.resorceHttp(); */
+           
+            this.resorceHttp(common.pageParam.myAttention); 
+            common.$on("attention",function(item){
+                 
+                 _self.resorceHttp(item); 
+            });
+
+            
+             
         },
   
         mounted() {

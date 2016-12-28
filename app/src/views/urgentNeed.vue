@@ -194,24 +194,23 @@ export default {
                 }, 1500);
             },
             jumpSearch(){
+                common.$emit('setParam','router','urgentNeed');
                 this.$router.push('search');
                 
             }
         },
         created() {
             let _self = this;
+             _self.getHttp('',0,0,'');
+            /*var param ;
+            param=common.pageParam.Urgentneed;
 
-            common.$on('post-urgentneed', function (word){
-                     _self.keyword = word;                     
-                    _self.getHttp(word,0,0,'');
-             })
-            
-  
-            common.$on('id-urgentneed', function (key) {
-                  _self.keyword = key;   
-                  _self.getHttp(key,0,0,'');
-            })
-                  _self.getHttp('',0,0,'');
+            _self.getHttp(param,0,0,'');*/
+            common.$on("Urgentneed",function(item){
+                 console.log(item);
+                 _self.getHttp(item,0,0,'');
+            });
+                  
              
         },
         mounted() {

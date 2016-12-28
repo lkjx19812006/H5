@@ -88,8 +88,41 @@ export default {
        
         created(){
                  let _self = this;
-
+                  _self.listHttp();
+                  
+                  common.$on("informAddress",function (id){
+                       _self.listHttp();
+                  })
+                  common.$on("reviseAAddress",function (id){
+                        console.log(1111)
+                       _self.listHttp();
+                  })
                   common.$emit('show-load');
+                  let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let otherbody={biz_module:'userAddressService',biz_method:'queryDefaultAddress',version:1,time:0,sign:'',biz_param:{
+                        
+                  }};
+                  
+                  otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
+                  otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
+                   httpService.addressManage(otherurl,otherbody,function(suc){
+                    common.$emit('close-load');
+                    //console.log(suc.data.biz_result);
+                    _self.id = suc.data.biz_result.id;
+                    
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+
+                   
+
+
+        },
+        methods:{
+          listHttp(){
+            //本页面列表刷新接口
+                 let _self = this;
+                 common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'userAddressService',biz_method:'queryUserAddressList',version:1,time:0,sign:'',biz_param:{
                         
@@ -113,74 +146,16 @@ export default {
                          }
                         
                     }
-                    common.$on('post-revise-address',function (obj){
-                              
-                               // console.log(listArr[_self.index].contactPhone);
-                                //console.log(obj.tel);
-
-                                      listArr[_self.index].contactPhone = obj.tel;
-                                      listArr[_self.index].contactName = obj.name;
-                                      listArr[_self.index].province = obj.province;
-                                      listArr[_self.index].city = obj.city;
-                                      listArr[_self.index].district = obj.addressDistrict;
-                                      listArr[_self.index].address = obj.detailAddr
-                                
-                    }),
-                    console.log(listArr.length);
-                    common.$on('post-add-address',function (obj){
-                      console.log(1111);
-                      var temp = {};
-                      /*temp.id = obj.id;*/
-                      temp.contactPhone = obj.phone;
-                      temp.contactName = obj.name;
-                      temp.province = obj.province;
-                      temp.city = obj.city;
-                      temp.district = obj.addressDistrict;
-                      temp.address = obj.detailAddr;
-                      temp.show = true;
-                      temp.first_img = '/static/images/default_nor.png';
-                      temp.second_img = '/static/images/modify.png';
-                      temp.last_img = '/static/images/delet.png';
-                      temp.router = 'addressRevise';
-                      //后台要给一个id
-                      listArr.unshift(temp);
-                      
-                      
-                      
-                    })
-                    _self.todos = listArr;
-
                     
+                    _self.todos = listArr
                     
                   },function(err){
                     common.$emit('close-load');
                   })
 
-                   common.$emit('show-load');
-                  let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let otherbody={biz_module:'userAddressService',biz_method:'queryDefaultAddress',version:1,time:0,sign:'',biz_param:{
-                        
-                  }};
-                  
-                  otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
-                  otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
-                   httpService.addressManage(otherurl,otherbody,function(suc){
-                    common.$emit('close-load');
-                    //console.log(suc.data.biz_result);
-                    _self.id = suc.data.biz_result.id;
-                    
-                  },function(err){
-                    common.$emit('close-load');
-                  })
-
-                   
-
-
-        },
-        methods:{
+          },
           delet:function(todo,id){
-                /*let deletLi = document.getElementsByTagName('li')[index];
-                deletLi.style.display = "none";*/
+               //删除接口
                 todo.show = !todo.show;
                 let _self = this;
                 common.$emit('show-load');
@@ -200,7 +175,8 @@ export default {
                   })
 
           },
-          changeColor:function(todos,todo,index){     
+          changeColor:function(todos,todo,index){ 
+             // 默认地址接口    
                 for(var item in todos){
                     todos[item].first_img = '/static/images/default_nor.png';
                     todos[index].first_img = '/static/images/default.png';
@@ -226,59 +202,17 @@ export default {
 
           },
           addAddress:function(){
+            //跳转到增加地址
                this.$router.push('addAddress');
           },
           revise:function(router,id,index){
                  let _self = this;
-                 common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'userAddressService',biz_method:'queryAddressById',version:1,time:0,sign:'',biz_param:{
-                        id:id
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.addressRevise(url,body,function(suc){
-                    common.$emit('close-load');
-                    console.log(suc.data.biz_result);
-                    let result = suc.data.biz_result;
-                        _self.obj.detailAddr = result.address;
-                        _self.obj.name = result.contactName;
-                        _self.obj.tel = result.contactPhone;
-                        _self.obj.addressProvince = result.province;
-                        _self.obj.addressCity = result.city;
-                        _self.obj.addressDistrict = result.district;
-
-                        common.$emit('post-address-id',_self.obj);
-                  },function(err){
-                    common.$emit('close-load');
-                  })
-
-
+                 //跳转到修改地址
+                common.$emit('setParam','addressId',id);
+                common.$emit('revise-address',id);
+                _self.$router.push(router + '/' + id);
                 
-                this.$router.push(router);
                 
-                console.log(index)
-                this.index = index;
-                /*todo.reviseShow = !todo.reviseShow;*/
-                 /*let _self = this;
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'userAddressService',biz_method:'updateUserAddressInfo',version:1,time:0,sign:'',biz_param:{
-                       contactName:todo.name,
-                       contactPhone:todo.number
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.queryEmployeeInfo(url,body,function(suc){
-                    common.$emit('close-load');
-                    console.log(suc);
-                    
-                    
-                  },function(err){
-                    common.$emit('close-load');
-                  })*/
           }
         }
        

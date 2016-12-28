@@ -10,7 +10,7 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list" >
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" >
+                        <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" >
                             <div class="list_header">
                                 <div>
                                     <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="res_content_right">
                                 <p>{{todo.price}}<span>元/kg</span></p>
-                                <button class="mint-button mint-button--primary mint-button--small" @click="jump(todo.other_router,todo.id)">编辑</button>
+                                <button class="mint-button mint-button--primary mint-button--small" @click="jump(todo.other_router,todo.id,index)">编辑</button>
                                 </div>
                             </div>
 
@@ -71,6 +71,7 @@ export default {
                 obj:{
 
                 },
+                index:'',
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -120,7 +121,7 @@ export default {
                     common.$emit('message', err.data.msg);
                   })
             },
-            ReviseHttp(id){
+            /*ReviseHttp(id){
                 let _self = this;
                 httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
@@ -147,13 +148,13 @@ export default {
                             _self.obj.phone = result.customerPhone;
                             _self.obj.imgArr = result.image;
                             
-                            common.$emit('myResource-to-revisePurchase',_self.obj)
+                          
                             
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
                         })
-            },
+            },*/
             getId(param){
                  let _self = this;
                   
@@ -162,11 +163,14 @@ export default {
                   
 
             },
-            jump:function(router,id){
+            jump:function(router,id,index){
                 /*common.$emit('myResource-to-revisePurchase',)*/
-                this.ReviseHttp(id);
-                this.$router.push(router+ '/' + id);
-                console.log(router+ '/' + id)
+                /*this.ReviseHttp(id);*/
+                this.index = index;
+                common.$emit("res-id",id);
+                common.$emit('setParam','resourceId',id);
+                //console.log(this.index);
+                this.$router.push(router + '/' + id);
                 
             },
             
@@ -201,8 +205,18 @@ export default {
             }
         },
         created() {
-             
+                let _self = this;
                 this.getHttp(0,0,'',0);
+                common.$on('reviseResource',function (obj){
+                      console.log(2222)
+                      _self.getHttp(0,0,'',0);
+                      console.log(111111)
+                })
+                common.$on("informMyRes",function (id){
+                    console.log(id);
+                    _self.getHttp(0,0,'',0);
+                })
+                
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

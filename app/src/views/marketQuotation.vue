@@ -1,6 +1,7 @@
 <template>
 
     <div class="market_quotation whole">
+
         <mt-header fixed title="市场行情">
 
             <router-link to="/home" slot="left">
@@ -9,7 +10,7 @@
         </mt-header>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
             <mt-loadmore>
-                <div class="search">
+                <div class="search" @click="jump">
                     <input type="text" placeholder="输入你想要的货物资源" disabled="true">
                     <img src="/static/images/search.png" class="search_image">
                 </div>
@@ -26,19 +27,25 @@
                         <ul class="first_ul">
                             <li v-for="(todo,index) in todos">
                                 <div class="second_level" v-on:click="firstLevel(index,todo)">
-                                    <p>{{todo.breedName}}</p>
+                                    <p>{{todo.name}}</p>
                                     <p>{{todo.spec}}</p>
-                                    <p>{{todo.location}}</p>
-                                    <p>{{todo.price}}</p>
-                                    <p>{{todo.up_price}}&nbsp;<img src="/static/images/up.png"></p>
+                                    <p>{{todo.area}}</p>
+                                    <p>{{todo.unitprice}}</p>
+                                    <p>{{todo.weekdowns}}&nbsp;
+                                        <img src="/static/images/up.png" v-if="todo.weekdowns > 0">
+                                        <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
+                                    </p>
                                 </div>
                                 <ul class="second_level_content" v-show="todo.show">
-                                    <li v-for="item in todos_li">
+                                    <li v-for="item in todo.list">
                                         <p>{{item.name}}</p>
                                         <p>{{item.spec}}</p>
-                                        <p>{{item.place}}</p>
-                                        <p>{{item.price}}</p>
-                                        <p>{{item.upordown_price}}&nbsp;<img src="/static/images/up.png"></p>
+                                        <p>{{item.area}}</p>
+                                        <p>{{item.unitprice}}</p>
+                                        <p>{{item.weekdowns}}&nbsp;
+                                            <img src="/static/images/up.png" v-if="todo.weekdowns > 0">
+                                            <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
+                                        </p>
                                     </li>
                                 </ul>
                             </li>
@@ -66,26 +73,16 @@ export default {
             firstLevel: function(sub, item) {
                 this.todos[sub].show = !this.todos[sub].show;
                 this.todos_li = item.list_li;
+            },
+            jump(){
+                common.$emit("setParam","router",'lowPriceRes');
+                this.$router.push("search");
             }
         },
         created() {
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.market_list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                let data_li = response.data.biz_result.list_li;
-                //console.log(response.data.biz_result.list_li)
-                for (var item in data) {
-                    data[item].show = false;
-                }
-                this.todos = data;
-                this.todos_li = data_li;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });
+           
 
-           /* let _self = this;
+            let _self = this;
             httpService.marketQuotation(common.urlCommon + common.apiUrl.most, {
                         biz_module:'breedService',
                         biz_method:'queryBreedPrice',
@@ -95,18 +92,20 @@ export default {
                         }, function(suc) {
                             console.log(suc);
                             let data = suc.data.biz_result.list;
-                            let data_li = suc.data.biz_result.list_li;
-                            console.log(data_li)
+                            
+                            
                             for (var item in data) {
                                 data[item].show = false;
                             }
-                            this.todos = data;
-                            this.todos_li = data_li; 
+                            _self.todos = data;
+                             
                             
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
-                        })*/
+                        })
+
+
             
         },
         mounted() {

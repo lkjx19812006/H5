@@ -1,13 +1,15 @@
 <template>
     <div >
         <mt-header fixed>
-            <router-link to="/search" slot="left">
+          
+            <router-link to="" slot="left" >     
                 <mt-button>北京</mt-button>
-                <div class="search_div">
+                <div class="search_div" @click="fromIndex">
                     请输入您想要的货物资源
                     <img src="/static/icons/search.png">
-                </div>
+                </div>    
             </router-link>
+          
         </mt-header>
         <div  class="whole">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -54,7 +56,9 @@
                         <div class="bg_white">
                             <p class="index_title">药材指导价</p>
                             <div class="more_content">
-                                <p>更多</p><img src="/static/images/right.png">
+                                <router-link to="marketQuotation">
+                                  <p>更多</p><img src="/static/images/right.png">
+                                </router-link>
                             </div>
                             <mt-swipe :auto="4000" :showIndicators="false" :prevent="true">
                                 <mt-swipe-item v-for="(todo,index) in drugGuidePrice" v-if="index%2==0">
@@ -196,6 +200,7 @@ export default {
                 drugParam: {
                     show: false
                 },
+                scroll_length:'',
                 categoryArr: [{
                     name: '低价资源',
                     router: 'lowPriceRes',
@@ -238,10 +243,10 @@ export default {
                                 pSize:20
                             }
                         }, function(suc) {
-                            console.log(suc)
+                            //console.log(suc)
                             /*common.$emit('message', suc.data.msg);*/
                             let result = suc.data.biz_result.list;
-                            
+                            //console.log(result);
                             _self.drugGuidePrice = result;
                         }, function(err) {
                             
@@ -263,8 +268,8 @@ export default {
                     common.$emit('close-load');
                     //console.log(suc);
                     let result = suc.data.biz_result;
-                    let begBuyList = result.begBuyList;
-                    let supplyList = result.supplyList;
+                    let begBuyList = result.begBuyList.slice(0,6);
+                    let supplyList = result.supplyList.slice(0,6);
                     _self.begBuyList = begBuyList;
                     _self.supplyList = supplyList;
                     
@@ -288,7 +293,8 @@ export default {
                             
                             /*common.$emit('message', suc.data.msg);*/
                             let result = suc.data.biz_result.list;
-                            console.log(result);
+                            /*console.log(result.length);*/
+                            _self.scroll_length = result.length + 1;
                             _self.transaction = result;
                         }, function(err) {
                             
@@ -298,6 +304,12 @@ export default {
             jump: function(router) {
                 console.log(router);
                 this.$router.push(router);
+            },
+            fromIndex(){
+                 let _self = this;
+                 common.$emit('setParam','router','lowPriceRes');
+                 console.log('dfdfdf');
+                 _self.$router.push("search");
             },
             jumpRes(router,id){
                 let _self = this;
@@ -312,7 +324,7 @@ export default {
                             
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result;
-                            console.log(result);
+                            //console.log(result);
                             
                              _self.obj = result;
                              common.$emit('post-res-detail',_self.obj);
@@ -410,7 +422,11 @@ export default {
             }
         },
         mounted() {
-
+            let _self = this;
+            //console.log(_self.scroll_length);
+            
+           
+            console.log(11111)
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-55;
 
             function startmarquee(lh, speed, delay) {
@@ -425,8 +441,9 @@ export default {
                 }
 
                 function scrolling() {
+
                     if (top % lh != 0 || top == 0) {
-                        if (count == 6) {
+                        if (count == _self.scroll_length) {
                             o.style.marginTop = 0;
                             clearInterval(t);
                             setTimeout(start, delay);

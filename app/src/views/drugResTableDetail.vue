@@ -187,25 +187,7 @@ export default {
 
       
             
-            httpService.drugResTable(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'breedService',
-                        biz_method:'queryDrugPropertiesInfo',
-              
-                            biz_param: {
-                                herbName:_self.id
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            
-                            //console.log(suc.data.biz_result.list)
-                            let result = suc.data.biz_result;
-                            console.log(result)
-                           /* _self.obj = result;*/
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+            
         }
 }
 </script>

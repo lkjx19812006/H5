@@ -137,7 +137,8 @@ export default {
                 console.log(suc);
                 /*_self.obj.id = suc.data.biz_result.id*/
                 common.$emit('message', suc.data.msg);
-                common.$emit('post-add-address',_self.obj);
+                /*common.$emit('post-add-address',_self.obj);*/
+                common.$emit('informAddress','refurbish');
                 _self.$router.push('addressManage')
               },function(err){
                 common.$emit('close-load');

@@ -134,6 +134,7 @@ export default {
                   _self.getHttp(_self.keyword,_self.value.time,_self.value.price,_self.value.sample)
             },
             jumpSearch(){
+                common.$emit('setParam','router','need')
                 this.$router.push('search');
             },
             jumpDetail(id){
@@ -197,18 +198,15 @@ export default {
         },
         created() {
             let _self = this;
-            
-              common.$on('post-urgentneed', function (word){
-                     _self.keyword = word;                     
-                    _self.getHttp(word,0,0,'');
-             })
+             _self.getHttp('',0,0,'');
+           
             
   
-            common.$on('id-urgentneed', function (key) {
-                  _self.keyword = key;   
-                  _self.getHttp(key,0,0,'');
+            common.$on('need', function (item) {
+                  console.log(item);
+                  _self.getHttp(item,0,0,'');
             })
-                  _self.getHttp('',0,0,'');
+                 
 
 
 

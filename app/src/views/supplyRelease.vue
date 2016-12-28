@@ -12,9 +12,9 @@
                     <div class="good_name">
                         <p>产品：</p>
                         <div>
-                            <div class="select">
-                                <!-- <p>请填写你需要的药材名称</p> -->
-                                <input text="text" disable="false" placeholder="请填写你需要的药材名称" v-model="obj.drug_name">
+                            <div class="select" @click="jump">
+                                <!-- <p>{{drug}}</p> -->
+                                <input type="text"  v-model="drug" placeholder="请输入你想要的药材" disabled = true/>
                             </div>
                         </div>
                     </div>
@@ -139,6 +139,7 @@ export default {
                 isB:false,
                 judge:0,
                 img_src:'/static/images/3.jpg',
+                drug:'请输入你想要的药材',
                 obj:{
                     drug_name:'',
                     spec:'',
@@ -203,12 +204,11 @@ export default {
             release() {
                   
                   let _self = this;
-                  console.log(_self.obj.number  + _self.obj.number_unit);
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'intentionService',biz_method:'editSupplyInfo',version:1,time:0,sign:'',biz_param:{
                          customerId:"",
-                         breedName:_self.obj.drug_name,
+                         breedName: common.pageParam.supplyRelease,
                          spec:_self.obj.spec,
                          location:_self.obj.place,
                          number:_self.obj.number,
@@ -233,14 +233,19 @@ export default {
                   httpService.supplyRelease(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc);
-                    let id = suc.data.biz_result.id;
-                   
-                    
+                    /*let id = suc.data.biz_result.id;*/
+                    common.$emit('informMyRes','refurbish');
+                    _self.$router.push("myResource")
                   },function(err){
                     common.$emit('close-load');
                     common.$emit()
                   })
 
+            },
+            jump(){
+                 let _self = this;
+                 common.$emit("setParam","router","supplyRelease");
+                 _self.$router.push("search");
             },
             /*toMyResourceHttp(){
                   let _self = this;
@@ -287,7 +292,15 @@ export default {
         },
         
         created() {
-            common.$emit('show-load');
+            let _self = this;
+            common.$on("supplyRelease",function (item){
+                   
+                   _self.drug = item;
+                   console.log(item)
+            })
+            
+            
+            /*common.$emit('show-load');
             this.$http.get(common.apiUrl.drug_information_list).then((response) => {
                 common.$emit('close-load');
                 let data = response.data.biz_result.list;
@@ -295,7 +308,7 @@ export default {
             }, (err) => {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
-            });
+            });*/
         }
 }
 </script>
@@ -456,6 +469,7 @@ textarea {
     border:0;
     height:100%;
     width:100%;
+    background:white;
 }
 
 

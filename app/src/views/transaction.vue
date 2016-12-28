@@ -108,7 +108,7 @@ export default {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
             });*/
-            httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
+             httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
                         biz_module:'tradeNewService',
                         biz_method:'currentTradeList',
               

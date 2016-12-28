@@ -12,7 +12,7 @@
                     <div class="good_name">
                         <p>产品：</p>
                         <div>
-                            <div class="select" @click="jump(router)">
+                            <div class="select" @click="jumpSearch('search')">
                                 <!-- <p>请填写你需要的药材名称</p> -->
                                 <input text="text" disabled="false" :placeholder="obj.drug_name" v-model="obj.drug_name">
                             </div>
@@ -92,7 +92,7 @@ export default {
                 router:'search',
                 selected: '1',
                 obj:{
-                    drug_name:'白术',
+                    drug_name:'',
                     spec:'',
                     place:'',
                     number:'',
@@ -108,7 +108,7 @@ export default {
         },
         methods: {
             release() {
-                /*this.$router.push('needReleaseSuccess');*/
+                
                 let _self = this;
                 common.$emit('show-load');
                   let url=common.addSID(common.urlCommon + common.apiUrl.most);
@@ -122,7 +122,7 @@ export default {
                          customerName:_self.obj.name,
                          customerPhone:_self.obj.phone,
                          duedate:_self.obj.duedate,
-                         breedId:"1111111",
+                         breedId:"",
                          unit:_self.obj.number_unit,
                         /* id:_self.obj.id*/    
                   }};
@@ -140,19 +140,17 @@ export default {
                   })
             },
             jump(router){
+
+                this.$router.push(router);
+            },
+            jumpSearch(router){
+                common.$emit("setParam","router",)
                 this.$router.push(router);
             }
+
         },
         created() {
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.drug_information_list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });
+          
         }
 }
 </script>
@@ -185,6 +183,7 @@ textarea {
     padding: 1.28rem;
     margin-bottom: 0.8533rem;
     background: white;
+
 }
 
 .need_release .good_information {
@@ -346,5 +345,6 @@ textarea {
     font-size: 1.536rem;
     color: white;
     line-height: 4.267rem;
+    
 }
 </style>

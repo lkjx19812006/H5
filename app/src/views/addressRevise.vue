@@ -59,13 +59,12 @@ export default {
                 show:false,
                 post_id:'',
                 obj:{
-                   name:'',
-                   tel:'',
-                    addressProvince: '北京',
-                    addressCity: '北京',
-                    addressDistrict:'朝阳区',
-                   
-                   detailAddr:''
+                    name:'',
+                    tel:'',
+                    addressProvince: '',
+                    addressCity: '',
+                    addressDistrict:'', 
+                    detailAddr:''
                 },
                 addressSlots: [
                       {
@@ -98,18 +97,43 @@ export default {
             }
         },
     methods: {
-           
+            self(id){
+              //本页面刷新接口
+                  let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userAddressService',biz_method:'queryAddressById',version:1,time:0,sign:'',biz_param:{
+                        id:id
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.addressRevise(url,body,function(suc){
+                    common.$emit('close-load');
+                    
+                    let result = suc.data.biz_result;
+                    console.log(result)
+                        _self.obj.detailAddr = result.address;
+                        _self.obj.name = result.contactName;
+                        _self.obj.tel = result.contactPhone;
+                        _self.obj.addressProvince = result.province;
+                        _self.obj.addressCity = result.city;
+                        _self.obj.addressDistrict = result.district;
+                        
+                        
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+            },
             onAddressChange(picker, values) {
-              //console.log(picker);
-              //console.log(values);
-              // picker.setSlotValues(1, address[values[0]]);
+             
               this.obj.addressProvince = values[0];
               this.obj.addressCity = values[1];
               this.obj.addressDistrict=values[2];
             },
 
         selectPlace(){
-            /*this.$router.push('selectPlace');*/
+            
              this.show = true;
         },
         cancel(){
@@ -119,7 +143,10 @@ export default {
              this.show = false;
         },
         confirm(){
+                //确认修改接口
                   let _self = this;
+                  console.log(_self.obj.detailAddr);
+                  console.log(111211);
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'userAddressService',biz_method:'updateUserAddressInfo',version:1,time:0,sign:'',biz_param:{
@@ -137,9 +164,11 @@ export default {
                   httpService.addressRevise(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc);
-                    /*var obj = _self.obj;*/
-                    common.$emit('post-revise-address',_self.obj);
-                    _self.$router.push('addressManage')
+                    
+                    
+                    common.$emit('reviseAAddress','refurbish');
+                    /*_self.$router.push('addressManage')*/
+                    /*_self.$router.go('addressManage');*/
                     
                   },function(err){
                     common.$emit('close-load');
@@ -148,38 +177,18 @@ export default {
         }
     },
      created(){
-               let _self = this;
-               /*common.$on('post-address-id', function (id){
-                    console.log(id);
-                    _self.post_id = id;
-                    console.log(id);
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'userAddressService',biz_method:'queryAddressById',version:1,time:0,sign:'',biz_param:{
-                        id:id
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.addressRevise(url,body,function(suc){
-                    common.$emit('close-load');
-                    console.log(suc.data.biz_result);
-                    let result = suc.data.biz_result;
-                        _self.obj.detailAddr = result.address;
-                        _self.obj.name = result.contactName;
-                        _self.obj.tel = result.contactPhone;
-                        _self.obj.addressProvince = result.province;
-                        _self.obj.addressCity = result.city;
-                        _self.obj.addressDistrict = result.district;
-                  },function(err){
-                    common.$emit('close-load');
+              
+                  let _self = this;
+                  //执行刷洗新
+                  var str = _self.$route.fullPath;
+                  var id = str.substring(15,str.length);
+                  console.log(id)
+                  _self.post_id = id;
+                  _self.self(id);
+
+                  common.$on('revise-address',function (item){
+                      _self.self(item);
                   })
-
-             }) */
-
-             common.$on('post-address-id', function (obj){
-                   _self.obj = obj;
-             })
              
      }
        

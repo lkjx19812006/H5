@@ -10,9 +10,12 @@
             <div class="good_name">
                 <p>产品：</p>
                 <div>
-                    <div class="select">
+                   <div class="select" @click="jump()">
                         <!-- <p>人参</p> -->
-                        <input text="text" disable="false" :placeholder="obj.drug_name" v-model="obj.drug_name">
+                        <!-- <input text="text" disable="true" :placeholder="obj.drug_name" v-model="obj.drug_name"> -->
+                       <router-link to="/search"> 
+                           <input type="text"  v-model="obj.drug_name"  disabled = true/>
+                       </router-link>
                     </div>
                 </div>
             </div>
@@ -145,11 +148,14 @@ export default {
                     name:'',
                     phone:'',
                     duedate:'30',
+                    imgArr:['','','',''],
                     id:''
 
                 },
+                drug:'',
                 selected: '1',
                 todos: {},
+                imgArr:['','','',''],
                 imgageArr:[
                       {
                         name: 'intention',
@@ -175,76 +181,9 @@ export default {
             imageUpload
         },
         methods: {
-            
-            judgeTrue(){
-                 this.judge = 1;
-                 /*this.isA = !this.isA;
-                 this.isB = !this.isB;*/
-
-            },
-            judgeFalse(){
-                 this.judge = 0;
-                 /*this.isA = !this.isA;
-                 this.isB = !this.isB*/;
-            },
-            release() {
-                /*this.$router.push('supplyReleaseSuccess');*/
-                /*common.$emit('confirm','确定修改','取消修改','确认修改信息后,将等待审核！','确定修改');*/
-                 
-                  let _self = this;
-                  //console.log(_self.obj.id);
-                 
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon + common.apiUrl.most);
-                  let body={biz_module:'intentionService',biz_method:'updateEditSupplyInfo',version:1,time:0,sign:'',biz_param:{
-                         customerId:"",
-                         breedName:_self.obj.drug_name,
-                         spec:_self.obj.spec,
-                         location:_self.obj.place,
-                         number:_self.obj.number,
-                         price:_self.obj.sales_price,
-                         address:_self.obj.where,
-                         sampling:_self.judge,
-                         description:_self.obj.selling_point,
-                         customerName:_self.obj.name,
-                         customerPhone:_self.obj.phone,
-                         editImage:['/static/images/3.jpg','/static/images/3.jpg','/static/images/3.jpg','/static/images/3.jpg'],
-                         descriptions:"",
-                         sampleNumber:_self.obj.weight,
-                         sampleAmount:_self.obj.price,
-                         duedate:_self.obj.duedate,
-                         breedId:"",
-                         unit:_self.obj.number_unit,
-                         id:_self.obj.id
-
-                        
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.supplyRelease(url,body,function(suc){
-                    common.$emit('close-load');
-                    //console.log(suc);
-                    common.$emit('message', suc.data.msg);
-                    
-                  },function(err){
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                  })
-                
-            },
-            getUrl(param){
-                console.log('dddddd');
-                console.log(param);
-            }
-        },
-        created() {
-            /*var _self = this;
-            var str = _self.$route.fullPath;
-            var id = str.substring(16,str.length);
-            _self.obj.id = id;
-           
-           httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+            self(id){
+                 let _self = this;
+                httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
               
@@ -263,48 +202,139 @@ export default {
                             _self.obj.weight = result.sampleNumber;
                             _self.obj.price = result.sampleAmount;
                             _self.obj.where = result.address;
-                            _self.judge = result.sampling;
+                            _self.obj.judge = result.sampling;
                             _self.obj.selling_point = result.description;
                             _self.obj.name = result.customerName;
                             _self.obj.phone = result.customerPhone;
+                           
+                            _self.imgageArr[0].url = result.image[0];
+                            _self.imgageArr[1].url = result.image[1];
+                            _self.imgageArr[2].url = result.image[2];
+                            _self.imgageArr[3].url = result.image[3];
                             
-                            let imageArr = result.image;
-                            
-                            
-                                _self.imgageArr[0].url = imageArr[0];
-                                _self.imgageArr[1].url = imageArr[1];
-                                _self.imgageArr[2].url = imageArr[2];
-                                _self.imgageArr[3].url = imageArr[3];
-                            
+                            if(result.image[0] != undefined){
+                                _self.obj.imgArr[0] = result.image[0];
+                            }
+                            if(result.image[1] != undefined){
+                                _self.obj.imgArr[1] = result.image[1];
+                            }
+                            if(result.image[2] != undefined){
+                                _self.obj.imgArr[2] = result.image[2];
+                            }
+                            if(result.image[3] != undefined){
+                                _self.obj.imgArr[3] = result.image[3];
+                            }
+                          
+
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
-                        })*/
-                 let _self = this;
-                  common.$on('myResource-to-revisePurchase',function (obj){
-                            _self.obj.drug_name = obj.drug_name;
-                            _self.obj.spec = obj.spec;
-                            _self.obj.place = obj.place;
-                            _self.obj.number = obj.number;
-                            _self.obj.number_unit = obj.number_unit;
-                            _self.obj.sales_price = obj.sales_price;
-                            _self.obj.weight = obj.weight;
-                            _self.obj.price = obj.price;
-                            _self.obj.where = obj.where;
-                            _self.obj.judge = obj.judge;
-                            _self.obj.selling_point = obj.selling_point;
-                            _self.obj.name = obj.name;
-                            _self.obj.phone = obj.phone;
-                            console.log(obj.imgArr);
-                            _self.imgageArr[0].url = obj.imgArr[0];
-                            _self.imgageArr[1].url = obj.imgArr[1];
-                            _self.imgageArr[2].url = obj.imgArr[2];
-                            _self.imgageArr[3].url = obj.imgArr[3];
-                            
-                                
-                  })
-            
+                        })
+            },
+            tabRevise(){
+                  let _self = this;
+                  //console.log(_self.obj.imgArr);
+                   
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon + common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'updateEditSupplyInfo',version:1,time:0,sign:'',biz_param:{
+                         customerId:"",
+                         breedName:_self.obj.drug_name,
+                         spec:_self.obj.spec,
+                         location:_self.obj.place,
+                         number:_self.obj.number,
+                         price:_self.obj.sales_price,
+                         address:_self.obj.where,
+                         sampling:_self.judge,
+                         description:_self.obj.selling_point,
+                         customerName:_self.obj.name,
+                         customerPhone:_self.obj.phone,
+                         editImage:_self.obj.imgArr,
+                         descriptions:"",
+                         sampleNumber:_self.obj.weight,
+                         sampleAmount:_self.obj.price,
+                         duedate:_self.obj.duedate,
+                         breedId:"",
+                         unit:_self.obj.number_unit,
+                         id:_self.obj.id
+
+                        
+                  }};
                   
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.supplyRelease(url,body,function(suc){
+                    common.$emit('close-load'); 
+                    console.log(suc);                  
+                    common.$emit("reviseResource","refurbish");
+                    
+                    /*_self.$router.push("myResource");*/  
+                  },function(err){
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                  })
+            },
+            jump(){
+                let _self = this;
+                
+                common.$emit("setParam","router","reviseResource");
+                /*_self.$router.push("search");*/
+               
+
+            },
+            judgeTrue(){
+                 this.judge = 1;
+                 /*this.isA = !this.isA;
+                 this.isB = !this.isB;*/
+
+            },
+            judgeFalse(){
+                 this.judge = 0;
+                 /*this.isA = !this.isA;
+                 this.isB = !this.isB*/;
+            },
+            release() {
+                /*this.$router.push('supplyReleaseSuccess');*/
+                   /*common.$emit('confirm','确定修改','取消修改','确认修改信息后,将等待审核！','确定修改');*/
+                 
+                   common.$emit('confirm','确认修改信息后,将等待审核！','确定修改');
+                  /* let _self = this;
+                   _self.tabRevise();
+
+                   _self.$router.push("/myResource");*/
+                
+            },
+            getUrl(param){
+                let _self = this;
+                if(param.index == 0){
+                    _self.obj.imgArr[0] = param.url;
+                    console.log(param.url)
+                }else if(param.index == 1){
+                    _self.obj.imgArr[1] = param.url;
+                }else if(param.index == 2){
+                    _self.obj.imgArr[2] = param.url;
+                }else if(param.index == 3){
+                    _self.obj.imgArr[3] = param.url;
+                }
+            }
+        },
+        created() {
+            
+                 var _self = this;
+                 var str = _self.$route.fullPath;
+                 var id = str.substring(16,str.length);
+                  _self.obj.id = id;
+                  _self.self(id);
+
+                  /*_self.self(common.pageParam.resourceId);*/
+                  common.$on("revResource",function (item){
+                         _self.obj.drug_name = item;
+
+                  })
+                  
+                  common.$on("res-id",function (item){
+                        _self.self(item);
+                  })
 
         }
 }
@@ -451,6 +481,7 @@ textarea {
     border:0;
     height:100%;
     width:100%;
+    background: white;
 }
 .revise_resource .good_number button{  
     height:100%;

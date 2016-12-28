@@ -14,15 +14,15 @@
         <div class="page-loadmore-wrapper" v-show="!keyword">
 
                 <div class="hot_drug">
-                    <p>热门药材{{title}}</p>
+                    <p>热门药材</p>
                 </div>
                 <div class="drug_show" >
                     <a @click="jump(index)">
-                        <img src="/static/images/1.jpg">
+                        <img :src="obj.icon">
                         <div class="drug_introduce">
-                            <p class="drug_name"><!-- {{todo.name}} --></p>
-                            <p class="drug_chinese_name">中文别名：<!-- {{todo.chinese_name}} --></p>
-                            <p class="drug_english_name">英文名：<!-- {{todo.english_name}} --></p>
+                            <p class="drug_name" id="drug_name">{{obj.name}}</p>
+                            <p class="drug_chinese_name" id="drug_chinese_name">英文名：{{obj.eName}}</p>
+                            <p class="drug_english_name" id="drug_english_name">拉丁：{{obj.lName}}</p>
                         </div>
                     </a>
                 </div>
@@ -59,41 +59,19 @@ export default {
                 showHead: true,
                 todos: [],
                 datas:[],
-                title: 'test'
+                title: 'test',
+                obj:{
+
+                },
+                detail_obj:{
+
+                },
             }
         },
         created() {
-            /*common.$emit('show-load');
-            this.$http.get(common.apiUrl.drug_table_list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                let hotDrugData = response.data.biz_result.hot_drug_list;
-                this.todos = data;
-                this.hot_drug = hotDrugData;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
              let _self = this;
-             httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'searchKeywordService',
-                        biz_method:'queryHotKeyword',
-              
-                            biz_param: {
-                                
-                                pn:1,
-                                pSize:20
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                            console.log(result)
-                            _self.todos = result;
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+             _self.hotKeySearch();
+             _self.hotDrug();
             
         },
         watch: {
@@ -131,6 +109,70 @@ export default {
             }
         },
         methods: {
+            drugDetail(id){
+                httpService.drugResTable(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'breedService',
+                        biz_method:'queryDrugPropertiesInfo',
+              
+                            biz_param: {
+                                herbName:id
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            
+                            //console.log(suc.data.biz_result.list)
+                            let result = suc.data.biz_result;
+                            console.log(result)
+                           /* _self.obj = result;*/
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            },
+            hotDrug(){
+                let _self = this;
+                httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'breedService',
+                        biz_method:'hotDrugPropertiesInfo',
+              
+                            biz_param: {
+                                
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list[0];
+                            _self.obj = result;
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            },
+            hotKeySearch(){
+                let _self = this;
+                httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'searchKeywordService',
+                        biz_method:'queryHotKeyword',
+              
+                            biz_param: {
+                                
+                                pn:1,
+                                pSize:20
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            //console.log(result)
+                            _self.todos = result;
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            },
             jump: function(router) {
                 this.$router.push('drugResTableDetail/' + router);
             },
@@ -144,7 +186,7 @@ export default {
                 window.back();
             },
             jumpDetail(id){
-                console.log(id)
+                this.drugDetail(id)
                 this.$router.push('drugResTableDetail/' + id);
             }
         },
@@ -279,20 +321,23 @@ export default {
     font-size: 1.10929rem;
 }
 
-.drug_table .drug_name {
-    color: #31323;
+.drug_table #drug_name {
+    color: #313232;
+    margin-bottom: 1.2799rem;
+    font-size: 1.3rem;
 }
 
-.drug_table .drug_chinese_name {
-    font-size: 1.87726rem;
+.drug_table #drug_chinese_name {
+    font-size: 1.2rem;
     color: #666666;
     margin-top: 0.42665rem;
     word-break: break-all;
     line-height: 1.35rem;
+    margin-bottom: 2rem;
 }
 
-.drug_table .drug_english_name {
-    font-size: 0.93863rem;
+.drug_table #drug_english_name {
+    font-size: 1.2rem;
     color: #666666;
     margin-top: 0.42665rem;
     word-break: break-all;

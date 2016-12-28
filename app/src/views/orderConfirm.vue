@@ -40,7 +40,7 @@ export default {
                 order:{
                     
                 },
-                value:'',
+                value:'100',
                 person:{
 
                 }
@@ -113,16 +113,18 @@ export default {
                 this.$router.go(-1);
             },
             getValue(param){
+                 //console.log(param.value);
                 this.value = param.value;
             },
             confirm(){
                   
                   
                   let _self = this;
-
+                  //console.log(_self.value);
                   var str = _self.$route.fullPath;
                   var id = str.substring(14,str.length);
-                  //console.log(_self.value)
+                  //console.log(_self.id)
+                  
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'intentionService',biz_method:'submitIntentionOrder',version:1,time:0,sign:'',biz_param:{

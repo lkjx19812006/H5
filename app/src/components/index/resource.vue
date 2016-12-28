@@ -103,6 +103,7 @@ export default {
                  _self.getHttp(_self.keyword,_self.value.time,_self.value.price,_self.value.sample);
             },
             jumpSearch(){
+                common.$emit('setParam','router','resource')
                 this.$router.push('search');
             },
             jumpDetail(id){
@@ -162,21 +163,13 @@ export default {
         },
         created() {
             let _self = this;
-            
-             common.$on('post-resource', function (word){
-                 _self.keyword = word;
-                 
-                     _self.getHttp(word,0,0,'');
-
-             })
-            
-            common.$on('id-resource', function (key) {
-                 
-                     _self.getHttp(key,0,0,'');
+             _self.getHttp('',0,0,'');
+            common.$on('resource', function (item) {
+                 console.log(item);
+                  _self.getHttp(item,0,0,'');
             })
-
             
-                        _self.getHttp('',0,0,'');
+                       
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-130;

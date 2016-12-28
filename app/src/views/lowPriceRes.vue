@@ -203,6 +203,7 @@ export default {
                 }, 1500);
             },
             jumpSearch(){
+                common.$emit('setParam','router','lowPriceRes')
                 this.$router.push('search');
             }
            
@@ -210,17 +211,15 @@ export default {
         
         created() {
 
-            let _self = this;  
-            common.$on('post-lowprice', function (word){
-                        _self.keyword = word;             
-                       _self.getHttp(word,0,0,'');
-             })
+            let _self = this;
+            console.log(common.pageParam.lowPrice);
+            _self.getHttp(common.pageParam.lowPrice,0,0,'');
+            common.$on("lowPriceRes",function(item){
+                 console.log(item)
+                 _self.getHttp(item,0,0,'');
+            });
+           
             
-            common.$on('id-lowprice', function (key) {
-                  _self.keyword = key;  
-                  _self.getHttp(key,0,0,'');
-            })      
-                  _self.getHttp('',0,0,'');
             
         },
         

@@ -19,6 +19,18 @@ let common = new Vue({
             login: '/account/login.do',
             getDate: '/system/date.do',
             most:'/handle/control.do'
+        },
+        pageParam:{
+           router:'',
+           lowPrice:'',
+           Urgentneed:'',
+           myAttention:'',
+           supplyRelease:'',
+           reviseResource:'',
+           addressId:'',
+           postAddressObj:'',
+           resourceId:''
+
         }
     },
     methods: {
@@ -80,7 +92,7 @@ common.$on('message', message => {
     });
 })
 
-common.$on('confirm', (confirmButtonText, cancelButtonText, message, title) => {
+/*common.$on('confirm', (confirmButtonText, cancelButtonText, message, title) => {
     MessageBox({
         showCancelButton: true,
         confirmButtonText: confirmButtonText,
@@ -88,6 +100,20 @@ common.$on('confirm', (confirmButtonText, cancelButtonText, message, title) => {
         message: message,
         title: title
     });
+   confirmButtonText, cancelButtonText, 
+})*/
+common.$on('confirm',(message, title) => {
+    MessageBox.confirm(message, title).then(action =>{
+           console.log(1111);
+    }).then(action => {
+           console.log(2222);
+    })
+})
+
+
+
+common.$on('setParam',(key,value) => {
+    common.pageParam[key]=value;
 })
 
 
