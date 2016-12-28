@@ -2,19 +2,17 @@
     <div class="mine">
         <div class="header" v-for="todo in content">
             <div class="header_top">
-
-                <div class="header_photo"><!-- <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload> --><img :src="url"></div>
-
+                <div class="header_photo">
+                    <!-- <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload> --><img :src="url"></div>
                 <div class="information">
                     <div class="information_center">
                         <div class="main_content">
                             <p class="name" id="mine_name">{{todo.name}}</p>
-
                             <p class="sex">
                                 <img src="/static/images/woman.png" v-if="todo.gender == ''">
-                                <img src="/static/images/woman.png" v-if="todo.gender == '1'"> <!-- 判断性别 -->
+                                <img src="/static/images/woman.png" v-if="todo.gender == '1'">
+                                <!-- 判断性别 -->
                             </p>
-
                         </div>
                         <p class="company">{{todo.company}}</p>
                     </div>
@@ -28,7 +26,6 @@
                 </router-link>
             </div>
             <div class="header_bottom">
-
                 <p class="my_service" v-if="todo.customerGender == '0' || todo.customerGender == '1'">{{todo.my_service}}</p>
                 <p class="my_service" v-if="todo.customerGender != '0' && todo.customerGender != '1' ">{{todo.my_apply}}</p>
                 <p class="his_name" v-if="todo.customerGender == '0' || todo.customerGender == '1'">{{todo.customer}}<span>
@@ -43,13 +40,12 @@
             </div>
         </div>
         <div class="all_order">
-                <p>全部订单</p>
-                <div @click="jump('myOrder')">
-                     <p>查看全部订单</p>
-                     <img src="/static/images/right-arrow.png">
-                </div>
-       </div>
-
+            <p>全部订单</p>
+            <div @click="jump('myOrder')">
+                <p>查看全部订单</p>
+                <img src="/static/images/right-arrow.png">
+            </div>
+        </div>
         <div class="entrance">
             <div v-for="todo in entrance" @click="jump(todo.router)">
                 <img :src="todo.img_src" class="entrance_img">
@@ -92,10 +88,10 @@ import imageUpload from '../../components/tools/imageUpload'
 export default {
     data() {
             return {
-                url:'',
+                url: '',
                 param: {
                     name: 'intention',
-                    index:0
+                    index: 0
                 },
                 content: [{
                     name: '扬帆',
@@ -104,11 +100,11 @@ export default {
                     integration: '1223',
 
                     customer: '余鹏飞',
-                    customerGender:'',
+                    customerGender: '',
                     my_service: '我的专属客服',
                     details: '点击详情',
                     gender: '',
-                    my_apply:'申请专属客服'
+                    my_apply: '申请专属客服'
                 }],
                 entrance: [{
                     name: '待审核',
@@ -166,77 +162,77 @@ export default {
             imageUpload
         },
         methods: {
-            getUrl(param){
-                console.log('dddddd');
-                console.log(param);
-            },
-
+            getUrl(param) {},
             drugMoney: function() {
                 common.$emit('confirm', '去下载app', '再考虑考虑？');
             },
             jump: function(router) {
-                console.log(router);
                 this.$router.push(router);
             }
         },
+        watch: {
+            '$route': function() {
+                console.log('sdfsdfsfdsdf');
+            }
+        },
+        route: {
+            data: function({
+                next
+            }) {
+                console.log("dfdfdfdfdfdf");
+               
+                next(); 
+            }
+        },
 
-        created(){
-          let _self = this;
-          let customer_id = '';
-          common.$emit('show-load');
-          let url=common.addSID(common.urlCommon+common.apiUrl.most);
-          let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
-          console.log(common.difTime);
-          body.time=Date.parse(new Date())+parseInt(common.difTime);
-          body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-          httpService.queryUserInfo(url,body,function(suc){
+    created() {
+        let _self = this;
+        let customer_id = '';
+        common.$emit('show-load');
+        let url = common.addSID(common.urlCommon + common.apiUrl.most);
+        let body = {
+            biz_module: 'userService',
+            biz_method: 'queryUserInfo',
+            version: 1,
+            time: 0,
+            sign: '',
+            biz_param: {}
+        };
+        body.time = Date.parse(new Date()) + parseInt(common.difTime);
+        body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+        httpService.queryUserInfo(url, body, function(suc) {
             common.$emit('close-load');
-            //console.log(suc.data.biz_result.customer.id);
             _self.content[0].name = suc.data.biz_result.name;
             _self.content[0].company = suc.data.biz_result.companyShort;
             _self.content[0].money = suc.data.biz_result.normalMoney;
             _self.content[0].integration = suc.data.biz_result.score;
             _self.content[0].gender = suc.data.biz_result.gender;
             _self.url = suc.data.biz_result.avatar;
-            /*common.$on('accountInfo',function (obj) {
-                   console.log(obj.url)
-                   _self.url = obj.url
-            })*/
-            
-             //业务员信息
-                  
-                  common.$emit('show-load');
-                  let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let otherbody={biz_module:'userService',biz_method:'queryEmployeeInfo',version:1,time:0,sign:'',biz_param:{
-                        
-                  }};
-                  
-                  otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
-                  otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
-                  httpService.queryEmployeeInfo(otherurl,otherbody,function(suc){
-                    common.$emit('close-load');
-                    console.log(suc.data.biz_result);
-                    console.log(suc.data.biz_result.gender);
-                    
-                    _self.content[0].customer = suc.data.biz_result.name;
-                    _self.content[0].customerGender = suc.data.biz_result.gender;
-                  },function(err){
-                    common.$emit('close-load');
-                  })
-
-
-          },function(err){
+            common.$emit('show-load');
+            let otherurl = common.addSID(common.urlCommon + common.apiUrl.most);
+            let otherbody = {
+                biz_module: 'userService',
+                biz_method: 'queryEmployeeInfo',
+                version: 1,
+                time: 0,
+                sign: '',
+                biz_param: {}
+            };
+            otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
+            otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
+            httpService.queryEmployeeInfo(otherurl, otherbody, function(suc) {
+                common.$emit('close-load');
+                _self.content[0].customer = suc.data.biz_result.name;
+                _self.content[0].customerGender = suc.data.biz_result.gender;
+            }, function(err) {
+                common.$emit('close-load');
+            })
+        }, function(err) {
             common.$emit('close-load');
-          })
-          
-
-
-          
-
-        }
+        })
+    }
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .mine {
     background: #F0F0F0;
@@ -252,7 +248,6 @@ export default {
 .mine .header_top {
     width: 88%;
     height: 6.4rem;
-    /*background:url(/static/images/right-arrow.png) right center no-repeat;background-size:1.024rem 1.024rem;*/
     margin-left: 6%;
     position: relative;
 }
@@ -268,12 +263,13 @@ export default {
     position: absolute;
     z-index: 200000;
     overflow: hidden;
+}
 
+.mine .header_photo img {
+    width: 100%;
+    height: 100%;
 }
-.mine .header_photo img{
-    width:100%;
-    height:100%;
-}
+
 .mine .information {
     width: 65.4%;
     height: 6.4rem;
@@ -282,14 +278,13 @@ export default {
     flex-direction: row;
     font-size: 1.024rem;
     position: absolute;
-    left:35%;
+    left: 35%;
 }
 
 .mine .information_center {
     flex: 4;
     display: flex;
     flex-direction: column;
-         
     text-align: left;
 }
 
@@ -355,13 +350,14 @@ export default {
 .mine .his_name {
     flex: 26;
     text-align: left;
-    
 }
-.mine .his_name img{
+
+.mine .his_name img {
     height: 1.024rem;
     position: absolute;
     margin-left: 0.5rem;
 }
+
 .mine .details {
     flex: 27;
     text-align: right;
@@ -371,47 +367,49 @@ export default {
     display: flex;
     flex-direction: row;
     height: 7.253rem;
-    /*margin-top: 0.8533rem;*/
     background: white;
-    width:100%;
+    width: 100%;
 }
-.mine  .all_order{
-    height:3.6rem;
+
+.mine .all_order {
+    height: 3.6rem;
     line-height: 3.6rem;
     background: white;
     border-bottom: 1px solid #E0E0DF;
 }
-.mine  .all_order>p{
-    float:left;
-    font-size:1.3rem;
-    color:#333333;
+
+.mine .all_order>p {
+    float: left;
+    font-size: 1.3rem;
+    color: #333333;
     margin-left: 4%;
 }
-.mine  .all_order>div{
-    float:right;
-    font-size:1.3rem;
-    color:#999999;
+
+.mine .all_order>div {
+    float: right;
+    font-size: 1.3rem;
+    color: #999999;
     margin-right: 4%;
-    
 }
-.mine  .all_order>div>p{
-    float:left;
+
+.mine .all_order>div>p {
+    float: left;
     margin-right: 0.5rem;
 }
-.mine  .all_order>div img{
-    float:right;
+
+.mine .all_order>div img {
+    float: right;
     width: 1.024rem;
     height: 1.024rem;
     margin-top: 1.288rem;
 }
+
 .mine .entrance div {
     flex: 1;
     box-sizing: border-box;
     height: 7.253rem;
-    /*padding-top:4.48rem;*/
     position: relative;
 }
-
 
 .mine .information_center div {
     flex: 1;
@@ -494,10 +492,8 @@ export default {
     flex: 1;
     box-sizing: border-box;
     height: 7.253rem;
-    /*padding-top:4.48rem;*/
     position: relative;
 }
-
 
 .mine .entrance div p {
     font-size: 1.109rem;

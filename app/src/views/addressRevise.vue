@@ -2,297 +2,296 @@
     <div class="address_revise">
         <mt-header title="修改地址">
             <router-link to="/addressManage" slot="left">
-                <mt-button icon="back" ></mt-button>
+                <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
         <ul>
-           <li>
-              <p>收货人</p>
-              <input type="text" :placeholder="obj.name" v-model="obj.name">
-           </li>
-
-           <li>
-              <p>联系电话</p>
-              <input type="text" :placeholder="obj.tel" v-model="obj.tel">
-           </li>
-
-           <li  @click="selectPlace">
-              <p>省市区(县)</p>
-              <p class="selectPlace">
-                  <!-- <span v-model="obj.province">{{obj.province}}</span>
+            <li>
+                <p>收货人</p>
+                <input type="text" :placeholder="obj.name" v-model="obj.name">
+            </li>
+            <li>
+                <p>联系电话</p>
+                <input type="text" :placeholder="obj.tel" v-model="obj.tel">
+            </li>
+            <li @click="selectPlace">
+                <p>省市区(县)</p>
+                <p class="selectPlace">
+                    <!-- <span v-model="obj.province">{{obj.province}}</span>
                   <span v-model="obj.city">{{obj.city}}</span>
                   <span v-model="obj.area">{{obj.area}}</span> -->
-                  <!-- <input type="text" v-model="obj.province" />
+                    <!-- <input type="text" v-model="obj.province" />
                   <input type="text" v-model="obj.city" />
                   <input type="text" v-model="obj.area" /> -->
-
-                  {{ obj.addressProvince }}{{ obj.addressCity }},{{obj.addressDistrict}}
-                  
-              </p>  
-              <img src="/static/images/right-arrow.png" >
-           </li>
-           <li class="last">
-              <textarea :placeholder="obj.detailAddr" v-model="obj.detailAddr"></textarea>
-           </li>
+                    {{ obj.addressProvince }}{{ obj.addressCity }},{{obj.addressDistrict}}
+                </p>
+                <img src="/static/images/right-arrow.png">
+            </li>
+            <li class="last">
+                <textarea :placeholder="obj.detailAddr" v-model="obj.detailAddr"></textarea>
+            </li>
         </ul>
-
-  <!-- <mt-picker :slots="slots" @change="onValuesChange" v-show="active" class="place" textAlign="center"></mt-picker> -->
-<!-- <mt-picker :slots="slots" @change="onValuesChange"></mt-picker> -->
-<!-- <mt-picker :slots="slots" @change="onAddressChange" class="address_picker"></mt-picker> -->
-      <div class="address_box" v-show="show">
-          <mt-button type="primary" class="left-button"  @click="cancel">取消</mt-button>
-          <mt-button type="primary" class="right-button" @click="confirmIt" >确定</mt-button>
-          <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5" class="select-box"></mt-picker>
-      </div>
-      <div class="confirm" v-on:click="confirm">保存</div>
+        <!-- <mt-picker :slots="slots" @change="onValuesChange" v-show="active" class="place" textAlign="center"></mt-picker> -->
+        <!-- <mt-picker :slots="slots" @change="onValuesChange"></mt-picker> -->
+        <!-- <mt-picker :slots="slots" @change="onAddressChange" class="address_picker"></mt-picker> -->
+        <div class="address_box" v-show="show">
+            <mt-button type="primary" class="left-button" @click="cancel">取消</mt-button>
+            <mt-button type="primary" class="right-button" @click="confirmIt">确定</mt-button>
+            <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5" class="select-box"></mt-picker>
+        </div>
+        <div class="confirm" v-on:click="confirm">保存</div>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import areaJson from '../common/data.json'
 
+ const addressArr = ['北京','广东','上海','天津','重庆','辽宁','江苏','湖北','四川','陕西','河北','山西','河南','吉林','黑龙江','内蒙古','山东','安徽','浙江','福建','湖南','广西','江西','贵州','云南','西藏','海南','甘肃','宁夏','青海','新疆','香港','澳门','台湾'];
 
 
 export default {
     data() {
             return {
-                show:false,
-                post_id:'',
-                obj:{
-                    name:'',
-                    tel:'',
+                show: false,
+                post_id: '',
+                obj: {
+                    name: '',
+                    tel: '',
                     addressProvince: '',
                     addressCity: '',
-                    addressDistrict:'', 
-                    detailAddr:''
+                    addressDistrict: '',
+                    detailAddr: ''
                 },
-                addressSlots: [
-                      {
-                        flex: 1,
-                        values: ['北京','上海'],
-                        className: 'slot1',
-                        textAlign: 'center'
-                      },{
-                        divider: true,
-                        content: '-',
-                        className: 'slot2'
-                      },{
-                        flex: 1,
-                        values:['北京','上海'] ,
-                        className: 'slot3',
-                        textAlign: 'center'
-                      }, 
-                      {
-                        divider: true,
-                        content: '-',
-                        className: 'slot4'
-                      }, {
-                        flex: 1,
-                        values: ['朝阳区','虹口区'],
-                        className: 'slot5',
-                        textAlign: 'center'
-                      }
-                    ],
-                    
+                addressSlots: [{
+                    flex: 1,
+                    values: addressArr,
+                    className: 'slot1',
+                    textAlign: 'center'
+                }, {
+                    divider: true,
+                    content: '-',
+                    className: 'slot2'
+                }, {
+                    flex: 1,
+                    values: ['北京'],
+                    className: 'slot3',
+                    textAlign: 'center'
+                }, {
+                    divider: true,
+                    content: '-',
+                    className: 'slot4'
+                }, {
+                    flex: 1,
+                    values: ['东城区', '西城区','朝阳区', '丰台区', '石景山区', '海淀区', '门头沟区', '房山区', '通州区', '顺义区', '昌平区', '大兴区', '怀柔区', '平谷区', '密云区', '延庆区'],
+                    className: 'slot5',
+                    textAlign: 'center'
+                }],
+
             }
         },
-    methods: {
-            self(id){
-              //本页面刷新接口
-                  let _self = this;
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'userAddressService',biz_method:'queryAddressById',version:1,time:0,sign:'',biz_param:{
-                        id:id
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.addressRevise(url,body,function(suc){
+        methods: {
+            self(id) {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userAddressService',
+                    biz_method: 'queryAddressById',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+                        id: id
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addressRevise(url, body, function(suc) {
                     common.$emit('close-load');
-                    
                     let result = suc.data.biz_result;
-                    console.log(result)
-                        _self.obj.detailAddr = result.address;
-                        _self.obj.name = result.contactName;
-                        _self.obj.tel = result.contactPhone;
-                        _self.obj.addressProvince = result.province;
-                        _self.obj.addressCity = result.city;
-                        _self.obj.addressDistrict = result.district;
-                        
-                        
-                  },function(err){
+                    _self.obj.detailAddr = result.detailAddr;
+                    _self.obj.name = result.contactName;
+                    _self.obj.tel = result.contactPhone;
+                    _self.obj.addressProvince = result.province;
+                    _self.obj.addressCity = result.city;
+                    _self.obj.addressDistrict = result.district;
+                }, function(err) {
                     common.$emit('close-load');
-                  })
+                })
             },
             onAddressChange(picker, values) {
-             
-              this.obj.addressProvince = values[0];
-              this.obj.addressCity = values[1];
-              this.obj.addressDistrict=values[2];
+              console.log(areaJson.data);
+                this.obj.addressProvince = values[0];
+                this.obj.addressCity = values[1];
+                this.obj.addressDistrict = values[2];
             },
-
-        selectPlace(){
-            
-             this.show = true;
-        },
-        cancel(){
-             this.show = false;
-        },
-        confirmIt(){
-             this.show = false;
-        },
-        confirm(){
-                //确认修改接口
-                  let _self = this;
-                  console.log(_self.obj.detailAddr);
-                  console.log(111211);
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'userAddressService',biz_method:'updateUserAddressInfo',version:1,time:0,sign:'',biz_param:{
-                        contactName:_self.obj.name,
-                        contactPhone:_self.obj.tel,
-                        province:_self.obj.addressProvince,
-                        city:_self.obj.addressCity,
-                        district:_self.obj.addressDistrict,
-                        detailAddr:_self.obj.detailAddr,
-                        id:_self.post_id
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.addressRevise(url,body,function(suc){
+            selectPlace() {
+                this.show = true;
+            },
+            cancel() {
+                this.show = false;
+            },
+            confirmIt() {
+                this.show = false;
+            },
+            confirm() {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userAddressService',
+                    biz_method: 'updateUserAddressInfo',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+                        contactName: _self.obj.name,
+                        contactPhone: _self.obj.tel,
+                        province: _self.obj.addressProvince,
+                        city: _self.obj.addressCity,
+                        district: _self.obj.addressDistrict,
+                        detailAddr: _self.obj.detailAddr,
+                        id: _self.post_id,
+                        address: _self.obj.addressProvince + _self.obj.addressCity + _self.obj.addressDistrict + _self.obj.detailAddr
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addressRevise(url, body, function(suc) {
                     common.$emit('close-load');
-                    console.log(suc);
-                    
-                    
-                    common.$emit('reviseAAddress','refurbish');
-                    /*_self.$router.push('addressManage')*/
-                    /*_self.$router.go('addressManage');*/
-                    
-                  },function(err){
+                    if (suc.data.code == '1c01') {
+                        common.$emit('reviseAAddress', 'refurbish');
+                        window.history.go(-1);
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
                     common.$emit('close-load');
-                  })
-                
+                })
+            }
+        },
+        created() {
+            let _self = this;
+            var str = _self.$route.fullPath;
+            var id = str.substring(15, str.length);
+            console.log(id)
+            _self.post_id = id;
+            _self.self(id);
+            common.$on('revise-address', function(item) {
+                _self.self(item);
+            })
         }
-    },
-     created(){
-              
-                  let _self = this;
-                  //执行刷洗新
-                  var str = _self.$route.fullPath;
-                  var id = str.substring(15,str.length);
-                  console.log(id)
-                  _self.post_id = id;
-                  _self.self(id);
-
-                  common.$on('revise-address',function (item){
-                      _self.self(item);
-                  })
-             
-     }
-       
-        
-    }
-
+}
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.address_revise ul{
-   padding: 0 1.5rem;
-   background:white;
-   width:100%;
-   color:#333333;
+.address_revise ul {
+    padding: 0 1.5rem;
+    background: white;
+    width: 100%;
+    color: #333333;
 }
-.address_revise ul li{
-   height:4.4rem;
-   border-bottom:1px solid #DADADA;
-   position: relative;
+
+.address_revise ul li {
+    height: 4.4rem;
+    border-bottom: 1px solid #DADADA;
+    position: relative;
 }
-.address_revise ul .last{
-   height:8.5rem;
-   color:#666666;
-   font-size: 1.2rem;
-   padding: 1rem 0;
-   border-bottom: none;
+
+.address_revise ul .last {
+    height: 8.5rem;
+    color: #666666;
+    font-size: 1.2rem;
+    padding: 1rem 0;
+    border-bottom: none;
 }
-.address_revise ul .last textarea{
-   width:100%;
-   height:100%;
-   border:0;
-   color:#666666;
+
+.address_revise ul .last textarea {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    color: #666666;
 }
-.address_revise ul li p{
-   position: absolute;
-   left:0;
-   font-size: 1.2rem;
-   color:#333333;
-   line-height: 4.4rem;
+
+.address_revise ul li p {
+    position: absolute;
+    left: 0;
+    font-size: 1.2rem;
+    color: #333333;
+    line-height: 4.4rem;
 }
-.address_revise ul li input{
-   position: absolute;
-   right:10%;
-   text-align: right;
-   border:none;
-   outline: none;
-   font-size: 1.2rem;
-   height:4.2rem;
-   color:#666666;
-   line-height: 4.4rem;
+
+.address_revise ul li input {
+    position: absolute;
+    right: 10%;
+    text-align: right;
+    border: none;
+    outline: none;
+    font-size: 1.2rem;
+    height: 4.2rem;
+    color: #666666;
+    line-height: 4.4rem;
 }
-.address_revise ul li .selectPlace{
-   position:absolute;
-   right:10%;
-   text-align: right;
-   font-size: 1.2rem;
-   color:#666666;
+
+.address_revise ul li .selectPlace {
+    position: absolute;
+    right: 10%;
+    text-align: right;
+    font-size: 1.2rem;
+    color: #666666;
 }
-.address_revise ul li img{
-   position: absolute;
-   right:0;
-   height:1rem;
-   top:1.7rem;
+
+.address_revise ul li img {
+    position: absolute;
+    right: 0;
+    height: 1rem;
+    top: 1.7rem;
 }
-.address_revise  .confirm{
-   width:100%;
-   height:5rem;
-   background:#FA6705;
-   color:white;
-   text-align: center;
-   line-height: 5rem;
-   font-size: 1.7rem;
-   position: fixed;
-   bottom: 0;
+
+.address_revise .confirm {
+    width: 100%;
+    height: 5rem;
+    background: #FA6705;
+    color: white;
+    text-align: center;
+    line-height: 5rem;
+    font-size: 1.7rem;
+    position: fixed;
+    bottom: 0;
 }
+
+
 /*.address_picker{
    width:100px;
    height:4.2rem;
 }*/
-.address_revise .address_box{
-   position: relative;
-   padding-top: 4rem;
-   
-   background: white;
-   
-}
-.address_revise .address_box .left-button{
-  position: absolute;
-  left: 10%;
-  top:1rem;
-  width:60px;
-  height:30px;
-  font-size: 16px;
+
+.address_revise .address_box {
+    position: relative;
+    padding-top: 4rem;
+    background: white;
 }
 
-.address_revise .address_box .right-button{
-  position: absolute;
-  right:10%;
-  top:1rem;
-  width:60px;
-  height:30px;
-  font-size: 16px;
+.address_revise .address_box .left-button {
+    position: absolute;
+    left: 10%;
+    top: 1rem;
+    width: 60px;
+    height: 30px;
+    font-size: 16px;
 }
-.address_revise .select-box{
-  background:white;
+
+.address_revise .address_box .right-button {
+    position: absolute;
+    right: 10%;
+    top: 1rem;
+    width: 60px;
+    height: 30px;
+    font-size: 16px;
+}
+
+.address_revise .select-box {
+    background: white;
 }
 </style>
