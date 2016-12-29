@@ -1,7 +1,7 @@
 <template>
     <div class="content mypurchase_sort">
         <div class="sort_content">
-            <div v-bind:class="item.class" v-for="(item,index) in arr" @click="showTable(item,index)">
+            <div v-bind:class="item.class" v-for="(item,index) in paramArr" @click="showTable(item,index)">
                 {{item.name}}<img v-bind:src="item.url">
             </div>
             <div class="sort_cell" v-show="selectShow">
@@ -19,128 +19,17 @@
 export default {
     data() {
             return {
-                arr: [{
-                    name: '发布日期',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '发布日期',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由新到旧',
-                        asc: 'low',
-                        show: false,
-                        pubdate:1,
-                        key:'pubdate'
-                    }, {
-                        name: '由旧到新',
-                        asc: 'top',
-                        show: false,
-                        pubdate:2,
-                        key:'pubdate'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        pubdate:0,
-                        key:'pubdate'
-                    }]
-                }, {
-                    name: '报价人数',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '报价人数',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由少到多',
-                        asc: 'low',
-                        show: false,
-                        number:1,
-                        key:'number'
-                    }, {
-                        name: '由多到少',
-                        asc: 'top',
-                        show: false,
-                        number:2,
-                        key:'number'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        number:0,
-                        key:'number'
-                    }]
-                }, {
-                    name: '剩余时间',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '剩余时间',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由少到多',
-                        asc: 'low',
-                        show: false,
-                        duedate:1,
-                        key:'duedate'
-                    }, {
-                        name: '由多到少',
-                        asc: 'top',
-                        show: false,
-                        duedate:0,
-                        key:'duedate'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        duedate:'',
-                        key:'duedate'
-                    }]
-                }, {
-                    name: '审核状态',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '审核状态',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '申请中',
-                        asc: 'low',
-                        show: false,
-                        text: 1,
-                        key:'text'
-                    }, {
-                        name: '上架失败',
-                        asc: 'low',
-                        show: false,
-                        text:-2,
-                        key:'text'
-                        
-                    },{
-                        name: '下架',
-                        asc: 'low',
-                        show: false,
-                        text:4,
-                        key:'text'
-                        
-                    }, {
-                        name: '上架',
-                        asc: 'top',
-                        show: false,
-                        text:2,
-                        key:'text'
-
-                    },
-                    {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        text:'',
-                        key:'text'
-
-                    }]
-                }],
                 selectShow: false,
                 selectArr: [],
                 selectIndex: 0
             }
+        },
+         props: {
+            sortRouter:{
+                type: String,
+                default: '/home'
+            },
+            paramArr:[Array]
         },
         methods: {
             showTable: function(item, index) {
@@ -153,27 +42,27 @@ export default {
                 }
             },
             getAsc: function(item) {
+                console.log(item);
                 if (!item.asc) {
-                    this.arr[this.selectIndex].name = this.arr[this.selectIndex].saveName;
-                    this.arr[this.selectIndex].url = '/static/icons/drop_down.png';
-                    this.arr[this.selectIndex].class = 'sort_content_detail';
+                    this.paramArr[this.selectIndex].name = this.paramArr[this.selectIndex].saveName;
+                    this.paramArr[this.selectIndex].url = '/static/icons/drop_down.png';
+                    this.paramArr[this.selectIndex].class = 'sort_content_detail';
                 } else {
-                    this.arr[this.selectIndex].class = 'sort_content_detail_select';
-                    this.arr[this.selectIndex].name = item.name;
+                    this.paramArr[this.selectIndex].class = 'sort_content_detail_select';
+                    this.paramArr[this.selectIndex].name = item.name;
                     if (item.asc == 'low') {
-                        this.arr[this.selectIndex].url = '/static/icons/drop_down_selected.png';
+                        this.paramArr[this.selectIndex].url = '/static/icons/drop_down_selected.png';
                     } else if (item.asc == 'top') {
-                        this.arr[this.selectIndex].url = '/static/icons/take_back.png';
+                        this.paramArr[this.selectIndex].url = '/static/icons/take_back.png';
                     }
                 }
                 this.selectShow = false;
                 let _self = this;
-                _self.$emit("postId", item);
-                
+                _self.$emit("postId", item); 
             }
         },
         created() {
-            this.selectArr = this.arr[0].sortArr;
+            this.selectArr = this.paramArr[0].sortArr;
         }
 }
 </script>

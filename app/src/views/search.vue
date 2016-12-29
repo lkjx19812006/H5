@@ -1,4 +1,4 @@
- <template>
+<template>
     <div class="content search">
         <div class="search_div">
             <div class="search_content">
@@ -14,7 +14,7 @@
                         热门搜索
                     </div>
                     <div class="history_search_content_result_detail">
-                        <button class="mint-button mint-button--default mint-button--small" v-for="item in todos"  v-on:click="jumpRes(item.keyWord)">{{item.keyWord}}</button>
+                        <button class="mint-button mint-button--default mint-button--small" v-for="item in todos" v-on:click="jumpRes(item.keyWord)">{{item.keyWord}}</button>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
             <div class="search_result">
                 <ul class="page-loadmore-list">
                     <li v-for="todo in datas" class="page-loadmore-listitem list_content_item">
-                        <div @click = "jumpRes(todo.keyWord)">
+                        <div @click="jumpRes(todo.keyWord)">
                             <img src="/static/icons/search.png">
                             <p>{{todo.keyWord}}</p>
                         </div>
@@ -56,12 +56,12 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                str:'',
+                str: '',
                 keyword: '',
                 historyArr: [],
                 todos: [],
-                datas:[],
-                customerId:'',
+                datas: [],
+                customerId: '',
                 searchArr: [{
                     "name": "人参",
                     "spec": "统货",
@@ -100,106 +100,82 @@ export default {
             clearResult: function() {
                 this.historyArr = [];
             },
-            
-            jumpRes(item){
+            jumpRes(item) {
                 let _self = this;
-
-                if(common.pageParam.router == 'lowPriceRes'){
-                    common.$emit("setParam",'lowPrice',item);
-                    common.$emit("lowPriceRes",item);
+                if (common.pageParam.router == 'lowPriceRes') {
+                    common.$emit("setParam", 'lowPrice', item);
+                    common.$emit("lowPriceRes", item);
                     _self.$router.push(common.pageParam.router);
-                   
-                }else if(common.pageParam.router == 'urgentNeed'){
+                } else if (common.pageParam.router == 'urgentNeed') {
                     console.log(111111)
-                    common.$emit("setParam",'Urgentneed',item);
-                    common.$emit("Urgentneed",item);
-                    
+                    common.$emit("setParam", 'Urgentneed', item);
+                    common.$emit("Urgentneed", item);
                     _self.$router.push(common.pageParam.router);
-                }else if(common.pageParam.router == 'need'){
-                        common.$emit("need",item);
-                     history.go(-1);
-                }else if(common.pageParam.router == 'resource'){
-
-                     common.$emit("resource",item);
+                } else if (common.pageParam.router == 'need') {
+                    common.$emit("need", item);
                     history.go(-1);
-                }else if(common.pageParam.router == 'myAttention'){
-                     common.$emit("setParam",'myAttention',item);
-                     common.$emit("attention",item);
-                     _self.$router.push(common.pageParam.router);
-                }else if(common.pageParam.router == 'supplyRelease'){
-                     common.$emit("setParam",'supplyRelease',item);
-                     common.$emit("supplyRelease",item);
-                     _self.$router.push(common.pageParam.router);
-                }else if(common.pageParam.router == 'reviseResource'){
-                     common.$emit("setParam",'revResource',item);
-                     common.$emit("revResource",item);
+                } else if (common.pageParam.router == 'resource') {
+                    common.$emit("resource", item);
+                    history.go(-1);
+                } else if (common.pageParam.router == 'myAttention') {
+                    common.$emit("setParam", 'myAttention', item);
+                    common.$emit("attention", item);
+                    _self.$router.push(common.pageParam.router);
+                } else if (common.pageParam.router == 'supplyRelease') {
+                    common.$emit("setParam", 'supplyRelease', item);
+                    common.$emit("supplyRelease", item);
+                    _self.$router.push(common.pageParam.router);
+                } else if (common.pageParam.router == 'reviseResource') {
+                    common.$emit("setParam", 'revResource', item);
+                    common.$emit("revResource", item);
                     history.go(-1);
                 }
-                
-
             },
-            search(){
+            search() {
                 let _self = this;
-
             }
         },
         watch: {
             keyword: function(newValue, oldValue) {
-                //console.log(newValue);
-                //console.log(oldValue);
                 let _self = this;
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
-                    //console.log('dssdsdsd');
-                  
-                   //搜索分词
                     httpService.searchWord(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'searchKeywordService',
-                        biz_method:'querySearchKeyword',
-              
-                            biz_param: {
-                                keyWord:_self.keyword,
-                                pn:1,
-                                pSize:20
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            
-                            console.log(suc.data.biz_result.list)
-                            let result = suc.data.biz_result.list;
-                            _self.datas = result;
-                            
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                        biz_module: 'searchKeywordService',
+                        biz_method: 'querySearchKeyword',
+                        biz_param: {
+                            keyWord: _self.keyword,
+                            pn: 1,
+                            pSize: 20
+                        }
+                    }, function(suc) {
+                        common.$emit('message', suc.data.msg);
+                        let result = suc.data.biz_result.list;
+                        _self.datas = result;
+                    }, function(err) {
+                        common.$emit('message', err.data.msg);
+                    })
                 }, 0)
             }
         },
 
         created() {
             let _self = this;
-                //热搜接口
-                httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'searchKeywordService',
-                        biz_method:'queryHotKeyword',
-              
-                            biz_param: {                               
-                                pn:1,
-                                pSize:20
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                            //console.log(result)
-                            _self.todos = result;
+            httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
+                biz_module: 'searchKeywordService',
+                biz_method: 'queryHotKeyword',
+                biz_param: {
+                    pn: 1,
+                    pSize: 20
+                }
+            }, function(suc) {
+                common.$emit('message', suc.data.msg);
+                let result = suc.data.biz_result.list;
+                _self.todos = result;
+            }, function(err) {
+                common.$emit('message', err.data.msg);
+            })
 
-                        }, function(err) {                           
-                            common.$emit('message', err.data.msg);
-                        })
-                                                             
         }
 }
 </script>

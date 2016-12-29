@@ -15,13 +15,13 @@
         <div class="history_box" v-show="selectArr.length>0">
             <div class="history">
                 <div v-for="(item,index) in selectArr">
-                    <p>{{item.place}}</p>
+                    <p>{{item.name}}</p>
                     <img src="../../static/images/false.png" @click="delItem(index)">
                 </div>
             </div>
         </div>
         <mt-index-list>
-            <div class="list" v-for="todo in list" >
+            <div class="list" v-for="todo in list">
                 <mt-index-section :index="todo.key" class="index_name">
                     <a @click="selectPlace(item)" v-for="item in todo.value">
                         <mt-cell :title="item.name"></mt-cell>
@@ -45,95 +45,94 @@ export default {
     data() {
             return {
                 selected: '1',
-                list:[],
+                list: [],
                 home_list: [{
-                    index: 'A',
-                    place_list: [{
-                        place: '湖北'
+                    key: 'A',
+                    value: [{
+                        name: '湖北'
                     }, {
-                        place: '湖北'
+                        name: '湖北'
                     }, {
-                        place: '湖北'
+                        name: '湖北'
                     }]
                 }, {
-                    index: 'B',
-                    place_list: [{
-                        place: '湖北'
+                    key: 'B',
+                    value: [{
+                        name: '湖北'
                     }, {
-                        place: '湖北'
+                        name: '湖北'
                     }, {
-                        place: '湖北'
+                        name: '湖北'
                     }]
                 }, {
-                    index: 'C',
-                    place_list: [{
-                        place: '湖北'
+                    key: 'C',
+                    value: [{
+                        name: '湖北'
                     }, {
-                        place: '湖北'
+                        name: '湖北'
                     }, {
-                        place: '湖北'
+                        name: '湖北'
                     }]
                 }, {
-                    index: 'D',
-                    place_list: [{
-                        place: '湖北'
+                    key: 'D',
+                    value: [{
+                        name: '湖北'
                     }, {
-                        place: '湖北'
+                        name: '湖北'
                     }, {
-                        place: '湖北'
+                        name: '湖北'
                     }]
                 }],
                 outer_list: [{
-                    index: 'A',
-                    place_list: [{
-                        place: '巴西'
+                    key: 'A',
+                    value: [{
+                        name: '巴西'
                     }, {
-                        place: '巴西'
+                        name: '巴西'
                     }, {
-                        place: '巴西'
+                        name: '巴西'
                     }]
                 }, {
-                    index: 'B',
-                    place_list: [{
-                        place: '巴西'
+                    key: 'B',
+                    value: [{
+                        name: '巴西'
                     }, {
-                        place: '巴西'
+                        name: '巴西'
                     }, {
-                        place: '巴西'
+                        name: '巴西'
                     }]
                 }, {
-                    index: 'C',
-                    place_list: [{
-                        place: '巴西'
+                    key: 'C',
+                    value: [{
+                        name: '巴西'
                     }, {
-                        place: '巴西'
+                        name: '巴西'
                     }, {
-                        place: '巴西'
+                        name: '巴西'
                     }]
                 }, {
-                    index: 'D',
-                    place_list: [{
-                        place: '巴西'
+                    key: 'D',
+                    value: [{
+                        name: '巴西'
                     }, {
-                        place: '巴西'
+                        name: '巴西'
                     }, {
-                        place: '巴西'
+                        name: '巴西'
                     }]
                 }],
-                selectArr: [{
-                    place: '天津'
-                }, {
-                    place: '山东'
-                }, {
-                    place: '湖南'
-                }]
+                selectArr: []
             }
-
         },
 
         methods: {
             selectPlace: function(item) {
-                this.selectArr.push(item);
+                let count = 1;
+                for (let i = 0; i < this.selectArr.length; i++) {
+                    if (this.selectArr[i].name == item.name) {
+                        count = 0;
+                    }
+                }
+                if (count) this.selectArr.push(item);
             },
             delItem: function(id) {
                 this.selectArr.splice(id, 1);
@@ -142,43 +141,51 @@ export default {
             back: function() {
                 this.$router.go(-1);
             },
-            save:function(){
+            save: function() {
+                let areaArr=[];
+
+                for(var i=0;i<this.selectArr.length;i++){
+                        areaArr.push(this.selectArr[i].name);
+                }
+
+                switch (this.$route.params.from) {
+                    case 'need':
+                        common.$emit('need-sort',areaArr);
+                        break;
+                    case 'resource':
+                        common.$emit('resource-sort',areaArr);
+                        break;
+                    case 'lowRes':
+                        common.$emit('lowRes-sort',areaArr);
+                        break;
+                    case 'urgentNeed':
+                        common.$emit('urgentNeed-sort',areaArr);
+                        break;
+                    default:
+                        break;
+
+                }
                 this.$router.go(-1);
             }
         },
 
         created() {
-            /*common.$emit('show-load');
-            this.$http.get(common.apiUrl.drug_information_list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
-            let  _self = this; 
+            let _self = this;
             common.$emit('show-load');
-                    httpService.specifiedPlace(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'breedService',
-                        biz_method:'queryBreedLocalList',
-
-                        biz_param: {
-                            breedId:1153,
-                           
-                        }
-                    }, function(suc) {
-                        
-                        common.$emit('close-load');
-                        
-                        console.log(suc);
-                        let result = suc.data.biz_result.list;
-                        _self.list = result;
-
-                    }, function(err) {
-                        common.$emit('close-load');
-                        common.$emit('message', err.data.msg);
-                    }) 
+            httpService.specifiedPlace(common.urlCommon + common.apiUrl.most, {
+                biz_module: 'breedService',
+                biz_method: 'queryBreedLocalList',
+                biz_param: {
+                    breedId: 1153,
+                }
+            }, function(suc) {
+                common.$emit('close-load');
+                let result = suc.data.biz_result.list;
+                _self.list = result;
+            }, function(err) {
+                common.$emit('close-load');
+                common.$emit('message', err.data.msg);
+            })
         }
 }
 </script>

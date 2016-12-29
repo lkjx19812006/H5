@@ -6,8 +6,7 @@
             </router-link>
         </mt-header>
         <div  @click="jumpSearch"><search-input></search-input></div>
-
-        <sort v-on:postId="getId"></sort>
+        <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -50,8 +49,88 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                /*key:'',
-                word:'',*/
+                sortRouter:'lowRes',
+                sortArr: [{
+                    name: '上架时间',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '上架时间',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由新到旧',
+                        asc: 'low',
+                        show: false,
+                        time: 1,
+                        key: 'time'
+                    }, {
+                        name: '由旧到新',
+                        asc: 'top',
+                        show: false,
+                        time: 2,
+                        key: 'time'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        time: 0,
+                        key: 'time'
+                    }]
+                }, {
+                    name: '价格排序',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '价格排序',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由低到高',
+                        asc: 'low',
+                        show: false,
+                        price: 1,
+                        key: 'price'
+                    }, {
+                        name: '由高到低',
+                        asc: 'top',
+                        show: false,
+                        price: 2,
+                        key: 'price'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        price: 0,
+                        key: 'price'
+                    }]
+                }, {
+                    name: '可否样品',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '可否样品',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '可提供',
+                        asc: 'low',
+                        show: false,
+                        sample: 1,
+                        key: 'sample'
+                    }, {
+                        name: '不可提供',
+                        asc: 'top',
+                        show: false,
+                        sample: 0,
+                        key: 'sample'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        sample: '',
+                        key: 'sample'
+                    }]
+                }, {
+                    name: '产地',
+                    asc: 'location',
+                    url: '/static/icons/screen.png',
+                    class: 'sort_content_detail',
+                }],
                 back_key:'0',
                 keyword:'',
                 todos: [{
