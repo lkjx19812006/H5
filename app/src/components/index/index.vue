@@ -228,7 +228,6 @@ export default {
                     image: '../../../static/images/myDemond.png'
                 }]
             }
-
         },
         methods: {
             drugGuidePrice(){
@@ -236,17 +235,12 @@ export default {
                   httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
                         biz_module:'breedService',
                         biz_method:'breedPriceGuide',
-              
-                            biz_param: {
-                                
+                            biz_param: {   
                                 pn:1,
                                 pSize:20
                             }
                         }, function(suc) {
-                            //console.log(suc)
-                            /*common.$emit('message', suc.data.msg);*/
                             let result = suc.data.biz_result.list;
-                            //console.log(result);
                             _self.drugGuidePrice = result;
                         }, function(err) {
                             
@@ -261,18 +255,15 @@ export default {
                         pn:1,
                         pSize:20
                   }};
-                  
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.begBuyList(url,body,function(suc){
                     common.$emit('close-load');
-                    //console.log(suc);
                     let result = suc.data.biz_result;
                     let begBuyList = result.begBuyList.slice(0,6);
                     let supplyList = result.supplyList.slice(0,6);
                     _self.begBuyList = begBuyList;
                     _self.supplyList = supplyList;
-                    
                     common.$emit('post-revise-address',_self.obj);
                   },function(err){
                     common.$emit('close-load');
@@ -283,21 +274,16 @@ export default {
                   httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
                         biz_module:'tradeNewService',
                         biz_method:'currentTradeList',
-              
                             biz_param: {
                                 
                                 pn:1,
                                 pSize:20
                             }
                         }, function(suc) {
-                            
-                            /*common.$emit('message', suc.data.msg);*/
                             let result = suc.data.biz_result.list;
-                            /*console.log(result.length);*/
                             _self.scroll_length = result.length + 1;
                             _self.transaction = result;
                         }, function(err) {
-                            
                             common.$emit('message', err.data.msg);
                         })
             },
@@ -308,7 +294,6 @@ export default {
             fromIndex(){
                  let _self = this;
                  common.$emit('setParam','router','lowPriceRes');
-                 console.log('dfdfdf');
                  _self.$router.push("search");
             },
             jumpRes(router,id){
@@ -316,39 +301,28 @@ export default {
                 httpService.myAttention(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
-              
                             biz_param: {
                                 id:id
                             }
                         }, function(suc) {
-                            
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result;
-                            //console.log(result);
-                            
                              _self.obj = result;
                              common.$emit('post-res-detail',_self.obj);
-                       
-
-                        }, function(err) {
-                            
+                        }, function(err) { 
                              common.$emit('message', err.data.msg);
                         })
                 this.$router.push(router + id);
             },
             jumpNeed(router,id){
                 let _self = this;
-                
                 httpService.myAttention(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
-              
                             biz_param: {
                                 id:id
                             }
                         }, function(suc) {
-                            
-                            /*common.$emit('message', suc.data.msg);*/
                             let result = suc.data.biz_result;
                             var duedateDate = new Date(result.duedate);
                             var pubdateDate = new Date(result.pubdate);
@@ -357,10 +331,8 @@ export default {
                             result.days = days;
                             result.pubdate = result.pubdate.substring(0,10);
                              _self.obj = result;
-
                              common.$emit('post-need-detail',_self.obj);
                         }, function(err) {
-                            
                             common.$emit('message', err.data.msg);
                         })
                 this.$router.push(router + id);
@@ -368,47 +340,10 @@ export default {
 
         },
         created() {
-            /*let _self = this;
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
-
-   
-
-                  let _self = this;
+                    let _self = this;
                    this.resourceHttp()
                    this.transaction();
-                   this.drugGuidePrice();
-                  /*common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'intentionService',biz_method:'reconnendList',version:1,time:0,sign:'',biz_param:{
-                        pn:1,
-                        pSize:20
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.begBuyList(url,body,function(suc){
-                    common.$emit('close-load');
-                    
-                    let result = suc.data.biz_result;
-                    let begBuyList = result.begBuyList;
-                    let supplyList = result.supplyList;
-                    _self.begBuyList = begBuyList;
-                    _self.supplyList = supplyList;
-                    
-                    common.$emit('post-revise-address',_self.obj);
-                  },function(err){
-                    common.$emit('close-load');
-                  })*/
-
-                   
+                   this.drugGuidePrice();         
         },
         computed: {
             drugArray: function() {
@@ -423,10 +358,7 @@ export default {
         },
         mounted() {
             let _self = this;
-            //console.log(_self.scroll_length);
-            
-           
-            console.log(11111)
+
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-55;
 
             function startmarquee(lh, speed, delay) {
@@ -592,6 +524,7 @@ export default {
     line-height: 50px;
     font-size: 1.2rem;
     height: 50px;
+    overflow: hidden;
 }
 
 .real_news .news_content ul li div {
@@ -639,10 +572,6 @@ export default {
     float: left;
 
 }
-/*.bg_white .drug_price_box p{
-    overflow: hidden;
-    text-overflow: ellipsis;
-}*/
 
 .bg_white .drug_price_box .drug_price_swipe {
     width: 50%;
@@ -717,7 +646,8 @@ export default {
     font-size: 1.1rem;
     text-align: center;
     width: 20%;
-    
+    height: 30px;
+    line-height: 30px;
     word-break:keep-all;
     white-space:nowrap;
     overflow:hidden; 
@@ -742,5 +672,4 @@ export default {
 .bg_white .list_content .cell_class .list_image .first_image {
     margin-right: 2%;
 }
-</style>
 </style>

@@ -24,11 +24,8 @@
                         <li>
                             <p>验证码：</p>
                             <input type="text" placeholder="请输入验证码" v-model="param.code" />
-
                             <button v-bind:class="{ get_code: !buttonDisabled, 'get_code_nor': buttonDisabled }" id="get_code" v-on:click="confirmLogin()" v-bind:disabled="buttonDisabled">{{code}}</button>
-
                             <!-- <button class="get_code" id="get_code" v-on:click="confirmLogin()" v-bind:disabled="buttonDisabled">{{code}}</button> -->
-
                         </li>
                     </ul>
                 </mt-tab-container-item>
@@ -96,12 +93,11 @@ export default {
             confirmLogin: function() {
                 let _self = this;
                 let checkPhone = validation.checkPhone(_self.param.phone);
-
                 if (checkPhone) {
                     common.$emit('message', checkPhone);
                 } else {
                     _self.buttonDisabled = true;
-                    var wait = 5;
+                    var wait = 60;
                     var time = setInterval(function() {
                         wait--;
                         _self.code = wait;
@@ -112,26 +108,17 @@ export default {
                         }
                     }, 1000);
                 }
-
-
-
                 httpService.register(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'userSmsService',
-                        biz_method:'getLoginCode',
-              
-                            biz_param: {
-                                mobile: _self.param.phone  
-                            }
-                        }, function(response) {
-                            
-                            common.$emit('message', response.data.msg);
-
-
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-
+                    biz_module: 'userSmsService',
+                    biz_method: 'getLoginCode',
+                    biz_param: {
+                        mobile: _self.param.phone
+                    }
+                }, function(response) {
+                    common.$emit('message', response.data.msg);
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
             },
             login() {
                 var checkArr = [];
@@ -139,10 +126,7 @@ export default {
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
                 if (_self.selected == 'identiCode') {
-
-                     
                     let checkCode = validation.checkCode(_self.param.code, '666000');
-
                     checkArr.push(checkCode);
                 } else {
                     let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
@@ -155,16 +139,10 @@ export default {
                         common.$emit('message', checkArr[i]);
                         return;
                     }
-
-
                 }
-
-
-                
                 common.$emit('show-load');
                 httpService.login(common.urlCommon + common.apiUrl.login, {
                     biz_param: {
-
                         phone: _self.param.phone,
                         password: _self.param.password
                     }
@@ -176,22 +154,17 @@ export default {
                         common.KEY = window.localStorage.KEY;
                         common.SID = window.localStorage.SID;
                         common.getDate();
-
-                        common.$emit('message', response.data.msg);
+                        // common.$emit('message', response.data.msg);
+                        _self.$router.push('/home');
                     } else {
                         common.$emit('message', response.data.msg);
-
-
-                    } 
-
-
+                    }
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                 })
             }
         }
-
 }
 </script>
 <style scoped>
@@ -260,7 +233,7 @@ export default {
     line-height: 2.3rem;
 }
 
-.login .selected_box .fill_in_first li .get_code_nor{
+.login .selected_box .fill_in_first li .get_code_nor {
     width: 100px;
     border: 1px solid #BFBFBF;
     height: 2.3rem;
@@ -268,7 +241,7 @@ export default {
     background: #F5F5F5;
     float: right;
     line-height: 2.3rem;
-    color:#CECEBF;
+    color: #CECEBF;
 }
 
 .login .selected_box .fill_in_second {
