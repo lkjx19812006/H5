@@ -6,7 +6,7 @@
             </router-link>
         </mt-header>
         <div @click="jumpSearch"><search-input ></search-input></div>
-        <urgentSort  v-on:postId="getId"></urgentSort>
+        <sort  v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -49,11 +49,93 @@
 <script>
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
-import urgentSort from '../components/tools/urgentSort'
+import sort from '../components/tools/sort'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                sortRouter:'urgentNeed',
+                sortArr:  [{
+                    name: '上架时间',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '上架时间',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由新到旧',
+                        asc: 'low',
+                        show: false,
+                        time:1,
+                        key:'time'
+                    }, {
+                        name: '由旧到新',
+                        asc: 'top',
+                        show: false,
+                        time:2,
+                        key:'time'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        time:0,
+                        key:'time'
+                    }]
+                }, {
+                    name: '报价人数',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '报价人数',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由少到多',
+                        asc: 'low',
+                        show: false,
+                        price:1,
+                        key:'price'
+                    }, {
+                        name: '由多到少',
+                        asc: 'top',
+                        show: false,
+                        price:2,
+                        key:'price'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        price:0,
+                        key:'price'
+                    }]
+                }, {
+                    name: '剩余时间',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '剩余时间',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由短到长',
+                        asc: 'low',
+                        show: false,
+                        sample:1,
+                        key:'sample'
+                    }, {
+                        name: '由长到短',
+                        asc: 'top',
+                        show: false,
+                        sample:0,
+                        key:'sample'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        sample:'',
+                        key:'sample'
+                    }]
+                }, {
+                    name: '产地',
+                    asc: 'location',
+                    url: '/static/icons/screen.png',
+                    class: 'sort_content_detail',
+                }],
                 todos: [/*{
                     "name": "人参",
                     "spec": "统货",
@@ -79,7 +161,7 @@ export default {
         },
         components: {
             searchInput,
-            urgentSort
+            sort
         },
         methods: {
             getHttp(word,shelve_time,price,sampling){

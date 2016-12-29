@@ -7,7 +7,6 @@
         </mt-header>
         <div class="center">
             <div class="title">
-                <!-- <img src="/static/icons/impatient.png"> -->
                 <p>{{obj.drug_name}}</p>
             </div>
             <div class="detail ">
@@ -22,7 +21,7 @@
                 <p>需求数量：<span>{{obj.number}}{{obj.number_unit}}</span></p>
             </div>
             <div class="detail">
-                 <p>备注：<span>{{obj.selling_point}}</span></p>
+                <p>备注：<span>{{obj.selling_point}}</span></p>
             </div>
             <div class="detail">
                 <p>已报价：<span class="orange_font">{{obj.offer}}</span>人</p>
@@ -31,13 +30,10 @@
                 <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
             </div>
         </div>
-        
-          <div class="flowsheet">
+        <div class="flowsheet">
             <p>流程图</p>
             <img src="/static/images/progress_1.png">
-          </div>
-          
-
+        </div>
     </div>
 </template>
 <script>
@@ -46,19 +42,18 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                obj:{
-                    drug_name:'白术',
-                    spec:'',
-                    place:'',
-                    number:'',
-                    number_unit:'kg',
-                    selling_point:'',
-                    offer:'',
-                    duedate:'',
-                    pubdate:'',
-                    offerVprice:'',
-                    id:''
-
+                obj: {
+                    drug_name: '白术',
+                    spec: '',
+                    place: '',
+                    number: '',
+                    number_unit: 'kg',
+                    selling_point: '',
+                    offer: '',
+                    duedate: '',
+                    pubdate: '',
+                    offerVprice: '',
+                    id: ''
                 },
                 todos: [{
                     "name": "人参",
@@ -80,139 +75,104 @@ export default {
         created() {
             var _self = this;
             var str = _self.$route.fullPath;
-            var id = str.substring(16,str.length);
+            var id = str.substring(16, str.length);
             _self.obj.id = id;
-
             httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            
-                            
-                            console.log(suc.data.biz_result);
-                            let result = suc.data.biz_result;
-
-                            var duedateDate = new Date(result.duedate);
-                            var pubdateDate = new Date(result.pubdate);
-                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                            var days=Math.floor(dateValue/(24*3600*1000));
-                            var pubdate = result.pubdate.substring(0,10);
-
-
-                            _self.obj.drug_name = result.breedName;
-                            _self.obj.spec = result.spec;
-                            _self.obj.place = result.location;
-                            _self.obj.number = result.number;
-                            _self.obj.number_unit = result.unit;
-                            _self.obj.selling_point = result.description;
-                            _self.obj.name = result.customerName;
-                            _self.obj.phone = result.customerPhone;
-                            _self.obj.offer = result.offer;
-                            _self.obj.offerVprice = result.offerVprice;
-                            _self.obj.pubdate = pubdate;
-                            _self.obj.duedate = days;
-
-                            //console.log(result.image);
-                            
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-
-
+                biz_module: 'intentionService',
+                biz_method: 'queryIntentionInfo',
+                biz_param: {
+                    id: id
+                }
+            }, function(suc) {
+                let result = suc.data.biz_result;
+                var duedateDate = new Date(result.duedate);
+                var pubdateDate = new Date(result.pubdate);
+                var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                var pubdate = result.pubdate.substring(0, 10);
+                _self.obj.drug_name = result.breedName;
+                _self.obj.spec = result.spec;
+                _self.obj.place = result.location;
+                _self.obj.number = result.number;
+                _self.obj.number_unit = result.unit;
+                _self.obj.selling_point = result.description;
+                _self.obj.name = result.customerName;
+                _self.obj.phone = result.customerPhone;
+                _self.obj.offer = result.offer;
+                _self.obj.offerVprice = result.offerVprice;
+                _self.obj.pubdate = pubdate;
+                _self.obj.duedate = days;
+            }, function(err) {
+                common.$emit('message', err.data.msg);
+            })
         }
 
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .need_detail {}
 
-/*.purchase_detail .fix_bottom {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
-.purchase_detail .fix_bottom .small_button {
-    width: 17%;
-    float: left;
-    background: #EEEEEE;
-    border: 1px solid #ddd;
-}*/
-
-
-.purchase_detail .center{
+.purchase_detail .center {
     padding: 20px;
-    /*position: relative;*/
     background: #fff;
     float: left;
     width: 100%;
-
 }
-.purchase_detail .center .title{
+
+.purchase_detail .center .title {
     float: left;
     width: 100%;
     margin-bottom: 20px;
 }
 
-
-.purchase_detail .center .title p{
+.purchase_detail .center .title p {
     float: left;
     margin-left: 0px;
     font-size: 1.8rem;
     line-height: 1.7rem;
     color: #333;
-
 }
 
-.purchase_detail .detail{
+.purchase_detail .detail {
     float: left;
     width: 100%;
     margin-bottom: 15px;
     text-align: left;
 }
 
-.purchase_detail .detail p{
+.purchase_detail .detail p {
     float: left;
 }
 
-.purchase_detail .detail p span{
+.purchase_detail .detail p span {
     color: #666;
     font-size: 1.1rem;
 }
-.purchase_detail .detail .right{
+
+.purchase_detail .detail .right {
     float: right;
 }
 
-.purchase_detail .detail p .orange_font{
+.purchase_detail .detail p .orange_font {
     color: #EC6817;
 }
-.purchase_detail  .flowsheet{
-  padding: 1.5rem;
-  background:white;
-  float: left;
-  margin: 1rem 0 50px 0;
-  
-  /*position: absolute;*/
+
+.purchase_detail .flowsheet {
+    padding: 1.5rem;
+    background: white;
+    float: left;
+    margin: 1rem 0 50px 0;
 }
-.purchase_detail  .flowsheet img{
-  height:4rem;
-  width:100%;
+
+.purchase_detail .flowsheet img {
+    height: 4rem;
+    width: 100%;
 }
-.purchase_detail  .flowsheet p{
-  float:left;
-  margin-bottom: 2rem;
-  font-size:1.4rem;
-  color:#FA6705; 
+
+.purchase_detail .flowsheet p {
+    float: left;
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    color: #FA6705;
 }
-/*.pp{
-    margin-top: 100px;
-    width:100px;
-    height:100px;
-}*/
 </style>

@@ -1,10 +1,11 @@
 <template>
     <div class="content search_input">
         <div class="search_div">
-            <div class="search_content">
-                <input type="text" placeholder="请输入您想要的货物资源" disabled ="true" >
-                <img src="/static/images/search.png" class="search_image" v-show="!show">
-                <img src="/static/images/false.png" class="search_image"  v-show="show">
+            <div class="search_content" v-bind:class="{ search_active: keyword }" >
+                <input type="text" v-bind:class="{ search_active: keyword }" placeholder="请输入您想要的货物资源" disabled="true" v-model="keyword">
+                <img src="/static/images/search.png" class="search_image" v-show="!keyword">
+                <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image"  >
+                </div>
             </div>
         </div>
     </div>
@@ -15,31 +16,20 @@ import common from '../../common/common.js'
 export default {
     data() {
             return {
-                value:'',
-                
-                prop:{
-                       show:true
-                    }
-                }
-                
-           },
-           /*watch: {
-            value: function(newValue, oldValue) {
-                //console.log(newValue);
-                //console.log(oldValue);
-                let _self = this;
-                window.clearTimeout(this.time);
-                this.time = setTimeout(() => {
-                    //console.log('dssdsdsd');
-
-                    _self.$emit('postValue',{
-                         value:_self.value 
-                    });
-                    
-                }, 0)
+                value: ''
             }
-        },*/
-        
+        },
+        props: {
+            keyword: {
+                type: String,
+                default: ''
+            }
+        },
+        methods:{
+            clearWord(){
+                 this.$emit("clearSearch");
+            }
+        }
 }
 </script>
 <style scoped>
@@ -57,6 +47,10 @@ export default {
     background: #EC6817;
 }
 
+.search_input .search_div .search_active{
+    background-color: #fff !important; 
+}
+
 .search_input .search_div .search_content {
     background: #F1EFEF;
     height: 30px;
@@ -64,6 +58,10 @@ export default {
     border-radius: 10px;
 }
 
+.search_input .search_div .search_content .clear{
+    float: right;
+    padding: 0 0 10px 10px;
+}
 .search_input .search_div .search_content input {
     background-color: #F1EFEF;
     height: 30px;
@@ -77,5 +75,4 @@ export default {
     max-height: 20px;
     margin: 5px 10px 0 0;
 }
-
 </style>

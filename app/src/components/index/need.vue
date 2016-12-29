@@ -1,8 +1,10 @@
 <template>
     <div class="content need">
         <div class="fixed">
-            <div @click="jumpSearch"> <search-input></search-input> </div>
-            <urgentSort  v-on:postId="getId"></urgentSort>
+            <div @click="jumpSearch">
+                <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></search-input>
+            </div>
+            <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         </div>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -46,178 +48,267 @@
 <script>
 import common from '../../common/common.js'
 import searchInput from '../../components/tools/inputSearch'
-import urgentSort from '../../components/tools/urgentSort'
+import sort from '../../components/tools/sort'
 import httpService from '../../common/httpService.js'
 export default {
     data() {
             return {
-                todos: [/*{
-                    "name": "人参",
-                    "spec": "统货",
-                    "place": "东北",
-                    "price": "98.9元/kg",
-                    "up_price": "9元/kg",
-                    "down_price": "9元/kg",
-                    "phone": "15301546832",
-                    "time": "12:26"
-                }*/],
+                sortRouter: 'need',
+                sortArr: [{
+                    name: '上架时间',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '上架时间',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由新到旧',
+                        asc: 'low',
+                        show: false,
+                        time: 1,
+                        key: 'time'
+                    }, {
+                        name: '由旧到新',
+                        asc: 'top',
+                        show: false,
+                        time: 2,
+                        key: 'time'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        time: 0,
+                        key: 'time'
+                    }]
+                }, {
+                    name: '报价人数',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '报价人数',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由少到多',
+                        asc: 'low',
+                        show: false,
+                        offer: 1,
+                        key: 'offer'
+                    }, {
+                        name: '由多到少',
+                        asc: 'top',
+                        show: false,
+                        offer: 2,
+                        key: 'offer'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        offer: 0,
+                        key: 'offer'
+                    }]
+                }, {
+                    name: '剩余时间',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '剩余时间',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由短到长',
+                        asc: 'low',
+                        show: false,
+                        duedate: 1,
+                        key: 'duedate'
+                    }, {
+                        name: '由长到短',
+                        asc: 'top',
+                        show: false,
+                        duedate: 2,
+                        key: 'duedate'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        duedate: 0,
+                        key: 'duedate'
+                    }]
+                }, {
+                    name: '产地',
+                    asc: 'location',
+                    url: '/static/icons/screen.png',
+                    class: 'sort_content_detail',
+                }],
+                todos: [],
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
-                value: {
-                    time:0,
-                    price:0,
-                    sample:''
-                },      
-                keyword:'',
+                httpPraram: {
+                    time: 0,
+                    offer: 0,
+                    duedate: 0,
+                    location: [],
+                    keyword: '',
+                    page: 1,
+                    pageSize: 20
+                }
+
             }
         },
         components: {
             searchInput,
-            urgentSort
+            sort
         },
         methods: {
-            getHttp(word,shelve_time,price,sampling){
-
-                 let _self = this;
-                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryBegBuyList',
-              
-                            biz_param: {
-                                keyWord: word,
-                                sort:{"shelve_time":shelve_time,"price":price},
-                               
-                                sampling:sampling,
-                                pn:1,
-                                pSize:20
-                            }
-                        }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                            
-                    for(var i=0;i<result.length;i++){
-
+            getHttp(back) {
+                let _self = this;
+                httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryBegBuyList',
+                    biz_param: {
+                        keyWord: _self.httpPraram.keyword,
+                        sort: {
+                            "shelve_time": _self.httpPraram.time,
+                            "offer": _self.httpPraram.offer,
+                            "duedate": _self.httpPraram.duedate
+                        },
+                        location: _self.httpPraram.location,
+                        pn: _self.httpPraram.page,
+                        pSize: _self.httpPraram.pageSize
+                    }
+                }, function(suc) {
+                    common.$emit('message', suc.data.msg);
+                    let result = suc.data.biz_result.list;
+                    for (var i = 0; i < result.length; i++) {
                         var item = result[i];
                         var duedate = item.duedate;
                         var pubdate = item.duedate;
-                         
-                              duedate =  duedate.replace(/-/g,'/'); 
-                              pubdate =  pubdate.replace(/-/g,'/');
-                              duedate = duedate.substring(0,10);
-                              pubdate = pubdate.substring(0,10);
-                        
+                        duedate = duedate.replace(/-/g, '/');
+                        pubdate = pubdate.replace(/-/g, '/');
+                        duedate = duedate.substring(0, 10);
+                        pubdate = pubdate.substring(0, 10);
                         var duedateDate = new Date(duedate);
                         var pubdateDate = new Date(pubdate);
                         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days=Math.floor(dateValue/(24*3600*1000));
-                        item.days = days; 
+                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                        item.days = days;
                         item.duedate = duedate;
                         item.pubdate = pubdate;
                     }
-                            
-                        _self.todos = result;       
-                           
-
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-                 
+                    for (var i = 0; i < result.length; i++) {
+                        _self.todos.push(result[i]);
+                    }
+                    if (back) {
+                        back();
+                    }
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                    if (back) {
+                        back();
+                    }
+                })
             },
-            getId(param){
-                 let _self = this;
-                  
-                  _self.value[param.key] = param[param.key];
-                  _self.getHttp(_self.keyword,_self.value.time,_self.value.price,_self.value.sample)
+            getId(param) {
+                let _self = this;
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.httpPraram[param.key] = param[param.key];
+                _self.getHttp()
             },
-            jumpSearch(){
-                common.$emit('setParam','router','need')
+            clearKeyword() {
+                this.httpPraram.page = 1;
+                this.todos.splice(0, _self.todos.length);
+                this.httpPraram.keyword = '';
+                this.httpPraram.keyword = '';
+                this.getHttp();
+            },
+            jumpSearch() {
+                common.$emit('setParam', 'router', 'need')
                 this.$router.push('search');
             },
-            jumpDetail(id){
-                let _self = this;
-                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result;
-                            var duedateDate = new Date(result.duedate);
-                            var pubdateDate = new Date(result.pubdate);
-                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                            var days=Math.floor(dateValue/(24*3600*1000));
-                            result.days = days;
-                            result.pubdate = result.pubdate.substring(0,10);
-                             _self.obj = result;
-
-                             common.$emit('post-need-detail',_self.obj);
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+            jumpDetail(id) {
+                // let _self = this;
+                // httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                //     biz_module: 'intentionService',
+                //     biz_method: 'queryIntentionInfo',
+                //     biz_param: {
+                //         id: id
+                //     }
+                // }, function(suc) {
+                //     common.$emit('message', suc.data.msg);
+                //     let result = suc.data.biz_result;
+                //     var duedateDate = new Date(result.duedate);
+                //     var pubdateDate = new Date(result.pubdate);
+                //     var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                //     var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                //     result.days = days;
+                //     result.pubdate = result.pubdate.substring(0, 10);
+                //     _self.obj = result;
+                //     common.$emit('post-need-detail', _self.obj);
+                // }, function(err) {
+                //     common.$emit('message', err.data.msg);
+                // })
                 this.$router.push('needDetail/' + id);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
+                let _self = this;
                 setTimeout(() => {
-                    let lastValue = this.todos[0];
-                    if (this.todos.length <= 40) {
-                        for (let i = 1; i <= 10; i++) {
-                            this.todos.push(this.todos[0]);
-                        }
-                    } else {
+                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
+                    } else {
+                        this.httpPraram.page++;
+                        this.getHttp(function() {
+                            _self.$refs.loadmore.onBottomLoaded(id);
+                        });
                     }
-                    this.$refs.loadmore.onBottomLoaded(id);
                 }, 1500);
             },
-
             handleTopChange(status) {
                 this.topStatus = status;
             },
             loadTop(id) {
+                let _self = this;
                 setTimeout(() => {
-                    let firstValue = this.todos[0];
-                    for (let i = 1; i <= 10; i++) {
-                        this.todos.unshift(firstValue);
-                    }
-                    this.$refs.loadmore.onTopLoaded(id);
+                    _self.httpPraram.page = 1;
+                    _self.todos.splice(0, _self.todos.length);
+                    _self.getHttp(function() {
+                        _self.$refs.loadmore.onTopLoaded(id);
+                    });
+
                 }, 1500);
             }
-
         },
         created() {
             let _self = this;
-             _self.getHttp('',0,0,'');
-           
-            
-  
-            common.$on('need', function (item) {
-                  console.log(item);
-                  _self.getHttp(item,0,0,'');
-            })
-                 
-
-
-
+            _self.getHttp();
+            common.$on('need', function(item) {
+                _self.httpPraram.keyword = item;
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.getHttp();
+            });
+            common.$on('need-sort', function(item) {
+                _self.httpPraram.location = item;
+                _self.sortArr[3].name = item[0];
+                _self.sortArr[3].class = "sort_content_detail_select";
+                _self.sortArr[3].url = "/static/icons/screen_selected.png";
+                if (item.length > 1) {
+                    _self.sortArr[3].name += '...';
+                } else if (item.length == 0) {
+                    _self.sortArr[3].name = '产地';
+                    _self.sortArr[3].class = "sort_content_detail";
+                    _self.sortArr[3].url = "/static/icons/screen.png";
+                }
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.getHttp();
+            });
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-130;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 130;
         }
-
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .page-loadmore-listitem {
     height: 50px;
@@ -257,18 +348,16 @@ export default {
     vertical-align: middle;
 }
 
-.need {
-   
-}
+.need {}
 
-.need .fixed{
+.need .fixed {
     position: fixed;
     width: 100%;
     z-index: 2;
     background: #fff;
 }
 
-.need .bg_white{
+.need .bg_white {
     margin-top: 100px;
 }
 

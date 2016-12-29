@@ -42,11 +42,9 @@ import companyAuthentication from './views/companyAuthentication'
 import certification from './views/certification'
 import reviseResource from './views/reviseResource'
 import revisePurchase from './views/revisePurchase'
-
 import selectPlace from './views/selectPlace'
 import cityName from './views/cityName'
 import areaName from './views/areaName'
-
 
 module.exports = {
     mode: 'hash',
@@ -66,7 +64,7 @@ module.exports = {
         { name: 'marketQuotation', path: '/marketQuotation', component: marketQuotation },
         { name: 'supplyRelease', path: '/supplyRelease', component: supplyRelease },
         { name: 'needRelease', path: '/needRelease', component: needRelease },
-        { name: 'provenanceSelection', path: '/provenanceSelection', component: provenanceSelection },
+        { name: 'provenanceSelection', path: '/provenanceSelection/:from', component: provenanceSelection },
         { name: 'accountInfo', path: '/accountInfo', component: accountInfo },
         { name: 'accountInfoFinish', path: '/accountInfoFinish', component: accountInfoFinish },
         { name: 'drugResTableDetail', path: '/drugResTableDetail/:drugId', component: drugResTableDetail },

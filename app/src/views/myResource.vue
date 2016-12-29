@@ -5,21 +5,20 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <otherSort  v-on:postId="getId"></otherSort>
+        <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                    <ul class="page-loadmore-list" >
-                        <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" >
+                    <ul class="page-loadmore-list">
+                        <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item">
                             <div class="list_header">
                                 <div>
                                     <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
                                     <p class="audit_state">{{todo.state}}</p>
                                 </div>
                             </div>
-                            
                             <img :src="todo.image[0]" class="list_images" @click="jump(todo.router,todo.id)">
-                            <div class="res_content" >
+                            <div class="res_content">
                                 <div class="res_content_center">
                                     <div><img src="/static/icons/sample.png">{{todo.breedName}}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
@@ -27,11 +26,10 @@
                                     <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
                                 </div>
                                 <div class="res_content_right">
-                                <p>{{todo.price}}<span>元/kg</span></p>
-                                <button class="mint-button mint-button--primary mint-button--small" @click="jump(todo.other_router,todo.id,index)">编辑</button>
+                                    <p>{{todo.price}}<span>元/kg</span></p>
+                                    <button class="mint-button mint-button--primary mint-button--small" @click="jump(todo.other_router,todo.id,index)">编辑</button>
                                 </div>
                             </div>
-
                         </li>
                     </ul>
                     <div slot="top" class="mint-loadmore-top">
@@ -50,97 +48,199 @@
 <script>
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
-import otherSort from '../components/tools/otherSort'
+import myPurchaseSort from '../components/tools/myPurchaseSort'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                todos: [/*{
-                    "breedName": "人参",
-                    "spec": "统货",
-                    "location": "东北",
-                    "price": "65",
-                    "state": "待审核",
-                    "customerPhone": "15301546832",
-                    "pubdate": "12-11-26",
-                    "router":"goodDetail",
-                    "other_router":"reviseResource"
-                    
-                }*/],
-                obj:{
-
-                },
-                index:'',
+                sortRouter: 'home',
+                sortArr: [{
+                    name: '发布日期',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '发布日期',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由新到旧',
+                        asc: 'low',
+                        show: false,
+                        pubdate: 2,
+                        key: 'pubdate'
+                    }, {
+                        name: '由旧到新',
+                        asc: 'top',
+                        show: false,
+                        pubdate: 1,
+                        key: 'pubdate'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        pubdate: 0,
+                        key: 'pubdate'
+                    }]
+                }, {
+                    name: '剩余时间',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '剩余时间',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由短到长',
+                        asc: 'low',
+                        show: false,
+                        duedate: 2,
+                        key: 'duedate'
+                    }, {
+                        name: '由长到短',
+                        asc: 'top',
+                        show: false,
+                        duedate: 1,
+                        key: 'duedate'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        duedate: '',
+                        key: 'duedate'
+                    }]
+                }, {
+                    name: '可否供样',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '可否样品',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '可供样',
+                        asc: 'low',
+                        show: false,
+                        sample: 1,
+                        key: 'sample'
+                    }, {
+                        name: '不可供样',
+                        asc: 'top',
+                        show: false,
+                        sample: 0,
+                        key: 'sample'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        sample: '',
+                        key: 'sample'
+                    }]
+                }, {
+                    name: '审核状态',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '审核状态',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '申请中',
+                        asc: 'low',
+                        show: false,
+                        text: 1,
+                        key: 'text'
+                    }, {
+                        name: '上架失败',
+                        asc: 'low',
+                        show: false,
+                        text: -2,
+                        key: 'text'
+                    }, {
+                        name: '下架',
+                        asc: 'low',
+                        show: false,
+                        text: 4,
+                        key: 'text'
+                    }, {
+                        name: '上架',
+                        asc: 'top',
+                        show: false,
+                        text: 2,
+                        key: 'text'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        text: '',
+                        key: 'text'
+                    }]
+                }],
+                todos: [],
+                obj: {},
+                index: '',
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
-                value:{
-                    pubdate:0,
-                    duedate:0,
-                    sample:'',
-                    text:0
+                value: {
+                    pubdate: 0,
+                    duedate: 0,
+                    sample: '',
+                    text: 0
                 }
             }
         },
-
         components: {
             searchInput,
-            otherSort
+            myPurchaseSort
         },
         methods: {
-            getHttp(pubdate,duedate,sample,text){
-                  let _self = this;
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'intentionService',biz_method:'mySupplyIntentionList',version:1,time:0,sign:'',biz_param:{
-                        sort:{"pubdate":pubdate,"duedate":duedate},
-                        onSell:text,
-                        sampling:sample,
-                        pn:"1",
-                        pSize:"20"
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.myResource(url,body,function(suc){
+            getHttp(pubdate, duedate, sample, text) {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'mySupplyIntentionList',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+                        sort: {
+                            "pubdate": pubdate,
+                            "duedate": duedate
+                        },
+                        onSell: text,
+                        sampling: sample,
+                        pn: "1",
+                        pSize: "20"
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
                     common.$emit('message', suc.data.msg);
                     console.log(suc);
                     _self.todos = suc.data.biz_result.list;
 
-                    for(var item in _self.todos){
+                    for (var item in _self.todos) {
                         _self.todos[item].router = "goodDetail";
                         _self.todos[item].other_router = "reviseResource";
-                        
+
                     }
-                    
-                  },function(err){
+
+                }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
-                  })
+                })
             },
-            
-            getId(param){
+            getId(param) {
                  let _self = this;
-                  
-                  _self.value[param.key] = param[param.key];
-            _self.getHttp(_self.value.pubdate,_self.value.duedate,_self.value.sample,_self.value.text);
-                  
-
+                 _self.value[param.key] = param[param.key];
+                _self.getHttp(_self.value.pubdate,_self.value.duedate,_self.value.sample,_self.value.text);
             },
-            jump:function(router,id,index){
+            jump: function(router, id, index) {
                 /*common.$emit('myResource-to-revisePurchase',)*/
                 /*this.ReviseHttp(id);*/
                 this.index = index;
-                common.$emit("res-id",id);
-                common.$emit('setParam','resourceId',id);
-                //console.log(this.index);
+                common.$emit("res-id", id);
+                common.$emit('setParam', 'resourceId', id);
                 this.$router.push(router + '/' + id);
-                
             },
-            
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
@@ -157,7 +257,6 @@ export default {
                     this.$refs.loadmore.onBottomLoaded(id);
                 }, 1500);*/
             },
-
             handleTopChange(status) {
                 this.topStatus = status;
             },
@@ -172,26 +271,23 @@ export default {
             }
         },
         created() {
-                let _self = this;
-                this.getHttp(0,0,'',0);
-                common.$on('reviseResource',function (obj){
-                      console.log(2222)
-                      _self.getHttp(0,0,'',0);
-                      console.log(111111)
-                })
-                common.$on("informMyRes",function (id){
-                    console.log(id);
-                    _self.getHttp(0,0,'',0);
-                })
-                
+            let _self = this;
+            this.getHttp(0, 0, '', 0);
+            common.$on('reviseResource', function(obj) {
+                console.log(2222)
+                _self.getHttp(0, 0, '', 0);
+                console.log(111111)
+            })
+            common.$on("informMyRes", function(id) {
+                console.log(id);
+                _self.getHttp(0, 0, '', 0);
+            })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
-
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .page-loadmore-listitem {
     height: 50px;
@@ -232,29 +328,32 @@ export default {
 }
 
 .low_price {}
-.my_resource .bg_white{
+
+.my_resource .bg_white {
     margin-top: 0.5rem;
 }
-.my_resource .title{
-    font-size: 1.7rem;
 
+.my_resource .title {
+    font-size: 1.7rem;
 }
-.my_resource .bg_white .page-loadmore-wrapper .mint-loadmore{
-    background:#F5F5F5;
+
+.my_resource .bg_white .page-loadmore-wrapper .mint-loadmore {
+    background: #F5F5F5;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
     min-height: 150px;
-    border:0;
+    border: 0;
     margin-bottom: 1rem;
+}
 
-}
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li{
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li {
     margin-bottom: 1rem;
-    background:white;
+    background: white;
 }
+
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
     height: 9rem;
     width: 8.5rem;
@@ -263,33 +362,30 @@ export default {
     position: absolute;
 }
 
-
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header{
-    width:100%;
-    height:40px;
-    
-    padding:0 10px;
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header>div{
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header>div {
     border-bottom: 1px solid #C6C6C5;
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
     line-height: 40px;
 }
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .time_font{
+
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .time_font {
     font-size: 1.25rem;
-    color:#9C9C9C;
-    float:left;
-}
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .audit_state{
-    font-size: 1.25rem;
-    color:#FA6705;
-    float:right;
-    
+    color: #9C9C9C;
+    float: left;
 }
 
-
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .audit_state {
+    font-size: 1.25rem;
+    color: #FA6705;
+    float: right;
+}
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
     float: left;
@@ -299,13 +395,15 @@ export default {
     margin-bottom: 8px;
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
     max-height: 1.6rem;
 }
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center div{
+
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center div {
     font-size: 1.6rem;
 }
+
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
     width: 100%;
@@ -322,7 +420,7 @@ export default {
     padding-top: 10px;
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right{
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
     max-width: 80px;
     height: 90px;
@@ -330,31 +428,33 @@ export default {
     right: 10px;
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
     font-size: 1.4rem;
     margin-top: 0px;
     color: #EC6817;
 }
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p span{
+
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p span {
     font-size: 1rem;
 }
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button{
-  position: absolute;
-  bottom: 10px;
-  background: white;
-  font-size: 10px;
-  min-width: 60px;
-  right: 0px;
-  max-height: 25px;
-  padding: 0 5px;
-  color:black;
-  border:1px solid #BDBDBD;
-  border-radius: 5px;
-  z-index: 100000;
-  font-size: 1.2rem;
+
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
+    position: absolute;
+    bottom: 10px;
+    background: white;
+    font-size: 10px;
+    min-width: 60px;
+    right: 0px;
+    max-height: 25px;
+    padding: 0 5px;
+    color: black;
+    border: 1px solid #BDBDBD;
+    border-radius: 5px;
+    z-index: 100000;
+    font-size: 1.2rem;
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {
     font-size: 1.1rem;
     color: #999;
 }

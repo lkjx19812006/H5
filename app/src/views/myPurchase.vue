@@ -5,12 +5,12 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <myPurchaseSort v-on:postId="getId"></myPurchaseSort>
+        <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" >
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
                             <div class="header_list">
                                 <p class="left_p">发布日期：{{todo.pubdate}}</p>
                                 <p class="right_p">{{todo.onSell}}</p>
@@ -27,10 +27,9 @@
                                 <p class="left">产地：{{todo.location}}</p>
                                 <p class="right">需求数量：{{todo.number}}{{todo.unit}}</p>
                             </div>
-
                             <div class="button">
-                               <p class="first_button" @click="jump(other_router,todo.id)">编辑</p>
-                               <p class="second_button" @click="jump(router,todo.id)">查看报价</p>
+                                <p class="first_button" @click="jump(other_router,todo.id)">编辑</p>
+                                <p class="second_button" @click="jump(router,todo.id)">查看报价</p>
                             </div>
                         </li>
                     </ul>
@@ -55,40 +54,141 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                router:"purchaseDetail",
-                other_router:"revisePurchase",
-                todos: [/*{
-                    "name": "人参",
-                    "spec": "统货",
-                    "place": "东北",
-                    "num": "12",
-                    "state": "已审核",
-                    "phone": "15301546832",
-                    "time": "12-11-26",
-                    "router":"purchaseDetail",
-                    "other_router":"revisePurchase"
-
-                    
-                }*/],
+                sortRouter: 'home',
+                sortArr: [{
+                    name: '发布日期',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '发布日期',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由新到旧',
+                        asc: 'low',
+                        show: false,
+                        pubdate: 1,
+                        key: 'pubdate'
+                    }, {
+                        name: '由旧到新',
+                        asc: 'top',
+                        show: false,
+                        pubdate: 2,
+                        key: 'pubdate'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        pubdate: 0,
+                        key: 'pubdate'
+                    }]
+                }, {
+                    name: '报价人数',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '报价人数',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由少到多',
+                        asc: 'low',
+                        show: false,
+                        number: 1,
+                        key: 'number'
+                    }, {
+                        name: '由多到少',
+                        asc: 'top',
+                        show: false,
+                        number: 2,
+                        key: 'number'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        number: 0,
+                        key: 'number'
+                    }]
+                }, {
+                    name: '剩余时间',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '剩余时间',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '由短到长',
+                        asc: 'low',
+                        show: false,
+                        duedate: 1,
+                        key: 'duedate'
+                    }, {
+                        name: '由长到短',
+                        asc: 'top',
+                        show: false,
+                        duedate: 0,
+                        key: 'duedate'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        duedate: '',
+                        key: 'duedate'
+                    }]
+                }, {
+                    name: '审核状态',
+                    asc: 'top',
+                    url: '/static/icons/drop_down.png',
+                    saveName: '审核状态',
+                    class: 'sort_content_detail',
+                    sortArr: [{
+                        name: '申请中',
+                        asc: 'low',
+                        show: false,
+                        text: 1,
+                        key: 'text'
+                    }, {
+                        name: '上架失败',
+                        asc: 'low',
+                        show: false,
+                        text: -2,
+                        key: 'text'
+                    }, {
+                        name: '下架',
+                        asc: 'low',
+                        show: false,
+                        text: 4,
+                        key: 'text'
+                    }, {
+                        name: '上架',
+                        asc: 'top',
+                        show: false,
+                        text: 2,
+                        key: 'text'
+                    }, {
+                        name: '全部',
+                        asc: '',
+                        show: false,
+                        text: '',
+                        key: 'text'
+                    }]
+                }],
+                router: "purchaseDetail",
+                other_router: "revisePurchase",
+                todos: [],
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
                 value: {
-                    pubdate:0,
-                    number:0,
-                    duedate:0,
-                    text:0
-                }, 
+                    pubdate: 0,
+                    number: 0,
+                    duedate: 0,
+                    text: 0
+                },
             }
         },
         components: {
             searchInput,
             myPurchaseSort
         },
-
         methods: {
-            getHttp(pubdate,duedate,number,text){
+            getHttp(pubdate, duedate, number, text) {
                 let _self = this;
                  common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
@@ -98,47 +198,41 @@ export default {
                         pn:1,
                         pSize:20         
                   }};
-                  
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.myResource(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc.data.biz_result.list);
                     let listArr = suc.data.biz_result.list;
-                    for(var item in listArr){
-                        
+                    for (var item in listArr) {
                         var duedateDate = new Date(listArr[item].duedate);
                         var pubdateDate = new Date(listArr[item].pubdate);
                         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days=Math.floor(dateValue/(24*3600*1000));
-                        if(listArr[item].onSell == 1){
+                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                        if (listArr[item].onSell == 1) {
                             listArr[item].onSell = '未审核'
                         }
-                        if(listArr[item].onSell == 2){
+                        if (listArr[item].onSell == 2) {
                             listArr[item].onSell = '已审核'
                         }
-                        if(listArr[item].onSell == -2){
+                        if (listArr[item].onSell == -2) {
                             listArr[item].onSell = '审核失败'
                         }
-                        if(listArr[item].onSell == 4){
+                        if (listArr[item].onSell == 4) {
                             listArr[item].onSell = '已下架'
                         }
                         listArr[item].days = days;
                         console.log(listArr[item].id);
                     }
                     _self.todos = listArr;
-                     
-                  },function(err){
+                }, function(err) {
                     common.$emit('close-load');
-                  })
+                })
             },
-            getId(param){
-                 let _self = this;
-                  
-                  _self.value[param.key] = param[param.key];
-            _self.getHttp(_self.value.pubdate,_self.value.duedate,_self.value.number,_self.value.text);
-                  
-
+            getId(param) {
+                let _self = this;
+                _self.value[param.key] = param[param.key];
+                _self.getHttp(_self.value.pubdate, _self.value.duedate, _self.value.number, _self.value.text);
             },
             jump:function(router,id){
                 common.$emit("purchase-id",id);
@@ -228,122 +322,126 @@ export default {
 }
 
 .low_price {}
-.my_purchase .bg_white{
+
+.my_purchase .bg_white {
     margin-top: 0.5rem;
 }
 
-.my_purchase .bg_white .page-loadmore-wrapper .mint-loadmore{
-    background:#F5F5F5;
+.my_purchase .bg_white .page-loadmore-wrapper .mint-loadmore {
+    background: #F5F5F5;
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
     min-height: 170px;
-    border:0;
+    border: 0;
     margin-bottom: 1rem;
-
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li{
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li {
     margin-bottom: 1rem;
-    background:white;
+    background: white;
     padding: 0 1.5rem;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list{
-    height:2.9rem;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list {
+    height: 2.9rem;
     text-align: left;
-    border-bottom:1px solid #E4E4E4;
+    border-bottom: 1px solid #E4E4E4;
     line-height: 2.9rem;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .left_p{
-    float:left;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .left_p {
+    float: left;
     font-size: 0.9rem;
-    color:#999999;
+    color: #999999;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .right_p{
-    float:right;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .right_p {
+    float: right;
     font-size: 1rem;
-    color:#FA6705;
+    color: #FA6705;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li  .first_line{
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line {
     /*border: 1px solid red;*/
     /*width:100%;
     text-align: left;*/
-    height:4.4rem;
-
+    height: 4.4rem;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .left{
-    float:left;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .left {
+    float: left;
     text-align: left;
     font-size: 1.4rem;
-    color:#333333;
+    color: #333333;
     /*border: 1px solid red;*/
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .right{
-    float:right;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .right {
+    float: right;
     text-align: right;
     font-size: 1.1rem;
-    color:#666666;
+    color: #666666;
     /*border: 1px solid red;*/
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .right span{
-    color:#FA6705;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .right span {
+    color: #FA6705;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li  .second_line{ 
-    height:1rem;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .second_line {
+    height: 1rem;
     margin-bottom: 0.5rem;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li  .third_line{
-    height:1rem;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line {
+    height: 1rem;
     margin-bottom: 1.5rem;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .second_line .left,.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line .left{
-    float:left;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .second_line .left,
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line .left {
+    float: left;
     text-align: left;
     font-size: 1rem;
     line-height: 1rem;
-    color:#666666;
+    color: #666666;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .second_line .right,.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line .right{
-    float:right;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .second_line .right,
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line .right {
+    float: right;
     text-align: right;
     font-size: 1rem;
-    color:#666666;
+    color: #666666;
     line-height: 1rem;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button{
-    float:right;
-    height:2rem;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button {
+    float: right;
+    height: 2rem;
     /*border:1px solid red;*/
     text-align: center;
     line-height: 2rem;
     font-size: 1.1rem;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button .first_button{
-    width:3.6rem;
-    height:2rem;
-    border:1px solid #BFBFBF;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button .first_button {
+    width: 3.6rem;
+    height: 2rem;
+    border: 1px solid #BFBFBF;
     border-radius: 3px;
-    float:left;
+    float: left;
     margin-right: 1rem;
-    
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button .second_button{
-    width:5.5rem;
-    height:2rem;
-    border:1px solid #BFBFBF;
-    float:right;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button .second_button {
+    width: 5.5rem;
+    height: 2rem;
+    border: 1px solid #BFBFBF;
+    float: right;
     border-radius: 3px;
 }
-
-
-
-
-
-
-
-
-
-
-
 </style>

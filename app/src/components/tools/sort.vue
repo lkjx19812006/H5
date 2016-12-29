@@ -1,7 +1,7 @@
 <template>
     <div class="content sort">
         <div class="sort_content">
-            <div v-bind:class="item.class" v-for="(item,index) in arr" @click="showTable(item,index)">
+            <div v-bind:class="item.class" v-for="(item,index) in paramArr" @click="showTable(item,index)">
                 {{item.name}}<img v-bind:src="item.url">
             </div>
             <div class="sort_cell" v-show="selectShow">
@@ -19,103 +19,23 @@
 import common from '../../common/common.js'
 export default {
     data() {
-
             return {
-
-                arr: [{
-                    name: '上架时间',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '上架时间',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由新到旧',
-                        asc: 'low',
-                        show: false,
-                        time:1,
-                        key:'time'
-                    }, {
-                        name: '由旧到新',
-                        asc: 'top',
-                        show: false,
-                        time:2,
-                        key:'time'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        time:0,
-                        key:'time'
-                    }]
-                }, {
-                    name: '价格排序',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '价格排序',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由低到高',
-                        asc: 'low',
-                        show: false,
-                        price:1,
-                        key:'price'
-                    }, {
-                        name: '由高到低',
-                        asc: 'top',
-                        show: false,
-                        price:2,
-                        key:'price'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        price:0,
-                        key:'price'
-                    }]
-                }, {
-                    name: '可否样品',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '可否样品',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '可提供',
-                        asc: 'low',
-                        show: false,
-                        sample:1,
-                        key:'sample'
-                    }, {
-                        name: '不可提供',
-                        asc: 'top',
-                        show: false,
-                        sample:0,
-                        key:'sample'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        sample:'',
-                        key:'sample'
-                    }]
-                }, {
-                    name: '产地',
-                    asc: 'location',
-                    url: '/static/icons/screen.png',
-                    class: 'sort_content_detail',
-                }],
                 selectShow: false,
                 selectArr: [],
                 selectIndex: 0
             }
         },
-
-             
-       
-    
+        props: {
+            sortRouter:{
+                type: String,
+                default: '/home'
+            },
+            paramArr:[Array]
+        },
         methods: {
             showTable: function(item, index) {
                 if (item.asc == 'location') {
-                    this.$router.push('provenanceSelection');
+                    this.$router.push('/provenanceSelection/'+this.sortRouter);
                 } else {
                     this.selectShow = !this.selectShow;
                     this.selectIndex = index;
@@ -124,26 +44,26 @@ export default {
             },
             getAsc: function(item) {
                 if (!item.asc) {
-                    this.arr[this.selectIndex].name = this.arr[this.selectIndex].saveName;
-                    this.arr[this.selectIndex].url = '/static/icons/drop_down.png';
-                    this.arr[this.selectIndex].class = 'sort_content_detail';
+                    this.paramArr[this.selectIndex].name = this.paramArr[this.selectIndex].saveName;
+                    this.paramArr[this.selectIndex].url = '/static/icons/drop_down.png';
+                    this.paramArr[this.selectIndex].class = 'sort_content_detail';
                 } else {
-                    this.arr[this.selectIndex].class = 'sort_content_detail_select';
-                    this.arr[this.selectIndex].name = item.name;
+                    this.paramArr[this.selectIndex].class = 'sort_content_detail_select';
+                    this.paramArr[this.selectIndex].name = item.name;
                     if (item.asc == 'low') {
-                        this.arr[this.selectIndex].url = '/static/icons/drop_down_selected.png';
+                        this.paramArr[this.selectIndex].url = '/static/icons/drop_down_selected.png';
                     } else if (item.asc == 'top') {
-                        this.arr[this.selectIndex].url = '/static/icons/take_back.png';
+                        this.paramArr[this.selectIndex].url = '/static/icons/take_back.png';
                     }
                 }
                 this.selectShow = false;
                 let _self = this;
                 _self.$emit("postId", item);
-                
+
             }
         },
         created() {
-            this.selectArr = this.arr[0].sortArr;
+            this.selectArr = this.paramArr[0].sortArr;
         }
 }
 </script>
