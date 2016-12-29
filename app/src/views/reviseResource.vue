@@ -254,7 +254,7 @@ export default {
                          sampleNumber:_self.obj.weight,
                          sampleAmount:_self.obj.price,
                          duedate:_self.obj.duedate,
-                         breedId:"",
+                         breedId:"-1",
                          unit:_self.obj.number_unit,
                          id:_self.obj.id
 
@@ -295,7 +295,7 @@ export default {
             },
             release() {
                 /*this.$router.push('supplyReleaseSuccess');*/
-                   /*common.$emit('confirm','确定修改','取消修改','确认修改信息后,将等待审核！','确定修改');*/
+                /*common.$emit('confirm','确定修改','取消修改','确认修改信息后,将等待审核！','确定修改');*/
                  
                    common.$emit('confirm','确认修改信息后,将等待审核！','确定修改');
                   /* let _self = this;

@@ -93,8 +93,7 @@ export default {
               
                             biz_param: {
                                 keyWord: word,
-                                sort:{"shelve_time":shelve_time,"price":price},
-                                
+                                sort:{"shelve_time":shelve_time,"price":price}, 
                                 sampling:sampling,
                                 pn:1,
                                 pSize:20
@@ -147,7 +146,7 @@ export default {
             },
             jumpDetail(id){
                 let _self = this;
-                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                /*httpService.myAttention(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
               
@@ -161,15 +160,15 @@ export default {
                             console.log(result);
                             
                              _self.obj = result;
-                             common.$emit('post-res-detail',_self.obj);
-                       
+                             
 
                         }, function(err) {
                             
                              common.$emit('message', err.data.msg);
-                        })
+                        })*/
                 
-
+                //common.$emit('post-res-detail',_self.obj);
+                common.$emit('post-res-detail-id',id);
                 
                 this.$router.push('resourceDetail/' + id);
 
@@ -216,6 +215,7 @@ export default {
             _self.getHttp(common.pageParam.lowPrice,0,0,'');
             common.$on("lowPriceRes",function(item){
                  console.log(item)
+                 _self.keyword = item;
                  _self.getHttp(item,0,0,'');
             });
            

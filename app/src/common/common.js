@@ -29,7 +29,9 @@ let common = new Vue({
            reviseResource:'',
            addressId:'',
            postAddressObj:'',
-           resourceId:''
+           resourceId:'',
+           Needrelease:'',
+           backAddress:''
 
         }
     },

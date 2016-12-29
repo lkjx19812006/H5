@@ -93,7 +93,7 @@ export default {
                  common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'intentionService',biz_method:'myBegIntentionList',version:1,time:0,sign:'',biz_param:{
-                        sort:{"pubdate":pubdate,"duedate":duedate,"offer":text},
+                        sort:{"offer":number,"pubdate":pubdate,"duedate":duedate},
                         onSell:text,
                         pn:1,
                         pSize:20         
@@ -141,6 +141,7 @@ export default {
 
             },
             jump:function(router,id){
+                common.$emit("purchase-id",id);
                 this.$router.push(router + '/' + id);
             },
             handleBottomChange(status) {
@@ -174,8 +175,11 @@ export default {
             }
         },
         created() {
+            let _self = this;
             this.getHttp(0,0,0,0);
-
+            common.$on("informMyPurchase",function (id){
+                 _self.getHttp(0,0,0,0);
+            })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

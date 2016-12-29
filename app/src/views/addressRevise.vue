@@ -164,14 +164,19 @@ export default {
                   httpService.addressRevise(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc);
+                    if (suc.data.code == '1c01'){
+                         common.$emit('reviseAAddress','refurbish');
+                         _self.$router.push('/addressManage')
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
                     
                     
-                    common.$emit('reviseAAddress','refurbish');
-                    /*_self.$router.push('addressManage')*/
-                    /*_self.$router.go('addressManage');*/
+                    
                     
                   },function(err){
                     common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
                   })
                 
         }

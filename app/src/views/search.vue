@@ -39,7 +39,7 @@
             <div class="search_result">
                 <ul class="page-loadmore-list">
                     <li v-for="todo in datas" class="page-loadmore-listitem list_content_item">
-                        <div @click = "jumpRes(todo.keyWord)">
+                        <div @click = "jumpRes(todo.keyWord,todo.id)">
                             <img src="/static/icons/search.png">
                             <p>{{todo.keyWord}}</p>
                         </div>
@@ -101,7 +101,7 @@ export default {
                 this.historyArr = [];
             },
             
-            jumpRes(item){
+            jumpRes(item,id){
                 let _self = this;
 
                 if(common.pageParam.router == 'lowPriceRes'){
@@ -134,6 +134,13 @@ export default {
                      common.$emit("setParam",'revResource',item);
                      common.$emit("revResource",item);
                     history.go(-1);
+                }else if(common.pageParam.router == 'needRelease'){
+                     /*common.$emit("setParam","Needrelease",item);*/
+                     common.$emit("Needrelease",item);
+                     history.go(-1);
+                }else if(common.pageParam.router == 'revisePurchase'){
+                     common.$emit("Revisepurchase",item);
+                     history.go(-1);
                 }
                 
 
