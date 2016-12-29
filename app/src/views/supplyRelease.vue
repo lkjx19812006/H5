@@ -223,7 +223,7 @@ export default {
                          sampleNumber:_self.obj.weight,
                          sampleAmount:_self.obj.price,
                          duedate:_self.obj.duedate,
-                         breedId:"",
+                         breedId:"-1",
                          unit:_self.obj.number_unit
                         
                   }};

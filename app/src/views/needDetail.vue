@@ -81,7 +81,13 @@ export default {
                   httpService.addAddress(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc.data);
-                    common.$emit('message', suc.data.msg);
+                    if(suc.data.code == '1c01'){
+                        common.$emit("informPurAttention",'refurbish');
+                        common.$emit('message', suc.data.msg);
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
                     
                   },function(err){
                     common.$emit('close-load');

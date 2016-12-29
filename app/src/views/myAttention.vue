@@ -254,8 +254,15 @@ export default {
                  _self.resorceHttp(item); 
             });
 
-            
+            common.$on("informResAttention",function (item){
+                 _self.resorceHttp(); 
+            });
              
+            common.$on("informPurAttention",function (item){
+                 console.log(111111)
+                 _self.resorceHttp(); 
+            });
+
         },
   
         mounted() {

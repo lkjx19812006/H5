@@ -201,15 +201,24 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.addressRevise(url, body, function(suc) {
                     common.$emit('close-load');
-                    if (suc.data.code == '1c01') {
-                        common.$emit('reviseAAddress', 'refurbish');
-                        window.history.go(-1);
-                    } else {
+
+                    console.log(suc);
+                    if (suc.data.code == '1c01'){
+                         common.$emit('reviseAAddress','refurbish');
+                         _self.$router.push('/addressManage')
+                    }else{
                         common.$emit('message', suc.data.msg);
                     }
-                }, function(err) {
+                    
+                    
+                    
+                    
+                  },function(err){
                     common.$emit('close-load');
-                })
+                    common.$emit('message', err.data.msg);
+                  })
+
+                   
             }
         },
         created() {
@@ -222,6 +231,7 @@ export default {
             common.$on('revise-address', function(item) {
                 _self.self(item);
             })
+
         }
 }
 </script>

@@ -198,7 +198,8 @@ export default {
                                 var pubdateDate = new Date(pubdate);
                                 var dateValue = duedateDate.getTime() - pubdateDate.getTime();
                                 var days=Math.floor(dateValue/(24*3600*1000));
-                                item.days = days; 
+                                item.days = days;
+                                console.log(days) 
                                 item.duedate = duedate;
                                 item.pubdate = pubdate;
                             }
@@ -289,7 +290,8 @@ export default {
 
             _self.getHttp(param,0,0,'');*/
             common.$on("Urgentneed",function(item){
-                 console.log(item);
+                 //console.log(item);
+                 _self.keyword = item;
                  _self.getHttp(item,0,0,'');
             });
                   

@@ -6,7 +6,7 @@
             </router-link>
         </mt-header>
         <ul>
-           <li v-for="(todo,index) in todos" v-show="todo.show">
+            <li v-for="(todo,index) in todos" v-show="todo.show" @click="jumpBack(todo)">
                <div class="address_top" >
                   <div class="receiver">
                     <p class="receiver_left">
@@ -88,37 +88,26 @@ export default {
        
         created(){
                  let _self = this;
+                  _self.getDefault();
                   _self.listHttp();
                   
                   common.$on("informAddress",function (id){
+                       _self.getDefault();
                        _self.listHttp();
                   })
                   common.$on("reviseAAddress",function (id){
-                        console.log(1111)
+                       _self.getDefault();
                        _self.listHttp();
                   })
-                  common.$emit('show-load');
-                  let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let otherbody={biz_module:'userAddressService',biz_method:'queryDefaultAddress',version:1,time:0,sign:'',biz_param:{
-                        
-                  }};
-                  
-                  otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
-                  otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
-                   httpService.addressManage(otherurl,otherbody,function(suc){
-                    common.$emit('close-load');
-                    //console.log(suc.data.biz_result);
-                    _self.id = suc.data.biz_result.id;
-                    
-                  },function(err){
-                    common.$emit('close-load');
-                  })
-
-                   
-
-
         },
         methods:{
+          jumpBack(todo){
+              let _self = this;
+                if(common.pageParam.router == 'orderConfirm'){
+                    common.$emit('backAddress',todo);
+                    history.go(-1);
+                }
+          },
           listHttp(){
             //本页面列表刷新接口
                  let _self = this;
@@ -132,30 +121,59 @@ export default {
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.addressManage(url,body,function(suc){
                     common.$emit('close-load');
-
+                    console.log(suc)
                     let listArr = suc.data.biz_result.list;
-                    for(var item in listArr){
-                         listArr[item].show = true;
-                         listArr[item].reviseShow = false;
-                         listArr[item].first_img = '/static/images/default_nor.png';
-                         listArr[item].second_img = '/static/images/modify.png';
-                         listArr[item].last_img = '/static/images/delet.png';
-                         listArr[item].router = 'addressRevise';
-                         if(listArr[item].id == _self.id){
-                              listArr[item].first_img = '/static/images/default.png';
-                         }
-                        
-                    }
+                        if(suc.data.code == "1c01"){
+                          for(var item in listArr){
+                             listArr[item].show = true;
+                             listArr[item].reviseShow = false;
+                             listArr[item].first_img = '/static/images/default_nor.png';
+                             listArr[item].second_img = '/static/images/modify.png';
+                             listArr[item].last_img = '/static/images/delet.png';
+                             listArr[item].router = 'addressRevise';
+                             
+                             if(listArr[item].id == common.pageParam.defaultId){
+                                listArr[item].first_img = '/static/images/default.png';
+                             }
+                             
+                             
+                            
+                            
+                        }
+                         console.log(listArr)
+                        _self.todos = listArr
+                      }else{
+                           common.$emit('message', suc.data.msg);
+                      }
                     
-                    _self.todos = listArr
                     
                   },function(err){
                     common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
                   })
 
           },
+          getDefault(){
+                  let _self = this;
+                  common.$emit('show-load');
+                  let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let otherbody={biz_module:'userAddressService',biz_method:'queryDefaultAddress',version:1,time:0,sign:'',biz_param:{
+                        
+                  }};
+                  
+                  otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
+                  otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
+                   httpService.addressManage(otherurl,otherbody,function(suc){
+                    common.$emit('close-load');
+                    let default_id = suc.data.biz_result.id;
+                    _self.id = default_id;
+                    common.$emit('setParam',"defaultId",default_id);
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+          },
           delet:function(todo,id){
-               //删除接口
+               //删除地址
                 todo.show = !todo.show;
                 let _self = this;
                 common.$emit('show-load');
@@ -177,13 +195,11 @@ export default {
           },
           changeColor:function(todos,todo,index){ 
              // 默认地址接口    
-                for(var item in todos){
-                    todos[item].first_img = '/static/images/default_nor.png';
-                    todos[index].first_img = '/static/images/default.png';
-                }
+                
+                 // console.log(todo.id)
+                  let _self = this;
+                  common.$emit('show-load');
                   console.log(todo.id)
-                let _self = this;
-                common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'userAddressService',biz_method:'setDefaultAddress',version:1,time:0,sign:'',biz_param:{
                         id:todo.id
@@ -193,8 +209,18 @@ export default {
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.addressManage(url,body,function(suc){
                     common.$emit('close-load');
-                    console.log(suc);
-                    
+                    if(suc.data.code == '1c01'){
+                          common.$emit('message', suc.data.msg);
+                          _self.id = suc.data.biz_result.id;
+                          for(var item in todos){
+                              todos[item].first_img = '/static/images/default_nor.png';
+                              todos[index].first_img = '/static/images/default.png';
+                          }
+                         
+                    }else{
+                         common.$emit('message', suc.data.msg);
+                         console.log(suc);
+                    }
                   },function(err){
                     common.$emit('close-load');
                   })

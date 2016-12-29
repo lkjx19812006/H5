@@ -108,6 +108,26 @@ export default {
             swiperSlide
         },
         methods: {
+            refurbish(id){
+                let _self = this;
+                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result;
+        
+                            _self.obj = result;
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            },
             back() {
                 this.$router.go(-1);
             },
@@ -136,7 +156,12 @@ export default {
                   httpService.addAddress(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc.data);
-                    common.$emit('message', suc.data.msg);
+                    if(suc.data.code == '1c01'){
+                        common.$emit("informResAttention",'refurbish');
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
                     
                   },function(err){
                     common.$emit('close-load');
@@ -147,56 +172,17 @@ export default {
          },
         created() {
             let _self = this;
-            /*common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });
-
-            _self.time = setTimeout(() => {
-                _self.imageShow = false;
-            }, 2450);*/
             
             var str = _self.$route.fullPath;
             var id = str.substring(16,str.length);
             _self.id = id;
             
+                  _self.refurbish(id);
             
-            httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result;
-                            //console.log(result);
-                            /*if(result.sampling == 0){
-                               result.sampling = '不提供' 
-                            }else{
-                                result.sampling = '提供'
-                            }*/
-                             _self.obj = result;
-                            
-                            
-                                            
-                               
-                           
 
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-
-                   common.$on('post-res-detail',function (obj){
-                        _self.obj = obj;
+                   common.$on('post-res-detail-id',function (item){
+                        /*_self.obj = obj;*/
+                        _self.refurbish(item);
                    })
         }
 }

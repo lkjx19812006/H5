@@ -10,9 +10,9 @@
             <div class="good_name">
                 <p>产品：</p>
                 <div>
-                    <div class="select">
+                    <div class="select" @click="jumpSearch('/search')">
                         <!-- <p>请填写你需要的药材名称</p> -->
-                        <input text="text" disabled="false" :placeholder="obj.drug_name" v-model="obj.drug_name">
+                        <input text="text" disabled="false"  v-model="obj.drug_name">
                     </div>
                 </div>
             </div>
@@ -103,6 +103,45 @@ export default {
             }
         },
         methods: {
+            jumpSearch(router){
+                common.$emit("setParam","router","revisePurchase");
+                this.$router.push(router);
+            },
+            self(id){
+                let _self = this;
+                httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'intentionService',
+                        biz_method:'queryIntentionInfo',
+              
+                            biz_param: {
+                                id:id
+                            }
+                        }, function(suc) {
+                            
+                           if (suc.data.code == '1c01'){
+                                let result = suc.data.biz_result;
+                                var duedateDate = new Date(result.duedate);
+                                var pubdateDate = new Date(result.pubdate);
+                                var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                                var days=Math.floor(dateValue/(24*3600*1000));
+
+                                _self.obj.drug_name = result.breedName;
+                                _self.obj.spec = result.spec;
+                                _self.obj.place = result.location;
+                                _self.obj.number = result.number;
+                                _self.obj.number_unit = result.unit;
+                                _self.obj.selling_point = result.description;
+                                _self.obj.name = result.customerName;
+                                _self.obj.phone = result.customerPhone;
+                                _self.obj.duedate = days;
+                            } else{
+                                common.$emit('message', suc.data.msg);
+                            }    
+                        }, function(err) {
+                            
+                            common.$emit('message', err.data.msg);
+                        })
+            },
             release(){
               /*this.$router.push('needReleaseSuccess');*/
               /*common.$emit('confirm','确定修改','取消修改','确认修改信息后,将等待审核！','确定修改');*/
@@ -119,7 +158,7 @@ export default {
                          customerName:_self.obj.name,
                          customerPhone:_self.obj.phone,
                          duedate:_self.obj.duedate,
-                         breedId:"1111111",
+                         breedId:"-1",
                          unit:_self.obj.number_unit,
                          id:_self.obj.id    
                   }};
@@ -129,7 +168,15 @@ export default {
                   httpService.needRelease(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc);
-                    common.$emit('message', suc.data.msg);
+                    if (suc.data.code == '1c01'){
+                        common.$emit('message', suc.data.msg);
+                        console.log(1113333)
+                        _self.$router.push("/myPurchase");
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
+                    
                     
                   },function(err){
                     common.$emit('close-load');
@@ -143,40 +190,14 @@ export default {
             var id = str.substring(16,str.length);
             _self.obj.id = id;
 
-            httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            
-                            
-                            console.log(suc.data.biz_result);
-                            let result = suc.data.biz_result;
+               _self.self(id);
+               common.$on('Revisepurchase',function (item){
+                     _self.obj.drug_name = item;
+               })
 
-                            var duedateDate = new Date(result.duedate);
-                            var pubdateDate = new Date(result.pubdate);
-                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                            var days=Math.floor(dateValue/(24*3600*1000));
-
-                            _self.obj.drug_name = result.breedName;
-                            _self.obj.spec = result.spec;
-                            _self.obj.place = result.location;
-                            _self.obj.number = result.number;
-                            _self.obj.number_unit = result.unit;
-                            _self.obj.selling_point = result.description;
-                            _self.obj.name = result.customerName;
-                            _self.obj.phone = result.customerPhone;
-                            _self.obj.duedate = days;
-                            //console.log(result.image);
-                            
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-
+               common.$on("purchase-id", function (item){
+                     _self.self(item);
+               })
 
         }
 }

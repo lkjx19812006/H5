@@ -190,29 +190,17 @@ export default {
         methods: {
             getHttp(pubdate, duedate, number, text) {
                 let _self = this;
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'intentionService',
-                    biz_method: 'myBegIntentionList',
-                    version: 1,
-                    time: 0,
-                    sign: '',
-                    biz_param: {
-                        sort: {
-                            "pubdate": pubdate,
-                            "duedate": duedate,
-                            "offer": text
-                        },
-                        onSell: text,
-                        pn: 1,
-                        pSize: 20
-                    }
-                };
-
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.myResource(url, body, function(suc) {
+                 common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'intentionService',biz_method:'myBegIntentionList',version:1,time:0,sign:'',biz_param:{
+                        sort:{"offer":number,"pubdate":pubdate,"duedate":duedate},
+                        onSell:text,
+                        pn:1,
+                        pSize:20         
+                  }};
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc.data.biz_result.list);
                     let listArr = suc.data.biz_result.list;
@@ -237,20 +225,17 @@ export default {
                         console.log(listArr[item].id);
                     }
                     _self.todos = listArr;
-
                 }, function(err) {
                     common.$emit('close-load');
                 })
             },
             getId(param) {
                 let _self = this;
-
                 _self.value[param.key] = param[param.key];
                 _self.getHttp(_self.value.pubdate, _self.value.duedate, _self.value.number, _self.value.text);
-
-
             },
-            jump: function(router, id) {
+            jump:function(router,id){
+                common.$emit("purchase-id",id);
                 this.$router.push(router + '/' + id);
             },
             handleBottomChange(status) {
@@ -284,8 +269,11 @@ export default {
             }
         },
         created() {
-            this.getHttp(0, 0, 0, 0);
-
+            let _self = this;
+            this.getHttp(0,0,0,0);
+            common.$on("informMyPurchase",function (id){
+                 _self.getHttp(0,0,0,0);
+            })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

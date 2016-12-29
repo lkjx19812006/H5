@@ -100,7 +100,7 @@ export default {
             clearResult: function() {
                 this.historyArr = [];
             },
-            jumpRes(item) {
+            jumpRes(item){
                 let _self = this;
                 if (common.pageParam.router == 'lowPriceRes') {
                     common.$emit("setParam", 'lowPrice', item);
@@ -129,6 +129,13 @@ export default {
                     common.$emit("setParam", 'revResource', item);
                     common.$emit("revResource", item);
                     history.go(-1);
+                }else if(common.pageParam.router == 'needRelease'){
+                     /*common.$emit("setParam","Needrelease",item);*/
+                     common.$emit("Needrelease",item);
+                     history.go(-1);
+                }else if(common.pageParam.router == 'revisePurchase'){
+                     common.$emit("Revisepurchase",item);
+                     history.go(-1);
                 }
             },
             search() {

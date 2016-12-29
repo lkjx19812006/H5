@@ -14,7 +14,7 @@
                         <div>
                             <div class="select" @click="jumpSearch('search')">
                                 <!-- <p>请填写你需要的药材名称</p> -->
-                                <input text="text" disabled="false" :placeholder="obj.drug_name" v-model="obj.drug_name">
+                                <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
                             </div>
                         </div>
                     </div>
@@ -110,7 +110,8 @@ export default {
             release() {
                 
                 let _self = this;
-                common.$emit('show-load');
+                  console.log(_self.obj.number_unit)
+                  common.$emit('show-load');
                   let url=common.addSID(common.urlCommon + common.apiUrl.most);
                   let body={biz_module:'intentionService',biz_method:'editBegBuyInfo',version:1,time:0,sign:'',biz_param:{
                          customerId:"",
@@ -122,17 +123,24 @@ export default {
                          customerName:_self.obj.name,
                          customerPhone:_self.obj.phone,
                          duedate:_self.obj.duedate,
-                         breedId:"",
+                         breedId:"-1",
                          unit:_self.obj.number_unit,
-                        /* id:_self.obj.id*/    
+                        
                   }};
                   
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.needRelease(url,body,function(suc){
                     common.$emit('close-load');
-                    console.log(suc);
-                    common.$emit('message', suc.data.msg);
+                    if (suc.data.code == '1c01'){
+                        //发布成功的时候
+                        common.$emit('message', suc.data.msg);
+                        common.$emit('informMyPurchase','refurbish');
+                        _self.$router.push("myPurchase")
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                  
                     
                   },function(err){
                     common.$emit('close-load');
@@ -144,13 +152,17 @@ export default {
                 this.$router.push(router);
             },
             jumpSearch(router){
-                common.$emit("setParam","router",)
+                common.$emit("setParam","router","needRelease");
                 this.$router.push(router);
             }
 
         },
         created() {
-          
+             let _self = this;
+             common.$on("Needrelease",function (item){
+                   _self.obj.drug_name = item;
+                   console.log(item)
+             });
         }
 }
 </script>

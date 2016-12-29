@@ -3,11 +3,11 @@
         <div class="left_district">
             <div class="content">
                 <div class="left_content"><img src="/static/icons/consignee.png">收货人：</div>
-                <div><span>杨帆</span>15692463581</div>
+                <div><span>{{param.contactName}}</span>{{param.contactPhone}}</div>
             </div>
             <div class="content address">
                 <div class="left_content"><img src="/static/icons/receipt_address.png">收货地址：</div>
-                <div :style="{ width: wrapperWidth + 'px' }">上海，上海，上海，上海，</div>
+                <div :style="{ width: wrapperWidth + 'px' }">{{param.address}}</div>
             </div>
         </div>
         <img src="/static/images/right.png" class="right_arrow">
