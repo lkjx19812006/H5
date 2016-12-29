@@ -1,5 +1,5 @@
 <template>
-    <div class="whole need_release_success">
+    <div class="need_release_success">
         <mt-header title="发布成功">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
@@ -14,7 +14,7 @@
                     <p class="index_title">资源图片</p>
                 </div>
                 <div class="more_content">
-                    <img src="/static/images/1.jpg"><img src="/static/images/2.jpg">
+                    <img :src="todo.url" v-for="todo in imgArr">
                 </div>
             </div>
         </div>
@@ -45,6 +45,7 @@ import common from '../common/common.js'
 import resourceInformation from '../components/tools/resourceInformation'
 import contactType from '../components/tools/contactType'
 import auditProgress from '../components/tools/auditProgress'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
@@ -66,33 +67,22 @@ export default {
                     name: '杨帆',
                     phone: '15123485654'
                 },
-                auditProgress: '1'
+                auditProgress: '1',
+                imgArr:[{
+                    url:''
+                },{
+                    url:''
+                },{
+                    url:''
+                },{
+                    url:''
+                }]
             }
         },
         methods: {
-
-        },
-        components: {
-            resourceInformation,
-            contactType,
-            auditProgress
-        },
-        created() {
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.drug_information_list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });
-             /*var _self = this;
-            var str = _self.$route.fullPath;
-            var id = str.substring(16,str.length);
-            _self.obj.id = id;
-
-            httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+              getHttp(id){
+                let _self = this;
+                httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
               
@@ -101,31 +91,67 @@ export default {
                             }
                         }, function(suc) {
                             
+                            if(suc.data.code == '1c01'){
+                                    let result = suc.data.biz_result;
+
+                                    var duedateDate = new Date(result.duedate);
+                                    var pubdateDate = new Date(result.pubdate);
+                                    var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                                    var days=Math.floor(dateValue/(24*3600*1000));
+
+                                    _self.person.name = result.customerName;
+                                    _self.person.phone = result.customerPhone;
+                                    _self.information.price = result.price;
+                                    _self.information.name = result.breedName;
+                                    _self.information.spec = result.spec;
+                                    _self.information.place = result.location;
+                                    _self.information.number = result.number;
+                                    _self.information.unit = result.unit;
+                                    _self.obj.description = result.description;
+                                    for(var i = 0; i < result.image.length; i++){
+                                         var item = result.image[i];
+                                         _self.imgArr[i].url = result.image[i];
+                                    }
+                            }else{
+                                common.$emit('message', suc.data.msg);
+                            }
                             
-                            console.log(suc.data.biz_result);
-                            let result = suc.data.biz_result;
-
-                            var duedateDate = new Date(result.duedate);
-                            var pubdateDate = new Date(result.pubdate);
-                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                            var days=Math.floor(dateValue/(24*3600*1000));
-
-                            _self.person.name = result.customerName;
-                            _self.person.phone = result.customerPhone;
-                            _self.information.price = result.price;
-                            _self.information.name = result.breedName;
-                            _self.information.spec = result.spec;
-                            _self.information.place = result.location;
-                            _self.information.number = result.number;
-                            _self.information.unit = result.unit;
-                            _self.obj.description = result.description;
                             
                            
                             
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
-                        })*/
+                        })
+              }
+              
+
+        },
+        components: {
+            resourceInformation,
+            contactType,
+            auditProgress
+        },
+        created() {
+            /*common.$emit('show-load');
+            this.$http.get(common.apiUrl.drug_information_list).then((response) => {
+                common.$emit('close-load');
+                let data = response.data.biz_result.list;
+                this.todos = data;
+            }, (err) => {
+                common.$emit('close-load');
+                common.$emit('message', response.data.msg);
+            });*/
+            var _self = this;
+            var str = _self.$route.fullPath;
+            var id = str.substring(22,str.length);
+            _self.obj.id = id;
+            _self.getHttp(id)
+            common.$on('informSupplySuccess',function (item){
+                   console.log(item)
+                   _self.getHttp(item);
+            });
+            
 
         }
 }

@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="entrance">
-            <div v-for="todo in entrance" @click="jump(todo.router)">
+            <div v-for="(todo,index) in entrance" @click="jumpOrder(index)">
                 <img :src="todo.img_src" class="entrance_img">
                 <p>{{todo.name}}</p>
             </div>
@@ -116,7 +116,7 @@ export default {
                     img_src: '/static/images/woman.png'
                 }],
                 entrance: [{
-                    name: '全部订单',
+                    name: '待确认',
                     router: 'myOrder',
 
                     img_src: '/static/icons/All-orders.png'
@@ -162,6 +162,76 @@ export default {
             imageUpload
         },
         methods: {
+            jumpOrder(index){
+                 let _self = this;
+                 var index = index + 1;
+                 common.$emit('mineToOrder',index);
+                 _self.$router.push('myOrder');
+            },
+            salesmanData(){
+                 let _self = this;
+                common.$emit('show-load');
+                let otherurl = common.addSID(common.urlCommon + common.apiUrl.most);
+                let otherbody = {
+                    biz_module: 'userService',
+                    biz_method: 'queryEmployeeInfo',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {}
+                };
+                otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
+                otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
+                httpService.queryEmployeeInfo(otherurl, otherbody, function(suc) {
+                    common.$emit('close-load');
+                    if(suc.data.code = "1c01"){
+                        console.log(suc.data.biz_result);
+                        _self.content[0].customer = suc.data.biz_result.name;
+                        _self.content[0].customerGender = suc.data.biz_result.gender;
+
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
+            getHttp(){
+                let _self = this;
+                  common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'queryUserInfo',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {}
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.queryUserInfo(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if(suc.data.code = "1c01"){
+                        _self.content[0].name = suc.data.biz_result.name;
+                        _self.content[0].company = suc.data.biz_result.companyShort;
+                        _self.content[0].money = suc.data.biz_result.normalMoney;
+                        _self.content[0].integration = suc.data.biz_result.score;
+                        _self.content[0].gender = suc.data.biz_result.gender;
+                        _self.url = suc.data.biz_result.avatar;
+                       
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
+                    
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
             getUrl(param) {},
             drugMoney: function() {
                 common.$emit('confirm', '去下载app', '再考虑考虑？');
@@ -172,7 +242,7 @@ export default {
         },
         watch: {
             '$route': function() {
-                console.log('sdfsdfsfdsdf');
+               // console.log('sdfsdfsfdsdf');
             }
         },
         route: {
@@ -187,49 +257,13 @@ export default {
 
     created() {
         let _self = this;
-        let customer_id = '';
-        common.$emit('show-load');
-        let url = common.addSID(common.urlCommon + common.apiUrl.most);
-        let body = {
-            biz_module: 'userService',
-            biz_method: 'queryUserInfo',
-            version: 1,
-            time: 0,
-            sign: '',
-            biz_param: {}
-        };
-        body.time = Date.parse(new Date()) + parseInt(common.difTime);
-        body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-        httpService.queryUserInfo(url, body, function(suc) {
-            common.$emit('close-load');
-            _self.content[0].name = suc.data.biz_result.name;
-            _self.content[0].company = suc.data.biz_result.companyShort;
-            _self.content[0].money = suc.data.biz_result.normalMoney;
-            _self.content[0].integration = suc.data.biz_result.score;
-            _self.content[0].gender = suc.data.biz_result.gender;
-            _self.url = suc.data.biz_result.avatar;
-            common.$emit('show-load');
-            let otherurl = common.addSID(common.urlCommon + common.apiUrl.most);
-            let otherbody = {
-                biz_module: 'userService',
-                biz_method: 'queryEmployeeInfo',
-                version: 1,
-                time: 0,
-                sign: '',
-                biz_param: {}
-            };
-            otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
-            otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
-            httpService.queryEmployeeInfo(otherurl, otherbody, function(suc) {
-                common.$emit('close-load');
-                _self.content[0].customer = suc.data.biz_result.name;
-                _self.content[0].customerGender = suc.data.biz_result.gender;
-            }, function(err) {
-                common.$emit('close-load');
-            })
-        }, function(err) {
-            common.$emit('close-load');
+        _self.getHttp();
+        _self.salesmanData();
+        common.$on("toMine",function (obj){                
+             _self.getHttp();
+             _self.salesmanData();
         })
+        
     }
 }
 </script>

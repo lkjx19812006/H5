@@ -1,5 +1,5 @@
 <template>
-    <div class="whole need_release_success">
+    <div class="need_release_success">
         <mt-header title="发布成功">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="source_information">
-            <contactType :information='person'></contactType>
+            <contactType :information ='person'></contactType>
         </div>
         <div class="source_information">
             <auditProgress :auditProgress='auditProgress'></auditProgress>
@@ -35,6 +35,7 @@ import common from '../common/common.js'
 import resourceInformation from '../components/tools/resourceInformation'
 import contactType from '../components/tools/contactType'
 import auditProgress from '../components/tools/auditProgress'
+import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
@@ -61,29 +62,9 @@ export default {
             }
         },
         methods: {
-
-        },
-        components: {
-            resourceInformation,
-            contactType,
-            auditProgress
-        },
-        created() {
-            common.$emit('show-load');
-            this.$http.get(common.apiUrl.drug_information_list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });
-             /*var _self = this;
-            var str = _self.$route.fullPath;
-            var id = str.substring(16,str.length);
-            _self.obj.id = id;
-           
-           httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+             getHttp(id){
+                let _self = this;
+                httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
               
@@ -91,21 +72,55 @@ export default {
                                 id:id
                             }
                         }, function(suc) { 
-                            console.log(suc.data.biz_result);
-                            let result = suc.data.biz_result;
-                            _self.person.name = result.customerName;
-                            _self.person.phone = result.customerPhone;
-                            _self.information.price = result.price;
-                            _self.information.name = result.breedName;
-                            _self.information.spec = result.spec;
-                            _self.information.place = result.location;
-                            _self.information.number = result.number;
-                            _self.information.unit = result.unit;
-                            _self.obj.description = result.description;
+                            //console.log(suc.data.biz_result);
+                            if(suc.data.code == '1c01'){
+                                let result = suc.data.biz_result;
+                                console.log(result)
+                                _self.person.name = result.customerName;
+                                _self.person.phone = result.customerPhone;
+                                _self.information.price = result.price;
+                                _self.information.name = result.breedName;
+                                _self.information.spec = result.spec;
+                                _self.information.place = result.location;
+                                _self.information.number = result.number;
+                                _self.information.unit = result.unit;
+                                _self.obj.description = result.description;
+                            }else{
+                                common.$emit('message', suc.data.msg);
+                            }
+                            
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
-                        })*/
+                        })
+             }
+        },
+        components: {
+            resourceInformation,
+            contactType,
+            auditProgress
+        },
+        created() {
+            /*common.$emit('show-load');
+            this.$http.get(common.apiUrl.drug_information_list).then((response) => {
+                common.$emit('close-load');
+                let data = response.data.biz_result.list;
+                this.todos = data;
+            }, (err) => {
+                common.$emit('close-load');
+                common.$emit('message', response.data.msg);
+            });*/
+            var _self = this;
+            var str = _self.$route.fullPath;
+            var id = str.substring(20,str.length);
+            console.log(id)
+            _self.obj.id = id;
+             
+             _self.getHttp(id);
+             
+                 common.$on('informNeedSuccess',function (item){
+                        _self.getHttp(item);
+                 });
 
         }
 }

@@ -1,55 +1,20 @@
 <template>
   <div class="my_order">
-        <mt-header title="我的订单">
+        <mt-header :title="title" class="title-color">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-             <mt-button  slot="right" class="right_text" @click="tabOrder">
+             <mt-button  slot="right" class="right_text" @click="tabOrder" id="right_text">
                    {{more}}
             </mt-button>
         </mt-header>
         
 
-      <!-- <div class="select_box">
-        <mt-navbar v-model="selected" class="first_nav">
-          <mt-tab-item id="1">我的采购</mt-tab-item>
-          <mt-tab-item id="2">我的销售</mt-tab-item>
-        </mt-navbar>
-      </div>
-        
-       <mt-tab-container v-model="selected" >
-        <mt-tab-container-item id="1">
-             <mt-navbar v-model="first_act" class="second_nav" v-show = "show">
-              <mt-tab-item id="1">全部订单</mt-tab-item>
-              <mt-tab-item id="2">待确认</mt-tab-item>
-              <mt-tab-item id="3">待付款</mt-tab-item>
-              <mt-tab-item id="4">待发货</mt-tab-item>
-              <mt-tab-item id="5">待收货</mt-tab-item>
-              <mt-tab-item id="6">已完成</mt-tab-item>
-              <mt-tab-item id="7">已取消</mt-tab-item>
-            </mt-navbar>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="2">
-             <mt-navbar v-model="second_act" class="second_nav" v-show ="!show">
-              <mt-tab-item id="1">订单</mt-tab-item>
-              <mt-tab-item id="2">待确认</mt-tab-item>
-              <mt-tab-item id="3">待付款</mt-tab-item>
-              <mt-tab-item id="4">待发货</mt-tab-item>
-              <mt-tab-item id="5">待收货</mt-tab-item>
-              <mt-tab-item id="6">已完成</mt-tab-item>
-              <mt-tab-item id="7">已取消</mt-tab-item>
-            </mt-navbar>
-        </mt-tab-container-item>
-      </mt-tab-container>  -->
 
-      <mt-navbar v-model="first_act" class="second_nav" >
-              <mt-tab-item id="1"><div @click="allOrder">全部订单</div></mt-tab-item>
-              <mt-tab-item id="2"><div @click="tbcOrder">待确认</div></mt-tab-item>
-              <mt-tab-item id="3"><div @click="waitMoneyOrder">待付款</div></mt-tab-item>
-              <mt-tab-item id="4"><div @click="waitSendOrder">待发货</div></mt-tab-item>
-              <mt-tab-item id="5"><div @click="waitGetGoodOrder"></div>待收货</mt-tab-item>
-              <mt-tab-item id="6"><div @click="confirmOrder">已完成</div></mt-tab-item>
-              <mt-tab-item id="7"><div @click="cancelOrder">已取消</div></mt-tab-item>
+     <mt-navbar v-model="selected" class="second_nav">
+            <mt-tab-item :id="todo.id" v-for="todo in data">
+                     <div @click="allOrder(todo.back_id)">{{todo.name}}</div>
+            </mt-tab-item>
      </mt-navbar>
        <div class="bg_white">
                 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -106,10 +71,6 @@
                     </mt-loadmore>
                 </div>
                 </div>
-
-   
-         
-        
         
   </div>
 </template>
@@ -121,8 +82,9 @@ export default {
     data() {
             return {
                 more:'采购订单',
+                title:'销售订单',
             　　show:true,
-                selected:"1",
+                selected:"",
                 first_act:'1',
                 second_act:'2',
                 todos: [{
@@ -141,8 +103,43 @@ export default {
                 allLoaded: false,
                 bottomStatus: '',
                 type:'1',
-                orderstatus:'0'
-
+                orderstatus:'0',
+                data:[{
+                    id:1,
+                    name:'全部订单',
+                    back_id:0,
+                    
+                },{
+                    id:2,
+                    name:'待确认',
+                    back_id:10,
+                    
+                },{
+                    id:3,
+                    name:'待付款',
+                    back_id:20,
+                    
+                },{
+                    id:4,
+                    name:'待发货',
+                    back_id:40,
+                    
+                },{
+                    id:5,
+                    name:'待收货',
+                    back_id:50,
+                    
+                },{
+                    id:6,
+                    name:'已完成',
+                    back_id:60,
+                    
+                },{
+                    id:7,
+                    name:'已取消',
+                    back_id:-1,
+                    
+                }]
             }
         },
         components: {
@@ -165,14 +162,16 @@ export default {
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.myResource(url,body,function(suc){
                     common.$emit('close-load');
-                    console.log(suc)
-                    let listArr = suc.data.biz_result.list;
-                    
-                    
-                    _self.todos = listArr;
-                     
+                    if(suc.data.code == '1c01'){
+                         let listArr = suc.data.biz_result.list;              
+                         _self.todos = listArr;
+                         console.log(suc);
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }             
                   },function(err){
                     common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
                   })
             },
             tabOrder(){
@@ -180,42 +179,21 @@ export default {
                     this.show = !this.show;
                     if(this.show == true){
                         _self.more = '采购订单';
+                        _self.title = '销售订单';
                         _self.type = '0';
                         _self.getHttp(_self.orderstatus,0);
                     }else{
                         _self.more = '销售订单';
+                        _self.title = '采购订单';
                         _self.type = '1';
                         _self.getHttp(_self.orderstatus,1);
                     }
             },
-            allOrder(){
-                console.log(this.type)
-                this.getHttp(0,this.type);
-                this.orderstatus = 0;
-            },
-            tbcOrder(){
-                this.getHttp(10,this.type);
-                this.orderstatus = 10;
-            },
-            waitMoneyOrder(){
-                this.getHttp(20,this.type);
-                this.orderstatus = 20;
-            },
-            waitSendOrder(){
-                this.getHttp(40,this.type);
-                this.orderstatus = 40;
-            },
-            waitGetGoodOrder(){
-                this.getHttp(50,this.type);
-                this.orderstatus = 50;
-            },
-            confirmOrder(){
-                this.getHttp(60,this.type);
-                this.orderstatus = 60;
-            },
-            cancelOrder(){
-                this.getHttp(-1,this.type);
-                this.orderstatus = -1;
+            allOrder(id){
+                
+                this.getHttp(id,this.type);
+                this.orderstatus = id;
+                
             },
             
             jump:function(id,no){
@@ -255,16 +233,12 @@ export default {
         },
         created() {
            
-           /* common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
-
+                  let _self = this;
                   this.getHttp(0,1);
+                  common.$on('mineToOrder',function (index){
+
+                       _self.allOrder(_self.data[index].back_id);
+                  });
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -316,30 +290,12 @@ export default {
 
 .low_price {}
 
-/*.my_order .select_box{
-    border-bottom: 1px solid #DFDFDF;
-    font-size: 2.5rem;
-    background-color: white;
-    padding: 1rem;
-}
-.my_order .select_box .first_nav{
-    width: 70%;
-    margin-left: 15%;
-}
-.my_order .select_box .first_nav .mint-tab-item{
-    padding: 1.2rem 0;
-    line-height: 0 !important;
-    border: 1px solid #FA6705;
-}
 
-.my_order .select_box .first_nav .mint-tab-item.is-selected{
-    background-color: #FA6705;
-    color: white;
-    margin: 0;
-} */
-
+.my_order .mint-header-title{
+    /*color:#FA6705;*/
+}
 .my_order .right_text{
-    
+    color:#333333;
     font-size: 1.2rem;
     padding-left: 2rem;
     background: url(/static/images/tab.png) no-repeat left center;

@@ -121,40 +121,7 @@ export default {
                     common.$emit('message', err.data.msg);
                   })
             },
-            /*ReviseHttp(id){
-                let _self = this;
-                httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) { 
-                            console.log(suc);
-                            let result = suc.data.biz_result;
-                            _self.obj.drug_name = result.breedName;
-                            _self.obj.spec = result.spec;
-                            _self.obj.place = result.location;
-                            _self.obj.number = result.number;
-                            _self.obj.number_unit = result.unit;
-                            _self.obj.sales_price = result.price;
-                            _self.obj.weight = result.sampleNumber;
-                            _self.obj.price = result.sampleAmount;
-                            _self.obj.where = result.address;
-                            _self.obj.judge = result.sampling;
-                            _self.obj.selling_point = result.description;
-                            _self.obj.name = result.customerName;
-                            _self.obj.phone = result.customerPhone;
-                            _self.obj.imgArr = result.image;
-                            
-                          
-                            
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-            },*/
+            
             getId(param){
                  let _self = this;
                   

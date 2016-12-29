@@ -77,11 +77,16 @@ export default {
                       body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                       httpService.queryEmployeeInfo(url,body,function(suc){
                         common.$emit('close-load');
-                       
+                        if(suc.data.code == "1c01"){
+                             common.$emit('message', suc.data.msg);
+                        }else{
+                             common.$emit('message', suc.data.msg);
+                        }
                         
                         
                       },function(err){
                         common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
                       })
 
                      /*common.$emit('show-load');

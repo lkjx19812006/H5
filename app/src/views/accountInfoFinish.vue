@@ -212,46 +212,11 @@ export default {
   created(){
           let _self = this;
           
-          common.$emit('show-load');
-          let url=common.addSID(common.urlCommon+common.apiUrl.most);
-          let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
-          console.log(common.difTime);
-          body.time=Date.parse(new Date())+parseInt(common.difTime);
-          body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-          httpService.queryUserInfo(url,body,function(suc){
-            common.$emit('close-load');
+          _self.getHttp();
               
-              
-              let birthday = JSON.stringify(_self.pickerValue);
-              birthday = birthday.substring(1,11);
-              birthday = new Date(birthday).getTime() + (24*3600*1000);
-              birthday = JSON.stringify(new Date(birthday));
-              birthday = birthday.substring(1,11);
-              _self.birthday = birthday;
-              let gender = suc.data.biz_result.gender;
-
-              
-              
-              
-            _self.arr.name = suc.data.biz_result.name;
-            _self.pickerValue = _self.birthday;
-            _self.arr.gender = gender;
-            _self.arr.phone = suc.data.biz_result.phone;
-            _self.arr.ucomment = suc.data.biz_result.ucomment;
-            
-            _self.arr.company = suc.data.biz_result.company;
-            _self.arr.companyShort = suc.data.biz_result.companyShort;
-            _self.arr.companyJob = suc.data.biz_result.companyJob;
-            _self.arr.bizMain = suc.data.biz_result.bizMain;
-            _self.arr.invoice = suc.data.biz_result.invoice;
-            _self.arr.ccomment = suc.data.biz_result.ccomment;
-            _self.param.url = suc.data.biz_result.avatar;
-            
-          },function(err){
-            common.$emit('close-load');
-          })
-              
-             
+          common.$on("informAccountFinish",function (item){
+                _self.getHttp();
+          });
  },
  watch: {
             pickerValue: function(newValue, oldValue) {
@@ -284,6 +249,44 @@ export default {
           this.$refs[picker].open();
           
       },
+      getHttp(){
+           let _self = this;
+          
+          common.$emit('show-load');
+          let url=common.addSID(common.urlCommon+common.apiUrl.most);
+          let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
+          console.log(common.difTime);
+          body.time=Date.parse(new Date())+parseInt(common.difTime);
+          body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+          httpService.queryUserInfo(url,body,function(suc){
+            common.$emit('close-load');
+              //对生日进行处理             
+              let birthday = JSON.stringify(_self.pickerValue);
+              birthday = birthday.substring(1,11);
+              birthday = new Date(birthday).getTime() + (24*3600*1000);
+              birthday = JSON.stringify(new Date(birthday));
+              birthday = birthday.substring(1,11);
+              _self.birthday = birthday;
+              let gender = suc.data.biz_result.gender;
+
+            _self.arr.name = suc.data.biz_result.name;
+            _self.pickerValue = _self.birthday;
+            _self.arr.gender = gender;
+            _self.arr.phone = suc.data.biz_result.phone;
+            _self.arr.ucomment = suc.data.biz_result.ucomment;
+            
+            _self.arr.company = suc.data.biz_result.company;
+            _self.arr.companyShort = suc.data.biz_result.companyShort;
+            _self.arr.companyJob = suc.data.biz_result.companyJob;
+            _self.arr.bizMain = suc.data.biz_result.bizMain;
+            _self.arr.invoice = suc.data.biz_result.invoice;
+            _self.arr.ccomment = suc.data.biz_result.ccomment;
+            _self.param.url = suc.data.biz_result.avatar;
+            /*common.$emit('setParam','accountPhoto',suc.data.biz_result.avatar)*/
+          },function(err){
+            common.$emit('close-load');
+          })
+      },
       
       upData(){
 
@@ -311,12 +314,17 @@ export default {
           body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
           httpService.queryUserInfo(url,body,function(suc){
             common.$emit('close-load');
+            if(suc.data.code == "1c01"){
+                 common.$emit("informAccountinfo","refurbish");
+                 common.$emit("toMine",_self.arr);
 
-            /*common.$emit('accountInfo',_self.arr);*/
-            
-            _self.$router.push('accountInfo');
+                 _self.$router.push('accountInfo');
+            }else{
+                 common.$emit('message', suc.data.msg);
+            }     
           },function(err){
             common.$emit('close-load');
+            common.$emit('message', suc.data.msg);
           })
       }
   }

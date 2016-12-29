@@ -58,8 +58,9 @@
                     </div>
                     <div class="good_number">
                         <p>交货地：</p>
-                        <div>
-                            <input type="text" placeholder="药材在哪里" v-model="obj.where"/>
+                        <div @click="selectPlace" class="select-address">
+                            <!-- <input type="text" placeholder="药材在哪里" v-model="obj.where"/> -->
+                            {{ obj.addressProvince }} {{ obj.addressCity }} {{obj.addressDistrict}}
                         </div>
                     </div>
                 </div>
@@ -125,16 +126,28 @@
                 <div class="confirm" @click="release()">确认发布</div>
             </mt-loadmore>
         </div>
+          <div class="address_outbox">
+                <div class="address_box" v-show="show">
+                    <mt-button type="primary" class="left-button" @click="cancel">取消</mt-button>
+                    <mt-button type="primary" class="right-button" @click="confirmIt">确定</mt-button>
+                    <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5" class="select-box"></mt-picker>
+                </div>
+          </div>
+           
     </div>
 </template>
 <script>
 import common from '../common/common.js'
-
+import areaJson from '../common/areaData'
 import imageUpload from '../components/tools/imageUpload'
 import httpService from '../common/httpService.js'
+
+const addressArr = ['北京市', '天津市', '河北省', '山西省', '内蒙古自治区', '辽宁省', '吉林省', '黑龙江省', '上海市', '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省', '河南省', '湖北省', '湖南省', '广东省', '广西壮族自治区', '海南省', '重庆市', '四川省', '贵州省', '云南省', '西藏自治区', '陕西省', '甘肃省', '青海省', '宁夏回族自治区', '新疆维吾尔族自治区'];
+
 export default {
     data() {
             return {
+                show: false,
                 isA:true,
                 isB:false,
                 judge:0,
@@ -153,7 +166,10 @@ export default {
                     selling_point:'',
                     name:'',
                     phone:'',
-                    duedate:'30'
+                    duedate:'30',
+                    addressProvince: '',
+                    addressCity: '',
+                    addressDistrict: ''
 
                 },
                 imgArr:['','','',''],
@@ -186,11 +202,91 @@ export default {
                     index:3,
                     url:''
                 }],
-                pickerValue: '1'
+                pickerValue: '1',
+                areaParam: {
+                    addressProvince: '北京市',
+                    addressCity: '北京市',
+                    addressDistrict: '东城区'
+                },
+                addressSlots: [{
+                    flex: 1,
+                    values: addressArr,
+                    className: 'slot1',
+                    textAlign: 'center'
+                }, {
+                    divider: true,
+                    content: '-',
+                    className: 'slot2'
+                }, {
+                    flex: 1,
+                    values: ['北京市'],
+                    className: 'slot3',
+                    textAlign: 'center'
+                }, {
+                    divider: true,
+                    content: '-',
+                    className: 'slot4'
+                }, {
+                    flex: 1,
+                    values: ['东城区', '西城区', '朝阳区', '丰台区', '石景山区', '海淀区', '门头沟区', '房山区', '通州区', '顺义区', '昌平区', '大兴区', '怀柔区', '平谷区', '密云区', '延庆区'],
+                    className: 'slot5',
+                    textAlign: 'center'
+                }],
 
             }
         },
         methods: {
+            onAddressChange(picker, values) {
+                let cityArr = [];
+                let districtArr = [];
+                let provinceId;
+                let cityId = '';
+                if (this.obj.addressProvince != values[0]) {
+                    for (var i = 0; i < areaJson.province.length; i++) {
+                        if (values[0] == areaJson.province[i].value) {
+                            provinceId = areaJson.province[i].id;
+                        }
+                    }
+                    for (var i = 0; i < areaJson.city.length; i++) {
+                        if (areaJson.city[i].parentId == provinceId) {
+                            if (!cityId) cityId = areaJson.city[i].id;
+                            cityArr.push(areaJson.city[i].value);
+                        }
+                    }
+                } else if (this.obj.addressCity != values[1]) {
+                    for (var i = 0; i < areaJson.city.length; i++) {
+                        if (areaJson.city[i].value == values[1]) {
+                            cityId = areaJson.city[i].id;
+                        }
+                    }
+
+                }
+                if (cityId) {
+                    for (var i = 0; i < areaJson.county.length; i++) {
+                        if (areaJson.county[i].parentId == cityId) {
+                            districtArr.push(areaJson.county[i].value);
+                        }
+                    }
+                }
+                if (cityArr.length > 0) picker.setSlotValues(1, cityArr);
+                if (districtArr.length > 0) picker.setSlotValues(2, districtArr);
+                this.areaParam.addressProvince = values[0];
+                this.areaParam.addressCity = values[1];
+                this.areaParam.addressDistrict = values[2];
+               
+            },
+            selectPlace() {
+                this.show = true;
+            },
+            cancel() {
+                this.show = false;
+            },
+            confirmIt() {
+                this.obj.addressProvince = this.areaParam.addressProvince;
+                this.obj.addressCity = this.areaParam.addressCity;
+                this.obj.addressDistrict = this.areaParam.addressDistrict;
+                this.show = false;
+            },
             judgeTrue(){
                  this.judge = 1; 
                  this.isA = !this.isA;
@@ -223,7 +319,7 @@ export default {
                          sampleNumber:_self.obj.weight,
                          sampleAmount:_self.obj.price,
                          duedate:_self.obj.duedate,
-                         breedId:"-1",
+                         breedId:"2",
                          unit:_self.obj.number_unit
                         
                   }};
@@ -233,12 +329,20 @@ export default {
                   httpService.supplyRelease(url,body,function(suc){
                     common.$emit('close-load');
                     console.log(suc);
-                    /*let id = suc.data.biz_result.id;*/
-                    common.$emit('informMyRes','refurbish');
-                    _self.$router.push("myResource")
+                    if(suc.data.code == '1c01'){
+                        /*let id = suc.data.biz_result.id;*/
+                        common.$emit('message', suc.data.msg);
+                        common.$emit('informMyRes','refurbish');
+                        let id = suc.data.biz_result.intentionId;
+                        common.$emit('informSupplySuccess',id);
+                        _self.$router.push("supplyReleaseSuccess" + '/' + id);
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
                   },function(err){
                     common.$emit('close-load');
-                    common.$emit()
+                    common.$emit('message', err.data.msg);
                   })
 
             },
@@ -412,6 +516,10 @@ textarea {
     text-align: center;
     padding-left:10px;
 }
+.supply_release .good_number .select-address{
+    font-size: 1.024rem;
+    color:#666666; 
+}
 .supply_release .good_place select {
     background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
     background-size: 1.067rem 1.067rem;
@@ -557,5 +665,33 @@ textarea {
     font-size: 1rem;
     color:#333333;
     padding-top: 1rem;
+}
+.supply_release .address_outbox{
+    position: fixed;
+    bottom: 0;
+    background: white;
+    width:100%;
+}
+.supply_release .address_box{
+    position: relative;
+    background: white;
+    padding-top: 4rem;
+}
+.supply_release .address_box .left-button {
+    position: absolute;
+    left: 10%;
+    top: 1rem;
+    width: 60px;
+    height: 30px;
+    font-size: 16px;
+}
+
+.supply_release .address_box .right-button {
+    position: absolute;
+    right: 10%;
+    top: 1rem;
+    width: 60px;
+    height: 30px;
+    font-size: 16px;
 }
 </style>

@@ -107,7 +107,22 @@ export default {
  created(){
 
       //用户信息
-          let _self = this;
+           let _self = this;
+           _self.getHttp();
+
+           common.$on("informAccountinfo",function (item){
+                _self.getHttp();
+           })
+  
+
+ },
+ methods:{
+      jumpPersonal(){
+
+           this.$router.push("certification");
+      },
+      getHttp(){
+           let _self = this;
           common.$emit('show-load');
           let url=common.addSID(common.urlCommon+common.apiUrl.most);
           let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
@@ -138,49 +153,10 @@ export default {
           },function(err){
             common.$emit('close-load');
           })
-
-  //来自编辑完成页面传值
-          /*common.$on('accountInfo',function (obj){
-                 console.log(obj.gender)
-                
-                  console.log(obj.gender)
-               let birthday = obj.birthday;
-                   birthday = JSON.stringify(new Date(birthday));
-                   birthday = birthday.substring(1,11);
-                   
-                  _self.personalDataArr[0].content = obj.name;
-                  _self.personalDataArr[1].content = obj.birthday;
-                  _self.personalDataArr[2].content = obj.gender;
-                  _self.personalDataArr[3].content = obj.phone;
-                  _self.personalDataArr[4].content = obj.ucomment;
-                  
-                  _self.companyDataArr[0].content = obj.company;
-                  _self.companyDataArr[1].content = obj.companyShort;
-                  _self.companyDataArr[2].content = obj.companyJob;
-                  _self.companyDataArr[3].content = obj.bizMain;
-                  _self.companyDataArr[4].content = obj.invoice;
-                  _self.companyDataArr[5].content = obj.ccomment;
-                  _self.url = obj.url;
-
-                  _self.obj.name = obj.name;
-                  _self.obj.phone = obj.phone;
-                  _self.obj.gender = obj.gender;
-                
-          })*/
-
-     //认证查询
-          
-
- },
- methods:{
-      jumpPersonal(){
-
-           this.$router.push("certification");
       },
-      
       upData:function(router){
            /*common.$emit("post-my-info",this.url);*/
-           
+           common.$emit("informAccountFinish","refurbish");
            this.$router.push(router);
            
         

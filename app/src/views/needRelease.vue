@@ -123,7 +123,7 @@ export default {
                          customerName:_self.obj.name,
                          customerPhone:_self.obj.phone,
                          duedate:_self.obj.duedate,
-                         breedId:"-1",
+                         breedId:"2",
                          unit:_self.obj.number_unit,
                         
                   }};
@@ -136,7 +136,9 @@ export default {
                         //发布成功的时候
                         common.$emit('message', suc.data.msg);
                         common.$emit('informMyPurchase','refurbish');
-                        _self.$router.push("myPurchase")
+                        let id = suc.data.biz_result.intentionId;
+                        common.$emit('informNeedSuccess',id);
+                        _self.$router.push("needReleaseSuccess" + '/' + id);
                     }else{
                         common.$emit('message', suc.data.msg);
                     }

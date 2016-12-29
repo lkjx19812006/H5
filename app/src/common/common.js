@@ -31,7 +31,8 @@ let common = new Vue({
            postAddressObj:'',
            resourceId:'',
            Needrelease:'',
-           backAddress:''
+           backAddress:'',
+           
 
         }
     },
@@ -107,11 +108,17 @@ common.$on('message', message => {
 common.$on('confirm',(message, title) => {
     MessageBox.confirm(message, title).then(action =>{
            console.log(1111);
-    }).then(action => {
+    },action =>{
            console.log(2222);
     })
 })
 
+
+/*this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (response) => {
+                err(response);
+            });*/
 
 
 common.$on('setParam',(key,value) => {

@@ -70,7 +70,7 @@ export default {
         },
         created(){
           let _self = this;
-            common.$on('post-no',function(no){
+                common.$on('post-no',function(no){
                   _self.no = no;
                   
                  common.$emit('show-load');
