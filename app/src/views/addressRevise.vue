@@ -218,15 +218,7 @@ export default {
                     common.$emit('message', err.data.msg);
                   })
 
-                    if (suc.data.code == '1c01') {
-                        common.$emit('reviseAAddress', 'refurbish');
-                        window.history.go(-1);
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                })
+                   
             }
         },
         created() {
