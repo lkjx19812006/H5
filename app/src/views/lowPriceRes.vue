@@ -155,7 +155,16 @@ export default {
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
-                show:''
+                show:'',
+                httpPraram: {
+                    time: 0,
+                    price: 0,
+                    sample: '',
+                    location: [],
+                    keyword: '',
+                    page: 1,
+                    pageSize: 20
+                }
             }
         },
         components: {
@@ -164,18 +173,22 @@ export default {
         },
         
         methods: {
-            getHttp(word,shelve_time,price,sampling){
+            getHttp(back){
                  let _self = this;
                  httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'querySupplyList',
               
                             biz_param: {
-                                keyWord: word,
-                                sort:{"shelve_time":shelve_time,"price":price}, 
-                                sampling:sampling,
-                                pn:1,
-                                pSize:20
+                                keyWord: _self.httpPraram.keyword,
+                                sort:{
+                                    "shelve_time":_self.httpPraram.time,
+                                    "price":_self.httpPraram.price
+                                }, 
+                                sampling:_self.httpPraram.sample,
+                                pn:_self.httpPraram.page,
+                                pSize:_self.httpPraram.pageSize,
+                                location: _self.httpPraram.location
                             }
                         }, function(suc) {
                             console.log(suc)

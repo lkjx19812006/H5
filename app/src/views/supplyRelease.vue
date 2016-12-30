@@ -1,11 +1,13 @@
 <template>
-    <div class="whole supply_release">
+    <div class="supply_release">
         <mt-header fixed title="资源发布">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <div class="page-loadmore-wrapper">
+
+        <div class="whole">
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
             <mt-loadmore>
                 <div class="good_information">
                     <p class="good_infor_header">货物基本信息</p>
@@ -125,7 +127,7 @@
                 </div>
                 <div class="confirm" @click="release()">确认发布</div>
             </mt-loadmore>
-        </div>
+        </div>   
           <div class="address_outbox">
                 <div class="address_box" v-show="show">
                     <mt-button type="primary" class="left-button" @click="cancel">取消</mt-button>
@@ -133,7 +135,7 @@
                     <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5" class="select-box"></mt-picker>
                 </div>
           </div>
-           
+        </div>
     </div>
 </template>
 <script>
@@ -167,9 +169,9 @@ export default {
                     name:'',
                     phone:'',
                     duedate:'30',
-                    addressProvince: '',
-                    addressCity: '',
-                    addressDistrict: ''
+                    addressProvince: '北京市',
+                    addressCity: '北京市',
+                    addressDistrict: '东城区'
 
                 },
                 imgArr:['','','',''],
@@ -309,7 +311,7 @@ export default {
                          location:_self.obj.place,
                          number:_self.obj.number,
                          price:_self.obj.sales_price,
-                         address:_self.obj.where,
+                         address:_self.obj.addressProvince + ' ' + _self.obj.addressCity + ' ' + _self.obj.addressDistrict,
                          sampling:_self.judge,
                          description:_self.obj.selling_point,
                          customerName:_self.obj.name,
@@ -413,6 +415,10 @@ export default {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
             });*/
+        },
+        mounted() {
+
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -422,7 +428,9 @@ export default {
     background: #F1EFEF;
 }
 
-.supply_release {}
+.supply_release {
+    
+}
 
 input[type="text"],
 input[type="submit"],
@@ -519,6 +527,8 @@ textarea {
 .supply_release .good_number .select-address{
     font-size: 1.024rem;
     color:#666666; 
+    line-height: 2.9rem;
+    overflow: hidden;
 }
 .supply_release .good_place select {
     background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;

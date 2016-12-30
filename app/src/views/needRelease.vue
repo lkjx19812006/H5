@@ -1,84 +1,88 @@
 <template>
-    <div class="whole need_release">
+    <div class="need_release">
         <mt-header fixed title="求购发布">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <div class="page-loadmore-wrapper"  >
-            <mt-loadmore >
-                <div class="good_information">
-                    <p class="good_infor_header">求购货物信息</p>
-                    <div class="good_name">
-                        <p>产品：</p>
-                        <div>
-                            <div class="select" @click="jumpSearch('search')">
-                                <!-- <p>请填写你需要的药材名称</p> -->
-                                <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
+
+        <div class="whole">
+            <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore >
+                    <div class="good_information">
+                        <p class="good_infor_header">求购货物信息</p>
+                        <div class="good_name">
+                            <p>产品：</p>
+                            <div>
+                                <div class="select" @click="jumpSearch('search')">
+                                    <!-- <p>请填写你需要的药材名称</p> -->
+                                    <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="good_spec">
+                            <p>规格：</p>
+                            <div>
+                                <select v-model="obj.spec">
+                                    <option>非统货</option>>
+                                    <option>统货</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="good_place">
+                            <p>产地：</p>
+                            <div>
+                                <select v-model="obj.place">
+                                    <option>上海</option>
+                                    <option>北京</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="good_number">
+                            <p>数量：</p>
+                            <div>
+                                <input type="text" placeholder="你需要的药材数量" v-model="obj.number"/>
+                                <p>
+                                    <select v-model="obj.number_unit" class="number_unit">
+                                       <option>kg</option>
+                                       <option>g</option>
+                                    </select>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="good_number">
+                            <p>求购有效期：</p>
+                            <div>
+                                <input type="number" placeholder="30" v-model="obj.duedate"/>
+                                <p>天</p>
                             </div>
                         </div>
                     </div>
-                    <div class="good_spec">
-                        <p>规格：</p>
-                        <div>
-                            <select v-model="obj.spec">
-                                <option>非统货</option>>
-                                <option>统货</option>
-                            </select>
+                    <div class="remarks">
+                        <p class="remarks_header">求购货物信息</p>
+                        <div class="remarks_content">
+                            <textarea placeholder="请根据实际情况填写药材资源卖点" v-model="obj.selling_point"></textarea>
                         </div>
                     </div>
-                    <div class="good_place">
-                        <p>产地：</p>
-                        <div>
-                            <select v-model="obj.place">
-                                <option>上海</option>
-                                <option>北京</option>
-                            </select>
+                    <div class="contact">
+                        <p class="contact_header">联系方式</p>
+                        <div class="contact_name">
+                            <P>姓名：</P>
+                            <div>
+                                <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
+                            </div>
+                        </div>
+                        <div class="contact_phone">
+                            <P>手机：</P>
+                            <div>
+                                <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
+                            </div>
                         </div>
                     </div>
-                    <div class="good_number">
-                        <p>数量：</p>
-                        <div>
-                            <input type="text" placeholder="你需要的药材数量" v-model="obj.number"/>
-                            <p>
-                                <select v-model="obj.number_unit" class="number_unit">
-                                   <option>kg</option>
-                                   <option>g</option>
-                                </select>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="good_number">
-                        <p>求购有效期：</p>
-                        <div>
-                            <input type="number" placeholder="30" v-model="obj.duedate"/>
-                            <p>天</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="remarks">
-                    <p class="remarks_header">求购货物信息</p>
-                    <div class="remarks_content">
-                        <textarea placeholder="请根据实际情况填写药材资源卖点" v-model="obj.selling_point"></textarea>
-                    </div>
-                </div>
-                <div class="contact">
-                    <p class="contact_header">联系方式</p>
-                    <div class="contact_name">
-                        <P>姓名：</P>
-                        <div>
-                            <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
-                        </div>
-                    </div>
-                    <div class="contact_phone">
-                        <P>手机：</P>
-                        <div>
-                            <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
-                        </div>
-                    </div>
-                </div>
-                <div class="confirm" @click="release()">确认发布</div>
-            </mt-loadmore>
+                    <div class="confirm" @click="release()">确认发布</div>
+                </mt-loadmore>
+            </div>
+
         </div>
     </div>
 </template>
@@ -165,6 +169,10 @@ export default {
                    _self.obj.drug_name = item;
                    console.log(item)
              });
+        },
+        mounted() {
+
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
