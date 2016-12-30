@@ -187,7 +187,7 @@ export default {
             common.$on("Needrelease", function(item) {
                 _self.getBreedInformation(item.id);
                 _self.obj.drug_name = item.keyWord;
-                _self.obj.id = item.id;
+                _self.obj.breedId = item.id;
             });
         }
 }

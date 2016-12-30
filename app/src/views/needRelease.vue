@@ -56,7 +56,7 @@ export default {
                     name: '',
                     phone: '',
                     duedate: '',
-                    id: ''
+                    breedId: ''
                 }
             }
         },
@@ -105,7 +105,7 @@ export default {
                         customerName: _self.obj.name,
                         customerPhone: _self.obj.phone,
                         duedate: _self.obj.duedate,
-                        breedId: _self.obj.id,
+                        breedId: _self.obj.breedId,
                         unit: _self.obj.number_unit,
                     }
                 };
