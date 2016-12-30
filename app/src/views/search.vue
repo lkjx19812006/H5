@@ -14,7 +14,7 @@
                         热门搜索
                     </div>
                     <div class="history_search_content_result_detail">
-                        <button class="mint-button mint-button--default mint-button--small" v-for="item in todos" v-on:click="jumpRes(item.keyWord)">{{item.keyWord}}</button>
+                        <button class="mint-button mint-button--default mint-button--small" v-for="item in todos" v-on:click="jumpRes(item)">{{item.keyWord}}</button>
                     </div>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                         历史搜索
                     </div>
                     <div class="history_search_content_result_detail" v-show="historyArr.length>0">
-                        <button class="mint-button mint-button--default mint-button--small" v-for="item in historyArr">{{item.name}}</button>
+                        <button class="mint-button mint-button--default mint-button--small" v-for="item in historyArr" v-on:click="jumpRes(item)">{{item.name}}</button>
                         <div class="clear_result">
                             <div class="click_district" @click="clearResult()"><img src="/static/icons/resource.png"><span>清空历史搜索</span></div>
                         </div>
@@ -39,7 +39,7 @@
             <div class="search_result">
                 <ul class="page-loadmore-list">
                     <li v-for="todo in datas" class="page-loadmore-listitem list_content_item">
-                        <div @click="jumpRes(todo.keyWord)">
+                        <div @click="jumpRes(todo)">
                             <img src="/static/icons/search.png">
                             <p>{{todo.keyWord}}</p>
                         </div>
@@ -91,7 +91,6 @@ export default {
                     "time": "12:26"
                 }]
             }
-
         },
         methods: {
             back: function() {
@@ -107,7 +106,6 @@ export default {
                     common.$emit("lowPriceRes", item);
                     _self.$router.push(common.pageParam.router);
                 } else if (common.pageParam.router == 'urgentNeed') {
-                    console.log(111111)
                     common.$emit("setParam", 'Urgentneed', item);
                     common.$emit("Urgentneed", item);
                     _self.$router.push(common.pageParam.router);
@@ -130,7 +128,6 @@ export default {
                     common.$emit("revResource", item);
                     history.go(-1);
                 }else if(common.pageParam.router == 'needRelease'){
-                     /*common.$emit("setParam","Needrelease",item);*/
                      common.$emit("Needrelease",item);
                      history.go(-1);
                 }else if(common.pageParam.router == 'revisePurchase'){

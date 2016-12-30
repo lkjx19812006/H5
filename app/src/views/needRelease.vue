@@ -5,61 +5,12 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-
         <div class="whole">
-            <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore >
-                    <div class="good_information">
-                        <p class="good_infor_header">求购货物信息</p>
-                        <div class="good_name">
-                            <p>产品：</p>
-                            <div>
-                                <div class="select" @click="jumpSearch('search')">
-                                    <!-- <p>请填写你需要的药材名称</p> -->
-                                    <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="good_spec">
-                            <p>规格：</p>
-                            <div>
-                                <select v-model="obj.spec">
-                                    <option>非统货</option>>
-                                    <option>统货</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="good_place">
-                            <p>产地：</p>
-                            <div>
-                                <select v-model="obj.place">
-                                    <option>上海</option>
-                                    <option>北京</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="good_number">
-                            <p>数量：</p>
-                            <div>
-                                <input type="text" placeholder="你需要的药材数量" v-model="obj.number"/>
-                                <p>
-                                    <select v-model="obj.number_unit" class="number_unit">
-                                       <option>kg</option>
-                                       <option>g</option>
-                                    </select>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="good_number">
-                            <p>求购有效期：</p>
-                            <div>
-                                <input type="number" placeholder="30" v-model="obj.duedate"/>
-                                <p>天</p>
-                            </div>
-                        </div>
-                    </div>
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                <druginformation :obj="obj"> </druginformation>
                     <div class="remarks">
-                        <p class="remarks_header">求购货物信息</p>
+                        <p class="remarks_header">备注</p>
                         <div class="remarks_content">
                             <textarea placeholder="请根据实际情况填写药材资源卖点" v-model="obj.selling_point"></textarea>
                         </div>
@@ -82,96 +33,106 @@
                     <div class="confirm" @click="release()">确认发布</div>
                 </mt-loadmore>
             </div>
-
         </div>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
-import imageUpload from '../components/tools/imageUpload'
+import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import druginformation from '../components/tools/purchaseGoodInformation'
 export default {
     data() {
             return {
-                router:'search',
+                router: 'search',
                 selected: '1',
-                obj:{
-                    drug_name:'',
-                    spec:'',
-                    place:'',
-                    number:'',
-                    number_unit:'kg',
-                    selling_point:'',
-                    name:'',
-                    phone:'',
-                    duedate:'',
-                    id:''
-
-                },
+                obj: {
+                    drug_name: '',
+                    spec: '',
+                    place: '',
+                    number: '',
+                    number_unit: 'kg',
+                    selling_point: '',
+                    name: '',
+                    phone: '',
+                    duedate: '',
+                    id: ''
+                }
             }
+        },
+        components: {
+            druginformation
         },
         methods: {
             release() {
-                
+                var checkArr = [];
                 let _self = this;
-                  console.log(_self.obj.number_unit)
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon + common.apiUrl.most);
-                  let body={biz_module:'intentionService',biz_method:'editBegBuyInfo',version:1,time:0,sign:'',biz_param:{
-                         customerId:"",
-                         breedName:_self.obj.drug_name,
-                         spec:_self.obj.spec,
-                         location:_self.obj.place,
-                         number:_self.obj.number,
-                         description:_self.obj.selling_point,
-                         customerName:_self.obj.name,
-                         customerPhone:_self.obj.phone,
-                         duedate:_self.obj.duedate,
-                         breedId:"2",
-                         unit:_self.obj.number_unit,
-                        
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.needRelease(url,body,function(suc){
+                let checkBreedId = validation.checkNull(_self.obj.id, '请先选择品种！');
+                checkArr.push(checkBreedId);
+                let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格！');
+                checkArr.push(checkBreedSpec);
+                let checkBreedPlace = validation.checkNull(_self.obj.place, '请输入产地！');
+                checkArr.push(checkBreedPlace);
+                let checkNumber = validation.checkNull(_self.obj.number,'请输入数量');
+                checkArr.push(checkNumber);
+                let checkDuedate = validation.checkNull(_self.obj.duedate,'请输入求购有效期');
+                checkArr.push(checkDuedate);
+                let checkName = validation.checkNull(_self.obj.name,'请输入姓名');
+                checkArr.push(checkPhone);
+                let checkPhone = validation.checkPhone(_self.obj.phone);
+                checkArr.push(checkPhone);
+                for (var i = 0; i < checkArr.length; i++) {
+                    if (checkArr[i]) {
+                        common.$emit('message', checkArr[i]);
+                        return;
+                    }
+                }
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'editBegBuyInfo',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+                        customerId: common.customerId,
+                        breedName: _self.obj.drug_name,
+                        spec: _self.obj.spec,
+                        location: _self.obj.place,
+                        number: _self.obj.number,
+                        description: _self.obj.selling_point,
+                        customerName: _self.obj.name,
+                        customerPhone: _self.obj.phone,
+                        duedate: _self.obj.duedate,
+                        breedId: _self.obj.id,
+                        unit: _self.obj.number_unit,
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.needRelease(url, body, function(suc) {
                     common.$emit('close-load');
-                    if (suc.data.code == '1c01'){
-                        //发布成功的时候
+                    if (suc.data.code == '1c01') {
                         common.$emit('message', suc.data.msg);
-                        common.$emit('informMyPurchase','refurbish');
+                        common.$emit('informMyPurchase', 'refurbish');
                         let id = suc.data.biz_result.intentionId;
-                        common.$emit('informNeedSuccess',id);
+                        common.$emit('informNeedSuccess', id);
                         _self.$router.push("needReleaseSuccess" + '/' + id);
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                  
-                    
-                  },function(err){
+                }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
-                  })
+                })
             },
-            jump(router){
-
-                this.$router.push(router);
-            },
-            jumpSearch(router){
-                common.$emit("setParam","router","needRelease");
+           
+            jump(router) {
                 this.$router.push(router);
             }
-
-        },
-        created() {
-             let _self = this;
-             common.$on("Needrelease",function (item){
-                   _self.obj.drug_name = item;
-                   console.log(item)
-             });
         },
         mounted() {
-
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
@@ -182,16 +143,9 @@ export default {
     background: #F1EFEF;
 }
 
-.need_release{}
+.need_release {}
 
-input[type="text"],
-input[type="submit"],
-input[type="reset"],
-select,
-textarea {
-    -webkit-appearance: none;
-    border-radius: 0;
-}
+
 
 .need_release .mint-header {
     background-color: white;
@@ -205,7 +159,6 @@ textarea {
     padding: 1.28rem;
     margin-bottom: 0.8533rem;
     background: white;
-
 }
 
 .need_release .good_information {
@@ -218,7 +171,7 @@ textarea {
 }
 
 .need_release .good_infor_header {
-    background: url('../../static/images/information.png') no-repeat 0 center;
+    background: url('/static/images/information.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
 }
 
@@ -231,15 +184,16 @@ textarea {
     padding-left: 1.536rem;
 }
 
+.need_release .remarks .remarks_header {
+    background: url('/static/images/remarks.png') no-repeat 0 center;
+    background-size: 1.11rem 1.11rem;
+}
 
-.need_release .remarks .remarks_header{
-    background:url('../../static/images/remarks.png') no-repeat 0 center;
-    background-size:1.11rem 1.11rem;
+.need_release .contact .contact_header {
+    background: url('/static/images/contact.png') no-repeat 0 center;
+    background-size: 1.11rem 1.11rem;
 }
-.need_release .contact .contact_header{
-    background:url('../../static/images/contact.png') no-repeat 0 center;
-    background-size:1.11rem 1.11rem;
-}
+
 .need_release .good_name,
 .good_spec,
 .good_place,
@@ -250,14 +204,20 @@ textarea {
     margin-top: 0.8533rem;
 }
 
+.need_release .good_number div p img {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
 .need_release .good_place select {
-    background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
+    background: url('/static/images/drop-down.png') no-repeat 13.3rem center;
     background-size: 1.067rem 1.067rem;
     text-align: center;
 }
 
 .need_release .good_spec select {
-    background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
+    background: url('/static/images/drop-down.png') no-repeat 13.3rem center;
     background-size: 1.067rem 1.067rem;
     text-align: center;
 }
@@ -289,17 +249,15 @@ textarea {
     position: relative;
 }
 
-
-.need_release .good_number .number_unit{
-    width:100%;
-    height:100%;
+.need_release .good_number .number_unit {
+    width: 100%;
+    height: 100%;
     outline: none;
-    border:0;
-    float:left;
+    border: 0;
+    float: left;
     text-align: center;
-    padding-left:10px;
+    padding-left: 10px;
 }
-
 
 .need_release .good_name div .select,
 .good_spec div select,
@@ -314,21 +272,29 @@ textarea {
     border: 1px solid #D2D2D2;
 }
 
-/*.need_release .good_name div .select p {
+.need_release .select input {
+    font-size: 1.024rem;
     height: 2.9rem;
     width: 14.847rem;
     text-align: center;
-    font-size: 1.024rem;
-    color: #999999;
-}*/
-.need_release .good_name div .select input{
+    outline: none;
+    border: 1px solid #D2D2D2;
+}
+
+.need_release .alert_input {
+    width: 100% !important;
+    background-color: #fff;
+}
+
+.need_release .good_name div .select input {
     text-align: center;
     outline: none;
-    border:0;
-    height:100%;
-    width:100%;
+    border: 0;
+    height: 100%;
+    width: 100%;
     background: white;
 }
+
 .need_release .good_number div {
     height: 2.9rem;
     width: 14.847rem;
@@ -348,7 +314,7 @@ textarea {
 
 .need_release .good_number div p {
     height: 2.73rem;
-    width: 3.2rem;
+    width: 3.5rem;
     border-left: 1px solid #D2D2D2;
 }
 
@@ -367,6 +333,5 @@ textarea {
     font-size: 1.536rem;
     color: white;
     line-height: 4.267rem;
-    
 }
 </style>
