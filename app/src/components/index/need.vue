@@ -173,7 +173,21 @@ export default {
                         pn: _self.httpPraram.page,
                         pSize: _self.httpPraram.pageSize
                     }
-                }, function(suc) {
+                },  function(suc) {
+                    common.$emit('message', suc.data.msg);
+                    let result = suc.data.biz_result.list;
+                    for (var i = 0; i < result.length; i++) {
+                        _self.todos.push(result[i]);
+                    }
+                    if (back) {
+                        back();
+                    }
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                    if (back) {
+                        back();
+                    }
+                })/*function(suc) {
                     common.$emit('message', suc.data.msg);
                     let result = suc.data.biz_result.list;
                     for (var i = 0; i < result.length; i++) {
@@ -203,19 +217,19 @@ export default {
                     if (back) {
                         back();
                     }
-                })
+                })*/
             },
             getId(param) {
                 let _self = this;
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
                 _self.httpPraram[param.key] = param[param.key];
-                _self.getHttp()
+                _self.getHttp();
             },
             clearKeyword() {
+                let _self = this;
                 this.httpPraram.page = 1;
                 this.todos.splice(0, _self.todos.length);
-                this.httpPraram.keyword = '';
                 this.httpPraram.keyword = '';
                 this.getHttp();
             },

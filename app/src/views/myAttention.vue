@@ -9,7 +9,9 @@
            </mt-button>
 
         </mt-header>
-        <div @click="jumpSearch"><search-input></search-input></div>
+        <div @click="jumpSearch">
+            <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></search-input>
+        </div>
       
       
         
@@ -18,7 +20,7 @@
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                  
                     <ul class="page-loadmore-list" v-show="show">
-                        <li v-for="todo in resourceArr" class="page-loadmore-listitem list_content_item">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
                                 <img src="/static/images/1.jpg" class="list_images">
                                 <div class="res_content">
                                     <div class="res_content_center">
@@ -36,7 +38,7 @@
                         </ul>
                    
                     <ul class="page-loadmore-list_second" v-show="!show">
-                        <li v-for="todo in needArr" class="page-loadmore-listitem list_content_item">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
                             <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div>
                             <div class="center">
                                 <div class="title">
@@ -90,19 +92,18 @@ export default {
                 resourceArr:[],
                 needArr:[],
                 keyword:'',
-                todos: [{
-                    "breedName": "人参",
-                    "spec": "统货",
-                    "location": "东北",
-                    "price": "65",
-                    "phone": "15301546832",
-                    "time": "12:26"
-                }],
+                todos: [],
                 topStatus: '',
                 wrapperHeight: 0,
                 ttwrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
+                httpPraram: {
+                    keyword: '',
+                    intentionType: 1,
+                    page: 1,
+                    pageSize: 20
+                }
             }
         },
         components: {
@@ -114,22 +115,22 @@ export default {
                 common.$emit('setParam','router','myAttention')
                 this.$router.push('search');
             },
-            resorceHttp(key){
+            resorceHttp(back){
                   let _self = this;
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'intentionService',biz_method:'attentionIntentionList',version:1,time:0,sign:'',biz_param:{
-                        breedName:key,
-                        pn:"1",
-                        pSize:"20",
-                        intentionType:"1"
+                        breedName:_self.httpPraram.keyword,
+                        pn:_self.httpPraram.page,
+                        pSize:_self.httpPraram.pageSize,
+                        intentionType:_self.httpPraram.intentionType
                   }};
                   
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.myAttention(url,body,function(suc){
                     common.$emit('close-load');
-                    console.log(suc.data.biz_result.list);
+                    
                     let result = suc.data.biz_result.list;
                     for(var i=0;i<result.length;i++){
 
@@ -150,13 +151,25 @@ export default {
                         item.duedate = duedate;
                         item.pubdate = pubdate;
                     }
-                    _self.resourceArr = result;
-                    
+                    /*if(_self.httpPraram.intentionType == 1){
+                        _self.resourceArr = result;
+                    }else if(_self.httpPraram.intentionType == 0){
+                        _self.needArr = result;
+                    }*/
+                    _self.todos = result;
+                    if(back){
+                        back();
+                    }
+
+
                   },function(err){
-                    common.$emit('close-load');
+                      common.$emit('close-load');
+                         if(back){
+                            back();
+                        }
                   })
             },
-            needHttp(key){
+           /* needHttp(key){
                 let _self = this;
                 common.$emit('show-load');
                   let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
@@ -197,21 +210,28 @@ export default {
                   },function(err){
                     common.$emit('close-load');
                   })
-             },
+            },*/
+            clearKeyword() {
+                let _self = this;
+                this.httpPraram.page = 1;
+                this.todos.splice(0, _self.todos.length);
+                this.httpPraram.keyword = '';
+                this.resorceHttp();
+            },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
+                let _self = this;
                 setTimeout(() => {
-                    let lastValue = this.todos[0];
-                    if (this.todos.length <= 40) {
-                        for (let i = 1; i <= 10; i++) {
-                            this.todos.push(this.todos[0]);
-                        }
-                    } else {
+                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
+                    } else {
+                        this.httpPraram.page++;
+                        this.resorceHttp(function() {
+                            _self.$refs.loadmore.onBottomLoaded(id);
+                        });
                     }
-                    this.$refs.loadmore.onBottomLoaded(id);
                 }, 1500);
             },
 
@@ -219,12 +239,14 @@ export default {
                 this.topStatus = status;
             },
             loadTop(id) {
+                let _self = this;
                 setTimeout(() => {
-                    let firstValue = this.todos[0];
-                    for (let i = 1; i <= 10; i++) {
-                        this.todos.unshift(firstValue);
-                    }
-                    this.$refs.loadmore.onTopLoaded(id);
+                    _self.httpPraram.page = 1;
+                    _self.todos.splice(0, _self.todos.length);
+                    _self.resorceHttp(function() {
+                        _self.$refs.loadmore.onTopLoaded(id);
+                    });
+
                 }, 1500);
             },
             tabAttention(){
@@ -233,11 +255,14 @@ export default {
                 if(this.show == true){
                     _self.more = '求购关注';
                     _self.title = '资源关注';
-                    _self.resorceHttp(_self.keyword);
+                   
+                    _self.httpPraram.intentionType = 1;
+                    _self.resorceHttp();
                 }else{
                     _self.more = '资源关注';
                     _self.title = '求购关注';
-                    _self.needHttp(_self.keyword);
+                    _self.httpPraram.intentionType = 0;
+                    _self.resorceHttp();
                 }
             }
             
@@ -246,21 +271,21 @@ export default {
         created() {
 
             let _self = this; 
-            /*this.resorceHttp(); */
            
-            this.resorceHttp(common.pageParam.myAttention); 
-            common.$on("attention",function(item){
-                 
-                 _self.resorceHttp(item); 
-            });
-
-            common.$on("informResAttention",function (item){
+            _self.resorceHttp(); 
+           
+            common.$on("informResAttention",function (id){  //来自资源页面的提示刷新
                  _self.resorceHttp(); 
             });
              
-            common.$on("informPurAttention",function (item){
-                 console.log(111111)
-                 _self.resorceHttp(); 
+            common.$on("informPurAttention",function (id){   //来自求购页的提示刷新       
+                _self.resorceHttp(); 
+            });
+            common.$on('attention', function (item) {   //来自搜索的提示刷新
+                _self.httpPraram.keyword = item;
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.resorceHttp();
             });
 
         },

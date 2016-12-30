@@ -90,20 +90,20 @@ export default {
                         name: '由少到多',
                         asc: 'low',
                         show: false,
-                        number: 1,
-                        key: 'number'
+                        offer: 1,
+                        key: 'offer'
                     }, {
                         name: '由多到少',
                         asc: 'top',
                         show: false,
-                        number: 2,
-                        key: 'number'
+                        offer: 2,
+                        key: 'offer'
                     }, {
                         name: '全部',
                         asc: '',
                         show: false,
-                        number: 0,
-                        key: 'number'
+                        offer: 0,
+                        key: 'offer'
                     }]
                 }, {
                     name: '剩余时间',
@@ -140,32 +140,32 @@ export default {
                         name: '申请中',
                         asc: 'low',
                         show: false,
-                        text: 1,
-                        key: 'text'
+                        testing: 1,
+                        key: 'testing'
                     }, {
                         name: '上架失败',
                         asc: 'low',
                         show: false,
-                        text: -2,
-                        key: 'text'
+                        testing: -2,
+                        key: 'testing'
                     }, {
                         name: '下架',
                         asc: 'low',
                         show: false,
-                        text: 4,
-                        key: 'text'
+                        testing: 4,
+                        key: 'testing'
                     }, {
                         name: '上架',
                         asc: 'top',
                         show: false,
-                        text: 2,
-                        key: 'text'
+                        testing: 2,
+                        key: 'testing'
                     }, {
                         name: '全部',
                         asc: '',
                         show: false,
-                        text: '',
-                        key: 'text'
+                        testing: 0,
+                        key: 'testing'
                     }]
                 }],
                 router: "purchaseDetail",
@@ -175,12 +175,14 @@ export default {
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
-                value: {
+                httpPraram: {
                     pubdate: 0,
-                    number: 0,
+                    offer: 0,
                     duedate: 0,
-                    text: 0
-                },
+                    testing: 0,
+                    page: 1,
+                    pageSize: 20
+                }
             }
         },
         components: {
@@ -188,21 +190,25 @@ export default {
             myPurchaseSort
         },
         methods: {
-            getHttp(pubdate, duedate, number, text) {
+            getHttp(back) {
                 let _self = this;
                  common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'intentionService',biz_method:'myBegIntentionList',version:1,time:0,sign:'',biz_param:{
-                        sort:{"offer":number,"pubdate":pubdate,"duedate":duedate},
-                        onSell:text,
-                        pn:1,
-                        pSize:20         
+                        sort:{
+                            "offer":_self.httpPraram.offer,
+                            "pubdate":_self.httpPraram.pubdate,
+                            "duedate":_self.httpPraram.duedate
+                        },
+                        onSell:_self.httpPraram.testing,
+                        pn:_self.httpPraram.page,
+                        pSize:_self.httpPraram.pageSize         
                   }};
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.myResource(url,body,function(suc){
                     common.$emit('close-load');
-                    console.log(suc.data.biz_result.list);
+                    
                     let listArr = suc.data.biz_result.list;
                     for (var item in listArr) {
                         var duedateDate = new Date(listArr[item].duedate);
@@ -225,14 +231,22 @@ export default {
                         console.log(listArr[item].id);
                     }
                     _self.todos = listArr;
+                    if(back){
+                        back();
+                    }
                 }, function(err) {
                     common.$emit('close-load');
+                    if(back){
+                        back();
+                    }
                 })
             },
             getId(param) {
                 let _self = this;
-                _self.value[param.key] = param[param.key];
-                _self.getHttp(_self.value.pubdate, _self.value.duedate, _self.value.number, _self.value.text);
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.httpPraram[param.key] = param[param.key];
+                _self.getHttp()
             },
             jump:function(router,id){
                 common.$emit("purchase-id",id);
@@ -242,37 +256,54 @@ export default {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                /*setTimeout(() => {
-                    let lastValue = this.todos[0];
-                    if (this.todos.length <= 40) {
-                        for (let i = 1; i <= 10; i++) {
-                            this.todos.push(this.todos[0]);
-                        }
+                let _self = this;
+                setTimeout(() => {
+                    if (_self.todos.length < _self.httpPraram.page * _self.httpPraram.pageSize) {
+                        _self.allLoaded = true;
                     } else {
-                        this.allLoaded = true;
+                        _self.httpPraram.page++;
+                        _self.getHttp(function() {
+                            _self.$refs.loadmore.onBottomLoaded(id);
+                        });
                     }
-                    this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);*/
+                }, 1500);
             },
 
             handleTopChange(status) {
                 this.topStatus = status;
             },
             loadTop(id) {
+                let _self = this;
                 setTimeout(() => {
-                    let firstValue = this.todos[0];
-                    for (let i = 1; i <= 10; i++) {
-                        this.todos.unshift(firstValue);
-                    }
-                    this.$refs.loadmore.onTopLoaded(id);
+                    _self.httpPraram.page = 1;
+                    _self.todos.splice(0, _self.todos.length);
+                    _self.getHttp(function() {
+                        _self.$refs.loadmore.onTopLoaded(id);
+                    });
+
                 }, 1500);
             }
         },
         created() {
-            let _self = this;
+           /* let _self = this;
             this.getHttp(0,0,0,0);
             common.$on("informMyPurchase",function (id){
                  _self.getHttp(0,0,0,0);
+            })
+*/
+            let _self = this;
+            _self.getHttp();
+            //发布成功通知刷新
+            common.$on('informMyPurchase', function (item) {
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.getHttp();
+            });
+            //修改成功通知刷新
+            common.$on("revisePurtoPur",function (item){
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.getHttp();
             })
         },
         mounted() {

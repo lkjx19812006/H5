@@ -17,7 +17,7 @@
                                     <p class="audit_state">{{todo.state}}</p>
                                 </div>
                             </div>
-                            <img :src="todo.image[0]" class="list_images" @click="jump(todo.router,todo.id)">
+                            <img :src="todo.image[0]" class="list_images" @click="jumpDetail(todo.id)">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div><img src="/static/icons/sample.png">{{todo.breedName}}</div>
@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}<span>元/kg</span></p>
-                                    <button class="mint-button mint-button--primary mint-button--small" @click="jump(todo.other_router,todo.id,index)">编辑</button>
+                                    <button class="mint-button mint-button--primary mint-button--small" @click="jump(todo.id,index)">编辑</button>
                                 </div>
                             </div>
                         </li>
@@ -140,32 +140,32 @@ export default {
                         name: '申请中',
                         asc: 'low',
                         show: false,
-                        text: 1,
-                        key: 'text'
+                        testing: 1,
+                        key: 'testing'
                     }, {
                         name: '上架失败',
                         asc: 'low',
                         show: false,
-                        text: -2,
-                        key: 'text'
+                        testing: -2,
+                        key: 'testing'
                     }, {
                         name: '下架',
                         asc: 'low',
                         show: false,
-                        text: 4,
-                        key: 'text'
+                        testing: 4,
+                        key: 'testing'
                     }, {
                         name: '上架',
                         asc: 'top',
                         show: false,
-                        text: 2,
-                        key: 'text'
+                        testing: 2,
+                        key: 'testing'
                     }, {
                         name: '全部',
                         asc: '',
                         show: false,
-                        text: '',
-                        key: 'text'
+                        testing: '',
+                        key: 'testing'
                     }]
                 }],
                 todos: [],
@@ -175,11 +175,13 @@ export default {
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
-                value: {
+                httpPraram: {
                     pubdate: 0,
                     duedate: 0,
                     sample: '',
-                    text: 0
+                    testing: 0,
+                    page: 1,
+                    pageSize: 20
                 }
             }
         },
@@ -188,7 +190,7 @@ export default {
             myPurchaseSort
         },
         methods: {
-            getHttp(pubdate, duedate, sample, text) {
+            getHttp(back) {
                 let _self = this;
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -200,13 +202,13 @@ export default {
                     sign: '',
                     biz_param: {
                         sort: {
-                            "pubdate": pubdate,
-                            "duedate": duedate
+                            "pubdate": _self.httpPraram.pubdate,
+                            "duedate": _self.httpPraram.duedate
                         },
-                        onSell: text,
-                        sampling: sample,
-                        pn: "1",
-                        pSize: "20"
+                        onSell: _self.httpPraram.testing,
+                        sampling: _self.httpPraram.sample,
+                        pn: _self.httpPraram.page,
+                        pSize: _self.httpPraram.pageSize
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -215,72 +217,82 @@ export default {
                     common.$emit('close-load');
                     common.$emit('message', suc.data.msg);
                     console.log(suc);
-                    _self.todos = suc.data.biz_result.list;
-
-                    for (var item in _self.todos) {
-                        _self.todos[item].router = "goodDetail";
-                        _self.todos[item].other_router = "reviseResource";
-
+                    let result = suc.data.biz_result.list;             
+                    for (var i = 0; i < result.length; i++) {
+                        _self.todos.push(result[i]);
                     }
-
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
+                    if(back){
+                        back();
+                    }
+                    }, function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                        if(back){
+                            back();
+                        }
+                    })
             },
             getId(param) {
-                 let _self = this;
-                 _self.value[param.key] = param[param.key];
-                _self.getHttp(_self.value.pubdate,_self.value.duedate,_self.value.sample,_self.value.text);
+                  let _self = this;
+                  _self.httpPraram.page = 1;
+                  _self.todos.splice(0, _self.todos.length);
+                  _self.httpPraram[param.key] = param[param.key];
+                  _self.getHttp();
             },
-            jump: function(router, id, index) {
-                /*common.$emit('myResource-to-revisePurchase',)*/
-                /*this.ReviseHttp(id);*/
+            jumpDetail(id){
+                 this.$router.push('resourceDetail/' + id);
+            },
+            jump: function(id, index) {
                 this.index = index;
                 common.$emit("res-id", id);
                 common.$emit('setParam', 'resourceId', id);
-                this.$router.push(router + '/' + id);
+                this.$router.push('reviseResource/' + id);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                /*setTimeout(() => {
-                    let lastValue = this.todos[0];
-                    if (this.todos.length <= 40) {
-                        for (let i = 1; i <= 10; i++) {
-                            this.todos.push(this.todos[0]);
-                        }
-                    } else {
+               let _self = this;
+                setTimeout(() => {
+                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
+                    } else {
+                        this.httpPraram.page++;
+                        this.getHttp(function() {
+                            _self.$refs.loadmore.onBottomLoaded(id);
+                        });
                     }
-                    this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);*/
+                }, 1500);
             },
             handleTopChange(status) {
                 this.topStatus = status;
             },
             loadTop(id) {
+                let _self = this;
                 setTimeout(() => {
-                    let firstValue = this.todos[0];
-                    for (let i = 1; i <= 10; i++) {
-                        this.todos.unshift(firstValue);
-                    }
-                    this.$refs.loadmore.onTopLoaded(id);
+                    _self.httpPraram.page = 1;
+                    _self.todos.splice(0, _self.todos.length);
+                    _self.getHttp(function() {
+                        _self.$refs.loadmore.onTopLoaded(id);
+                    });
+
                 }, 1500);
             }
         },
         created() {
             let _self = this;
-            this.getHttp(0, 0, '', 0);
-            common.$on('reviseResource', function(obj) {
-                console.log(2222)
-                _self.getHttp(0, 0, '', 0);
-                console.log(111111)
+            this.getHttp();
+            //修改成功通知刷新
+            common.$on('reviseResource', function(obj) { 
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);             
+                _self.getHttp();            
             })
+            //发布成功通知刷新
             common.$on("informMyRes", function(id) {
-                console.log(id);
-                _self.getHttp(0, 0, '', 0);
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);       
+                _self.getHttp();
             })
         },
         mounted() {
