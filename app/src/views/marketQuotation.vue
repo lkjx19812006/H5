@@ -8,12 +8,13 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <mt-loadmore>
                 <div class="search" @click="jump">
                     <input type="text" placeholder="输入你想要的货物资源" disabled="true">
                     <img src="/static/images/search.png" class="search_image">
                 </div>
+       
+           
+                
                 <div class="good_list">
                     <p class="good_list_header">*数据仅供参考！</p>
                     <div class="good_list_content">
@@ -24,6 +25,8 @@
                             <p>价格</p>
                             <input type="button" value="跌涨(元)">
                         </div>
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+           <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">    
                         <ul class="first_ul">
                             <li v-for="(todo,index) in todos">
                                 <div class="second_level" v-on:click="firstLevel(index,todo)">
@@ -52,6 +55,14 @@
                         </ul>
                     </div>
                 </div>
+                    <div slot="top" class="mint-loadmore-top">
+                        <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+                        <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                    </div>
+                    <div slot="bottom" class="mint-loadmore-bottom">
+                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                        <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                    </div>
             </mt-loadmore>
         </div>
     </div>
@@ -64,46 +75,81 @@ export default {
             return {
                 wrapperHeight: 0,
                 onOrOff: false,
-                todos: {},
+                todos: [],
                 todos_li: {},
-                show: false
+                show: false,
+                
             }
         },
         methods: {
-            firstLevel: function(sub, item) {
-                this.todos[sub].show = !this.todos[sub].show;
-                this.todos_li = item.list_li;
+            getHttp(back){
+                    let _self = this;
+                    httpService.marketQuotation(common.urlCommon + common.apiUrl.most, {
+                                biz_module:'breedService',
+                                biz_method:'queryBreedPrice',
+                                biz_param: {
+                                       
+                                    }
+                                }, function(suc) {
+                                    //console.log(suc);
+                                    let data = suc.data.biz_result.list;                
+                                    for (var item in data) {
+                                        data[item].show = false;
+                                    }
+                                    _self.todos = data;
+                                    if(back){
+                                        back();
+                                    }
+                                    
+                                }, function(err) {
+                                    
+                                    common.$emit('message', err.data.msg);
+                                    if(back){
+                                        back();
+                                    }
+                                })
             },
+           
             jump(){
                 common.$emit("setParam","router",'lowPriceRes');
                 this.$router.push("search");
+            },
+            handleBottomChange(status) {
+                this.bottomStatus = status;
+            },
+            loadBottom(id) {
+                let _self = this;
+                setTimeout(() => {
+                    if (this.todos.length < 5) {
+                        this.allLoaded = true;
+                    } else {
+                        
+                        this.getHttp(function() {
+                            _self.$refs.loadmore.onBottomLoaded(id);
+                        });
+                    }
+                }, 1500);
+            },
+            handleTopChange(status) {
+                this.topStatus = status;
+            },
+            loadTop(id) {
+                let _self = this;
+                setTimeout(() => {
+                    
+                    _self.todos.splice(0, _self.todos.length);
+                    _self.getHttp(function() {
+                        _self.$refs.loadmore.onTopLoaded(id);
+                    });
+
+                }, 1500);
             }
         },
         created() {
            
 
             let _self = this;
-            httpService.marketQuotation(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'breedService',
-                        biz_method:'queryBreedPrice',
-                        biz_param: {
-                               
-                            }
-                        }, function(suc) {
-                            console.log(suc);
-                            let data = suc.data.biz_result.list;
-                            
-                            
-                            for (var item in data) {
-                                data[item].show = false;
-                            }
-                            _self.todos = data;
-                             
-                            
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+            _self.getHttp();
 
 
             
@@ -118,7 +164,7 @@ export default {
 
 
 .market_quotation {
-    position: relative;
+   /* position: relative;*/
 }
 
 .market_quotation .mint-header {
@@ -129,6 +175,7 @@ export default {
 .market_quotation .search {
     height: 60px;
     background: #F2F2F2;
+    position: relative;
 }
 
 .market_quotation .search input {

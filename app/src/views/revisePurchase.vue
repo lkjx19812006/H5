@@ -170,7 +170,7 @@ export default {
                     console.log(suc);
                     if (suc.data.code == '1c01'){
                         common.$emit('message', suc.data.msg);
-                        console.log(1113333)
+                        common.$emit('revisePurtoPur','refurbish');
                         _self.$router.push("/myPurchase");
                     }else{
                         common.$emit('message', suc.data.msg);

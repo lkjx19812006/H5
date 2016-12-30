@@ -5,7 +5,9 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <div @click="jumpSearch"><search-input ></search-input></div>
+        <div @click="jumpSearch">
+             <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" ></search-input>
+        </div>
         <sort  v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -136,27 +138,21 @@ export default {
                     url: '/static/icons/screen.png',
                     class: 'sort_content_detail',
                 }],
-                todos: [/*{
-                    "name": "人参",
-                    "spec": "统货",
-                    "place": "东北",
-                    "price": "98.9元/kg",
-                    "up_price": "9元/kg",
-                    "down_price": "9元/kg",
-                    "phone": "15301546832",
-                    "time": "12:26"
-                }*/],
-                
-                value: {
-                    time:0,
-                    price:0,
-                    sample:''
-                },      
+                todos: [],                   
                 keyword:'',
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
+                httpPraram: {
+                    time: 0,
+                    offer: 0,
+                    duedate: 0,
+                    location: [],
+                    keyword: '',
+                    page: 1,
+                    pageSize: 20
+                }
             }
         },
         components: {
@@ -164,22 +160,38 @@ export default {
             sort
         },
         methods: {
-            getHttp(word,shelve_time,price,sampling){
-
+            getHttp(back){
                  let _self = this;
                  httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryBegBuyList',
               
                             biz_param: {
-                                keyWord: word,
-                                sort:{"shelve_time":shelve_time,"price":price},
-                                
-                                sampling:sampling,
-                                pn:1,
-                                pSize:20
+                                keyWord: _self.httpPraram.keyword,
+                                sort:{
+                                    "shelve_time":_self.httpPraram.time,
+                                    "offer": _self.httpPraram.offer,
+                                    "duedate": _self.httpPraram.duedate
+                                },                          
+                                location: _self.httpPraram.location,
+                                pn: _self.httpPraram.page,
+                                pSize: _self.httpPraram.pageSize
                             }
-                        }, function(suc) {
+                        },  function(suc) {
+                            common.$emit('message', suc.data.msg);
+                            let result = suc.data.biz_result.list;
+                            for (var i = 0; i < result.length; i++) {
+                                _self.todos.push(result[i]);
+                            }
+                            if (back) {
+                                back();
+                            }
+                        }, function(err) {
+                            common.$emit('message', err.data.msg);
+                            if (back) {
+                                back();
+                            }
+                        })/*function(suc) {
                             console.log(suc)
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result.list;
@@ -209,18 +221,24 @@ export default {
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
-                        })
+                        })*/
             },
             getId(param){
                  let _self = this;
-                  
-                  _self.value[param.key] = param[param.key];
-                  _self.getHttp(_self.keyword,_self.value.time,_self.value.price,_self.value.sample)
-                  
-
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.httpPraram[param.key] = param[param.key];
+                _self.getHttp();
+            },
+            clearKeyword() {
+                let _self = this;
+                this.httpPraram.page = 1;
+                this.todos.splice(0, _self.todos.length);
+                this.httpPraram.keyword = '';
+                this.getHttp();
             },
             jumpDetail(id) {
-                let _self = this;
+                /*let _self = this;
                 httpService.myAttention(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
@@ -244,36 +262,38 @@ export default {
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
-                        })
+                        })*/
                 this.$router.push('needDetail/' + id);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                /*setTimeout(() => {
-                    let lastValue = this.todos[0];
-                    if (this.todos.length <= 40) {
-                        for (let i = 1; i <= 10; i++) {
-                            this.todos.push(this.todos[0]);
-                        }
-                    } else {
+                let _self = this;
+                setTimeout(() => {
+                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
+                    } else {
+                        this.httpPraram.page++;
+                        this.getHttp(function() {
+                            _self.$refs.loadmore.onBottomLoaded(id);
+                        });
                     }
-                    this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);*/
+                }, 1500);
             },
 
             handleTopChange(status) {
                 this.topStatus = status;
             },
             loadTop(id) {
+                let _self = this;
                 setTimeout(() => {
-                    let firstValue = this.todos[0];
-                    for (let i = 1; i <= 10; i++) {
-                        this.todos.unshift(firstValue);
-                    }
-                    this.$refs.loadmore.onTopLoaded(id);
+                    _self.httpPraram.page = 1;
+                    _self.todos.splice(0, _self.todos.length);
+                    _self.getHttp(function() {
+                        _self.$refs.loadmore.onTopLoaded(id);
+                    });
+
                 }, 1500);
             },
             jumpSearch(){
@@ -284,15 +304,28 @@ export default {
         },
         created() {
             let _self = this;
-             _self.getHttp('',0,0,'');
-            /*var param ;
-            param=common.pageParam.Urgentneed;
-
-            _self.getHttp(param,0,0,'');*/
-            common.$on("Urgentneed",function(item){
-                 //console.log(item);
-                 _self.keyword = item;
-                 _self.getHttp(item,0,0,'');
+            _self.getHttp();
+            common.$on('Urgentneed', function(item) {
+                _self.httpPraram.keyword = item;
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.getHttp();
+            });
+            common.$on('urgentNeed-sort', function(item) {
+                _self.httpPraram.location = item;
+                _self.sortArr[3].name = item[0];
+                _self.sortArr[3].class = "sort_content_detail_select";
+                _self.sortArr[3].url = "/static/icons/screen_selected.png";
+                if (item.length > 1) {
+                    _self.sortArr[3].name += '...';
+                } else if (item.length == 0) {
+                    _self.sortArr[3].name = '产地';
+                    _self.sortArr[3].class = "sort_content_detail";
+                    _self.sortArr[3].url = "/static/icons/screen.png";
+                }
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.getHttp();
             });
                   
              

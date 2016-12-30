@@ -351,7 +351,7 @@ export default {
                          sampleNumber:_self.obj.weight,
                          sampleAmount:_self.obj.price,
                          duedate:_self.obj.duedate,
-                         breedId:"-1",
+                         breedId:"2",
                          unit:_self.obj.number_unit,
                          id:_self.obj.id
 
@@ -395,10 +395,10 @@ export default {
                 /*common.$emit('confirm','确定修改','取消修改','确认修改信息后,将等待审核！','确定修改');*/
                  
                    common.$emit('confirm','确认修改信息后,将等待审核！','确定修改');
-                  /* let _self = this;
+                   let _self = this;
                    _self.tabRevise();
 
-                   _self.$router.push("/myResource");*/
+                   /*_self.$router.push("/myResource");*/
                 
             },
             getUrl(param){

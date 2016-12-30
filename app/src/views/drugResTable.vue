@@ -2,7 +2,6 @@
 
     <div class="drug_table whole">
         <mt-header fixed title="药材百科">
-
             <router-link to="/home" slot="left">
                 <mt-button icon="back" @click="iosBack()"></mt-button>
             </router-link>
@@ -17,7 +16,7 @@
                     <p>热门药材</p>
                 </div>
                 <div class="drug_show" >
-                    <a @click="jump(index)">
+                    <a @click="jumpDetail(obj.name)">
                         <img :src="obj.icon">
                         <div class="drug_introduce">
                             <p class="drug_name" id="drug_name">{{obj.name}}</p>
@@ -29,7 +28,7 @@
                 <div class="hot_search_drug">
                     <p>热搜药材</p>
                     <div class="hot_drugs">
-                        <p v-for="(todo,index) in todos" @click="jump(index)">{{todo.keyWord}}</p>
+                        <p v-for="(todo,index) in todos" @click="jumpDetail(todo.keyWord)">{{todo.keyWord}}</p>
                     </div>
                 </div>
 
@@ -109,35 +108,13 @@ export default {
             }
         },
         methods: {
-            drugDetail(id){
-                httpService.drugResTable(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'breedService',
-                        biz_method:'queryDrugPropertiesInfo',
-              
-                            biz_param: {
-                                herbName:id
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            
-                            //console.log(suc.data.biz_result.list)
-                            let result = suc.data.biz_result;
-                            console.log(result)
-                           /* _self.obj = result;*/
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-            },
             hotDrug(){
                 let _self = this;
                 httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
                         biz_module:'breedService',
                         biz_method:'hotDrugPropertiesInfo',
               
-                            biz_param: {
-                                
+                            biz_param: {                              
                                 pn:1,
                                 pSize:20
                             }
@@ -145,6 +122,7 @@ export default {
                             
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result.list[0];
+                            console.log(result)
                             _self.obj = result;
                         }, function(err) {
                             
@@ -166,16 +144,14 @@ export default {
                             
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result.list;
-                            //console.log(result)
+                           
                             _self.todos = result;
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
                         })
             },
-            jump: function(router) {
-                this.$router.push('drugResTableDetail/' + router);
-            },
+            
             jumpIosSearch: function() {
                 window.jumpSearch();
             },
@@ -186,7 +162,7 @@ export default {
                 window.back();
             },
             jumpDetail(id){
-                this.drugDetail(id)
+                common.$emit("informdrugDetail",id); //通知药性表详情刷新
                 this.$router.push('drugResTableDetail/' + id);
             }
         },

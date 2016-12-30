@@ -5,7 +5,9 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <div  @click="jumpSearch"><search-input></search-input></div>
+        <div  @click="jumpSearch">
+            <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></search-input>
+        </div>
         <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -133,24 +135,11 @@ export default {
                 }],
                 back_key:'0',
                 keyword:'',
-                todos: [{
-                    "name": "人参",
-                    "spec": "统货",
-                    "place": "东北",
-                    "price": "98.9",
-                    "up_price": "9",
-                    "down_price": "9元/kg",
-                    "phone": "15301546832",
-                    "time": "12:26"
-                }],
+                todos: [],
                 obj:{
 
                 },
-                value: {
-                    time:0,
-                    price:0,
-                    sample:''
-                }, 
+                
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -191,50 +180,77 @@ export default {
                                 location: _self.httpPraram.location
                             }
                         }, function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                            for(var i=0;i<result.length;i++){
-                        
+                                common.$emit('message', suc.data.msg);
+                                let result = suc.data.biz_result.list;
+                                for(var i=0;i<result.length;i++){                        
+                                        var item = result[i];
+                                        var duedate = item.duedate;
+                                        var pubdate = item.duedate;
+                                        if(item.duedate != ''){                                    
+                                            duedate =  duedate.replace(/-/g,'/');
+                                            duedate = duedate.substring(0,10);                                  
+                                        }
+                                        if(item.duedate != ''){                                   
+                                            pubdate =  pubdate.replace(/-/g,'/');
+                                            pubdate = pubdate.substring(0,10);                                 
+                                        }
+                                        var duedateDate = new Date(duedate);
+                                        var pubdateDate = new Date(pubdate);
+                                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                                        var days=Math.floor(dateValue/(24*3600*1000));
+                                        item.days = days; 
+                                        item.duedate = duedate;
+                                        item.pubdate = pubdate;
+                                }
+                                      _self.todos = result;
+
+                                if (back) {
+                                    back();
+                                }
+                            }, function(err) {
+                                common.$emit('message', err.data.msg);
+                                if (back) {
+                                    back();
+                                }
+                            })
+
+                            /*let result = suc.data.biz_result.list;
+                            for(var i=0;i<result.length;i++){                        
                                 var item = result[i];
-                               
                                 var duedate = item.duedate;
                                 var pubdate = item.duedate;
-                                if(item.duedate != ''){
-                                    
+                                if(item.duedate != ''){                                    
                                     duedate =  duedate.replace(/-/g,'/');
-                                    duedate = duedate.substring(0,10);
-                                    
+                                    duedate = duedate.substring(0,10);                                  
                                 }
-                                if(item.duedate != ''){
-                                    
+                                if(item.duedate != ''){                                   
                                     pubdate =  pubdate.replace(/-/g,'/');
-                                    pubdate = pubdate.substring(0,10);
-                                    
+                                    pubdate = pubdate.substring(0,10);                                 
                                 }
                                 var duedateDate = new Date(duedate);
                                 var pubdateDate = new Date(pubdate);
                                 var dateValue = duedateDate.getTime() - pubdateDate.getTime();
                                 var days=Math.floor(dateValue/(24*3600*1000));
                                 item.days = days; 
-
                                 item.duedate = duedate;
                                 item.pubdate = pubdate;
-                            }
-                            
-                        _self.todos = result;       
-                           
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-            },
+                            }*/
             
+            },           
             getId(param){
                   let _self = this;
-                  _self.value[param.key] = param[param.key];
-
-                 _self.getHttp(_self.keyword,_self.value.time,_self.value.price,_self.value.sample);
+                  /*_self.value[param.key] = param[param.key];
+                  _self.getHttp(_self.keyword,_self.value.time,_self.value.price,_self.value.sample);*/
+                  _self.httpPraram.page = 1;
+                  _self.todos.splice(0, _self.todos.length);
+                  _self.httpPraram[param.key] = param[param.key];
+                  _self.getHttp();
+            },
+            clearKeyword() {
+                this.httpPraram.page = 1;
+                this.todos.splice(0, this.todos.length);
+                this.httpPraram.keyword = '';
+                this.getHttp();
             },
             jumpDetail(id){
                 let _self = this;
@@ -261,36 +277,36 @@ export default {
                 
                 //common.$emit('post-res-detail',_self.obj);
                 common.$emit('post-res-detail-id',id);
-                
                 this.$router.push('resourceDetail/' + id);
-
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                /*setTimeout(() => {
-                    let lastValue = this.todos[0];
-                    if (this.todos.length <= 40) {
-                        for (let i = 1; i <= 10; i++) {
-                            this.todos.push(this.todos[0]);
-                        }
-                    } else {
+                let _self = this;
+                setTimeout(() => {
+                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
+                    } else {
+                        this.httpPraram.page++;
+                        this.getHttp(function() {
+                            _self.$refs.loadmore.onBottomLoaded(id);
+                        });
                     }
-                    this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);*/
+                }, 1500);
             },
             handleTopChange(status) {
                 this.topStatus = status;
             },
             loadTop(id) {
+                let _self = this;
                 setTimeout(() => {
-                    let firstValue = this.todos[0];
-                    for (let i = 1; i <= 10; i++) {
-                        this.todos.unshift(firstValue);
-                    }
-                    this.$refs.loadmore.onTopLoaded(id);
+                    _self.httpPraram.page = 1;
+                    _self.todos.splice(0, _self.todos.length);
+                    _self.getHttp(function() {
+                        _self.$refs.loadmore.onTopLoaded(id);
+                    });
+
                 }, 1500);
             },
             jumpSearch(){
@@ -303,14 +319,29 @@ export default {
         created() {
 
             let _self = this;
-            console.log(common.pageParam.lowPrice);
-            _self.getHttp(common.pageParam.lowPrice,0,0,'');
-            common.$on("lowPriceRes",function(item){
-                 console.log(item)
-                 _self.keyword = item;
-                 _self.getHttp(item,0,0,'');
+            _self.getHttp();
+            common.$on('lowPriceRes', function(item) {
+                _self.httpPraram.keyword = item;
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.getHttp();
+            })
+            common.$on('lowRes-sort', function(item) {
+                _self.httpPraram.location = item;
+                _self.sortArr[3].name = item[0];
+                _self.sortArr[3].class = "sort_content_detail_select";
+                _self.sortArr[3].url = "/static/icons/screen_selected.png";
+                if (item.length > 1) {
+                    _self.sortArr[3].name += '...';
+                } else if (item.length == 0) {
+                    _self.sortArr[3].name = '产地';
+                    _self.sortArr[3].class = "sort_content_detail";
+                    _self.sortArr[3].url = "/static/icons/screen.png";
+                }
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.getHttp();
             });
-           
             
             
         },

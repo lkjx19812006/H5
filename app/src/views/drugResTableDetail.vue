@@ -25,41 +25,29 @@
                             <div class="drug_name">
                                 <div class="name_type">
                                     <p class="what_name">别名：</p>
-                                    <p class="answer_name">{{obj.alias}}</p>
+                                    <p class="answer_name" v-html="obj.alias"></p>
                                 </div>
                                 <div class="name_type">
                                     <p class="what_name">拼音：</p>
-                                    <p class="answer_name">{{obj.lName}}</p>
+                                    <p class="answer_name" v-html="obj.pinyin"></p>
                                 </div>
                                 <div class="name_type" id="last_name_type">
                                     <p class="what_name">英文：</p>
-                                    <p class="answer_name">{{obj.eName}}</p>
+                                    <p class="answer_name" v-html="obj.eName"></p>
                                 </div>
                             </div>
                             <div class="drug_effect">
                                 <div class="drug_effect_type">
                                     <p class="what_effect">概述：</p>
-                                    <p class="effect_content">{{obj.summary}}</p>
+                                    <p class="effect_content" v-html="obj.summary">
+                                    </p>
                                 </div>
-                                <!-- <div class="drug_effect_type" id="last_effect_type">
-                                    <p class="what_effect">功效：</p>
-                                    <p class="effect_content">{{todo.drug_effect.effect_content}}</p>
-                                </div> -->
                             </div>
                             <div class="spec">
                                 <div class="spec_type">
                                     <p class="what_spec">产地分布：</p>
-                                    <p class="spec_content">{{obj.producingArea}}</p>
-                                </div>
-                                <!-- <div class="spec_type">
-                                    <p class="what_spec">产新时间：</p>
-                                    <p class="spec_content"></p>
-                                </div>
-                                <div class="spec_type" id="spec_type">
-                                    <p class="what_spec">产新时间：</p>
-                                    <p class="spec_content"></p>
-                                </div> -->
-                                
+                                    <p class="spec_content" v-html="obj.producingArea"></p>
+                                </div>          
                             </div>
                         </div>
                     </mt-tab-container-item>
@@ -70,22 +58,8 @@
                                <div class="spec">
                                 <div class="spec_type">
                                     <p class="what_spec">形态特征：</p>
-                                    <p class="spec_content">{{obj.morphology}}</p>
-                                </div>
-                                <!-- <div class="spec_type">
-                                    <p class="what_spec">形态规格：</p>
-                                    <p class="spec_content"></p>
-                                </div>
-                                <div class="spec_type">
-                                    <p class="what_spec">性味功能：</p>
-                                    <p class="spec_content"></p>
-                                </div>
-                                <div class="spec_type" id="spec_type">
-                                    <p class="what_spec">储存方式：</p>
-                                    <p class="spec_content"></p>
-                                </div> -->
-                                
-                            
+                                    <p class="spec_content" v-html="obj.morphology"></p>
+                                </div>                              
                             </div>
                          </div>
                     </mt-tab-container-item>
@@ -96,34 +70,23 @@
                                <div class="spec">
                                     <div class="spec_type">
                                         <p class="what_spec">鉴别真伪：</p>
-                                        <p class="spec_content"></p>
-                                    </div>
-                                
-                                
-                            
+                                        <p class="spec_content" v-html="obj.identify"></p>
+                                    </div>                         
                               </div>
                             </div>
                     </mt-tab-container-item>
 
                     <mt-tab-container-item id="4">
                             <div class="information" >
-                              <div class="spec">
-                                   <!-- <div class="spec_type"> -->
+                              <div class="spec">                                
                                             <p class="what_spec" id="what_spec">2015年药典标准：</p>
-                                            <p class="spec_content"></p>
-                                    <!-- </div> -->
+                                            <p class="spec_content" v-html="obj.standard"></p>                   
                               </div>
                             </div>
                     </mt-tab-container-item>
-                    <!-- <mt-tab-container-item id="5">
-                        <mt-cell v-for="n in 4" :title="'测试 ' + n" /></mt-cell>
-                    </mt-tab-container-item>
-                    <mt-tab-container-item id="6">
-                        <mt-cell v-for="n in 6" :title="'选项 ' + n" /></mt-cell>
-                    </mt-tab-container-item> -->
+                 
                 </mt-tab-container>
-              </div>  
-            <!-- </mt-loadmore> -->
+              </div> 
         </div>
     </div>
 
@@ -142,51 +105,47 @@ export default {
                 breedName:''
             }
         },
-        methods: {},
+        methods: {
 
-        mounted(){
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
-        },
-        created() {
-            /*common.$emit('show-load');
-            this.$http.get(common.apiUrl.drug_information_list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                console.log(data);
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
-             
-            var _self = this;
-            var str = _self.$route.fullPath;
-            var id = str.substring(20,str.length);
-            _self.id = id;
-               console.log(id)
-            /*httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
+            drugDetail(name){
+                let _self = this;
+                httpService.drugResTable(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'breedService',
+                        biz_method:'queryDrugPropertiesInfo',
               
                             biz_param: {
-                                id:id
+                                herbName:name
                             }
                         }, function(suc) {
                             
                             common.$emit('message', suc.data.msg);
                             
                             
-                            let result = suc.data.biz_result.breedName;
-                            console.log(result)
-                            _self.breedName = result;
-                            
+                            let result = suc.data.biz_result;
+                            _self.obj = result;
+                           
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
-                        })*/
+                        })
+            }
+        },
 
-      
-            
+        mounted(){
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        },
+        created() {
+           
+             
+            var _self = this;
+            let name = _self.$route.params.drugId;           
+            _self.drugDetail(name);
+
+            common.$on("informdrugDetail",function (item){
+                    _self.drugDetail(item);
+            });
+
+           
             
         }
 }
