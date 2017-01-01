@@ -18,14 +18,14 @@ let httpService = new Vue({
                 err(response);
             });
         },
-        findPassWord(url, body, suc, err){
+        findPassWord(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (response) => {
                 err(response);
             });
         },
-        revisePassWord(url, body, suc, err){
+        revisePassWord(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (response) => {
@@ -46,141 +46,148 @@ let httpService = new Vue({
             }, (res) => {
                 err(res);
             });
-        }, 
-        queryEmployeeInfo(url, body, suc, err){
+        },
+        queryEmployeeInfo(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        myAttention(url, body, suc, err){
+        myAttention(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        myResource(url, body, suc, err){
+        myResource(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        lowPriceRes(url, body, suc, err){
+        lowPriceRes(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        urgentNeed(url, body, suc, err){
+        urgentNeed(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        addressManage(url, body, suc, err){
+        addressManage(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        addressRevise(url, body, suc, err){
+        addressRevise(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        addAddress(url, body, suc, err){
+        addAddress(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        supplyRelease(url, body, suc, err){
+        supplyRelease(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        getIntentionDetails(url,body,suc,err){
+        getIntentionDetails(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        needRelease(url,body,suc,err){
+        needRelease(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        myPurchase(url,body,suc,err){
+        myPurchase(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        intentResOrder(url,body,suc,err){
+        intentResOrder(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        realTimeTurnover(url,body,suc,err){
+        realTimeTurnover(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        searchWord(url,body,suc,err){
+        searchWord(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        hotSearch(url,body,suc,err){
+        hotSearch(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        marketQuotation(url,body,suc,err){
+        marketQuotation(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        drugResTable(url,body,suc,err){
+        drugResTable(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        myOrder(url,body,suc,err){
+        myOrder(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
                 err(res);
             });
         },
-        specifiedPlace(url,body,suc,err){
+        specifiedPlace(url, body, suc, err) {
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (res) => {
+                err(res);
+            });
+        },
+        commonPost(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (res) => {
@@ -192,7 +199,7 @@ let httpService = new Vue({
         },
         del(url) {
 
-         },
+        },
         getQiniuToken(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response.data);
