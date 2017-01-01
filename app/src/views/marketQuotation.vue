@@ -77,7 +77,16 @@ export default {
                 onOrOff: false,
                 todos: [],
                 todos_li: {},
+                topStatus: '',
+                wrapperHeight: 0,
+                ttwrapperHeight: 0,
+                allLoaded: false,
+                bottomStatus: '',
                 show: false,
+                httpPraram: {
+                    page: 1,
+                    pageSize: 10
+                }
                 
             }
         },
@@ -120,10 +129,10 @@ export default {
             loadBottom(id) {
                 let _self = this;
                 setTimeout(() => {
-                    if (this.todos.length < 5) {
+                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
                     } else {
-                        
+                        this.httpPraram.page++;
                         this.getHttp(function() {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
@@ -136,7 +145,7 @@ export default {
             loadTop(id) {
                 let _self = this;
                 setTimeout(() => {
-                    
+                    _self.httpPraram.page = 1;
                     _self.todos.splice(0, _self.todos.length);
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);

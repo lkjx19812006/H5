@@ -1,6 +1,6 @@
 <template>
-  <div class="certification">
-        <mt-header title="实名认证">
+  <div class="certification whole">
+        <mt-header title="实名认证" fixed>
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
@@ -18,10 +18,10 @@
                      </div>
                      <div>
                          <p class="left">性别</p>
-                         <p class="right" v-if="obj.gender == 0">
+                         <p class="right" v-if="obj.gender == '女'">
                             <img src="/static/images/woman.png">
                          </p>
-                         <p class="right" v-if="obj.gender == 1">
+                         <p class="right" v-if="obj.gender == '男'">
                             <img src="/static/images/man.png">
                          </p>
                      </div>
@@ -107,6 +107,25 @@ export default {
             imageUpload
         },
         methods: {
+            getHttp(){
+                 let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
+                  console.log(common.difTime);
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.queryUserInfo(url,body,function(suc){
+                     common.$emit('close-load');
+                     console.log(suc.data.biz_result.gender);
+                    _self.obj.name = suc.data.biz_result.name;
+                    _self.obj.gender = suc.data.biz_result.gender;
+                    _self.obj.phone = suc.data.biz_result.phone;
+                      
+                  },function(err){
+                    common.$emit('close-load');
+                  })
+            },
             getUrl(param){
                 let _self = this;
                 if(param.index == 0){
@@ -132,15 +151,11 @@ export default {
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.queryUserInfo(url,body,function(suc){
                      common.$emit('close-load');
-                     console.log(suc)
-
-                      
+                     console.log(suc);                  
                   },function(err){
                     common.$emit('close-load');
                   })
 
-                    
-                   console.log();
             }
             
         },
@@ -155,7 +170,7 @@ export default {
           body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
           httpService.queryUserInfo(url,body,function(suc){
              common.$emit('close-load');
-             
+             console.log(suc.data.biz_result.gender);
             _self.obj.name = suc.data.biz_result.name;
             _self.obj.gender = suc.data.biz_result.gender;
             _self.obj.phone = suc.data.biz_result.phone;

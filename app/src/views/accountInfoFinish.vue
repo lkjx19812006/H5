@@ -6,6 +6,7 @@
       </router-link>
     <mt-button  slot="right" ><div id="right" v-on:click="upData">完成</div></mt-button> 
    </mt-header>
+   <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
    <div class="header_photo_box">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
         <div class="header_photo">
@@ -20,7 +21,7 @@
            <li >  <!-- v-for="(item,index) in personalDataArr" v-if="index==0" -->
               <p class="name name_smart_size" >姓名</p>
               <p class="name_content" >
-                 <input type="text" :placeholder="arr.name" v-model="arr.name">
+                 <input type="text" :placeholder="arr.name" v-model="arr.name" maxlength="5">
               </p>
            </li>
 
@@ -60,9 +61,9 @@
              </li>
 
              <li ><!--  v-for="(item,index) in personalDataArr" v-if="index==4" -->
-              <p class="name name_big_size" @click="jump('certification')">个人认证</p>
+              <p class="name name_big_size" >个人认证</p>
               <p class="name_content" >
-                 <input type="text" :placeholder="arr.ucomment" v-model="arr.ucomment">
+                 <input type="text" :placeholder="arr.ucomment" v-model="arr.ucomment" disabled="true">
               </p>
               <img src="/static/images/right-arrow.png" class="right-arrow">
            </li>
@@ -109,7 +110,8 @@
            
         </ul>
    </div>
-                 
+  </div>
+               
                     <!-- <mt-datetime-picker
                       v-model="pickerVisible"
                       
@@ -125,7 +127,6 @@
         
         <!-- <mt-button @click.native="open('picker')" size="large">点击弹出 DateTime Picker</mt-button> -->
       
-
 
   </div>
 </template>
@@ -238,6 +239,7 @@ export default {
         },
   methods:{
       jump(router){
+
           this.$router.push(router);
       },
       
@@ -327,7 +329,11 @@ export default {
             common.$emit('message', suc.data.msg);
           })
       }
-  }
+  },
+  mounted() {
+
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        }
 
  
 }
