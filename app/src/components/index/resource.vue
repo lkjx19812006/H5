@@ -1,8 +1,9 @@
 <template>
     <div class="content resource">
-        <div class="fixed">
+        <div >
+           
             <div @click="jumpSearch">
-                <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></search-input>
+                <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></longSearch>
             </div>
             <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         </div>
@@ -15,7 +16,7 @@
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.breedName}}</div>
-                                    <p>规格：<span>{{todo.spec}}</span></p>
+                                    <p class="spec">规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                     <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
                                 </div>
@@ -41,7 +42,7 @@
 </template>
 <script>
 import common from '../../common/common.js'
-import searchInput from '../../components/tools/inputSearch'
+import longSearch from '../../components/tools/longSearch'
 import sort from '../../components/tools/sort'
 import httpService from '../../common/httpService.js'
 export default {
@@ -146,7 +147,7 @@ export default {
             }
         },
         components: {
-            searchInput,
+            longSearch,
             sort
         },
         methods: {
@@ -320,6 +321,18 @@ export default {
 }
 
 .resource {}
+.resource .go-back{
+    position: absolute;
+    width:15%;
+    padding-right:5%;
+    height:50px;
+    border-bottom: 1px solid #ccc;
+    background:#EC6817;
+}
+
+
+
+
 
 .resource .fixed {
     position: fixed;
@@ -329,18 +342,24 @@ export default {
 }
 
 .resource .bg_white {
-    margin-top: 90px;
+    /*margin-top: 90px;*/
 }
-
+.resource .bg_white{
+    background: #F5F5F5;
+    padding: 0 10px;
+}
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
-    min-height: 100px;
+    height: 9.55rem;
+    margin-top: 10px;
+    background: white;
+    border-radius: 3px;
 }
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    height: 80px;
-    max-width: 100px;
+    height: 8.1rem;
+    width: 25%;
     left: 10px;
     margin: 10px 10px 10px 0;
     position: absolute;
@@ -367,37 +386,40 @@ export default {
     text-align: left;
     font-size: 1.2rem;
     color: #666;
+    margin-top: 0.8rem;
 }
-
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec{
+    margin-top: 0.3rem;
+}
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
     width: 100%;
-    padding-left: 120px;
+    padding-left: 30%;
     padding-top: 10px;
 }
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
     max-width: 80px;
-    height: 90px;
+    height: 95px;
     margin: 0;
     right: 10px;
 }
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
     font-size: 1.25rem;
-    margin-top: 10px;
+    margin-top: 0px;
     color: #EC6817;
 }
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
-    position: absolute;
-    bottom: 10px;
-    background: #EC6817;
-    font-size: 10px;
-    min-width: 60px;
-    right: 0px;
-    max-height: 25px;
-    padding: 0 5px;
+      position: absolute;
+      bottom: 0px;
+      background: #EC6817;
+      font-size: 1.109rem;
+      width: 5.97rem;
+      right: 0px;
+      height: 2.38rem;
+      padding: 0 5px;
 }
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {

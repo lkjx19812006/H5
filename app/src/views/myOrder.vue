@@ -49,8 +49,8 @@
 
                             <div class="sum">
                                 <div>
-                                    <p class="sum_left">合计：(含运费￥0.00)</p>
-                                    <p>￥<span>{{Number(todo.price) * Number(todo.number)}}</span>.00</p>
+                                    <p class="sum_left">(含运费￥0.00)</p>
+                                    <p>合计：￥<span>{{Number(todo.price) * Number(todo.number)}}</span>.00</p>
                                 </div>
                                 
                                 <p v-if = "todo.type == 0">
@@ -241,7 +241,7 @@ export default {
                              
                             if(listArr[i].orderStatus == -1){
                                 listArr[i].now_status = '订单取消';
-                                /*listArr[i].button_status = '已取消';*/
+                                
                             }else if(listArr[i].orderStatus == -2){
                                 listArr[i].now_status = '订单过期';
                                 listArr[i].button_status = '取消订单';
@@ -259,7 +259,7 @@ export default {
                                 listArr[i].saleorder_status = '确认收款';
                             }else if(listArr[i].orderStatus == 30){
                                 listArr[i].now_status = '待确认（已支付）';
-                                //listArr[i].button_status = '立即支付';
+                                
                             }else if(listArr[i].orderStatus == 40){
                                 listArr[i].now_status = '待发货（支付确定）';
                                 listArr[i].button_status = '吹促发货';
@@ -278,9 +278,9 @@ export default {
                                 listArr[i].button_status = '查看订单';
                                 listArr[i].saleorder_status = '查看订单';
                             }
-                        console.log(listArr[i].button_status);      
+                           
                     }
-                              
+                         //common.$emit("translatePubdate",listArr,_self.todos);  
                          _self.todos = listArr;
                          console.log(suc);
                     }else{
@@ -509,7 +509,7 @@ export default {
 
 }
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum>div{
-    border: 1px solid #DEDEDE;
+   /* border: 1px solid #DEDEDE;*/
     height:3rem;
     width:100%;
 }
@@ -517,7 +517,7 @@ export default {
     float:right;
 }
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum .sum_left{
-    float:left;
+    
 }
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum p{
     font-size: 1rem;

@@ -210,27 +210,9 @@ export default {
                     common.$emit('close-load');
                     
                     let listArr = suc.data.biz_result.list;
-                    for (var item in listArr) {
-                        var duedateDate = new Date(listArr[item].duedate);
-                        var pubdateDate = new Date(listArr[item].pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
-                        if (listArr[item].onSell == 1) {
-                            listArr[item].onSell = '未审核'
-                        }
-                        if (listArr[item].onSell == 2) {
-                            listArr[item].onSell = '已审核'
-                        }
-                        if (listArr[item].onSell == -2) {
-                            listArr[item].onSell = '审核失败'
-                        }
-                        if (listArr[item].onSell == 4) {
-                            listArr[item].onSell = '已下架'
-                        }
-                        listArr[item].days = days;
-                        console.log(listArr[item].id);
-                    }
-                    _self.todos = listArr;
+                   
+                    common.$emit("translatePubdate",listArr,_self.todos);
+                    
                     if(back){
                         back();
                     }
@@ -386,13 +368,13 @@ export default {
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .left_p {
     float: left;
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #999999;
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .right_p {
     float: right;
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #FA6705;
 }
 
@@ -406,7 +388,7 @@ export default {
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .left {
     float: left;
     text-align: left;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     color: #333333;
     /*border: 1px solid red;*/
 }
@@ -414,7 +396,7 @@ export default {
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .right {
     float: right;
     text-align: right;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #666666;
     /*border: 1px solid red;*/
 }
@@ -437,7 +419,7 @@ export default {
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line .left {
     float: left;
     text-align: left;
-    font-size: 1rem;
+    font-size: 1.2rem;
     line-height: 1rem;
     color: #666666;
 }
@@ -446,7 +428,7 @@ export default {
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line .right {
     float: right;
     text-align: right;
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: #666666;
     line-height: 1rem;
 }
@@ -457,7 +439,7 @@ export default {
     /*border:1px solid red;*/
     text-align: center;
     line-height: 2rem;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button .first_button {
