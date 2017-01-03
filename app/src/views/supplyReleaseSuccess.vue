@@ -14,7 +14,7 @@
                     <p class="index_title">资源图片</p>
                 </div>
                 <div class="more_content">
-                    <img :src="todo.url" v-for="todo in imgArr">
+                    <img :src="todo" v-for="todo in imgArr">
                 </div>
             </div>
         </div>
@@ -35,7 +35,7 @@
             <auditProgress :auditProgress='auditProgress'></auditProgress>
         </div>
         <div class="bottom">
-            <button class="mint-button mint-button--primary mint-button--large">继续放布</button>
+            <button class="mint-button mint-button--primary mint-button--large" @click="back()">继续放布</button>
             <button class="mint-button mint-button--primary mint-button--large">查看匹配求购信息</button>
         </div>
     </div>
@@ -57,75 +57,58 @@ export default {
                     price: "98.9",
                     sendPlace: "上海",
                     number: "100",
-                    unit:"kg",
-                    
+                    unit: "kg",
                 },
-                obj:{
-                    description:'hahhahah'
+                obj: {
+                    description: 'hahhahah'
                 },
                 person: {
                     name: '杨帆',
                     phone: '15123485654'
                 },
                 auditProgress: '1',
-                imgArr:[{
-                    url:''
-                },{
-                    url:''
-                },{
-                    url:''
-                },{
-                    url:''
-                }]
+                imgArr: []
             }
         },
         methods: {
-              getHttp(id){
+            getHttp(id) {
                 let _self = this;
+                common.$emit('show-load');
                 httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            
-                            if(suc.data.code == '1c01'){
-                                    let result = suc.data.biz_result;
-
-                                    var duedateDate = new Date(result.duedate);
-                                    var pubdateDate = new Date(result.pubdate);
-                                    var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                                    var days=Math.floor(dateValue/(24*3600*1000));
-
-                                    _self.person.name = result.customerName;
-                                    _self.person.phone = result.customerPhone;
-                                    _self.information.price = result.price;
-                                    _self.information.name = result.breedName;
-                                    _self.information.spec = result.spec;
-                                    _self.information.place = result.location;
-                                    _self.information.number = result.number;
-                                    _self.information.unit = result.unit;
-                                    _self.obj.description = result.description;
-                                    for(var i = 0; i < result.image.length; i++){
-                                         var item = result.image[i];
-                                         _self.imgArr[i].url = result.image[i];
-                                    }
-                            }else{
-                                common.$emit('message', suc.data.msg);
-                            }
-                            
-                            
-                           
-                            
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-              }
-              
-
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+                    biz_param: {
+                        id: id
+                    }
+                }, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        let result = suc.data.biz_result;
+                        var duedateDate = new Date(result.duedate);
+                        var pubdateDate = new Date(result.pubdate);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                        _self.person.name = result.customerName;
+                        _self.person.phone = result.customerPhone;
+                        _self.information.price = result.price;
+                        _self.information.name = result.breedName;
+                        _self.information.spec = result.spec;
+                        _self.information.place = result.location;
+                        _self.information.number = result.number;
+                        _self.information.unit = result.unit;
+                        _self.obj.description = result.description;
+                        _self.imgArr = result.image;
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
+            back(){
+                window.history.go(-1);
+            }
         },
         components: {
             resourceInformation,
@@ -133,26 +116,13 @@ export default {
             auditProgress
         },
         created() {
-            /*common.$emit('show-load');
-            this.$http.get(common.apiUrl.drug_information_list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
             var _self = this;
-            var str = _self.$route.fullPath;
-            var id = str.substring(22,str.length);
+            var id = this.$route.params.suppSucId;
             _self.obj.id = id;
             _self.getHttp(id)
-            common.$on('informSupplySuccess',function (item){
-                   console.log(item)
-                   _self.getHttp(item);
+            common.$on('informSupplySuccess', function(item) {
+                _self.getHttp(item);
             });
-            
-
         }
 }
 </script>
@@ -204,14 +174,13 @@ export default {
     text-align: left;
     white-space: normal;
     word-break: break-all;
-    text-indent: 2.2rem;
 }
 
-.need_release_success .source_information .bg_white .more_content img{
-   width: 20%;
-   margin-left: 10px;
-   float: left;
-   height: 40px;
+.need_release_success .source_information .bg_white .more_content img {
+    width: 18%;
+    margin-right: 2%;
+    float: left;
+    height: 40px;
 }
 
 .need_release_success .bottom {

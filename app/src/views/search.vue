@@ -123,15 +123,8 @@ export default {
                     common.$emit("setParam", 'supplyRelease', item);
                     common.$emit("supplyRelease", item);
                     _self.$router.push(common.pageParam.router);
-                } else if (common.pageParam.router == 'reviseResource') {
-                    common.$emit("setParam", 'revResource', item);
-                    common.$emit("revResource", item);
-                    history.go(-1);
                 }else if(common.pageParam.router == 'needRelease'){
                      common.$emit("Needrelease",item);
-                     history.go(-1);
-                }else if(common.pageParam.router == 'revisePurchase'){
-                     common.$emit("Revisepurchase",item);
                      history.go(-1);
                 }
             },

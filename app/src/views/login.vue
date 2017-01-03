@@ -197,11 +197,7 @@ export default {
                       _self.codeLogin()
                   }else if(_self.selected == 'password'){
                      _self.passWordLogin()
-                  }
-                    
-
-                 
-                 
+                  }  
             }
         }
 }

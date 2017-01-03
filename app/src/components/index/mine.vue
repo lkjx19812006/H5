@@ -206,6 +206,7 @@ export default {
                         _self.content[0].customer = suc.data.biz_result.name;
                         _self.content[0].customerGender = suc.data.biz_result.gender;
                         common.customerId = suc.data.biz_result.id;
+                        window.localStorage.ID = suc.data.biz_result.id;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }

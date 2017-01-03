@@ -1,5 +1,5 @@
 <template>
-    <div class="whole order_total">
+    <div class=" order_total">
         <div class="title">
             {{name}}
         </div>

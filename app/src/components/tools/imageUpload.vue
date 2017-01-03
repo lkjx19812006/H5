@@ -215,10 +215,9 @@ export default {
 
 .img_upload .close_image {
     position: absolute;
-    top: -16px;
-    right: -14px;
-    width: 30px;
-    
+    top: -5px;
+    right: -5px;
+    max-width: 10px; 
 }
 </style>
 

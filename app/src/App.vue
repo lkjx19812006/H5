@@ -1,5 +1,5 @@
 <template>
-    <div id="app" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+    <div id="app" >
         <keep-alive>
             <router-view></router-view>
         </keep-alive>
@@ -11,10 +11,6 @@ export default {
             return {
                 wrapperHeight: 0
             }
-        },
-        mounted() {
-
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 
 }

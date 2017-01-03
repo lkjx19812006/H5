@@ -6,7 +6,7 @@ import { Indicator, Toast, MessageBox, DatetimePicker } from 'mint-ui'
 
 let common = new Vue({
     data: {
-        customerId:'',
+        customerId:window.localStorage.ID,
         show: true,
         urlCommon: 'front',
         KEY: window.localStorage.KEY ,

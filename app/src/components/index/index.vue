@@ -275,7 +275,6 @@ export default {
                         biz_module:'tradeNewService',
                         biz_method:'currentTradeList',
                             biz_param: {
-                                
                                 pn:1,
                                 pSize:20
                             }
@@ -297,48 +296,11 @@ export default {
                  _self.$router.push("search");
             },
             jumpRes(router,id){
-                let _self = this;
-                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result;
-                             _self.obj = result;
-                             common.$emit('indexToOrderConfirm',id);
-                             common.$emit('indexToResdetail',id);
-                        }, function(err) { 
-                             common.$emit('message', err.data.msg);
-                        })
+                common.$emit('indexToResdetail', id);
                 this.$router.push(router + id);
             },
             jumpNeed(router,id){
-                let _self = this;
-
-                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            let result = suc.data.biz_result;
-                            console.log(result);
-                            var duedateDate = new Date(result.duedate);
-                            var pubdateDate = new Date(result.pubdate);
-                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                            var days=Math.floor(dateValue/(24*3600*1000));
-                            result.days = days;
-                            result.pubdate = result.pubdate.substring(0,10);
-                             _self.obj = result;
-
-                             common.$emit('indexToNeeddetail',id);
-                        }, function(err) {
-                            common.$emit('message', err.data.msg);
-                        })
+                common.$emit('indexToNeeddetail', id);
                 this.$router.push(router + id);
             },
 
