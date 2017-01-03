@@ -5,6 +5,8 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
+
+  <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">      
              <div class="main">
 
                     <div class="personal_info">
@@ -62,6 +64,7 @@
           </div>    
        </div>
         <div class="confirm" @click="confirm">申请认证</div>
+       </div> 
   </div>
 </template>
 
@@ -187,6 +190,10 @@ export default {
 
 
             })
+        },
+        mounted() {
+
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 
 }

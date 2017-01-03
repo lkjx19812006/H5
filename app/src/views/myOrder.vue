@@ -365,6 +365,10 @@ export default {
                        _self.httpPraram.orderstatus = _self.data[index].back_id;
                        _self.allOrder();
                   });
+
+                  common.$on("orderToMyOrder",function (item){
+                       _self.getHttp();
+                  });
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

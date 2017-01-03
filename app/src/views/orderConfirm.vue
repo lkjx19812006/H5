@@ -50,24 +50,26 @@ export default {
        
         created() {
             let _self = this;
-            var str = _self.$route.fullPath;
-            var id = str.substring(14,str.length);
+            var id = _self.$route.params.sourceId;
             _self.sourceId = id;
             console.log(id)
             
             _self.getAddress();
             _self.gethttp(id);
-                            common.$on('post-res-detail-id',function (item){
-                                 /*_self.param = obj;
-                                 _self.order = obj;*/
-                                 _self.gethttp(item);
-                                 _self.getAddress();
-                            });
-                   
+                            
                             common.$on('backAddress',function (todo){
                                  _self.person = todo;
                                  _self.id = todo.id;
                             })
+                            common.$on('resourceDetail',function (item){
+                                 _self.gethttp(item);
+                            })
+                            common.$on('indexToOrderConfirm',function (item){
+                                 _self.gethttp(item);
+                            })
+                            common.$on('lowPriceToRes',function (item){
+                                    _self.gethttp(item);
+                            });
                 
         },
         components: {
@@ -130,12 +132,12 @@ export default {
                 this.$router.go(-1);
             },
             getValue(param){
-                 //console.log(param.value);
+                 
                 this.value = param.value;
             },
             jumpAddress(){
                 let _self = this;
-                common.$emit('setParam','router','orderConfirm')
+               /* common.$emit('setParam','router','orderConfirm')*/
                 _self.$router.push("/addressManage");
             },
             confirm(){
@@ -161,6 +163,7 @@ export default {
                   httpService.intentResOrder(url,body,function(suc){
                     common.$emit('close-load');
                     if(suc.data.code == '1c01'){
+                        common.$emit("orderToMyOrder","refurbish");
                         _self.$router.push("/myOrder")
                     }else{
                         common.$emit('message', suc.data.msg);

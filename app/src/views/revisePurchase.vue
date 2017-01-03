@@ -149,8 +149,9 @@ export default {
         },
         created() {
             var _self = this;
-            var str = _self.$route.fullPath;
-            var id = str.substring(16, str.length);
+            /*var str = _self.$route.fullPath;
+            var id = str.substring(16, str.length);*/
+            var id = _self.$route.params.visePurId;
             _self.obj.id = id;
 
             _self.self(id);

@@ -81,6 +81,59 @@ export default {
             this.getCode();
         },
         methods: {
+            passWordLogin(){
+                   let _self = this;
+                    common.$emit('show-load');
+                    httpService.login(common.urlCommon + common.apiUrl.login, {
+                        biz_param: {
+                            phone: _self.param.phone,
+                            password: _self.param.password
+                        }
+                    }, function(response) {
+                        common.$emit('close-load');
+                        if (response.data.code == '1c01') {
+                            window.localStorage.KEY = response.data.biz_result.KEY;
+                            window.localStorage.SID = response.data.biz_result.SID;
+                            common.KEY = window.localStorage.KEY;
+                            common.SID = window.localStorage.SID;
+                            common.getDate();
+                            // common.$emit('message', response.data.msg);
+                            _self.$router.push('/home');
+                        } else {
+                            common.$emit('message', response.data.msg);
+                        }
+                    }, function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+            },
+            codeLogin(){
+                    let _self = this;
+                    common.$emit('show-load');
+                    httpService.login(common.urlCommon + common.apiUrl.login, {
+                        biz_param: {
+                            phone: _self.param.phone,
+                            code: _self.param.code
+                        }
+                    }, function(response) {
+                        common.$emit('close-load');
+                        console.log(response)
+                        if (response.data.code == '1c01') {
+                            window.localStorage.KEY = response.data.biz_result.KEY;
+                            window.localStorage.SID = response.data.biz_result.SID;
+                            common.KEY = window.localStorage.KEY;
+                            common.SID = window.localStorage.SID;
+                            common.getDate();
+                            common.$emit('message', response.data.msg);
+                            _self.$router.push('/home');
+                        } else {
+                            //common.$emit('message', response.data.msg);
+                        }
+                    }, function(err) {
+                        common.$emit('close-load');
+                        //common.$emit('message', err.data.msg);
+                    })
+            },
             getCode: function() {
                 let str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLNOPQRSTUVWXYZ0123456789';
                 let res = '';
@@ -128,7 +181,7 @@ export default {
                 if (_self.selected == 'identiCode') {
                     let checkCode = validation.checkCode(_self.param.code, '666000');
                     checkArr.push(checkCode);
-                } else {
+                } else if(_self.selected == 'password'){
                     let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
                     let checkCode = validation.checkCode(_self.param.imageCode, _self.identify_code);
                     checkArr.push(checkPassword);
@@ -140,29 +193,15 @@ export default {
                         return;
                     }
                 }
-                common.$emit('show-load');
-                httpService.login(common.urlCommon + common.apiUrl.login, {
-                    biz_param: {
-                        phone: _self.param.phone,
-                        password: _self.param.password
-                    }
-                }, function(response) {
-                    common.$emit('close-load');
-                    if (response.data.code == '1c01') {
-                        window.localStorage.KEY = response.data.biz_result.KEY;
-                        window.localStorage.SID = response.data.biz_result.SID;
-                        common.KEY = window.localStorage.KEY;
-                        common.SID = window.localStorage.SID;
-                        common.getDate();
-                        // common.$emit('message', response.data.msg);
-                        _self.$router.push('/home');
-                    } else {
-                        common.$emit('message', response.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
+                  if(_self.selected == 'identiCode'){
+                      _self.codeLogin()
+                  }else if(_self.selected == 'password'){
+                     _self.passWordLogin()
+                  }
+                    
+
+                 
+                 
             }
         }
 }

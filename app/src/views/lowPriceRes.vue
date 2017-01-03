@@ -276,7 +276,7 @@ export default {
                         })*/
                 
                 //common.$emit('post-res-detail',_self.obj);
-                common.$emit('post-res-detail-id',id);
+                common.$emit('lowPriceToRes',id);
                 this.$router.push('resourceDetail/' + id);
             },
             handleBottomChange(status) {

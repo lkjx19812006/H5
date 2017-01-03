@@ -123,7 +123,7 @@ export default {
  },
  methods:{
       jumpPersonal(){
-            common.$emit("certification","refurbish");
+           common.$emit("certification","refurbish");
            this.$router.push("certification");
       },
       jumpCompany(){

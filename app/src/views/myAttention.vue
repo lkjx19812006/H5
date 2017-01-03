@@ -21,7 +21,7 @@
                  
                     <ul class="page-loadmore-list" v-show="show">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                                <img src="/static/images/1.jpg" class="list_images">
+                                <img :src="todo.image[0]" class="list_images">
                                 <div class="res_content">
                                     <div class="res_content_center">
                                         <div><img src="/static/icons/bao.png">{{todo.breedName}}</div>
@@ -132,6 +132,7 @@ export default {
                     common.$emit('close-load');
                     
                     let result = suc.data.biz_result.list;
+                    //console.log(result);
                     for(var i=0;i<result.length;i++){
 
                         var item = result[i];
@@ -150,6 +151,7 @@ export default {
                         item.days = days; 
                         item.duedate = duedate;
                         item.pubdate = pubdate;
+                        console.log(item.image[0]);
                     }
                     /*if(_self.httpPraram.intentionType == 1){
                         _self.resourceArr = result;

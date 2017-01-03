@@ -103,10 +103,13 @@ export default {
         methods:{
           jumpBack(todo){
               let _self = this;
-                if(common.pageParam.router == 'orderConfirm'){
-                    common.$emit('backAddress',todo);
+              common.$emit('backAddress',todo);
+               /* if(common.pageParam.router == 'orderConfirm'){             
                     history.go(-1);
-                }
+                }else if(common.pageParam.router == 'sampleConfirm'){
+                    history.go(-1);
+                }*/
+                 history.go(-1);
           },
           listHttp(){
             //本页面列表刷新接口

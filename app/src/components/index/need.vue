@@ -176,9 +176,8 @@ export default {
                 },  function(suc) {
                     common.$emit('message', suc.data.msg);
                     let result = suc.data.biz_result.list;
-                    for (var i = 0; i < result.length; i++) {
-                        _self.todos.push(result[i]);
-                    }
+                    common.$emit('translateDate',result,_self.todos);
+
                     if (back) {
                         back();
                     }
@@ -187,37 +186,7 @@ export default {
                     if (back) {
                         back();
                     }
-                })/*function(suc) {
-                    common.$emit('message', suc.data.msg);
-                    let result = suc.data.biz_result.list;
-                    for (var i = 0; i < result.length; i++) {
-                        var item = result[i];
-                        var duedate = item.duedate;
-                        var pubdate = item.duedate;
-                        duedate = duedate.replace(/-/g, '/');
-                        pubdate = pubdate.replace(/-/g, '/');
-                        duedate = duedate.substring(0, 10);
-                        pubdate = pubdate.substring(0, 10);
-                        var duedateDate = new Date(duedate);
-                        var pubdateDate = new Date(pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
-                        item.days = days;
-                        item.duedate = duedate;
-                        item.pubdate = pubdate;
-                    }
-                    for (var i = 0; i < result.length; i++) {
-                        _self.todos.push(result[i]);
-                    }
-                    if (back) {
-                        back();
-                    }
-                }, function(err) {
-                    common.$emit('message', err.data.msg);
-                    if (back) {
-                        back();
-                    }
-                })*/
+                })
             },
             getId(param) {
                 let _self = this;
@@ -259,6 +228,7 @@ export default {
                 // }, function(err) {
                 //     common.$emit('message', err.data.msg);
                 // })
+                common.$emit('post-need-detail', id);
                 this.$router.push('needDetail/' + id);
             },
             handleBottomChange(status) {

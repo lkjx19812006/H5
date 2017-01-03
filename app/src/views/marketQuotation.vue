@@ -29,7 +29,7 @@
            <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">    
                         <ul class="first_ul">
                             <li v-for="(todo,index) in todos">
-                                <div class="second_level" v-on:click="firstLevel(index,todo)">
+                                <div class="second_level" v-on:click="firstLevel(index,todos)">
                                     <p>{{todo.name}}</p>
                                     <p>{{todo.spec}}</p>
                                     <p>{{todo.area}}</p>
@@ -101,7 +101,8 @@ export default {
                                     }
                                 }, function(suc) {
                                     //console.log(suc);
-                                    let data = suc.data.biz_result.list;                
+                                    let data = suc.data.biz_result.list; 
+                                    //console.log(data)               
                                     for (var item in data) {
                                         data[item].show = false;
                                     }
@@ -118,7 +119,10 @@ export default {
                                     }
                                 })
             },
-           
+            firstLevel(index,todos){
+                 this.todos[index].show = !this.todos[index].show;
+
+            },
             jump(){
                 common.$emit("setParam","router",'lowPriceRes');
                 this.$router.push("search");

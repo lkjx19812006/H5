@@ -1,25 +1,19 @@
 <template>
   <div class="company_authentication">
-     
-                <mt-header title="企业认证" >
+
+                <mt-header title="企业认证" fixed>
                     <router-link to="/home" slot="left">
                         <mt-button icon="back"></mt-button>
                     </router-link>
-                </mt-header>
-               
-         
-                <div class="select_box" >
+                </mt-header>        
+                <div class="select_box">
                   <mt-navbar v-model="selected">
                     <mt-tab-item id="1" class="word">传统三证</mt-tab-item>
                     <mt-tab-item id="2" class="word">三证合一</mt-tab-item>
                   </mt-navbar>
                 </div>   
 
-     
-         
-       
-       
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">  
           <div class="content">
                <mt-tab-container v-model="selected">
                   <mt-tab-container-item id="1">
@@ -30,11 +24,8 @@
                                <imageUpload :param="personImgArr[index]" v-on:postUrl="getUrl"></imageUpload>
                            </div>
                            <p class="point">{{todo.point}}</p>
-                        </div>
-
-                       
-                         
-                    </div>
+                        </div>                       
+                   </div>
                   </mt-tab-container-item>
                   <mt-tab-container-item id="2">
                     <div class="second_item">
@@ -230,7 +221,7 @@ export default {
         },
         
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 300;
         }
 
 }
@@ -238,19 +229,23 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.company_authentication{
+  position: relative;
+  
+}
 .company_authentication .select_box{
-    border-bottom: 1px solid #DFDFDF;
+    /*border-bottom: 1px solid #DFDFDF;
     background-color: white;
     padding: 1rem;
-    /*top: 80px;
-    position: fixed;*/
+    position: relative;
+    height:70px;*/
 }
 .company_authentication .mint-navbar {
     width: 70%;
     margin-left: 15%;
-
-
+    position: fixed;
+    top:70px;
+    z-index: 100000;
 }
 .company_authentication .mint-navbar .mint-tab-item {
     padding: 1.2rem 0;
