@@ -104,12 +104,6 @@ export default {
 
                        let checkCode = validation.checkCode(_self.param.code, '666000');
                            checkArr.push(checkCode);
-                         
-                     
-                     
-                     
-
-
                      for (var i = 0; i < checkArr.length; i++) {
                         if (checkArr[i]) {
                             common.$emit('message', checkArr[i]);

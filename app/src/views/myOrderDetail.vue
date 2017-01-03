@@ -69,34 +69,39 @@ export default {
             }
         },
         created(){
-          let _self = this;
-                common.$on('post-no',function(no){
-                  _self.no = no;
-                  
-                 common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'orderService',biz_method:'queryOrderInfo',version:1,time:0,sign:'',biz_param:{
-                          no: no
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.myResource(url,body,function(suc){
-                    common.$emit('close-load');
-                    
-                    let listObj = suc.data.biz_result;
-                    
-                    console.log(listObj)
-                    
-                    _self.todo = listObj;
-                     
-                  },function(err){
-                    common.$emit('close-load');
-                  })
-            })
+                let _self = this;
+                _self.getHttp(_self.$route.params.OrdeId);
+                common.$on('post-no',function(id){
+                     _self.getHttp(id);
+                })
 
                
 
+        },
+        methods:{
+                 getHttp(id){
+                      let _self = this;
+                      common.$emit('show-load');
+                      let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                      let body={biz_module:'orderService',biz_method:'queryOrderInfo',version:1,time:0,sign:'',biz_param:{
+                              id: id
+                      }};
+                      
+                      body.time=Date.parse(new Date())+parseInt(common.difTime);
+                      body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                      httpService.myResource(url,body,function(suc){
+                        common.$emit('close-load');
+                        
+                        let listObj = suc.data.biz_result;
+                        
+                        console.log(listObj)
+                        
+                        _self.todo = listObj;
+                         
+                      },function(err){
+                        common.$emit('close-load');
+                      })
+                 }
         }
         
 

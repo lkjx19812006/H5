@@ -21,16 +21,17 @@
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                  
                         <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jump(todo.id,todo.no)">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" >
                             <div class="list_header">
                                 <div>
                                     <p class="time_font"><span>{{todo.ctime}}</span></p>
-                                    <p class="order">订单编号：<span>{{todo.no}}</span></p>
-                                    <p class="audit_state">{{todo.orderStatus}}</p>
+                                    <!-- <p class="order">订单编号：<span>{{todo.no}}</span></p> -->
+                                    <p class="audit_state" v-if="todo.type==0">{{todo.now_status}}</p>
+                                    <p class="audit_state" v-if="todo.type==1">{{todo.salenow_status}}</p>
                                 </div>
                             </div>
                             
-                            <img src="/static/images/1.jpg" class="list_images">
+                            <img :src="todo.image" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>{{todo.breedName}}</div>
@@ -52,10 +53,22 @@
                                     <p>￥<span>{{Number(todo.price) * Number(todo.number)}}</span>.00</p>
                                 </div>
                                 
-                                <p >
-                                   <button>物流查询</button>
-                                   <button class="last-one">确认收货</button>
+                                <p v-if = "todo.type == 0">
+                                   <button v-if="todo.button_status == '取消订单'" @click="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
+                                   <button  v-if="todo.button_status == '吹促发货'">吹促发货</button>
+                                   <button  v-if="todo.button_status == '物流查询'">物流查询</button>
+                                   <button  v-if="todo.button_status == '查看订单'" @click="jump(todo.id)">查看订单</button>
+                                   <button class="last-one" v-if="todo.button_status == '立即支付'">立即支付</button>
+                                   <button class="last-one" v-if="todo.order_status == '确认收货'">确认收货</button>
                                 </p>
+                                <p v-if = "todo.type == 1">
+                                   <button v-if="todo.salebutton_status == '取消订单'" @click="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
+                                   <button class="last-one" v-if="todo.salebutton_status == '我要发货'" >我要发货</button>
+                                   <button  v-if="todo.salebutton_status == '物流查询'">物流查询</button>
+                                   <button  v-if="todo.salebutton_status == '查看订单' || todo.saleorder_status == '查看订单'" @click="jump(todo.id)">查看订单</button>
+                                   <button v-if="todo.saleorder_status == '确认收款'">确认收款</button>
+                                </p>
+
                             </div>
                         </li>
                     </ul>
@@ -139,7 +152,16 @@ export default {
                     name:'已取消',
                     back_id:-1,
                     
-                }]
+                }],
+                buttonStatus:[{
+
+                }],
+                httpPraram: {
+                    type:1,
+                    orderstatus:0,
+                    page: 1,
+                    pageSize: 20
+                }
             }
         },
         components: {
@@ -147,15 +169,14 @@ export default {
             
         },
         methods: {
-            getHttp(orderstatus,type){
-                let _self = this;
-                  common.$emit('show-load');
+            upDate(no,id,type){
+                  let _self = this;
+                 common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'orderService',biz_method:'queryOrderList',version:1,time:0,sign:'',biz_param:{
-                        orderStatus:orderstatus,
-                        type:type,
-                        pn:1,
-                        pSize:20        
+                  let body={biz_module:'orderService',biz_method:'updateOrderStatus',version:1,time:0,sign:'',biz_param:{
+                             type:type,
+                             no:no,
+                             id:id
                   }};
                   
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
@@ -163,81 +184,190 @@ export default {
                   httpService.myResource(url,body,function(suc){
                     common.$emit('close-load');
                     if(suc.data.code == '1c01'){
-                         let listArr = suc.data.biz_result.list;              
+                        common.$emit('message', suc.data.msg);        
+                    
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }        
+                  },function(err){
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                    
+                  })
+            },
+            cancelOrder(id,no,type){
+                 let _self = this;
+                 common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'orderService',biz_method:'cancelOrder',version:1,time:0,sign:'',biz_param:{
+                             id:id,
+                             no:no
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    if(suc.data.code == '1c01'){
+                        common.$emit('message', suc.data.msg);
+                        _self.getHttp();                       
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }        
+                  },function(err){
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                    
+                  })
+            },
+            getHttp(back){
+                let _self = this;
+                  common.$emit('show-load');
+                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                  let body={biz_module:'orderService',biz_method:'queryOrderList',version:1,time:0,sign:'',biz_param:{
+                        orderStatus:_self.httpPraram.orderstatus,
+                        type:_self.httpPraram.type,
+                        pn:_self.httpPraram.page,
+                        pSize:_self.httpPraram.pageSize        
+                  }};
+                  
+                  body.time=Date.parse(new Date())+parseInt(common.difTime);
+                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                  httpService.myResource(url,body,function(suc){
+                    common.$emit('close-load');
+                    if(suc.data.code == '1c01'){
+                         let listArr = suc.data.biz_result.list;
+                         for(var i = 0; i < listArr.length; i++){
+                             
+                            if(listArr[i].orderStatus == -1){
+                                listArr[i].now_status = '订单取消';
+                                /*listArr[i].button_status = '已取消';*/
+                            }else if(listArr[i].orderStatus == -2){
+                                listArr[i].now_status = '订单过期';
+                                listArr[i].button_status = '取消订单';
+                            }else if(listArr[i].orderStatus == 0){
+                                listArr[i].now_status = '意向生成中';
+                                listArr[i].button_status = '取消订单';
+                            }else if(listArr[i].orderStatus == 10){
+                                listArr[i].now_status = '订单处理中';
+                                listArr[i].button_status = '取消订单';
+                            }else if(listArr[i].orderStatus == 20){      
+                                listArr[i].now_status = '订单处理确定';
+                                listArr[i].button_status = '立即支付';
+                                listArr[i].salenow_status = '待收款';
+                                listArr[i].salebutton_status = '取消订单';
+                                listArr[i].saleorder_status = '确认收款';
+                            }else if(listArr[i].orderStatus == 30){
+                                listArr[i].now_status = '待确认（已支付）';
+                                //listArr[i].button_status = '立即支付';
+                            }else if(listArr[i].orderStatus == 40){
+                                listArr[i].now_status = '待发货（支付确定）';
+                                listArr[i].button_status = '吹促发货';
+                                listArr[i].salenow_status = '待发货';
+                                listArr[i].salebutton_status = '我要发货';
+                                listArr[i].saleorder_status = '查看订单';
+                            }else if(listArr[i].orderStatus == 50){
+                                listArr[i].now_status = '待收货（已发货）';
+                                listArr[i].button_status = '物流查询';
+                                listArr[i].order_status = '确认收货';
+                                listArr[i].salenow_status = '待收货（已发货）';
+                                listArr[i].salebutton_status = '物流查询';
+                                listArr[i].saleorder_status = '查看订单';
+                            }else if(listArr[i].orderStatus == 60){
+                                listArr[i].now_status = '确认收货';
+                                listArr[i].button_status = '查看订单';
+                                listArr[i].saleorder_status = '查看订单';
+                            }
+                        console.log(listArr[i].button_status);      
+                    }
+                              
                          _self.todos = listArr;
                          console.log(suc);
                     }else{
                         common.$emit('message', suc.data.msg);
-                    }             
+                    } 
+
+                    if(back){
+                        back();
+                    }            
                   },function(err){
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
+                    if(back){
+                        back();
+                    }
                   })
             },
             tabOrder(){
                  let _self = this;
                     this.show = !this.show;
-                    if(this.show == true){
+                    if(_self.show == true){
                         _self.more = '采购订单';
                         _self.title = '销售订单';
-                        _self.type = '0';
-                        _self.getHttp(_self.orderstatus,0);
+                        _self.httpPraram.type = 1;
+                       // console.log(_self.httpPraram.type)
+                        _self.getHttp();
                     }else{
                         _self.more = '销售订单';
                         _self.title = '采购订单';
-                        _self.type = '1';
-                        _self.getHttp(_self.orderstatus,1);
+                        _self.httpPraram.type = 0;
+                        //console.log(_self.httpPraram.type)
+                        _self.getHttp();
                     }
             },
-            allOrder(id){
-                
-                this.getHttp(id,this.type);
-                this.orderstatus = id;
-                
+            allOrder(status){
+                this.httpPraram.orderstatus = status;
+                this.getHttp();       
             },
             
-            jump:function(id,no){
+            jump:function(id){
                  this.$router.push('myOrderDetail/' + id);
                  
-                 common.$emit('post-no',no);
+                 common.$emit('post-no',id);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                /*setTimeout(() => {
-                    let lastValue = this.todos[0];
-                    if (this.todos.length <= 40) {
-                        for (let i = 1; i <= 10; i++) {
-                            this.todos.push(this.todos[0]);
-                        }
-                    } else {
+                let _self = this;
+                setTimeout(() => {
+                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
+                    } else {
+                        this.httpPraram.page++;
+                        this.getHttp(function() {
+                            _self.$refs.loadmore.onBottomLoaded(id);
+                        });
                     }
-                    this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);*/
+                }, 1500);
             },
 
             handleTopChange(status) {
                 this.topStatus = status;
             },
             loadTop(id) {
-                /*setTimeout(() => {
-                    let firstValue = this.todos[0];
-                    for (let i = 1; i <= 10; i++) {
-                        this.todos.unshift(firstValue);
-                    }
-                    this.$refs.loadmore.onTopLoaded(id);
-                }, 1500);*/
+                let _self = this;
+                setTimeout(() => {
+                    _self.httpPraram.page = 1;
+                    _self.todos.splice(0, _self.todos.length);
+                    _self.getHttp(function() {
+                        _self.$refs.loadmore.onTopLoaded(id);
+                    });
+
+                }, 1500);
             }
         },
         created() {
            
                   let _self = this;
-                  this.getHttp(0,1);
+                  this.getHttp();
                   common.$on('mineToOrder',function (index){
+                       _self.httpPraram.orderstatus = _self.data[index].back_id;
+                       _self.allOrder();
+                  });
 
-                       _self.allOrder(_self.data[index].back_id);
+                  common.$on("orderToMyOrder",function (item){
+                       _self.getHttp();
                   });
         },
         mounted() {

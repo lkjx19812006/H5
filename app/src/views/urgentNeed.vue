@@ -22,7 +22,7 @@
                                 </div>
                                 <div class="detail">
                                     <p>规格：{{todo.spec}}</p>
-                                    <p>剩余：<span>{{Number(todo.days)}}</span>天</p>
+                                    <p>剩余：<span>{{todo.days}}</span>天</p>
                                 </div>
                                 <div class="detail">
                                     <p>产地：{{todo.location}}</p>
@@ -180,9 +180,34 @@ export default {
                         },  function(suc) {
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result.list;
-                            for (var i = 0; i < result.length; i++) {
-                                _self.todos.push(result[i]);
-                            }
+                             common.$emit('translateDate',result,_self.todos);
+                               /* for (var i = 0; i < result.length; i++) {
+                                var item = result[i];                          
+                                var duedate = item.duedate;
+                                var pubdate = item.duedate;
+                                if(duedate != '')duedate = duedate.substring(0,10);
+                                if(pubdate != '')pubdate = pubdate.substring(0,10);
+
+                                item.duedate = duedate;
+                                item.pubdate = pubdate;
+
+                                if(duedate != '' && pubdate != ''){
+                                    
+                                    duedate =  duedate.replace(/-/g,'/');
+                                    pubdate =  pubdate.replace(/-/g,'/');
+
+                                    var duedateDate = new Date(duedate);
+                                    var pubdateDate = new Date(pubdate);
+
+                                    var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                                    var days=Math.floor(dateValue/(24*3600*1000));
+                                    item.days = Number(days);
+                          
+                                }else{
+                                    item.days = '';
+                                }                               
+                                    _self.todos.push(item);
+                            }         */      
                             if (back) {
                                 back();
                             }
@@ -263,6 +288,7 @@ export default {
                             
                             common.$emit('message', err.data.msg);
                         })*/
+                common.$emit("needToDetail",id);
                 this.$router.push('needDetail/' + id);
             },
             handleBottomChange(status) {

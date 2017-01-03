@@ -154,7 +154,7 @@
                                         <div class="list_font">{{todo.location}}</div>
                                         <div class="list_font">{{todo.duedate}}</div>
                                         <div class="list_font">
-                                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/' + todo.id)">
+                                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/',todo.id)">
                                                 我要报价
                                             </button>
                                         </div>
@@ -308,7 +308,8 @@ export default {
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result;
                              _self.obj = result;
-                             common.$emit('post-res-detail',_self.obj);
+                             common.$emit('indexToOrderConfirm',id);
+                             common.$emit('indexToResdetail',id);
                         }, function(err) { 
                              common.$emit('message', err.data.msg);
                         })
@@ -316,6 +317,7 @@ export default {
             },
             jumpNeed(router,id){
                 let _self = this;
+
                 httpService.myAttention(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
@@ -324,6 +326,7 @@ export default {
                             }
                         }, function(suc) {
                             let result = suc.data.biz_result;
+                            console.log(result);
                             var duedateDate = new Date(result.duedate);
                             var pubdateDate = new Date(result.pubdate);
                             var dateValue = duedateDate.getTime() - pubdateDate.getTime();
@@ -331,7 +334,8 @@ export default {
                             result.days = days;
                             result.pubdate = result.pubdate.substring(0,10);
                              _self.obj = result;
-                             common.$emit('post-need-detail',_self.obj);
+
+                             common.$emit('indexToNeeddetail',id);
                         }, function(err) {
                             common.$emit('message', err.data.msg);
                         })

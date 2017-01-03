@@ -215,6 +215,7 @@ export default {
                 //         }, function(err) {  
                 //              common.$emit('message', err.data.msg);
                 //         })
+                common.$emit("resourceDetail",id);
                 this.$router.push('resourceDetail/' + id);
             },
             handleBottomChange(status) {

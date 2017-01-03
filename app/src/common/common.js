@@ -68,6 +68,7 @@ let common = new Vue({
             console.log(signStr);
             return signStr;
         }
+       
     }
 })
 
@@ -106,15 +107,45 @@ common.$on('message', message => {
     });
    confirmButtonText, cancelButtonText, 
 })*/
-common.$on('confirm',(message, title) => {
+/*common.$on('confirm',(message, title) => {
     MessageBox.confirm(message, title).then(action =>{
            console.log(1111);
     },action =>{
            console.log(2222);
     })
+})*/
+
+common.$on('translateDate',(result,todos) => {
+
+                for (var i = 0; i < result.length; i++) {
+                var item = result[i];                          
+                var duedate = item.duedate;
+                var pubdate = item.duedate;
+                if(duedate != '')duedate = duedate.substring(0,10);
+                if(pubdate != '')pubdate = pubdate.substring(0,10);
+
+                item.duedate = duedate;
+                item.pubdate = pubdate;
+
+                if(duedate != '' && pubdate != ''){
+                    
+                    duedate =  duedate.replace(/-/g,'/');
+                    pubdate =  pubdate.replace(/-/g,'/');
+
+                    var duedateDate = new Date(duedate);
+                    var pubdateDate = new Date(pubdate);
+
+                    var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                    var days=Math.floor(dateValue/(24*3600*1000));
+                    item.days = Number(days);
+          
+                }else{
+                    item.days = '';
+                }                               
+                    todos.push(item);
+            }
+       
 })
-
-
 /*this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (response) => {

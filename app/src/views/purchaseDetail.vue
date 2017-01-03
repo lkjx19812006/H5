@@ -68,43 +68,51 @@ export default {
             }
         },
         methods: {
+            getHttp(id){
+                  let _self = this;
+                  httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+                        biz_module: 'intentionService',
+                        biz_method: 'queryIntentionInfo',
+                        biz_param: {
+                            id: id
+                        }
+                    }, function(suc) {
+                        let result = suc.data.biz_result;
+                        var duedateDate = new Date(result.duedate);
+                        var pubdateDate = new Date(result.pubdate);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                        var pubdate = result.pubdate.substring(0, 10);
+                        _self.obj.drug_name = result.breedName;
+                        _self.obj.spec = result.spec;
+                        _self.obj.place = result.location;
+                        _self.obj.number = result.number;
+                        _self.obj.number_unit = result.unit;
+                        _self.obj.selling_point = result.description;
+                        _self.obj.name = result.customerName;
+                        _self.obj.phone = result.customerPhone;
+                        _self.obj.offer = result.offer;
+                        _self.obj.offerVprice = result.offerVprice;
+                        _self.obj.pubdate = pubdate;
+                        _self.obj.duedate = days;
+                    }, function(err) {
+                        common.$emit('message', err.data.msg);
+                    })
+            },
             back() {
                 this.$router.go(-1);
             },
         },
         created() {
             var _self = this;
-            var str = _self.$route.fullPath;
-            var id = str.substring(16, str.length);
+            var id = _self.$route.params.rchaseId;
             _self.obj.id = id;
-            httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
-                biz_module: 'intentionService',
-                biz_method: 'queryIntentionInfo',
-                biz_param: {
-                    id: id
-                }
-            }, function(suc) {
-                let result = suc.data.biz_result;
-                var duedateDate = new Date(result.duedate);
-                var pubdateDate = new Date(result.pubdate);
-                var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                var days = Math.floor(dateValue / (24 * 3600 * 1000));
-                var pubdate = result.pubdate.substring(0, 10);
-                _self.obj.drug_name = result.breedName;
-                _self.obj.spec = result.spec;
-                _self.obj.place = result.location;
-                _self.obj.number = result.number;
-                _self.obj.number_unit = result.unit;
-                _self.obj.selling_point = result.description;
-                _self.obj.name = result.customerName;
-                _self.obj.phone = result.customerPhone;
-                _self.obj.offer = result.offer;
-                _self.obj.offerVprice = result.offerVprice;
-                _self.obj.pubdate = pubdate;
-                _self.obj.duedate = days;
-            }, function(err) {
-                common.$emit('message', err.data.msg);
-            })
+
+            _self.getHttp(id);
+            common.$on("myPurToPurDetail",function (item){
+                  _self.getHttp(item);
+            });
+            
         }
 
 }

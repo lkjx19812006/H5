@@ -29,7 +29,7 @@
            <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">    
                         <ul class="first_ul">
                             <li v-for="(todo,index) in todos">
-                                <div class="second_level" v-on:click="firstLevel(index,todo)">
+                                <div class="second_level" v-on:click="firstLevel(index,todos)">
                                     <p>{{todo.name}}</p>
                                     <p>{{todo.spec}}</p>
                                     <p>{{todo.area}}</p>
@@ -77,7 +77,16 @@ export default {
                 onOrOff: false,
                 todos: [],
                 todos_li: {},
+                topStatus: '',
+                wrapperHeight: 0,
+                ttwrapperHeight: 0,
+                allLoaded: false,
+                bottomStatus: '',
                 show: false,
+                httpPraram: {
+                    page: 1,
+                    pageSize: 10
+                }
                 
             }
         },
@@ -92,7 +101,8 @@ export default {
                                     }
                                 }, function(suc) {
                                     //console.log(suc);
-                                    let data = suc.data.biz_result.list;                
+                                    let data = suc.data.biz_result.list; 
+                                    //console.log(data)               
                                     for (var item in data) {
                                         data[item].show = false;
                                     }
@@ -109,7 +119,10 @@ export default {
                                     }
                                 })
             },
-           
+            firstLevel(index,todos){
+                 this.todos[index].show = !this.todos[index].show;
+
+            },
             jump(){
                 common.$emit("setParam","router",'lowPriceRes');
                 this.$router.push("search");
@@ -120,10 +133,10 @@ export default {
             loadBottom(id) {
                 let _self = this;
                 setTimeout(() => {
-                    if (this.todos.length < 5) {
+                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
                     } else {
-                        
+                        this.httpPraram.page++;
                         this.getHttp(function() {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
@@ -136,7 +149,7 @@ export default {
             loadTop(id) {
                 let _self = this;
                 setTimeout(() => {
-                    
+                    _self.httpPraram.page = 1;
                     _self.todos.splice(0, _self.todos.length);
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);

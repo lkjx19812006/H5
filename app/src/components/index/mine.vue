@@ -1,9 +1,10 @@
 <template>
     <div class="mine">
         <div class="header" v-for="todo in content">
-            <div class="header_top">
+            <!-- <div class="header_top">
                 <div class="header_photo">
-                    <!-- <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload> --><img :src="url"></div>
+                    <img :src="url">
+                </div>
                 <div class="information">
                     <div class="information_center">
                         <div class="main_content">
@@ -11,7 +12,7 @@
                             <p class="sex">
                                 <img src="/static/images/woman.png" v-if="todo.gender == ''">
                                 <img src="/static/images/woman.png" v-if="todo.gender == '1'">
-                                <!-- 判断性别 -->
+                                
                             </p>
                         </div>
                         <p class="company">{{todo.company}}</p>
@@ -32,12 +33,28 @@
                     
 
                     <img src="/static/images/woman.png" v-if="todo.customerGender == '0'">
-                    <img src="/static/images/woman.png" v-if="todo.customerGender == '1'"> <!-- 判断性别 -->
+                    <img src="/static/images/woman.png" v-if="todo.customerGender == '1'"> 
                 </span></p>
                 <router-link to="detailsPage">
                     <p class="details" v-if="todo.customerGender == '0' || todo.customerGender == '1'">{{todo.details}}</p>
                 </router-link>
-            </div>
+            </div> -->
+        </div>
+        <div class="information">
+             <ul>
+                 <li>
+                     <img src="/static/images/custom-service.png">
+                     <p>专属客服</p>
+                 </li>
+                 <li>
+                     <img src="/static/images/address-manage.png">
+                     <p>地址管理</p>
+                 </li>
+                 <li  class="last">
+                     <img src="/static/images/my-account.png">
+                     <p>我的账户</p>
+                 </li>
+             </ul>
         </div>
         <div class="all_order">
             <p>全部订单</p>
@@ -253,13 +270,12 @@ export default {
 }
 
 .mine .header {
-    height: 17.537rem;
+    height: 16.64rem;
     width: 100%;
-    background: #cccccc;
-    padding-top: 3.7rem;
+    background: url(/static/images/bg.png) no-repeat;
 }
 
-.mine .header_top {
+/*.mine .header_top {
     width: 88%;
     height: 6.4rem;
     margin-left: 6%;
@@ -375,14 +391,26 @@ export default {
 .mine .details {
     flex: 27;
     text-align: right;
+}*/
+.mine .information{
+    padding: 0.64rem 0;
+    height:4.2665rem;
 }
-
+.mine .information ul{
+    display: flex;
+    flex-direction:row;
+}
+.mine .information ul li{
+    flex:1;
+    border-right:1px solid #e6e6e6;
+}
 .mine .entrance {
     display: flex;
     flex-direction: row;
-    height: 7.253rem;
+    height: 6.06rem;
     background: white;
     width: 100%;
+    margin:0;
 }
 
 .mine .all_order {
@@ -390,6 +418,7 @@ export default {
     line-height: 3.6rem;
     background: white;
     border-bottom: 1px solid #E0E0DF;
+    margin:0;
 }
 
 .mine .all_order>p {
@@ -421,7 +450,7 @@ export default {
 .mine .entrance div {
     flex: 1;
     box-sizing: border-box;
-    height: 7.253rem;
+    height: 6.06rem;
     position: relative;
 }
 
@@ -497,22 +526,23 @@ export default {
 .mine .entrance {
     display: flex;
     flex-direction: row;
-    height: 7.253rem;
+    height: 6.06rem;
     margin-top: 0.8533rem;
     background: white;
+    margin:0;
 }
 
 .mine .entrance div {
     flex: 1;
     box-sizing: border-box;
-    height: 7.253rem;
+    height: 6.06rem;
     position: relative;
 }
 
 .mine .entrance div p {
     font-size: 1.109rem;
     color: #333333;
-    margin-top: 4.48rem;
+    margin-top: 4rem;
 }
 
 .mine .my_list {
@@ -554,7 +584,7 @@ export default {
     height: 2.048rem;
     margin-left: -1.024rem;
     left: 50%;
-    top: 1.621rem;
+    top: 1.5rem;
 }
 
 .mine .my_list_part {

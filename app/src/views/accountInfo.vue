@@ -6,46 +6,51 @@
  </router-link>
  <mt-button  slot="right"><div v-on:click="upData('accountInfoFinish')">编辑</div></mt-button> 
 </mt-header>
-<div class="header_photo_box">
-  <p class="header_word">头像<span>(点击更改头像)</span></p>
-  <div class="photo-div"><img v-bind:src='url' class="photo"></div>
-  
+
+<div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+      <div class="header_photo_box">
+        <p class="header_word">头像<span>(点击更改头像)</span></p>
+        <div class="photo-div"><img v-bind:src='url' class="photo"></div>
+        
+      </div>
+
+      <div class="basic_data">
+        <p class="basic_data_title">基础信息</p>
+        <ul>
+         <li v-for="(item,index) in personalDataArr" v-if="index !== 4"> 
+          <p class="name  name_big_size" v-if="index > 2">{{item.name}}</p>
+          <p class="name  name_smart_size" v-if="index <= 2">{{item.name}}</p>
+          <p class="name_content" v-if="index !== 2">{{item.content}}</p>
+          <p class="name_content" v-if="index == 2 && item.content == '女'"><img src="/static/images/woman.png"></p>
+          <p class="name_content" v-if="index == 2 && item.content == '男'"><img src="/static/images/man.png"></p>
+        </li>
+        <li v-for="(item,index) in personalDataArr" v-if="index == 4" id="personal_authentication" @click="jumpPersonal"> 
+          <p class="name  name_big_size">{{item.name}}</p>
+          <p class="name_content">{{item.content}}</p>
+        </li>
+        
+      </ul>
+      </div>
+
+      <div class="company_data">
+        <p class="company_data_title">企业信息</p>
+        <ul>
+         <li v-for="(item,index) in companyDataArr" v-if="index !== 5">
+          <p class="name  name_smart_size" v-if="index <= 2">{{item.name}}</p>
+          <p class="name  name_big_size" v-if="index > 2">{{item.name}}</p>
+          <p class="name_content">{{item.content}}</p>
+        </li>
+
+        <li v-for="(item,index) in companyDataArr" v-if="index == 5" id="company_authentication" @click="jumpCompany"> 
+          <p class="name  name_big_size">{{item.name}}</p>
+          <p class="name_content">{{item.content}}</p>
+        </li>
+        
+      </ul>
+      </div>
+
 </div>
 
-<div class="basic_data">
-  <p class="basic_data_title">基础信息</p>
-  <ul>
-   <li v-for="(item,index) in personalDataArr" v-if="index !== 4"> 
-    <p class="name  name_big_size" v-if="index > 2">{{item.name}}</p>
-    <p class="name  name_smart_size" v-if="index <= 2">{{item.name}}</p>
-    <p class="name_content" v-if="index !== 2">{{item.content}}</p>
-    <p class="name_content" v-if="index == 2 && item.content == '女'"><img src="/static/images/woman.png"></p>
-    <p class="name_content" v-if="index == 2 && item.content == '男'"><img src="/static/images/man.png"></p>
-  </li>
-  <li v-for="(item,index) in personalDataArr" v-if="index == 4" id="personal_authentication" @click="jumpPersonal"> 
-    <p class="name  name_big_size">{{item.name}}</p>
-    <p class="name_content">{{item.content}}</p>
-  </li>
-  
-</ul>
-</div>
-
-<div class="company_data">
-  <p class="company_data_title">企业信息</p>
-  <ul>
-   <li v-for="(item,index) in companyDataArr" v-if="index !== 5">
-    <p class="name  name_smart_size" v-if="index <= 2">{{item.name}}</p>
-    <p class="name  name_big_size" v-if="index > 2">{{item.name}}</p>
-    <p class="name_content">{{item.content}}</p>
-  </li>
-
-  <li v-for="(item,index) in companyDataArr" v-if="index == 5" id="company_authentication">
-    <p class="name  name_big_size">{{item.name}}</p>
-    <p class="name_content">{{item.content}}</p>
-  </li>
-  
-</ul>
-</div>
 
 </div>
 </template>
@@ -118,8 +123,11 @@ export default {
  },
  methods:{
       jumpPersonal(){
-
+           common.$emit("certification","refurbish");
            this.$router.push("certification");
+      },
+      jumpCompany(){
+          this.$router.push("companyAuthentication");
       },
       getHttp(){
            let _self = this;
@@ -165,8 +173,11 @@ export default {
 
 
 
-  }     
- 
+  },    
+  mounted() {
+
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        }
 
  
 }

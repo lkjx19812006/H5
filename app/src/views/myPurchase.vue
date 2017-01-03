@@ -250,6 +250,7 @@ export default {
             },
             jump:function(router,id){
                 common.$emit("purchase-id",id);
+                common.$emit("myPurToPurDetail",id);
                 this.$router.push(router + '/' + id);
             },
             handleBottomChange(status) {

@@ -173,17 +173,21 @@ export default {
         created() {
             let _self = this;
             
-            var str = _self.$route.fullPath;
-            var id = str.substring(16,str.length);
+           
+            var id = _self.$route.params.sourceId;
             _self.id = id;
             
                   _self.refurbish(id);
             
-
-                   common.$on('post-res-detail-id',function (item){
-                        /*_self.obj = obj;*/
+                   common.$on('lowPriceToRes',function (item){
+                        _self.refurbish(item);
+                   });
+                   common.$on('resourceDetail',function (item){
                         _self.refurbish(item);
                    })
+                   common.$on('indexToResdetail',function (item){
+                        _self.refurbish(item);
+                   });
         }
 }
 </script>
