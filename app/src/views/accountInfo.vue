@@ -10,7 +10,7 @@
 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
       <div class="header_photo_box">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
-        <div class="photo-div"><img v-bind:src='url' class="photo"></div>
+        <div class="photo-div"><headerPhoto :param = "param"></headerPhoto></div>
         
       </div>
 
@@ -59,9 +59,13 @@
 import common from '../common/common.js'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import headerPhoto from '../components/tools/headerPhoto'
 export default {
   data () {
     return {
+      param:{
+         url:'',
+      },
       personalDataArr:[{
        name:'姓名',
        content:'杨帆帆'
@@ -104,7 +108,7 @@ export default {
          gender:'',
          
      },
-     url:''
+     url:'/static/images/my-header.png'
      
 
    }
@@ -121,6 +125,9 @@ export default {
   
 
  },
+ components: {
+            headerPhoto
+        },
  methods:{
       jumpPersonal(){
            common.$emit("certification","refurbish");
@@ -156,8 +163,8 @@ export default {
             _self.companyDataArr[3].content = suc.data.biz_result.bizMain;
             _self.companyDataArr[4].content = suc.data.biz_result.invoice;
             _self.companyDataArr[5].content = suc.data.biz_result.ccomment;
-            _self.url = suc.data.biz_result.avatar;
-            
+            _self.param.url = suc.data.biz_result.avatar;
+            console.log(suc.data.biz_result.avatar)
           },function(err){
             common.$emit('close-load');
           })
@@ -212,13 +219,11 @@ export default {
 .account_overview .photo{
   width:5.1198rem;
   height:5.1198rem;
-  border-radius: 50%;
-  
-  
+  border-radius: 50%; 
 }
 .photo-div{
   overflow: hidden;
-  background:#FED77A;
+  background:#fff;
   float:right;
   margin-top:1.0666rem;
   margin-right: 6%;

@@ -1,10 +1,14 @@
 <template>
     <div class="content urgent_need">
-        <mt-header title="紧急求购">
+        <!-- <mt-header title="紧急求购">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+
+        <div class="go-back" @click="jump('home')">
+                <img src="/static/images/go-back.png">
+        </div>
         <div @click="jumpSearch">
              <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" ></search-input>
         </div>
@@ -14,19 +18,34 @@
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                            <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div>
+                            
                             <div class="center">
+                                 <img src="/static/icons/england.png" class="flag">
                                 <div class="title">
-                                    <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
+                                    <div><img src="/static/icons/impatient.png">{{todo.breedName}}</div>
                                     <p>发布时间：{{todo.pubdate}}</p>
                                 </div>
-                                <div class="detail">
+                                <!-- <div class="detail">
                                     <p>规格：{{todo.spec}}</p>
                                     <p>剩余：<span>{{todo.days}}</span>天</p>
                                 </div>
                                 <div class="detail">
                                     <p>产地：{{todo.location}}</p>
                                     <p>需求数量：{{todo.number}}{{todo.unit}}</p>
+                                </div> -->
+                                <div class="detail">
+                                    <div>
+                                        <p>规格</p>
+                                        <p>产地</p>
+                                        <p>剩余</p>
+                                        <p>需求数量</p>
+                                    </div>
+                                    <div class="last">
+                                        <p>{{todo.spec}}</p>
+                                        <p>{{todo.location}}</p>
+                                        <p>{{todo.days}}<span>天</span></p>
+                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
+                                    </div>
                                 </div>
                             </div>
                             <div class="bottom">
@@ -326,6 +345,9 @@ export default {
                 common.$emit('setParam','router','urgentNeed');
                 this.$router.push('search');
                 
+            },
+            jump(router){
+                this.$router.push(router);
             }
         },
         created() {
@@ -364,7 +386,7 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.page-loadmore-listitem {
+/*.page-loadmore-listitem {
     height: 50px;
     line-height: 50px;
     border-bottom: solid 1px #eee;
@@ -372,7 +394,7 @@ export default {
     &:first-child {
         border-top: solid 1px #eee;
     }
-}
+}*/
 
 .page-loadmore-wrapper {
     margin-top: -1px;
@@ -403,43 +425,50 @@ export default {
 }
 
 .urgent_need {}
+.urgent_need .go-back{
+    position: absolute;
+    width:15%;
+    padding-right:5%;
+    height:50px;
+    border-bottom: 1px solid #ccc;
+    background:#EC6817;
+}
 
+.urgent_need .go-back  img{
+    margin-top: 15px;
+    height:20px;
+}
+.urgent_need .bg_white{
+    background:#fff;
+}
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list {
+    padding: 0 10px;
+}
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
     min-height: 100px;
-    padding: 10px;
+    padding:0;
     height: auto;
+    background: white;
+    margin-top: 10px;
+    border-radius: 3px;
+    box-shadow: 0px 0px 20px #F5F5F5;
 }
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag {
-    float: left;
-    width: 100%;
-    padding-bottom: 10px;
-    line-height: 17px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag img {
-    max-height: 15px;
-    float: left;
-}
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag span {
-    margin-left: 5px;
-    color: #666;
-    font-size: 1rem;
-}
+
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom {
     float: left;
     width: 100%;
-    margin-top: 10px;
+    padding: 0 10px;
+    height:4.18rem;
 }
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom p {
-    line-height: 24px;
+    line-height: 4.18rem;
     float: left;
     font-size: 1.2rem;
     color: #666;
@@ -452,60 +481,79 @@ export default {
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom button {
     float: right;
     background: #EC6817;
-    font-size: 10px;
-    min-width: 60px;
-    max-height: 25px;
+    font-size: 1.2rem;
+    width: 5.97rem;
+    height: 2.389rem;
     padding: 0 5px;
     border: none;
     color: #fff;
     line-height: 0;
+    margin-top: 0.8955rem;
 }
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center {
     float: left;
     width: 100%;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
+    padding: 0 10px 1.066rem 10px;
+    /*padding:0 0 10px 0;*/
+    position: relative;
 }
-
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag{
+    position: absolute;
+    top:0px;
+    right:0px;
+    width:1.7rem;
+    height:1.23rem;
+}
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center div {
     float: left;
 }
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title {
     width: 100%;
-    font-size: 1.3rem;
+    font-size: 1.365rem;
     color: #333;
-    line-height: 15px;
-    margin: 10px 0;
+    line-height: 1.365rem;
+    /*margin: 10px 0;*/
 }
-
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title>div{
+    margin-top:1.06rem;
+}
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title p {
     float: right;
     font-size: 1rem;
     color: #999;
+    margin:1.2rem 2.559rem 0 0;
+
 }
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img {
-    max-height: 15px;
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img { 
+    width:1.2rem;
+    margin-right: 5px;
+}
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail{
+    width:100%;
+    
+    display: flex;
+    flex-direction:column;
+}
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div{
+    flex:1;
+    display:flex;
+    flex-direction:row;
+    margin-top: 1.279rem;
+    
+}
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail .last p{
+    color:#666666;
+}
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div p{
+    flex:1;
+    
+    
+    font-size: 1.109rem;
+    color:#424242;
 }
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail {
-    width: 100%;
-    line-height: 18px;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail p {
-    float: left;
-    font-size: 1.2rem;
-    color: #666;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail span {
-    color: #EC6817;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail p:last-child {
-    float: right;
-}
 </style>

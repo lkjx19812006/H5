@@ -14,7 +14,7 @@
                             <div class="list_header">
                                 <div>
                                     <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
-                                    <p class="audit_state">{{todo.state}}</p>
+                                    <p class="audit_state">{{todo.onSell}}</p>
                                 </div>
                             </div>
                             <img :src="todo.image[0]" class="list_images" @click="jumpDetail(todo.id)">
@@ -216,11 +216,11 @@ export default {
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
                     common.$emit('message', suc.data.msg);
-                    console.log(suc);
+                    
                     let result = suc.data.biz_result.list;             
-                    for (var i = 0; i < result.length; i++) {
-                        _self.todos.push(result[i]);
-                    }
+                    
+                    common.$emit("translatePubdate",result,_self.todos);
+
                     if(back){
                         back();
                     }
@@ -364,19 +364,20 @@ export default {
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li {
     margin-bottom: 1rem;
     background: white;
+
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    height: 9rem;
-    width: 8.5rem;
+    height: 8.1rem;
+    width: 25%;
     left: 10px;
-    margin: 50px 10px 10px 0;
+    margin: 3.55rem 10px 10px 0;
     position: absolute;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header {
     width: 100%;
-    height: 40px;
+    height: 2.8rem;
     padding: 0 10px;
 }
 
@@ -384,17 +385,17 @@ export default {
     border-bottom: 1px solid #C6C6C5;
     width: 100%;
     height: 100%;
-    line-height: 40px;
+    line-height: 2.8rem;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .time_font {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     color: #9C9C9C;
     float: left;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .audit_state {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: #FA6705;
     float: right;
 }
@@ -414,6 +415,7 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center div {
     font-size: 1.6rem;
+    margin-bottom: 1rem;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
@@ -424,6 +426,7 @@ export default {
     text-align: left;
     font-size: 1.1rem;
     color: #666;
+    margin-bottom: 0.5rem;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
@@ -438,10 +441,11 @@ export default {
     height: 90px;
     margin: 0;
     right: 10px;
+    
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     margin-top: 0px;
     color: #EC6817;
 }
@@ -452,7 +456,7 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
     position: absolute;
-    bottom: 10px;
+    bottom: 0px;
     background: white;
     font-size: 10px;
     min-width: 60px;

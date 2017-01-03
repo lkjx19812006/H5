@@ -1,8 +1,9 @@
 <template>
     <div class="content need">
         <div class="fixed">
+            
             <div @click="jumpSearch">
-                <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></search-input>
+                <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></longSearch>
             </div>
             <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         </div>
@@ -11,19 +12,34 @@
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                            <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div>
+                            <!-- <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div> -->
                             <div class="center">
+                                <img src="/static/icons/england.png" class="flag">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
                                     <p>发布时间：{{todo.pubdate}}</p>
                                 </div>
-                                <div class="detail">
+                                <!-- <div class="detail">
                                     <p>规格：{{todo.spec}}</p>
                                     <p>剩余：<span>{{todo.days}}</span>天</p>
                                 </div>
                                 <div class="detail">
                                     <p>产地：{{todo.location}}</p>
                                     <p>需求数量：{{todo.number}}{{todo.unit}}</p>
+                                </div> -->
+                                <div class="detail">
+                                    <div>
+                                        <p>规格</p>
+                                        <p>产地</p>
+                                        <p>剩余</p>
+                                        <p>需求数量</p>
+                                    </div>
+                                    <div class="last">
+                                        <p>{{todo.spec}}</p>
+                                        <p>{{todo.location}}</p>
+                                        <p>{{todo.days}}<span>天</span></p>
+                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
+                                    </div>
                                 </div>
                             </div>
                             <div class="bottom">
@@ -47,7 +63,7 @@
 </template>
 <script>
 import common from '../../common/common.js'
-import searchInput from '../../components/tools/inputSearch'
+import longSearch from '../../components/tools/longSearch'
 import sort from '../../components/tools/sort'
 import httpService from '../../common/httpService.js'
 export default {
@@ -153,7 +169,7 @@ export default {
             }
         },
         components: {
-            searchInput,
+            longSearch,
             sort
         },
         methods: {
@@ -294,7 +310,7 @@ export default {
 }
 </script>
 <style scoped>
-.page-loadmore-listitem {
+/*.page-loadmore-listitem {
     height: 50px;
     line-height: 50px;
     border-bottom: solid 1px #eee;
@@ -302,7 +318,7 @@ export default {
     &:first-child {
         border-top: solid 1px #eee;
     }
-}
+}*/
 
 .page-loadmore-wrapper {
     margin-top: -1px;
@@ -334,6 +350,35 @@ export default {
 
 .need {}
 
+
+.need .go-back{
+    position: absolute;
+    width:15%;
+    padding-right:5%;
+    height:50px;
+    border-bottom: 1px solid #ccc;
+    background:#EC6817;
+}
+
+.need .bg_white{
+    background:#fff;
+}
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list {
+    padding: 0 10px;
+}
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
+    float: left;
+    width: 100%;
+    min-height: 100px;
+    padding:0;
+    height: auto;
+    background: white;
+    margin-top: 10px;
+    border-radius: 3px;
+    box-shadow: 0px 0px 20px #F5F5F5;
+}
+
+
 .need .fixed {
     position: fixed;
     width: 100%;
@@ -353,54 +398,49 @@ export default {
     height: auto;
 }
 
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag {
+
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag{
+    position: absolute;
+    top:0px;
+    right:0px;
+    width:1.7rem;
+    height:1.23rem;
+}
+
+
+
+.need  .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom {
     float: left;
     width: 100%;
-    padding-bottom: 10px;
-    line-height: 17px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+    padding: 0 10px;
+    height:4.18rem;
 }
 
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag img {
-    max-height: 15px;
-    float: left;
-}
-
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag span {
-    margin-left: 5px;
-    color: #666;
-    font-size: 1rem;
-}
-
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom {
-    float: left;
-    width: 100%;
-    margin-top: 10px;
-}
-
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom p {
-    line-height: 24px;
+.need  .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom p {
+    line-height: 4.18rem;
     float: left;
     font-size: 1.2rem;
     color: #666;
 }
 
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom span {
+.need  .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom span {
     color: #EC6817;
 }
 
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom button {
+.need  .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom button {
     float: right;
     background: #EC6817;
-    font-size: 10px;
-    min-width: 60px;
-    max-height: 25px;
+    font-size: 1.2rem;
+    width: 5.97rem;
+    height: 2.389rem;
     padding: 0 5px;
     border: none;
     color: #fff;
     line-height: 0;
+    margin-top: 0.8955rem;
 }
+
+
 
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center {
     float: left;
@@ -431,22 +471,26 @@ export default {
     max-height: 15px;
 }
 
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail {
-    width: 100%;
-    line-height: 18px;
-}
 
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail p {
-    float: left;
-    font-size: 1.2rem;
-    color: #666;
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail{
+    width:100%;
+    
+    display: flex;
+    flex-direction:column;
 }
-
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail span {
-    color: #EC6817;
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div{
+    flex:1;
+    display:flex;
+    flex-direction:row;
+    margin-top: 1.279rem;
+    
 }
-
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail p:last-child {
-    float: right;
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail .last p{
+    color:#666666;
+}
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div p{
+    flex:1;   
+    font-size: 1.109rem;
+    color:#424242;
 }
 </style>

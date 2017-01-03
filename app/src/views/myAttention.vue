@@ -10,7 +10,7 @@
 
         </mt-header>
         <div @click="jumpSearch">
-            <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></search-input>
+            <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></longSearch>
         </div>
       
       
@@ -79,7 +79,7 @@
 
 <script>
 import common from '../common/common.js'
-import searchInput from '../components/tools/inputSearch'
+import longSearch from '../components/tools/longSearch'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
 export default {
@@ -107,7 +107,7 @@ export default {
             }
         },
         components: {
-            searchInput
+            longSearch
             
         },
         methods: {

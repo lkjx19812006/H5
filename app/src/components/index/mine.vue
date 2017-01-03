@@ -1,61 +1,9 @@
 <template>
     <div class="mine">
-        <div class="header" v-for="todo in content">
-            <!-- <div class="header_top">
-                <div class="header_photo">
-                    <img :src="url">
-                </div>
-                <div class="information">
-                    <div class="information_center">
-                        <div class="main_content">
-                            <p class="name" id="mine_name">{{todo.name}}</p>
-                            <p class="sex">
-                                <img src="/static/images/woman.png" v-if="todo.gender == ''">
-                                <img src="/static/images/woman.png" v-if="todo.gender == '1'">
-                                
-                            </p>
-                        </div>
-                        <p class="company">{{todo.company}}</p>
-                    </div>
-                    <div class="information_right">
-                        <p class="money">储值：￥{{todo.money}}</p>
-                        <p class="integration">积分：{{todo.integration}}</p>
-                    </div>
-                </div>
-                <router-link to="accountInfo">
-                    <img src="/static/images/right-arrow.png" class="header_top_right-arrow">
-                </router-link>
-            </div>
-            <div class="header_bottom">
-                <p class="my_service" v-if="todo.customerGender == '0' || todo.customerGender == '1'">{{todo.my_service}}</p>
-                <p class="my_service" v-if="todo.customerGender != '0' && todo.customerGender != '1' ">{{todo.my_apply}}</p>
-                <p class="his_name" v-if="todo.customerGender == '0' || todo.customerGender == '1'">{{todo.customer}}<span>
-                    
+    
+        <accountOverview :param="param"></accountOverview>
+        <myInformation></myInformation>
 
-                    <img src="/static/images/woman.png" v-if="todo.customerGender == '0'">
-                    <img src="/static/images/woman.png" v-if="todo.customerGender == '1'"> 
-                </span></p>
-                <router-link to="detailsPage">
-                    <p class="details" v-if="todo.customerGender == '0' || todo.customerGender == '1'">{{todo.details}}</p>
-                </router-link>
-            </div> -->
-        </div>
-        <div class="information">
-             <ul>
-                 <li>
-                     <img src="/static/images/custom-service.png">
-                     <p>专属客服</p>
-                 </li>
-                 <li>
-                     <img src="/static/images/address-manage.png">
-                     <p>地址管理</p>
-                 </li>
-                 <li  class="last">
-                     <img src="/static/images/my-account.png">
-                     <p>我的账户</p>
-                 </li>
-             </ul>
-        </div>
         <div class="all_order">
             <p>全部订单</p>
             <div @click="jump('myOrder')">
@@ -101,14 +49,20 @@
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import imageUpload from '../../components/tools/imageUpload'
-
+import accountOverview from '../../components/tools/accountOverview'
+import myInformation from '../../components/tools/myInformation'
 export default {
     data() {
             return {
                 url: '',
                 param: {
-                    name: 'intention',
-                    index: 0
+                    url:'',
+                    companyShort:'',
+                    normalMoney:'',
+                    score:''
+                },
+                information:{
+
                 },
                 content: [{
                     name: '扬帆',
@@ -176,7 +130,9 @@ export default {
             }
         },
         components: {
-            imageUpload
+            imageUpload,
+            accountOverview,
+            myInformation
         },
         methods: {
             jumpOrder(index) {
@@ -231,14 +187,14 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
-                    if (suc.data.code = "1c01") {
-                        _self.content[0].name = suc.data.biz_result.name;
-                        _self.content[0].company = suc.data.biz_result.companyShort;
-                        _self.content[0].money = suc.data.biz_result.normalMoney;
-                        _self.content[0].integration = suc.data.biz_result.score;
-                        _self.content[0].gender = suc.data.biz_result.gender;
+                    if(suc.data.code = "1c01"){
+                        _self.param.name = suc.data.biz_result.name;
+                        _self.param.companyShort = suc.data.biz_result.companyShort;
+                        _self.param.normalMoney = suc.data.biz_result.normalMoney;
+                        _self.param.score = suc.data.biz_result.score;
+                        _self.param.url = suc.data.biz_result.avatar;
                         _self.url = suc.data.biz_result.avatar;
-                    } else {
+                    }else{
                         common.$emit('message', suc.data.msg);
                     }
                 }, function(err) {
@@ -246,7 +202,6 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            getUrl(param) {},
             drugMoney: function() {
                 common.$emit('confirm', '去下载app', '再考虑考虑？');
             },
@@ -270,12 +225,46 @@ export default {
     background: #F0F0F0;
 }
 
-.mine .header {
-    height: 16.64rem;
+/*.mine .header {
+    height: 16.6rem;
     width: 100%;
     background: url(/static/images/bg.png) no-repeat;
+    background-size: 100% 100%;
+    margin:0;
+    padding: 0;
 }
-
+.mine .header img{
+    margin-top: 2.815rem;
+    margin-bottom: 0.8rem;
+    width:5.119rem;
+    height:5.119rem;
+}
+.mine .header>p{
+    font-size: 1.279rem;
+    line-height: 1.279rem;
+    color:#333333;
+}
+.mine .header .company-name{
+    font-size: 1.023rem;
+    line-height: 1.023rem;
+    margin-top: 0.8rem;
+}
+.mine .header>div{
+    margin-top: 1.5rem;
+    font-size: 1.023rem;
+    height:1.2rem;
+    padding: 0 15%;
+}
+.mine .header>div .left{
+    float: left;
+}
+.mine .header>div .right{
+    float:right;
+}
+.mine .header>div .left span,
+.mine .header>div .right span{
+    color:#FA6705;
+}*/
 /*.mine .header_top {
     width: 88%;
     height: 6.4rem;
@@ -393,9 +382,11 @@ export default {
     flex: 27;
     text-align: right;
 }*/
-.mine .information{
+/*.mine .information{
     padding: 0.64rem 0;
     height:4.2665rem;
+    background: white;
+    margin-bottom: 1rem;
 }
 .mine .information ul{
     display: flex;
@@ -405,6 +396,9 @@ export default {
     flex:1;
     border-right:1px solid #e6e6e6;
 }
+.mine .information ul li.last{
+    border:none;
+}*/
 .mine .entrance {
     display: flex;
     flex-direction: row;

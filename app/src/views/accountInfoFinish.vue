@@ -149,8 +149,7 @@ export default {
       },
       birthday:'',
       pickerValue:'',
-      arr:{
-        
+      arr:{      
         name:'',
         birthday:'',
         gender:'',

@@ -146,6 +146,47 @@ common.$on('translateDate',(result,todos) => {
             }
        
 })
+
+common.$on("translatePubdate",(result,todos) =>{
+    for (var i = 0; i < result.length; i++){
+        var item = result[i];
+        var onSell = item.onSell;
+        var pubdate = item.duedate;
+        var duedate = item.duedate;
+        if(duedate != '')duedate = duedate.substring(0,10);
+        if(pubdate != '')pubdate = pubdate.substring(0,10);
+        if(onSell == 1){
+            onSell = '待审核'
+        }else if(onSell == 2){
+            onSell = '正在匹配买家'
+        }else{
+            onSell = ''
+        }
+        item.pubdate = pubdate;
+        item.onSell = onSell;
+        //console.log(item)
+        if(duedate != '' && pubdate != ''){
+                    
+                    duedate =  duedate.replace(/-/g,'/');
+                    pubdate =  pubdate.replace(/-/g,'/');
+
+                    var duedateDate = new Date(duedate);
+                    var pubdateDate = new Date(pubdate);
+
+                    var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                    var days=Math.floor(dateValue/(24*3600*1000));
+                    item.days = Number(days);
+          
+                }else{
+                    item.days = '';
+                }   
+        todos.push(item);
+    }
+})
+
+
+
+
 /*this.$http.post(url, body).then((response) => {
                 suc(response);
             }, (response) => {

@@ -1,10 +1,9 @@
 <template>
-    <div class="content low_price">
-        <mt-header title="低价资源">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header>
+    <div class="low_price">
+            <div class="go-back" @click="jump('home')">
+                <img src="/static/images/go-back.png">
+            </div>
+          
         <div  @click="jumpSearch">
             <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></search-input>
         </div>
@@ -18,9 +17,9 @@
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.breedName}}</div>
-                                    <p>规格：<span>{{todo.spec}}</span></p>
+                                    <p class="spec">规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
-                                    <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
+                                    <p class="time_font">发布时间:<span>{{todo.pubdate}}</span></p>
                                 </div>
                                 <div class="res_content_right">
                                 <p>{{todo.price}}<!-- {{todo.unit}} -->kg/元</p>
@@ -182,27 +181,8 @@ export default {
                         }, function(suc) {
                                 common.$emit('message', suc.data.msg);
                                 let result = suc.data.biz_result.list;
-                                for(var i=0;i<result.length;i++){                        
-                                        var item = result[i];
-                                        var duedate = item.duedate;
-                                        var pubdate = item.duedate;
-                                        if(item.duedate != ''){                                    
-                                            duedate =  duedate.replace(/-/g,'/');
-                                            duedate = duedate.substring(0,10);                                  
-                                        }
-                                        if(item.duedate != ''){                                   
-                                            pubdate =  pubdate.replace(/-/g,'/');
-                                            pubdate = pubdate.substring(0,10);                                 
-                                        }
-                                        var duedateDate = new Date(duedate);
-                                        var pubdateDate = new Date(pubdate);
-                                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                                        var days=Math.floor(dateValue/(24*3600*1000));
-                                        item.days = days; 
-                                        item.duedate = duedate;
-                                        item.pubdate = pubdate;
-                                }
-                                      _self.todos = result;
+                                common.$emit('translateDate',result,_self.todos);
+                                
 
                                 if (back) {
                                     back();
@@ -214,28 +194,7 @@ export default {
                                 }
                             })
 
-                            /*let result = suc.data.biz_result.list;
-                            for(var i=0;i<result.length;i++){                        
-                                var item = result[i];
-                                var duedate = item.duedate;
-                                var pubdate = item.duedate;
-                                if(item.duedate != ''){                                    
-                                    duedate =  duedate.replace(/-/g,'/');
-                                    duedate = duedate.substring(0,10);                                  
-                                }
-                                if(item.duedate != ''){                                   
-                                    pubdate =  pubdate.replace(/-/g,'/');
-                                    pubdate = pubdate.substring(0,10);                                 
-                                }
-                                var duedateDate = new Date(duedate);
-                                var pubdateDate = new Date(pubdate);
-                                var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                                var days=Math.floor(dateValue/(24*3600*1000));
-                                item.days = days; 
-                                item.duedate = duedate;
-                                item.pubdate = pubdate;
-                            }*/
-            
+                           
             },           
             getId(param){
                   let _self = this;
@@ -254,28 +213,7 @@ export default {
             },
             jumpDetail(id){
                 let _self = this;
-                /*httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result;
-                            console.log(result);
-                            
-                             _self.obj = result;
-                             
-
-                        }, function(err) {
-                            
-                             common.$emit('message', err.data.msg);
-                        })*/
-                
-                //common.$emit('post-res-detail',_self.obj);
+               
                 common.$emit('lowPriceToRes',id);
                 this.$router.push('resourceDetail/' + id);
             },
@@ -312,6 +250,9 @@ export default {
             jumpSearch(){
                 common.$emit('setParam','router','lowPriceRes')
                 this.$router.push('search');
+            },
+            jump(router){
+                this.$router.push(router);
             }
            
         },
@@ -356,7 +297,7 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.page-loadmore-listitem {
+/*.page-loadmore-listitem {
     height: 50px;
     line-height: 50px;
     border-bottom: solid 1px #eee;
@@ -364,13 +305,14 @@ export default {
     &:first-child {
         border-top: solid 1px #eee;
     }
-}
+}*/
 
 .page-loadmore-wrapper {
     margin-top: -1px;
     overflow: scroll;
     padding-bottom: 10px;
     width: 100%;
+
 }
 
 .mint-load {
@@ -395,16 +337,46 @@ export default {
 }
 
 .low_price {}
-
+.low_price .go-back{
+    position: absolute;
+    width:15%;
+    padding-right:5%;
+    height:50px;
+    border-bottom: 1px solid #ccc;
+    background:#EC6817;
+}
+.low_price .go-back  img{
+    margin-top: 15px;
+    height:20px;
+}
+/*.low_price .go-back .hide{
+    height: 48px;
+    width:3px;
+    position: absolute;
+    left:30px;
+    top:0;
+    background:#EC6817;
+    z-index: 20000;
+}*/
+.low_price{
+    background: #F5F5F5;
+}
+.low_price .bg_white{
+    background: #F5F5F5;
+    padding: 0 10px;
+}
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
-    min-height: 100px;
+    height: 9.55rem;
+    margin-top: 10px;
+    background: white;
+    border-radius: 3px;
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    height: 80px;
-    max-width: 100px;
+    height: 8.1rem;
+    width: 25%;
     left: 10px;
     margin: 10px 10px 10px 0;
     position: absolute;
@@ -427,45 +399,49 @@ export default {
     float: left;
     width: 100%;
     padding-right: 90px;
-    line-height: 18px;
+    line-height: 1.2rem;
     text-align: left;
     font-size: 1.2rem;
     color: #666;
+    margin-top: 0.8rem;
 }
-
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec{
+    margin-top: 0.3rem;
+}
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
     width: 100%;
-    padding-left: 120px;
+    padding-left: 30%;
     padding-top: 10px;
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right{
     position: absolute;
     max-width: 80px;
-    height: 90px;
+    height: 95px;
     margin: 0;
     right: 10px;
+    
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
     font-size: 1.25rem;
-    margin-top: 10px;
+    margin-top: 0px;
     color: #EC6817;
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button{
   position: absolute;
-  bottom: 10px;
+  bottom: 0px;
   background: #EC6817;
-  font-size: 10px;
-  min-width: 60px;
+  font-size: 1.109rem;
+  width: 5.97rem;
   right: 0px;
-  max-height: 25px;
+  height: 2.38rem;
   padding: 0 5px;
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #999;
 }
 </style>
