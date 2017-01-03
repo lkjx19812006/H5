@@ -162,14 +162,14 @@ export default {
             imageUpload
         },
         methods: {
-            jumpOrder(index){
-                 let _self = this;
-                 var index = index + 1;
-                 common.$emit('mineToOrder',index);
-                 _self.$router.push('myOrder');
+            jumpOrder(index) {
+                let _self = this;
+                var index = index + 1;
+                common.$emit('mineToOrder', index);
+                _self.$router.push('myOrder');
             },
-            salesmanData(){
-                 let _self = this;
+            salesmanData() {
+                let _self = this;
                 common.$emit('show-load');
                 let otherurl = common.addSID(common.urlCommon + common.apiUrl.most);
                 let otherbody = {
@@ -184,24 +184,22 @@ export default {
                 otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
                 httpService.queryEmployeeInfo(otherurl, otherbody, function(suc) {
                     common.$emit('close-load');
-                    if(suc.data.code = "1c01"){
+                    if (suc.data.code = "1c01") {
                         console.log(suc.data.biz_result);
                         _self.content[0].customer = suc.data.biz_result.name;
                         _self.content[0].customerGender = suc.data.biz_result.gender;
-                        common.customerId=suc.data.biz_result.id;
-
-                    }else{
+                        common.customerId = suc.data.biz_result.id;
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                 })
             },
-            getHttp(){
+            getHttp() {
                 let _self = this;
-                  common.$emit('show-load');
+                common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'userService',
@@ -215,19 +213,16 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
-                    if(suc.data.code = "1c01"){
+                    if (suc.data.code = "1c01") {
                         _self.content[0].name = suc.data.biz_result.name;
                         _self.content[0].company = suc.data.biz_result.companyShort;
                         _self.content[0].money = suc.data.biz_result.normalMoney;
                         _self.content[0].integration = suc.data.biz_result.score;
                         _self.content[0].gender = suc.data.biz_result.gender;
                         _self.url = suc.data.biz_result.avatar;
-                       
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    
-                    
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
@@ -241,31 +236,15 @@ export default {
                 this.$router.push(router);
             }
         },
-        watch: {
-            '$route': function() {
-               // console.log('sdfsdfsfdsdf');
-            }
-        },
-        route: {
-            data: function({
-                next
-            }) {
-                console.log("dfdfdfdfdfdf");
-               
-                next(); 
-            }
-        },
-
-    created() {
-        let _self = this;
-        _self.getHttp();
-        _self.salesmanData();
-        common.$on("toMine",function (obj){                
-             _self.getHttp();
-             _self.salesmanData();
-        })
-        
-    }
+        created() {
+            let _self = this;
+            _self.getHttp();
+            _self.salesmanData();
+            common.$on("toMine", function(obj) {
+                _self.getHttp();
+                _self.salesmanData();
+            })
+        }
 }
 </script>
 <style scoped>
