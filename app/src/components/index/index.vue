@@ -3,7 +3,8 @@
         <mt-header fixed>
           
             <router-link to="" slot="left" >     
-                <mt-button>北京</mt-button>
+                <!-- <mt-button>北京</mt-button> -->
+                <img src="/static/images/my-logo.png" class="logo">
                 <div class="search_div" @click="fromIndex">
                     请输入您想要的货物资源
                     <img src="/static/icons/search.png">
@@ -422,7 +423,9 @@ export default {
     text-indent: 1rem;
     font-size: 14px;
 }
-
+.logo{
+    height:30px;
+}
 .search_div img {
     float: right;
     max-height: 20px;
