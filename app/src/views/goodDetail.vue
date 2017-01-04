@@ -85,13 +85,11 @@ export default {
                 }
             }
         },
-        created(){
-            var _self = this;
-            var str = _self.$route.fullPath;
-            var id = str.substring(12,str.length);
-            _self.obj.id = id;
-            console.log(id)
-            httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+        methods:{
+             getHttp(id){
+                     let _self = this;
+                     //common.$emit('show-load');
+                     httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
                         biz_method:'queryIntentionInfo',
               
@@ -131,6 +129,20 @@ export default {
                             
                             common.$emit('message', err.data.msg);
                         })
+             }
+        },
+        created(){
+            var _self = this;
+            /*var str = _self.$route.fullPath;
+            var id = str.substring(12,str.length);*/
+            var id = _self.$route.params.odId;
+            _self.obj.id = id;
+            //console.log(id)
+            _self.getHttp(id);
+
+            common.$on("inform-goodDetail",function (item){
+                  _self.getHttp(item);
+            });
         }
 }
 </script>

@@ -4,19 +4,19 @@
             <span v-if="order.from=='order'">{{orderName}}</span>
             <span v-if="order.from!='order'">{{name}}</span>
         </div>
-        <div class="detail" >
+        <div class="detail">
             <p class="p_left"><span v-if="order.from!='order'">{{title[0]}}</span><span v-if="order.from=='order'">{{orderTitle[0]}}</span></p>
             <p class="p_right">￥<span v-if="order.from!='order'">{{order.sampleAmount}}</span><span v-if="order.from=='order'">{{order.price}}</span></p>
         </div>
-        <div class="detail" >
+        <div class="detail">
             <p class="p_left"><span v-if="order.from!='order'">{{title[1]}}</span><span v-if="order.from=='order'">{{orderTitle[1]}}</span></p>
             <p class="p_right">{{Number(order.value)}}</p>
         </div>
-        <div class="detail" >
+        <div class="detail">
             <p class="p_left"><span v-if="order.from!='order'">{{title[2]}}</span><span v-if="order.from=='order'">{{orderTitle[2]}}</span></p>
             <p class="p_right">￥<span v-if="order.from!='order'">{{Number(order.sampleAmount * order.value)}}</span><span v-if="order.from=='order'">{{Number(order.price * order.value)}}</span></p>
         </div>
-        <div class="detail" >
+        <div class="detail">
             <p class="p_left">{{title[3]}}</p>
             <p class="p_right">{{data[3]}}</p>
         </div>
@@ -36,16 +36,16 @@ export default {
                 data: ['20', '1份', '88', '待确定'],
                 count: '98',
                 title: ['样品单价', '样品数量', '商品总价', '运输价格'],
-                orderTitle:['商品单价','购买数量','商品总价','运输价格'],
-                orderName:'大货订单：'
+                orderTitle: ['商品单价', '购买数量', '商品总价', '运输价格'],
+                orderName: '大货订单：'
             }
         },
         props: {
             order: {
-                
+
             }
         },
-        
+
         methods: {
 
         }
@@ -94,7 +94,7 @@ export default {
     font-size: 1.2rem;
 }
 
-.order_total .count .p_right{
+.order_total .count .p_right {
     float: right;
 }
 </style>

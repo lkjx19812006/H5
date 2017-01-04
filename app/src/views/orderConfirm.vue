@@ -86,7 +86,6 @@ export default {
                     time: 0,
                     sign: '',
                     biz_param: {
-
                     }
                 };
                 otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -101,7 +100,6 @@ export default {
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
-
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
@@ -111,8 +109,7 @@ export default {
                 this.$router.go(-1);
             },
             jumpAddress() {
-                let _self = this;
-                _self.$router.push("/addressManage");
+                this.$router.push("/addressManage");
             },
             confirm() {
                 let _self = this;

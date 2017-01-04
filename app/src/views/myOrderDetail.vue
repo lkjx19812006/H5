@@ -1,13 +1,13 @@
 <template>
   <div class="my_order_detail">
-        <mt-header title="采购订单">
+        <mt-header :title="todo.my_title">
             <router-link to="/myOrder" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
         
-      <div class="ad_img"></div> 
-      
+      <div class="buy-img" v-if="todo.type == 0"></div> 
+      <div class="sale-img" v-if="todo.type == 1"></div> 
       <div class="word_info">
             <!-- <img src="/static/images/1.jpg"> -->
             <div  class="info_left">
@@ -23,7 +23,7 @@
 
       <div class="drug_info">
           <div class="drug_info_top">
-               <img src="/static/images/1.jpg">
+               <img :src="todo.image">
                <div class="info_top_center">
                    <p class="drug_name">{{todo.breedName}}</p>
                    <p class="drug_spec">规格：{{todo.spec}}</p>
@@ -51,7 +51,10 @@
       </div> 
       
 
-   
+     <div class="footer">
+          <p>联系我们</p>
+          <p class="pay-money" v-if="todo.type == 0">立即付款</p>
+     </div>
          
         
         
@@ -66,6 +69,7 @@ export default {
             return {
                todo:{},
                no:''
+
             }
         },
         created(){
@@ -93,7 +97,11 @@ export default {
                         common.$emit('close-load');
                         
                         let listObj = suc.data.biz_result;
-                        
+                        if(listObj.type == 0){
+                             listObj.my_title = '采购订单'
+                        }else if(listObj.type == 1){
+                             listObj.my_title = '销售订单'
+                        }
                         console.log(listObj)
                         
                         _self.todo = listObj;
@@ -113,8 +121,16 @@ export default {
 .my_order_detail{
     background:#F5F5F5;
 }
-.my_order_detail .ad_img{
-    background:green;
+.my_order_detail .buy-img{
+    background:url(/static/images/buy-order.png) no-repeat;
+    background-size: 100% 100%;
+    width:100%;
+    height:14rem;
+    margin-bottom: 1rem;
+}
+.my_order_detail .sale-img{
+    background:url(/static/images/sale-order.png) no-repeat;
+    background-size: 100% 100%;
     width:100%;
     height:14rem;
     margin-bottom: 1rem;
@@ -148,7 +164,7 @@ export default {
     margin-top: 1rem;
     padding: 1.5rem;
     background:white;
-    margin-bottom: 100px;
+    /*margin-bottom: 100px;*/
 }
 .my_order_detail .drug_info .drug_info_top{
     height:9.75rem;
@@ -235,5 +251,23 @@ export default {
     line-height: 1.2rem;
     margin-top: 1.5rem;
     height:1.2rem;
+}
+.my_order_detail .footer{
+    float:right;
+    margin-top: 1rem;
+}
+.my_order_detail .footer p{
+    width:5.97rem;
+    font-size: 1.2rem;
+    border:1px solid #DFDFD0;
+    float:left;
+    margin-right: 1rem;
+    padding: 3px 5px;
+    color:#333333;
+    border-radius: 1px;
+}
+.my_order_detail .footer .pay-money{
+    color:#FA6705;
+    border:1px solid #FA6705;
 }
 </style>

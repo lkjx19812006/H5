@@ -16,7 +16,7 @@
                             <img src="/static/images/1.jpg" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div><img src="/static/icons/bao.png"><img src="/static/icons/sample.png">{{todo.breedName}}</div>
+                                    <div><img src="/static/images/bao.png"><img src="/static/images/zheng.png">{{todo.breedName}}</div>
                                     <p class="spec">规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                     <p class="time_font">发布时间:<span>{{todo.pubdate}}</span></p>
@@ -390,18 +390,19 @@ export default {
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
     float: left;
-    max-height: 15px;
+    width: 1.2rem;
+    margin-right: 4px;
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
     width: 100%;
     padding-right: 90px;
-    line-height: 1.2rem;
+    line-height: 18px;
     text-align: left;
     font-size: 1.2rem;
     color: #666;
-    margin-top: 0.8rem;
+    margin-top: 0.5rem;
 }
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec{
     margin-top: 0.3rem;
