@@ -19,19 +19,19 @@
                 <p>求购的规格：</p>
                 
                      <div v-show="obj.drug_name" class="div_content">
-                        <div v-show="breedSpec.length" class="my-border">
+                        <div v-show="breedSpec.length">
                             <input type="text" v-model="obj.spec" />
-                            <p>
-                                <img src="/static/images/drop-down.png" @click="showAction('spec')">
+                            <p class="my-p">
+                                <img src="/static/images/right.png" @click="showAction('spec')"  >
                             </p>
                         </div>
-                        <input text="text" v-model="obj.spec" class="alert_input" v-show="!breedSpec.length">
+                        <input text="text" v-model="obj.spec" class="alert_input  right_input" v-show="!breedSpec.length" >
+
                     </div>
                     <div v-show="!obj.drug_name"  class="select div_content">
-                        <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
-                                         
+                        <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">                               
                     </div>
-                
+                    <!-- <img src="/static/images/right.png" class="right_image" v-show="breedLocation.length"> -->
                
             </div>
             <div class="good_number">
@@ -40,23 +40,23 @@
                     <div v-show="obj.drug_name"  class="div_content">
                         <div v-show="breedLocation.length">
                             <input type="text" v-model="obj.place" />
-                            <p>
-                                <img src="/static/images/drop-down.png" @click="showAction('place')">
+                            <p class="my-p">
+                                <img src="/static/images/right.png" @click="showAction('place')">
                             </p>
                         </div>
-                        <input text="text" v-model="obj.place" class="alert_input" v-show="!breedLocation.length">
+                        <input text="text" v-model="obj.place" class="alert_input  right_input" v-show="!breedLocation.length">
                     </div>
                     <div v-show="!obj.drug_name" class="select div_content">
                         <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
                     </div>
-                
+                    <!-- <img src="/static/images/right.png" class="right_image" v-show="breedLocation.length"> -->
                 
             </div>
             <div class="good_number">
                 <p>求购的数量：</p>
                 <div  class="div_content">
-                    <input type="number" placeholder="你需要的药材数量" v-model="obj.number" />
-                    <p @click="showAction('unit')">
+                    <input type="number" placeholder="请输入" v-model="obj.number" class="last_input"/>
+                    <p @click="showAction('unit')" class="right">
                       {{obj.number_unit}}
                     </p>
                 </div>
@@ -64,8 +64,8 @@
             <div class="good_number">
                 <p>求购有效期：</p>
                 <div  class="div_content">
-                    <input type="number" placeholder="30" v-model="obj.duedate" />
-                    <p>天</p>
+                    <input type="number" placeholder="请输入" v-model="obj.duedate" class="last_input"/>
+                    <p class="right">天</p>
                 </div>
             </div>
         </div>
@@ -226,7 +226,7 @@ textarea {
 .remarks,
 .contact {
     /*padding: 1.28rem;*/
-    margin-bottom: 0.8533rem;
+    margin-bottom: 0rem;
     background: white;
 }
 
@@ -253,7 +253,7 @@ textarea {
     color: #FA6705;
     text-align: left;
     padding-left: 1.536rem;
-    line-height:3.58rem; 
+    line-height:3.75rem; 
     height:3.58rem;
     margin-left: 1.28rem;
 }
@@ -274,15 +274,15 @@ textarea {
 .good_number,
 .contact_name,
 .contact_phone {
-    height: 2.9rem;
+    height: 3.5rem;
     /*margin-top: 0.8533rem;*/
     border-bottom: 1px solid #D2D2D2;;
 }
 
 .purchase_good_information .good_number div p img {
-    width: 100%;
-    height: 100%;
-    padding: 10px;
+    /*width: 100%;
+    height: 100%;*/
+    /*padding: 10px;*/
     float: left;
 }
 
@@ -302,7 +302,7 @@ textarea {
 .good_place p,
 .good_number p {
     float: left;
-    line-height: 2.9rem;
+    line-height: 3.5rem;
     font-size: 1.024rem;
     color: #333333;
 }
@@ -352,13 +352,26 @@ textarea {
     background:white;
     margin-right: 1.28rem;
 }
-
+.purchase_good_information .good_number{
+    position:relative;
+    line-height: 3.5rem;
+}
 .purchase_good_information .alert_input {
     width: 100% !important;
     background-color: #fff;
-
+    padding-right: 1.28rem !important;
 }
 
+.purchase_good_information .right_image{
+    width:0.64rem;
+    position: absolute;
+    right:1.28rem;
+    top:0.8rem;
+}
+.purchase_good_information .right_input{
+    padding-right: 2.28rem;
+
+}
 .purchase_good_information .good_name div .select input {
     text-align: center;
     outline: none;
@@ -371,24 +384,42 @@ textarea {
 .purchase_good_information .good_number .div_content {
     height: 2.9rem;
     width: 14.847rem;
-   
-  
 }
 
 .purchase_good_information .good_number div input {
     outline: none;
     font-size: 1.024rem;
     height: 2.7rem;
-    width: 80%;
+    width: 70%;
     text-align: right;
     float: left;
     outline: none;
     border: 0;
+    padding-right: 2px;
 }
 
 .purchase_good_information .good_number div p {
-    height: 2.73rem;
-    width: 20%;
+    height: 2.9rem;
+    width: 30%;
     border-left: 1px solid #D2D2D2;
+    position: relative;
+}
+.purchase_good_information .good_number div .my-p{
+    border-left: 0;
+}
+.purchase_good_information .good_number div .last_input{
+    width:60%;
+    padding-right: 20px;
+
+}
+.purchase_good_information .good_number div .right{
+    width:40%;
+}
+
+.purchase_good_information .good_number div .my-p img{
+    height:1.0rem;
+    position: absolute;
+    left:1.3rem;
+    top:0.85rem;
 }
 </style>

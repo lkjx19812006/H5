@@ -5,29 +5,37 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <druginformation :obj="obj"></druginformation>
-        <div class="remarks">
-            <p class="remarks_header">备注</p>
-            <div class="remarks_content">
-                <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
-            </div>
-        </div>
-        <div class="contact">
-            <p class="contact_header">联系方式</p>
-            <div class="contact_name">
-                <P>姓名：</P>
-                <div>
-                    <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <druginformation :obj="obj"></druginformation>
+                <div class="title_name">
+                    <p class="remarks_header">备注</p>
+                </div> 
+                <div class="remarks">
+                   
+                    <div class="remarks_content">
+                        <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="contact_phone">
-                <P>手机：</P>
-                <div>
-                    <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
+                <div class="title_name">
+                   <p class="contact_header">联系方式</p>
                 </div>
-            </div>
-        </div>
-        <div class="confirm" @click="release()">确认修改</div>
+                <div class="contact">
+                    <div class="contact_name">
+                        <P>姓名：</P>
+                        <div>
+                            <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
+                        </div>
+                    </div>
+                    <div class="contact_phone">
+                        <P>手机：</P>
+                        <div>
+                            <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="confirm" @click="release()">确认修改</div>
+    </div> 
     </div>
 </template>
 <script>
@@ -178,6 +186,9 @@ export default {
                 _self.getNeedDetail(item);
             })
 
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -192,7 +203,11 @@ textarea {
     -webkit-appearance: none;
     border-radius: 0;
 }
+.revise_purchase .remarks .title_name{
+    background: #F1F0F0;
+    width:100%;
 
+}
 .revise_purchase .mint-header {
     background-color: white;
     color: #313232;
@@ -200,25 +215,25 @@ textarea {
 }
 
 .revise_purchase .good_information,
-.remarks,
-.contact {
-    padding: 1.28rem;
-    margin-bottom: 0.8533rem;
+.remarks{
+    padding: 1.28rem;   
     background: white;
 }
-
+.revise_purchase .contact{
+    background: white;
+}
 .revise_purchase .good_information {
-    height: 23.9rem;
+    height: 10.24rem;
 }
 
 .revise_purchase .contact {
-    height: 12.8rem;
     margin-bottom: 10px;
 }
 
 .revise_purchase .good_infor_header {
     background: url('../../static/images/information.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
+
 }
 
 .revise_purchase .good_infor_header,
@@ -236,10 +251,34 @@ textarea {
 .good_number,
 .contact_name,
 .contact_phone {
-    height: 2.99rem;
-    margin-top: 0.8533rem;
+    height: 2.9rem;
+    
 }
+.revise_purchase .contact_name,
+.revise_purchase .contact_phone{
+    margin-top: 0px;
+    border-bottom: 1px solid #D2D2D2;
+    position: relative;
+}
+.revise_purchase .contact_name div,
+.revise_purchase .contact_phone div{
+    position: absolute;
+    right:1.28rem;
 
+
+}
+.revise_purchase .contact_name input,
+.revise_purchase .contact_phone input{
+    text-align: right;
+    border:none;
+    height:2.5rem;
+    line-height: 2.9rem;
+}
+.revise_purchase .contact_name p,
+.revise_purchase .contact_phone p{
+    position: absolute;
+    left:1.28rem;
+}
 .revise_purchase .good_place select {
     background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
     background-size: 1.067rem 1.067rem;
@@ -324,7 +363,7 @@ textarea {
     text-align: center;
     float: left;
     outline: none;
-    border: 0;
+    border: none;
 }
 
 .revise_purchase .good_number div p {
@@ -335,8 +374,7 @@ textarea {
 
 .revise_purchase .remarks_content textarea {
     height: 7.68rem;
-    width: 92%;
-    margin-top: 1.279rem;
+    width: 100%;
     padding: 1.279rem;
     border: 1px solid #D2D2D2;
 }
@@ -348,17 +386,24 @@ textarea {
     font-size: 1.536rem;
     color: white;
     line-height: 4.267rem;
+    margin-top: 5rem;
 }
 
-.revise_purchase .remarks .remarks_header {
+.revise_purchase .title_name  .remarks_header{
     background: url('../../static/images/remarks.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
 }
-
-.revise_purchase .contact .contact_header {
+.revise_purchase .title_name  .contact_header{
     background: url('../../static/images/contact.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
 }
+
 
 .revise_purchase .good_number .number_unit {
     width: 100%;

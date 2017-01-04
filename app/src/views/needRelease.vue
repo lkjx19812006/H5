@@ -8,15 +8,20 @@
         <div class="whole">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <druginformation :obj="obj"> </druginformation>
-                <mt-loadmore>
+                    <div class="title_name">
+                       <p class="remarks_header">备注</p>
+                    </div> 
                     <div class="remarks">
-                        <p class="remarks_header">备注</p>
+                        <!-- <p class="remarks_header">备注</p> -->
                         <div class="remarks_content">
                             <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
                         </div>
                     </div>
+                     <div class="title_name">
+                       <p class="contact_header">联系方式</p>
+                    </div>
                     <div class="contact">
-                        <p class="contact_header">联系方式</p>
+                        <!-- <p class="contact_header">联系方式</p> -->
                         <div class="contact_name">
                             <P>姓名：</P>
                             <div>
@@ -31,7 +36,7 @@
                         </div>
                     </div>
                     <div class="confirm" @click="release()">确认发布</div>
-                </mt-loadmore>
+               
             </div>
         </div>
     </div>
@@ -154,17 +159,17 @@ export default {
 .need_release .good_information,
 .remarks,
 .contact {
-    padding: 1.28rem;
-    margin-bottom: 0.8533rem;
+   
+    /*margin-bottom: 0.8533rem;*/
     background: white;
 }
 
 .need_release .good_information {
-    height: 23.9rem;
+    height: 10.24rem;
 }
 
 .need_release .contact {
-    height: 12.8rem;
+   
     margin-bottom: 10px;
 }
 
@@ -182,14 +187,20 @@ export default {
     padding-left: 1.536rem;
 }
 
-.need_release .remarks .remarks_header {
-    background: url('/static/images/remarks.png') no-repeat 0 center;
+.need_release .title_name  .remarks_header{
+    background: url('../../static/images/remarks.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
-}
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
 
-.need_release .contact .contact_header {
-    background: url('/static/images/contact.png') no-repeat 0 center;
+}
+.need_release .title_name  .contact_header{
+    background: url('../../static/images/contact.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
 }
 
 .need_release .good_name,
@@ -198,10 +209,34 @@ export default {
 .good_number,
 .contact_name,
 .contact_phone {
-    height: 2.99rem;
-    margin-top: 0.8533rem;
+    height: 2.9rem;
+   
 }
+.need_release .contact_name,
+.need_release .contact_phone{
+    margin-top: 0px;
+    border-bottom: 1px solid #D2D2D2;
+    position: relative;
+}
+.need_release .contact_name div,
+.need_release .contact_phone div{
+    position: absolute;
+    right:1.28rem;
 
+
+}
+.need_release .contact_name input,
+.need_release .contact_phone input{
+    text-align: right;
+    border:none;
+    height:2.5rem;
+    line-height: 2.9rem;
+}
+.need_release .contact_name p,
+.need_release .contact_phone p{
+    position: absolute;
+    left:1.28rem;
+}
 .need_release .good_number div p img {
     width: 100%;
     height: 100%;
@@ -210,13 +245,13 @@ export default {
 
 .need_release .good_place select {
     background: url('/static/images/drop-down.png') no-repeat 13.3rem center;
-    background-size: 1.067rem 1.067rem;
+    background-size: 1.1rem 1.1rem;
     text-align: center;
 }
 
 .need_release .good_spec select {
     background: url('/static/images/drop-down.png') no-repeat 13.3rem center;
-    background-size: 1.067rem 1.067rem;
+    background-size: 1.1rem 1.1rem;
     text-align: center;
 }
 
@@ -229,7 +264,7 @@ export default {
 .contact_name div,
 .contact_phone div {
     float: left;
-    line-height: 2.99rem;
+    line-height: 2.9rem;
     font-size: 1.024rem;
     color: #333333;
 }
@@ -260,8 +295,8 @@ export default {
 .need_release .good_name div .select,
 .good_spec div select,
 .good_place div select,
-.contact_name div input,
-.contact_phone div input {
+/*.contact_name div input,*/
+/*.contact_phone div input */{
     font-size: 1.024rem;
     height: 2.9rem;
     width: 14.847rem;
@@ -315,11 +350,13 @@ export default {
     width: 3.5rem;
     border-left: 1px solid #D2D2D2;
 }
-
+.need_release .remarks{
+    padding: 1.28rem;
+}   
 .need_release .remarks_content textarea {
     height: 7.68rem;
-    width: 92%;
-    margin-top: 1.279rem;
+    width: 100%;
+    
     padding: 1.279rem;
     border: 1px solid #D2D2D2;
 }
@@ -331,5 +368,6 @@ export default {
     font-size: 1.536rem;
     color: white;
     line-height: 4.267rem;
+    margin-top: 5rem;
 }
 </style>
