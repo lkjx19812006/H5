@@ -13,7 +13,7 @@
                 <div class="content">
                     <orderItem :param="param" ></orderItem>
                     <div class="total">
-                        <orderTotal :order="order"></orderTotal>
+                        <orderTotal :order="param"></orderTotal>
                     </div>
                 </div>
             </mt-loadmore>
@@ -32,50 +32,21 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                id: '',
-                sourceId: '',
                 data: "",
-                param: {},
-                order: {},
-                value: '100',
+                param: {
+                  image:[]
+                },
                 person: {}
             }
         },
         created() {
             let _self = this;
             var id = _self.$route.params.sourceId;
-            _self.sourceId = id;
             _self.getAddress();
             _self.gethttp(id);
-
-                            
-                            /*common.$on('backAddress',function (todo){
-                                 _self.person = todo;
-                                 _self.id = todo.id;
-                            })
-                            common.$on('resourceDetail',function (item){
-                                 _self.gethttp(item);
-                            })
-                            common.$on('indexToOrderConfirm',function (item){
-                                 _self.gethttp(item);
-                            })
-                            common.$on('lowPriceToRes',function (item){
-                                    _self.gethttp(item);
-                            });
-
-                            common.$on('indexToResdetail',function (item){
-                                    _self.gethttp(item);
-                            });
-*/
-            common.$on('backAddress', function(todo) {
-                _self.person = todo;
-                _self.id = todo.id;
-            });
             common.$on('orderConfirm', function(item) {
-              console.log(item);
                 _self.gethttp(item);
             });
-
         },
         components: {
             orderAddress,
@@ -83,24 +54,6 @@ export default {
             orderTotal
         },
         methods: {
-
-             /*gethttp(id){
-                  let _self = this;
-                  httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result;   
-                            console.log(result);
-                            _self.param = result;
-                            _self.order = result;   */   
-
             gethttp(id) {
                 let _self = this;
                 httpService.myAttention(common.urlCommon + common.apiUrl.most, {
@@ -112,8 +65,12 @@ export default {
                 }, function(suc) {
                     common.$emit('message', suc.data.msg);
                     let result = suc.data.biz_result;
+                    result.value=1;
+                    if(!result.image.length){
+                      result.image.push('/static/images/default_image.png');
+                    }
+                    result.from="order";
                     _self.param = result;
-                    _self.order = result;
                 }, function(err) {
                     common.$emit('message', err.data.msg);
                 })
@@ -129,8 +86,6 @@ export default {
                     time: 0,
                     sign: '',
                     biz_param: {
-
-
                     }
                 };
                 otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -145,7 +100,6 @@ export default {
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
-
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
@@ -155,10 +109,8 @@ export default {
                 this.$router.go(-1);
             },
             jumpAddress() {
-                let _self = this;
-                _self.$router.push("/addressManage");
+                this.$router.push("/addressManage");
             },
-
             confirm() {
                 let _self = this;
                 var id = _self.$route.params.sourceId;
@@ -172,22 +124,19 @@ export default {
                     sign: '',
                     biz_param: {
                         sourceId: id,
-                        number: _self.value,
+                        number: _self.param.value,
                         sample: _self.param.sampling,
-                        addressId: _self.id
+                        addressId: _self.person.id
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.intentResOrder(url, body, function(suc) {
-
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         common.$emit("orderToMyOrder", "refurbish");
                         _self.$router.push("/myOrder")
-
                     } else {
-
                         common.$emit('message', suc.data.msg);
                     }
                 }, function(err) {

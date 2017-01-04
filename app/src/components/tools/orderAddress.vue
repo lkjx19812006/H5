@@ -22,8 +22,12 @@ export default {
             }
         },
         created() {
+            let _self=this;
              common.$on('backAddress', function(todo) {
-                _self.param = todo;
+                _self.param.id = todo.id;
+                _self.param.address = todo.address;
+                _self.param.contactPhone = todo.contactPhone;
+                _self.param.contactName = todo.contactName;
             })
         },
         methods: {

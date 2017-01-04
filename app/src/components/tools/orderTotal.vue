@@ -1,27 +1,28 @@
 <template>
     <div class=" order_total">
         <div class="title">
-            {{name}}
+            <span v-if="order.from=='order'">{{orderName}}</span>
+            <span v-if="order.from!='order'">{{name}}</span>
         </div>
-        <div class="detail" >
-            <p class="p_left">{{title[0]}}</p>
-            <p class="p_right">￥{{Number(order.sampleNumber)}}</p>
+        <div class="detail">
+            <p class="p_left"><span v-if="order.from!='order'">{{title[0]}}</span><span v-if="order.from=='order'">{{orderTitle[0]}}</span></p>
+            <p class="p_right">￥<span v-if="order.from!='order'">{{order.sampleAmount}}</span><span v-if="order.from=='order'">{{order.price}}</span></p>
         </div>
-        <div class="detail" >
-            <p class="p_left">{{title[1]}}</p>
-            <p class="p_right">{{Number(order.sampleAmount)}}</p>
+        <div class="detail">
+            <p class="p_left"><span v-if="order.from!='order'">{{title[1]}}</span><span v-if="order.from=='order'">{{orderTitle[1]}}</span></p>
+            <p class="p_right">{{Number(order.value)}}</p>
         </div>
-        <div class="detail" >
-            <p class="p_left">{{title[2]}}</p>
-            <p class="p_right">￥{{Number(order.sampleNumber + order.sampleAmount)}}</p>
+        <div class="detail">
+            <p class="p_left"><span v-if="order.from!='order'">{{title[2]}}</span><span v-if="order.from=='order'">{{orderTitle[2]}}</span></p>
+            <p class="p_right">￥<span v-if="order.from!='order'">{{Number(order.sampleAmount * order.value)}}</span><span v-if="order.from=='order'">{{Number(order.price * order.value)}}</span></p>
         </div>
-        <div class="detail" >
+        <div class="detail">
             <p class="p_left">{{title[3]}}</p>
-            <p class="p_right">￥{{Number(data[3])}}</p>
+            <p class="p_right">{{data[3]}}</p>
         </div>
         <div class="count">
             <p>合计</p>
-            <p class="p_right">￥{{Number(order.sampleNumber + order.sampleAmount + data[3])}}</p>
+            <p class="p_right">￥<span v-if="order.from!='order'">{{Number(order.sampleAmount * order.value)}}</span><span v-if="order.from=='order'">{{Number(order.price * order.value)}}</span></p>
         </div>
     </div>
 </template>
@@ -32,17 +33,19 @@ export default {
     data() {
             return {
                 name: '样品订单：',
-                data: ['20/份', '1份', '88', '10'],
+                data: ['20', '1份', '88', '待确定'],
                 count: '98',
-                title: ['样品单价', '样品数量', '商品总价', '运输价格']
+                title: ['样品单价', '样品数量', '商品总价', '运输价格'],
+                orderTitle: ['商品单价', '购买数量', '商品总价', '运输价格'],
+                orderName: '大货订单：'
             }
         },
         props: {
             order: {
-                
+
             }
         },
-        
+
         methods: {
 
         }
@@ -91,7 +94,7 @@ export default {
     font-size: 1.2rem;
 }
 
-.order_total .count .p_right{
+.order_total .count .p_right {
     float: right;
 }
 </style>
