@@ -24,7 +24,7 @@
                     </div>
                     <input text="text" v-model="obj.spec" class="alert_input" v-show="!breedSpec.length">
                 </div>
-                <div v-show="!obj.drug_name" class="select">
+                <div v-show="!obj.drug_name" class="select content_div">
                     <input text="text" disabled="false" placeholder="请选择你的药材" class="alert_input">
                 </div>
             </div>
@@ -39,7 +39,7 @@
                     </div>
                     <input text="text" v-model="obj.place" class="alert_input" v-show="!breedLocation.length">
                 </div>
-                <div v-show="!obj.drug_name" class="select">
+                <div v-show="!obj.drug_name" class="select content_div">
                     <input text="text" disabled="false" placeholder="请选择你的药材" class="alert_input">
                 </div>
             </div>
