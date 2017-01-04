@@ -1,8 +1,9 @@
 <template>
     <div>
         <mt-header fixed>
-            <router-link to="" slot="left">
-                <mt-button>北京</mt-button>
+            <router-link to="" slot="left" >     
+                <!-- <mt-button>北京</mt-button> -->
+                <img src="/static/images/my-logo.png" class="logo">
                 <div class="search_div" @click="fromIndex">
                     请输入您想要的货物资源
                     <img src="/static/icons/search.png">
@@ -330,7 +331,6 @@ export default {
             let _self = this;
 
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
-
             function startmarquee(lh, speed, delay) {
                 var count = 1;
                 var t;
@@ -343,7 +343,6 @@ export default {
                 }
 
                 function scrolling() {
-
                     if (top % lh != 0 || top == 0) {
                         if (count == _self.scroll_length) {
                             o.style.marginTop = 0;
@@ -388,7 +387,9 @@ export default {
     text-indent: 1rem;
     font-size: 14px;
 }
-
+.logo{
+    height:30px;
+}
 .search_div img {
     float: right;
     max-height: 20px;
