@@ -1,11 +1,11 @@
 <template>
     <div class="content long_search">
         <div class="search_div">
-            <div class="search_content" v-bind:class="{ search_active: keyword }" >
-                <input type="text" v-bind:class="{ search_active: keyword }" placeholder="请输入您想要的货物资源" disabled="true" v-model="keyword">
+            <div class="search_content" v-bind:class="{ search_active: keyword }" >               
                 <img src="/static/images/search.png" class="search_image" v-show="!keyword">
-                <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image"  >
+                <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image"  >       
                 </div>
+                <input type="text" v-bind:class="{ search_active: keyword }" placeholder="请输入您想要的货物资源" disabled="true" v-model="keyword">
             </div>
         </div>
     </div>
@@ -65,14 +65,17 @@ export default {
 .long_search .search_div .search_content input {
     background-color: #F1EFEF;
     height: 30px;
-    position: absolute;
-    left: 45px;
+    /*position: absolute;
+    left: 45px;*/
+    float:left;
     border: none;
+    margin-left: 10px;
 }
 
 .long_search .search_div .search_content img {
-    float: right;
+    float: left;
     max-height: 20px;
-    margin: 5px 10px 0 0;
+    margin: 5px 0 0 0;
+    margin-left: 18%;
 }
 </style>

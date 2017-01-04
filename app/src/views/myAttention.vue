@@ -361,8 +361,9 @@ export default {
 .my_attention .right_text{
     
     font-size: 1.2rem;
-    padding-left: 2rem;
+    padding-left: 1.5rem;
     background: url(/static/images/tab.png) no-repeat left center;
+    background-size: 1.2rem;
 }
 .my_attention .select_box{
     /*position: relative;

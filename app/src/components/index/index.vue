@@ -35,8 +35,11 @@
                         </div>
                         <div class="supply_demond">
                             <div class="supply_demond_path" v-for="item in supplyDemandArray" @click="jump(item.router)">
-                                <p>{{item.name}}</p>
-                                <img v-bind:src="item.image">
+                                <p>
+                                    {{item.name}}
+                                    <img :src="item.image">
+                                </p>
+                                <!-- <img v-bind:src="item.image"> -->
                             </div>
                         </div>
                         <div class="real_news" @click="jump('transaction')">
@@ -172,6 +175,7 @@
 <script>
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
+import longSearch from '../../components/tools/longSearch'
 export default {
     data() {
             return {
@@ -222,17 +226,18 @@ export default {
                 supplyDemandArray: [{
                     name: '我要供应',
                     router: 'supplyRelease',
-                    image: '../../../static/images/mySupply.png'
+                    image: '/static/images/my-supply.png'
                 }, {
                     name: '我要采购',
                     router: 'needRelease',
-                    image: '../../../static/images/myDemond.png'
+                    image: '/static/images/my-purchase.png'
                 }]
             }
         },
         methods: {
             drugGuidePrice(){
                   let _self = this;
+                   common.$emit('show-load');
                   httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
                         biz_module:'breedService',
                         biz_method:'breedPriceGuide',
@@ -384,15 +389,17 @@ export default {
     line-height: 30px;
     text-indent: 1rem;
     font-size: 14px;
+
 }
 .logo{
     height:30px;
 }
 .search_div img {
-    float: right;
+    float: left;
     max-height: 20px;
     margin-top: 5px;
-    margin-right: 10px;
+   /* margin-right: 10px;*/
+   margin-left: 15%;
 }
 
 .swipe_height {
@@ -453,14 +460,24 @@ export default {
     font-weight: 500;
     font-size: 1.3rem;
     float: left;
+    width:100%;
+    padding-left: 40%;
+    height: 100%;
+    position: relative;
 }
+.supply_demond p img{
+    position: absolute;
+    left:25%;
+    width:1.919rem;
+    top:1.5905rem;
 
-.supply_demond img {
+}
+/*.supply_demond img {
     float: left;
     max-width: 80px;
     width: 3rem;
     margin: 1rem 0 1rem 3rem;
-}
+}*/
 
 .real_news {
     position: relative;
@@ -548,14 +565,16 @@ export default {
 }
 
 .bg_white .drug_price_box .drug_price_swipe_right {
-    background-color: #FFF0D7;
+    /*background-color: #FFF0D7;*/
+    background-color: #F1F1F1;
     margin: 0.8rem 0.8rem 0.8rem 0.4rem;
     border-radius: 10px;
 }
 
 .bg_white .drug_price_box .drug_price_swipe .drug_price_swipe_left {
     margin: 0.8rem 0.4rem 0.8rem 0.8rem;
-    background-color: #EDFAD8;
+    /*background-color: #EDFAD8;*/
+    background-color: #F1F1F1;
     border-radius: 10px;
 }
 

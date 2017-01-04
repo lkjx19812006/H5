@@ -9,7 +9,7 @@
         </div>
         <div class="detail" >
             <p class="p_left">{{title[1]}}</p>
-            <p class="p_right">￥{{Number(order.sampleAmount)}}</p>
+            <p class="p_right">{{Number(order.sampleAmount)}}</p>
         </div>
         <div class="detail" >
             <p class="p_left">{{title[2]}}</p>

@@ -70,6 +70,10 @@ export default {
                             common.$on('lowPriceToRes',function (item){
                                     _self.gethttp(item);
                             });
+
+                            common.$on('indexToResdetail',function (item){
+                                    _self.gethttp(item);
+                            });
                 
         },
         components: {
@@ -91,7 +95,7 @@ export default {
                             
                             common.$emit('message', suc.data.msg);
                             let result = suc.data.biz_result;   
-                          
+                            console.log(result);
                             _self.param = result;
                             _self.order = result;      
 
@@ -145,8 +149,9 @@ export default {
                   //提交订单接口
                   let _self = this;
                  
-                  var str = _self.$route.fullPath;
-                  var id = str.substring(14,str.length);
+                  /*var str = _self.$route.fullPath;
+                  var id = str.substring(14,str.length);*/
+                  var id = _self.$route.params.sourceId;
                   
                   console.log(_self.id);
                   common.$emit('show-load');
@@ -165,6 +170,7 @@ export default {
                     if(suc.data.code == '1c01'){
                         common.$emit("orderToMyOrder","refurbish");
                         _self.$router.push("/myOrder")
+                        
                     }else{
                         common.$emit('message', suc.data.msg);
                     }

@@ -31,7 +31,7 @@
                                 </div>
                             </div>
                             
-                            <img :src="todo.image" class="list_images">
+                            <img :src="todo.image" class="list_images" @click="jump(todo.id)">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>{{todo.breedName}}</div>
@@ -427,8 +427,9 @@ export default {
 .my_order .right_text{
     color:#333333;
     font-size: 1.2rem;
-    padding-left: 2rem;
+    padding-left: 1.5rem;
     background: url(/static/images/tab.png) no-repeat left center;
+    background-size: 1.2rem;
 }
 .my_order .second_nav{
     width:100%;
