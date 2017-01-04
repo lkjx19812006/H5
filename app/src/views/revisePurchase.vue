@@ -5,7 +5,7 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header>
-        <druginformation :obj="obj"> </druginformation>
+        <druginformation :obj="obj"></druginformation>
         <div class="remarks">
             <p class="remarks_header">备注</p>
             <div class="remarks_content">

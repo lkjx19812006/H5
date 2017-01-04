@@ -1,50 +1,59 @@
 <template>
     <div class="content purchase_good_information">
         <div class="good_information">
-            <p class="good_infor_header">求购货物信息</p>
+            <div class="title_name">
+                 <p class="good_infor_header">求购货物信息</p>
+            </div>
             <div class="good_name">
-                <p>产品：</p>
-                <div>
-                    <div class="select" @click="jumpSearch('/search')" v-show="!obj.update">
+                <p>求购的产品：</p>
+                 
+                    <div class="select" @click="jumpSearch('/search')" v-show="!obj.update" >
                         <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
                     </div>
                      <div class="select" v-show="obj.update">
                         <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
                     </div>
-                </div>
+                    
             </div>
             <div class="good_number">
-                <p>规格：</p>
-                <div v-show="obj.drug_name" class="div_content">
-                    <div v-show="breedSpec.length">
-                        <input type="text" v-model="obj.spec" />
-                        <p>
-                            <img src="/static/images/drop-down.png" @click="showAction('spec')">
-                        </p>
+                <p>求购的规格：</p>
+                
+                     <div v-show="obj.drug_name" class="div_content">
+                        <div v-show="breedSpec.length" class="my-border">
+                            <input type="text" v-model="obj.spec" />
+                            <p>
+                                <img src="/static/images/drop-down.png" @click="showAction('spec')">
+                            </p>
+                        </div>
+                        <input text="text" v-model="obj.spec" class="alert_input" v-show="!breedSpec.length">
                     </div>
-                    <input text="text" v-model="obj.spec" class="alert_input" v-show="!breedSpec.length">
-                </div>
-                <div v-show="!obj.drug_name" class="select div_content">
-                    <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
-                </div>
-            </div>
-            <div class="good_number">
-                <p>产地：</p>
-                <div v-show="obj.drug_name"  class="div_content">
-                    <div v-show="breedLocation.length">
-                        <input type="text" v-model="obj.place" />
-                        <p>
-                            <img src="/static/images/drop-down.png" @click="showAction('place')">
-                        </p>
+                    <div v-show="!obj.drug_name"  class="select div_content">
+                        <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
+                                         
                     </div>
-                    <input text="text" v-model="obj.place" class="alert_input" v-show="!breedLocation.length">
-                </div>
-                <div v-show="!obj.drug_name" class="select div_content">
-                    <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
-                </div>
+                
+               
             </div>
             <div class="good_number">
-                <p>数量：</p>
+                <p>求购的产地：</p>
+                
+                    <div v-show="obj.drug_name"  class="div_content">
+                        <div v-show="breedLocation.length">
+                            <input type="text" v-model="obj.place" />
+                            <p>
+                                <img src="/static/images/drop-down.png" @click="showAction('place')">
+                            </p>
+                        </div>
+                        <input text="text" v-model="obj.place" class="alert_input" v-show="!breedLocation.length">
+                    </div>
+                    <div v-show="!obj.drug_name" class="select div_content">
+                        <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
+                    </div>
+                
+                
+            </div>
+            <div class="good_number">
+                <p>求购的数量：</p>
                 <div  class="div_content">
                     <input type="number" placeholder="你需要的药材数量" v-model="obj.number" />
                     <p @click="showAction('unit')">
@@ -216,7 +225,7 @@ textarea {
 .purchase_good_information .good_information,
 .remarks,
 .contact {
-    padding: 1.28rem;
+    /*padding: 1.28rem;*/
     margin-bottom: 0.8533rem;
     background: white;
 }
@@ -225,12 +234,18 @@ textarea {
     height: 12.8rem;
     margin-bottom: 10px;
 }
-
+.purchase_good_information .title_name{
+    background: #F1F0F0;
+    width:100%;
+}
 .purchase_good_information .good_infor_header {
     background: url('/static/images/information.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
 }
-
+.purchase_good_information  input {
+    outline:none;
+    border:0;
+}
 .purchase_good_information .good_infor_header,
 .remarks_header,
 .contact_header {
@@ -238,6 +253,9 @@ textarea {
     color: #FA6705;
     text-align: left;
     padding-left: 1.536rem;
+    line-height:3.58rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
 }
 
 .purchase_good_information .remarks .remarks_header {
@@ -256,8 +274,9 @@ textarea {
 .good_number,
 .contact_name,
 .contact_phone {
-    height: 2.99rem;
-    margin-top: 0.8533rem;
+    height: 2.9rem;
+    /*margin-top: 0.8533rem;*/
+    border-bottom: 1px solid #D2D2D2;;
 }
 
 .purchase_good_information .good_number div p img {
@@ -283,11 +302,16 @@ textarea {
 .good_place p,
 .good_number p {
     float: left;
-    line-height: 2.99rem;
+    line-height: 2.9rem;
     font-size: 1.024rem;
     color: #333333;
 }
-
+.purchase_good_information .good_name>p,
+.good_spec>p,
+.good_place>p,
+.good_number>p{
+    margin-left: 1.28rem;
+}
 .purchase_good_information .good_name div,
 .good_spec div,
 .good_place div,
@@ -313,21 +337,26 @@ textarea {
     width: 14.847rem;
     text-align: center;
     outline: none;
-    border: 1px solid #D2D2D2;
+
+    /*border: 1px solid #D2D2D2;*/
+
 }
 
 .purchase_good_information .select input {
     font-size: 1.024rem;
-    height: 2.9rem;
+    height: 2.7rem;
     width: 14.847rem;
-    text-align: center;
+    text-align: right;
     outline: none;
-    border: 1px solid #D2D2D2;
+    /*border: 1px solid #D2D2D2;*/
+    background:white;
+    margin-right: 1.28rem;
 }
 
 .purchase_good_information .alert_input {
     width: 100% !important;
     background-color: #fff;
+
 }
 
 .purchase_good_information .good_name div .select input {
@@ -342,7 +371,8 @@ textarea {
 .purchase_good_information .good_number .div_content {
     height: 2.9rem;
     width: 14.847rem;
-    border: 1px solid #D2D2D2;
+   
+  
 }
 
 .purchase_good_information .good_number div input {
@@ -350,7 +380,7 @@ textarea {
     font-size: 1.024rem;
     height: 2.7rem;
     width: 80%;
-    text-align: center;
+    text-align: right;
     float: left;
     outline: none;
     border: 0;
