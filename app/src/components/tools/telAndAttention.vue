@@ -52,13 +52,16 @@ export default {
                             _self.obj.isAttention = 0;
                         }
                     } else {
-
+                         common.$emit('message', suc.data.msg);
                     }
-                    common.$emit('message', suc.data.msg);
+                   
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                 })
+            },
+            getTel(){
+
             }
         },
         created() {

@@ -223,27 +223,6 @@ export default {
                 this.$router.push('search');
             },
             jumpDetail(id) {
-                // let _self = this;
-                // httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                //     biz_module: 'intentionService',
-                //     biz_method: 'queryIntentionInfo',
-                //     biz_param: {
-                //         id: id
-                //     }
-                // }, function(suc) {
-                //     common.$emit('message', suc.data.msg);
-                //     let result = suc.data.biz_result;
-                //     var duedateDate = new Date(result.duedate);
-                //     var pubdateDate = new Date(result.pubdate);
-                //     var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                //     var days = Math.floor(dateValue / (24 * 3600 * 1000));
-                //     result.days = days;
-                //     result.pubdate = result.pubdate.substring(0, 10);
-                //     _self.obj = result;
-                //     common.$emit('post-need-detail', _self.obj);
-                // }, function(err) {
-                //     common.$emit('message', err.data.msg);
-                // })
                 common.$emit('post-need-detail', id);
                 this.$router.push('needDetail/' + id);
             },

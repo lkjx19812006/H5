@@ -6,8 +6,8 @@
             </router-link>
         </mt-header>
         <ul>
-            <li v-for="(todo,index) in todos" v-show="todo.show" @click="jumpBack(todo)">
-                <div class="address_top">
+            <li v-for="(todo,index) in todos" v-show="todo.show">
+                <div class="address_top" @click="jumpBack(todo)">
                     <div class="receiver">
                         <p class="receiver_left">
                             <span>收货人：{{todo.contactName}}</span>
@@ -30,11 +30,11 @@
                     <div class="address_box">
                         <p class="center_p">
                             <img :src="todo.second_img" class="second_img">
-                            <span v-on:click="revise(todo.router,todo.id,index)">修改</span>
+                            <span v-on:click="revise(todo)">修改</span>
                         </p>
                         <p class="bottom_p">
                             <img :src="todo.last_img" class="last_img">
-                            <span v-on:click="delet(todo,todo.id)">删除</span>
+                            <span v-on:click="delet(todo)">删除</span>
                         </p>
                     </div>
                 </div>
@@ -79,14 +79,8 @@ export default {
         },
         created() {
             let _self = this;
-            _self.getDefault();
             _self.listHttp();
             common.$on("informAddress", function(id) {
-                _self.getDefault();
-                _self.listHttp();
-            })
-            common.$on("reviseAAddress", function(id) {
-                _self.getDefault();
                 _self.listHttp();
             })
         },
@@ -126,7 +120,7 @@ export default {
                             listArr[item].second_img = '/static/images/modify.png';
                             listArr[item].last_img = '/static/images/delet.png';
                             listArr[item].router = 'addressRevise';
-                            if (listArr[item].id == common.pageParam.defaultId) {
+                            if (listArr[item].type == 1) {
                                 listArr[item].first_img = '/static/images/default.png';
                             }
                         }
@@ -140,35 +134,7 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            getDefault() {
-                let _self = this;
-                common.$emit('show-load');
-                let otherurl = common.addSID(common.urlCommon + common.apiUrl.most);
-                let otherbody = {
-                    biz_module: 'userAddressService',
-                    biz_method: 'queryDefaultAddress',
-                    version: 1,
-                    time: 0,
-                    sign: '',
-                    biz_param: {
-
-                    }
-                };
-
-                otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
-                otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
-                httpService.addressManage(otherurl, otherbody, function(suc) {
-                    common.$emit('close-load');
-                    let default_id = suc.data.biz_result.id;
-                    _self.id = default_id;
-                    common.$emit('setParam', "defaultId", default_id);
-                }, function(err) {
-                    common.$emit('close-load');
-                })
-            },
-            delet: function(todo, id) {
-                //删除地址
-                todo.show = !todo.show;
+            delet: function(todo) {
                 let _self = this;
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -179,28 +145,26 @@ export default {
                     time: 0,
                     sign: '',
                     biz_param: {
-                        id: id
+                        id: todo.id
                     }
                 };
-
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.addressManage(url, body, function(suc) {
                     common.$emit('close-load');
-                    console.log(suc);
-
+                    if (suc.data.code == '1c01') {
+                        todo.show = !todo.show;
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
                 }, function(err) {
                     common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
                 })
-
             },
             changeColor: function(todos, todo, index) {
-                // 默认地址接口    
-
-                // console.log(todo.id)
                 let _self = this;
                 common.$emit('show-load');
-                console.log(todo.id)
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'userAddressService',
@@ -212,7 +176,6 @@ export default {
                         id: todo.id
                     }
                 };
-
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.addressManage(url, body, function(suc) {
@@ -224,29 +187,23 @@ export default {
                             todos[item].first_img = '/static/images/default_nor.png';
                             todos[index].first_img = '/static/images/default.png';
                         }
-
                     } else {
                         common.$emit('message', suc.data.msg);
-                        console.log(suc);
                     }
                 }, function(err) {
                     common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
                 })
-
-
             },
             addAddress: function() {
-                //跳转到增加地址
                 this.$router.push('addAddress');
             },
-            revise: function(router, id, index) {
+            revise: function(item) {
                 let _self = this;
                 //跳转到修改地址
-                common.$emit('setParam', 'addressId', id);
-                common.$emit('revise-address', id);
-                _self.$router.push(router + '/' + id);
-
-
+                common.$emit('setParam', 'addressId', item.id);
+                common.$emit('revise-address', item.id);
+                _self.$router.push('/addressRevise' + '/' + item.id);
             }
         }
 

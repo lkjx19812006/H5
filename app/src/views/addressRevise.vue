@@ -1,8 +1,8 @@
 <template>
     <div class="address_revise">
         <mt-header title="修改地址">
-            <router-link to="/addressManage" slot="left">
-                <mt-button icon="back"></mt-button>
+            <router-link to="" slot="left">
+                <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
         </mt-header>
         <ul>
@@ -54,7 +54,6 @@ export default {
     data() {
             return {
                 show: false,
-                post_id: '',
                 obj: {
                     name: '',
                     tel: '',
@@ -96,7 +95,10 @@ export default {
             }
         },
         methods: {
-            self(id) {
+            back() {
+                window.history.go(-1);
+            },
+            getAddress(id) {
                 let _self = this;
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -162,7 +164,7 @@ export default {
                 this.areaParam.addressProvince = values[0];
                 this.areaParam.addressCity = values[1];
                 this.areaParam.addressDistrict = values[2];
-               
+
             },
             selectPlace() {
                 this.show = true;
@@ -193,7 +195,7 @@ export default {
                         city: _self.obj.addressCity,
                         district: _self.obj.addressDistrict,
                         detailAddr: _self.obj.detailAddr,
-                        id: _self.post_id,
+                        id: _self.$route.params.addreId,
                         address: _self.obj.addressProvince + _self.obj.addressCity + _self.obj.addressDistrict + _self.obj.detailAddr
                     }
                 };
@@ -201,35 +203,33 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.addressRevise(url, body, function(suc) {
                     common.$emit('close-load');
-
                     console.log(suc);
-                    if (suc.data.code == '1c01'){
-                         common.$emit('reviseAAddress','refurbish');
-                         _self.$router.push('/addressManage')
-                    }else{
+                    if (suc.data.code == '1c01') {
+                        common.$emit('informAddress', 'refurbish');
+                        common.$emit('edit-Address', {
+                            id:_self.$route.params.addreId,
+                            contactName:_self.obj.name,
+                            contactPhone:_self.obj.tel,
+                            address:_self.obj.addressProvince + _self.obj.addressCity + _self.obj.addressDistrict + _self.obj.detailAddr
+                        });
+                        window.history.go(-1);
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    
-                    
-                    
-                    
-                  },function(err){
+                }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
-                  })
+                })
 
-                   
+
             }
         },
         created() {
             let _self = this;
-            var str = _self.$route.fullPath;
-            var id = str.substring(15, str.length);
-            console.log(id)
-            _self.post_id = id;
-            _self.self(id);
+            var id = _self.$route.params.addreId;
+            _self.getAddress(id);
             common.$on('revise-address', function(item) {
-                _self.self(item);
+                _self.getAddress(item);
             })
 
         }
