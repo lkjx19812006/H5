@@ -1,24 +1,26 @@
 <template>
     <div class=" order_item">
-        <img src="/static/images/1.jpg">
+        <img v-bind:src="param.image[0]">
         <div class="item_right">
             <div class="item_right_div">
                 <p class="title">{{param.breedName}}</p>
-                <p class="right"><span>{{param.price}}元</span><span class="little_font">/kg</span></p>
+                <p class="right" v-if="param.from=='order'"><span>{{param.price}}元</span><span class="little_font">/{{param.unit}}</span></p>
+                <p class="right" v-if="param.from!='order'"><span>{{param.sampleAmount}}元</span><span class="little_font">/份</span></p>
             </div>
             <div class="item_right_div">
                 <p>规格：{{param.spec}}</p>
             </div>
             <div class="item_right_div">
                 <p>产地：{{param.location}}</p>
-                <p class="right">重量：{{param.sampleNumber}}kg/份</p>
+                <p class="right" v-if="param.from=='order'">数量：{{param.number}}</p>
+                <p class="right" v-if="param.from!='order'">数量：{{param.sampleNumber}}</p>
             </div>
         </div>
         <div class="count">
             <div class="number">购买数量：</div>
             <div class="operate">
                 <button class="mint-button mint-button--primary mint-button--small gray" v-on:click="subtraction">—</button>
-                <input type="text" disabled='true' v-model="value" :value="value">
+                <input type="text" disabled='true' v-model="param.value">
                 <button class="mint-button mint-button--primary mint-button--small gray" v-on:click="addition">+</button>
             </div>
         </div>
@@ -28,39 +30,36 @@
 import common from '../../common/common.js'
 
 export default {
-    data() {
-            return {
-                data: "",
-                value: 1
+    props: {
+        param: {
+            value: 1
+        }
+    },
+    created() {
+
+    },
+    methods: {
+        subtraction() {
+            let _self = this;
+            if (_self.param.value > 1) {
+                _self.param.value = Number(_self.param.value - 1);
             }
         },
-        props: {
-            param: {
-
-            }
-        },
-        created() {
-
-        },
-        methods: {
-            subtraction() {
-                let _self = this;
-                if (_self.value == 0) {
-                    _self.value == _self.value;
-                } else {
-                    _self.value = Number(_self.value - 1);
+        addition() {
+            let _self = this;
+            if (_self.param.from == 'order') {
+                if (_self.param.value < _self.param.number) {
+                    _self.param.value = Number(_self.param.value + 1);
                 }
-            },
-            addition() {
-                let _self = this;
-                if (_self.value == _self.param.number) {
-                    _self.value = _self.value;
-                } else {
-                    _self.value = Number(_self.value + 1);
+            }else{
+                 if (_self.param.value < _self.param.sampleNumber) {
+                    _self.param.value = Number(_self.param.value + 1);
                 }
             }
 
         }
+
+    }
 }
 </script>
 <style scoped>

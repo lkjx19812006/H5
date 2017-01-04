@@ -13,7 +13,7 @@
                 <div class="content">
                     <orderItem :param="param" ></orderItem>
                     <div class="total">
-                        <orderTotal :order="order"></orderTotal>
+                        <orderTotal :order="param"></orderTotal>
                     </div>
                 </div>
             </mt-loadmore>
@@ -32,27 +32,19 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                id: '',
-                sourceId: '',
                 data: "",
-                param: {},
-                order: {},
-                value: '100',
+                param: {
+                  image:[]
+                },
                 person: {}
             }
         },
         created() {
             let _self = this;
             var id = _self.$route.params.sourceId;
-            _self.sourceId = id;
             _self.getAddress();
             _self.gethttp(id);
-            common.$on('backAddress', function(todo) {
-                _self.person = todo;
-                _self.id = todo.id;
-            });
             common.$on('orderConfirm', function(item) {
-              console.log(item);
                 _self.gethttp(item);
             });
         },
@@ -73,8 +65,12 @@ export default {
                 }, function(suc) {
                     common.$emit('message', suc.data.msg);
                     let result = suc.data.biz_result;
+                    result.value=1;
+                    if(!result.image.length){
+                      result.image.push('/static/images/default_image.png');
+                    }
+                    result.from="order";
                     _self.param = result;
-                    _self.order = result;
                 }, function(err) {
                     common.$emit('message', err.data.msg);
                 })
@@ -131,9 +127,9 @@ export default {
                     sign: '',
                     biz_param: {
                         sourceId: id,
-                        number: _self.value,
+                        number: _self.param.value,
                         sample: _self.param.sampling,
-                        addressId: _self.id
+                        addressId: _self.person.id
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);

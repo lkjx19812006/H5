@@ -11,9 +11,9 @@
                     <orderAddress :param="person"></orderAddress>
                 </div>
                 <div class="content">
-                    <orderItem :param="param" ></orderItem>
+                    <orderItem :param="param"></orderItem>
                     <div class="total">
-                        <orderTotal :order="order"></orderTotal>
+                        <orderTotal :order="param"></orderTotal>
                     </div>
                 </div>
             </mt-loadmore>
@@ -34,22 +34,16 @@ export default {
             return {
                 data: "",
                 param: {
+                    image: []
                 },
-                order: {
-                },
-                value: '1',
-                person: {
-                }
+                person: {}
             }
         },
         created() {
             let _self = this;
             var id = _self.$route.params.sourceId;
+            _self.getAddress();
             _self.gethttp(id);
-            common.$on('backAddress', function(todo) {
-                _self.person = todo;
-                _self.id = todo.id;
-            })
             common.$on('sampleConfirm', function(item) {
                 _self.gethttp(item);
             })
@@ -63,6 +57,38 @@ export default {
             back() {
                 this.$router.go(-1);
             },
+            getAddress() {
+                let _self = this;
+                common.$emit('show-load');
+                let otherurl = common.addSID(common.urlCommon + common.apiUrl.most);
+                let otherbody = {
+                    biz_module: 'userAddressService',
+                    biz_method: 'queryDefaultAddress',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+
+                    }
+                };
+                otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
+                otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
+                httpService.addressManage(otherurl, otherbody, function(suc) {
+                    common.$emit('close-load');
+                    let result = suc.data.biz_result;
+                    if (suc.data.code == "1c01") {
+                        _self.id = result.id;
+                        _self.person = result;
+                        common.$emit('message', suc.data.msg);
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
             gethttp(id) {
                 let _self = this;
                 httpService.myAttention(common.urlCommon + common.apiUrl.most, {
@@ -74,8 +100,12 @@ export default {
                 }, function(suc) {
                     common.$emit('message', suc.data.msg);
                     let result = suc.data.biz_result;
+                    result.value = 1;
+                    if (!result.image.length) {
+                        result.image.push('/static/images/default_image.png');
+                    }
+                    result.from = "order";
                     _self.param = result;
-                    _self.order = result;
                 }, function(err) {
                     common.$emit('message', err.data.msg);
                 })
@@ -96,7 +126,7 @@ export default {
                     sign: '',
                     biz_param: {
                         sourceId: _self.$route.params.sourceId,
-                        number: _self.value,
+                        number: _self.param.value,
                         sample: _self.param.sampling,
                         addressId: _self.person.id
                     }
