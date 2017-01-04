@@ -7,7 +7,7 @@
             </div>
             <div class="content address">
                 <div class="left_content"><img src="/static/icons/receipt_address.png">收货地址：</div>
-                <div >{{param.address}}</div>
+                <div class="address_detail">{{param.address}}</div>
             </div>
         </div>
         <img src="/static/images/right.png" class="right_arrow">
@@ -17,21 +17,28 @@
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 export default {
-        props: {
-            param: {
-            }
-        },
-        created() {
-            let _self=this;
-             common.$on('backAddress', function(todo) {
-                _self.param.id = todo.id;
+    props: {
+        param: {}
+    },
+    created() {
+        let _self = this;
+        common.$on('backAddress', function(todo) {
+            _self.param.id = todo.id;
+            _self.param.address = todo.address;
+            _self.param.contactPhone = todo.contactPhone;
+            _self.param.contactName = todo.contactName;
+        })
+
+        common.$on('edit-Address', function(todo) {
+            if (_self.param.id == todo.id) {
                 _self.param.address = todo.address;
                 _self.param.contactPhone = todo.contactPhone;
                 _self.param.contactName = todo.contactName;
-            })
-        },
-        methods: {
-        }
+            }
+
+        })
+    },
+    methods: {}
 }
 </script>
 <style scoped>
@@ -73,7 +80,7 @@ export default {
 }
 
 .address_confirm .left_district .content div {
-    float: left;
+    text-align: left;
 }
 
 .address_confirm .left_district .content img {
@@ -86,5 +93,9 @@ export default {
     right: 10px;
     max-height: 20px;
     margin-top: 15px;
+}
+
+.address_confirm .left_district .address .address_detail {
+    padding-left: 90px;
 }
 </style>

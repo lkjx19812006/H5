@@ -6,12 +6,12 @@ import { Indicator, Toast, MessageBox, DatetimePicker } from 'mint-ui'
 
 let common = new Vue({
     data: {
-        customerId:window.localStorage.ID,
+        customerId: window.localStorage.ID,
         show: true,
         urlCommon: 'front',
-        KEY: window.localStorage.KEY ,
-        SID: window.localStorage.SID ,
-        difTime: window.localStorage.difTime ,
+        KEY: window.localStorage.KEY,
+        SID: window.localStorage.SID,
+        difTime: window.localStorage.difTime,
         apiUrl: {
             list: '/static/data/list.json',
             market_list: '/static/data/market_list.json',
@@ -19,21 +19,21 @@ let common = new Vue({
             drug_information_list: '/static/data/drug_information_list.json',
             login: '/account/login.do',
             getDate: '/system/date.do',
-            most:'/handle/control.do'
+            most: '/handle/control.do'
         },
-        pageParam:{
-           router:'',
-           lowPrice:'',
-           Urgentneed:'',
-           myAttention:'',
-           supplyRelease:'',
-           reviseResource:'',
-           addressId:'',
-           postAddressObj:'',
-           resourceId:'',
-           Needrelease:'',
-           backAddress:'',
-           
+        pageParam: {
+            router: '',
+            lowPrice: '',
+            Urgentneed: '',
+            myAttention: '',
+            supplyRelease: '',
+            reviseResource: '',
+            addressId: '',
+            postAddressObj: '',
+            resourceId: '',
+            Needrelease: '',
+            backAddress: '',
+
 
         }
     },
@@ -56,19 +56,19 @@ let common = new Vue({
             });
         },
         getSign(str) {
-             let _self = this;
-            if(!_self.KEY){
-               _self.KEY='test'; 
+            let _self = this;
+            if (!_self.KEY) {
+                _self.KEY = 'test';
             }
-            if(!str){
-                str='test';
+            if (!str) {
+                str = 'test';
             }
-           
-            let signStr = CryptoJS.HmacSHA1(str,_self.KEY).toString(CryptoJS.enc.Base64);
+
+            let signStr = CryptoJS.HmacSHA1(str, _self.KEY).toString(CryptoJS.enc.Base64);
             console.log(signStr);
             return signStr;
         }
-       
+
     }
 })
 
@@ -87,7 +87,6 @@ common.$on('success', () => {
         iconClass: 'icon icon-success'
     });
 })
-
 
 
 common.$on('message', message => {
@@ -115,89 +114,64 @@ common.$on('message', message => {
     })
 })*/
 
-common.$on('translateDate',(result,todos) => {
-
-                for (var i = 0; i < result.length; i++) {
-                var item = result[i];                          
-                var duedate = item.duedate;
-                var pubdate = item.duedate;
-                if(duedate != '')duedate = duedate.substring(0,10);
-                if(pubdate != '')pubdate = pubdate.substring(0,10);
-
-                item.duedate = duedate;
-                item.pubdate = pubdate;
-
-                if(duedate != '' && pubdate != ''){
-                    
-                    duedate =  duedate.replace(/-/g,'/');
-                    pubdate =  pubdate.replace(/-/g,'/');
-
-                    var duedateDate = new Date(duedate);
-                    var pubdateDate = new Date(pubdate);
-
-                    var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                    var days=Math.floor(dateValue/(24*3600*1000));
-                    item.days = Number(days);
-          
-                }else{
-                    item.days = '';
-                }                               
-                    todos.push(item);
-            }
-       
-})
-
-common.$on("translatePubdate",(result,todos) =>{
-    for (var i = 0; i < result.length; i++){
+common.$on('translateDate', (result, todos) => {
+    for (var i = 0; i < result.length; i++) {
         var item = result[i];
-        var onSell = item.onSell;
-        var pubdate = item.duedate;
         var duedate = item.duedate;
-        if(duedate != '')duedate = duedate.substring(0,10);
-        if(pubdate != '')pubdate = pubdate.substring(0,10);
-        if(onSell == 1){
-            onSell = '待审核'
-        }else if(onSell == 2){
-            onSell = '正在匹配买家'
-        }else{
-            onSell = ''
-        }
+        var pubdate = item.duedate;
+        if (duedate != '') duedate = duedate.substring(0, 10);
+        if (pubdate != '') pubdate = pubdate.substring(0, 10);
+        item.duedate = duedate;
         item.pubdate = pubdate;
-        item.onSell = onSell;
-        //console.log(item)
-        if(duedate != '' && pubdate != ''){
-                    
-                    duedate =  duedate.replace(/-/g,'/');
-                    pubdate =  pubdate.replace(/-/g,'/');
-
-                    var duedateDate = new Date(duedate);
-                    var pubdateDate = new Date(pubdate);
-
-                    var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                    var days=Math.floor(dateValue/(24*3600*1000));
-                    item.days = Number(days);
-          
-                }else{
-                    item.days = '';
-                }   
+        if (duedate != '' && pubdate != '') {
+            duedate = duedate.replace(/-/g, '/');
+            pubdate = pubdate.replace(/-/g, '/');
+            var duedateDate = new Date(duedate);
+            var pubdateDate = new Date(pubdate);
+            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+            var days = Math.floor(dateValue / (24 * 3600 * 1000));
+            item.days = Number(days);
+        } else {
+            item.days = '';
+        }
         todos.push(item);
     }
 })
 
-
-
-
-/*this.$http.post(url, body).then((response) => {
-                suc(response);
-            }, (response) => {
-                err(response);
-            });*/
-
-
-common.$on('setParam',(key,value) => {
-    common.pageParam[key]=value;
+common.$on("translatePubdate", (result, todos) => {
+    for (var i = 0; i < result.length; i++) {
+        var item = result[i];
+        var onSell = item.onSell;
+        var pubdate = item.duedate;
+        var duedate = item.duedate;
+        if (duedate != '') duedate = duedate.substring(0, 10);
+        if (pubdate != '') pubdate = pubdate.substring(0, 10);
+        if (onSell == 1) {
+            onSell = '待审核'
+        } else if (onSell == 2) {
+            onSell = '正在匹配买家'
+        } else {
+            onSell = ''
+        }
+        item.pubdate = pubdate;
+        item.onSell = onSell;
+        if (duedate != '' && pubdate != '') {
+            duedate = duedate.replace(/-/g, '/');
+            pubdate = pubdate.replace(/-/g, '/');
+            var duedateDate = new Date(duedate);
+            var pubdateDate = new Date(pubdate);
+            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+            var days = Math.floor(dateValue / (24 * 3600 * 1000));
+            item.days = Number(days);
+        } else {
+            item.days = '';
+        }
+        todos.push(item);
+    }
 })
 
-
+common.$on('setParam', (key, value) => {
+    common.pageParam[key] = value;
+})
 
 module.exports = common;

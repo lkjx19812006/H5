@@ -140,6 +140,7 @@ export default {
             _self.refurbish(id);
             common.$on('resourceDetail', function(item) {
                 _self.refurbish(item);
+                _self.obj={};
             })
         }
 }
