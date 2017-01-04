@@ -5,14 +5,17 @@
             <div class="good_name">
                 <p>产品：</p>
                 <div>
-                    <div class="select" @click="jumpSearch('/search')">
+                    <div class="select" @click="jumpSearch('/search')" v-show="!obj.update">
+                        <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
+                    </div>
+                     <div class="select" v-show="obj.update">
                         <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
                     </div>
                 </div>
             </div>
             <div class="good_number">
                 <p>规格：</p>
-                <div v-show="obj.drug_name">
+                <div v-show="obj.drug_name" class="div_content">
                     <div v-show="breedSpec.length">
                         <input type="text" v-model="obj.spec" />
                         <p>
@@ -21,13 +24,13 @@
                     </div>
                     <input text="text" v-model="obj.spec" class="alert_input" v-show="!breedSpec.length">
                 </div>
-                <div v-show="!obj.drug_name" class="select">
+                <div v-show="!obj.drug_name" class="select div_content">
                     <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
                 </div>
             </div>
             <div class="good_number">
                 <p>产地：</p>
-                <div v-show="obj.drug_name">
+                <div v-show="obj.drug_name"  class="div_content">
                     <div v-show="breedLocation.length">
                         <input type="text" v-model="obj.place" />
                         <p>
@@ -36,24 +39,22 @@
                     </div>
                     <input text="text" v-model="obj.place" class="alert_input" v-show="!breedLocation.length">
                 </div>
-                <div v-show="!obj.drug_name" class="select">
+                <div v-show="!obj.drug_name" class="select div_content">
                     <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
                 </div>
             </div>
             <div class="good_number">
                 <p>数量：</p>
-                <div>
+                <div  class="div_content">
                     <input type="number" placeholder="你需要的药材数量" v-model="obj.number" />
-                    <p>
-                        <select v-model="obj.number_unit" class="number_unit">
-                            <option v-for="item in unit">{{item.name}}</option>
-                        </select>
+                    <p @click="showAction('unit')">
+                      {{obj.number_unit}}
                     </p>
                 </div>
             </div>
             <div class="good_number">
                 <p>求购有效期：</p>
-                <div>
+                <div  class="div_content">
                     <input type="number" placeholder="30" v-model="obj.duedate" />
                     <p>天</p>
                 </div>
@@ -171,13 +172,21 @@ export default {
                             key: 'spec'
                         });
                     }
-                } else {
-                    for (var i = 0; i < _self.breedLocation.length; i++) {
+                } else if(param=="unit"){
+                   
+                    for (var i = 0; i < _self.unit.length; i++) {
+                        _self.actions.push({
+                            name: _self.unit[i].name,
+                            key: 'number_unit'
+                        });
+                    }
+                }else{
+                   for (var i = 0; i < _self.breedLocation.length; i++) {
                         _self.actions.push({
                             name: _self.breedLocation[i].name,
                             key: 'place'
                         });
-                    }
+                    }  
                 }
             }
         },
@@ -187,7 +196,7 @@ export default {
             common.$on("Needrelease", function(item) {
                 _self.getBreedInformation(item.id);
                 _self.obj.drug_name = item.keyWord;
-                _self.obj.id = item.id;
+                _self.obj.breedId = item.id;
             });
         }
 }
@@ -210,10 +219,6 @@ textarea {
     padding: 1.28rem;
     margin-bottom: 0.8533rem;
     background: white;
-}
-
-.purchase_good_information .good_information {
-    height: 23.9rem;
 }
 
 .purchase_good_information .contact {
@@ -259,37 +264,28 @@ textarea {
     width: 100%;
     height: 100%;
     padding: 10px;
+    float: left;
 }
 
-.purchase_good_information .good_place select {
-    background: url('/static/images/drop-down.png') no-repeat 13.3rem center;
-    background-size: 1.067rem 1.067rem;
+.purchase_good_information .good_number select {
+    background-color:#fff;
     text-align: center;
 }
 
-.purchase_good_information .good_spec select {
-    background: url('/static/images/drop-down.png') no-repeat 13.3rem center;
-    background-size: 1.067rem 1.067rem;
+.purchase_good_information .good_number select option{
+    background-color:#fff;
     text-align: center;
 }
+
 
 .purchase_good_information .good_name p,
 .good_spec p,
 .good_place p,
-.good_number p,
-.contact_name p,
-.contact_phone p,
-.contact_name div,
-.contact_phone div {
+.good_number p {
     float: left;
     line-height: 2.99rem;
     font-size: 1.024rem;
     color: #333333;
-}
-
-.purchase_good_information .contact_name p,
-.contact_phone p {
-    margin-right: 2.47rem;
 }
 
 .purchase_good_information .good_name div,
@@ -307,14 +303,11 @@ textarea {
     border: 0;
     float: left;
     text-align: center;
-    padding-left: 10px;
 }
 
 .purchase_good_information .good_name div .select,
 .good_spec div select,
-.good_place div select,
-.contact_name div input,
-.contact_phone div input {
+.good_place div select {
     font-size: 1.024rem;
     height: 2.9rem;
     width: 14.847rem;
@@ -346,7 +339,7 @@ textarea {
     background: white;
 }
 
-.purchase_good_information .good_number div {
+.purchase_good_information .good_number .div_content {
     height: 2.9rem;
     width: 14.847rem;
     border: 1px solid #D2D2D2;
@@ -355,8 +348,8 @@ textarea {
 .purchase_good_information .good_number div input {
     outline: none;
     font-size: 1.024rem;
-    height: 2.73rem;
-    width: 11.178rem;
+    height: 2.7rem;
+    width: 80%;
     text-align: center;
     float: left;
     outline: none;
@@ -365,7 +358,7 @@ textarea {
 
 .purchase_good_information .good_number div p {
     height: 2.73rem;
-    width: 3.5rem;
+    width: 20%;
     border-left: 1px solid #D2D2D2;
 }
 </style>

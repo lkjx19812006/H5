@@ -54,91 +54,91 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                id:'',
-                obj:{
-
+                id: '',
+                obj: {
                 }
             }
         },
         methods: {
-            getHttp(id){
+            getHttp(id) {
                 let _self = this;
-                  httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result;
-                            var duedateDate = new Date(result.duedate);
-                            var pubdateDate = new Date(result.pubdate);
-                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                            var days=Math.floor(dateValue/(24*3600*1000));
-                            result.days = days;
-                            result.pubdate = result.pubdate.substring(0,10);
-                             _self.obj = result;
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                common.$emit('show-load');
+                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+
+                    biz_param: {
+                        id: id
+                    }
+                }, function(suc) {
+                    common.$emit('close-load');
+                    common.$emit('message', suc.data.msg);
+                    let result = suc.data.biz_result;
+                    var duedateDate = new Date(result.duedate);
+                    var pubdateDate = new Date(result.pubdate);
+                    var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                    var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                    result.days = days;
+                    result.pubdate = result.pubdate.substring(0, 10);
+                    _self.obj = result;
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
             },
             back() {
                 this.$router.go(-1);
             },
-            myAttention(){
+            myAttention() {
                 let _self = this;
-
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'userService',biz_method:'userAttention',version:1,time:0,sign:'',biz_param:{
-                        intentionId:_self.id,
-                        type:1,
-                        breedName:_self.obj.breedName,
-                        intentionType:_self.obj.type
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.addAddress(url,body,function(suc){
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'userAttention',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+                        intentionId: _self.id,
+                        type: 1,
+                        breedName: _self.obj.breedName,
+                        intentionType: _self.obj.type
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addAddress(url, body, function(suc) {
                     common.$emit('close-load');
-                    console.log(suc.data);
-                    if(suc.data.code == '1c01'){
-                        common.$emit("informPurAttention",'refurbish');
+                    if (suc.data.code == '1c01') {
+                        common.$emit("informPurAttention", 'refurbish');
                         common.$emit('message', suc.data.msg);
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    
-                    
-                  },function(err){
+
+
+                }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
-                  })
-            
+                })
+
             }
         },
         created() {
             let _self = this;
-            /*var str = _self.$route.fullPath;
-            var id = str.substring(12,str.length);
-            _self.id = id;*/
             let id = _self.$route.params.needId;
             _self.id = id;
-            
-                 _self.getHttp(id);
-                 common.$on("needToDetail",function (item){
-                         _self.getHttp(item);
-                 });
-                 common.$on('post-need-detail', function (item){
-                       _self.getHttp(item);
-                 });
-                 common.$on('indexToNeeddetail',function (item){
-                      _self.getHttp(item);
-                 });
+            _self.getHttp(id);
+            common.$on("needToDetail", function(item) {
+                _self.getHttp(item);
+            });
+            common.$on('post-need-detail', function(item) {
+                _self.getHttp(item);
+            });
+            common.$on('indexToNeeddetail', function(item) {
+                _self.getHttp(item);
+            });
         }
 
 }

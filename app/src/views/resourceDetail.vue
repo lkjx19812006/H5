@@ -7,15 +7,15 @@
         </mt-header>
         <div class="page-loadmore-wrapper">
             <mt-loadmore>
-                <div class="swipe_height">
+                <div class="swipe_height" v-if="obj.image">
                     <swiper :options="swiperOption" class="swipe_height">
-                        <swiper-slide v-for="(item,index) in imgArray">
+                        <swiper-slide v-for="item in obj.image">
                             <div>
-                                <img v-bind:src="item.url">
+                                <img v-bind:src="item">
                             </div>
                         </swiper-slide>
                     </swiper>
-                    <div class="swipe_number"><span>{{number}}</span>/{{imgArray.length}}</div>
+                    <div class="swipe_number"><span>{{number}}</span>/{{obj.image.length}}</div>
                 </div>
                 <div class="top">
                     <p>发布时间：<span>{{obj.pubdate}}</span></p>
@@ -50,12 +50,14 @@
                 <img src="/static/icons/tel.png">
                 <p>电话</p>
             </button>
-            <button class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention">
+            <button v-if="obj.isAttention" class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention(0)">
                 <img src="/static/icons/follow.png">
-                <p>关注</p>
             </button>
-            <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="obj.sampling == 0">无样品</button>
-            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling == 1" @click="jumpBuy(obj.id)">购买样品</button>
+            <button v-if="!obj.isAttention" class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention(1)">
+                <img src="/static/icons/unfollow.png">
+            </button>
+            <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
+            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
             <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
         </div>
     </div>
@@ -72,24 +74,10 @@ export default {
     data() {
             let _self = this;
             return {
-                imgArray: [{
-                    url: '/static/images/1.jpg'
-                }, {
-                    url: '/static/images/2.jpg'
-                }, {
-                    url: '/static/images/3.jpg'
-                }],
+                number: 0,
                 obj:{
-                    /*breedName:'',
-                    price:'',
-                    location:'',
-                    spec:'',
-                    number:'',
-                    moq:'',
-                    sampling:'',
-                    description:''*/
                 },
-                id:'',
+                id: '',
                 swiperOption: {
                     name: 'currentSwiper',
                     autoplay: 3000,
@@ -98,6 +86,7 @@ export default {
                     loop: true,
                     autoplayDisableOnInteraction: false,
                     onTransitionStart: function(swiper) {
+                        console.log(swiper.realIndex);
                         _self.number = parseInt(swiper.realIndex) + 1;
                     }
                 }
@@ -108,86 +97,95 @@ export default {
             swiperSlide
         },
         methods: {
-            refurbish(id){
+            refurbish(id) {
                 let _self = this;
-                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result;
-        
-                            _self.obj = result;
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                common.$emit('show-load');
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+                    biz_param: {
+                        id: id
+                    }
+                }
+                if (common.customerId) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.version = 1;
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                }
+                httpService.myAttention(url, body, function(suc) {
+                    common.$emit('close-load');
+                    common.$emit('message', suc.data.msg);
+                    _self.obj = suc.data.biz_result;
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
             },
             back() {
                 this.$router.go(-1);
             },
             jump(id) {
-                
                 this.$router.push('/orderConfirm/' + id);
-
             },
-            jumpBuy(id){
+            jumpBuy(id) {
                 this.$router.push('/sampleConfirm/' + id);
             },
-            myAttention(){
+            myAttention(type) {
                 let _self = this;
-
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'userService',biz_method:'userAttention',version:1,time:0,sign:'',biz_param:{
-                        intentionId:_self.id,
-                        type:1,
-                        breedName:_self.obj.breedName,
-                        intentionType:_self.obj.type
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.addAddress(url,body,function(suc){
-                    common.$emit('close-load');
-                    console.log(suc.data);
-                    if(suc.data.code == '1c01'){
-                        common.$emit("informResAttention",'refurbish');
-                    }else{
-                        common.$emit('message', suc.data.msg);
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'userAttention',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+                        intentionId: _self.id,
+                        type: type,
+                        breedName: _self.obj.breedName,
+                        intentionType: _self.obj.type
                     }
-                    
-                    
-                  },function(err){
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addAddress(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        common.$emit("informResAttention", 'refurbish');
+                        if (type) {
+                            _self.obj.isAttention = 1;
+                        } else {
+                            _self.obj.isAttention = 0;
+                        }
+                    } else {
+
+                    }
+                    common.$emit('message', suc.data.msg);
+
+                }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
-                  })
-            
+                })
+
             }
-         },
+        },
         created() {
             let _self = this;
-            
-           
             var id = _self.$route.params.sourceId;
             _self.id = id;
-            
-                  _self.refurbish(id);
-            
-                   common.$on('lowPriceToRes',function (item){
-                        _self.refurbish(item);
-                   });
-                   common.$on('resourceDetail',function (item){
-                        _self.refurbish(item);
-                   })
-                   common.$on('indexToResdetail',function (item){
-                        _self.refurbish(item);
-                   });
+            _self.refurbish(id);
+            common.$on('lowPriceToRes', function(item) {
+                _self.refurbish(item);
+            });
+            common.$on('resourceDetail', function(item) {
+                _self.refurbish(item);
+            })
+            common.$on('indexToResdetail', function(item) {
+                _self.refurbish(item);
+            });
         }
 }
 </script>

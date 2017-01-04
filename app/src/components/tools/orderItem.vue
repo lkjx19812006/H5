@@ -1,5 +1,5 @@
 <template>
-    <div class="whole order_item">
+    <div class=" order_item">
         <img src="/static/images/1.jpg">
         <div class="item_right">
             <div class="item_right_div">

@@ -7,12 +7,12 @@
         </mt-header>
         <div class="whole">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore>
                 <druginformation :obj="obj"> </druginformation>
+                <mt-loadmore>
                     <div class="remarks">
                         <p class="remarks_header">备注</p>
                         <div class="remarks_content">
-                            <textarea placeholder="请根据实际情况填写药材资源卖点" v-model="obj.selling_point"></textarea>
+                            <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
                         </div>
                     </div>
                     <div class="contact">
@@ -47,16 +47,17 @@ export default {
                 router: 'search',
                 selected: '1',
                 obj: {
+                    update:false,
                     drug_name: '',
                     spec: '',
                     place: '',
                     number: '',
-                    number_unit: 'kg',
+                    number_unit: '',
                     selling_point: '',
                     name: '',
                     phone: '',
                     duedate: '',
-                    id: ''
+                    breedId: ''
                 }
             }
         },
@@ -65,21 +66,21 @@ export default {
         },
         methods: {
             release() {
-                var checkArr = [];
                 let _self = this;
-                let checkBreedId = validation.checkNull(_self.obj.id, '请先选择品种！');
+                var checkArr = [];
+                let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
                 checkArr.push(checkBreedId);
                 let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格！');
                 checkArr.push(checkBreedSpec);
                 let checkBreedPlace = validation.checkNull(_self.obj.place, '请输入产地！');
                 checkArr.push(checkBreedPlace);
-                let checkNumber = validation.checkNull(_self.obj.number,'请输入数量');
+                let checkNumber = validation.checkNull(_self.obj.number, '请输入数量');
                 checkArr.push(checkNumber);
-                let checkDuedate = validation.checkNull(_self.obj.duedate,'请输入求购有效期');
+                let checkDuedate = validation.checkNull(_self.obj.duedate, '请输入求购有效期');
                 checkArr.push(checkDuedate);
-                let checkName = validation.checkNull(_self.obj.name,'请输入姓名');
-                checkArr.push(checkPhone);
-                let checkPhone = validation.checkPhone(_self.obj.phone);
+                let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
+                checkArr.push(checkName);
+                let checkPhone = validation.checkPhone(_self.obj.phone,'请输入电话');
                 checkArr.push(checkPhone);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
@@ -105,7 +106,7 @@ export default {
                         customerName: _self.obj.name,
                         customerPhone: _self.obj.phone,
                         duedate: _self.obj.duedate,
-                        breedId: _self.obj.id,
+                        breedId: _self.obj.breedId,
                         unit: _self.obj.number_unit,
                     }
                 };
@@ -127,7 +128,6 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-           
             jump(router) {
                 this.$router.push(router);
             }
@@ -144,8 +144,6 @@ export default {
 }
 
 .need_release {}
-
-
 
 .need_release .mint-header {
     background-color: white;
