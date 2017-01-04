@@ -36,14 +36,9 @@
             </mt-loadmore>
         </div>
         <div class="fix_bottom">
-            <button class="mint-button mint-button--primary mint-button--normal small_button">
-                <img src="/static/icons/tel.png">
-                <p>电话</p>
-            </button>
-            <button class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention">
-                <img src="/static/icons/follow.png">
-                <p>关注</p>
-            </button>
+            <div class="attention">
+                <telAndAttention :obj='obj'></telAndAttention>
+            </div>
             <button class="mint-button mint-button--primary mint-button--normal orange_button">立即报价</button>
         </div>
     </div>
@@ -51,26 +46,36 @@
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import telAndAttention from '../components/tools/telAndAttention'
 export default {
     data() {
             return {
                 id: '',
-                obj: {
-                }
+                obj: {}
             }
+        },
+        components: {
+            telAndAttention
         },
         methods: {
             getHttp(id) {
                 let _self = this;
                 common.$emit('show-load');
-                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
                     biz_module: 'intentionService',
                     biz_method: 'queryIntentionInfo',
-
                     biz_param: {
                         id: id
                     }
-                }, function(suc) {
+                }
+                if (common.customerId) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.version = 1;
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                }
+                httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     common.$emit('message', suc.data.msg);
                     let result = suc.data.biz_result;
@@ -88,41 +93,6 @@ export default {
             },
             back() {
                 this.$router.go(-1);
-            },
-            myAttention() {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'userService',
-                    biz_method: 'userAttention',
-                    version: 1,
-                    time: 0,
-                    sign: '',
-                    biz_param: {
-                        intentionId: _self.id,
-                        type: 1,
-                        breedName: _self.obj.breedName,
-                        intentionType: _self.obj.type
-                    }
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.addAddress(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code == '1c01') {
-                        common.$emit("informPurAttention", 'refurbish');
-                        common.$emit('message', suc.data.msg);
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-
-
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-
             }
         },
         created() {
@@ -154,20 +124,9 @@ export default {
     z-index: 2;
 }
 
-.need_detail .fix_bottom .small_button {
-    width: 17%;
+.need_detail .fix_bottom .attention {
     float: left;
-    background: #EEEEEE;
-    border: 1px solid #ddd;
-}
-
-.need_detail .fix_bottom .small_button img {
-    max-height: 13px;
-}
-
-.need_detail .fix_bottom .small_button p {
-    font-size: 10px;
-    color: #333;
+    width: 34%;
 }
 
 .need_detail .fix_bottom .orange_button {

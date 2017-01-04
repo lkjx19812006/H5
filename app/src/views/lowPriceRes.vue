@@ -4,7 +4,7 @@
                 <img src="/static/images/go-back.png">
             </div>
           
-        <div  @click="jumpSearch">
+        <div @click="jumpSearch">
             <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></search-input>
         </div>
         <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
@@ -212,9 +212,7 @@ export default {
                 this.getHttp();
             },
             jumpDetail(id){
-                let _self = this;
-               
-                common.$emit('lowPriceToRes',id);
+                common.$emit('resourceDetail',id);
                 this.$router.push('resourceDetail/' + id);
             },
             handleBottomChange(status) {

@@ -1,18 +1,16 @@
 <template>
-    <div >
+    <div>
         <mt-header fixed>
-          
             <router-link to="" slot="left" >     
                 <!-- <mt-button>北京</mt-button> -->
                 <img src="/static/images/my-logo.png" class="logo">
                 <div class="search_div" @click="fromIndex">
                     请输入您想要的货物资源
                     <img src="/static/icons/search.png">
-                </div>    
+                </div>
             </router-link>
-          
         </mt-header>
-        <div  class="whole">
+        <div class="whole">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
                     <div class="content">
@@ -61,7 +59,7 @@
                             <p class="index_title">药材指导价</p>
                             <div class="more_content">
                                 <router-link to="marketQuotation">
-                                  <p>更多</p><img src="/static/images/right.png">
+                                    <p>更多</p><img src="/static/images/right.png">
                                 </router-link>
                             </div>
                             <mt-swipe :auto="4000" :showIndicators="false" :prevent="true">
@@ -88,9 +86,9 @@
                                             <div class="drug_price_swipe_right">
                                                 <p class="price_swiper_name">{{drugGuidePrice[index+1].name}}</p>
                                                 <div class="price_swiper_div">
-                                                     <span>规格:
+                                                    <span>规格:
                                                         <span>{{drugGuidePrice[index+1].spec}}</span>
-                                                     </span>
+                                                    </span>
                                                     <span class="price_swiper_right_span">
                                                         {{drugGuidePrice[index+1].unitprice}}</span>
                                                 </div>
@@ -153,7 +151,7 @@
                                             <img src="/static/icons/impatient.png" class="first_image">
                                             <img src="/static/images/zheng.png">
                                         </div>
-                                        <div class="list_image" >{{todo.breedName}}</div>
+                                        <div class="list_image">{{todo.breedName}}</div>
                                         <div class="list_font">{{todo.spec}}</div>
                                         <div class="list_font">{{todo.location}}</div>
                                         <div class="list_font">{{todo.duedate}}</div>
@@ -198,14 +196,14 @@ export default {
                     "phone": "15301546832",
                     "time": "12:26"
                 }],
-                drugGuidePrice:[],
-                transaction:[],
-                supplyList:[],
-                begBuyList:[],
+                drugGuidePrice: [],
+                transaction: [],
+                supplyList: [],
+                begBuyList: [],
                 drugParam: {
                     show: false
                 },
-                scroll_length:'',
+                scroll_length: '',
                 categoryArr: [{
                     name: '低价资源',
                     router: 'lowPriceRes',
@@ -235,7 +233,8 @@ export default {
             }
         },
         methods: {
-            drugGuidePrice(){
+
+           /* drugGuidePrice(){
                   let _self = this;
                    common.$emit('show-load');
                   httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
@@ -251,71 +250,95 @@ export default {
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
-                        }) 
-            },
-            resourceHttp(){
+                        }) */
+
+            drugGuidePrice() {
                 let _self = this;
-                 common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'intentionService',biz_method:'reconnendList',version:1,time:0,sign:'',biz_param:{
-                        pn:1,
-                        pSize:20
-                  }};
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.begBuyList(url,body,function(suc){
+                httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'breedService',
+                    biz_method: 'breedPriceGuide',
+                    biz_param: {
+                        pn: 1,
+                        pSize: 20
+                    }
+                }, function(suc) {
+                    let result = suc.data.biz_result.list;
+                    _self.drugGuidePrice = result;
+                }, function(err) {
+
+                    common.$emit('message', err.data.msg);
+                })
+
+            },
+            resourceHttp() {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'reconnendList',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+                        pn: 1,
+                        pSize: 20
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.begBuyList(url, body, function(suc) {
                     common.$emit('close-load');
                     let result = suc.data.biz_result;
-                    let begBuyList = result.begBuyList.slice(0,6);
-                    let supplyList = result.supplyList.slice(0,6);
+                    let begBuyList = result.begBuyList.slice(0, 6);
+                    let supplyList = result.supplyList.slice(0, 6);
                     _self.begBuyList = begBuyList;
                     _self.supplyList = supplyList;
-                    common.$emit('post-revise-address',_self.obj);
-                  },function(err){
+                    common.$emit('post-revise-address', _self.obj);
+                }, function(err) {
                     common.$emit('close-load');
-                  })
+                })
             },
-            transaction(){
+            transaction() {
                 let _self = this;
-                  httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'tradeNewService',
-                        biz_method:'currentTradeList',
-                            biz_param: {
-                                pn:1,
-                                pSize:20
-                            }
-                        }, function(suc) {
-                            let result = suc.data.biz_result.list;
-                            _self.scroll_length = result.length + 1;
-                            _self.transaction = result;
-                        }, function(err) {
-                            common.$emit('message', err.data.msg);
-                        })
+                httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'tradeNewService',
+                    biz_method: 'currentTradeList',
+                    biz_param: {
+                        pn: 1,
+                        pSize: 20
+                    }
+                }, function(suc) {
+                    let result = suc.data.biz_result.list;
+                    _self.scroll_length = result.length + 1;
+                    _self.transaction = result;
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
             },
             jump: function(router) {
                 console.log(router);
                 this.$router.push(router);
             },
-            fromIndex(){
-                 let _self = this;
-                 common.$emit('setParam','router','lowPriceRes');
-                 _self.$router.push("search");
+            fromIndex() {
+                let _self = this;
+                common.$emit('setParam','router','lowPriceRes');
+                _self.$router.push("search");
             },
-            jumpRes(router,id){
-                common.$emit('indexToResdetail', id);
+            jumpRes(router, id) {
+                common.$emit('resourceDetail', id);
                 this.$router.push(router + id);
             },
-            jumpNeed(router,id){
+            jumpNeed(router, id) {
                 common.$emit('indexToNeeddetail', id);
                 this.$router.push(router + id);
             },
-
         },
         created() {
-                    let _self = this;
-                   this.resourceHttp()
-                   this.transaction();
-                   this.drugGuidePrice();         
+            let _self = this;
+            this.resourceHttp()
+            this.transaction();
+            this.drugGuidePrice();
         },
         computed: {
             drugArray: function() {
@@ -331,8 +354,7 @@ export default {
         mounted() {
             let _self = this;
 
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-55;
-
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
             function startmarquee(lh, speed, delay) {
                 var count = 1;
                 var t;
@@ -345,7 +367,6 @@ export default {
                 }
 
                 function scrolling() {
-
                     if (top % lh != 0 || top == 0) {
                         if (count == _self.scroll_length) {
                             o.style.marginTop = 0;
@@ -556,7 +577,6 @@ export default {
 .bg_white .drug_price_box {
     width: 100%;
     float: left;
-
 }
 
 .bg_white .drug_price_box .drug_price_swipe {
@@ -611,12 +631,14 @@ export default {
     min-height: 40px;
     padding: 0;
 }
-.bg_white .supply-list{
+
+.bg_white .supply-list {
     height: 40px;
     overflow: hidden;
-    word-break:keep-all; 
+    word-break: keep-all;
     -ms-text-overflow: ellipsis;
 }
+
 .bg_white .list_content {
     padding: 0 0.8rem;
     float: left;
@@ -636,20 +658,20 @@ export default {
     width: 20%;
     height: 30px;
     line-height: 30px;
-    word-break:keep-all;
-    white-space:nowrap;
-    overflow:hidden; 
-    text-overflow:ellipsis; 
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .bg_white .list_content .cell_class .list_image {
     font-size: 1.1rem;
     text-align: center;
     width: 10%;
-    word-break:keep-all;
-    white-space:nowrap;
-    overflow:hidden; 
-    text-overflow:ellipsis; 
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .bg_white .list_content .cell_class .list_image img {

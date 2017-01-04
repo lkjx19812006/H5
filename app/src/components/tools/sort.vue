@@ -59,7 +59,6 @@ export default {
                 this.selectShow = false;
                 let _self = this;
                 _self.$emit("postId", item);
-
             }
         },
         created() {

@@ -18,7 +18,7 @@
             <div class="number">购买数量：</div>
             <div class="operate">
                 <button class="mint-button mint-button--primary mint-button--small gray" v-on:click="subtraction">—</button>
-                <input  type="text" disabled='true' v-model="value" :value="value">
+                <input type="text" disabled='true' v-model="value" :value="value">
                 <button class="mint-button mint-button--primary mint-button--small gray" v-on:click="addition">+</button>
             </div>
         </div>
@@ -31,41 +31,33 @@ export default {
     data() {
             return {
                 data: "",
-                value:100
+                value: 1
             }
         },
         props: {
             param: {
-                
+
             }
         },
         created() {
-            
+
         },
         methods: {
-            subtraction(){
+            subtraction() {
                 let _self = this;
-                if(_self.value == 0){
+                if (_self.value == 0) {
                     _self.value == _self.value;
-                }else{
+                } else {
                     _self.value = Number(_self.value - 1);
                 }
-                _self.$emit("postValue", {
-                    value: _self.value
-                });
-               
             },
-            addition(){
+            addition() {
                 let _self = this;
-                if(_self.value == _self.param.number){
+                if (_self.value == _self.param.number) {
                     _self.value = _self.value;
-                }else{
+                } else {
                     _self.value = Number(_self.value + 1);
                 }
-                _self.$emit("postValue", {
-                    value: _self.value
-                });
-                
             }
 
         }
@@ -138,14 +130,14 @@ export default {
 
 .order_item .count .number {
     float: left;
-   line-height: 3.5rem;
+    line-height: 3.5rem;
 }
 
 .order_item .count .operate {
     margin-right: 1rem;
 }
 
-.order_item .count .operate button{
+.order_item .count .operate button {
     height: 3.5rem;
     width: 3.5rem;
     padding: 0;
@@ -157,7 +149,8 @@ export default {
     border-bottom: 1px solid #ddd;
     color: #333;
 }
-.order_item .count .operate input{
+
+.order_item .count .operate input {
     height: 3.5rem;
     width: 3.5rem;
     padding: 0;
@@ -165,12 +158,13 @@ export default {
     font-size: 1.5rem;
     border-radius: 0;
     background: #fff;
-    border:none;
+    border: none;
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     color: #333;
     text-align: center;
 }
+
 .order_item .count .operate .gray {
     background: #F5F5F5;
     border: 1px solid #ddd;

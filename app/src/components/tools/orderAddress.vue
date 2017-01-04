@@ -7,7 +7,7 @@
             </div>
             <div class="content address">
                 <div class="left_content"><img src="/static/icons/receipt_address.png">收货地址：</div>
-                <div :style="{ width: wrapperWidth + 'px' }">{{param.address}}</div>
+                <div >{{param.address}}</div>
             </div>
         </div>
         <img src="/static/images/right.png" class="right_arrow">
@@ -15,27 +15,18 @@
 </template>
 <script>
 import common from '../../common/common.js'
-
+import httpService from '../../common/httpService.js'
 export default {
-    data() {
-            return {
-                data: "",
-                wrapperWidth:0
-            }
-        },
-        props:{
-            param:{
-
+        props: {
+            param: {
             }
         },
         created() {
-
+             common.$on('backAddress', function(todo) {
+                _self.param = todo;
+            })
         },
         methods: {
-
-        },
-         mounted() {
-            this.wrapperWidth = document.documentElement.clientWidth - 140;
         }
 }
 </script>
@@ -61,17 +52,17 @@ export default {
     color: #333;
 }
 
-.address_confirm .left_district .content span{
+.address_confirm .left_district .content span {
     border-right: 1px solid #666;
     padding-right: 3px;
     margin-right: 3px;
 }
 
-.address_confirm .left_district .address{
+.address_confirm .left_district .address {
     margin-top: 5px;
 }
 
-.address_confirm .left_district .content .left_content{
+.address_confirm .left_district .content .left_content {
     float: left;
     text-align: right;
     min-width: 90px;

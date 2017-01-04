@@ -10,7 +10,7 @@
                 <div class="swipe_height" v-if="obj.image">
                     <swiper :options="swiperOption" class="swipe_height">
                         <swiper-slide v-for="item in obj.image">
-                            <div>
+                            <div class="img_content">
                                 <img v-bind:src="item">
                             </div>
                         </swiper-slide>
@@ -46,16 +46,9 @@
             </mt-loadmore>
         </div>
         <div class="fix_bottom">
-            <button class="mint-button mint-button--primary mint-button--normal small_button">
-                <img src="/static/icons/tel.png">
-                <p>电话</p>
-            </button>
-            <button v-if="obj.isAttention" class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention(0)">
-                <img src="/static/icons/follow.png">
-            </button>
-            <button v-if="!obj.isAttention" class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention(1)">
-                <img src="/static/icons/unfollow.png">
-            </button>
+            <div class="attention">
+                <telAndAttention :obj='obj'></telAndAttention>
+            </div>
             <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
             <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
             <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
@@ -65,6 +58,7 @@
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import telAndAttention from '../components/tools/telAndAttention'
 import {
     swiper,
     swiperSlide,
@@ -75,8 +69,7 @@ export default {
             let _self = this;
             return {
                 number: 0,
-                obj:{
-                },
+                obj: {},
                 id: '',
                 swiperOption: {
                     name: 'currentSwiper',
@@ -94,7 +87,8 @@ export default {
         },
         components: {
             swiper,
-            swiperSlide
+            swiperSlide,
+            telAndAttention
         },
         methods: {
             refurbish(id) {
@@ -118,6 +112,10 @@ export default {
                     common.$emit('close-load');
                     common.$emit('message', suc.data.msg);
                     _self.obj = suc.data.biz_result;
+                    console.log(_self.obj);
+                    if (_self.obj.image.length == 0) {
+                        _self.obj.image.push('/static/images/default_image.png');
+                    }
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
@@ -127,49 +125,12 @@ export default {
                 this.$router.go(-1);
             },
             jump(id) {
+                common.$emit('orderConfirm', id);
                 this.$router.push('/orderConfirm/' + id);
             },
             jumpBuy(id) {
+                common.$emit('orderConfirm', id);
                 this.$router.push('/sampleConfirm/' + id);
-            },
-            myAttention(type) {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'userService',
-                    biz_method: 'userAttention',
-                    version: 1,
-                    time: 0,
-                    sign: '',
-                    biz_param: {
-                        intentionId: _self.id,
-                        type: type,
-                        breedName: _self.obj.breedName,
-                        intentionType: _self.obj.type
-                    }
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.addAddress(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code == '1c01') {
-                        common.$emit("informResAttention", 'refurbish');
-                        if (type) {
-                            _self.obj.isAttention = 1;
-                        } else {
-                            _self.obj.isAttention = 0;
-                        }
-                    } else {
-
-                    }
-                    common.$emit('message', suc.data.msg);
-
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-
             }
         },
         created() {
@@ -177,15 +138,9 @@ export default {
             var id = _self.$route.params.sourceId;
             _self.id = id;
             _self.refurbish(id);
-            common.$on('lowPriceToRes', function(item) {
-                _self.refurbish(item);
-            });
             common.$on('resourceDetail', function(item) {
                 _self.refurbish(item);
             })
-            common.$on('indexToResdetail', function(item) {
-                _self.refurbish(item);
-            });
         }
 }
 </script>
@@ -199,8 +154,15 @@ export default {
     position: relative;
 }
 
+.resource_detail .swipe_height .img_content {
+    float: left;
+    width: 100%;
+    height: 160px;
+}
+
 .resource_detail .swipe_height img {
     width: 100%;
+    margin-top: -80px;
 }
 
 .resource_detail .swipe_height .swipe_number {
@@ -249,20 +211,9 @@ export default {
     width: 100%;
 }
 
-.resource_detail .fix_bottom .small_button {
-    width: 17%;
+.resource_detail .fix_bottom .attention {
     float: left;
-    background: #EEEEEE;
-    border: 1px solid #ddd;
-}
-
-.resource_detail .fix_bottom .small_button img {
-    max-height: 13px;
-}
-
-.resource_detail .fix_bottom .small_button p {
-    font-size: 10px;
-    color: #333;
+    width: 34%;
 }
 
 .resource_detail .fix_bottom .orange_button {

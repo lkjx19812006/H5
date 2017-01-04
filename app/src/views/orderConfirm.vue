@@ -7,19 +7,19 @@
         </mt-header>
         <div class="page-loadmore-wrapper">
             <mt-loadmore>
-                <div  @click="jumpAddress"><orderAddress :param="person"></orderAddress></div>
+                <div @click="jumpAddress">
+                    <orderAddress :param="person"></orderAddress>
+                </div>
                 <div class="content">
-                    <orderItem :param="param" v-on:postValue="getValue"></orderItem>
+                    <orderItem :param="param" ></orderItem>
                     <div class="total">
-                        <orderTotal :order="order" ></orderTotal>
+                        <orderTotal :order="order"></orderTotal>
                     </div>
-                    
                 </div>
             </mt-loadmore>
         </div>
-
-        <div class="fix_bottom" v-on:click = "confirm">
-                        提交订单
+        <div class="fix_bottom" v-on:click="confirm">
+            提交订单
         </div>
     </div>
 </template>
@@ -32,32 +32,24 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                id:'',
-                sourceId:'',
+                id: '',
+                sourceId: '',
                 data: "",
-                param:{
-                    
-                },
-                order:{
-                    
-                },
-                value:'100',
-                person:{
-
-                }
+                param: {},
+                order: {},
+                value: '100',
+                person: {}
             }
         },
-       
         created() {
             let _self = this;
             var id = _self.$route.params.sourceId;
             _self.sourceId = id;
-            console.log(id)
-            
             _self.getAddress();
             _self.gethttp(id);
+
                             
-                            common.$on('backAddress',function (todo){
+                            /*common.$on('backAddress',function (todo){
                                  _self.person = todo;
                                  _self.id = todo.id;
                             })
@@ -74,7 +66,16 @@ export default {
                             common.$on('indexToResdetail',function (item){
                                     _self.gethttp(item);
                             });
-                
+*/
+            common.$on('backAddress', function(todo) {
+                _self.person = todo;
+                _self.id = todo.id;
+            });
+            common.$on('orderConfirm', function(item) {
+              console.log(item);
+                _self.gethttp(item);
+            });
+
         },
         components: {
             orderAddress,
@@ -82,7 +83,8 @@ export default {
             orderTotal
         },
         methods: {
-             gethttp(id){
+
+             /*gethttp(id){
                   let _self = this;
                   httpService.myAttention(common.urlCommon + common.apiUrl.most, {
                         biz_module:'intentionService',
@@ -97,89 +99,101 @@ export default {
                             let result = suc.data.biz_result;   
                             console.log(result);
                             _self.param = result;
-                            _self.order = result;      
+                            _self.order = result;   */   
 
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-             },
-              getAddress(){
-                  let  _self = this;
-                  common.$emit('show-load');
-                  let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let otherbody={biz_module:'userAddressService',biz_method:'queryDefaultAddress',version:1,time:0,sign:'',biz_param:{
-                        
-                  }};
-                  
-                  otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
-                  otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
-                   httpService.addressManage(otherurl,otherbody,function(suc){
-                    common.$emit('close-load');
-                    //console.log(suc.data.biz_result);
-                    let result = suc.data.biz_result;
-                    /*_self.id = suc.data.biz_result.id;*/
-                    if(suc.data.code == "1c01"){
-                       _self.id = result.id;
-                       _self.person = result;
-                       common.$emit('message', suc.data.msg);
-                    }else{
-                       common.$emit('message', suc.data.msg);
+            gethttp(id) {
+                let _self = this;
+                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+                    biz_param: {
+                        id: id
                     }
-                    
-                  },function(err){
+                }, function(suc) {
+                    common.$emit('message', suc.data.msg);
+                    let result = suc.data.biz_result;
+                    _self.param = result;
+                    _self.order = result;
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
+            },
+            getAddress() {
+                let _self = this;
+                common.$emit('show-load');
+                let otherurl = common.addSID(common.urlCommon + common.apiUrl.most);
+                let otherbody = {
+                    biz_module: 'userAddressService',
+                    biz_method: 'queryDefaultAddress',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+
+
+                    }
+                };
+                otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
+                otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
+                httpService.addressManage(otherurl, otherbody, function(suc) {
+                    common.$emit('close-load');
+                    let result = suc.data.biz_result;
+                    if (suc.data.code == "1c01") {
+                        _self.id = result.id;
+                        _self.person = result;
+                        common.$emit('message', suc.data.msg);
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+
+                }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
-                  })
-             },
+                })
+            },
             back() {
                 this.$router.go(-1);
             },
-            getValue(param){
-                 
-                this.value = param.value;
-            },
-            jumpAddress(){
+            jumpAddress() {
                 let _self = this;
-               /* common.$emit('setParam','router','orderConfirm')*/
                 _self.$router.push("/addressManage");
             },
-            confirm(){
-                  
-                  //提交订单接口
-                  let _self = this;
-                 
-                  /*var str = _self.$route.fullPath;
-                  var id = str.substring(14,str.length);*/
-                  var id = _self.$route.params.sourceId;
-                  
-                  console.log(_self.id);
-                  common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'intentionService',biz_method:'submitIntentionOrder',version:1,time:0,sign:'',biz_param:{
-                        sourceId:id,
-                        number:_self.value,
-                        sample:_self.param.sampling,
-                        addressId:_self.id
-                  }};
-                  
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.intentResOrder(url,body,function(suc){
+
+            confirm() {
+                let _self = this;
+                var id = _self.$route.params.sourceId;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'submitIntentionOrder',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+                        sourceId: id,
+                        number: _self.value,
+                        sample: _self.param.sampling,
+                        addressId: _self.id
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.intentResOrder(url, body, function(suc) {
+
                     common.$emit('close-load');
-                    if(suc.data.code == '1c01'){
-                        common.$emit("orderToMyOrder","refurbish");
+                    if (suc.data.code == '1c01') {
+                        common.$emit("orderToMyOrder", "refurbish");
                         _self.$router.push("/myOrder")
-                        
-                    }else{
+
+                    } else {
+
                         common.$emit('message', suc.data.msg);
                     }
-                    
-                    
-                  },function(err){
-                        common.$emit('close-load');
-                        common.$emit('message', err.data.msg);
-                  })
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
             }
         }
 }
@@ -188,7 +202,6 @@ export default {
 .order_confirm {
     float: left;
     width: 100%;
-    
 }
 
 .order_confirm .content {
@@ -205,7 +218,7 @@ export default {
     width: 100%;
 }
 
-.order_confirm  .fix_bottom {
+.order_confirm .fix_bottom {
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -215,9 +228,9 @@ export default {
     font-size: 1.7rem;
     background: #FA6705;
     line-height: 5rem;
-
 }
-.order_confirm  .page-loadmore-wrapper{
+
+.order_confirm .page-loadmore-wrapper {
     margin-bottom: 100px;
 }
 </style>
