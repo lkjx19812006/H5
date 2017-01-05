@@ -150,6 +150,15 @@ export default {
 
 .need_release {}
 
+input[type="text"],
+input[type="submit"],
+input[type="reset"],
+select,
+textarea {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
 .need_release .mint-header {
     background-color: white;
     color: #313232;
@@ -209,7 +218,7 @@ export default {
 .good_number,
 .contact_name,
 .contact_phone {
-    height: 2.9rem;
+    height: 3.5rem;
    
 }
 .need_release .contact_name,
@@ -229,13 +238,16 @@ export default {
 .need_release .contact_phone input{
     text-align: right;
     border:none;
-    height:2.5rem;
-    line-height: 2.9rem;
+    height:3.1rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
 }
 .need_release .contact_name p,
 .need_release .contact_phone p{
     position: absolute;
     left:1.28rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
 }
 .need_release .good_number div p img {
     width: 100%;
@@ -264,7 +276,7 @@ export default {
 .contact_name div,
 .contact_phone div {
     float: left;
-    line-height: 2.9rem;
+    line-height: 3.5rem;
     font-size: 1.024rem;
     color: #333333;
 }
@@ -298,7 +310,7 @@ export default {
 /*.contact_name div input,*/
 /*.contact_phone div input */{
     font-size: 1.024rem;
-    height: 2.9rem;
+    height: 3.3rem;
     width: 14.847rem;
     text-align: center;
     outline: none;
@@ -307,7 +319,7 @@ export default {
 
 .need_release .select input {
     font-size: 1.024rem;
-    height: 2.9rem;
+    height: 3.3rem;
     width: 14.847rem;
     text-align: center;
     outline: none;
@@ -337,7 +349,7 @@ export default {
 .need_release .good_number div input {
     outline: none;
     font-size: 1.024rem;
-    height: 2.73rem;
+    height: 3.3rem;
     width: 11.178rem;
     text-align: center;
     float: left;
@@ -356,7 +368,7 @@ export default {
 .need_release .remarks_content textarea {
     height: 7.68rem;
     width: 100%;
-    
+    font-size: 1.19rem;
     padding: 1.279rem;
     border: 1px solid #D2D2D2;
 }

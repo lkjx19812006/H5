@@ -251,7 +251,7 @@ textarea {
 .good_number,
 .contact_name,
 .contact_phone {
-    height: 2.9rem;
+    height: 3.5rem;
     
 }
 .revise_purchase .contact_name,
@@ -271,13 +271,16 @@ textarea {
 .revise_purchase .contact_phone input{
     text-align: right;
     border:none;
-    height:2.5rem;
-    line-height: 2.9rem;
+    height:3.1rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
 }
 .revise_purchase .contact_name p,
 .revise_purchase .contact_phone p{
     position: absolute;
     left:1.28rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
 }
 .revise_purchase .good_place select {
     background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
@@ -399,7 +402,7 @@ textarea {
 .revise_purchase .title_name  .contact_header{
     background: url('../../static/images/contact.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
-    line-height:3.75rem; 
+    line-height:3.7rem; 
     height:3.58rem;
     margin-left: 1.28rem;
 }

@@ -285,7 +285,9 @@ textarea {
     /*padding: 10px;*/
     float: left;
 }
-
+.purchase_good_information .good_name>p{
+    font-size: 1.19rem;
+}
 .purchase_good_information .good_number select {
     background-color:#fff;
     text-align: center;
@@ -303,7 +305,7 @@ textarea {
 .good_number p {
     float: left;
     line-height: 3.5rem;
-    font-size: 1.024rem;
+    font-size: 1.19rem;
     color: #333333;
 }
 .purchase_good_information .good_name>p,
@@ -332,7 +334,7 @@ textarea {
 .purchase_good_information .good_name div .select,
 .good_spec div select,
 .good_place div select {
-    font-size: 1.024rem;
+    font-size: 1.19rem;
     height: 2.9rem;
     width: 14.847rem;
     text-align: center;
@@ -343,8 +345,8 @@ textarea {
 }
 
 .purchase_good_information .select input {
-    font-size: 1.024rem;
-    height: 2.7rem;
+    font-size: 1.19rem;
+    height: 3.3rem;
     width: 14.847rem;
     text-align: right;
     outline: none;
@@ -382,14 +384,14 @@ textarea {
 }
 
 .purchase_good_information .good_number .div_content {
-    height: 2.9rem;
+    height: 3.5rem;
     width: 14.847rem;
 }
 
 .purchase_good_information .good_number div input {
     outline: none;
-    font-size: 1.024rem;
-    height: 2.7rem;
+    font-size: 1.19rem;
+    height: 3.3rem;
     width: 70%;
     text-align: right;
     float: left;
@@ -399,7 +401,7 @@ textarea {
 }
 
 .purchase_good_information .good_number div p {
-    height: 2.9rem;
+    height: 3.4rem;
     width: 30%;
     border-left: 1px solid #D2D2D2;
     position: relative;
@@ -411,6 +413,7 @@ textarea {
     width:60%;
     padding-right: 20px;
 
+
 }
 .purchase_good_information .good_number div .right{
     width:40%;
@@ -420,6 +423,6 @@ textarea {
     height:1.0rem;
     position: absolute;
     left:1.3rem;
-    top:0.85rem;
+    top:1.1rem;
 }
 </style>
