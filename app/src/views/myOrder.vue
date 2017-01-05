@@ -8,15 +8,11 @@
                 {{more}}
             </mt-button>
         </mt-header>
-        <mt-navbar v-model="selected" class="second_nav">
-            <mt-tab-item :id="todo.id" v-for="todo in data">
-                <div @click="allOrder(todo.back_id)">{{todo.name}}</div>
-            </mt-tab-item>
-        </mt-navbar>
-        <div class="bg_white " >
+        <landscapeScroll :param="data" v-on:postData="changeOrderStatus"></landscapeScroll>
+        <div class="bg_white ">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
-                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore" >
-                    <ul class="page-loadmore-list" >
+                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                    <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem">
                             <div class="list_header">
                                 <div>
@@ -62,11 +58,11 @@
                             </div>
                         </li>
                     </ul>
-                    <div slot="top" class="mint-loadmore-top" >
+                    <div slot="top" class="mint-loadmore-top">
                         <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
                         <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
-                    <div slot="bottom" class="mint-loadmore-bottom" >
+                    <div slot="bottom" class="mint-loadmore-bottom">
                         <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
@@ -78,58 +74,46 @@
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import landscapeScroll from '../components/tools/landscapeScroll'
 export default {
     data() {
             return {
                 more: '采购订单',
                 title: '销售订单',
                 　　show: false,
-                selected: "",
-                first_act: '1',
-                second_act: '2',
                 todos: [],
                 topStatus: '',
                 wrapperHeight: 0,
-                ttwrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
-                type: '1',
-                orderstatus: '0',
                 data: [{
-                    id: 1,
                     name: '全部订单',
                     back_id: 0,
-
+                    show:true
                 }, {
-                    id: 2,
                     name: '待确认',
                     back_id: 10,
-
+                    show:false
                 }, {
-                    id: 3,
                     name: '待付款',
                     back_id: 20,
-
+                    show:false
                 }, {
-                    id: 4,
                     name: '待发货',
                     back_id: 40,
-
+                    show:false
                 }, {
-                    id: 5,
                     name: '待收货',
                     back_id: 50,
-
+                    show:false
                 }, {
-                    id: 6,
                     name: '已完成',
                     back_id: 60,
-
+                    show:false
                 }, {
-                    id: 7,
                     name: '已取消',
                     back_id: -1,
-
+                    show:false
                 }],
                 buttonStatus: [{
 
@@ -143,6 +127,14 @@ export default {
             }
         },
         methods: {
+            changeOrderStatus(item){
+                console.log(item);
+                this.httpPraram.orderstatus=item.id;
+                this.httpPraram.page=1;
+                this.todos.splice(0, this.todos.length);
+                this.getHttp();
+
+            },
             upDate(no, id, type) {
                 let _self = this;
                 common.$emit('show-load');
@@ -228,6 +220,9 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         let listArr = suc.data.biz_result.list;
+                        if (listArr.length < _self.httpPraram.pageSize) {
+                            _self.allLoaded = true;
+                        }
                         console.log(listArr);
                         for (let i = 0; i < listArr.length; i++) {
                             _self.todos.push(listArr[i]);
@@ -255,15 +250,15 @@ export default {
                     _self.more = '采购订单';
                     _self.title = '销售订单';
                     _self.httpPraram.type = 1;
-                    // console.log(_self.httpPraram.type)
-                    _self.getHttp();
                 } else {
                     _self.more = '销售订单';
                     _self.title = '采购订单';
                     _self.httpPraram.type = 0;
-                    //console.log(_self.httpPraram.type)
-                    _self.getHttp();
                 }
+                this.allLoaded = false;
+                this.todos.splice(0, this.todos.length);
+                this.httpPraram.page = 1;
+                _self.getHttp();
             },
             jump: function(id) {
                 this.$router.push('myOrderDetail/' + id);
@@ -277,6 +272,8 @@ export default {
                 setTimeout(() => {
                     if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
+                        _self.$refs.loadmore.onBottomLoaded(id);
+
                     } else {
                         this.httpPraram.page++;
                         this.getHttp(function() {
@@ -300,6 +297,9 @@ export default {
                 }, 1500);
             }
         },
+         components: {
+            landscapeScroll
+        },
         created() {
             let _self = this;
             this.httpPraram.page = 1;
@@ -321,8 +321,8 @@ export default {
             });
         },
         mounted() {
-             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-120;
-                       
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 100;
+
         }
 
 }
@@ -362,6 +362,14 @@ export default {
     display: inline-block;
     transition: .2s linear;
     vertical-align: middle;
+}
+
+.mint-swipe-items-wrap {
+    float: left;
+}
+
+.my_order .mint-swipe-items-wrap .mint-swipe-item {
+    float: left;
 }
 
 .my_order .mint-header-title {

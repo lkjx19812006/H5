@@ -361,11 +361,9 @@ export default {
                 var o = document.getElementById("scrollText");
                 var top = 0;
                 o.style.marginTop = 0;
-
                 function start() {
                     t = setInterval(scrolling, speed);
                 }
-
                 function scrolling() {
                     if (top % lh != 0 || top == 0) {
                         if (count == _self.scroll_length) {
