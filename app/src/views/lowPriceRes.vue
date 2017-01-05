@@ -1,11 +1,13 @@
 <template>
     <div class="low_price">
-            <div class="go-back" @click="jump('home')">
-                <img src="/static/images/go-back.png">
-            </div>
-          
+        <div class="go-back" @click="jump('home')">
+            <img src="/static/images/go-back.png">
+        </div>         
+        <div  class="title-name">
+             <p>低价资源</p>
+        </div>  
         <div @click="jumpSearch">
-            <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></search-input>
+            <backSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></backSearch>
         </div>
         <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         <div class="bg_white">
@@ -43,7 +45,7 @@
 </template>
 <script>
 import common from '../common/common.js'
-import searchInput from '../components/tools/inputSearch'
+import backSearch from '../components/tools/backSearch'
 import sort from '../components/tools/sort'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
@@ -156,7 +158,7 @@ export default {
             }
         },
         components: {
-            searchInput,
+            backSearch,
             sort
         },
         
@@ -198,8 +200,14 @@ export default {
             },           
             getId(param){
                   let _self = this;
-                  /*_self.value[param.key] = param[param.key];
-                  _self.getHttp(_self.keyword,_self.value.time,_self.value.price,_self.value.sample);*/
+                  
+                  /*for(var i = 0; i < 3; i++){
+                       var item = sortArr[i].sortArr;
+                       for(var j = 0; j < item.length; j++){
+                            
+                       }
+                  }
+                  param.show = true;*/
                   _self.httpPraram.page = 1;
                   _self.todos.splice(0, _self.todos.length);
                   _self.httpPraram[param.key] = param[param.key];
@@ -335,6 +343,17 @@ export default {
 }
 
 .low_price {}
+.low_price .title-name{  
+    position: absolute;
+    left:15%;
+    width:70%;
+    height:50px;
+    border-bottom: 1px solid #ccc;
+    background: #EC6817;
+    font-size: 1.7rem;
+    line-height: 50px;
+    color:white;
+}
 .low_price .go-back{
     position: absolute;
     width:15%;

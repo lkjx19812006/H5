@@ -1,10 +1,7 @@
 <template>
     <div class="content my_resource">
-        <mt-header title="我的资源" class="title">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header>
+      
+        <myHeader :param = "param"></myHeader>
         <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -48,6 +45,7 @@
 <script>
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
+import myHeader from '../components/tools/myHeader'
 import myPurchaseSort from '../components/tools/myPurchaseSort'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
@@ -55,6 +53,9 @@ export default {
     data() {
             return {
                 sortRouter: 'home',
+                param:{
+                    name:'我的资源'
+                },
                 sortArr: [{
                     name: '发布日期',
                     asc: 'top',
@@ -187,7 +188,8 @@ export default {
         },
         components: {
             searchInput,
-            myPurchaseSort
+            myPurchaseSort,
+            myHeader
         },
         methods: {
             getHttp(back) {
@@ -249,6 +251,9 @@ export default {
                 common.$emit("res-id", id);
                 common.$emit('setParam', 'resourceId', id);
                 this.$router.push('reviseResource/' + id);
+            },
+            jumpBack(router){
+                 this.$router.push(router)
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -343,9 +348,7 @@ export default {
 
 .low_price {}
 
-.my_resource .bg_white {
-    margin-top: 0.5rem;
-}
+
 
 .my_resource .title {
     font-size: 1.7rem;
@@ -357,47 +360,46 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
-    width: 100%;
-    min-height: 150px;
+    
+    min-height: 12rem;
     border: 0;
-    margin-bottom: 1rem;
+    
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li {
-    margin-bottom: 1rem;
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li {    
     background: white;
-
+    margin:1rem 1rem 0 1rem;
+    border-radius: 4px;
 }
-
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    height: 8.1rem;
-    width: 25%;
+    height: 6.5rem;
+    width: 19.375%;
     left: 10px;
-    margin: 3.55rem 10px 10px 0;
+    margin: 4.55rem 10px 0px 0.85rem;
     position: absolute;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header {
     width: 100%;
-    height: 2.8rem;
-    padding: 0 10px;
+    /*height: 2.8rem;*/
+    border-bottom: 1px solid #C6C6C5;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header>div {
-    border-bottom: 1px solid #C6C6C5;
+    padding: 0;
     width: 100%;
     height: 100%;
-    line-height: 2.8rem;
+    padding: 1rem 0.85rem;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .time_font {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #9C9C9C;
     float: left;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .audit_state {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #FA6705;
     float: right;
 }
@@ -407,16 +409,18 @@ export default {
     text-align: left;
     line-height: 20px;
     font-size: 1.3rem;
-    margin-bottom: 8px;
+    
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
-    max-height: 1.6rem;
+    /*max-height: 1.6rem;*/
+    width:1.5rem;
+    margin-right: 0.5rem;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center div {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     margin-bottom: 1rem;
 }
 
@@ -426,28 +430,28 @@ export default {
     padding-right: 90px;
     line-height: 18px;
     text-align: left;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #666;
     margin-bottom: 0.5rem;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
     width: 100%;
-    padding-left: 120px;
+    padding-left: 27%;
     padding-top: 10px;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
     max-width: 80px;
-    height: 90px;
+    min-height: 6.5rem;
     margin: 0;
-    right: 10px;
-    
+    right: 1.85rem;
+   
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     margin-top: 0px;
     color: #EC6817;
 }
@@ -461,15 +465,15 @@ export default {
     bottom: 0px;
     background: white;
     font-size: 10px;
-    min-width: 60px;
+    min-width: 1.5rem;
     right: 0px;
-    max-height: 25px;
+    max-height: 4rem;
     padding: 0 5px;
     color: black;
     border: 1px solid #BDBDBD;
     border-radius: 5px;
     z-index: 100000;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {

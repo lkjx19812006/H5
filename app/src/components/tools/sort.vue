@@ -5,7 +5,7 @@
                 {{item.name}}<img v-bind:src="item.url">
             </div>
             <div class="sort_cell" v-show="selectShow">
-                <a v-for="item in selectArr" @click="getAsc(item)">
+                <a v-for="(item,index) in selectArr" @click="getAsc(item,index)">
                     <mt-cell>
                         <p class="cell_p">{{item.name}}</p>
                         <img class="cell_image" src="/static/icons/selected.png" style="max-height:10px" v-show="item.show">
@@ -42,7 +42,7 @@ export default {
                     this.selectArr = item.sortArr;
                 }
             },
-            getAsc: function(item) {
+            getAsc: function(item,index) {
                 if (!item.asc) {
                     this.paramArr[this.selectIndex].name = this.paramArr[this.selectIndex].saveName;
                     this.paramArr[this.selectIndex].url = '/static/icons/drop_down.png';
@@ -57,6 +57,8 @@ export default {
                     }
                 }
                 this.selectShow = false;
+                
+                
                 let _self = this;
                 _self.$emit("postId", item);
             }

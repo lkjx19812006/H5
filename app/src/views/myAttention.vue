@@ -1,17 +1,17 @@
 <template>
   <div class="my_attention">
-        <mt-header :title="title">
+        <!-- <mt-header :title="title">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
             <mt-button  slot="right" class="right_text" @click="tabAttention">
                    {{more}}
            </mt-button>
-
-        </mt-header>
-        <div @click="jumpSearch">
+        </mt-header> -->
+         <attentionHead :param = "param"></attentionHead>
+        <!-- <div @click="jumpSearch">
             <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></longSearch>
-        </div>
+        </div> -->
       
       
         
@@ -80,11 +80,16 @@
 <script>
 import common from '../common/common.js'
 import longSearch from '../components/tools/longSearch'
+import attentionHead from '../components/tools/attentionHead'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                param:{
+                    name:'资源关注',
+                    other_name:'求购关注'
+                },
                 more:"求购关注",
                 title:"资源关注",
                 show:true,
@@ -107,7 +112,8 @@ export default {
             }
         },
         components: {
-            longSearch
+            longSearch,
+            attentionHead
             
         },
         methods: {

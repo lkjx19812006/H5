@@ -6,20 +6,27 @@
             </router-link>
         </mt-header>
         <releaseGrugInformation :obj="obj"></releaseGrugInformation>
-        <div class="good_information">
+        <div class="title_name">
             <p class="good_photo_header">上传货物图片</p>
+        </div>
+        <div class="good_information">
+              
             <div class="upload_image" v-for="item in imgageArr">
                 <imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload>
             </div>
         </div>
         <div class="remarks">
-            <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">备注</p>
+            <div class="title_name">
+                <p class="remarks_header">备注</p>
+            </div>
             <div class="remarks_content">
                 <textarea :placeholder="obj.selling_point" v-model="obj.selling_point"></textarea>
             </div>
         </div>
         <div class="contact">
-            <p class="contact_header" style="background:url('../../static/images/contact.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">联系方式</p>
+             <div class="title_name">
+                 <p class="contact_header">联系方式</p>
+            </div>  
             <div class="contact_name">
                 <P>姓名：</P>
                 <div>
@@ -66,28 +73,36 @@ export default {
                     address: '',
                     sampling:1
                 },
-                imgArr: ['', '', '', '', ''],
+                imgArr: ['', '', '', '', '','',''],
                 imgageArr: [{
                     name: 'intention',
                     index: 0,
-                    url: ''
+                    url: '/static/images/upload-image.png'
                 }, {
                     name: 'intention',
                     index: 1,
-                    url: ''
+                    url: '/static/images/upload-image.png'
                 }, {
                     name: 'intention',
                     index: 2,
-                    url: ''
+                    url: '/static/images/upload-image.png'
                 }, {
                     name: 'intention',
                     index: 3,
-                    url: ''
+                    url: '/static/images/upload-image.png'
                 }, {
                     name: 'intention',
                     index: 4,
-                    url: ''
-                }]
+                    url: '/static/images/upload-image.png'
+                },{
+                    name: 'intention',
+                    index: 5,
+                    url: '/static/images/upload-image.png'
+                },{
+                    name: 'intention',
+                    index: 6,
+                    url: '/static/images/upload-image.png'
+                },]
 
             }
         },
@@ -127,6 +142,8 @@ export default {
                     _self.imgageArr[2].url = result.image[2];
                     _self.imgageArr[3].url = result.image[3];
                     _self.imgageArr[4].url = result.image[4];
+                    _self.imgageArr[5].url = result.image[5];
+                    _self.imgageArr[6].url = result.image[6];
                     _self.imgArr=result.image;
                     if (result.image[0] != undefined) {
                         _self.obj.imgArr[0] = result.image[0];
@@ -141,9 +158,14 @@ export default {
                         _self.obj.imgArr[3] = result.image[3];
                     }
                     if (result.image[4] != undefined) {
-                        _self.obj.imgArr[4] = result.image[3];
+                        _self.obj.imgArr[4] = result.image[4];
                     }
-
+                    if (result.image[5] != undefined) {
+                        _self.obj.imgArr[5] = result.image[5];
+                    }
+                    if (result.image[6] != undefined) {
+                        _self.obj.imgArr[6] = result.image[6];
+                    }
                 }, function(err) {
 
                     common.$emit('message', err.data.msg);
@@ -268,24 +290,28 @@ textarea {
     border-bottom: 1px solid #C9C9C9;
 }
 
-.revise_resource .good_information,
-.remarks,
-.contact {
-    padding: 1.28rem;
-    margin-bottom: 0.8533rem;
+.revise_resource .good_information{
+    /*padding: 1.28rem;*/
+    /*margin-bottom: 0.8533rem;*/
     background: white;
 }
-
+.revise_resource .remarks,
+.contact{
+    background: white;
+    float: left;
+    width: 100%;
+}
 .revise_resource .good_information {
     float: left;
     width: 100%;
+    padding: 1.28rem;
 }
 
-.revise_resource .contact {
+/*.revise_resource .contact {
     float: left;
     width: 100%;
     margin-bottom: 10px;
-}
+}*/
 
 .revise_resource .good_infor_header {
     background: url('../../static/images/information.png') no-repeat 0 center;
@@ -302,11 +328,32 @@ textarea {
     background-size: 1.11rem 1.11rem;
 }
 
-.revise_resource .good_photo_header {
-    background: url('../../static/images/upload.png') no-repeat 0 center;
+.revise_resource .title_name{
+    width:100%;
+    background: #F1F0F0;
+}
+.revise_resource .title_name .good_photo_header {
+    background: url('/static/images/upload.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
 }
 
+.revise_resource .title_name .remarks_header{
+    background: url('/static/images/remarks.png') no-repeat 0 center;
+    background-size:1.11rem 1.11rem;  
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
+}
+.revise_resource .title_name .contact_header{
+    background:url('../../static/images/contact.png') no-repeat 0 center;
+    background-size:1.11rem 1.11rem;
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
+}
 .revise_resource .good_infor_header,
 .good_delivery_header,
 .good_sample_header,
@@ -331,10 +378,12 @@ textarea {
 .good_number,
 .contact_name,
 .contact_phone {
-    height: 2.99rem;
-    margin-top: 0.8533rem;
+    height:3.5rem;
 }
-
+.revise_resource .contact {
+    
+    margin-bottom: 10px;
+}
 .revise_resource .good_place select {
     background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
     background-size: 1.067rem 1.067rem;
@@ -350,14 +399,10 @@ textarea {
 .revise_resource .good_name p,
 .good_spec p,
 .good_place p,
-.good_number p,
-.contact_name p,
-.contact_phone p,
-.contact_name div,
-.contact_phone div {
+.good_number p{
     float: left;
-    line-height: 2.99rem;
-    font-size: 1.024rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
     color: #333333;
 }
 
@@ -376,9 +421,7 @@ textarea {
 
 .revise_resource .good_name div .select,
 .good_spec div select,
-.good_place div select,
-.contact_name div input,
-.contact_phone div input {
+.good_place div select{
     font-size: 1.024rem;
     height: 2.9rem;
     width: 14.847rem;
@@ -474,7 +517,9 @@ textarea {
     padding: 1.279rem;
     border: 1px solid #D2D2D2;
 }
-
+.revise_resource .remarks_content{
+    padding-bottom: 1.279rem;
+}
 .revise_resource .confirm {
     width: 100%;
     height: 4.267rem;
@@ -522,5 +567,35 @@ textarea {
     color: #666666;
     line-height: 2.9rem;
     overflow: hidden;
+}
+
+
+.revise_resource .contact_name,
+.revise_resource .contact_phone{
+    margin-top: 0px;
+    border-bottom: 1px solid #D2D2D2;
+    position: relative;
+}
+.revise_resource .contact_name div,
+.revise_resource .contact_phone div{
+    position: absolute;
+    right:1.28rem;
+
+
+}
+.revise_resource .contact_name input,
+.revise_resource .contact_phone input{
+    text-align: right;
+    border:none;
+    height:3.1rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
+}
+.revise_resource .contact_name p,
+.contact_phone p{
+    position: absolute;
+    left:1.28rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
 }
 </style>

@@ -9,21 +9,30 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <releaseGrugInformation :obj="obj"></releaseGrugInformation>
                 <mt-loadmore>
+                <div class="title_name">
+                   <p class="good_photo_header">上传货物图片</p>
+                </div> 
                     <div class="good_information">
-                        <p class="good_photo_header">上传货物图片</p>
+                        
                         <div class="upload_image" v-for="item in imageArr">
                             <imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload>
                             <p class="img-name">{{item.title}}</p>
                         </div>
                     </div>
-                    <div class="remarks">
-                        <p class="remarks_header" style="background:url('../../static/images/remarks.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">备注</p>
+                   
+                    <div class="remarks">  
+                        <div class="title_name">
+                           <p class="remarks_header">备注</p>
+                        </div>                      
                         <div class="remarks_content">
                             <textarea placeholder="请根据实际情况填写药材资源卖点" v-model="obj.selling_point"></textarea>
                         </div>
                     </div>
-                    <div class="contact">
-                        <p class="contact_header" style="background:url('../../static/images/contact.png') no-repeat 0 center;background-size:1.11rem 1.11rem;">联系方式</p>
+                     
+                    <div class="contact">  
+                         <div class="title_name">
+                          <p class="contact_header">联系方式</p>
+                         </div>                      
                         <div class="contact_name">
                             <P>姓名：</P>
                             <div>
@@ -76,34 +85,44 @@ export default {
                     breedId: '',
                     address:'北京市 北京市 东城区'
                 },
-                imgArr: ['', '', '', '', ''],
+                imgArr: ['', '', '', '', '','',''],
                 selected: '1',
                 todos: {},
                 imageArr: [{
                     title: '大货照',
                     name: 'intention',
                     index: 0,
-                    url: ''
+                    url: '/static/images/upload-image.png'
                 }, {
                     title: '样品照',
                     name: 'intention',
                     index: 1,
-                    url: ''
+                    url: '/static/images/upload-image.png'
                 }, {
                     title: '细节照',
                     name: 'intention',
                     index: 2,
-                    url: ''
+                    url: '/static/images/upload-image.png'
                 }, {
-                    title: '随意照',
+                    title: '细节照',
                     name: 'intention',
                     index: 3,
-                    url: ''
+                    url: '/static/images/upload-image.png'
                 }, {
-                    title: '随意照',
+                    title: '细节照',
                     name: 'intention',
                     index: 4,
-                    url: ''
+                    url: '/static/images/upload-image.png'
+                },{
+                    title: '细节照',
+                    name: 'intention',
+                    index: 5,
+                    url: '/static/images/upload-image.png'
+                },{
+                    title: '细节照',
+                    name: 'intention',
+                    index: 6,
+                    url: '/static/images/upload-image.png'
                 }]
             }
         },
@@ -129,7 +148,8 @@ export default {
                     checkArr.push(checkSamplePrice);
                 }
                 let count = false;
-                for (let i = 0; i < _self.imgArr.length; i++) {
+                let a = 0;
+                for (let i = 0; i < _self.imgArr.length; i++) { //_self.imgArr.length
                     if (!_self.imgArr[i]) {
                          count = '请上传图片';
                          break;
@@ -235,26 +255,50 @@ textarea {
     border-bottom: 1px solid #C9C9C9;
 }
 
-.supply_release .good_information,
-.remarks,
-.contact {
+.supply_release .good_information{
     padding: 1.28rem;
-    margin-bottom: 0.8533rem;
+    /*margin-bottom: 0.8533rem;*/
     background: white;
     float: left;
     width: 100%;
 }
-
+.supply_release .remarks,
+.contact{
+    background: white;
+    float: left;
+    width: 100%;
+}
 .supply_release .contact {
-    height: 12.8rem;
+    
     margin-bottom: 10px;
 }
 
-.supply_release .good_photo_header {
+.supply_release .title_name .good_photo_header {
     background: url('/static/images/upload.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
+}
+.supply_release .title_name .remarks_header{
+    background: url('/static/images/remarks.png') no-repeat 0 center;
+    background-size:1.11rem 1.11rem;  
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
 }
 
+.supply_release .title_name .contact_header{
+    background:url('../../static/images/contact.png') no-repeat 0 center;
+    background-size:1.11rem 1.11rem;
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
+}
+.supply_release .title_name{
+    width:100%;
+    background: #F1F0F0;
+}
 .supply_release .good_photo_header,
 .remarks_header,
 .contact_header {
@@ -270,8 +314,8 @@ textarea {
 .good_number,
 .contact_name,
 .contact_phone {
-    height: 2.99rem;
-    margin-top: 0.8533rem;
+    height: 3.5rem;
+    /*margin-top: 0.8533rem;*/
 }
 
 .supply_release .good_number .number_unit {
@@ -299,21 +343,17 @@ textarea {
 .supply_release .good_name p,
 .good_spec p,
 .good_place p,
-.good_number p,
-.contact_name p,
-.contact_phone p,
-.contact_name div,
-.contact_phone div {
+.good_number p {
     float: left;
-    line-height: 2.99rem;
-    font-size: 1.024rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
     color: #333333;
 }
 
-.supply_release .contact_name p,
+/*.supply_release .contact_name p,
 .contact_phone p {
     margin-right: 2.47rem;
-}
+}*/
 
 .supply_release .good_name div,
 .good_spec div,
@@ -325,15 +365,14 @@ textarea {
 
 .supply_release .good_name div .select,
 .good_spec div select,
-.good_place div select,
-.contact_name div input,
-.contact_phone div input {
-    font-size: 1.024rem;
-    height: 2.9rem;
+.good_place div select{
+    font-size: 1.19rem;
+    height: 3.3rem;
     width: 14.847rem;
     text-align: center;
     outline: none;
-    border: 1px solid #D2D2D2;
+    border:none;
+    /*border: 1px solid #D2D2D2;*/
 }
 
 .supply_release .good_name div .select input {
@@ -383,7 +422,9 @@ textarea {
     padding: 1.279rem;
     border: 1px solid #D2D2D2;
 }
-
+.supply_release .remarks_content{
+    padding-bottom: 1.279rem;
+}
 .supply_release .confirm {
     width: 100%;
     height: 4.267rem;
@@ -396,6 +437,7 @@ textarea {
 
 .supply_release .good_information .upload_image {
     width: 18%;
+    height:7rem;
     float: left;
     margin: 1rem 2% 0 0;
 }
@@ -404,5 +446,33 @@ textarea {
     font-size: 1rem;
     color: #333333;
     padding-top: 1rem;
+}
+
+
+.supply_release .contact_name,
+.supply_release .contact_phone{
+    margin-top: 0px;
+    border-bottom: 1px solid #D2D2D2;
+    position: relative;
+}
+.supply_release .contact_name div,
+.supply_release .contact_phone div{
+    position: absolute;
+    right:1.28rem;
+}
+.supply_release .contact_name input,
+.supply_release .contact_phone input{
+    text-align: right;
+    border:none;
+    height:3.1rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
+}
+.supply_release .contact_name p,
+.contact_phone p{
+    position: absolute;
+    left:1.28rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
 }
 </style>

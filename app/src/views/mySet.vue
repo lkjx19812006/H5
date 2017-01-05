@@ -137,8 +137,9 @@ export default {
    font-size: 1.7rem;
    color:white;
    line-height: 5rem;
-   position: fixed;
+   position: absolute;
    bottom: 0;
+
    
 }
 </style>

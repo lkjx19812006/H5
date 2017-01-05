@@ -1,16 +1,15 @@
 <template>
     <div class="content urgent_need">
-        <!-- <mt-header title="紧急求购">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header> -->
 
         <div class="go-back" @click="jump('home')">
                 <img src="/static/images/go-back.png">
         </div>
+
+        <div  class="title-name">
+             <p>紧急求购</p>
+        </div>
         <div @click="jumpSearch">
-             <search-input :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" ></search-input>
+             <backSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" ></backSearch>
         </div>
         <sort  v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         <div class="bg_white">
@@ -69,7 +68,7 @@
 </template>
 <script>
 import common from '../common/common.js'
-import searchInput from '../components/tools/inputSearch'
+import backSearch from '../components/tools/backSearch'
 import sort from '../components/tools/sort'
 import httpService from '../common/httpService.js'
 export default {
@@ -175,7 +174,7 @@ export default {
             }
         },
         components: {
-            searchInput,
+            backSearch,
             sort
         },
         methods: {
@@ -209,40 +208,12 @@ export default {
                             if (back) {
                                 back();
                             }
-                        })/*function(suc) {
-                            console.log(suc)
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                            for(var i=0;i<result.length;i++){
-
-                                var item = result[i];
-                                var duedate = item.duedate;
-                                var pubdate = item.duedate;
-                                 
-                                      duedate =  duedate.replace(/-/g,'/'); 
-                                      pubdate =  pubdate.replace(/-/g,'/');
-                                      duedate = duedate.substring(0,10);
-                                      pubdate = pubdate.substring(0,10);
-                                
-                                var duedateDate = new Date(duedate);
-                                var pubdateDate = new Date(pubdate);
-                                var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                                var days=Math.floor(dateValue/(24*3600*1000));
-                                item.days = days;
-                                console.log(days) 
-                                item.duedate = duedate;
-                                item.pubdate = pubdate;
-                            }
-                            
-                        _self.todos = result;       
-                           
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })*/
+                        })
             },
             getId(param){
                  let _self = this;
+
+                _self.param = true;
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
                 _self.httpPraram[param.key] = param[param.key];
@@ -256,31 +227,7 @@ export default {
                 this.getHttp();
             },
             jumpDetail(id) {
-                /*let _self = this;
-                httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result;
-                            var duedateDate = new Date(result.duedate);
-                            var pubdateDate = new Date(result.pubdate);
-                            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                            var days=Math.floor(dateValue/(24*3600*1000));
-                            result.days = days;
-                            result.pubdate = result.pubdate.substring(0,10);
-                             _self.obj = result;
-
-                             common.$emit('post-need-detail',_self.obj);
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })*/
+                
                 common.$emit("needToDetail",id);
                 this.$router.push('needDetail/' + id);
             },
@@ -407,7 +354,17 @@ export default {
     border-bottom: 1px solid #ccc;
     background:#EC6817;
 }
-
+.urgent_need .title-name{  
+    position: absolute;
+    left:15%;
+    width:70%;
+    height:50px;
+    border-bottom: 1px solid #ccc;
+    background: #EC6817;
+    font-size: 1.7rem;
+    line-height: 50px;
+    color:white;
+}
 .urgent_need .go-back  img{
     margin-top: 15px;
     height:20px;

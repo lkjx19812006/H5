@@ -21,7 +21,6 @@
                        <p class="contact_header">联系方式</p>
                     </div>
                     <div class="contact">
-                        <!-- <p class="contact_header">联系方式</p> -->
                         <div class="contact_name">
                             <P>姓名：</P>
                             <div>

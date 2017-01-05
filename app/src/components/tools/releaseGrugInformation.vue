@@ -1,28 +1,30 @@
 <template>
     <div class="content release_good_information">
         <div class="good_information">
-            <p class="good_infor_header">货物基本信息</p>
+            <div class="title_name">
+                 <p class="good_infor_header">求购货物信息</p>
+            </div>
             <div class="good_name">
                 <p>产品：</p>
-                <div>
+                
                     <div class="select" @click="jumpSearch('/search')" v-show="!obj.update">
                         <input text="text" disabled="false" placeholder="请选择你的药材" v-model="obj.drug_name">
                     </div>
                      <div class="select"  v-show="obj.update">
                         <input text="text" disabled="false"  v-model="obj.drug_name">
                     </div>
-                </div>
+                
             </div>
             <div class="good_number">
                 <p>规格：</p>
                 <div v-show="obj.drug_name" class="content_div">
                     <div v-show="breedSpec.length">
-                        <input type="text" v-model="obj.spec" />
-                        <p>
-                            <img src="/static/images/drop-down.png" @click="showAction('spec')">
+                        <input type="text" v-model="obj.spec" class="goods-info"/>
+                        <p class="my-p" @click="showAction('spec')">
+                            <img src="/static/images/right.png" >
                         </p>
                     </div>
-                    <input text="text" v-model="obj.spec" class="alert_input" v-show="!breedSpec.length">
+                    <input text="text" v-model="obj.spec" class="alert_input right_input" v-show="!breedSpec.length">
                 </div>
                 <div v-show="!obj.drug_name" class="select content_div">
                     <input text="text" disabled="false" placeholder="请选择你的药材" class="alert_input">
@@ -32,24 +34,25 @@
                 <p>产地：</p>
                 <div v-show="obj.drug_name" class="content_div">
                     <div v-show="breedLocation.length">
-                        <input type="text" v-model="obj.place" />
-                        <p>
-                            <img src="/static/images/drop-down.png" @click="showAction('place')">
+                        <input type="text" v-model="obj.place" class="goods-info"/>
+                        <p class="my-p" @click="showAction('place')">
+                            <img src="/static/images/right.png" >
                         </p>
                     </div>
-                    <input text="text" v-model="obj.place" class="alert_input" v-show="!breedLocation.length">
+                    <input text="text" v-model="obj.place" class="alert_input right_input" v-show="!breedLocation.length">
                 </div>
                 <div v-show="!obj.drug_name" class="select content_div">
                     <input text="text" disabled="false" placeholder="请选择你的药材" class="alert_input">
                 </div>
             </div>
         </div>
+
+        <p class="good_delivery_header">货物交收信息</p>
         <div class="good_information">
-            <p class="good_delivery_header">货物交收信息</p>
             <div class="good_number">
                 <p>数量：</p>
                 <div class="content_div">
-                    <input type="number" placeholder="你的药材数量" v-model="obj.number" />
+                    <input type="number" placeholder="请输入" v-model="obj.number" class="last_input"/>
                     <p @click="showAction('unit')">
                         {{obj.number_unit}}
                     </p>
@@ -58,30 +61,42 @@
             <div class="good_number">
                 <p>销售价格：</p>
                 <div class="content_div">
-                    <input type="number" placeholder="什么价格销售" v-model="obj.sales_price" />
+                    <input type="number" placeholder="请输入" v-model="obj.sales_price" class="last_input"/>
                     <p>元/份</p>
                 </div>
             </div>
-            <div class="good_number ">
+            <div class="good_number">
                 <p>交货地：</p>
                 <div @click="show=true" class="select-address content_div">
                     {{ obj.address }}
                 </div>
+                
             </div>
         </div>
+        <p class="good_sample_header">样品信息</p>
         <div class="good_information">
-            <p class="good_sample_header">样品信息</p>
+            
             <div class="good_number">
                 <p>是否提供样品：</p>
                 <div class="sample_button content_div">
-                    <button v-on:click="judgeValue(1)" v-bind:class=" obj.sampling ? 'button_active':''">是</button>
-                    <button v-on:click="judgeValue(0)" v-bind:class=" obj.sampling ? '':'button_active'">否</button>
+                    <!-- <button v-on:click="judgeValue(1)" v-bind:class=" obj.sampling ? 'button_active':''">是</button>
+                    <button v-on:click="judgeValue(0)" v-bind:class=" obj.sampling ? '':'button_active'">否</button>  -->  
+                    <div  class="left_button" v-on:click="judgeValue(1)">
+                        <img src="/static/images/no-select.png" v-show="!obj.sampling">
+                        <img src="/static/images/over-select.png" v-show="obj.sampling">
+                        <p>是</p>
+                    </div> 
+                    <div  class="right_button" v-on:click="judgeValue(0)">
+                        <img src="/static/images/no-select.png" v-show="obj.sampling">
+                        <img src="/static/images/over-select.png" v-show="!obj.sampling">
+                        <p>否</p>
+                    </div>              
                 </div>
             </div>
             <div class="good_number" v-show="obj.sampling">
                 <p>样品重量：</p>
                 <div class="content_div">
-                    <input type="number" placeholder="100" v-model="obj.weight" />
+                    <input type="number" placeholder="请输入" v-model="obj.weight" class="last_input"/>
                     <p>
                         {{obj.number_unit}}
                     </p>
@@ -90,7 +105,7 @@
             <div class="good_number" v-show="obj.sampling">
                 <p>样品价格：</p>
                 <div class="content_div">
-                    <input type="number" placeholder="500" v-model="obj.price" />
+                    <input type="number" placeholder="请输入" v-model="obj.price" class="last_input"/>
                     <p>元</p>
                 </div>
             </div>
@@ -168,6 +183,7 @@ export default {
         methods: {
             judgeValue(param) {
                 this.obj.sampling = param;
+
             },
             confirmIt() {
                 this.obj.addressProvince = this.areaParam.addressProvince;
@@ -340,11 +356,14 @@ textarea {
 .release_good_information {}
 
 .release_good_information .good_information {
-    padding: 1.28rem;
-    margin-bottom: 0.8533rem;
+    /*padding: 1.28rem;*/
+    margin-bottom: 0rem;
     background: white;
 }
-
+.release_good_information .title_name{
+    background: #F1F0F0;
+    width:100%;
+}
 .release_good_information .good_infor_header {
     background: url('/static/images/information.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
@@ -357,12 +376,15 @@ textarea {
     color: #FA6705;
     text-align: left;
     padding-left: 1.536rem;
+    line-height:3.75rem; 
+    height:3.58rem;
+    margin-left: 1.28rem;
 }
 
 .release_good_information .good_number .select-address {
-    font-size: 1.024rem;
+    font-size: 1.19rem;
     color: #666666;
-    line-height: 2.9rem;
+    line-height: 3.5rem;
     overflow: hidden;
 }
 
@@ -370,14 +392,17 @@ textarea {
 .good_spec,
 .good_place,
 .good_number {
-    height: 2.99rem;
-    margin-top: 0.8533rem;
+    height: 3.5rem;
+    border-bottom: 1px solid #D2D2D2;
+
+   /* margin-top: 0.8533rem;*/
 }
 
 .release_good_information .good_number div p img {
-    width: 100%;
-    height: 100%;
-    padding: 10px;
+    /*width: 100%;
+    height: 100%;*/
+    /*padding: 10px;*/
+    float: left;
 }
 
 .release_good_information .good_place select {
@@ -397,9 +422,10 @@ textarea {
 .good_place p,
 .good_number p {
     float: left;
-    line-height: 2.99rem;
-    font-size: 1.024rem;
+    line-height: 3.5rem;
+    font-size: 1.19rem;
     color: #333333;
+    margin-left: 1.28rem;
 }
 
 .release_good_information .good_name div,
@@ -423,60 +449,94 @@ textarea {
 .release_good_information .good_name div .select,
 .good_spec div select,
 .good_place div select {
-    font-size: 1.024rem;
-    height: 2.9rem;
+    font-size: 1.19rem;
+    height: 3.3rem;
     width: 14.847rem;
     text-align: center;
     outline: none;
-    border: 1px solid #D2D2D2;
+    line-height:3.5rem;
+    /*border: 1px solid #D2D2D2;*/
 }
 
 .release_good_information .select input {
-    font-size: 1.024rem;
-    height: 2.9rem;
+    font-size: 1.19rem;
+    height: 3.3rem;
     width: 14.847rem;
-    text-align: center;
+    text-align: right;
     outline: none;
-    border: 1px solid #D2D2D2;
+    /*border: 1px solid #D2D2D2;*/
+    margin-right: 1.28rem;
+    line-height: 3.5rem;
+    border: none;
+    background: white;
 }
 
 .release_good_information .alert_input {
     width: 100% !important;
     background-color: #fff;
-}
+    /*height: 3.5rem;
+    line-height: 3.5rem;*/
+    padding-right: 1.28rem !important;
 
+}
+.release_good_information .good_number div .last_input{
+    padding-right: 20px;
+}
 .release_good_information .good_name div .select input {
     text-align: center;
     outline: none;
-    border: 0;
+    border: none;
     height: 100%;
     width: 100%;
     background: white;
 }
 
 .release_good_information .good_number .content_div {
-    height: 2.9rem;
+    height: 3.5rem;
     width: 14.847rem;
-    border: 1px solid #D2D2D2;
+    /*border: 1px solid #D2D2D2;*/
 }
 
 .release_good_information .good_number div input {
     outline: none;
-    font-size: 1.024rem;
-    height: 2.73rem;
-    width: 75%;
-    text-align: center;
+    font-size: 1.19rem;
+    height: 3.3rem;
+    width: 60%;
+    text-align: right;
     float: left;
     outline: none;
     border: 0;
+    padding-right: 2px;
 }
 
 .release_good_information .good_number div p {
-    height: 2.73rem;
-    width: 25%;
+    height: 3.4rem;
+    width: 40%;
     border-left: 1px solid #D2D2D2;
+    position: absolute;
+    right:0;
 }
 
+.release_good_information .good_number div .goods-info{
+    width: 70%;
+}
+.release_good_information .good_number div .my-p{
+    border-left: 0;
+    height:3.5rem;
+    width:3.5rem;
+    position: absolute;
+    right:0;
+    width:30%;
+
+}
+
+.release_good_information .good_number div .my-p img{
+    height:1.0rem;
+    /*position: absolute;*/
+    margin-left:1.3rem;
+    margin-top:1.1rem;
+
+}
 .release_good_information .good_delivery_header {
     background: url('/static/images/deliveryInformation.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
@@ -493,15 +553,40 @@ textarea {
     background: white;
     border: 1px solid #D2D2D2;
     outline: none;
+   
 }
 
-.release_good_information .good_number .sample_button {
+.release_good_information .good_number .sample_button{
     border: none;
-}
+    width:8rem;
+    margin-right: 1.28rem;
 
-.release_good_information .good_number .sample_button .button_active {
-    background: #FA6705;
 }
+.release_good_information .good_number .sample_button img{
+    width:1rem;
+    margin-top: 1.1rem;
+}
+.release_good_information .good_number .sample_button .left_button p,
+.release_good_information .good_number .sample_button .right_button p{
+    border: none;
+    float: left;
+    line-height: 3.5rem;
+}
+.release_good_information .good_number .sample_button .left_button img,
+.release_good_information .good_number .sample_button .right_button img{
+    float:left;
+}
+.release_good_information .good_number .sample_button .left_button{
+    float:left;
+    width:40%;
+}
+.release_good_information .good_number .sample_button .right_button{
+    float:right;
+    width:40%;
+}
+/*.release_good_information .good_number .sample_button .button_active {
+    background: #FA6705;
+}*/
 
 .release_good_information .address_outbox{
     position: fixed;
@@ -531,5 +616,9 @@ textarea {
     width: 60px;
     height: 30px;
     font-size: 16px;
+}
+.release_good_information .right_input{
+    padding-right: 2.28rem;
+
 }
 </style>

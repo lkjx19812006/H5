@@ -1,10 +1,11 @@
 <template>
     <div class="content my_purchase">
-        <mt-header title="我的求购">
+        <!-- <mt-header title="我的求购">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+         <myHeader :param = "param"></myHeader>
         <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -19,13 +20,27 @@
                                 <p class="left">{{todo.breedName}}</p>
                                 <p class="right"><span>{{todo.offer}}</span>人已报价</p>
                             </div>
-                            <div class="second_line">
+                            <!-- <div class="second_line">
                                 <p class="left">规格：{{todo.spec}}</p>
                                 <p class="right">剩余：{{todo.days}}天</p>
                             </div>
                             <div class="third_line">
                                 <p class="left">产地：{{todo.location}}</p>
                                 <p class="right">需求数量：{{todo.number}}{{todo.unit}}</p>
+                            </div> -->
+                            <div class="detail">
+                                    <div>
+                                        <p>规格</p>
+                                        <p>产地</p>
+                                        <p>剩余</p>
+                                        <p>需求数量</p>
+                                    </div>
+                                    <div class="last">
+                                        <p>{{todo.spec}}</p>
+                                        <p>{{todo.location}}</p>
+                                        <p>{{todo.days}}<span>天</span></p>
+                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
+                                    </div>
                             </div>
                             <div class="button">
                                 <p class="first_button" @click="jump(other_router,todo.id)">编辑</p>
@@ -49,12 +64,16 @@
 <script>
 import common from '../common/common.js'
 import searchInput from '../components/tools/inputSearch'
+import myHeader from '../components/tools/myHeader'
 import myPurchaseSort from '../components/tools/myPurchaseSort'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
                 sortRouter: 'home',
+                param:{
+                    name:'我的求购'
+                },
                 sortArr: [{
                     name: '发布日期',
                     asc: 'top',
@@ -187,7 +206,8 @@ export default {
         },
         components: {
             searchInput,
-            myPurchaseSort
+            myPurchaseSort,
+            myHeader
         },
         methods: {
             getHttp(back) {
@@ -299,7 +319,7 @@ export default {
 <style scoped>
 .page-loadmore-listitem {
     height: 50px;
-    line-height: 50px;
+    /*line-height: 50px;*/
     border-bottom: solid 1px #eee;
     text-align: center;
     &:first-child {
@@ -338,7 +358,7 @@ export default {
 .low_price {}
 
 .my_purchase .bg_white {
-    margin-top: 0.5rem;
+    
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .mint-loadmore {
@@ -346,51 +366,52 @@ export default {
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
-    float: left;
-    width: 100%;
-    min-height: 170px;
+    
+    min-height: 15.8rem;
     border: 0;
-    margin-bottom: 1rem;
+   
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li {
-    margin-bottom: 1rem;
+    
     background: white;
-    padding: 0 1.5rem;
+    margin: 1rem 1rem 0 1rem;
+    border-radius: 4px;
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list {
-    height: 2.9rem;
+    min-height: 3rem;
     text-align: left;
     border-bottom: 1px solid #E4E4E4;
-    line-height: 2.9rem;
+    padding:1rem 0.85rem;
+
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .left_p {
-    float: left;
+    float:left;
     font-size: 1rem;
     color: #999999;
+    
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .right_p {
     float: right;
-    font-size: 1.1rem;
-    color: #FA6705;
+    font-size: 1rem;
+    color: #FA6705; 
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line {
-    /*border: 1px solid red;*/
-    /*width:100%;
-    text-align: left;*/
-    height: 4.4rem;
+    padding: 1rem 0.85rem;
+    min-height: 3rem;
+   
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .left {
     float: left;
     text-align: left;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     color: #333333;
-    /*border: 1px solid red;*/
+     
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .right {
@@ -398,53 +419,26 @@ export default {
     text-align: right;
     font-size: 1.2rem;
     color: #666666;
-    /*border: 1px solid red;*/
+    margin-top: 0.2rem;
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .right span {
     color: #FA6705;
 }
 
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .second_line {
-    height: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line {
-    height: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .second_line .left,
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line .left {
-    float: left;
-    text-align: left;
-    font-size: 1.2rem;
-    line-height: 1rem;
-    color: #666666;
-}
-
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .second_line .right,
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .third_line .right {
-    float: right;
-    text-align: right;
-    font-size: 1.2rem;
-    color: #666666;
-    line-height: 1rem;
-}
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button {
-    float: right;
-    height: 2rem;
-    /*border:1px solid red;*/
-    text-align: center;
-    line-height: 2rem;
-    font-size: 1.2rem;
+    float: right;  
+    padding:1rem 0;
+    text-align: center;  
+    font-size: 1.1rem;
+    margin-right: 0.85rem;
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button .first_button {
     width: 3.6rem;
     height: 2rem;
+    line-height: 2rem;
     border: 1px solid #BFBFBF;
     border-radius: 3px;
     float: left;
@@ -455,7 +449,36 @@ export default {
     width: 5.5rem;
     height: 2rem;
     border: 1px solid #BFBFBF;
+    line-height: 2rem;
     float: right;
     border-radius: 3px;
+}
+
+
+
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail{
+    width:100%;  
+    display: flex;
+    flex-direction:column;
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 1rem;
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail div{
+    flex:1;
+    display:flex;
+    flex-direction:row;
+    margin-top: 1rem;
+    
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail .last p{
+    color:#666666;
+}
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail div p{
+    flex:1;
+    
+    
+    font-size: 1.109rem;
+    color:#424242;
 }
 </style>

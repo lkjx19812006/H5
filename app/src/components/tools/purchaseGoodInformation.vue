@@ -21,8 +21,8 @@
                      <div v-show="obj.drug_name" class="div_content">
                         <div v-show="breedSpec.length">
                             <input type="text" v-model="obj.spec" />
-                            <p class="my-p">
-                                <img src="/static/images/right.png" @click="showAction('spec')"  >
+                            <p class="my-p" @click="showAction('spec')">
+                                <img src="/static/images/right.png"   >
                             </p>
                         </div>
                         <input text="text" v-model="obj.spec" class="alert_input  right_input" v-show="!breedSpec.length" >
@@ -40,8 +40,8 @@
                     <div v-show="obj.drug_name"  class="div_content">
                         <div v-show="breedLocation.length">
                             <input type="text" v-model="obj.place" />
-                            <p class="my-p">
-                                <img src="/static/images/right.png" @click="showAction('place')">
+                            <p class="my-p" @click="showAction('place')">
+                                <img src="/static/images/right.png" >
                             </p>
                         </div>
                         <input text="text" v-model="obj.place" class="alert_input  right_input" v-show="!breedLocation.length">
@@ -276,7 +276,7 @@ textarea {
 .contact_phone {
     height: 3.5rem;
     /*margin-top: 0.8533rem;*/
-    border-bottom: 1px solid #D2D2D2;;
+    border-bottom: 1px solid #D2D2D2;
 }
 
 .purchase_good_information .good_number div p img {
@@ -340,7 +340,7 @@ textarea {
     text-align: center;
     outline: none;
 
-    /*border: 1px solid #D2D2D2;*/
+    
 
 }
 
