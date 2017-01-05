@@ -16,15 +16,14 @@
                         <li v-for="todo in todos" class="page-loadmore-listitem">
                             <div class="list_header">
                                 <div>
-                                    <p class="time_font"><span>{{todo.ctime}}</span></p>
-                                    <p class="audit_state" v-if="todo.type==0">{{todo.now_status}}</p>
-                                    <p class="audit_state" v-if="todo.type==1">{{todo.salenow_status}}</p>
+                                    <p class="time_font"><span>{{todo.ctime | timeFormat}}</span><span style="margin-left:10px">订单编号：{{todo.no}}</span></p>
+                                    <p class="audit_state">{{todo.orderStatus | orderStatus}}</p>
                                 </div>
                             </div>
                             <img :src="todo.image" class="list_images" @click="jump(todo.id)">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div>{{todo.breedName}}</div>
+                                    <div>{{todo.breedName }}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                     <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
@@ -37,24 +36,16 @@
                             </div>
                             <div class="sum">
                                 <div>
-                                    <p class="sum_left">(含运费￥0.00)</p>
+                                    <p class="sum_left">(含运费￥{{todo.incidentals}})</p>
                                     <p>合计：￥<span>{{Number(todo.price) * Number(todo.number)}}</span>.00</p>
                                 </div>
-                                <!--   <p v-if="todo.type == 0">
-                                    <button v-if="todo.button_status == '取消订单'" @click="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
-                                    <button v-if="todo.button_status == '吹促发货'">吹促发货</button>
-                                    <button v-if="todo.button_status == '物流查询'">物流查询</button>
-                                    <button v-if="todo.button_status == '查看订单'" @click="jump(todo.id)">查看订单</button>
-                                    <button class="last-one" v-if="todo.button_status == '立即支付'">立即支付</button>
-                                    <button class="last-one" v-if="todo.order_status == '确认收货'">确认收货</button>
+                                <p>
+                                    <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
+                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus) ">查看物流</button>
+                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus) ">确认收货</button>
+                                    <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus) ">吹促发货</button>
+                                    <button v-if="'pay' ==judgeOrderStatus(todo.orderStatus) ">立即支付</button>
                                 </p>
-                                <p v-if="todo.type == 1">
-                                    <button v-if="todo.salebutton_status == '取消订单'" @click="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
-                                    <button class="last-one" v-if="todo.salebutton_status == '我要发货'">我要发货</button>
-                                    <button v-if="todo.salebutton_status == '物流查询'">物流查询</button>
-                                    <button v-if="todo.salebutton_status == '查看订单' || todo.saleorder_status == '查看订单'" @click="jump(todo.id)">查看订单</button>
-                                    <button v-if="todo.saleorder_status == '确认收款'">确认收款</button>
-                                </p> -->
                             </div>
                         </li>
                     </ul>
@@ -75,12 +66,13 @@
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import landscapeScroll from '../components/tools/landscapeScroll'
+import filters from '../filters/filters'
 export default {
     data() {
             return {
                 more: '采购订单',
                 title: '销售订单',
-                　　show: false,
+                show: false,
                 todos: [],
                 topStatus: '',
                 wrapperHeight: 0,
@@ -89,31 +81,31 @@ export default {
                 data: [{
                     name: '全部订单',
                     back_id: 0,
-                    show:true
+                    show: true
                 }, {
                     name: '待确认',
                     back_id: 10,
-                    show:false
+                    show: false
                 }, {
                     name: '待付款',
                     back_id: 20,
-                    show:false
+                    show: false
                 }, {
                     name: '待发货',
                     back_id: 40,
-                    show:false
+                    show: false
                 }, {
                     name: '待收货',
                     back_id: 50,
-                    show:false
+                    show: false
                 }, {
                     name: '已完成',
                     back_id: 60,
-                    show:false
+                    show: false
                 }, {
                     name: '已取消',
                     back_id: -1,
-                    show:false
+                    show: false
                 }],
                 buttonStatus: [{
 
@@ -127,45 +119,44 @@ export default {
             }
         },
         methods: {
-            changeOrderStatus(item){
-                console.log(item);
-                this.httpPraram.orderstatus=item.id;
-                this.httpPraram.page=1;
+            judgeOrderStatus(val) {
+                let status = ''
+                switch (val) {
+                    case -2:
+                        status = '';
+                        break;
+                    case -1:
+                        status = '';
+                        break;
+                    case 0:
+                        status = 'cancel';
+                        break;
+                    case 10:
+                        status = 'cancel';
+                        break;
+                    case 20:
+                        status = 'pay';
+                        break;
+                    case 30:
+                        status = 'waitsend';
+                        break;
+                    case 40:
+                        status = 'waitsend';
+                        break;
+                    case 50:
+                        status = 'send';
+                        break;
+                    case 60:
+                        status = '';
+                        break;
+                }
+                return status;
+            },
+            changeOrderStatus(item) {
+                this.httpPraram.orderstatus = item.id;
+                this.httpPraram.page = 1;
                 this.todos.splice(0, this.todos.length);
                 this.getHttp();
-
-            },
-            upDate(no, id, type) {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'orderService',
-                    biz_method: 'updateOrderStatus',
-                    version: 1,
-                    time: 0,
-                    sign: '',
-                    biz_param: {
-                        type: type,
-                        no: no,
-                        id: id
-                    }
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.myResource(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code == '1c01') {
-                        common.$emit('message', suc.data.msg);
-
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-
-                })
             },
             cancelOrder(id, no, type) {
                 let _self = this;
@@ -188,6 +179,8 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         common.$emit('message', suc.data.msg);
+                        _self.todos.splice(0, _self.todos.length);
+                        _self.httpPraram.page = 1;
                         _self.getHttp();
                     } else {
                         common.$emit('message', suc.data.msg);
@@ -223,12 +216,9 @@ export default {
                         if (listArr.length < _self.httpPraram.pageSize) {
                             _self.allLoaded = true;
                         }
-                        console.log(listArr);
                         for (let i = 0; i < listArr.length; i++) {
                             _self.todos.push(listArr[i]);
                         }
-
-
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -273,14 +263,12 @@ export default {
                     if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
                         _self.$refs.loadmore.onBottomLoaded(id);
-
                     } else {
                         this.httpPraram.page++;
                         this.getHttp(function() {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
-
                 }, 1500);
             },
             handleTopChange(status) {
@@ -297,7 +285,41 @@ export default {
                 }, 1500);
             }
         },
-         components: {
+        filters: (filters, {
+            orderStatus: (val) => {
+                switch (val) {
+                    case -2:
+                        val = '已过期';
+                        break;
+                    case -1:
+                        val = '已取消';
+                        break;
+                    case 0:
+                        val = '待审核';
+                        break;
+                    case 10:
+                        val = '待审核';
+                        break;
+                    case 20:
+                        val = '待付款';
+                        break;
+                    case 30:
+                        val = '待发货';
+                        break;
+                    case 40:
+                        val = '待发货';
+                        break;
+                    case 50:
+                        val = '待收货';
+                        break;
+                    case 60:
+                        val = '已完成';
+                        break;
+                }
+                return val;
+            }
+        }),
+        components: {
             landscapeScroll
         },
         created() {
@@ -401,11 +423,9 @@ export default {
     min-height: 150px;
     border: 0;
     margin-top: 10px;
-}
-
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li {
-    background: white;
-    height: 17.3rem;
+    float: left;
+    background-color: #fff;
+    height: auto;
 }
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
