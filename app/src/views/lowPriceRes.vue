@@ -14,8 +14,8 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item">
-                            <img src="/static/images/1.jpg" class="list_images">
+                        <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
+                            <img :src="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div><img src="/static/images/bao.png"><img src="/static/images/zheng.png">{{todo.breedName}}</div>
@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="res_content_right">
                                 <p>{{todo.price}}<!-- {{todo.unit}} -->kg/元</p>
-                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail(todo.id)">立即购买</button>
+                                <button class="mint-button mint-button--primary mint-button--small" >立即购买</button>
                                 </div>
                             </div>
                         </li>

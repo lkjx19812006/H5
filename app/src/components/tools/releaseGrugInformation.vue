@@ -97,8 +97,8 @@
                 <p>样品重量：</p>
                 <div class="content_div">
                     <input type="number" placeholder="请输入" v-model="obj.weight" class="last_input"/>
-                    <p>
-                        {{obj.number_unit}}
+                    <p @click="showAction('sample_unit')">
+                        {{obj.sample_unit}}<!-- sampleUnit -->
                     </p>
                 </div>
             </div>
@@ -289,7 +289,10 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         _self.unit = suc.data.biz_result.list;
-                        if (!_self.obj.number_unit) _self.obj.number_unit = _self.unit[0].name;
+                        if (!_self.obj.number_unit){
+                             _self.obj.number_unit = _self.unit[0].name;
+                             _self.obj.sample_unit = _self.unit[0].name;
+                        }
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -313,6 +316,13 @@ export default {
                             key: 'spec'
                         });
                     }
+                }else if(param == "sample_unit"){
+                    for (var i = 0; i < _self.unit.length; i++) {
+                        _self.actions.push({
+                            name: _self.unit[i].name,
+                            key: 'sample_unit'
+                        });
+                     }   
                 } else if (param == "unit") {
 
                     for (var i = 0; i < _self.unit.length; i++) {

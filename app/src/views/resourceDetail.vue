@@ -1,11 +1,13 @@
 <template>
-    <div class="content resource_detail whole">
-        <mt-header fixed title="资源详情">
+    <div class="resource_detail">
+        <!-- <mt-header fixed title="资源详情">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
-        </mt-header>
-        <div class="page-loadmore-wrapper">
+        </mt-header> -->
+        <myHeader :param = "param"></myHeader>
+
+        <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
             <mt-loadmore>
                 <div class="swipe_height" v-if="obj.image">
                     <swiper :options="swiperOption" class="swipe_height">
@@ -44,20 +46,22 @@
                     </div>
                 </div>
             </mt-loadmore>
-        </div>
-        <div class="fix_bottom">
+            <div class="fix_bottom">
             <div class="attention">
                 <telAndAttention :obj='obj'></telAndAttention>
             </div>
             <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
             <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
             <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
+            </div>
         </div>
+        
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 import telAndAttention from '../components/tools/telAndAttention'
 import {
     swiper,
@@ -68,6 +72,9 @@ export default {
     data() {
             let _self = this;
             return {
+                param:{
+                    name:'商品详情'
+                },
                 number: 0,
                 obj: {},
                 id: '',
@@ -79,7 +86,7 @@ export default {
                     loop: true,
                     autoplayDisableOnInteraction: false,
                     onTransitionStart: function(swiper) {
-                        console.log(swiper.realIndex);
+                        //console.log(swiper.realIndex);
                         _self.number = parseInt(swiper.realIndex) + 1;
                     }
                 }
@@ -88,7 +95,8 @@ export default {
         components: {
             swiper,
             swiperSlide,
-            telAndAttention
+            telAndAttention,
+            myHeader
         },
         methods: {
             refurbish(id) {
@@ -142,13 +150,27 @@ export default {
                 _self.refurbish(item);
                 _self.obj={};
             })
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 1;
         }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.resource_detail {}
+.resource_detail {
+    position: relative;
+}
+.resource_detail .page-loadmore-wrapper{
+    /*margin-top: -1px;*/
+    overflow: scroll;
+    padding-bottom: 10px;
+    width: 100%;
 
+}
+.page-loadmore-wrapper {
+    
+}
 .resource_detail .swipe_height {
     height: 16rem;
     max-height: 160px;
@@ -206,10 +228,11 @@ export default {
 }
 
 .resource_detail .fix_bottom {
-    position: fixed;
-    bottom: 0;
-    z-index: 2;
+    /*position: absolute;
+    bottom: 10px;
+    z-index: 2;*/
     width: 100%;
+    margin-top: 100px;
 }
 
 .resource_detail .fix_bottom .attention {

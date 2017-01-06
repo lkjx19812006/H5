@@ -1,10 +1,12 @@
 <template>
     <div class="revise_purchase">
-        <mt-header title="修改求购">
+        <!-- <mt-header title="修改求购">
             <router-link to="/myPurchase" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "param"></myHeader>
+        <mt-loadmore>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <druginformation :obj="obj"></druginformation>
                 <div class="title_name">
@@ -36,9 +38,11 @@
 
                 <div class="confirm" @click="release()">确认修改</div>
     </div> 
+     </mt-loadmore>
     </div>
 </template>
 <script>
+import myHeader from '../components/tools/myHeader'
 import druginformation from '../components/tools/purchaseGoodInformation'
 import common from '../common/common.js'
 import validation from '../validation/validation.js'
@@ -47,6 +51,10 @@ export default {
     data() {
             return {
                 selected: '1',
+                param:{
+                     name:'修改求购'
+
+                },
                 todos: {},
                 obj: {
                     update:true,
@@ -65,7 +73,8 @@ export default {
             }
         },
         components: {
-            druginformation
+            druginformation,
+            myHeader
         },
         methods: {
             getNeedDetail(id) {

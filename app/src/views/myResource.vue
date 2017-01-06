@@ -1,5 +1,5 @@
 <template>
-    <div class="content my_resource">
+    <div class="my_resource">
       
         <myHeader :param = "param"></myHeader>
         <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
@@ -54,7 +54,8 @@ export default {
             return {
                 sortRouter: 'home',
                 param:{
-                    name:'我的资源'
+                    name:'我的资源',
+                    router:"home"
                 },
                 sortArr: [{
                     name: '发布日期',

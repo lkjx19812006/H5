@@ -1,13 +1,15 @@
 <template>
     <div class="need_release">
-        <mt-header fixed title="求购发布">
+        <!-- <mt-header fixed title="求购发布">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header>
-        <div class="whole">
+        </mt-header> -->
+        <myHeader :param = "param"></myHeader>
+        <mt-loadmore>
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <druginformation :obj="obj"> </druginformation>
+                
                     <div class="title_name">
                        <p class="remarks_header">备注</p>
                     </div> 
@@ -36,18 +38,24 @@
                     </div>
                     <div class="confirm" @click="release()">确认发布</div>
                
-            </div>
+           
         </div>
+        </mt-loadmore>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 import druginformation from '../components/tools/purchaseGoodInformation'
 export default {
     data() {
             return {
+                param:{
+                    name:'求购发布',
+                    router:'home'
+                },
                 router: 'search',
                 selected: '1',
                 obj: {
@@ -66,7 +74,8 @@ export default {
             }
         },
         components: {
-            druginformation
+            druginformation,
+            myHeader
         },
         methods: {
             release() {
@@ -137,7 +146,7 @@ export default {
             }
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 10;
         }
 }
 </script>
@@ -147,7 +156,9 @@ export default {
     background: #F1EFEF;
 }
 
-.need_release {}
+.need_release {
+
+}
 
 input[type="text"],
 input[type="submit"],
@@ -379,6 +390,6 @@ textarea {
     font-size: 1.536rem;
     color: white;
     line-height: 4.267rem;
-    margin-top: 5rem;
+    margin-top: 5rem;   
 }
 </style>

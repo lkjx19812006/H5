@@ -26,7 +26,10 @@
         </li>
         <li v-for="(item,index) in personalDataArr" v-if="index == 4" id="personal_authentication" @click="jumpPersonal"> 
           <p class="name  name_big_size">{{item.name}}</p>
-          <p class="name_content">{{item.content}}</p>
+          <p class="name_content" v-if="item.content == 0">未认证</p>
+          <p class="name_content" v-if="item.content == 1">待审核</p>
+          <p class="name_content" v-if="item.content == 2">已认证</p>
+          <p class="name_content" v-if="item.content == 3">未通过</p>
         </li>
         
       </ul>
@@ -43,7 +46,10 @@
 
         <li v-for="(item,index) in companyDataArr" v-if="index == 5" id="company_authentication" @click="jumpCompany"> 
           <p class="name  name_big_size">{{item.name}}</p>
-          <p class="name_content">{{item.content}}</p>
+          <p class="name_content" v-if="item.content == 0">未认证</p>
+          <p class="name_content" v-if="item.content == 1">待审核</p>
+          <p class="name_content" v-if="item.content == 2">已认证</p>
+          <p class="name_content" v-if="item.content == 3">未通过</p>
         </li>
         
       </ul>
@@ -146,7 +152,7 @@ export default {
           body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
           httpService.queryUserInfo(url,body,function(suc){
              common.$emit('close-load');
-             
+             console.log(suc);
              let birthday = suc.data.biz_result.birthday;
              birthday = JSON.stringify(new Date(birthday));
              birthday = birthday.substring(1,11);
@@ -155,14 +161,14 @@ export default {
             _self.personalDataArr[1].content = birthday;
             _self.personalDataArr[2].content = suc.data.biz_result.gender;
             _self.personalDataArr[3].content = suc.data.biz_result.phone;
-            _self.personalDataArr[4].content = suc.data.biz_result.ucomment;
+            _self.personalDataArr[4].content = suc.data.biz_result.utype;
             
             _self.companyDataArr[0].content = suc.data.biz_result.company;
             _self.companyDataArr[1].content = suc.data.biz_result.companyShort;
             _self.companyDataArr[2].content = suc.data.biz_result.companyJob;
             _self.companyDataArr[3].content = suc.data.biz_result.bizMain;
             _self.companyDataArr[4].content = suc.data.biz_result.invoice;
-            _self.companyDataArr[5].content = suc.data.biz_result.ccomment;
+            _self.companyDataArr[5].content = suc.data.biz_result.ctype;
             _self.param.url = suc.data.biz_result.avatar;
             console.log(suc.data.biz_result.avatar)
           },function(err){

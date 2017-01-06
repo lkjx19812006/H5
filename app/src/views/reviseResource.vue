@@ -1,10 +1,13 @@
 <template>
     <div class="revise_resource">
-        <mt-header title="修改资源">
+        <!-- <mt-header title="修改资源">
             <router-link to="/myResource" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "param"></myHeader>
+        <mt-loadmore>
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
         <releaseGrugInformation :obj="obj"></releaseGrugInformation>
         <div class="title_name">
             <p class="good_photo_header">上传货物图片</p>
@@ -42,17 +45,24 @@
         </div>
         <div class="confirm" @click="release()">确认修改</div>
     </div>
+    </mt-loadmore>
+   </div> 
 </template>
 <script>
 import common from '../common/common.js'
 import validation from '../validation/validation.js'
 import imageUpload from '../components/tools/imageUpload'
+import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
 import releaseGrugInformation from '../components/tools/releaseGrugInformation'
 
 export default {
     data() {
             return {
+                param:{
+                    name:'修改资源',
+                    
+                },
                 obj: {
                     update:true,
                     drug_name: '',
@@ -108,7 +118,8 @@ export default {
         },
         components: {
             imageUpload,
-            releaseGrugInformation
+            releaseGrugInformation,
+            myHeader
         },
         methods: {
             getResource(id) {
@@ -269,6 +280,9 @@ export default {
                 _self.getResource(item);
             })
 
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>

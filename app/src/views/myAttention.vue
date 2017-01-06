@@ -1,11 +1,11 @@
 <template>
-
-  <div class="my_attention">
-        
-         <attentionHead :param = "param"></attentionHead>
+  <div class="my_attention">        
+         <attentionHead :param = "param" v-on:tab="tabAttention"></attentionHead>
        
 
-      
+           <div @click="jumpSearch">
+                <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
+           </div>
       
         
                 <div class="bg_white">
@@ -13,38 +13,44 @@
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                  
 
-                    <ul class="page-loadmore-list" v-show="show">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
+                    <ul class="page-loadmore-list" v-show="param.show">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  v-on:click="jump(todo.id)">
                             <img :src="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div><img src="/static/icons/bao.png">{{todo.breedName}}</div>
-                                    <p>规格：<span>{{todo.spec}}</span></p>
+                                    <div><img src="/static/images/bao.png"><img src="/static/images/zheng.png">{{todo.breedName}}</div>
+                                    <p class="spec">规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                     <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}<span>元/kg</span></p>
-                                    <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
+                                    <button class="mint-button mint-button--primary mint-button--small" >立即购买</button>
                                 </div>
                             </div>
                         </li>
                     </ul>
-                    <ul class="page-loadmore-list_second" v-show="!show">
+                    <ul class="page-loadmore-list_second" v-show="!param.show">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                            <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div>
                             <div class="center">
+                                <img src="/static/icons/england.png"  class="flag">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
                                     <p>发布时间：{{todo.pubdate}}</p>
                                 </div>
                                 <div class="detail">
-                                    <p>规格：{{todo.spec}}</p>
-                                    <p>剩余：<span>{{todo.days}}</span>天</p>
-                                </div>
-                                <div class="detail">
-                                    <p>产地：{{todo.location}}</p>
-                                    <p>需求数量：{{todo.number}}{{todo.unit}}</p>
+                                    <div>
+                                        <p>规格</p>
+                                        <p>产地</p>
+                                        <p>剩余</p>
+                                        <p>需求数量</p>
+                                    </div>
+                                    <div class="last">
+                                        <p>{{todo.spec}}</p>
+                                        <p>{{todo.location}}</p>
+                                        <p>{{todo.days}}<span>天</span></p>
+                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
+                                    </div>
                                 </div>
                             </div>
                             <div class="bottom">
@@ -75,13 +81,15 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-
+                myShow:{
+                    myShow:true
+                },
                 param:{
                     name:'资源关注',
-                    other_name:'求购关注'
+                    other_name:'求购关注',
+                    show:true,
+                    router:"home"
                 },
-                more:"求购关注",
-                title:"资源关注",
                 show:true,
                 selected:"1",
                 resourceArr:[],
@@ -115,6 +123,9 @@ export default {
                 common.$emit('setParam', 'router', 'myAttention')
                 this.$router.push('search');
             },
+            jump(id){
+                this.$router.push('resourceDetail/' + id);
+            },
             resorceHttp(back) {
                 let _self = this;
                 common.$emit('show-load');
@@ -139,33 +150,7 @@ export default {
                     common.$emit('close-load');
 
                     let result = suc.data.biz_result.list;
-                    //console.log(result);
-                    for (var i = 0; i < result.length; i++) {
-
-                        var item = result[i];
-                        var duedate = item.duedate;
-                        var pubdate = item.duedate;
-
-                        duedate = duedate.replace(/-/g, '/');
-                        pubdate = pubdate.replace(/-/g, '/');
-                        duedate = duedate.substring(0, 10);
-                        pubdate = pubdate.substring(0, 10);
-
-                        var duedateDate = new Date(duedate);
-                        var pubdateDate = new Date(pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
-                        item.days = days;
-                        item.duedate = duedate;
-                        item.pubdate = pubdate;
-                        console.log(item.image[0]);
-                    }
-                    /*if(_self.httpPraram.intentionType == 1){
-                        _self.resourceArr = result;
-                    }else if(_self.httpPraram.intentionType == 0){
-                        _self.needArr = result;
-                    }*/
-                    _self.todos = result;
+                    common.$emit('translateDate', result,_self.todos);
                     if (back) {
                         back();
                     }
@@ -178,48 +163,6 @@ export default {
                     }
                 })
             },
-            /* needHttp(key){
-                 let _self = this;
-                 common.$emit('show-load');
-                   let otherurl=common.addSID(common.urlCommon+common.apiUrl.most);
-                   let otherbody={biz_module:'intentionService',biz_method:'attentionIntentionList',version:1,time:0,sign:'',biz_param:{
-                         breedName:key,
-                         pn:"1",
-                         pSize:"20",
-                         intentionType:"0"
-                   }};
-                   
-                   otherbody.time=Date.parse(new Date())+parseInt(common.difTime);
-                   otherbody.sign=common.getSign('biz_module='+otherbody.biz_module+'&biz_method='+otherbody.biz_method+'&time='+otherbody.time);
-                   httpService.myAttention(otherurl,otherbody,function(suc){
-                     common.$emit('close-load');
-                     console.log(suc.data.biz_result.list);
-                     let result = suc.data.biz_result.list;
-                     for(var i=0;i<result.length;i++){
-
-                         var item = result[i];
-                         var duedate = item.duedate;
-                         var pubdate = item.duedate;
-                          
-                               duedate =  duedate.replace(/-/g,'/'); 
-                               pubdate =  pubdate.replace(/-/g,'/');
-                               duedate = duedate.substring(0,10);
-                               pubdate = pubdate.substring(0,10);
-                         
-                         var duedateDate = new Date(duedate);
-                         var pubdateDate = new Date(pubdate);
-                         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                         var days=Math.floor(dateValue/(24*3600*1000));
-                         item.days = days; 
-                         item.duedate = duedate;
-                         item.pubdate = pubdate;
-                     }
-                     _self.needArr = result;
-                     
-                   },function(err){
-                     common.$emit('close-load');
-                   })
-             },*/
             clearKeyword() {
                 let _self = this;
                 this.httpPraram.page = 1;
@@ -258,19 +201,16 @@ export default {
 
                 }, 1500);
             },
-            tabAttention() {
+            tabAttention(param) {
                 let _self = this;
-                this.show = !this.show;
-                if (this.show == true) {
-                    _self.more = '求购关注';
-                    _self.title = '资源关注';
-
+                console.log(param)
+                if (param == true) {
                     _self.httpPraram.intentionType = 1;
+                    _self.todos.splice(0, _self.todos.length);
                     _self.resorceHttp();
-                } else {
-                    _self.more = '资源关注';
-                    _self.title = '求购关注';
+                }else if(param == false){
                     _self.httpPraram.intentionType = 0;
+                    _self.todos.splice(0, _self.todos.length);
                     _self.resorceHttp();
                 }
             }
@@ -310,12 +250,14 @@ export default {
 <style scoped>
 .page-loadmore-listitem {
     height: 50px;
-    line-height: 50px;
+    
     border-bottom: solid 1px #eee;
     text-align: center;
+
     &:first-child {
         border-top: solid 1px #eee;
     }
+
 }
 
 .page-loadmore-wrapper {
@@ -349,25 +291,95 @@ export default {
 .low_price {}
 
 
-/*.my_attention .right_header{
-    height:100%;
-    width:100%;
-    border:1px solid red;
-}
-.my_attention .right_header .tab{
-    position: absolute;
-    width:1.2rem;
-    height:1.2rem;
-    top:0.8rem;
-    left:0;
-}
-.my_attention .right_header .right_text{
-    padding-left: 2rem;
-    font-size: 1.2rem;
-    line-height: 4rem;
-}*/
 
-.my_attention .right_text {
+.my_attention .bg_white{
+    background: #F5F5F5;
+    padding: 0 10px;
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list{
+    margin-top:-10px;
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
+    float: left;
+    width: 100%;
+    height: 9.55rem;
+    margin-top: 10px;
+    background: white;
+    border-radius: 3px;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
+    height: 8.1rem;
+    width: 25%;
+    left: 10px;
+    margin: 10px 10px 10px 0;
+    position: absolute;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
+    float: left;
+    text-align: left;
+    line-height: 20px;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
+    float: left;
+    width: 1.2rem;
+    margin-right: 4px;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
+    float: left;
+    width: 100%;
+    padding-right: 90px;
+    line-height: 18px;
+    text-align: left;
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec{
+    margin-top: 0.3rem;
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
+    width: 100%;
+    padding-left: 30%;
+    padding-top: 10px;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right{
+    position: absolute;
+    max-width: 80px;
+    height: 95px;
+    margin: 0;
+    right: 10px;
+    
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
+    font-size: 1.25rem;
+    margin-top: 0px;
+    color: #EC6817;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button{
+  position: absolute;
+  bottom: 0px;
+  background: #EC6817;
+  font-size: 1.109rem;
+  width: 5.97rem;
+  right: 0px;
+  height: 2.38rem;
+  padding: 0 5px;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{
+    font-size: 1rem;
+    color: #999;
+}
+/*.my_attention .right_text {
     font-size: 1.2rem;
     padding-left: 1.5rem;
     background: url(/static/images/tab.png) no-repeat left center;
@@ -375,8 +387,7 @@ export default {
 }
 
 .my_attention .select_box {
-    /*position: relative;
-    top:50px;*/
+    
     margin-top: 50px;
     border-bottom: 1px solid #DFDFDF;
     font-size: 2.5rem;
@@ -385,7 +396,7 @@ export default {
 }
 
 .my_attention .bg_white {
-    /*position: fixed;*/
+    
 }
 
 .my_attention .mint-navbar {
@@ -412,11 +423,7 @@ export default {
 }
 
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    /*height: 80px;
-    max-width: 100px;
-    left: 10px;
-    margin: 10px 10px 10px 0;
-    position: absolute;*/
+    
     height: 9.4rem;
     width: 8.533rem;
     position: absolute;
@@ -465,7 +472,7 @@ export default {
     height: 10rem;
     margin: 0;
     right: 10px;
-    /*border:1px solid red;*/
+   
 }
 
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
@@ -494,11 +501,135 @@ export default {
     font-size: 1.2rem;
     color: #999;
     margin-top: 0.2rem;
-}
+}*/
+
+
+
 
 .urgent_need {}
 
+
+
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second {
+     margin-top: -10px;
+     position: relative;
+}
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem {
+    float: left;
+    width: 100%;
+    min-height: 100px;
+    padding:0;
+    height: auto;
+    background: white;
+    margin-top: 10px;
+    border-radius: 3px;
+    box-shadow: 0px 0px 20px #F5F5F5;
+}
+
+
+
+
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom {
+    float: left;
+    width: 100%;
+    padding: 0 10px;
+    height:4.18rem;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom p {
+    line-height: 4.18rem;
+    float: left;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom span {
+    color: #EC6817;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom button {
+    float: right;
+    background: #EC6817;
+    font-size: 1.2rem;
+    width: 5.97rem;
+    height: 2.389rem;
+    padding: 0 5px;
+    border: none;
+    color: #fff;
+    line-height: 0;
+    margin-top: 0.8955rem;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center {
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    padding: 0 10px 1.066rem 10px;
+   
+    position: relative;
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem{
+    position: 
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .flag{
+    position: absolute;
+    top:0px;
+    right:0px;
+    width:1.7rem;
+    height:1.23rem;
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center div {
+    float: left;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title {
+    width: 100%;
+    font-size: 1.365rem;
+    color: #333;
+    line-height: 1.365rem;
+    /*margin: 10px 0;*/
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title>div{
+    margin-top:1.06rem;
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title p {
+    float: right;
+    font-size: 1rem;
+    color: #999;
+    margin:1.2rem 2.559rem 0 0;
+
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title img { 
+    width:1.2rem;
+    margin-right: 5px;
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail{
+    width:100%;
+    
+    display: flex;
+    flex-direction:column;
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail div{
+    flex:1;
+    display:flex;
+    flex-direction:row;
+    margin-top: 1.279rem;
+    
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail .last p{
+    color:#666666;
+}
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail div p{
+    flex:1;
+    
+    
+    font-size: 1.109rem;
+    color:#424242;
+}
+/*.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem {
     float: left;
     width: 100%;
     min-height: 100px;
@@ -607,5 +738,5 @@ export default {
 
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail p:last-child {
     float: right;
-}
+}*/
 </style>

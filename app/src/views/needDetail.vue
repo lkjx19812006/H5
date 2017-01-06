@@ -1,10 +1,12 @@
 <template>
     <div class="content need_detail">
-        <mt-header title="需求详情">
+        <!-- <mt-header title="需求详情">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "param"></myHeader>
+        
         <div class="page-loadmore-wrapper">
             <mt-loadmore>
                 <div class="center">
@@ -33,7 +35,7 @@
                         <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
                     </div>
                 </div>
-            </mt-loadmore>
+           </mt-loadmore>
         </div>
         <div class="fix_bottom">
             <div class="attention">
@@ -41,21 +43,28 @@
             </div>
             <button class="mint-button mint-button--primary mint-button--normal orange_button">立即报价</button>
         </div>
+         
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 import telAndAttention from '../components/tools/telAndAttention'
 export default {
     data() {
             return {
                 id: '',
-                obj: {}
+                obj: {},
+                param:{
+                    name:'需求详情'
+                    
+                },
             }
         },
         components: {
-            telAndAttention
+            telAndAttention,
+            myHeader
         },
         methods: {
             getHttp(id) {
@@ -115,11 +124,13 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.need_detail {}
+.need_detail {
+   
+}
 
 .need_detail .fix_bottom {
-    position: fixed;
-    bottom: 0;
+    /*position: absolute;
+    bottom: 0;*/
     width: 100%;
     z-index: 2;
 }

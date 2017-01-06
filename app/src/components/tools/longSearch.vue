@@ -1,6 +1,14 @@
 <template>
     <div class="content long_search">
-        <div class="search_div">
+        <div class="search_div"  v-show="!param.myShow">
+            <div class="search_content" v-bind:class="{ search_active: keyword }" >               
+                <img src="/static/images/search.png" class="search_image" v-show="!keyword">
+                <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image"  >       
+                </div>
+                <input type="text" v-bind:class="{ search_active: keyword }" placeholder="请输入您想要的货物资源" disabled="true" v-model="keyword">
+            </div>
+        </div>
+         <div class="search-div"  v-show="param.myShow">
             <div class="search_content" v-bind:class="{ search_active: keyword }" >               
                 <img src="/static/images/search.png" class="search_image" v-show="!keyword">
                 <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image"  >       
@@ -23,6 +31,9 @@ export default {
             keyword: {
                 type: String,
                 default: ''
+            },
+            param:{
+
             }
         },
         methods:{
@@ -40,39 +51,53 @@ export default {
 
 .long_search .search_div {
     height: 50px;
-    background: #fff;
     border-bottom: 1px solid #ccc;
     width: 100%;
     float: left;
     background: #EC6817;
 }
-
-.long_search .search_div .search_active{
+.long_search .search-div {
+    height: 50px;
+    width: 100%;
+    float: left;   
+}
+.long_search .search_div .search_active,
+.search-div .search_active{
     background-color: #fff !important; 
 }
 
-.long_search .search_div .search_content {
-    background: #F1EFEF;
+.long_search .search_div .search_content,
+.search-div .search_content{
     height: 30px;
     margin: 10px 30px;
     border-radius: 10px;
 }
-
-.long_search .search_div .search_content .clear{
+.long_search .search_div .search_content{
+    background: #F1EFEF;
+}
+.long_search .search-div .search_content{
+    background: white;
+}
+.long_search .search_div .search_content .clear,
+.search-div .search_content .clear{
     float: right;
     padding: 0 0 10px 10px;
 }
-.long_search .search_div .search_content input {
-    background-color: #F1EFEF;
+.long_search .search_div .search_content input,
+.search-div  .search_content input {  
     height: 30px;
-    /*position: absolute;
-    left: 45px;*/
     float:left;
     border: none;
     margin-left: 10px;
 }
-
-.long_search .search_div .search_content img {
+.long_search .search_div .search_content input{
+    background-color: #F1EFEF;
+}
+.long_search .search-div  .search_content input{
+    background-color: #fff;
+}
+.long_search .search_div .search_content img,
+.search-div .search_content img {
     float: left;
     max-height: 20px;
     margin: 5px 0 0 0;

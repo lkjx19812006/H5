@@ -1,23 +1,28 @@
 <template>
   <div class="company_authentication">
 
-                <mt-header title="企业认证" fixed>
+                <!-- <mt-header title="企业认证" fixed>
                     <router-link to="/home" slot="left">
                         <mt-button icon="back"></mt-button>
                     </router-link>
-                </mt-header>        
-                <div class="select_box">
-                  <mt-navbar v-model="selected">
+                </mt-header> -->  
+               <div class="box">
+                   <myHeader :param = "headerName"></myHeader>  
+                   <div class="select"><myTab :param = "myShow" ></myTab></div>
+               </div> 
+                
+                <!-- <div class="select_box" id="select_box">
+                  <mt-navbar v-model="selected" >
                     <mt-tab-item id="1" class="word">传统三证</mt-tab-item>
                     <mt-tab-item id="2" class="word">三证合一</mt-tab-item>
                   </mt-navbar>
-                </div>   
-
+                </div> -->   
+     <mt-loadmore>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">  
           <div class="content">
-               <mt-tab-container v-model="selected">
-                  <mt-tab-container-item id="1">
-                    <div class="first_item">
+               <!-- <mt-tab-container v-model="selected">
+                  <mt-tab-container-item id="1"> -->
+                    <div class="first_item" v-show="myShow.show">
                         <div v-for="(todo,index) in todos" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                            <p class="title">{{todo.title}}</p>
                            <div class="photo">
@@ -26,9 +31,9 @@
                            <p class="point">{{todo.point}}</p>
                         </div>                       
                    </div>
-                  </mt-tab-container-item>
-                  <mt-tab-container-item id="2">
-                    <div class="second_item">
+                 <!--  </mt-tab-container-item>
+                  <mt-tab-container-item id="2"> -->
+                    <div class="second_item" v-show="!myShow.show">
                         <div v-for="(todo,index) in datas" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                            <p class="title">{{todo.title}}</p>
                            <div class="photo">
@@ -38,8 +43,8 @@
                         </div>
                          
                     </div>
-                  </mt-tab-container-item>
-                </mt-tab-container>
+                 <!--  </mt-tab-container-item>
+                </mt-tab-container> -->
           </div>  
                     
            <div class="common_problem">
@@ -51,17 +56,27 @@
            </div>
             <div class="confirm" @click="confirm">申请认证</div>
     </div>
-    
+    </mt-loadmore>
   </div>
 </template>
 
 <script>
 import common from '../common/common.js'
+import myHeader from '../components/tools/myHeader'
+import myTab from '../components/tools/tab'
 import imageUpload from '../components/tools/imageUpload'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                myShow:{
+                    show:true,
+                    left_name:'传统三证',
+                    right_name:'三证合一'
+                },
+                headerName:{
+                     name:'企业认证'
+                },
                 selected:"1",
                 isActive: true,
                 hasError: false,
@@ -150,9 +165,12 @@ export default {
             }
         },
         components: {
-            imageUpload
+            imageUpload,
+            myHeader,
+            myTab
         },
         methods: {
+           
             confirm(){
                 let _self = this;
                 if(_self.selected == 1){
@@ -221,7 +239,7 @@ export default {
         },
         
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 300;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 
 }
@@ -233,18 +251,30 @@ export default {
   position: relative;
   
 }
-.company_authentication .select_box{
-    /*border-bottom: 1px solid #DFDFDF;
+.company_authentication .box{
+
+}
+.page-loadmore-wrapper {
+    margin-top: -1px;
+    overflow: scroll;
+    padding-bottom: 10px;
+    width: 100%;
+}
+.company_authentication .select{
+    background: white;
+}
+.company_authentication #select_box{
+    border-bottom: 1px solid #DFDFDF;
     background-color: white;
     padding: 1rem;
     position: relative;
-    height:70px;*/
+    min-height:65px;
 }
 .company_authentication .mint-navbar {
     width: 70%;
     margin-left: 15%;
     position: fixed;
-    top:70px;
+    top:60px;
     z-index: 100000;
 }
 .company_authentication .mint-navbar .mint-tab-item {

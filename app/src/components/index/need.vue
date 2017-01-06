@@ -3,7 +3,7 @@
         <div class="fixed">
             
             <div @click="jumpSearch">
-                <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></longSearch>
+                <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
             </div>
             <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         </div>
@@ -11,7 +11,7 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  @click="jumpDetail(todo.id)">
                             <!-- <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div> -->
                             <div class="center">
                                 <img src="/static/icons/england.png" class="flag">
@@ -44,7 +44,7 @@
                             </div>
                             <div class="bottom">
                                 <p>已报价<span>{{todo.offer}}</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail(todo.id)">我要报价</button>
+                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump()">我要报价</button>
                             </div>
                         </li>
                     </ul>
@@ -69,6 +69,9 @@ import httpService from '../../common/httpService.js'
 export default {
     data() {
             return {
+                myShow:{
+                    myShow:false
+                },
                 sortRouter: 'need',
                 sortArr: [{
                     name: '上架时间',
@@ -225,6 +228,9 @@ export default {
             jumpDetail(id) {
                 common.$emit('post-need-detail', id);
                 this.$router.push('needDetail/' + id);
+            },
+            jump(){
+                //去下载app
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;

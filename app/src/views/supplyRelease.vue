@@ -1,14 +1,16 @@
 <template>
     <div class="supply_release">
-        <mt-header fixed title="资源发布">
+        <!-- <mt-header fixed title="资源发布">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header>
-        <div class="whole">
+        </mt-header> -->
+        <myHeader :param = "param"></myHeader>
+        <mt-loadmore>
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+
                 <releaseGrugInformation :obj="obj"></releaseGrugInformation>
-                <mt-loadmore>
+                
                 <div class="title_name">
                    <p class="good_photo_header">上传货物图片</p>
                 </div> 
@@ -47,14 +49,16 @@
                         </div>
                     </div>
                     <div class="confirm" @click="release()">确认发布</div>
-                </mt-loadmore>
-            </div>
+               
+           
         </div>
+         </mt-loadmore>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import validation from '../validation/validation.js'
+import myHeader from '../components/tools/myHeader'
 import imageUpload from '../components/tools/imageUpload'
 import releaseGrugInformation from '../components/tools/releaseGrugInformation'
 import httpService from '../common/httpService.js'
@@ -62,6 +66,10 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                param:{
+                    name:'资源发布',
+                    router:'home'
+                },
                 img_src: '/static/images/3.jpg',
                 drug: '请输入你的药材',
                 obj: {
@@ -72,6 +80,7 @@ export default {
                     place: '',
                     number: '',
                     number_unit: '',
+                    sample_unit:'',
                     sales_price: '',
                     weight: '',
                     price: '',
@@ -195,7 +204,8 @@ export default {
                         sampleAmount: _self.obj.price,
                         duedate: _self.obj.duedate,
                         breedId: _self.obj.breedId,
-                        unit: _self.obj.number_unit
+                        unit: _self.obj.number_unit,
+                        sampleUnit:_self.obj.sample_unit
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -224,7 +234,8 @@ export default {
         },
         components: {
             imageUpload,
-            releaseGrugInformation
+            releaseGrugInformation,
+            myHeader
         },
         created() {},
         mounted() {
@@ -233,10 +244,7 @@ export default {
 }
 </script>
 <style scoped>
-.whole {
-    position: relative;
-    background: #F1EFEF;
-}
+
 
 .supply_release {}
 
@@ -248,6 +256,7 @@ textarea {
     -webkit-appearance: none;
     border-radius: 0;
 }
+
 
 .supply_release .mint-header {
     background-color: white;

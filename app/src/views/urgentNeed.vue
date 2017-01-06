@@ -16,22 +16,13 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
-                            
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">                          
                             <div class="center">
                                  <img src="/static/icons/england.png" class="flag">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png">{{todo.breedName}}</div>
                                     <p>发布时间：{{todo.pubdate}}</p>
-                                </div>
-                                <!-- <div class="detail">
-                                    <p>规格：{{todo.spec}}</p>
-                                    <p>剩余：<span>{{todo.days}}</span>天</p>
-                                </div>
-                                <div class="detail">
-                                    <p>产地：{{todo.location}}</p>
-                                    <p>需求数量：{{todo.number}}{{todo.unit}}</p>
-                                </div> -->
+                                </div>                     
                                 <div class="detail">
                                     <div>
                                         <p>规格</p>
@@ -49,7 +40,7 @@
                             </div>
                             <div class="bottom">
                                 <p>已报价<span>{{todo.offer}}</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small" @click="jumpDetail(todo.id)">我要报价</button>
+                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop = "jump">我要报价</button>
                             </div>
                         </li>
                     </ul>
@@ -230,6 +221,9 @@ export default {
                 
                 common.$emit("needToDetail",id);
                 this.$router.push('needDetail/' + id);
+            },
+            jump(){
+                   //下载app
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;

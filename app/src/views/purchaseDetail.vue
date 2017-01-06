@@ -32,7 +32,8 @@
         </div>
         <div class="flowsheet">
             <p>流程图</p>
-            <img src="/static/images/progress_1.png">
+            <img src="/static/images/progress_1.png"  v-if="obj.onSell == 1">
+            <img src="/static/images/progress_4.png"  v-if="obj.onSell == 2">
         </div>
     </div>
 </template>
@@ -53,7 +54,8 @@ export default {
                     duedate: '',
                     pubdate: '',
                     offerVprice: '',
-                    id: ''
+                    id: '',
+                    onSell:''
                 },
                 todos: [{
                     "name": "人参",
@@ -78,6 +80,7 @@ export default {
                         }
                     }, function(suc) {
                         let result = suc.data.biz_result;
+                        console.log(result);
                         var duedateDate = new Date(result.duedate);
                         var pubdateDate = new Date(result.pubdate);
                         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
@@ -89,6 +92,7 @@ export default {
                         _self.obj.number = result.number;
                         _self.obj.number_unit = result.unit;
                         _self.obj.selling_point = result.description;
+                        _self.obj.onSell = result.onSell;
                         _self.obj.name = result.customerName;
                         _self.obj.phone = result.customerPhone;
                         _self.obj.offer = result.offer;

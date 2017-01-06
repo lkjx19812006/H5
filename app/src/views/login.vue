@@ -1,6 +1,7 @@
 <template>
-    <div class="login">
-        <mt-header title="登录">
+    <div class="login" :style="{ height: wholeHeight + 'px' }">
+        
+        <!-- <mt-header title="登录">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
@@ -25,7 +26,7 @@
                             <p>验证码：</p>
                             <input type="text" placeholder="请输入验证码" v-model="param.code" />
                             <button v-bind:class="{ get_code: !buttonDisabled, 'get_code_nor': buttonDisabled }" id="get_code" v-on:click="confirmLogin()" v-bind:disabled="buttonDisabled">{{code}}</button>
-                            <!-- <button class="get_code" id="get_code" v-on:click="confirmLogin()" v-bind:disabled="buttonDisabled">{{code}}</button> -->
+                            
                         </li>
                     </ul>
                 </mt-tab-container-item>
@@ -55,16 +56,57 @@
             <router-link to="findPassWord">
                 <div class="forget_password">忘记密码？</div>
         </div>
-        <div class="confirm_login" @click="login()">登陆</div>
+        <div class="confirm_login" @click="login()">登陆</div> -->
+
+        <img src="/static/images/logo-login.png" class="my-logo">
+        <myTab :param = "myShow" ></myTab> 
+        <div class="password" v-show="myShow.show">
+               <div class="account-number">
+                     <input type="text" placeholder="请输入用户名/手机号/邮箱" v-model="param.phone">
+               </div> 
+               <div  class="pass-word">
+                    <input type="text" placeholder="请输入密码" v-model="param.password">
+               </div>
+        </div>
+               
+         
+
+         <div class="password" v-show="!myShow.show">
+               <div class="phone">
+                     <p class="tel">+86</p>
+                     <input type="text" placeholder="请输入手机号" v-model="param.phone">
+               </div> 
+               <div  class="pass-name">
+                    <input type="text" placeholder="请输入验证码" v-model="param.code">
+                    <p  v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }" v-on:click="confirmLogin()">{{code}}</p>
+               </div>
+        </div>
+               <div class="prompt" id="prompt" >
+                    <router-link to="findPassWord">
+                       <p class="left">忘记密码</p>
+                    </router-link>   
+                    <router-link to="register"> 
+                       <p class="right">立即注册</p>
+                    </router-link>
+               </div>
+
+               <div  class="confirm" @click="login()">登陆</div>
+         
     </div>
 </template>
 <script>
 import common from '../common/common.js'
+import myTab from '../components/tools/tab'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                myShow:{
+                    show:true,
+                    left_name:'密码登陆',
+                    right_name:'短信登陆'
+                },
                 selected: 'identiCode',
                 identify_code: '',
                 code: '获取验证码',
@@ -79,6 +121,9 @@ export default {
         },
         created() {
             this.getCode();
+        },
+        components:{
+            myTab
         },
         methods: {
             passWordLogin(){
@@ -124,14 +169,14 @@ export default {
                             common.KEY = window.localStorage.KEY;
                             common.SID = window.localStorage.SID;
                             common.getDate();
-                            common.$emit('message', response.data.msg);
+                            
                             _self.$router.push('/home');
                         } else {
-                            //common.$emit('message', response.data.msg);
+                            common.$emit('message', response.data.msg);
                         }
                     }, function(err) {
                         common.$emit('close-load');
-                        //common.$emit('message', err.data.msg);
+                        common.$emit('message', err.data.msg);
                     })
             },
             getCode: function() {
@@ -178,13 +223,20 @@ export default {
                 let _self = this;
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
-                if (_self.selected == 'identiCode') {
+                /*if (_self.selected == 'identiCode') {
                     let checkCode = validation.checkCode(_self.param.code, '666000');
                     checkArr.push(checkCode);
                 } else if(_self.selected == 'password'){
                     let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
                     let checkCode = validation.checkCode(_self.param.imageCode, _self.identify_code);
                     checkArr.push(checkPassword);
+                    checkArr.push(checkCode);
+                }*/
+                if(_self.myShow.show == true){
+                    let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
+                    checkArr.push(checkPassword);
+                }else if(_self.myShow.show == false){
+                    let checkCode = validation.checkCode(_self.param.code, '666000');
                     checkArr.push(checkCode);
                 }
                 for (var i = 0; i < checkArr.length; i++) {
@@ -193,17 +245,107 @@ export default {
                         return;
                     }
                 }
-                  if(_self.selected == 'identiCode'){
+                  if(_self.myShow.show == false){
                       _self.codeLogin()
-                  }else if(_self.selected == 'password'){
+                  }else if(_self.myShow.show == true){
                      _self.passWordLogin()
                   }  
             }
+        },
+        mounted() {
+            this.wholeHeight = document.documentElement.clientHeight;
         }
 }
 </script>
 <style scoped>
-.login .out_select_box {
+.login{
+    background: url("/static/images/background-img.png") no-repeat;
+    background-size: 100% 100%;
+    width:100%; 
+    /*height:1000px;*/
+}
+.login .my-logo{
+    width:66.5%;
+    margin-top:10.6%;
+    margin-bottom: 10.6%;
+}
+.login .password div{
+    width:86%;
+    margin-left: 7%;
+    padding: 0.8rem 0;
+    border:1px solid #313232;
+    margin-top: 1.8rem;
+    border-radius: 3px;
+
+}
+.login .password input{
+    outline: none;
+    border:none;
+    background-color:transparent;
+    text-align:left;
+    width:70%;
+}
+.login .account-number{
+    background: url("/static/icons/my-phone.png") no-repeat 1.25rem center;
+    background-size: 20px;
+
+}
+.login .account-number{
+    background: url("/static/icons/my-phone.png") no-repeat 1.25rem center;
+    background-size: 15px;
+
+}
+.login .pass-word{
+    background: url("/static/icons/my-password.png") no-repeat 1.25rem center;
+    background-size: 17px;
+}
+.login #prompt{
+    width:86%;
+    padding:1.5rem;
+    border:0;
+    margin:0 0 2.7rem 7%;  
+}
+.login .prompt .left{
+    float:left;
+}
+.login .prompt .right{
+    float:right;
+}
+.login .password .phone .tel{
+    float:left;
+    border-right:1px solid #333333;
+    height:100%;
+    padding: 0 1rem;
+}
+.login .password .pass-name .my_code{
+    float:right;
+    width:40%;
+    border-left:1px solid #333333;
+    color:#FA6705;
+}
+.login .password .pass-name .my_code_nor{
+    float:right;
+    width:40%;
+    border-left:1px solid #333333;
+    color:#CECEBF;
+}
+.login .password  .pass-name input{
+    
+    width:60%;
+    padding-left:1rem;
+    
+
+}
+.login .confirm{
+    width:86%;
+    font-size: 1.8rem;
+    background: #FA6804;
+    padding: 1rem 0;
+    color:white;
+    border-radius: 3px;
+    margin-left: 7%;
+}
+/*.login .out_select_box {
     width: 100%;
     padding: 1.5rem 0;
     background: white;
@@ -330,5 +472,5 @@ export default {
     line-height: 3.5rem;
     text-align: center;
     border-radius: 1.75rem;
-}
+}*/
 </style>

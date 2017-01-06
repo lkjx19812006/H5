@@ -1,15 +1,18 @@
 <template>
   <div class="good_detail">
-        <mt-header title="商品详情">
+        <!-- <mt-header title="商品详情">
             <router-link to="/myResource" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+      <myHeader :param = "param"></myHeader>
+    <mt-loadmore>
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
        <div class="swipe_height" >
             <mt-swipe :auto="4000" :prevent="true" :show-indicators="false">        
               <mt-swipe-item v-for="(item,index) in imgArray" >
-                   <img :src="item.url">
-                   <div class="index"><span>{{index+1}}</span>/5</div>
+                   <img :src="item">
+                   <div class="index"><span>{{index+1}}</span>/{{arrLength}}</div>
               </mt-swipe-item>   
             </mt-swipe>
         </div>
@@ -44,29 +47,31 @@
         </div>
         <div class="flowsheet">
             <p>流程图</p>
-            <img src="/static/images/progress_1.png">
-        </div>  
+            <img src="/static/images/progress_1.png"  v-if="obj.onSell == 1">
+            <img src="/static/images/progress_4.png"  v-if="obj.onSell == 2">
+        </div> 
+
+       </div> 
+     </mt-loadmore>  
   </div>
 </template>
 
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
-               imgArray: [{
-                    url:''
-               },{
-                    url:''
-               },{
-                    url:''
-               },{
-                    url:''
-               },{
-                    url:''
-               }],
-
+                param:{
+                    name:'商品详情',
+                    show:true,
+                    reviseRouter:'',
+                    item:''
+                    
+                },
+               imgArray: [],
+               arrLength:'',
                 obj:{
                     drug_name:'白术',
                     spec:'',
@@ -80,10 +85,14 @@ export default {
                     moq:'',
                     sampling:'',
                     price:'',
-                    id:''
+                    id:'',
+                    onSell:''
 
                 }
             }
+        },
+        components: {
+            myHeader
         },
         methods:{
              getHttp(id){
@@ -119,12 +128,16 @@ export default {
                             _self.obj.pubdate = result.pubdate;
                             _self.obj.moq = result.moq;
                             _self.obj.price = result.price;
+                            _self.obj.onSell = result.onSell;
                             let imageArr = result.image;
-                            for(var item in imageArr){
+                            /*for(var item in imageArr){
                                  console.log(imageArr[item]);
                                  _self.imgArray[item].url = imageArr[item];
+                            }*/
+                            for(var i = 0; i < imageArr.length; i ++){
+                                  _self.imgArray.push(imageArr[i]);
                             }
-                            
+                            _self.arrLength = imageArr.length;
                         }, function(err) {
                             
                             common.$emit('message', err.data.msg);
@@ -136,13 +149,21 @@ export default {
             /*var str = _self.$route.fullPath;
             var id = str.substring(12,str.length);*/
             var id = _self.$route.params.odId;
+            _self.param.reviseRouter = '/reviseResource/' + id;
+            _self.param.item = id;
+            //console.log('/reviseRevise/' + id)
             _self.obj.id = id;
             //console.log(id)
             _self.getHttp(id);
 
             common.$on("inform-goodDetail",function (item){
                   _self.getHttp(item);
+                   _self.param.reviseRouter = '/reviseResource/' + item;
+                   _self.param.item = item;
             });
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>

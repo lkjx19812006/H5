@@ -1,11 +1,12 @@
 <template>
-    <div class="whole  order_confirm">
-        <mt-header fixed title="订单确认">
+    <div class="order_confirm">
+        <!-- <mt-header fixed title="订单确认">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
-        </mt-header>
-        <div class="page-loadmore-wrapper">
+        </mt-header> -->
+        <myHeader :param = "myhead"></myHeader>
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
             <mt-loadmore>
                 <div @click="jumpAddress">
                     <orderAddress :param="person"></orderAddress>
@@ -16,15 +17,19 @@
                         <orderTotal :order="param"></orderTotal>
                     </div>
                 </div>
-            </mt-loadmore>
-        </div>
-        <div class="fix_bottom" v-on:click="confirm">
-            提交订单
-        </div>
+
+               
+         </mt-loadmore>   
+         <div class="fix_bottom" v-on:click="confirm">
+                    提交订单
+         </div>
+
+         </div>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
+import myHeader from '../components/tools/myHeader'
 import orderAddress from '../components/tools/orderAddress'
 import orderItem from '../components/tools/orderItem'
 import orderTotal from '../components/tools/orderTotal'
@@ -33,6 +38,9 @@ export default {
     data() {
             return {
                 data: "",
+                myhead:{
+                     name:'立即购买'
+                },
                 param: {
                   image:[]
                 },
@@ -47,8 +55,13 @@ export default {
             common.$on('orderConfirm', function(item) {
                 _self.gethttp(item);
             });
+            common.$on('backAddress', function(todo) {
+                 _self.person = todo;
+                 console.log(todo.id)
+            })
         },
         components: {
+            myHeader,
             orderAddress,
             orderItem,
             orderTotal
@@ -144,6 +157,9 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             }
+        },
+         mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -151,8 +167,15 @@ export default {
 .order_confirm {
     float: left;
     width: 100%;
-}
 
+}
+.order_confirm .page-loadmore-wrapper{
+   /* margin-top: 1px;
+    overflow: scroll;
+    padding-bottom: 10px;
+    width: 100%;
+    border:1px solid red;*/
+}
 .order_confirm .content {
     background: #fff;
     margin-top: 10px;
@@ -168,8 +191,8 @@ export default {
 }
 
 .order_confirm .fix_bottom {
-    position: fixed;
-    bottom: 0;
+    /*position: absolute;
+    bottom: 10px;*/
     width: 100%;
     left: 0;
     height: 5rem;
@@ -177,9 +200,14 @@ export default {
     font-size: 1.7rem;
     background: #FA6705;
     line-height: 5rem;
+   
 }
 
 .order_confirm .page-loadmore-wrapper {
-    margin-bottom: 100px;
+    overflow: scroll;
+   /* padding-bottom: 10px;*/
+    width: 100%;
+    
 }
+
 </style>

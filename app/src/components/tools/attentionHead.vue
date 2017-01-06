@@ -4,11 +4,11 @@
                   <img src="/static/images/go-back.png">
                 </div>         
                 <div  class="title-name">
-                     <p v-show="show">{{param.name}}</p>
-                     <p v-show="!show">{{param.other_name}}</p>           
+                     <p v-show="param.show">{{param.name}}</p>
+                     <p v-show="!param.show">{{param.other_name}}</p>           
                 </div>
-               <div class="right_text" @click="change" v-show="!show">{{param.other_name}}</div>
-               <div class="right_text" @click="change" v-show="show">{{param.name}}</div>
+               <div class="right_text" @click="change" v-show="param.show">{{param.other_name}}</div>
+               <div class="right_text" @click="change" v-show="!param.show">{{param.name}}</div>
      </div>
 </template>
 <script>
@@ -27,10 +27,11 @@ export default {
         },
         methods:{
             jumpBack(){
-                history.go(-1);
+                this.$router.push(this.param.router);
             },
             change(){
-                this.show = !this.show;
+                this.param.show = !this.param.show;
+                this.$emit("tab",this.param.show)
             }
         }
 }

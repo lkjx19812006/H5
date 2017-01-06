@@ -1,17 +1,12 @@
 <template>
     <div class="content my_purchase">
-        <!-- <mt-header title="我的求购">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header> -->
          <myHeader :param = "param"></myHeader>
         <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  @click="jump(router,todo.id)">
                             <div class="header_list">
                                 <p class="left_p">发布日期：{{todo.pubdate}}</p>
                                 <p class="right_p">{{todo.onSell}}</p>
@@ -20,14 +15,7 @@
                                 <p class="left">{{todo.breedName}}</p>
                                 <p class="right"><span>{{todo.offer}}</span>人已报价</p>
                             </div>
-                            <!-- <div class="second_line">
-                                <p class="left">规格：{{todo.spec}}</p>
-                                <p class="right">剩余：{{todo.days}}天</p>
-                            </div>
-                            <div class="third_line">
-                                <p class="left">产地：{{todo.location}}</p>
-                                <p class="right">需求数量：{{todo.number}}{{todo.unit}}</p>
-                            </div> -->
+                           
                             <div class="detail">
                                     <div>
                                         <p>规格</p>
@@ -43,8 +31,8 @@
                                     </div>
                             </div>
                             <div class="button">
-                                <p class="first_button" @click="jump(other_router,todo.id)">编辑</p>
-                                <p class="second_button" @click="jump(router,todo.id)">查看报价</p>
+                                <p class="first_button" v-on:click.stop="jump(other_router,todo.id)">编辑</p>
+                                <p class="second_button" v-on:click.stop="jumpApp()">查看报价</p>
                             </div>
                         </li>
                     </ul>
@@ -72,7 +60,8 @@ export default {
             return {
                 sortRouter: 'home',
                 param:{
-                    name:'我的求购'
+                    name:'我的求购',
+                    router:'home'
                 },
                 sortArr: [{
                     name: '发布日期',
@@ -254,6 +243,9 @@ export default {
                 common.$emit("purchase-id",id);
                 common.$emit("myPurToPurDetail",id);
                 this.$router.push(router + '/' + id);
+            },
+            jumpApp(){
+                 //去下载
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;

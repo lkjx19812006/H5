@@ -1,11 +1,11 @@
 <template>
-  <div class="certification whole">
-        <mt-header title="实名认证" fixed>
+  <div class="certification">
+       <!--  <mt-header title="实名认证" fixed>
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header>
-
+        </mt-header> -->
+   <myHeader :param = "param"></myHeader>
   <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">      
              <div class="main">
 
@@ -71,11 +71,16 @@
 <script>
 import common from '../common/common.js'
 import imageUpload from '../components/tools/imageUpload'
+import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
 
 export default {
     data() {
             return {
+                 param:{
+                    name:'实名认证',
+                    
+                },
                 obj:{
                     gender:'',
                     phone:'',
@@ -107,11 +112,14 @@ export default {
             }
         },
         components: {
-            imageUpload
+            imageUpload,
+            myHeader
         },
         methods: {
             getHttp(){
                  let _self = this;
+
+
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
@@ -141,12 +149,16 @@ export default {
             },
             confirm(){
                   let _self = this;
-                  //console.log(_self.arr)
+                  for(var i = 0; i < _self.arr.length; i++){
+                      if (_self.arr[i] == '') {
+                        common.$emit('message','请上传实名认证凭证');
+                        return;
+                      }
+                  }
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'userService',biz_method:'submitAuthen',version:1,time:0,sign:'',biz_param:{
-                         type:0,
-                        
+                         type:0,                     
                          authenImage:_self.arr
                   }};
                   console.log(common.difTime);

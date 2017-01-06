@@ -1,13 +1,7 @@
 <template>
     <div class="my_order">
-        <mt-header :title="title" class="title-color">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-            <mt-button slot="right" class="right_text" @click="tabOrder" id="right_text">
-                {{more}}
-            </mt-button>
-        </mt-header>
+    
+        <attentionHead :param = "param" v-on:tab="tabOrder"></attentionHead>
         <landscapeScroll :param="data" v-on:postData="changeOrderStatus"></landscapeScroll>
         <div class="bg_white ">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
@@ -35,11 +29,11 @@
                                 <p class="num">数量：<span>{{todo.number}}</span>kg</p>
                             </div>
                             <div class="sum">
-                                <div>
+                                <div class="sum_top">
                                     <p class="sum_left">(含运费￥{{todo.incidentals}})</p>
                                     <p>合计：￥<span>{{Number(todo.price) * Number(todo.number)}}</span>.00</p>
                                 </div>
-                                <p>
+                                <p class="sum_bottom">
                                     <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus) ">查看物流</button>
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus) ">确认收货</button>
@@ -66,10 +60,17 @@
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import landscapeScroll from '../components/tools/landscapeScroll'
+import attentionHead from '../components/tools/attentionHead'
 import filters from '../filters/filters'
 export default {
     data() {
             return {
+                param:{
+                    name:'采购订单',
+                    other_name:'销售订单',
+                    show:true,
+                    router:"home"
+                },
                 more: '采购订单',
                 title: '销售订单',
                 show: false,
@@ -233,17 +234,13 @@ export default {
                     }
                 })
             },
-            tabOrder() {
+            tabOrder(param) {
                 let _self = this;
-                this.show = !this.show;
-                if (_self.show) {
-                    _self.more = '采购订单';
-                    _self.title = '销售订单';
-                    _self.httpPraram.type = 1;
-                } else {
-                    _self.more = '销售订单';
-                    _self.title = '采购订单';
+                
+                if (param == true) {                 
                     _self.httpPraram.type = 0;
+                } else {
+                    _self.httpPraram.type = 1;
                 }
                 this.allLoaded = false;
                 this.todos.splice(0, this.todos.length);
@@ -320,13 +317,13 @@ export default {
             }
         }),
         components: {
-            landscapeScroll
+            landscapeScroll,
+            attentionHead
         },
         created() {
             let _self = this;
             this.httpPraram.page = 1;
-            _self.more = '销售订单';
-            _self.title = '采购订单';
+           
             _self.httpPraram.type = 0;
             this.getHttp();
             common.$on('mineToOrder', function(index) {
@@ -336,8 +333,7 @@ export default {
             });
             common.$on("orderToMyOrder", function(item) {
                 _self.httpPraram.page = 1;
-                _self.more = '销售订单';
-                _self.title = '采购订单';
+               
                 _self.httpPraram.type = 0;
                 _self.getHttp();
             });
@@ -474,9 +470,18 @@ export default {
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum {
     float: right;
-    margin-right: 10px;
+    /*padding-right: 10px;*/
+    width:100%;
+    
 }
-
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum .sum_top{
+    width:100%;
+    border-bottom: 1px solid #E6E6E6;
+    padding-right: 10px;
+}
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum .sum_bottom{
+    padding-right: 10px;
+}
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum>div {
     /* border: 1px solid #DEDEDE;*/
     height: 3rem;
@@ -485,6 +490,7 @@ export default {
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum>div p {
     float: right;
+
 }
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum .sum_left {}
