@@ -1,10 +1,8 @@
 <template>
     <div class="resource_detail">
-        
         <myHeader :param = "param"></myHeader>
      <mt-loadmore>
         <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            
                 <div class="swipe_height" v-if="obj.image">
                     <swiper :options="swiperOption" class="swipe_height">
                         <swiper-slide v-for="item in obj.image">
@@ -152,7 +150,7 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
         }
 }
 </script>
@@ -261,7 +259,6 @@ export default {
     background: #fff;
     float: left;
     width: 100%;
-    margin-bottom: 100px;
 }
 
 .resource_detail .center .title {
