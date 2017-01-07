@@ -258,7 +258,7 @@ export default {
             let _self = this;
             _self.getHttp();
             common.$on('resource', function(item) {
-                _self.httpPraram.keyword = item;
+                _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();

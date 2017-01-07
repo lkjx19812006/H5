@@ -1,17 +1,9 @@
 <template>
     <div class="low_price">
-        <div class="go-back" @click="jump('home')">
-            <img src="/static/images/go-back.png">
-        </div>         
-        <div  class="title-name">
-             <p>低价资源</p>
-        </div>  
-        <div @click="jumpSearch">
-            <backSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword"></backSearch>
-        </div>
+        <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
         <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         <div class="bg_white">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
@@ -24,8 +16,9 @@
                                     <p class="time_font">发布时间:<span>{{todo.pubdate}}</span></p>
                                 </div>
                                 <div class="res_content_right">
-                                <p>{{todo.price}}<!-- {{todo.unit}} -->kg/元</p>
-                                <button class="mint-button mint-button--primary mint-button--small" >立即购买</button>
+                                    <p>{{todo.price}}
+                                        <!-- {{todo.unit}} -->kg/元</p>
+                                    <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
                                 </div>
                             </div>
                         </li>
@@ -45,14 +38,14 @@
 </template>
 <script>
 import common from '../common/common.js'
-import backSearch from '../components/tools/backSearch'
 import sort from '../components/tools/sort'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import headFix from '../components/tools/head'
 export default {
     data() {
             return {
-                sortRouter:'lowRes',
+                sortRouter: 'lowRes',
                 sortArr: [{
                     name: '上架时间',
                     asc: 'top',
@@ -134,18 +127,15 @@ export default {
                     url: '/static/icons/screen.png',
                     class: 'sort_content_detail',
                 }],
-                back_key:'0',
-                keyword:'',
+                back_key: '0',
+                keyword: '',
                 todos: [],
-                obj:{
-
-                },
-                
+                obj: {},
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
-                show:'',
+                show: '',
                 httpPraram: {
                     time: 0,
                     price: 0,
@@ -154,64 +144,61 @@ export default {
                     keyword: '',
                     page: 1,
                     pageSize: 20
+                },
+                headParam:{
+                    title:'低价资源',
+                    keyword:'',
+                    router:'lowPriceRes'
                 }
             }
         },
         components: {
-            backSearch,
-            sort
+            sort,
+            headFix
         },
-        
         methods: {
-            getHttp(back){
-                 let _self = this;
-                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'querySupplyList',
-              
-                            biz_param: {
-                                keyWord: _self.httpPraram.keyword,
-                                sort:{
-                                    "shelve_time":_self.httpPraram.time,
-                                    "price":_self.httpPraram.price
-                                }, 
-                                sampling:_self.httpPraram.sample,
-                                pn:_self.httpPraram.page,
-                                pSize:_self.httpPraram.pageSize,
-                                location: _self.httpPraram.location
-                            }
-                        }, function(suc) {
-                                common.$emit('message', suc.data.msg);
-                                let result = suc.data.biz_result.list;
-                                common.$emit('translateDate',result,_self.todos);
-                                
-
-                                if (back) {
-                                    back();
-                                }
-                            }, function(err) {
-                                common.$emit('message', err.data.msg);
-                                if (back) {
-                                    back();
-                                }
-                            })
-
-                           
-            },           
-            getId(param){
-                  let _self = this;
-                  
-                  /*for(var i = 0; i < 3; i++){
-                       var item = sortArr[i].sortArr;
-                       for(var j = 0; j < item.length; j++){
-                            
-                       }
-                  }
-                  param.show = true;*/
-                  _self.httpPraram.page = 1;
-                  _self.todos.splice(0, _self.todos.length);
-                  _self.httpPraram[param.key] = param[param.key];
-                  _self.getHttp();
+            getHttp(back) {
+                if(this.httpPraram.page==1){
+                    this.allLoaded=false;
+                }
+                let _self = this;
+                httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'intentionService',
+                    biz_method: 'querySupplyList',
+                    biz_param: {
+                        keyWord: _self.httpPraram.keyword,
+                        sort: {
+                            "shelve_time": _self.httpPraram.time,
+                            "price": _self.httpPraram.price
+                        },
+                        sampling: _self.httpPraram.sample,
+                        pn: _self.httpPraram.page,
+                        pSize: _self.httpPraram.pageSize,
+                        location: _self.httpPraram.location
+                    }
+                }, function(suc) {
+                    common.$emit('message', suc.data.msg);
+                    let result = suc.data.biz_result.list;
+                    if(result.length<_self.httpPraram.pageSize){
+                        _self.allLoaded = true;
+                    }
+                    common.$emit('translateDate', result, _self.todos);
+                    if (back) {
+                        back();
+                    }
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                    if (back) {
+                        back();
+                    }
+                })
+            },
+            getId(param) {
+                let _self = this;
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.httpPraram[param.key] = param[param.key];
+                _self.getHttp();
             },
             clearKeyword() {
                 this.httpPraram.page = 1;
@@ -219,8 +206,8 @@ export default {
                 this.httpPraram.keyword = '';
                 this.getHttp();
             },
-            jumpDetail(id){
-                common.$emit('resourceDetail',id);
+            jumpDetail(id) {
+                common.$emit('resourceDetail', id);
                 this.$router.push('resourceDetail/' + id);
             },
             handleBottomChange(status) {
@@ -250,25 +237,19 @@ export default {
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
-
                 }, 1500);
             },
-            jumpSearch(){
-                common.$emit('setParam','router','lowPriceRes')
-                this.$router.push('search');
-            },
-            jump(router){
+            jump(router) {
                 this.$router.push(router);
             }
-           
         },
-        
         created() {
-
             let _self = this;
             _self.getHttp();
             common.$on('lowPriceRes', function(item) {
-                _self.httpPraram.keyword = item;
+                console.log(item);
+                _self.headParam.keyword = item.keyWord;
+                _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
@@ -289,36 +270,18 @@ export default {
                 _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             });
-            
-            
         },
-        
-       
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
-
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top -90;
         }
-
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-/*.page-loadmore-listitem {
-    height: 50px;
-    line-height: 50px;
-    border-bottom: solid 1px #eee;
-    text-align: center;
-    &:first-child {
-        border-top: solid 1px #eee;
-    }
-}*/
-
 .page-loadmore-wrapper {
     margin-top: -1px;
     overflow: scroll;
     padding-bottom: 10px;
     width: 100%;
-
 }
 
 .mint-load {
@@ -342,46 +305,41 @@ export default {
     vertical-align: middle;
 }
 
-.low_price {}
-.low_price .title-name{  
+.low_price .title-name {
     position: absolute;
-    left:15%;
-    width:70%;
-    height:50px;
+    left: 15%;
+    width: 70%;
+    height: 50px;
     border-bottom: 1px solid #ccc;
     background: #EC6817;
     font-size: 1.7rem;
     line-height: 50px;
-    color:white;
+    color: white;
 }
-.low_price .go-back{
+
+.low_price .go-back {
     position: absolute;
-    width:15%;
-    padding-right:5%;
-    height:50px;
+    width: 15%;
+    padding-right: 5%;
+    height: 50px;
     border-bottom: 1px solid #ccc;
-    background:#EC6817;
+    background: #EC6817;
 }
-.low_price .go-back  img{
+
+.low_price .go-back img {
     margin-top: 15px;
-    height:20px;
+    height: 20px;
 }
-/*.low_price .go-back .hide{
-    height: 48px;
-    width:3px;
-    position: absolute;
-    left:30px;
-    top:0;
-    background:#EC6817;
-    z-index: 20000;
-}*/
-.low_price{
+
+.low_price {
     background: #F5F5F5;
 }
-.low_price .bg_white{
+
+.low_price .bg_white {
     background: #F5F5F5;
     padding: 0 10px;
 }
+
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
@@ -407,7 +365,7 @@ export default {
     margin-bottom: 8px;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
     width: 1.2rem;
     margin-right: 4px;
@@ -423,42 +381,43 @@ export default {
     color: #666;
     margin-top: 0.5rem;
 }
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec{
+
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec {
     margin-top: 0.3rem;
 }
+
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
     width: 100%;
     padding-left: 30%;
     padding-top: 10px;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right{
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
     max-width: 80px;
     height: 95px;
     margin: 0;
     right: 10px;
-    
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
     font-size: 1.25rem;
     margin-top: 0px;
     color: #EC6817;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button{
-  position: absolute;
-  bottom: 0px;
-  background: #EC6817;
-  font-size: 1.109rem;
-  width: 5.97rem;
-  right: 0px;
-  height: 2.38rem;
-  padding: 0 5px;
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
+    position: absolute;
+    bottom: 0px;
+    background: #EC6817;
+    font-size: 1.109rem;
+    width: 5.97rem;
+    right: 0px;
+    height: 2.38rem;
+    padding: 0 5px;
 }
 
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {
     font-size: 1rem;
     color: #999;
 }
