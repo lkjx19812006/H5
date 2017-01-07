@@ -217,7 +217,6 @@ export default {
                 this.getHttp();
             },
             jumpDetail(id) {
-
                 common.$emit("needToDetail", id);
                 this.$router.push('needDetail/' + id);
             },
@@ -240,7 +239,6 @@ export default {
                     }
                 }, 1500);
             },
-
             handleTopChange(status) {
                 this.topStatus = status;
             },
@@ -285,13 +283,10 @@ export default {
                 _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             });
-
-
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
         }
-
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
