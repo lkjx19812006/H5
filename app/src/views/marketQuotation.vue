@@ -1,34 +1,20 @@
 <template>
-
     <div class="market_quotation">
-
-        <!-- <mt-header fixed title="市场行情">
-
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header> -->
-        <myHeader :param = "param" ></myHeader>
-                <div class="search" @click="jump">
-                    <input type="text" placeholder="输入你想要的货物资源" disabled="true">
-                    <img src="/static/images/search.png" class="search_image">
+        <myHeader :param="param"></myHeader>
+        <div class="search" @click="jump">
+           <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
+        </div>
+        <div class="good_list">
+            <div class="good_list_content">
+                <div class="list_content_header">
+                    <p>品名</p>
+                    <p>规格</p>
+                    <p>产地</p>
+                    <p>价格</p>
+                    <input type="button" value="跌涨(元)">
                 </div>
-       
-           
-                
-                <div class="good_list">
-                    <!-- <p class="good_list_header">*数据仅供参考！</p> -->
-        <div class="good_list_content">
-                        <div class="list_content_header">
-                            <p>品名</p>
-                            <p>规格</p>
-                            <p>产地</p>
-                            <p>价格</p>
-                            <input type="button" value="跌涨(元)">
-                        </div>
-               <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">              
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-          
+                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                         <ul class="first_ul">
                             <li v-for="(todo,index) in todos">
                                 <div class="second_level" v-on:click="firstLevel(index,todos)">
@@ -55,8 +41,7 @@
                                 </ul>
                             </li>
                         </ul>
-             </div>
-        
+                    </div>
                     <div slot="top" class="mint-loadmore-top">
                         <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
                         <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
@@ -65,20 +50,24 @@
                         <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
-            </mt-loadmore>
+                </mt-loadmore>
             </div>
         </div>
     </div>
 </template>
 <script>
+import longSearch from '../components/tools/longSearch'
 import common from '../common/common.js'
 import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                param:{
-                    name:'市场行情'
+                myShow:{
+                    myShow:false
+                },
+                param: {
+                    name: '市场行情'
                 },
                 wrapperHeight: 0,
                 onOrOff: false,
@@ -92,55 +81,53 @@ export default {
                 show: false,
                 httpPraram: {
                     page: 1,
-                    pageSize: 10
+                    pageSize: 10,
+                    keyword:''
                 }
-                
             }
         },
         components: {
-            myHeader
+            myHeader,
+            longSearch
         },
         methods: {
-            getHttp(back){
-                    let _self = this;
-                    httpService.marketQuotation(common.urlCommon + common.apiUrl.most, {
-                                biz_module:'breedService',
-                                biz_method:'queryBreedPrice',
-                                biz_param: {
-                                       
-                                    }
-                                }, function(suc) {
-                                    //console.log(suc);
-                                    let data = suc.data.biz_result.list; 
-                                    //console.log(data)               
-                                    /*for (var item in data) {
-                                        data[item].show = false;
-
-                                    }
-                                    _self.todos = data;*/
-                                    for(var i = 0; i < data.length; i++){
-                                        let item = data[i];
-                                        item.show = false;
-                                        _self.todos.push(item);
-                                    }
-                                    if(back){
-                                        back();
-                                    }
-                                    
-                                }, function(err) {
-                                    
-                                    common.$emit('message', err.data.msg);
-                                    if(back){
-                                        back();
-                                    }
-                                })
+            getHttp(back) {
+                let _self = this;
+                httpService.marketQuotation(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'breedService',
+                    biz_method: 'queryBreedPrice',
+                    biz_param: {
+                        name: _self.httpPraram.keyword
+                    }
+                }, function(suc) {
+                    let data = suc.data.biz_result.list;
+                    for (var i = 0; i < data.length; i++) {
+                        let item = data[i];
+                        item.show = false;
+                        _self.todos.push(item);
+                    }
+                    if (back) {
+                        back();
+                    }
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                    if (back) {
+                        back();
+                    }
+                })
             },
-            firstLevel(index,todos){
-                 this.todos[index].show = !this.todos[index].show;
-
+            firstLevel(index, todos) {
+                this.todos[index].show = !this.todos[index].show;
             },
-            jump(){
-                common.$emit("setParam","router",'lowPriceRes');
+            clearKeyword() {
+                let _self = this;
+                this.httpPraram.page = 1;
+                this.todos.splice(0, _self.todos.length);
+                this.httpPraram.keyword = '';
+                this.getHttp();
+            },
+            jump() {
+                common.$emit("setParam", "router", 'marketQuotation');
                 this.$router.push("search");
             },
             handleBottomChange(status) {
@@ -170,27 +157,25 @@ export default {
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
-
                 }, 1500);
             }
         },
         created() {
-           
-
             let _self = this;
             _self.getHttp();
-
-
-            
+            common.$on('marketQuotation', function(item) {
+                _self.httpPraram.keyword = item.keyWord;
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.getHttp();
+            })
         },
         mounted() {
-
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
 <style scoped>
-
 .mint-loadmore-top span {
     display: inline-block;
     transition: .2s linear;
@@ -202,8 +187,13 @@ export default {
     transition: .2s linear;
     vertical-align: middle;
 }
+
 .market_quotation {
-   /* position: relative;*/
+
+}
+
+.market_quotation .search .long_search .search_div .search_content{
+    background-color:#fff; 
 }
 
 .market_quotation .mint-header {
@@ -230,8 +220,7 @@ export default {
 }
 
 .market_quotation .search .search_image {
-    width: 2rem;
-    height: 2rem;
+   max-width: 24px;
     position: absolute;
     right: 13%;
     top: 18px;
@@ -252,7 +241,6 @@ export default {
 }
 
 .market_quotation .good_list .good_list_content {
-    /*margin-top: 1.7066rem;*/
     width: 100%;
     background: white;
 }
@@ -264,10 +252,8 @@ export default {
 .market_quotation .list_content_header {
     display: flex;
     flex-direction: row;
-    margin-bottom: 0.213rem;
-    padding-right: 0.8rem;
-    padding-top:0.8rem;
-    
+    height: 50px;
+    line-height: 50px;
 }
 
 .market_quotation .list_content_header p {
@@ -276,13 +262,16 @@ export default {
 }
 
 .market_quotation .list_content_header input {
+    margin-right:0.8rem ;
     outline: none;
     border: 0;
-    width: 5.333rem;
-    height: 2.133rem;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
     background: #FA6705;
     color: white;
     border-radius: 4px;
+    margin-top: 10px;
 }
 
 .market_quotation .second_level {

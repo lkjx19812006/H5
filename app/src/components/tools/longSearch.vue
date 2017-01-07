@@ -51,10 +51,8 @@ export default {
 
 .long_search .search_div {
     height: 50px;
-    border-bottom: 1px solid #ccc;
     width: 100%;
     float: left;
-    background: #EC6817;
 }
 .long_search .search-div {
     height: 50px;
@@ -73,7 +71,7 @@ export default {
     border-radius: 10px;
 }
 .long_search .search_div .search_content{
-    background: #F1EFEF;
+    background: #fff;
 }
 .long_search .search-div .search_content{
     background: white;
@@ -91,7 +89,7 @@ export default {
     margin-left: 10px;
 }
 .long_search .search_div .search_content input{
-    background-color: #F1EFEF;
+    background-color: #fff;
 }
 .long_search .search-div  .search_content input{
     background-color: #fff;

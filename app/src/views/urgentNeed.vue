@@ -206,7 +206,6 @@ export default {
                         _self.allLoaded = true;
                     }
                     common.$emit('translateDate', result, _self.todos);
-
                     if (back) {
                         back();
                     }

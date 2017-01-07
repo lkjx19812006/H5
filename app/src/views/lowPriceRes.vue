@@ -245,9 +245,10 @@ export default {
         },
         created() {
             let _self = this;
+             _self.headParam.keyword = common.pageParam.lowPrice.keyWord;
+            _self.httpPraram.keyword = common.pageParam.lowPrice.keyWord;
             _self.getHttp();
             common.$on('lowPriceRes', function(item) {
-                console.log(item);
                 _self.headParam.keyword = item.keyWord;
                 _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;

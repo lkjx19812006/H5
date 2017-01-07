@@ -2,7 +2,6 @@
     <div>
         <mt-header fixed>
             <router-link to="" slot="left" >     
-                <!-- <mt-button>北京</mt-button> -->
                 <img src="/static/images/my-logo.png" class="logo">
                 <div class="search_div" @click="fromIndex">
                     请输入您想要的货物资源
@@ -37,7 +36,6 @@
                                     {{item.name}}
                                     <img :src="item.image">
                                 </p>
-                                <!-- <img v-bind:src="item.image"> -->
                             </div>
                         </div>
                         <div class="real_news" @click="jump('transaction')">
@@ -322,7 +320,7 @@ export default {
             },
             fromIndex() {
                 let _self = this;
-                common.$emit('setParam','router','lowPriceRes');
+                common.$emit('setParam','router','index');
                 _self.$router.push("search");
             },
             jumpRes(router, id) {
