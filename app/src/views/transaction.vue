@@ -1,11 +1,12 @@
 <template>
-    <div class="content transaction">
-        <mt-header title="实时成交">
+    <div class="transaction">
+        <!-- <mt-header title="实时成交">
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header>
-        <div class="transaction_title"> *查看最新成交信息，坐等客户上门！</div>
+        </mt-header> -->
+        <myHeader :param = "param" ></myHeader>
+        <!-- <div class="transaction_title"> *查看最新成交信息，坐等客户上门！</div> -->
         <div class="bg_white">
             <div class="list_head">
                 <div class="list_font">品种</div>
@@ -14,8 +15,9 @@
                 <div class="list_font">产地</div>
                 <div class="list_font">成交时间</div>
             </div>
+           
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
                             <div class="list_font">{{todo.breedName}}</div>
@@ -33,17 +35,22 @@
                         <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
-                </mt-loadmore>
+                </mt-loadmore> 
             </div>
+           
         </div>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
+import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                param:{
+                    name:'实时成交'
+                },
                 msg: 'Welcome to Your Vue.js App',
                 todos: [/*{
                     "name": "人参",
@@ -59,44 +66,80 @@ export default {
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
+                httpPraram: {
+                    page: 1,
+                    pageSize: 20
+                },
             }
         },
         methods: {
+            getHttp(back){
+                let _self = this;
+                common.$emit('show-load');
+                 httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
+                        biz_module:'tradeNewService',
+                        biz_method:'currentTradeList',
+              
+                            biz_param: {
+                                
+                                pn:_self.httpPraram.page,
+                                pSize:_self.httpPraram.pageSize
+                            }
+                        }, function(suc) {
+                            common.$emit('close-load');
+                            if(suc.data.code == '1c01'){
+                                let result = suc.data.biz_result.list;
+                                for(var i = 0; i < result.length; i++){
+                                    _self.todos.push(result[i]);
+                                }
+                            }else{
+                                common.$emit('message', suc.data.msg);
+                            }
+                            if(back){
+                                        back();
+                                    }
+                        }, function(err) {
+                            common.$emit('close-load');
+                            common.$emit('message', err.data.msg);
+                            if(back){
+                                        back();
+                                    }
+                        })
+            },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-                console.log('sdfsdfsdf');
-                console.log(this.allLoaded);
-                /*setTimeout(() => {
-                    let lastValue = this.todos[0];
-                     console.log(this.allLoaded);
-                     console.log(this.todos.length);
-                    if (this.todos.length <= 40) {
-                        for (let i = 1; i <= 10; i++) {
-                            this.todos.push(this.todos[0]);
-                        }
-                    } else {
+                let _self = this;
+                setTimeout(() => {
+                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
+                    } else {
+                        this.httpPraram.page++;
+                        this.getHttp(function() {
+                            _self.$refs.loadmore.onBottomLoaded(id);
+                        });
                     }
-                      console.log(this.allLoaded);
-                    this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);*/
+                }, 1500);
             },
-
+            
             handleTopChange(status) {
                 this.topStatus = status;
             },
             loadTop(id) {
+                let _self = this;
                 setTimeout(() => {
-                    let firstValue = this.todos[0];
-                    for (let i = 1; i <= 10; i++) {
-                        this.todos.unshift(firstValue);
-                    }
-                    this.$refs.loadmore.onTopLoaded(id);
+                    _self.httpPraram.page = 1;
+                    _self.todos.splice(0, _self.todos.length);
+                    _self.getHttp(function() {
+                        _self.$refs.loadmore.onTopLoaded(id);
+                    });
                 }, 1500);
             }
         },
+        components: {
+                myHeader
+            },
         created() {
             let _self = this;
             /*common.$emit('show-load');
@@ -108,25 +151,8 @@ export default {
                 common.$emit('close-load');
                 common.$emit('message', response.data.msg);
             });*/
-             httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'tradeNewService',
-                        biz_method:'currentTradeList',
-              
-                            biz_param: {
-                                
-                                pn:1,
-                                pSize:20
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                            console.log(result)
-                            _self.todos = result;
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+            _self.getHttp();
+
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

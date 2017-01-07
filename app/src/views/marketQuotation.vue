@@ -213,17 +213,22 @@ export default {
     border-radius: 1.28rem;
     border: 0;
     outline: none;
-    padding-left: 5%;
+    padding-left: 25%;
     background: #fff;
     border: 1px solid #ddd;
     margin-top: 15px;
+    text-align: left;
+
 }
 
 .market_quotation .search .search_image {
    max-width: 24px;
+    width: 18px;
+    height: 18px;
     position: absolute;
-    right: 13%;
-    top: 18px;
+    left:25%;
+    top: 21px;
+
 }
 
 .market_quotation .good_list {

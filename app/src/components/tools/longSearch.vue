@@ -98,6 +98,6 @@ export default {
 .search-div .search_content img {
     float: left;
     max-height: 20px;
-    margin: 5px 5px 0 5px;
+    margin: 5px 5px 0 20%;
 }
 </style>
