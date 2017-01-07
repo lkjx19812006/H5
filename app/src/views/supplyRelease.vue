@@ -6,7 +6,7 @@
             </router-link>
         </mt-header> -->
         <myHeader :param = "param"></myHeader>
-        <mt-loadmore>
+        <!-- <mt-loadmore> -->
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
                 <releaseGrugInformation :obj="obj"></releaseGrugInformation>
@@ -52,7 +52,7 @@
                
            
         </div>
-         </mt-loadmore>
+         <!-- </mt-loadmore> -->
     </div>
 </template>
 <script>
@@ -257,7 +257,9 @@ textarea {
     border-radius: 0;
 }
 
-
+.supply_release .page-loadmore-wrapper{
+    margin-bottom: 0px;
+}
 .supply_release .mint-header {
     background-color: white;
     color: #313232;
@@ -436,11 +438,11 @@ textarea {
 }
 .supply_release .confirm {
     width: 100%;
-    height: 4.267rem;
+    height: 50px;
     background: #FA6705;
     font-size: 1.536rem;
     color: white;
-    line-height: 4.267rem;
+    line-height: 50px;
     float: left;
 }
 

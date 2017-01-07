@@ -1,14 +1,10 @@
 <template>
     <div class="resource_detail">
-        <!-- <mt-header fixed title="资源详情">
-            <router-link to="" slot="left">
-                <mt-button icon="back" @click="back()"></mt-button>
-            </router-link>
-        </mt-header> -->
+        
         <myHeader :param = "param"></myHeader>
-
+     <mt-loadmore>
         <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <mt-loadmore>
+            
                 <div class="swipe_height" v-if="obj.image">
                     <swiper :options="swiperOption" class="swipe_height">
                         <swiper-slide v-for="item in obj.image">
@@ -119,8 +115,12 @@ export default {
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     common.$emit('message', suc.data.msg);
-                    _self.obj = suc.data.biz_result;
-                    console.log(_self.obj);
+                    let result = suc.data.biz_result;
+                    var pubdate = result.pubdate;
+                    if (pubdate != '') pubdate = pubdate.substring(0, 10);
+                    result.pubdate = pubdate;
+                    _self.obj = result;
+                    
                     if (_self.obj.image.length == 0) {
                         _self.obj.image.push('/static/images/default_image.png');
                     }
@@ -152,7 +152,7 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 1;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -164,8 +164,9 @@ export default {
 .resource_detail .page-loadmore-wrapper{
     /*margin-top: -1px;*/
     overflow: scroll;
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
     width: 100%;
+    margin-bottom: 0px;
 
 }
 .page-loadmore-wrapper {
@@ -228,11 +229,11 @@ export default {
 }
 
 .resource_detail .fix_bottom {
-    /*position: absolute;
-    bottom: 10px;
-    z-index: 2;*/
+    position: absolute;
+    bottom: 0px;
+    z-index: 2;
     width: 100%;
-    margin-top: 100px;
+    
 }
 
 .resource_detail .fix_bottom .attention {
@@ -260,6 +261,7 @@ export default {
     background: #fff;
     float: left;
     width: 100%;
+    margin-bottom: 100px;
 }
 
 .resource_detail .center .title {

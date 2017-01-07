@@ -1,14 +1,14 @@
 <template>
     <div class="content need_detail">
-        <!-- <mt-header title="需求详情">
+       <!--  <mt-header title="需求详情">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
         </mt-header> -->
         <myHeader :param = "param"></myHeader>
-        
-        <div class="page-loadmore-wrapper">
-            <mt-loadmore>
+        <mt-loadmore> 
+        <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+           
                 <div class="center">
                     <div class="title">
                         <img src="/static/icons/impatient.png">
@@ -35,15 +35,16 @@
                         <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
                     </div>
                 </div>
-           </mt-loadmore>
-        </div>
+         
         <div class="fix_bottom">
             <div class="attention">
                 <telAndAttention :obj='obj'></telAndAttention>
             </div>
             <button class="mint-button mint-button--primary mint-button--normal orange_button">立即报价</button>
         </div>
-         
+        
+    </div>  
+    </mt-loadmore> 
     </div>
 </template>
 <script>
@@ -88,12 +89,22 @@ export default {
                     common.$emit('close-load');
                     common.$emit('message', suc.data.msg);
                     let result = suc.data.biz_result;
-                    var duedateDate = new Date(result.duedate);
-                    var pubdateDate = new Date(result.pubdate);
-                    var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                    var days = Math.floor(dateValue / (24 * 3600 * 1000));
-                    result.days = days;
-                    result.pubdate = result.pubdate.substring(0, 10);
+                    
+                    var duedate = result.duedate;
+                    var pubdate = result.pubdate;
+                    if(duedate != '' && pubdate != ''){
+                        duedate = duedate.replace(/-/g, '/');
+                        pubdate = pubdate.replace(/-/g, '/');
+                        var duedateDate = new Date(duedate);
+                        var pubdateDate = new Date(pubdate);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                        result.days = days;
+                    }else{
+                        result.days = '';
+                    }                       
+                    if(pubdate != '')result.pubdate = result.pubdate.substring(0, 10);
+                    
                     _self.obj = result;
                 }, function(err) {
                     common.$emit('close-load');
@@ -118,19 +129,22 @@ export default {
             common.$on('indexToNeeddetail', function(item) {
                 _self.getHttp(item);
             });
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.need_detail {
-   
+.need_detail .page-loadmore-wrapper{
+   margin-bottom: 0px;
 }
 
 .need_detail .fix_bottom {
-    /*position: absolute;
-    bottom: 0;*/
+    position: absolute;
+    bottom: 0;
     width: 100%;
     z-index: 2;
 }

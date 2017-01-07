@@ -1,10 +1,11 @@
 <template>
     <div class="purchase_detail">
-        <mt-header title="求购详情">
+        <!-- <mt-header title="求购详情">
             <router-link to="myPurchase" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "param"></myHeader>
         <div class="center">
             <div class="title">
                 <p>{{obj.drug_name}}</p>
@@ -39,10 +40,15 @@
 </template>
 <script>
 import common from '../common/common.js'
+import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                param:{
+                    name:'求购详情'
+                    
+                },
                 obj: {
                     drug_name: '白术',
                     spec: '',
@@ -68,6 +74,9 @@ export default {
                     "time": "12:26"
                 }]
             }
+        },
+        components: {
+            myHeader
         },
         methods: {
             getHttp(id){

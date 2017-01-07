@@ -47,6 +47,7 @@ export default {
     float: left;
     width: 100%;
     padding: 10px;
+    position: relative;
 }
 
 .address_confirm .left_district {

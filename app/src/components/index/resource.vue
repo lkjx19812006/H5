@@ -22,7 +22,7 @@
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}元/kg</p>
-                                    <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump()">立即购买</button>
+                                    <button class="mint-button mint-button--primary mint-button--small" >立即购买</button>
                                 </div>
                             </div>
                         </li>
@@ -173,9 +173,10 @@ export default {
                 }, function(suc) {
                     common.$emit('message', suc.data.msg);
                     let result = suc.data.biz_result.list;
-                    for (var i = 0; i < result.length; i++) {
+                    /*for (var i = 0; i < result.length; i++) {
                         _self.todos.push(result[i]);
-                    }
+                    }*/
+                    common.$emit('translateDate',result,_self.todos);
                     if (back) {
                         back();
                     }

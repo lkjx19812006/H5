@@ -1,12 +1,12 @@
 <template>
 
-    <div class="whole drug_table_detail">
-        <mt-header fixed title="药性表">
+    <div class="drug_table_detail">
+        <!-- <mt-header fixed title="药性表">
             <router-link to="/drugResTable" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header> 
-
+        </mt-header>  -->
+        <myHeader :param = "param" ></myHeader>
          <div class="nav-header" >
             <mt-navbar v-model="selected">
             <mt-tab-item id="1">基本信息</mt-tab-item>
@@ -15,7 +15,7 @@
             <mt-tab-item id="4">药典标准</mt-tab-item>
             </mt-navbar>
         </div> 
-
+       <mt-loadmore>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
               
                <div class="info_content">
@@ -88,15 +88,20 @@
                 </mt-tab-container>
               </div> 
         </div>
+        </mt-loadmore> 
     </div>
 
 </template>
 <script>
 import common from '../common/common.js'
+import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                param:{
+                    name:'药性表'
+                },
                 selected: '1',
                 obj:{
 
@@ -104,6 +109,9 @@ export default {
                 id:'',
                 breedName:''
             }
+        },
+        components: {
+            myHeader
         },
         methods: {
 
