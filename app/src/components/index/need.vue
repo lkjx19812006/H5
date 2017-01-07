@@ -1,8 +1,7 @@
 <template>
     <div class="need">
         <div class="fixed">
-            
-            <div @click="jumpSearch">
+            <div @click="jumpSearch" class="search_content">
                 <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
             </div>
             <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
@@ -329,6 +328,11 @@ export default {
 
 .need {}
 
+.need .fixed .search_content{
+    float: left;
+    width: 100%;
+    background: #EC6817;
+}
 
 .need .go-back{
     position: absolute;

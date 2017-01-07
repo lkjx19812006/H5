@@ -99,33 +99,48 @@ export default {
             clearResult: function() {
                 this.historyArr = [];
             },
-            jumpRes(item){
+            jumpRes(item) {
                 let _self = this;
-                if (common.pageParam.router == 'lowPriceRes') {
+                switch (common.pageParam.router) {
+                    case 'lowPriceRes':
+                        common.$emit("setParam", 'lowPrice', item);
+                        common.$emit("lowPriceRes", item);
+                        break;
+                    case 'urgentNeed':
+                        common.$emit("setParam", 'Urgentneed', item);
+                        common.$emit("Urgentneed", item);
+                        break;
+                    case 'need':
+                        common.$emit("need", item);
+                        break;
+                    case 'resource':
+                        common.$emit("resource", item);
+                        break;
+                    case 'myAttention':
+                        common.$emit("setParam", 'myAttention', item);
+                        common.$emit("attention", item);
+                        break;
+                    case 'supplyRelease':
+                        common.$emit("setParam", 'supplyRelease', item);
+                        common.$emit("supplyRelease", item);
+                        break;
+                    case 'needRelease':
+                        common.$emit("Needrelease", item);
+                        break;
+                    case 'marketQuotation':
+                        common.$emit("marketQuotation", item);
+                        break;
+                    default:
+                        common.$emit("setParam", 'lowPrice', item);
+                        common.$emit("lowPriceRes", item);
+                        break;
+                }
+                if (common.pageParam.router == 'index') {
                     common.$emit("setParam", 'lowPrice', item);
-                    common.$emit("lowPriceRes", item);
+                    _self.$router.push('lowPriceRes');
+
+                } else {
                     window.history.go(-1);
-                } else if (common.pageParam.router == 'urgentNeed') {
-                    common.$emit("setParam", 'Urgentneed', item);
-                    common.$emit("Urgentneed", item);
-                    window.history.go(-1);
-                } else if (common.pageParam.router == 'need') {
-                    common.$emit("need", item);
-                    window.history.go(-1);
-                } else if (common.pageParam.router == 'resource') {
-                    common.$emit("resource", item);
-                    window.history.go(-1);
-                } else if (common.pageParam.router == 'myAttention') {
-                    common.$emit("setParam", 'myAttention', item);
-                    common.$emit("attention", item);
-                    _self.$router.push(common.pageParam.router);
-                } else if (common.pageParam.router == 'supplyRelease') {
-                    common.$emit("setParam", 'supplyRelease', item);
-                    common.$emit("supplyRelease", item);
-                    window.history.go(-1);
-                }else if(common.pageParam.router == 'needRelease'){
-                     common.$emit("Needrelease",item);
-                     window.history.go(-1);
                 }
             },
             search() {

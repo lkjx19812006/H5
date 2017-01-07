@@ -46,8 +46,6 @@ let common = new Vue({
             this.$http.get(this.urlCommon + this.apiUrl.getDate).then((response) => {
                 if (response.data.code == '1c01') {
                     var timestamp = Date.parse(new Date());
-                    console.log(timestamp);
-                    console.log(response.data.biz_result.time);
                     window.localStorage.difTime = response.data.biz_result.time - timestamp;
                     _self.difTime = window.localStorage.difTime;
                 }

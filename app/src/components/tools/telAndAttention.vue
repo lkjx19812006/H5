@@ -45,6 +45,7 @@ export default {
                 httpService.addAddress(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
+                        common.$emit('message', suc.data.msg);
                         common.$emit("informResAttention", 'refurbish');
                         if (type) {
                             _self.obj.isAttention = 1;

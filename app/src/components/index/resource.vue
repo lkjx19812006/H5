@@ -2,7 +2,7 @@
     <div class="content resource">
         <div >
            
-            <div @click="jumpSearch">
+            <div @click="jumpSearch" class="search_content">
                 <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
             </div>
             <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
@@ -326,6 +326,12 @@ export default {
 }
 
 .resource {}
+
+.resource  .search_content{
+    float: left;
+    width: 100%;
+    background: #EC6817;
+}
 .resource .go-back{
     position: absolute;
     width:15%;
