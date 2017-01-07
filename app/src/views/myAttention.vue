@@ -231,6 +231,7 @@ export default {
                 _self.resorceHttp();
             });
             common.$on('attention', function(item) { //来自搜索的提示刷新
+                console.log(item)
                 _self.httpPraram.keyword = item;
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
