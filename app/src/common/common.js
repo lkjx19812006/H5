@@ -12,6 +12,7 @@ let common = new Vue({
         KEY: window.localStorage.KEY,
         SID: window.localStorage.SID,
         difTime: window.localStorage.difTime,
+        servicePhone:'',
         apiUrl: {
             list: '/static/data/list.json',
             market_list: '/static/data/market_list.json',
@@ -33,8 +34,6 @@ let common = new Vue({
             resourceId: '',
             Needrelease: '',
             backAddress: '',
-
-
         }
     },
     methods: {
