@@ -104,17 +104,17 @@ export default {
                 if (common.pageParam.router == 'lowPriceRes') {
                     common.$emit("setParam", 'lowPrice', item);
                     common.$emit("lowPriceRes", item);
-                    _self.$router.push(common.pageParam.router);
+                    window.history.go(-1);
                 } else if (common.pageParam.router == 'urgentNeed') {
                     common.$emit("setParam", 'Urgentneed', item);
                     common.$emit("Urgentneed", item);
-                    _self.$router.push(common.pageParam.router);
+                    window.history.go(-1);
                 } else if (common.pageParam.router == 'need') {
                     common.$emit("need", item);
-                    history.go(-1);
+                    window.history.go(-1);
                 } else if (common.pageParam.router == 'resource') {
                     common.$emit("resource", item);
-                    history.go(-1);
+                    window.history.go(-1);
                 } else if (common.pageParam.router == 'myAttention') {
                     common.$emit("setParam", 'myAttention', item);
                     common.$emit("attention", item);
@@ -122,10 +122,10 @@ export default {
                 } else if (common.pageParam.router == 'supplyRelease') {
                     common.$emit("setParam", 'supplyRelease', item);
                     common.$emit("supplyRelease", item);
-                    _self.$router.push(common.pageParam.router);
+                    window.history.go(-1);
                 }else if(common.pageParam.router == 'needRelease'){
                      common.$emit("Needrelease",item);
-                     history.go(-1);
+                     window.history.go(-1);
                 }
             },
             search() {

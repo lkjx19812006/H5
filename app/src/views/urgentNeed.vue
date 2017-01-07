@@ -1,5 +1,6 @@
 <template>
-    <div class="urgent_need">
+
+   <!--  <div class="urgent_need">
 
         <div class="go-back" @click="jump('home')">
                 <img src="/static/images/go-back.png">
@@ -11,18 +12,23 @@
         <div @click="jumpSearch">
              <backSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" ></backSearch>
         </div>
-        <sort  v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
+        <sort  v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort> -->
+
+    <div class="content urgent_need">
+        <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
+        <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
+
         <div class="bg_white">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">                          
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
                             <div class="center">
-                                 <img src="/static/icons/england.png" class="flag">
+                                <img src="/static/icons/england.png" class="flag">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png">{{todo.breedName}}</div>
                                     <p>发布时间：{{todo.pubdate}}</p>
-                                </div>                     
+                                </div>
                                 <div class="detail">
                                     <div>
                                         <p>规格</p>
@@ -34,13 +40,13 @@
                                         <p>{{todo.spec}}</p>
                                         <p>{{todo.location}}</p>
                                         <p>{{todo.days}}<span>天</span></p>
-                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
+                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="bottom">
                                 <p>已报价<span>{{todo.offer}}</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop = "jump">我要报价</button>
+                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump">我要报价</button>
                             </div>
                         </li>
                     </ul>
@@ -59,14 +65,14 @@
 </template>
 <script>
 import common from '../common/common.js'
-import backSearch from '../components/tools/backSearch'
+import headFix from '../components/tools/head'
 import sort from '../components/tools/sort'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                sortRouter:'urgentNeed',
-                sortArr:  [{
+                sortRouter: 'urgentNeed',
+                sortArr: [{
                     name: '上架时间',
                     asc: 'top',
                     url: '/static/icons/drop_down.png',
@@ -76,20 +82,20 @@ export default {
                         name: '由新到旧',
                         asc: 'low',
                         show: false,
-                        time:1,
-                        key:'time'
+                        time: 1,
+                        key: 'time'
                     }, {
                         name: '由旧到新',
                         asc: 'top',
                         show: false,
-                        time:2,
-                        key:'time'
+                        time: 2,
+                        key: 'time'
                     }, {
                         name: '全部',
                         asc: '',
                         show: false,
-                        time:0,
-                        key:'time'
+                        time: 0,
+                        key: 'time'
                     }]
                 }, {
                     name: '报价人数',
@@ -101,20 +107,20 @@ export default {
                         name: '由少到多',
                         asc: 'low',
                         show: false,
-                        price:1,
-                        key:'price'
+                        price: 1,
+                        key: 'price'
                     }, {
                         name: '由多到少',
                         asc: 'top',
                         show: false,
-                        price:2,
-                        key:'price'
+                        price: 2,
+                        key: 'price'
                     }, {
                         name: '全部',
                         asc: '',
                         show: false,
-                        price:0,
-                        key:'price'
+                        price: 0,
+                        key: 'price'
                     }]
                 }, {
                     name: '剩余时间',
@@ -126,20 +132,20 @@ export default {
                         name: '由短到长',
                         asc: 'low',
                         show: false,
-                        sample:1,
-                        key:'sample'
+                        sample: 1,
+                        key: 'sample'
                     }, {
                         name: '由长到短',
                         asc: 'top',
                         show: false,
-                        sample:0,
-                        key:'sample'
+                        sample: 0,
+                        key: 'sample'
                     }, {
                         name: '全部',
                         asc: '',
                         show: false,
-                        sample:'',
-                        key:'sample'
+                        sample: '',
+                        key: 'sample'
                     }]
                 }, {
                     name: '产地',
@@ -147,8 +153,8 @@ export default {
                     url: '/static/icons/screen.png',
                     class: 'sort_content_detail',
                 }],
-                todos: [],                   
-                keyword:'',
+                todos: [],
+                keyword: '',
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -161,49 +167,58 @@ export default {
                     keyword: '',
                     page: 1,
                     pageSize: 20
+                },
+                headParam: {
+                    title: '紧急求购',
+                    keyword: '',
+                    router: 'urgentNeed'
                 }
             }
         },
         components: {
-            backSearch,
+            headFix,
             sort
         },
         methods: {
-            getHttp(back){
-                 let _self = this;
-                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryBegBuyList',
-              
-                            biz_param: {
-                                keyWord: _self.httpPraram.keyword,
-                                sort:{
-                                    "shelve_time":_self.httpPraram.time,
-                                    "offer": _self.httpPraram.offer,
-                                    "duedate": _self.httpPraram.duedate
-                                },                          
-                                location: _self.httpPraram.location,
-                                pn: _self.httpPraram.page,
-                                pSize: _self.httpPraram.pageSize
-                            }
-                        },  function(suc) {
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                             common.$emit('translateDate',result,_self.todos);
-                              
-                            if (back) {
-                                back();
-                            }
-                        }, function(err) {
-                            common.$emit('message', err.data.msg);
-                            if (back) {
-                                back();
-                            }
-                        })
-            },
-            getId(param){
-                 let _self = this;
+            getHttp(back) {
+                if (this.httpPraram.page == 1) {
+                    this.allLoaded = false;
+                }
+                let _self = this;
+                httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryBegBuyList',
+                    biz_param: {
+                        keyWord: _self.httpPraram.keyword,
+                        sort: {
+                            "shelve_time": _self.httpPraram.time,
+                            "offer": _self.httpPraram.offer,
+                            "duedate": _self.httpPraram.duedate
+                        },
+                        location: _self.httpPraram.location,
+                        pn: _self.httpPraram.page,
+                        pSize: _self.httpPraram.pageSize
+                    }
+                }, function(suc) {
+                    common.$emit('message', suc.data.msg);
+                    let result = suc.data.biz_result.list;
+                    if(result.length<_self.httpPraram.pageSize){
+                        _self.allLoaded = true;
+                    }
+                    common.$emit('translateDate', result, _self.todos);
 
+                    if (back) {
+                        back();
+                    }
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                    if (back) {
+                        back();
+                    }
+                })
+            },
+            getId(param) {
+                let _self = this;
                 _self.param = true;
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
@@ -218,12 +233,12 @@ export default {
                 this.getHttp();
             },
             jumpDetail(id) {
-                
-                common.$emit("needToDetail",id);
+
+                common.$emit("needToDetail", id);
                 this.$router.push('needDetail/' + id);
             },
-            jump(){
-                   //下载app
+            jump() {
+                //下载app
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -256,12 +271,7 @@ export default {
 
                 }, 1500);
             },
-            jumpSearch(){
-                common.$emit('setParam','router','urgentNeed');
-                this.$router.push('search');
-                
-            },
-            jump(router){
+            jump(router) {
                 this.$router.push(router);
             }
         },
@@ -269,7 +279,8 @@ export default {
             let _self = this;
             _self.getHttp();
             common.$on('Urgentneed', function(item) {
-                _self.httpPraram.keyword = item;
+                _self.headParam.keyword = item.keyWord;
+                _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
@@ -290,11 +301,11 @@ export default {
                 _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             });
-                  
-             
+
+
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
         }
 
 }
@@ -340,40 +351,46 @@ export default {
 }
 
 .urgent_need {}
-.urgent_need .go-back{
+
+.urgent_need .go-back {
     position: absolute;
-    width:15%;
-    padding-right:5%;
-    height:50px;
+    width: 15%;
+    padding-right: 5%;
+    height: 50px;
     border-bottom: 1px solid #ccc;
-    background:#EC6817;
+    background: #EC6817;
 }
-.urgent_need .title-name{  
+
+.urgent_need .title-name {
     position: absolute;
-    left:15%;
-    width:70%;
-    height:50px;
+    left: 15%;
+    width: 70%;
+    height: 50px;
     border-bottom: 1px solid #ccc;
     background: #EC6817;
     font-size: 1.7rem;
     line-height: 50px;
-    color:white;
+    color: white;
 }
-.urgent_need .go-back  img{
+
+.urgent_need .go-back img {
     margin-top: 15px;
-    height:20px;
+    height: 20px;
 }
-.urgent_need .bg_white{
-    background:#fff;
+
+.urgent_need .bg_white {
+    background: #fff;
 }
+
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list {
     padding: 0 10px;
 }
+
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
     min-height: 100px;
-    padding:0;
+    padding: 0;
     height: auto;
     background: white;
     margin-top: 10px;
@@ -381,15 +398,11 @@ export default {
     box-shadow: 0px 0px 20px #F5F5F5;
 }
 
-
-
-
-
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom {
     float: left;
     width: 100%;
     padding: 0 10px;
-    height:4.18rem;
+    height: 4.18rem;
 }
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom p {
@@ -424,13 +437,15 @@ export default {
     /*padding:0 0 10px 0;*/
     position: relative;
 }
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag{
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag {
     position: absolute;
-    top:0px;
-    right:0px;
-    width:1.7rem;
-    height:1.23rem;
+    top: 0px;
+    right: 0px;
+    width: 1.7rem;
+    height: 1.23rem;
 }
+
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center div {
     float: left;
 }
@@ -442,43 +457,43 @@ export default {
     line-height: 1.365rem;
     /*margin: 10px 0;*/
 }
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title>div{
-    margin-top:1.06rem;
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title>div {
+    margin-top: 1.06rem;
 }
+
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title p {
     float: right;
     font-size: 1rem;
     color: #999;
-    margin:1.2rem 2.559rem 0 0;
-
+    margin: 1.2rem 2.559rem 0 0;
 }
 
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img { 
-    width:1.2rem;
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img {
+    width: 1.2rem;
     margin-right: 5px;
 }
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail{
-    width:100%;
-    
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail {
+    width: 100%;
     display: flex;
-    flex-direction:column;
-}
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div{
-    flex:1;
-    display:flex;
-    flex-direction:row;
-    margin-top: 1.279rem;
-    
-}
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail .last p{
-    color:#666666;
-}
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div p{
-    flex:1;
-    
-    
-    font-size: 1.109rem;
-    color:#424242;
+    flex-direction: column;
 }
 
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    margin-top: 1.279rem;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail .last p {
+    color: #666666;
+}
+
+.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div p {
+    flex: 1;
+    font-size: 1.109rem;
+    color: #424242;
+}
 </style>
