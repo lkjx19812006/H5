@@ -1,62 +1,6 @@
 <template>
     <div class="login" :style="{ height: wholeHeight + 'px' }">
-        
-        <!-- <mt-header title="登录">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header>
-        <div class="out_select_box">
-            <div class="select_box">
-                <mt-navbar v-model="selected">
-                    <mt-tab-item id="identiCode">验证码登录</mt-tab-item>
-                    <mt-tab-item id="password">密码登录</mt-tab-item>
-                </mt-navbar>
-            </div>
-        </div>
-        <div class="selected_box">
-            <mt-tab-container v-model="selected">
-                <mt-tab-container-item id="identiCode">
-                    <ul class="fill_in_first">
-                        <li>
-                            <p>账号：</p>
-                            <input type="text" placeholder="请输入手机号码" v-model="param.phone" />
-                        </li>
-                        <li>
-                            <p>验证码：</p>
-                            <input type="text" placeholder="请输入验证码" v-model="param.code" />
-                            <button v-bind:class="{ get_code: !buttonDisabled, 'get_code_nor': buttonDisabled }" id="get_code" v-on:click="confirmLogin()" v-bind:disabled="buttonDisabled">{{code}}</button>
-                            
-                        </li>
-                    </ul>
-                </mt-tab-container-item>
-                <mt-tab-container-item id="password">
-                    <ul class="fill_in_second">
-                        <li>
-                            <p>账号：</p>
-                            <input type="text" placeholder="请输入手机号码" v-model="param.phone" />
-                        </li>
-                        <li>
-                            <p>登陆密码：</p>
-                            <input type="password" placeholder="请输入密码" v-model="param.password" />
-                        </li>
-                        <li>
-                            <p>验证码：</p>
-                            <input type="text" placeholder="请输入验证码" v-model="param.imageCode" />
-                            <div v-on:click="getCode">{{identify_code}}</div>
-                        </li>
-                    </ul>
-                </mt-tab-container-item>
-            </mt-tab-container>
-        </div>
-        <div class="prompt_box">
-            <router-link to="register">
-                <div class="fast_register">快速注册</div>
-            </router-link>
-            <router-link to="findPassWord">
-                <div class="forget_password">忘记密码？</div>
-        </div>
-        <div class="confirm_login" @click="login()">登陆</div> -->
+       
 
         <img src="/static/images/logo-login.png" class="my-logo">
         <myTab :param = "myShow" ></myTab> 

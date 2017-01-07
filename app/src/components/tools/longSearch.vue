@@ -29,8 +29,8 @@ export default {
         },
         props: {
             keyword: {
-                type: String,
-                default: ''
+                /*type: String,
+                default: ''*/
             },
             param:{
 
@@ -80,6 +80,7 @@ export default {
 .search-div .search_content .clear{
     float: right;
     padding: 0 0 10px 10px;
+    margin-right: 10px;
 }
 .long_search .search_div .search_content input,
 .search-div  .search_content input {  
@@ -95,7 +96,7 @@ export default {
     background-color: #fff;
 }
 .long_search .search_div .search_content img,
-.search-div .search_content img {
+.search-div .search_content img{
     float: left;
     max-height: 20px;
     margin: 5px 5px 0 20%;

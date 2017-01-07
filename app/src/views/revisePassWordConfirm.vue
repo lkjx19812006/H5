@@ -1,10 +1,11 @@
 <template>
     <div class="revise_password_confirm">
-        <mt-header title="修改密码">
+        <!-- <mt-header title="修改密码">
             <router-link to="/mySet" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "my_header" ></myHeader>
         <ul class="fill_in">
             <li>
                <p >手机号：</p>
@@ -29,9 +30,14 @@
 import common from '../common/common.js'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                 my_header:{
+                    name:'修改密码'
+                    
+                },
                  param:{
                      phone:'',
                      new_passWord:'',
@@ -40,7 +46,9 @@ export default {
                 
             }
         },
-       
+       components: {           
+            myHeader
+        },
         methods:{
                
 
@@ -89,54 +97,9 @@ export default {
                         common.$emit('message', err.data.msg);
                       })
 
-                     /*common.$emit('show-load');
-                      httpService.revisePassWord(common.urlCommon + common.apiUrl.most, {
-                          biz_module:'userService',
-                          biz_method:'updateUserPassword',
-                          biz_param: {
-                
-                              password:_self.param.passWord,
-                              newPassword:_self.param.new_passWord
-                          }
-                      }, function(response) {
-                          console.log(1111)
-                          common.$emit('close-load');
-                          if (response.data.code == '1c01') {
-                              common.$emit('message', response.data.msg);
-                              common.getDate();
-                          } else {
-                              common.$emit('message', response.data.msg);
-
-                          }
-
-
-                      }, function(err) {
-                          common.$emit('close-load');
-                          common.$emit('message', err.data.msg);
-                      })  */
+                    
                  }
-                /*nextStep:function(){
-                    var phone=document.getElementById("ephone").value;
-                    var pattern = /^1[34578]\d{9}$/;    
-                    if(!pattern.test(phone)) {          
-                        alert('请输入有效的手机号！');
-                    }else{
-                       let wait = 10;
-                       let this_ = this;
-                       let time = setInterval(function(){
-                                
-                                wait--;
-                                console.log(wait);
-                                this_.code = wait;
-                                 if(wait == 0){
-                                   clearInterval(time);
-                                   this_.code = '获取验证码';
-                                }
-                              },1000);
-
-
-                    }
-                }    */
+               
             
 
         }

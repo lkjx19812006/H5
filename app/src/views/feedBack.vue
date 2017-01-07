@@ -1,10 +1,14 @@
 <template>
     <div class="feed_back">
-        <mt-header title="意见反馈">
+       <!--  <mt-header title="意见反馈">
             <router-link to="/mySet" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "my_header" ></myHeader>
+        <mt-loadmore>
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+
         <div class="main">
              <textarea placeholder="请填写您的反馈内容" v-model="param.content"></textarea>
              <p>您的反馈对我们至关重要！</p>
@@ -19,19 +23,24 @@
                <input type="text" placeholder="请填写您的手机号！" v-model="param.phone">
              </div>
         </div>
-
-        <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
-
+        </div>
+         </mt-loadmore>
+     <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
+    
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
-
+               my_header:{
+                    name:'意见反馈'
+                    
+                },
                param:{
                    content:'',
                    name:'',
@@ -39,6 +48,9 @@ export default {
                }
 
             }
+        },
+        components: {           
+            myHeader
         },
         methods:{
             confirmSubmit:function(){
@@ -85,14 +97,23 @@ export default {
             }
 
                 
-            }
+            },
+             mounted() {
+
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        }
 
          
     }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.feed_back .page-loadmore-wrapper{
+  margin-bottom: 0px;
+}
+.feed_back{
 
+}
 .feed_back .main{
    padding: 2rem 1.5rem 0 1.5rem;
    background:white;
@@ -141,13 +162,16 @@ export default {
   
 }
 .feed_back .confirm_submit{
-  height:5rem;
+  height:50px;
   width:100%;
   background:#FA6705;
   color:white;
   font-size: 1.7rem;
   text-align: center;
-  line-height: 5rem;
-  margin-top: 14rem;
+  line-height: 50px;
+ /* margin-top: 14rem;*/
+ position: fixed;
+ bottom: 0;
+  
 }
 </style>

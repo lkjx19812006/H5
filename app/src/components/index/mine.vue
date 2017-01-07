@@ -59,7 +59,8 @@ export default {
                     url:'',
                     companyShort:'',
                     normalMoney:'',
-                    score:''
+                    score:'',
+                    name:''
                 },
                 information:{
 
@@ -216,6 +217,10 @@ export default {
             common.$on("toMine", function(obj) {
                 _self.getHttp();
                 _self.salesmanData();
+                _self.param.name = obj.name;
+                _self.param.url = obj.url;
+                _self.param.companyShort = obj.companyShort;
+
             })
         }
 }

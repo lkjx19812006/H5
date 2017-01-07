@@ -89,6 +89,7 @@ export default {
 .head .title_right {
     float: left;
     width: 15%;
+    
 }
 
 .head .title_right img {
@@ -103,6 +104,7 @@ export default {
     height: 30px;
     margin: 10px 0; 
     border-radius: 30px;
+
 }
 
 .head .title-name .text .clear {
@@ -121,5 +123,7 @@ export default {
     color: #999;
     margin-left: 15px;
     font-size: 15px;
+    line-height: 30px;
+
 }
 </style>

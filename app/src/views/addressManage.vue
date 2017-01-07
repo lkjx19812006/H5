@@ -1,10 +1,9 @@
 <template>
     <div class="address_manage">
-        <mt-header title="地址管理">
-            <router-link to="" slot="left">
-                <mt-button icon="back" @click="back()"></mt-button>
-            </router-link>
-        </mt-header>
+       
+        <myHeader :param = "my_header" ></myHeader>
+        <mt-loadmore>
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
         <ul>
             <li v-for="(todo,index) in todos" v-show="todo.show">
                 <div class="address_top" @click="jumpBack(todo)">
@@ -41,39 +40,24 @@
             </li>
         </ul>
         <div class="add_address" v-on:click="addAddress">添加新地址</div>
+       </div>
+        </mt-loadmore>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                my_header:{
+                    name:'地址管理',
+                    
+                },
                 id: '',
                 index: '',
-                todos: [
-                    /*{
-                                        show:true,
-                                        reviseShow:false,
-                                        name:'扬帆',
-                                        number:'15971484216',
-                                        address:'上海宝隆一方大厦',
-                                        first_img:'/static/images/default_nor.png',
-                                        second_img:'/static/images/modify.png',
-                                        last_img:'/static/images/delet.png',
-                                        router:'addressRevise'
-                                    },{
-                                        show:true,
-                                        reviseShow:false,
-                                        name:'小黄毛',
-                                        number:'15971484216',
-                                        address:'上海宝隆一方大厦',
-                                        first_img:'/static/images/default_nor.png',
-                                        second_img:'/static/images/modify.png',
-                                        last_img:'/static/images/delet.png',
-                                        router:'addressRevise'
-                                    }*/
-                ],
+                todos: [],
                 obj: {}
             }
         },
@@ -83,6 +67,9 @@ export default {
             common.$on("informAddress", function(id) {
                 _self.listHttp();
             })
+        },
+        components: {           
+            myHeader
         },
         methods: {
             back() {
@@ -205,6 +192,10 @@ export default {
                 common.$emit('revise-address', item.id);
                 _self.$router.push('/addressRevise' + '/' + item.id);
             }
+        },
+        mounted() {
+
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 
 
@@ -220,7 +211,9 @@ export default {
     background: white;
     margin-top: 1rem;
 }
-
+.address_manage .page-loadmore-wrapper{
+    margin-bottom: 0;
+}
 .address_manage ul li {
     position: relative;
 }
@@ -322,7 +315,7 @@ export default {
     background: #FA6705;
     font-size: 1.7rem;
     color: white;
-    line-height: 5rem;
+    line-height: 50px;
     position: fixed;
     bottom: 0;
 }

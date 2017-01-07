@@ -1,10 +1,11 @@
 <template>
     <div class="my_set">
-        <mt-header title="我的设置">
+       <!--  <mt-header title="我的设置">
             <router-link to="/home" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "my_header" ></myHeader>
         <ul class="mylist">
            <li v-for="(todo,index) in todos" v-if="index == 0" @click="jump(todo.router)">
               <img :src="todo.first_img" class="herder">
@@ -38,10 +39,14 @@
 </template>
 <script>
 import common from '../common/common.js'
-
+import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                 my_header:{
+                    name:'我的设置',
+                    router:'home'
+                },
                 msg: 'Welcome to Your Vue.js App',
                 todos:[{
                     first_img:'/static/images/my-news.png',
@@ -78,6 +83,9 @@ export default {
                 }]
                 
             }
+        },
+        components: {           
+            myHeader
         },
         methods:{
             jump:function(router){
@@ -136,7 +144,7 @@ export default {
    background:#FA6705;
    font-size: 1.7rem;
    color:white;
-   line-height: 5rem;
+   line-height: 50px;
    position: absolute;
    bottom: 0;
 

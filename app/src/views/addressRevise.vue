@@ -1,10 +1,11 @@
 <template>
     <div class="address_revise">
-        <mt-header title="修改地址">
+        <!-- <mt-header title="修改地址">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+         <myHeader :param = "my_header" ></myHeader>
         <ul>
             <li>
                 <p>收货人</p>
@@ -46,6 +47,8 @@
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import areaJson from '../common/areaData'
+import myHeader from '../components/tools/myHeader'
+import validation from '../validation/validation.js'
 
 const addressArr = ['北京市', '天津市', '河北省', '山西省', '内蒙古自治区', '辽宁省', '吉林省', '黑龙江省', '上海市', '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省', '河南省', '湖北省', '湖南省', '广东省', '广西壮族自治区', '海南省', '重庆市', '四川省', '贵州省', '云南省', '西藏自治区', '陕西省', '甘肃省', '青海省', '宁夏回族自治区', '新疆维吾尔族自治区'];
 
@@ -53,6 +56,9 @@ const addressArr = ['北京市', '天津市', '河北省', '山西省', '内蒙�
 export default {
     data() {
             return {
+                my_header:{
+                    name:'修改地址',
+                },
                 show: false,
                 obj: {
                     name: '',
@@ -93,6 +99,9 @@ export default {
                 }],
 
             }
+        },
+        components: {           
+            myHeader
         },
         methods: {
             back() {
@@ -180,6 +189,22 @@ export default {
             },
             confirm() {
                 let _self = this;
+
+                var checkArr = [];
+                  let checkName = validation.checkNull(_self.obj.name, '请输入姓名！');
+                  checkArr.push(checkName);
+                  let checkPhone = validation.checkPhone(_self.obj.tel);
+                  checkArr.push(checkPhone);
+                  let checkdetailAddr = validation.checkNull(_self.obj.detailAddr, '请输入详细信息！');
+                  checkArr.push(checkdetailAddr);
+
+                  for (var i = 0; i < checkArr.length; i++) {
+                            if (checkArr[i]) {
+                                common.$emit('message', checkArr[i]);
+                                return;
+                            }
+                         } 
+
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {

@@ -7,11 +7,13 @@
                      <p>{{param.name}}</p>
                 </div>
                 <p v-show="param.show" @click="jumpRevise">编辑</p>
+                <p v-show="param.t_show" @click="jumpRevise">完成</p>
      </div>
 </template>
 <script>
 
 import common from '../../common/common.js'
+
 export default {
     data() {
             return {
@@ -33,10 +35,20 @@ export default {
                 
             },
             jumpRevise(){
+                let _self = this;
+                //console.log(this.param.reviseRouter)
+                if(_self.param.t_show == true){
+                    
+                    _self.$emit('myUpData','genxin');
+                    history.go(-1);
+                }else if(_self.param.tt == true){
+                     common.$emit("informAccountFinish","refurbish");
+                     _self.$router.push(_self.param.reviseRouter);
+                }else{
+                    common.$emit("res-id", this.param.item);
+                    _self.$router.push(_self.param.reviseRouter);
+                }
                 
-                console.log(this.param.reviseRouter)
-                common.$emit("res-id", this.param.item);
-                this.$router.push(this.param.reviseRouter);
             }
         }
 }
@@ -78,5 +90,8 @@ export default {
     padding:16px 1.5rem;
     color:white;
     
+}
+.my-header .active{
+    color:#FA6705;
 }
 </style>

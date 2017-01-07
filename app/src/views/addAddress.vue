@@ -1,10 +1,11 @@
 <template>
     <div class="add_address">
-        <mt-header title="添加新地址">
+       <!--  <mt-header title="添加新地址">
             <router-link to="/addressManage" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+         <myHeader :param = "my_header" ></myHeader>
         <ul>
            <li>
               <p>收货人</p>
@@ -42,12 +43,15 @@
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
-
-
+import myHeader from '../components/tools/myHeader'
+import validation from '../validation/validation.js'
 
 export default {
     data() {
             return {
+                 my_header:{
+                    name:'增加地址',
+                },
                 show:false,
                 address:'请选择',
                 name:'',
@@ -97,6 +101,9 @@ export default {
 
                 
         },
+        components: {           
+            myHeader
+        },
     methods:{
           
         selectPlace(){
@@ -119,6 +126,21 @@ export default {
         },
         confirm(){
               let _self = this;
+              var checkArr = [];
+              let checkName = validation.checkNull(_self.obj.name, '请输入姓名！');
+              checkArr.push(checkName);
+              let checkPhone = validation.checkPhone(_self.obj.phone);
+              checkArr.push(checkPhone);
+              let checkdetailAddr = validation.checkNull(_self.obj.detailAddr, '请输入详细信息！');
+              checkArr.push(checkdetailAddr);
+
+              for (var i = 0; i < checkArr.length; i++) {
+                        if (checkArr[i]) {
+                            common.$emit('message', checkArr[i]);
+                            return;
+                        }
+                     }  
+
               common.$emit('show-load');
               let url=common.addSID(common.urlCommon+common.apiUrl.most);
               let body={biz_module:'userAddressService',biz_method:'addUserAddress',version:1,time:0,sign:'',biz_param:{
@@ -134,9 +156,14 @@ export default {
               body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
               httpService.addAddress(url,body,function(suc){
                 common.$emit('close-load');
-                console.log(suc);
+                if(suc.data.code == '1c01'){
+                    
+                }else{
+                    common.$emit('message', suc.data.msg);
+                }
+                //console.log(suc);
                 /*_self.obj.id = suc.data.biz_result.id*/
-                common.$emit('message', suc.data.msg);
+                
                 /*common.$emit('post-add-address',_self.obj);*/
                 common.$emit('informAddress','refurbish');
                 _self.$router.push('addressManage')

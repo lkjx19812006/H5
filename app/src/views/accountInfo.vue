@@ -1,12 +1,12 @@
 <template>
   <div class="account_overview">
-   <mt-header title="账户信息" class="header">
+  <!--  <mt-header title="账户信息" class="header">
    <router-link to="/" slot="left">
    <mt-button icon="back"></mt-button>
  </router-link>
  <mt-button  slot="right"><div v-on:click="upData('accountInfoFinish')">编辑</div></mt-button> 
-</mt-header>
-
+</mt-header> -->
+   <myHeader :param = "my_header" ></myHeader>
 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
       <div class="header_photo_box">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
@@ -64,11 +64,20 @@
 <script>
 import common from '../common/common.js'
 import validation from '../validation/validation.js'
+import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
 import headerPhoto from '../components/tools/headerPhoto'
 export default {
   data () {
     return {
+      my_header:{
+                    name:'账户信息',
+                    router:"home",
+                    show:true,
+                    tt:true,
+                    reviseRouter:'accountInfoFinish',
+                    word:'编辑'
+                },
       param:{
          url:'',
       },
@@ -128,11 +137,12 @@ export default {
            common.$on("informAccountinfo",function (item){
                 _self.getHttp();
            })
-  
+           
 
  },
  components: {
-            headerPhoto
+            headerPhoto,
+            myHeader
         },
  methods:{
       jumpPersonal(){
@@ -177,8 +187,8 @@ export default {
       },
       upData:function(router){
            /*common.$emit("post-my-info",this.url);*/
-           common.$emit("informAccountFinish","refurbish");
-           this.$router.push(router);
+           
+           
            
         
      }
