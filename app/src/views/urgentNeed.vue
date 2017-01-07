@@ -1,7 +1,23 @@
 <template>
+
+   <!--  <div class="urgent_need">
+
+        <div class="go-back" @click="jump('home')">
+                <img src="/static/images/go-back.png">
+        </div>
+
+        <div  class="title-name">
+             <p>紧急求购</p>
+        </div>
+        <div @click="jumpSearch">
+             <backSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" ></backSearch>
+        </div>
+        <sort  v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort> -->
+
     <div class="content urgent_need">
         <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
         <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
+
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -291,15 +307,15 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-/*.page-loadmore-listitem {
+.page-loadmore-listitem {
     height: 50px;
-    line-height: 50px;
+    
     border-bottom: solid 1px #eee;
     text-align: center;
     &:first-child {
         border-top: solid 1px #eee;
     }
-}*/
+}
 
 .page-loadmore-wrapper {
     margin-top: -1px;

@@ -1,12 +1,14 @@
 <template>
-    <div class="whole sample_confirm">
-        <mt-header fixed title="样品订单确认">
+    <div class="sample_confirm">
+        <!-- <mt-header fixed title="样品订单确认">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
-        </mt-header>
-        <div class="page-loadmore-wrapper">
-            <mt-loadmore>
+        </mt-header> -->
+        <myHeader :param = "myhead"></myHeader>
+        <mt-loadmore>
+        <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            
                 <div @click="jumpAddress">
                     <orderAddress :param="person"></orderAddress>
                 </div>
@@ -16,16 +18,19 @@
                         <orderTotal :order="param"></orderTotal>
                     </div>
                 </div>
-            </mt-loadmore>
-        </div>
+            
+        
+        </mt-loadmore>
         <div class="fix_bottom" v-on:click="confirm">
             提交订单
+        </div>
         </div>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import orderAddress from '../components/tools/orderAddress'
+import myHeader from '../components/tools/myHeader'
 import orderItem from '../components/tools/orderItem'
 import orderTotal from '../components/tools/orderTotal'
 import httpService from '../common/httpService.js'
@@ -33,6 +38,9 @@ export default {
     data() {
             return {
                 data: "",
+                myhead:{
+                     name:'样品确认单'
+                },
                 param: {
                     image: []
                 },
@@ -51,7 +59,8 @@ export default {
         components: {
             orderAddress,
             orderItem,
-            orderTotal
+            orderTotal,
+            myHeader
         },
         methods: {
             back() {
@@ -146,6 +155,9 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             }
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -174,14 +186,14 @@ export default {
     bottom: 0;
     width: 100%;
     left: 0;
-    height: 5rem;
+    height: 50px;
     color: #FFF;
     font-size: 1.7rem;
     background: #FA6705;
-    line-height: 5rem;
+    line-height: 50px;
 }
 
 .sample_confirm .page-loadmore-wrapper {
-    margin-bottom: 100px;
+   margin-bottom: 0px;
 }
 </style>

@@ -66,13 +66,15 @@ export default {
 .order_item {
     float: left;
     width: 100%;
+    position: relative;
 }
 
 .order_item img {
     width: 9rem;
     height: 8.5rem;
     position: absolute;
-    left: 10px;
+    left: 0px;
+    top:8px;
 }
 
 .order_item .item_right {

@@ -1,13 +1,14 @@
 <template>
 
-    <div class="market_quotation whole">
+    <div class="market_quotation">
 
-        <mt-header fixed title="市场行情">
+        <!-- <mt-header fixed title="市场行情">
 
             <router-link to="/home" slot="left">
                 <mt-button icon="back"></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "param" ></myHeader>
                 <div class="search" @click="jump">
                     <input type="text" placeholder="输入你想要的货物资源" disabled="true">
                     <img src="/static/images/search.png" class="search_image">
@@ -16,8 +17,8 @@
            
                 
                 <div class="good_list">
-                    <p class="good_list_header">*数据仅供参考！</p>
-                    <div class="good_list_content">
+                    <!-- <p class="good_list_header">*数据仅供参考！</p> -->
+        <div class="good_list_content">
                         <div class="list_content_header">
                             <p>品名</p>
                             <p>规格</p>
@@ -25,8 +26,9 @@
                             <p>价格</p>
                             <input type="button" value="跌涨(元)">
                         </div>
+               <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">              
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-           <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">    
+          
                         <ul class="first_ul">
                             <li v-for="(todo,index) in todos">
                                 <div class="second_level" v-on:click="firstLevel(index,todos)">
@@ -53,8 +55,8 @@
                                 </ul>
                             </li>
                         </ul>
-                    </div>
-                </div>
+             </div>
+        
                     <div slot="top" class="mint-loadmore-top">
                         <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
                         <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
@@ -64,15 +66,20 @@
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
             </mt-loadmore>
+            </div>
         </div>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
+import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                param:{
+                    name:'市场行情'
+                },
                 wrapperHeight: 0,
                 onOrOff: false,
                 todos: [],
@@ -90,6 +97,9 @@ export default {
                 
             }
         },
+        components: {
+            myHeader
+        },
         methods: {
             getHttp(back){
                     let _self = this;
@@ -103,10 +113,16 @@ export default {
                                     //console.log(suc);
                                     let data = suc.data.biz_result.list; 
                                     //console.log(data)               
-                                    for (var item in data) {
+                                    /*for (var item in data) {
                                         data[item].show = false;
+
                                     }
-                                    _self.todos = data;
+                                    _self.todos = data;*/
+                                    for(var i = 0; i < data.length; i++){
+                                        let item = data[i];
+                                        item.show = false;
+                                        _self.todos.push(item);
+                                    }
                                     if(back){
                                         back();
                                     }
@@ -175,7 +191,17 @@ export default {
 </script>
 <style scoped>
 
+.mint-loadmore-top span {
+    display: inline-block;
+    transition: .2s linear;
+    vertical-align: middle;
+}
 
+.mint-loadmore-bottom span {
+    display: inline-block;
+    transition: .2s linear;
+    vertical-align: middle;
+}
 .market_quotation {
    /* position: relative;*/
 }
@@ -214,6 +240,8 @@ export default {
 .market_quotation .good_list {
     width: 100%;
     position: relative;
+    padding: 0;
+    background: white;
 }
 
 .market_quotation .good_list .good_list_header {
@@ -224,8 +252,9 @@ export default {
 }
 
 .market_quotation .good_list .good_list_content {
-    margin-top: 1.7066rem;
+    /*margin-top: 1.7066rem;*/
     width: 100%;
+    background: white;
 }
 
 .market_quotation .good_list .good_list_content .first_ul {
@@ -237,6 +266,8 @@ export default {
     flex-direction: row;
     margin-bottom: 0.213rem;
     padding-right: 0.8rem;
+    padding-top:0.8rem;
+    
 }
 
 .market_quotation .list_content_header p {

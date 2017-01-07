@@ -1,5 +1,5 @@
 <template>
-    <div class="content need">
+    <div class="need">
         <div class="fixed">
             
             <div @click="jumpSearch">
@@ -12,21 +12,14 @@
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  @click="jumpDetail(todo.id)">
-                            <!-- <div class="flag"><img src="/static/icons/england.png"><span>{{todo.country}}</span></div> -->
+                            
                             <div class="center">
                                 <img src="/static/icons/england.png" class="flag">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
                                     <p>发布时间：{{todo.pubdate}}</p>
                                 </div>
-                                <!-- <div class="detail">
-                                    <p>规格：{{todo.spec}}</p>
-                                    <p>剩余：<span>{{todo.days}}</span>天</p>
-                                </div>
-                                <div class="detail">
-                                    <p>产地：{{todo.location}}</p>
-                                    <p>需求数量：{{todo.number}}{{todo.unit}}</p>
-                                </div> -->
+                                
                                 <div class="detail">
                                     <div>
                                         <p>规格</p>
@@ -376,13 +369,7 @@ export default {
     margin-top: 100px;
 }
 
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
-    float: left;
-    width: 100%;
-    min-height: 100px;
-    padding: 10px;
-    height: auto;
-}
+
 
 
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag{
@@ -432,31 +419,43 @@ export default {
     float: left;
     width: 100%;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
+   /* padding-bottom: 10px;*/
+    position: relative;
+    padding: 0 10px 1.066rem 10px;
 }
-
+/*.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag{
+    position: absolute;
+    top:0px;
+    right:0px;
+    width:1.7rem;
+    height:1.23rem;
+}*/
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center div {
     float: left;
 }
 
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title {
     width: 100%;
-    font-size: 1.3rem;
+    font-size: 1.365rem;
     color: #333;
-    line-height: 15px;
-    margin: 10px 0;
+    line-height: 1.365rem;
 }
 
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title p {
     float: right;
     font-size: 1rem;
     color: #999;
+    margin:1.2rem 2.559rem 0 0;
+
 }
 
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img {
-    max-height: 15px;
+    width:1.2rem;
+    margin-right: 5px;
 }
-
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title>div{
+    margin-top:1.06rem;
+}
 
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail{
     width:100%;

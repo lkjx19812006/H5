@@ -6,8 +6,9 @@
             </router-link>
         </mt-header> -->
         <myHeader :param = "myhead"></myHeader>
+         <mt-loadmore>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <mt-loadmore>
+           
                 <div @click="jumpAddress">
                     <orderAddress :param="person"></orderAddress>
                 </div>
@@ -167,6 +168,7 @@ export default {
 .order_confirm {
     float: left;
     width: 100%;
+    position: relative;
 
 }
 .order_confirm .page-loadmore-wrapper{
@@ -175,6 +177,7 @@ export default {
     padding-bottom: 10px;
     width: 100%;
     border:1px solid red;*/
+    margin-bottom: 0px;
 }
 .order_confirm .content {
     background: #fff;
@@ -182,24 +185,26 @@ export default {
     float: left;
     width: 100%;
     padding: 10px;
+
 }
 
 .order_confirm .content .total {
     margin-top: 1rem;
     float: left;
     width: 100%;
+    margin-bottom: 40px;
 }
 
 .order_confirm .fix_bottom {
-    /*position: absolute;
-    bottom: 10px;*/
+    position: absolute;
+    bottom: 0px;
     width: 100%;
     left: 0;
-    height: 5rem;
+    height: 50px;
     color: #FFF;
     font-size: 1.7rem;
     background: #FA6705;
-    line-height: 5rem;
+    line-height: 50px;
    
 }
 

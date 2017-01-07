@@ -1,12 +1,8 @@
 <template>
     <div class="need_release">
-        <!-- <mt-header fixed title="求购发布">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header> -->
+        
         <myHeader :param = "param"></myHeader>
-        <mt-loadmore>
+        <!-- <mt-loadmore> -->
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <druginformation :obj="obj"> </druginformation>
                 
@@ -40,7 +36,7 @@
                
            
         </div>
-        </mt-loadmore>
+        <!-- </mt-loadmore> -->
     </div>
 </template>
 <script>
@@ -159,7 +155,10 @@ export default {
 .need_release {
 
 }
-
+.need_release .page-loadmore-wrapper{
+    margin-bottom: 0px;
+    padding: 0px;
+}
 input[type="text"],
 input[type="submit"],
 input[type="reset"],
@@ -385,11 +384,12 @@ textarea {
 
 .need_release .confirm {
     width: 100%;
-    height: 4.267rem;
+    height: 50px;
     background: #FA6705;
     font-size: 1.536rem;
     color: white;
-    line-height: 4.267rem;
-    margin-top: 5rem;   
+    line-height: 50px;
+    margin-top: 50px;
+    float:left;
 }
 </style>

@@ -1,18 +1,20 @@
 <template>
 
-    <div class="drug_table whole">
-        <mt-header fixed title="药材百科">
+    <div class="drug_table">
+        <!-- <mt-header fixed title="药材百科">
             <router-link to="/home" slot="left">
                 <mt-button icon="back" @click="iosBack()"></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "param" ></myHeader>
         <div class="search" @click="jumpIosSearch()">
             <input type="text" placeholder="输入你想要的货物资源" v-model="keyword">
             <img src="/static/images/search.png" class="search_image">
         </div>
-        <div class="page-loadmore-wrapper" v-show="!keyword">
-
-                <div class="hot_drug">
+        <mt-loadmore>
+        <div class="page-loadmore-wrapper"   ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <div  v-show="!keyword">
+                 <div class="hot_drug">
                     <p>热门药材</p>
                 </div>
                 <div class="drug_show" >
@@ -31,9 +33,13 @@
                         <p v-for="(todo,index) in todos" @click="jumpDetail(todo.keyWord)">{{todo.keyWord}}</p>
                     </div>
                 </div>
+            </div>
+                
 
-        </div>
-        <div v-show="keyword">
+        
+         
+
+        <div v-show="keyword"  >
             <div class="search_result">
                 <ul class="page-loadmore-list">
                     <li v-for="todo in datas" class="page-loadmore-listitem list_content_item">
@@ -45,15 +51,22 @@
                 </ul>
             </div>
         </div>
+       </div>
+       </mt-loadmore> 
     </div>
 </template>
 <script>
 import common from '../common/common.js'
+import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
 export default {
 
     data() {
             return {
+                param:{
+                    name:'药材百科',
+                    router:'home'
+                },
                 keyword:'',
                 showHead: true,
                 todos: [],
@@ -72,6 +85,9 @@ export default {
              _self.hotKeySearch();
              _self.hotDrug();
             
+        },
+        components: {
+            myHeader
         },
         watch: {
             keyword: function(newValue, oldValue) {
@@ -167,6 +183,7 @@ export default {
             }
         },
         mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
             let _self = this;
             let type = 'ios';
             let ua = navigator.userAgent.toLowerCase();
@@ -229,7 +246,7 @@ export default {
     height: 60px;
     background: white;
     position: relative;
-    background: #F2F2F2;
+    background: white;
 }
 
 .drug_table .search input {
@@ -239,8 +256,8 @@ export default {
     border: 0;
     outline: none;
     padding-left: 5%;
-    background: #F1EFEF;
-    background: white;
+    
+    background: #F2F2F2;
     margin-top: 15px;
 }
 
@@ -260,6 +277,7 @@ export default {
 .drug_table .hot_search_drug {
     width: 100%;
     height: 4rem;
+
 }
 
 .drug_table .hot_drug p,
@@ -323,6 +341,8 @@ export default {
 .drug_table .hot_drugs {
     width: 100%;
     padding: 1.27995rem 0 1.27995rem 0;
+    background: white;
+    float:left;
 }
 
 .drug_table .hot_drugs p {
