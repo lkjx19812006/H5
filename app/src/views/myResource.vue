@@ -1,17 +1,16 @@
 <template>
     <div class="my_resource">
-      
-        <myHeader :param = "param"></myHeader>
+        <myHeader :param="param"></myHeader>
         <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
         <div class="bg_white">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item"  v-on:click.stop="jumpDetail(todo.id)">
+                        <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" v-on:click.stop="jumpDetail(todo.id)">
                             <div class="list_header">
                                 <div>
-                                    <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
-                                    <p class="audit_state">{{todo.onSell}}</p>
+                                    <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
+                                    <p class="audit_state">{{todo.onSell | shellStatus}}</p>
                                 </div>
                             </div>
                             <img :src="todo.image[0]" class="list_images">
@@ -49,13 +48,14 @@ import myHeader from '../components/tools/myHeader'
 import myPurchaseSort from '../components/tools/myPurchaseSort'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import filters from '../filters/filters'
 export default {
     data() {
             return {
                 sortRouter: 'home',
-                param:{
-                    name:'我的资源',
-                    router:"home"
+                param: {
+                    name: '我的资源',
+                    router: "home"
                 },
                 sortArr: [{
                     name: '发布日期',
@@ -192,9 +192,15 @@ export default {
             myPurchaseSort,
             myHeader
         },
+        filters: (filters, {
+           
+        }),
         methods: {
             getHttp(back) {
                 let _self = this;
+                if (_self.httpPraram.page == 1) {
+                    _self.allLoaded = false;
+                }
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -219,33 +225,35 @@ export default {
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
                     common.$emit('message', suc.data.msg);
-                    
-                    let result = suc.data.biz_result.list;             
-                    
-                    common.$emit("translatePubdate",result,_self.todos);
-
-                    if(back){
+                    let result = suc.data.biz_result.list;
+                    if (result.length < _self.httpPraram.pageSize) {
+                        _self.allLoaded = true;
+                    }
+                    for (let i = 0; i < result.length; i++) {
+                        _self.todos.push(result[i]);
+                    }
+                    if (back) {
                         back();
                     }
-                    }, function(err) {
-                        common.$emit('close-load');
-                        common.$emit('message', err.data.msg);
-                        if(back){
-                            back();
-                        }
-                    })
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                    if (back) {
+                        back();
+                    }
+                })
             },
             getId(param) {
-                  let _self = this;
-                  _self.httpPraram.page = 1;
-                  _self.todos.splice(0, _self.todos.length);
-                  _self.httpPraram[param.key] = param[param.key];
-                  _self.getHttp();
+                let _self = this;
+                _self.httpPraram.page = 1;
+                _self.todos.splice(0, _self.todos.length);
+                _self.httpPraram[param.key] = param[param.key];
+                _self.getHttp();
             },
-            jumpDetail(id){
-                 /*this.$router.push('resourceDetail/' + id);*/
-                 common.$emit("inform-goodDetail",id);
-                 this.$router.push("goodDetail/" + id);
+            jumpDetail(id) {
+                /*this.$router.push('resourceDetail/' + id);*/
+                common.$emit("inform-goodDetail", id);
+                this.$router.push("goodDetail/" + id);
             },
             jump: function(id, index) {
                 this.index = index;
@@ -253,14 +261,14 @@ export default {
                 common.$emit('setParam', 'resourceId', id);
                 this.$router.push('reviseResource/' + id);
             },
-            jumpBack(router){
-                 this.$router.push(router)
+            jumpBack(router) {
+                this.$router.push(router)
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
             loadBottom(id) {
-               let _self = this;
+                let _self = this;
                 setTimeout(() => {
                     if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
                         this.allLoaded = true;
@@ -291,20 +299,20 @@ export default {
             let _self = this;
             this.getHttp();
             //修改成功通知刷新
-            common.$on('reviseResource', function(obj) { 
-                _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);             
-                _self.getHttp();            
-            })
-            //发布成功通知刷新
+            common.$on('reviseResource', function(obj) {
+                    _self.httpPraram.page = 1;
+                    _self.todos.splice(0, _self.todos.length);
+                    _self.getHttp();
+                })
+                //发布成功通知刷新
             common.$on("informMyRes", function(id) {
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);       
+                _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
         }
 }
 </script>
@@ -349,8 +357,6 @@ export default {
 
 .low_price {}
 
-
-
 .my_resource .title {
     font-size: 1.7rem;
 }
@@ -361,17 +367,16 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
-    
     min-height: 12rem;
     border: 0;
-    
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li {    
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li {
     background: white;
-    margin:1rem 1rem 0 1rem;
+    margin: 1rem 1rem 0 1rem;
     border-radius: 4px;
 }
+
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
     height: 6.5rem;
     width: 19.375%;
@@ -410,13 +415,12 @@ export default {
     text-align: left;
     line-height: 20px;
     font-size: 1.3rem;
-    
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
     /*max-height: 1.6rem;*/
-    width:1.5rem;
+    width: 1.5rem;
     margin-right: 0.5rem;
 }
 
@@ -448,7 +452,6 @@ export default {
     min-height: 6.5rem;
     margin: 0;
     right: 1.85rem;
-   
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
@@ -466,7 +469,7 @@ export default {
     bottom: 0px;
     background: white;
     font-size: 10px;
-    min-width: 1.5rem;
+    min-width: 50px;
     right: 0px;
     max-height: 4rem;
     padding: 0 5px;

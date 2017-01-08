@@ -31,7 +31,7 @@
                </div>
                <div class="info_top_bottom">
                    <p class="drug_money">{{todo.price}}<span>元/kg</span></p>
-                   <p>数量：<span>{{todo.number}}</span>{{todo.unit}}</p>
+                   <p>数量：<span>{{todo.number}}</span></p>
                </div>  
           </div>
           <div class="drug_info_bottom">

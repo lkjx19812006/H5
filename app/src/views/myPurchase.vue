@@ -1,34 +1,33 @@
 <template>
     <div class="content my_purchase">
-         <myHeader :param = "param"></myHeader>
+        <myHeader :param="param"></myHeader>
         <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
         <div class="bg_white">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  @click="jump(router,todo.id)">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jump(router,todo.id)">
                             <div class="header_list">
-                                <p class="left_p">发布日期：{{todo.pubdate}}</p>
-                                <p class="right_p">{{todo.onSell}}</p>
+                                <p class="left_p">发布日期：{{todo.pubdate | timeFormat}}</p>
+                                <p class="right_p">{{todo.onSell | shellStatus}}</p>
                             </div>
                             <div class="first_line">
                                 <p class="left">{{todo.breedName}}</p>
                                 <p class="right"><span>{{todo.offer}}</span>人已报价</p>
                             </div>
-                           
                             <div class="detail">
-                                    <div>
-                                        <p>规格</p>
-                                        <p>产地</p>
-                                        <p>剩余</p>
-                                        <p>需求数量</p>
-                                    </div>
-                                    <div class="last">
-                                        <p>{{todo.spec}}</p>
-                                        <p>{{todo.location}}</p>
-                                        <p>{{todo.days}}<span>天</span></p>
-                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
-                                    </div>
+                                <div>
+                                    <p>规格</p>
+                                    <p>产地</p>
+                                    <p>剩余</p>
+                                    <p>需求数量</p>
+                                </div>
+                                <div class="last">
+                                    <p>{{todo.spec}}</p>
+                                    <p>{{todo.location}}</p>
+                                    <p>{{todo.days}}<span>天</span></p>
+                                    <p>{{todo.number}}<span>{{todo.unit}}</span></p>
+                                </div>
                             </div>
                             <div class="button">
                                 <p class="first_button" v-on:click.stop="jump(other_router,todo.id)">编辑</p>
@@ -55,13 +54,14 @@ import searchInput from '../components/tools/inputSearch'
 import myHeader from '../components/tools/myHeader'
 import myPurchaseSort from '../components/tools/myPurchaseSort'
 import httpService from '../common/httpService.js'
+import filters from '../filters/filters'
 export default {
     data() {
             return {
                 sortRouter: 'home',
-                param:{
-                    name:'我的求购',
-                    router:'home'
+                param: {
+                    name: '我的求购',
+                    router: 'home'
                 },
                 sortArr: [{
                     name: '发布日期',
@@ -73,13 +73,13 @@ export default {
                         name: '由新到旧',
                         asc: 'low',
                         show: false,
-                        pubdate: 1,
+                        pubdate: 2,
                         key: 'pubdate'
                     }, {
                         name: '由旧到新',
                         asc: 'top',
                         show: false,
-                        pubdate: 2,
+                        pubdate: 1,
                         key: 'pubdate'
                     }, {
                         name: '全部',
@@ -198,36 +198,51 @@ export default {
             myPurchaseSort,
             myHeader
         },
+        filters: (filters, {
+
+        }),
         methods: {
             getHttp(back) {
                 let _self = this;
-                 common.$emit('show-load');
-                  let url=common.addSID(common.urlCommon+common.apiUrl.most);
-                  let body={biz_module:'intentionService',biz_method:'myBegIntentionList',version:1,time:0,sign:'',biz_param:{
-                        sort:{
-                            "offer":_self.httpPraram.offer,
-                            "pubdate":_self.httpPraram.pubdate,
-                            "duedate":_self.httpPraram.duedate
+                if (_self.httpPraram.page == 1) {
+                    _self.allLoaded = false;
+                }
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'myBegIntentionList',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+                        sort: {
+                            "offer": _self.httpPraram.offer,
+                            "pubdate": _self.httpPraram.pubdate,
+                            "duedate": _self.httpPraram.duedate
                         },
-                        onSell:_self.httpPraram.testing,
-                        pn:_self.httpPraram.page,
-                        pSize:_self.httpPraram.pageSize         
-                  }};
-                  body.time=Date.parse(new Date())+parseInt(common.difTime);
-                  body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-                  httpService.myResource(url,body,function(suc){
+                        onSell: _self.httpPraram.testing,
+                        pn: _self.httpPraram.page,
+                        pSize: _self.httpPraram.pageSize
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
-                    
-                    let listArr = suc.data.biz_result.list;
-                   
-                    common.$emit("translatePubdate",listArr,_self.todos);
-                    
-                    if(back){
+                    let result = suc.data.biz_result.list;
+                    if (result.length < _self.httpPraram.pageSize) {
+                        _self.allLoaded = true;
+                    }
+                    for (let i = 0; i < result.length; i++) {
+                        _self.todos.push(result[i]);
+                    }
+                    if (back) {
                         back();
                     }
                 }, function(err) {
                     common.$emit('close-load');
-                    if(back){
+                    if (back) {
                         back();
                     }
                 })
@@ -239,13 +254,16 @@ export default {
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp()
             },
-            jump:function(router,id){
-                common.$emit("purchase-id",id);
-                common.$emit("myPurToPurDetail",id);
+            jump: function(router, id) {
+                common.$emit("purchase-id", id);
+                common.$emit("myPurToPurDetail", id);
                 this.$router.push(router + '/' + id);
             },
-            jumpApp(){
-                 //去下载
+            loadApp(){
+                window.location.href='http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
+            },
+            jumpApp() {
+               common.$emit("confirm", {message:'查看报价请下载App',title:'提示',ensure:this.loadApp});
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -280,29 +298,21 @@ export default {
             }
         },
         created() {
-           /* let _self = this;
-            this.getHttp(0,0,0,0);
-            common.$on("informMyPurchase",function (id){
-                 _self.getHttp(0,0,0,0);
-            })
-*/
             let _self = this;
             _self.getHttp();
-            //发布成功通知刷新
-            common.$on('informMyPurchase', function (item) {
+            common.$on('informMyPurchase', function(item) {
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             });
-            //修改成功通知刷新
-            common.$on("revisePurtoPur",function (item){
+            common.$on("revisePurtoPur", function(item) {
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
         }
 
 }
@@ -349,23 +359,18 @@ export default {
 
 .low_price {}
 
-.my_purchase .bg_white {
-    
-}
+.my_purchase .bg_white {}
 
 .my_purchase .bg_white .page-loadmore-wrapper .mint-loadmore {
     background: #F5F5F5;
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
-    
     min-height: 15.8rem;
     border: 0;
-   
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li {
-    
     background: white;
     margin: 1rem 1rem 0 1rem;
     border-radius: 4px;
@@ -375,27 +380,24 @@ export default {
     min-height: 3rem;
     text-align: left;
     border-bottom: 1px solid #E4E4E4;
-    padding:1rem 0.85rem;
-
+    padding: 1rem 0.85rem;
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .left_p {
-    float:left;
+    float: left;
     font-size: 1rem;
     color: #999999;
-    
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .header_list .right_p {
     float: right;
     font-size: 1rem;
-    color: #FA6705; 
+    color: #FA6705;
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line {
     padding: 1rem 0.85rem;
     min-height: 3rem;
-   
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .left {
@@ -403,7 +405,6 @@ export default {
     text-align: left;
     font-size: 1.4rem;
     color: #333333;
-     
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .first_line .right {
@@ -418,11 +419,10 @@ export default {
     color: #FA6705;
 }
 
-
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button {
-    float: right;  
-    padding:1rem 0;
-    text-align: center;  
+    float: right;
+    padding: 1rem 0;
+    text-align: center;
     font-size: 1.1rem;
     margin-right: 0.85rem;
 }
@@ -446,31 +446,28 @@ export default {
     border-radius: 3px;
 }
 
-
-
-
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail{
-    width:100%;  
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail {
+    width: 100%;
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     border-bottom: 1px solid #f1f1f1;
     padding-bottom: 1rem;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail div{
-    flex:1;
-    display:flex;
-    flex-direction:row;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail div {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
     margin-top: 1rem;
-    
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail .last p{
-    color:#666666;
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail .last p {
+    color: #666666;
 }
-.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail div p{
-    flex:1;
-    
-    
+
+.my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail div p {
+    flex: 1;
     font-size: 1.109rem;
-    color:#424242;
+    color: #424242;
 }
 </style>
