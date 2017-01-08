@@ -7,6 +7,7 @@
  <mt-button  slot="right"><div v-on:click="upData('accountInfoFinish')">编辑</div></mt-button> 
 </mt-header> -->
    <myHeader :param = "my_header" ></myHeader>
+   <mt-loadmore>
 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
       <div class="header_photo_box">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
@@ -57,7 +58,7 @@
 
 </div>
 
-
+ </mt-loadmore>
 </div>
 </template>
 

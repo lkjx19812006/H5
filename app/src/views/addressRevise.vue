@@ -6,6 +6,7 @@
             </router-link>
         </mt-header> -->
          <myHeader :param = "my_header" ></myHeader>
+         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
         <ul>
             <li>
                 <p>收货人</p>
@@ -24,7 +25,7 @@
                     <!-- <input type="text" v-model="obj.province" />
                   <input type="text" v-model="obj.city" />
                   <input type="text" v-model="obj.area" /> -->
-                    {{ obj.addressProvince }}{{ obj.addressCity }},{{obj.addressDistrict}}
+                    {{ obj.addressProvince }},{{ obj.addressCity }},{{obj.addressDistrict}}
                 </p>
                 <img src="/static/images/right-arrow.png">
             </li>
@@ -41,6 +42,7 @@
             <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5" class="select-box"></mt-picker>
         </div>
         <div class="confirm" v-on:click="confirm">保存</div>
+         </div>
     </div>
 </template>
 <script>
@@ -249,6 +251,10 @@ export default {
 
             }
         },
+        mounted() {
+
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        },
         created() {
             let _self = this;
             var id = _self.$route.params.addreId;
@@ -262,6 +268,9 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.address_revise .page-loadmore-wrapper{
+  margin-bottom: 0px;
+}
 .address_revise ul {
     padding: 0 1.5rem;
     background: white;
@@ -327,11 +336,11 @@ export default {
 
 .address_revise .confirm {
     width: 100%;
-    height: 5rem;
+    height: 50px;
     background: #FA6705;
     color: white;
     text-align: center;
-    line-height: 5rem;
+    line-height: 50px;
     font-size: 1.7rem;
     position: fixed;
     bottom: 0;

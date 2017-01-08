@@ -7,6 +7,7 @@
     <mt-button  slot="right" ><div id="right" v-on:click="myUpData">完成</div></mt-button> 
    </mt-header> -->
    <myHeader :param = "my_header"  v-on:myUpData = "upData"></myHeader>
+    <mt-loadmore>
    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
    <div class="header_photo_box">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
@@ -120,7 +121,7 @@
         </ul>
    </div>
   </div>
-               
+      </mt-loadmore>         
                     <!-- <mt-datetime-picker
                       v-model="pickerVisible"
                       

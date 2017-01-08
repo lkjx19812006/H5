@@ -2,7 +2,7 @@
     <div class="content release_good_information">
         <div class="good_information">
             <div class="title_name">
-                 <p class="good_infor_header">求购货物信息</p>
+                 <p class="good_infor_header">货物基本信息</p>
             </div>
             <div class="good_name">
                 <p>产品：</p>
@@ -46,7 +46,6 @@
                 </div>
             </div>
         </div>
-
         <p class="good_delivery_header">货物交收信息</p>
         <div class="good_information">
             <div class="good_number">

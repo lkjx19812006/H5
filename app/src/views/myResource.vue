@@ -10,7 +10,7 @@
                         <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item"  v-on:click.stop="jumpDetail(todo.id)">
                             <div class="list_header">
                                 <div>
-                                    <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
+                                    <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
                                     <p class="audit_state">{{todo.onSell}}</p>
                                 </div>
                             </div>
@@ -49,6 +49,7 @@ import myHeader from '../components/tools/myHeader'
 import myPurchaseSort from '../components/tools/myPurchaseSort'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import filters from '../filters/filters'
 export default {
     data() {
             return {
@@ -218,11 +219,26 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
-                    common.$emit('message', suc.data.msg);
+                    
                     
                     let result = suc.data.biz_result.list;             
-                    
-                    common.$emit("translatePubdate",result,_self.todos);
+                    if(suc.data.code == '1c01'){
+                        for(var i = 0; i < result.length; i++){
+                            let onSell = result[i].onSell;
+                            if (onSell == 1) {
+                                onSell = '待审核'
+                            } else if (onSell == 2) {
+                                onSell = '正在匹配买家'
+                            } else {
+                                onSell = ''
+                            }
+                            result[i].onSell = onSell;
+                            _self.todos.push(result[i]);
+                        }
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    /*common.$emit("translatePubdate",result,_self.todos);*/
 
                     if(back){
                         back();

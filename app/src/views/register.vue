@@ -1,10 +1,11 @@
 <template>
     <div class="register">
-        <mt-header title="注册">
+        <!-- <mt-header title="注册">
             <router-link to="/login" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "myHeader"></myHeader>
         <form action="#" method="post" name="personalForm" id="personalForm">
             <ul class="fill_in">
                <li>
@@ -28,12 +29,15 @@
 </template>
 <script>
 import common from '../common/common.js'
+import myHeader from '../components/tools/myHeader'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                
+                myHeader:{
+                    name:'注册'
+                },
                 code:'获取验证码',
                 buttonDisabled: false,
                 param: {
@@ -46,6 +50,9 @@ export default {
 
             }
         },
+        components: {
+            myHeader
+        },
         methods:{
                  confirm:function(){
                     
@@ -55,7 +62,7 @@ export default {
                         common.$emit('message',checkPhone);
                     }else{
                         _self.buttonDisabled = true;
-                        let wait = 5;
+                        let wait = 60;
                         let time = setInterval(function() {
                         wait--;
                         _self.code = wait;
@@ -66,7 +73,7 @@ export default {
                         }
                       }, 1000);
                     }
-
+                        common.$emit('show-load');
                         httpService.register(common.urlCommon + common.apiUrl.most, {
                         biz_module:'userSmsService',
                         biz_method:'getVervifyCode',
@@ -75,12 +82,17 @@ export default {
                                 mobile: _self.param.phone  
                             }
                         }, function(response) {
+                            common.$emit('close-load');
+                            if(response.data.code == '1c01'){
+
+                            }else{
+                              common.$emit('message', response.data.msg);
+                            }
                             
-                            common.$emit('message', response.data.msg);
 
 
                         }, function(err) {
-                            
+                            common.$emit('close-load');
                             common.$emit('message', err.data.msg);
                         })
 

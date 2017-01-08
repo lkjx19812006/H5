@@ -1,42 +1,53 @@
 <template>
     <div class="details_page">
-        <mt-header title="详情">
+        <!-- <mt-header title="详情">
             <router-link to="/home" slot="left">
                 <mt-button icon="back" ></mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <myHeader :param = "myHeader"></myHeader>
+        <mt-loadmore>
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+              <ul class="info_list" >
+                 <li  v-for="(todo,index) in todos" v-if="index == 0" class="header_phone">
+                    <div><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
+                    
+                    <p class="name_content">{{todo.content}}</p>
+                 </li>
 
-        <ul class="info_list">
-           <li  v-for="(todo,index) in todos" v-if="index == 0" class="header_phone">
-              <div><imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload></div>
-              
-              <p class="name_content">{{todo.content}}</p>
-           </li>
+                 <li  v-for="(todo,index) in todos" v-if="index > 0">
+                    <img :src="todo.img_src">
+                    <p class="name">{{todo.name}}</p>
+                    <p class="name_content">{{todo.content}}</p>
+                 </li>
 
-           <li  v-for="(todo,index) in todos" v-if="index > 0">
-              <img :src="todo.img_src">
-              <p class="name">{{todo.name}}</p>
-              <p class="name_content">{{todo.content}}</p>
-           </li>
+              </ul>
 
-        </ul>
+              <div class="advantage" v-for="item in data">
+                  <img :src="item.img_src">
+                  <p>{{item.name}}</p>
+                  <div>
+                     {{item.content}}
+                  </div>
+              </div>
 
-        <div class="advantage" v-for="item in data">
-            <img :src="item.img_src">
-            <p>{{item.name}}</p>
-            <div>
-               {{item.content}}
-            </div>
         </div>
+         </mt-loadmore>
+     
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 import imageUpload from '../components/tools/imageUpload'
 export default {
     data() {
             return {
+                myHeader:{
+                    name:'详情'
+                    
+                },
                 param: {
                     name: 'intention',
                     index:0
@@ -83,7 +94,8 @@ export default {
             }
         },
         components: {
-            imageUpload
+            imageUpload,
+            myHeader
         },
         created(){
                   let _self = this;
@@ -109,6 +121,9 @@ export default {
                     common.$emit('close-load');
                   })
 
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
        
         

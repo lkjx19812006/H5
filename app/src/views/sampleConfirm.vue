@@ -53,8 +53,12 @@ export default {
             _self.getAddress();
             _self.gethttp(id);
             common.$on('sampleConfirm', function(item) {
+                _self.getAddress();
                 _self.gethttp(item);
             })
+            common.$on('orderConfirm', function(item) {
+                _self.gethttp(item);
+            });
         },
         components: {
             orderAddress,
@@ -88,6 +92,7 @@ export default {
                     if (suc.data.code == "1c01") {
                         _self.id = result.id;
                         _self.person = result;
+
                         common.$emit('message', suc.data.msg);
                     } else {
                         common.$emit('message', suc.data.msg);

@@ -6,33 +6,34 @@
             </router-link>
         </mt-header> -->
         <myHeader :param = "param"></myHeader>
-        <mt-loadmore> 
-        <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-           
+        
+        <div class="page-loadmore-wrapper"  >
+            
                 <div class="center">
                     <div class="title">
-                        <img src="/static/icons/impatient.png">
+                        <!-- <img src="/static/icons/impatient.png"> -->
                         <p>{{obj.breedName}}</p>
                     </div>
-                    <div class="detail ">
+                    <div class="detail">
                         <p>规格：<span>{{obj.spec}}</span></p>
-                        <p class="right">发布时间：<span>{{obj.pubdate}}</span></p>
+                        <p class="right">发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
                     </div>
                     <div class="detail">
                         <p>产地：<span>{{obj.location}}</span></p>
-                        <p class="right">剩余：<span>{{obj.days}}天</span></p>
+                        <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}天</span></p>
                     </div class="detail">
                     <div class="detail">
                         <p>需求数量：<span>{{obj.number}}{{obj.unit}}</span></p>
                     </div>
-                    <div class="detail">
-                        <p>备注：<span>{{obj.description}}</span></p>
-                    </div>
+                    
                     <div class="detail">
                         <p>已报价：<span class="orange_font">{{obj.offer}}</span>人</p>
                     </div>
                     <div class="detail">
                         <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
+                    </div>
+                    <div class="detail">
+                        <p>备注：<span>{{obj.description}}</span></p>
                     </div>
                 </div>
          
@@ -44,13 +45,14 @@
         </div>
         
     </div>  
-    </mt-loadmore> 
+   
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
+import filters from '../filters/filters'
 import telAndAttention from '../components/tools/telAndAttention'
 export default {
     data() {
@@ -87,10 +89,14 @@ export default {
                 }
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
-                    common.$emit('message', suc.data.msg);
-                    let result = suc.data.biz_result;
                     
-                    var duedate = result.duedate;
+                    let result = suc.data.biz_result;
+                    if(suc.data.code == '1c01'){
+                        _self.obj = result;
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                   /* var duedate = result.duedate;
                     var pubdate = result.pubdate;
                     if(duedate != '' && pubdate != ''){
                         duedate = duedate.replace(/-/g, '/');
@@ -103,9 +109,9 @@ export default {
                     }else{
                         result.days = '';
                     }                       
-                    if(pubdate != '')result.pubdate = result.pubdate.substring(0, 10);
+                    if(pubdate != '')result.pubdate = result.pubdate.substring(0, 10);*/
                     
-                    _self.obj = result;
+                    
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
@@ -129,10 +135,8 @@ export default {
             common.$on('indexToNeeddetail', function(item) {
                 _self.getHttp(item);
             });
-        },
-        mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
+       
 
 }
 </script>
@@ -182,7 +186,7 @@ export default {
 
 .need_detail .center .title p {
     float: left;
-    margin-left: 10px;
+   /* margin-left: 10px;*/
     font-size: 1.8rem;
     line-height: 1.7rem;
     color: #333;

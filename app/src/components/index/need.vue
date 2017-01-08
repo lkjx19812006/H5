@@ -16,7 +16,7 @@
                                 <img src="/static/icons/england.png" class="flag">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
-                                    <p>发布时间：{{todo.pubdate}}</p>
+                                    <p>发布时间：{{todo.pubdate | timeFormat}}</p>
                                 </div>
                                 
                                 <div class="detail">
@@ -29,7 +29,7 @@
                                     <div class="last">
                                         <p>{{todo.spec}}</p>
                                         <p>{{todo.location}}</p>
-                                        <p>{{todo.days}}<span>天</span></p>
+                                        <p>{{todo.duedate | timeDays(todo.pubdate)}}<span>天</span></p>
                                         <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
                                     </div>
                                 </div>
@@ -58,6 +58,7 @@ import common from '../../common/common.js'
 import longSearch from '../../components/tools/longSearch'
 import sort from '../../components/tools/sort'
 import httpService from '../../common/httpService.js'
+import filters from '../../filters/filters'
 export default {
     data() {
             return {
@@ -170,6 +171,7 @@ export default {
         methods: {
             getHttp(back) {
                 let _self = this;
+                common.$emit('show-load');
                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'intentionService',
                     biz_method: 'queryBegBuyList',
@@ -185,14 +187,23 @@ export default {
                         pSize: _self.httpPraram.pageSize
                     }
                 },  function(suc) {
-                    common.$emit('message', suc.data.msg);
                     let result = suc.data.biz_result.list;
-                    common.$emit('translateDate',result,_self.todos);
-
+                    common.$emit('close-load');
+                    if(suc.data.code == '1c01'){
+                        /*common.$emit('translateDate',result,_self.todos);*/
+                         for(var i = 0; i < result.length; i++){
+                            _self.todos.push(result[i]);
+                        }
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
+                 
                     if (back) {
                         back();
                     }
                 }, function(err) {
+                    common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                     if (back) {
                         back();

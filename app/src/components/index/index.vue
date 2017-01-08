@@ -9,9 +9,10 @@
                 </div>
             </router-link>
         </mt-header>
+        <mt-loadmore>
         <div class="whole">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore>
+                
                     <div class="content">
                         <div class="swipe_height">
                             <mt-swipe :auto="4000" :prevent="true">
@@ -163,9 +164,10 @@
                             </div>
                         </div>
                     </div>
-                </mt-loadmore>
+                
             </div>
         </div>
+        </mt-loadmore>
     </div>
 </template>
 <script>

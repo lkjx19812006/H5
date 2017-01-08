@@ -2,7 +2,7 @@
     <div class="address_manage">
        
         <myHeader :param = "my_header" ></myHeader>
-        <mt-loadmore>
+       
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
         <ul>
             <li v-for="(todo,index) in todos" v-show="todo.show">
@@ -39,9 +39,10 @@
                 </div>
             </li>
         </ul>
-        <div class="add_address" v-on:click="addAddress">添加新地址</div>
+        
        </div>
-        </mt-loadmore>
+       <div class="add_address" v-on:click="addAddress">添加新地址</div>
+       
     </div>
 </template>
 <script>
@@ -253,6 +254,7 @@ export default {
     height: 1.2rem;
     line-height: 1.2rem;
     margin-top: -0.1rem;
+
 }
 
 .address_manage ul li .address_top .address {
@@ -316,7 +318,7 @@ export default {
     font-size: 1.7rem;
     color: white;
     line-height: 50px;
-    position: fixed;
+    position: absolute;
     bottom: 0;
 }
 </style>

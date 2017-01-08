@@ -1,27 +1,17 @@
 <template>
   <div class="company_authentication">
 
-                <!-- <mt-header title="企业认证" fixed>
-                    <router-link to="/home" slot="left">
-                        <mt-button icon="back"></mt-button>
-                    </router-link>
-                </mt-header> -->  
+                
                <div class="box">
                    <myHeader :param = "headerName"></myHeader>  
                    <div class="select"><myTab :param = "myShow" ></myTab></div>
                </div> 
                 
-                <!-- <div class="select_box" id="select_box">
-                  <mt-navbar v-model="selected" >
-                    <mt-tab-item id="1" class="word">传统三证</mt-tab-item>
-                    <mt-tab-item id="2" class="word">三证合一</mt-tab-item>
-                  </mt-navbar>
-                </div> -->   
+               
      <mt-loadmore>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">  
           <div class="content">
-               <!-- <mt-tab-container v-model="selected">
-                  <mt-tab-container-item id="1"> -->
+               
                     <div class="first_item" v-show="myShow.show">
                         <div v-for="(todo,index) in todos" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                            <p class="title">{{todo.title}}</p>
@@ -31,8 +21,7 @@
                            <p class="point">{{todo.point}}</p>
                         </div>                       
                    </div>
-                 <!--  </mt-tab-container-item>
-                  <mt-tab-container-item id="2"> -->
+               
                     <div class="second_item" v-show="!myShow.show">
                         <div v-for="(todo,index) in datas" v-bind:class="{ maxbox: index%2==0, 'otherbox': index%2==1 }">
                            <p class="title">{{todo.title}}</p>
@@ -43,8 +32,7 @@
                         </div>
                          
                     </div>
-                 <!--  </mt-tab-container-item>
-                </mt-tab-container> -->
+                
           </div>  
                     
            <div class="common_problem">

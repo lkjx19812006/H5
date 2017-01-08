@@ -11,13 +11,13 @@
 
                 <releaseGrugInformation :obj="obj"></releaseGrugInformation>
                 
-                <div class="title_name">
-                   <p class="good_photo_header">上传货物图片</p>
-                </div> 
+                    <div class="title_name">
+                       <p class="good_photo_header">上传货物图片</p>
+                    </div> 
                     <div class="good_information">
                         
                         <div class="upload_image" v-for="item in imageArr">
-                            <imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload>
+                            <div><imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload></div>
                             <p class="img-name">{{item.title}}</p>
                         </div>
                     </div>
@@ -452,7 +452,10 @@ textarea {
     float: left;
     margin: 1rem 2% 0 0;
 }
-
+.supply_release .good_information .upload_image>div{
+    height:5rem;
+    overflow: hidden;
+}
 .supply_release .good_information .upload_image .img-name {
     font-size: 1rem;
     color: #333333;

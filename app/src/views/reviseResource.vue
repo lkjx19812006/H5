@@ -15,7 +15,7 @@
         <div class="good_information">
               
             <div class="upload_image" v-for="item in imgageArr">
-                <imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload>
+                <div><imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload></div>
             </div>
         </div>
         <div class="remarks">
@@ -385,7 +385,10 @@ textarea {
     float: left;
     margin: 1rem 2% 0 0;
 }
-
+.revise_resource .good_information .upload_image>div{
+    height:5rem;
+    overflow: hidden;
+}
 .revise_resource .good_name,
 .good_spec,
 .good_place,

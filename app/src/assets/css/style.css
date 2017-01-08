@@ -322,7 +322,7 @@ a {
     overflow: scroll;
     width: 100%;
     overflow-y: visible;
-   margin-bottom: -6px;
+    margin-bottom: -6px;
 }
 
 .page-wrap{

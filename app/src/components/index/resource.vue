@@ -18,7 +18,7 @@
                                     <div><img src="/static/images/bao.png"><img src="/static/images/zheng.png">{{todo.breedName}}</div>
                                     <p class="spec">规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
-                                    <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
+                                    <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}元/kg</p>
@@ -45,6 +45,7 @@ import common from '../../common/common.js'
 import longSearch from '../../components/tools/longSearch'
 import sort from '../../components/tools/sort'
 import httpService from '../../common/httpService.js'
+import filters from '../../filters/filters'
 export default {
     data() {
             return {
@@ -156,6 +157,7 @@ export default {
         methods: {
             getHttp(back) {
                 let _self = this;
+                common.$emit('show-load');
                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'intentionService',
                     biz_method: 'querySupplyList',
@@ -171,16 +173,23 @@ export default {
                         location: _self.httpPraram.location
                     }
                 }, function(suc) {
-                    common.$emit('message', suc.data.msg);
+                    common.$emit('close-load');
+                    
                     let result = suc.data.biz_result.list;
-                    /*for (var i = 0; i < result.length; i++) {
-                        _self.todos.push(result[i]);
-                    }*/
-                    common.$emit('translateDate',result,_self.todos);
+                    if(suc.data.code == '1c01'){
+                        /*common.$emit('translateDate',result,_self.todos);*/
+                        for(var i = 0; i < result.length; i++){
+                            _self.todos.push(result[i]);
+                        }
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
                     if (back) {
                         back();
                     }
                 }, function(err) {
+                    common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                     if (back) {
                         back();

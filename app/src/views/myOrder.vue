@@ -214,11 +214,13 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         let listArr = suc.data.biz_result.list;
+                    
                         if (listArr.length < _self.httpPraram.pageSize) {
                             _self.allLoaded = true;
                         }
                         for (let i = 0; i < listArr.length; i++) {
                             _self.todos.push(listArr[i]);
+
                         }
                     } else {
                         common.$emit('message', suc.data.msg);

@@ -21,22 +21,22 @@
                                     <div><img src="/static/images/bao.png"><img src="/static/images/zheng.png">{{todo.breedName}}</div>
                                     <p class="spec">规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
-                                    <p class="time_font">发布时间：<span>{{todo.pubdate}}</span></p>
+                                    <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}<span>元/kg</span></p>
-                                    <button class="mint-button mint-button--primary mint-button--small" >立即购买</button>
+                                    <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
                                 </div>
                             </div>
                         </li>
                     </ul>
-                    <ul class="page-loadmore-list_second" v-show="!param.show">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
+                    <ul class="page-loadmore-list_second" v-show="!param.show"  >
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  v-on:click="jumpNeed(todo.id)">
                             <div class="center">
                                 <img src="/static/icons/england.png"  class="flag">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
-                                    <p>发布时间：{{todo.pubdate}}</p>
+                                    <p>发布时间：{{todo.pubdate | timeFormat}}</p>
                                 </div>
                                 <div class="detail">
                                     <div>
@@ -48,7 +48,7 @@
                                     <div class="last">
                                         <p>{{todo.spec}}</p>
                                         <p>{{todo.location}}</p>
-                                        <p>{{todo.days}}<span>天</span></p>
+                                        <p>{{todo.duedate | timeDays(todo.pubdate)}}<span>天</span></p>
                                         <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
                                     </div>
                                 </div>
@@ -78,6 +78,7 @@ import longSearch from '../components/tools/longSearch'
 import attentionHead from '../components/tools/attentionHead'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import filters from '../filters/filters'
 export default {
     data() {
             return {
@@ -124,7 +125,12 @@ export default {
                 this.$router.push('search');
             },
             jump(id){
+                common.$emit('resourceDetail', id);
                 this.$router.push('resourceDetail/' + id);
+            },
+            jumpNeed(id){
+                common.$emit("needToDetail", id);
+                this.$router.push('needDetail/' + id);
             },
             resorceHttp(back) {
                 let _self = this;

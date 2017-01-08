@@ -6,38 +6,42 @@
             </router-link>
         </mt-header> -->
          <myHeader :param = "my_header" ></myHeader>
-        <ul>
-           <li>
-              <p>收货人</p>
-              <input type="text" placeholder="请输入您的名字" v-model="obj.name">
-           </li>
+         
+         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                   <ul>
+                     <li>
+                        <p>收货人</p>
+                        <input type="text" placeholder="请输入您的名字" v-model="obj.name">
+                     </li>
 
-           <li>
-              <p>联系电话</p>
-              <input type="text" placeholder="请输入您的联系电话" v-model="obj.phone">
-           </li>
+                     <li>
+                        <p>联系电话</p>
+                        <input type="text" placeholder="请输入您的联系电话" v-model="obj.phone">
+                     </li>
 
-           <li>
-              <p>省市区(县)</p>
-              <!-- <p class="selectPlace" v-if="">{{address}}</p>   -->
+                     <li>
+                    <p>省市区(县)</p>
+                    <!-- <p class="selectPlace" v-if="">{{address}}</p>   -->
 
-              <p class="selectPlace" >{{ obj.addressProvince }},{{ obj.addressCity }},{{obj.addressDistrict}}</p>  
-              <img src="/static/images/right-arrow.png" @click="selectPlace">
-           </li>
-           <li class="last">
-              <textarea placeholder="详细地址" v-model="obj.detailAddr"></textarea>
-           </li>
-        </ul>
-        <div class="address_box" v-show="show">
-          <mt-button type="primary" class="left-button"  @click="cancel">取消</mt-button>
-          <mt-button type="primary" class="right-button" @click="confirmIt" >确定</mt-button>
-          <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5"></mt-picker>
-        </div>
-
-        <div class="confirm" v-on:click="confirm">保存</div>
+                    <p class="selectPlace" >{{ obj.addressProvince }},{{ obj.addressCity }},{{obj.addressDistrict}}</p>  
+                    <img src="/static/images/right-arrow.png" @click="selectPlace">
+                 </li>
+                 <li class="last">
+                    <textarea placeholder="详细地址" v-model="obj.detailAddr"></textarea>
+                 </li>
+              </ul>
+              <div class="address_box" v-show="show">
+                <mt-button type="primary" class="left-button"  @click="cancel">取消</mt-button>
+                <mt-button type="primary" class="right-button" @click="confirmIt" >确定</mt-button>
+                <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5"></mt-picker>
+              </div>
+           
+              <div class="confirm" v-on:click="confirm">保存</div>
+         </div>
+        
   <!-- <mt-picker :slots="slots" @change="onValuesChange" v-show="active" class="place" textAlign="center"></mt-picker> -->
 <!-- <mt-picker :slots="slots" @change="onValuesChange"></mt-picker> -->
-
+    
     </div>
 </template>
 <script>
@@ -173,6 +177,10 @@ export default {
               })
         }
     },
+    mounted() {
+
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        },
     created(){
               
     }
@@ -183,6 +191,9 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.add_address .page-loadmore-wrapper{
+  margin-bottom: 0px;
+}
 .add_address ul{
    padding: 0 1.5rem;
    background:white;
@@ -240,14 +251,17 @@ export default {
 }
 .add_address  .confirm{
    width:100%;
-   height:5rem;
+   height:50px;
    background:#FA6705;
    color:white;
    text-align: center;
-   line-height: 5rem;
+   line-height: 50px;
    font-size: 1.7rem;
-   position: fixed;
+   /*position: fixed;
+   bottom: 0;*/
+   position: absolute;
    bottom: 0;
+
 }
 
 
