@@ -13,7 +13,7 @@
                                     <p class="audit_state">{{todo.orderStatus | orderStatus}}</p>
                                 </div>
                             </div>
-                            <img :src="todo.image" class="list_images" >
+                            <img :src="todo.image" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>{{todo.breedName }}</div>
@@ -34,10 +34,10 @@
                                 </div>
                                 <p class="sum_bottom">
                                     <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click.stop="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
-                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus) ">查看物流</button>
-                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus) ">确认收货</button>
-                                    <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus) ">吹促发货</button>
-                                    <button v-if="'pay' ==judgeOrderStatus(todo.orderStatus) ">立即支付</button>
+                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('查看物流')">查看物流</button>
+                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('确认收货')">确认收货</button>
+                                    <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('催促发货')">催促发货</button>
+                                    <!-- <button v-if="'pay' ==judgeOrderStatus(todo.orderStatus)" >立即支付</button> -->
                                 </p>
                             </div>
                         </li>
@@ -160,40 +160,47 @@ export default {
             },
             cancelOrder(id, no, type) {
                 let _self = this;
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'orderService',
-                    biz_method: 'cancelOrder',
-                    version: 1,
-                    time: 0,
-                    sign: '',
-                    biz_param: {
-                        id: id,
-                        no: no
-                    }
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.myResource(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code == '1c01') {
-                        common.$emit('message', suc.data.msg);
-                        _self.todos.splice(0, _self.todos.length);
-                        _self.httpPraram.page = 1;
-                        _self.getHttp();
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
+                function cancelOrder() {
+                    common.$emit('show-load');
+                    let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    let body = {
+                        biz_module: 'orderService',
+                        biz_method: 'cancelOrder',
+                        version: 1,
+                        time: 0,
+                        sign: '',
+                        biz_param: {
+                            id: id,
+                            no: no
+                        }
+                    };
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                    httpService.myResource(url, body, function(suc) {
+                        common.$emit('close-load');
+                        if (suc.data.code == '1c01') {
+                            common.$emit('message', suc.data.msg);
+                            _self.todos.splice(0, _self.todos.length);
+                            _self.httpPraram.page = 1;
+                            _self.getHttp();
+                        } else {
+                            common.$emit('message', suc.data.msg);
+                        }
+                    }, function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+                }
+                common.$emit('confirm', {
+                    message:'确定取消订单？',
+                    title:'提示',
+                    ensure:cancelOrder
+                });
             },
             getHttp(back) {
                 let _self = this;
                 if (_self.httpPraram.page == 1) {
-                    _self.todos.splice(0,_self.todos.length);
+                    _self.todos.splice(0, _self.todos.length);
                 }
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -216,7 +223,7 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         let listArr = suc.data.biz_result.list;
-                    
+
                         if (listArr.length < _self.httpPraram.pageSize) {
                             _self.allLoaded = true;
                         }
@@ -284,41 +291,20 @@ export default {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
                 }, 1500);
+            },
+            prompt(text) {
+                function loadApp(){
+                    window.location.href = common.appUrl;
+                }
+               common.$emit('confirm', {
+                    message:text+'请下载App',
+                    title:'提示',
+                    ensure:loadApp
+                });
             }
         },
         filters: (filters, {
-            orderStatus: (val) => {
-                switch (val) {
-                    case -2:
-                        val = '已过期';
-                        break;
-                    case -1:
-                        val = '已取消';
-                        break;
-                    case 0:
-                        val = '待审核';
-                        break;
-                    case 10:
-                        val = '待审核';
-                        break;
-                    case 20:
-                        val = '待付款';
-                        break;
-                    case 30:
-                        val = '待发货';
-                        break;
-                    case 40:
-                        val = '待发货';
-                        break;
-                    case 50:
-                        val = '待收货';
-                        break;
-                    case 60:
-                        val = '已完成';
-                        break;
-                }
-                return val;
-            }
+           
         }),
         components: {
             landscapeScroll,
@@ -328,20 +314,20 @@ export default {
             let _self = this;
             this.httpPraram.page = 1;
             _self.httpPraram.type = 0;
-            _self.httpPraram.orderstatus=_self.data[common.pageParam.orderStatus].back_id;
-             for(let i=0;i<_self.data.length;i++){
-                    _self.data[i].show=false;
-                }
-                _self.data[common.pageParam.orderStatus].show=true;
+            _self.httpPraram.orderstatus = _self.data[common.pageParam.orderStatus].back_id;
+            for (let i = 0; i < _self.data.length; i++) {
+                _self.data[i].show = false;
+            }
+            _self.data[common.pageParam.orderStatus].show = true;
             this.getHttp();
             common.$on('mineToOrder', function(index) {
                 _self.httpPraram.orderstatus = _self.data[index].back_id;
                 _self.httpPraram.type = 0;
                 _self.httpPraram.page = 1;
-                for(let i=0;i<_self.data.length;i++){
-                    _self.data[i].show=false;
+                for (let i = 0; i < _self.data.length; i++) {
+                    _self.data[i].show = false;
                 }
-                _self.data[index].show=true;
+                _self.data[index].show = true;
                 _self.getHttp();
             });
         },

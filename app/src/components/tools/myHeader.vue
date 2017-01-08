@@ -32,11 +32,9 @@ export default {
             },
             jumpRevise() {
                 let _self = this;
-                //console.log(this.param.reviseRouter)
                 if (_self.param.t_show == true) {
-
                     _self.$emit('myUpData', 'genxin');
-                    history.go(-1);
+                    window.history.go(-1);
                 } else if (_self.param.tt == true) {
                     common.$emit("informAccountFinish", "refurbish");
                     _self.$router.push(_self.param.reviseRouter);
@@ -44,7 +42,6 @@ export default {
                     common.$emit("res-id", this.param.item);
                     _self.$router.push(_self.param.reviseRouter);
                 }
-
             }
         }
 }
@@ -89,7 +86,7 @@ export default {
     height: 20px;
 }
 
-.my-header>p {
+.my-header .header_content>p {
     position: absolute;
     right: 0;
     font-size: 14px;

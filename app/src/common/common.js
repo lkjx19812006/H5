@@ -13,6 +13,7 @@ let common = new Vue({
         SID: window.localStorage.SID,
         difTime: window.localStorage.difTime,
         servicePhone:'',
+        appUrl:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai',
         apiUrl: {
             list: '/static/data/list.json',
             market_list: '/static/data/market_list.json',

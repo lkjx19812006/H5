@@ -6,9 +6,11 @@
         </button>
         <button v-if="obj.isAttention" class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention(0)">
             <img src="/static/icons/follow.png">
+            <p>已关注</p>
         </button>
         <button v-if="!obj.isAttention" class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention(1)">
             <img src="/static/icons/unfollow.png">
+            <p>未关注</p>
         </button>
     </div>
 </template>
@@ -30,7 +32,6 @@ export default {
         },
         getCustomerPhone() {
             let _self = this;
-
             this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
                 if (response.data.code == '1c01') {
                     console.log(response.data);
