@@ -1,20 +1,19 @@
 <template>
     <div class="my_order">
-    
-        <attentionHead :param = "param" v-on:tab="tabOrder"></attentionHead>
+        <attentionHead :param="param" v-on:tab="tabOrder"></attentionHead>
         <landscapeScroll :param="data" v-on:postData="changeOrderStatus"></landscapeScroll>
         <div class="bg_white ">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem">
+                        <li v-for="todo in todos" class="page-loadmore-listitem" @click="jump(todo.id)">
                             <div class="list_header">
                                 <div>
                                     <p class="time_font"><span>{{todo.ctime | timeFormat}}</span><span style="margin-left:10px">订单编号：{{todo.no}}</span></p>
                                     <p class="audit_state">{{todo.orderStatus | orderStatus}}</p>
                                 </div>
                             </div>
-                            <img :src="todo.image" class="list_images" @click="jump(todo.id)">
+                            <img :src="todo.image" class="list_images" >
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>{{todo.breedName }}</div>
@@ -34,7 +33,7 @@
                                     <p>合计：￥<span>{{Number(todo.price) * Number(todo.number)}}</span>.00</p>
                                 </div>
                                 <p class="sum_bottom">
-                                    <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
+                                    <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click.stop="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus) ">查看物流</button>
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus) ">确认收货</button>
                                     <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus) ">吹促发货</button>
@@ -65,11 +64,11 @@ import filters from '../filters/filters'
 export default {
     data() {
             return {
-                param:{
-                    name:'采购订单',
-                    other_name:'销售订单',
-                    show:true,
-                    router:"home"
+                param: {
+                    name: '采购订单',
+                    other_name: '销售订单',
+                    show: true,
+                    router: "home"
                 },
                 more: '采购订单',
                 title: '销售订单',
@@ -193,6 +192,9 @@ export default {
             },
             getHttp(back) {
                 let _self = this;
+                if (_self.httpPraram.page == 1) {
+                    _self.todos.splice(0,_self.todos.length);
+                }
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -238,8 +240,8 @@ export default {
             },
             tabOrder(param) {
                 let _self = this;
-                
-                if (param == true) {                 
+
+                if (param == true) {
                     _self.httpPraram.type = 0;
                 } else {
                     _self.httpPraram.type = 1;
@@ -325,18 +327,21 @@ export default {
         created() {
             let _self = this;
             this.httpPraram.page = 1;
-           
             _self.httpPraram.type = 0;
+            _self.httpPraram.orderstatus=_self.data[common.pageParam.orderStatus].back_id;
+             for(let i=0;i<_self.data.length;i++){
+                    _self.data[i].show=false;
+                }
+                _self.data[common.pageParam.orderStatus].show=true;
             this.getHttp();
             common.$on('mineToOrder', function(index) {
                 _self.httpPraram.orderstatus = _self.data[index].back_id;
-                _self.getHttp();
-                _self.httpPraram.page = 1;
-            });
-            common.$on("orderToMyOrder", function(item) {
-                _self.httpPraram.page = 1;
-               
                 _self.httpPraram.type = 0;
+                _self.httpPraram.page = 1;
+                for(let i=0;i<_self.data.length;i++){
+                    _self.data[i].show=false;
+                }
+                _self.data[index].show=true;
                 _self.getHttp();
             });
         },
@@ -473,17 +478,19 @@ export default {
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum {
     float: right;
     /*padding-right: 10px;*/
-    width:100%;
-    
+    width: 100%;
 }
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum .sum_top{
-    width:100%;
+
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum .sum_top {
+    width: 100%;
     border-bottom: 1px solid #E6E6E6;
     padding-right: 10px;
 }
-.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum .sum_bottom{
+
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum .sum_bottom {
     padding-right: 10px;
 }
+
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum>div {
     /* border: 1px solid #DEDEDE;*/
     height: 3rem;
@@ -492,7 +499,6 @@ export default {
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum>div p {
     float: right;
-
 }
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list li .sum .sum_left {}

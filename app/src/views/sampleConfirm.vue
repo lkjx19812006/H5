@@ -1,14 +1,8 @@
 <template>
     <div class="sample_confirm">
-        <!-- <mt-header fixed title="样品订单确认">
-            <router-link to="" slot="left">
-                <mt-button icon="back" @click="back()"></mt-button>
-            </router-link>
-        </mt-header> -->
         <myHeader :param = "myhead"></myHeader>
         <mt-loadmore>
         <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            
                 <div @click="jumpAddress">
                     <orderAddress :param="person"></orderAddress>
                 </div>
@@ -18,8 +12,6 @@
                         <orderTotal :order="param"></orderTotal>
                     </div>
                 </div>
-            
-        
         </mt-loadmore>
         <div class="fix_bottom" v-on:click="confirm">
             提交订单
@@ -150,7 +142,7 @@ export default {
                 httpService.intentResOrder(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
-                        common.$emit("orderToMyOrder", "refurbish");
+                       common.$emit("mineToOrder", 0);
                         _self.$router.push("/myOrder")
                     } else {
                         common.$emit('message', suc.data.msg);

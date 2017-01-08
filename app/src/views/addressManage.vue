@@ -2,8 +2,10 @@
     <div class="address_manage">
        
         <myHeader :param = "my_header" ></myHeader>
-       
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+
+        <mt-loadmore>
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
+
         <ul>
             <li v-for="(todo,index) in todos" v-show="todo.show">
                 <div class="address_top" @click="jumpBack(todo)">
@@ -195,8 +197,7 @@ export default {
             }
         },
         mounted() {
-
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top -50;
         }
 
 

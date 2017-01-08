@@ -34,6 +34,7 @@ let common = new Vue({
             resourceId: '',
             Needrelease: '',
             backAddress: '',
+            orderStatus:0
         }
     },
     methods: {
@@ -60,7 +61,6 @@ let common = new Vue({
             if (!str) {
                 str = 'test';
             }
-
             let signStr = CryptoJS.HmacSHA1(str, _self.KEY).toString(CryptoJS.enc.Base64);
             console.log(signStr);
             return signStr;
@@ -103,13 +103,13 @@ common.$on('message', message => {
     });
    confirmButtonText, cancelButtonText, 
 })*/
-/*common.$on('confirm',(message, title) => {
-    MessageBox.confirm(message, title).then(action =>{
-           console.log(1111);
+common.$on('confirm',(obj) => {
+    MessageBox.confirm(obj.message, obj.title).then(action =>{
+           obj.ensure();
     },action =>{
-           console.log(2222);
+           
     })
-})*/
+})
 
 common.$on('translateDate', (result, todos) => {
     for (var i = 0; i < result.length; i++) {

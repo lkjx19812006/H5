@@ -26,7 +26,6 @@ export default {
     },
     methods: {
         call(){
-            console.log(this.phone);
              window.location.href = "tel:"+this.phone;
         },
         getCustomerPhone() {
@@ -85,7 +84,6 @@ export default {
         }
     },
     created() {
-
         if(!common.servicePhone)this.getCustomerPhone();
     }
 }

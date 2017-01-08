@@ -1,12 +1,10 @@
 <template>
     <div class="mine">
-    
         <accountOverview :param="param"></accountOverview>
         <myInformation></myInformation>
-
         <div class="all_order">
             <p>全部订单</p>
-            <div @click="jump('myOrder')">
+            <div @click="jumpOrder(-1)">
                 <p>查看全部订单</p>
                 <img src="/static/images/right-arrow.png">
             </div>
@@ -19,25 +17,7 @@
         </div>
         <div class="my_list">
             <ul>
-                <li class="my_list_part  my_list_part_norlast" v-for="(todo,index) in my_list" v-if="index == 0" @click="drugMoney">
-                    <img :src="todo.img_src" class="my_list_part_img">
-                    <p>{{todo.name}}</p>
-                </li>
-                <li class="my_list_part  my_list_part_norlast" v-for="(todo,index) in my_list" v-if="index == 1" @click="jump(todo.router)">
-                    <img :src="todo.img_src" class="my_list_part_img">
-                    <p>{{todo.name}}</p>
-                </li>
-                <li class="my_list_part" v-for="(todo,index) in my_list" v-if="index == 2" @click="jump(todo.router)">
-                    <img :src="todo.img_src" class="my_list_part_img">
-                    <p>{{todo.name}}</p>
-                </li>
-            </ul>
-            <ul>
-                <li class="my_list_part  my_list_part_norlast" v-for="(todo,index) in my_list" v-if="index > 2 && index <5" @click="jump(todo.router)">
-                    <img :src="todo.img_src" class="my_list_part_img">
-                    <p>{{todo.name}}</p>
-                </li>
-                <li class="my_list_part" v-for="(todo,index) in my_list" v-if="index == 5" @click="jump(todo.router)">
+                <li v-bind:class="[index%3==1 ? disClass : '', listPart,norLast]" v-for="(todo,index) in my_list" @click="jump(todo.router)">
                     <img :src="todo.img_src" class="my_list_part_img">
                     <p>{{todo.name}}</p>
                 </li>
@@ -54,15 +34,18 @@ import myInformation from '../../components/tools/myInformation'
 export default {
     data() {
             return {
+                listPart: 'my_list_part',
+                norLast: 'my_list_part_norlast',
+                disClass: 'my_list_part_disClass',
                 url: '',
                 param: {
-                    url:'',
-                    companyShort:'',
-                    normalMoney:'',
-                    score:'',
-                    name:''
+                    url: '',
+                    companyShort: '',
+                    normalMoney: '',
+                    score: '',
+                    name: ''
                 },
-                information:{
+                information: {
 
                 },
                 content: [{
@@ -70,7 +53,6 @@ export default {
                     company: '康美药业',
                     money: '31232.89',
                     integration: '1223',
-
                     customer: '余鹏飞',
                     customerGender: '',
                     my_service: '我的专属客服',
@@ -81,7 +63,6 @@ export default {
                 entrance: [{
                     name: '待审核',
                     router: '',
-
                     his_name: '余鹏飞',
                     my_service: '我的专属客服',
                     details: '点击详情',
@@ -90,7 +71,6 @@ export default {
                 entrance: [{
                     name: '待确认',
                     router: 'myOrder',
-
                     img_src: '/static/icons/All-orders.png'
                 }, {
                     name: '待付款',
@@ -107,7 +87,8 @@ export default {
                 }],
                 my_list: [{ //         
                     name: '我的药款',
-                    img_src: '/static/icons/I-Yaokuan.png'
+                    img_src: '/static/icons/I-Yaokuan.png',
+                    router: 'app'
                 }, {
                     name: '我的资源',
                     router: 'myResource',
@@ -118,7 +99,8 @@ export default {
                     img_src: '/static/icons/My-purchase.png'
                 }, {
                     name: '我的报价',
-                    img_src: '/static/icons/My-offer.png'
+                    img_src: '/static/icons/My-offer.png',
+                    router: 'app'
                 }, {
                     name: '我的关注',
                     router: 'myAttention',
@@ -139,6 +121,7 @@ export default {
             jumpOrder(index) {
                 let _self = this;
                 var index = index + 1;
+                common.$emit('setParam','orderStatus',index);
                 common.$emit('mineToOrder', index);
                 _self.$router.push('myOrder');
             },
@@ -188,14 +171,14 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
-                    if(suc.data.code = "1c01"){
+                    if (suc.data.code = "1c01") {
                         _self.param.name = suc.data.biz_result.name;
                         _self.param.companyShort = suc.data.biz_result.companyShort;
                         _self.param.normalMoney = suc.data.biz_result.normalMoney;
                         _self.param.score = suc.data.biz_result.score;
                         _self.param.url = suc.data.biz_result.avatar;
                         _self.url = suc.data.biz_result.avatar;
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
                 }, function(err) {
@@ -203,11 +186,20 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            drugMoney: function() {
-                common.$emit('confirm', '去下载app', '再考虑考虑？');
+            loadApp() {
+                window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
             },
             jump: function(router) {
-                this.$router.push(router);
+                if (router == "app") {
+                    common.$emit("confirm", {
+                        message: '请下载App后，在App内查看',
+                        title: '提示',
+                        ensure: this.loadApp
+                    });
+                } else {
+                    this.$router.push(router);
+                }
+
             }
         },
         created() {
@@ -226,191 +218,21 @@ export default {
 }
 </script>
 <style scoped>
+.mint-tab-container-item {
+    background-color: #f0f0f0;
+}
+
 .mine {
     background: #F0F0F0;
 }
 
-/*.mine .header {
-    height: 16.6rem;
-    width: 100%;
-    background: url(/static/images/bg.png) no-repeat;
-    background-size: 100% 100%;
-    margin:0;
-    padding: 0;
-}
-.mine .header img{
-    margin-top: 2.815rem;
-    margin-bottom: 0.8rem;
-    width:5.119rem;
-    height:5.119rem;
-}
-.mine .header>p{
-    font-size: 1.279rem;
-    line-height: 1.279rem;
-    color:#333333;
-}
-.mine .header .company-name{
-    font-size: 1.023rem;
-    line-height: 1.023rem;
-    margin-top: 0.8rem;
-}
-.mine .header>div{
-    margin-top: 1.5rem;
-    font-size: 1.023rem;
-    height:1.2rem;
-    padding: 0 15%;
-}
-.mine .header>div .left{
-    float: left;
-}
-.mine .header>div .right{
-    float:right;
-}
-.mine .header>div .left span,
-.mine .header>div .right span{
-    color:#FA6705;
-}*/
-/*.mine .header_top {
-    width: 88%;
-    height: 6.4rem;
-    margin-left: 6%;
-    position: relative;
-}
-
-.mine .header_photo {
-    background: #FFD779;
-    width: 6.4rem;
-    height: 6.4rem;
-    border-radius: 50%;
-    margin-right: 4%;
-    float: left;
-    border: 1px solid red;
-    position: absolute;
-    z-index: 200000;
-    overflow: hidden;
-}
-
-.mine .header_photo img {
-    width: 100%;
-    height: 100%;
-}
-
-.mine .information {
-    width: 65.4%;
-    height: 6.4rem;
-    padding: 1.38rem 0;
-    display: flex;
-    flex-direction: row;
-    font-size: 1.024rem;
-    position: absolute;
-    left: 35%;
-}
-
-.mine .information_center {
-    flex: 4;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-}
-
-.mine .information_center div {
-    flex: 1;
-}
-
-.mine .company {
-    flex: 1;
-}
-
-.mine .information_right {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    flex: 6;
-}
-
-.mine .money {
-    flex: 1;
-}
-
-.mine .integration {
-    flex: 1;
-}
-
-#mine_name {
-    font-size: 1.365rem;
-    color: #FB761E;
-    float: left;
-}
-
-.mine .sex img {
-    height: 1.024rem;
-    margin-left: 3%;
-    margin-top: 0.1705rem;
-    float: left;
-}
-
-.mine .right-arrow {
-    width: 1.024rem;
-    height: 1.024rem;
-    margin-top: 1.308rem;
-}
-
-.mine .header_bottom {
-    width: 85%;
-    height: 1.27995rem;
-    line-height: 1.27995rem;
-    display: flex;
-    flex-direction: row;
-    font-size: 1.024rem;
-    float: right;
-    margin-right: 6%;
-    margin-top: 1.96rem;
-}
-
-.mine .my_service {
-    flex: 47;
-    text-align: left;
-}
-
-.mine .his_name {
-    flex: 26;
-    text-align: left;
-}
-
-.mine .his_name img {
-    height: 1.024rem;
-    position: absolute;
-    margin-left: 0.5rem;
-}
-
-.mine .details {
-    flex: 27;
-    text-align: right;
-}*/
-/*.mine .information{
-    padding: 0.64rem 0;
-    height:4.2665rem;
-    background: white;
-    margin-bottom: 1rem;
-}
-.mine .information ul{
-    display: flex;
-    flex-direction:row;
-}
-.mine .information ul li{
-    flex:1;
-    border-right:1px solid #e6e6e6;
-}
-.mine .information ul li.last{
-    border:none;
-}*/
 .mine .entrance {
     display: flex;
     flex-direction: row;
     height: 6.06rem;
     background: white;
     width: 100%;
-    margin:0;
+    margin: 0;
 }
 
 .mine .all_order {
@@ -418,7 +240,7 @@ export default {
     line-height: 3.6rem;
     background: white;
     border-bottom: 1px solid #E0E0DF;
-    margin:0;
+    margin: 0;
 }
 
 .mine .all_order>p {
@@ -529,7 +351,7 @@ export default {
     height: 6.06rem;
     margin-top: 0.8533rem;
     background: white;
-    margin:0;
+    margin: 0;
 }
 
 .mine .entrance div {
@@ -547,35 +369,29 @@ export default {
 
 .mine .my_list {
     width: 100%;
-    height: 17.066rem;
-    display: flex;
-    flex-direction: column;
+    float: left;
     margin-top: 0.8533rem;
 }
 
 .mine .my_list ul {
     width: 100%;
-    height: 17.066rem;
-    flex: 1;
+    float: left;
     margin-bottom: 0.213rem;
-    display: flex;
-    flex-direction: row;
 }
 
 .mine .my_list ul li {
-    flex: 1;
+    float: left;
+    width: 32.5%;
     box-sizing: border-box;
     padding-top: 5.46rem;
     position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 5px;
 }
 
 .mine .my_list ul li p {
     font-size: 1.024rem;
     color: #333333;
-}
-
-.mine .my_list_part_norlast {
-    margin-right: 0.213rem;
 }
 
 .mine .entrance_img {
@@ -598,6 +414,10 @@ export default {
     margin-left: -1.28rem;
     left: 50%;
     top: 2.133rem;
+}
+
+.mine .my_list_part_disClass {
+    margin: 0 1.25%;
 }
 
 .mine .header_top_right-arrow {

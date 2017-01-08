@@ -45,6 +45,7 @@ import revisePurchase from './views/revisePurchase'
 import selectPlace from './views/selectPlace'
 import cityName from './views/cityName'
 import areaName from './views/areaName'
+import aboutus from './views/aboutus'
 
 module.exports = {
     mode: 'hash',
@@ -102,6 +103,7 @@ module.exports = {
         { name: 'sampleConfirm', path: '/sampleConfirm/:sourceId', component: sampleConfirm },
         { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
+        { name: 'aboutus', path: '/aboutus', component: aboutus },
         { path: '*', redirect: '/home' }
     ]
 }
