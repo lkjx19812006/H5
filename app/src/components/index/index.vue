@@ -330,7 +330,7 @@ export default {
                 this.$router.push(router + id);
             },
             jumpNeed(router, id) {
-                common.$emit('indexToNeeddetail', id);
+                common.$emit('needToDetail', id);
                 this.$router.push(router + id);
             },
         },

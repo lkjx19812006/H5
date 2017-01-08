@@ -163,6 +163,7 @@ export default {
                     }, function(suc) {
                         common.$emit('message', suc.data.msg);
                         let result = suc.data.biz_result.list;
+
                         _self.datas = result;
                     }, function(err) {
                         common.$emit('message', err.data.msg);
@@ -183,6 +184,7 @@ export default {
             }, function(suc) {
                 common.$emit('message', suc.data.msg);
                 let result = suc.data.biz_result.list;
+                //console.log(result);
                 _self.todos = result;
             }, function(err) {
                 common.$emit('message', err.data.msg);

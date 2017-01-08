@@ -99,14 +99,14 @@ export default {
             codeLogin(){
                     let _self = this;
                     common.$emit('show-load');
-                    httpService.login(common.urlCommon + common.apiUrl.login, {
+                    httpService.login(common.urlCommon + common.apiUrl.code_login, {
                         biz_param: {
                             phone: _self.param.phone,
                             code: _self.param.code
                         }
                     }, function(response) {
                         common.$emit('close-load');
-                        console.log(response)
+                        console.log(response);
                         if (response.data.code == '1c01') {
                             window.localStorage.KEY = response.data.biz_result.KEY;
                             window.localStorage.SID = response.data.biz_result.SID;
@@ -117,6 +117,7 @@ export default {
                             _self.$router.push('/home');
                         } else {
                             common.$emit('message', response.data.msg);
+
                         }
                     }, function(err) {
                         common.$emit('close-load');

@@ -6,6 +6,7 @@
             </router-link>
         </mt-header>
         
+        
       <div class="buy-img" v-if="todo.type == 0"></div> 
       <div class="sale-img" v-if="todo.type == 1"></div> 
       <div class="word_info">

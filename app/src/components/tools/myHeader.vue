@@ -36,13 +36,13 @@ export default {
                 if (_self.param.t_show == true) {
 
                     _self.$emit('myUpData', 'genxin');
-                    history.go(-1);
+                    
                 } else if (_self.param.tt == true) {
                     common.$emit("informAccountFinish", "refurbish");
                     _self.$router.push(_self.param.reviseRouter);
                 } else {
                     common.$emit("res-id", this.param.item);
-                    _self.$router.push(_self.param.reviseRouter);
+                    _self.$router.push(_self.param.reviseRouter); //跳转到修改资源
                 }
 
             }
@@ -65,7 +65,7 @@ export default {
 }
 
 .my-header .title-name {
-    width: 85%;
+    width: 70%;
     height: 50px;
     float: left;
     font-size: 1.7rem;
@@ -96,6 +96,7 @@ export default {
     top: 0;
     padding: 16px 1.5rem;
     color: white;
+
 }
 
 .my-header .active {

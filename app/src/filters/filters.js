@@ -2,15 +2,15 @@ import Vue from 'vue'
 
 
 Vue.filter('timeFormat', function(val){
-		val=val.split(' ')[0];
+		if(val)val=val.split(' ')[0];
         return  val;
     });
 
 Vue.filter('timeDays',function(due,pub){
-        due=due.split(' ')[0];
-        pub=pub.split(' ')[0];
-            if(due != '')due = due.replace(/-/g, '/');
-            if(pub != '')pub = pub.replace(/-/g, '/');
+        if(due)due=due.split(' ')[0];
+        if(pub)pub=pub.split(' ')[0];
+            if(due)due = due.replace(/-/g, '/');
+            if(pub)pub = pub.replace(/-/g, '/');
             if(due != '' && pub != ''){
                 var duedateDate = new Date(due);
                 var pubdateDate = new Date(pub);

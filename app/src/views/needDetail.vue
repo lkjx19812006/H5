@@ -129,12 +129,12 @@ export default {
             common.$on("needToDetail", function(item) {
                 _self.getHttp(item);
             });
-            common.$on('post-need-detail', function(item) {
+            /*common.$on('post-need-detail', function(item) {
                 _self.getHttp(item);
             });
             common.$on('indexToNeeddetail', function(item) {
                 _self.getHttp(item);
-            });
+            });*/
         }
        
 

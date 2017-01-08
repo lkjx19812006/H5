@@ -19,6 +19,7 @@ let common = new Vue({
             drug_table_list: '/static/data/drug_table_list.json',
             drug_information_list: '/static/data/drug_information_list.json',
             login: '/account/login.do',
+            code_login:'/account/verifiLogin.do',
             getDate: '/system/date.do',
             most: '/handle/control.do'
         },
