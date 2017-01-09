@@ -3,6 +3,14 @@ import CryptoJS from "crypto-js"
 import crypto from "crypto"
 import { Indicator, Toast, MessageBox, DatetimePicker } from 'mint-ui'
 
+//百度统计代码
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?77f09e26962559dd888e83b1dcf882a0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
 
 let common = new Vue({
     data: {
