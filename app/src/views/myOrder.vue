@@ -13,7 +13,7 @@
                                     <p class="audit_state">{{todo.orderStatus | orderStatus}}</p>
                                 </div>
                             </div>
-                            <img :src="todo.image" class="list_images">
+                            <img v-bind:src="todo.image" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>{{todo.breedName }}</div>

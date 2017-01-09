@@ -15,7 +15,7 @@
 
                                 </div>
                             </div>
-                            <img v-lazy="todo.image[0]" class="list_images">
+                            <img v-bind:src="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div><img src="/static/icons/sample.png">{{todo.breedName}}</div>

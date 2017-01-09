@@ -28,10 +28,7 @@ export default {
             }
         },
         created() {
-            common.$on("clear_Information", function() { //来自资源页面的提示刷新
-                this.param = {};
-                
-            });
+          
         }
 
 }
