@@ -5,23 +5,6 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
                     <ul class="fill_in">
-                        <!-- <li>
-                            <p>手机号：</p>
-                            <input type="text" placeholder="请输入手机号码" v-model="param.phone" />
-                        </li>
-                        <li>
-                            <p>密码：</p>
-                            <input type="password" placeholder="请设置密码" v-model="param.password" />
-                        </li>
-                        <li>
-                            <p>确认密码：</p>
-                            <input type="password" placeholder="请再次输入密码" v-model="param.againPassword">
-                        </li>
-                        <li>
-                            <p>验证码：</p>
-                            <input type="text" placeholder="请输入验证码" v-model="param.code" />
-                            <input v-bind:class="{ get_code: !buttonDisabled, 'get_code_nor': buttonDisabled }" id="get_code" v-on:click="confirm" type="button" :value="code">
-                        </li> -->
                         <li>
                             <p><img src="/static/icons/my-phone.png"></p>
                             <input type="text" class='top_text' v-model="param.phone" placeholder="请输入手机号码">
@@ -38,9 +21,6 @@
                             <p><img src="/static/icons/my-password.png"></p>
                             <input type="password" class='top_text' v-model="param.code" placeholder="请输入验证码">
                             
-                           <!-- <div  v-on:click="confirm" v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
-                             <p>{{code}}</p>
-                          </div> -->
                            <div  v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }" >
                                  <p><input  :value="code" type="button" v-on:click="confirm" :disabled = 'buttonDisabled'  ></p>
                             </div> 
@@ -49,7 +29,6 @@
                                 注册
                         </li>
                     </ul>
-                    <!-- <div class="confirm_register" v-on:click="register">注册</div> -->
                 </mt-loadmore>
             </div>
         </div>

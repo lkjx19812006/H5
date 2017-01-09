@@ -23,9 +23,9 @@
                 <input type="text" placeholder="请输入手机号" v-model="param.phone">
             </div>
             <div class="pass-name">
-                <input type="text" placeholder="请输入验证码" v-model="param.code">
+                <input type="text" placeholder="请输入验证码" v-model="param.code" >
                 <p v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
-                <input  v-on:click="confirmLogin()" :value = 'code' type="button">
+                <input  v-on:click="confirmLogin()" :value = 'code' type="button" :disabled = "buttonDisabled" class="pass_code">
                 </p>
             </div>
         </div>
@@ -273,6 +273,9 @@ export default {
     padding: 0 1rem;
 }
 
+.login .password .pass-name .pass_code{
+    width: 80%;
+}
 .login .password .pass-name .my_code {
     float:right;
     width:40%;
