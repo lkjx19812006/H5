@@ -68,7 +68,6 @@ export default {
             myHeader
         },
         methods: {
-
             quit() {
                 common.customerId = '';
                 common.KEY = '';
@@ -80,7 +79,6 @@ export default {
                 window.localStorage.difTime = '';
                 common.$emit('clear_Information');
                 this.$router.push('/login');
-
             },
             getCustomerPhone() {
                 let _self = this;
