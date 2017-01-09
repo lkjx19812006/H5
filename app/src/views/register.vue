@@ -128,9 +128,11 @@ export default {
                 checkArr.push(checkPassword);
                 let checkagainPassword = validation.checkNull(_self.param.againPassword, '请确认密码！');
                 checkArr.push(checkagainPassword);
+
                 let checkCommon = validation.checkCommon(_self.param.password, _self.param.againPassword);
                 checkArr.push(checkCommon);
                 
+
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);

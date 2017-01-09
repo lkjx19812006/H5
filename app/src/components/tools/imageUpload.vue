@@ -14,7 +14,7 @@ import httpService from '../../common/httpService.js'
 export default {
     data() {
             return {
-                image: "/static/images/default_image.png",
+                image: "/static/images/upload-image.png",
                 close: false,
                 size: 0,
                 key: '',

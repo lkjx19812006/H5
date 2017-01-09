@@ -1,32 +1,34 @@
 <template>
     <div class="need_release_success">
-        <mt-header title="发布成功">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header>
-        <div class="source_information">
-            <resourceInformation :information='information'></resourceInformation>
-        </div>
-        <div class="source_information">
-            <div class="bg_white">
-                <div class="title">
-                    <p class="index_title">备注</p>
-                </div>
-                <div class="more_content">
-                    <p>{{obj.description}}</p>
-                </div>
+        <myHeader :param="param"></myHeader>
+        <div class="bg_white">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                    <div class="source_information">
+                        <resourceInformation :information='information'></resourceInformation>
+                    </div>
+                    <div class="source_information">
+                        <div class="bg_white">
+                            <div class="title">
+                                <p class="index_title">备注</p>
+                            </div>
+                            <div class="more_content">
+                                <p>{{obj.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="source_information">
+                        <contactType :information='person'></contactType>
+                    </div>
+                    <div class="source_information">
+                        <auditProgress :auditProgress='auditProgress'></auditProgress>
+                    </div>
+                </mt-loadmore>
             </div>
-        </div>
-        <div class="source_information">
-            <contactType :information ='person'></contactType>
-        </div>
-        <div class="source_information">
-            <auditProgress :auditProgress='auditProgress'></auditProgress>
-        </div>
-        <div class="bottom">
-            <button class="mint-button mint-button--primary mint-button--large">继续放布</button>
-            <button class="mint-button mint-button--primary mint-button--large">查看匹配供应信息</button>
+            <div class="bottom">
+                <button class="mint-button mint-button--primary mint-button--large" @click="back()">继续放布</button>
+                <button class="mint-button mint-button--primary mint-button--large" @click="jump()">查看匹配供应信息</button>
+            </div>
         </div>
     </div>
 </template>
@@ -36,9 +38,14 @@ import resourceInformation from '../components/tools/resourceInformation'
 import contactType from '../components/tools/contactType'
 import auditProgress from '../components/tools/auditProgress'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                param: {
+                    name: '发布成功'
+                },
+                wrapperHeight: '',
                 todos: {},
                 information: {
                     name: "人参",
@@ -47,12 +54,12 @@ export default {
                     price: "98.9",
                     sendPlace: "上海",
                     number: "100",
-                    unit:"kg",
-                    name:"",
-                    phone:""
+                    unit: "kg",
+                    name: "",
+                    phone: ""
                 },
-                obj:{
-                    description:'hahhahah'
+                obj: {
+                    description: 'hahhahah'
                 },
                 person: {
                     name: '杨帆',
@@ -62,67 +69,63 @@ export default {
             }
         },
         methods: {
-             getHttp(id){
+            getHttp(id) {
                 let _self = this;
                 httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'intentionService',
-                        biz_method:'queryIntentionInfo',
-              
-                            biz_param: {
-                                id:id
-                            }
-                        }, function(suc) { 
-                            //console.log(suc.data.biz_result);
-                            if(suc.data.code == '1c01'){
-                                let result = suc.data.biz_result;
-                                console.log(result)
-                                _self.person.name = result.customerName;
-                                _self.person.phone = result.customerPhone;
-                                _self.information.price = result.price;
-                                _self.information.name = result.breedName;
-                                _self.information.spec = result.spec;
-                                _self.information.place = result.location;
-                                _self.information.number = result.number;
-                                _self.information.unit = result.unit;
-                                _self.obj.description = result.description;
-                            }else{
-                                common.$emit('message', suc.data.msg);
-                            }
-                            
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
-             }
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+                    biz_param: {
+                        id: id
+                    }
+                }, function(suc) {
+                    if (suc.data.code == '1c01') {
+                        let result = suc.data.biz_result;
+                        _self.person.name = result.customerName;
+                        _self.person.phone = result.customerPhone;
+                        _self.information.price = result.price;
+                        _self.information.name = result.breedName;
+                        _self.information.spec = result.spec;
+                        _self.information.place = result.location;
+                        _self.information.number = result.number;
+                        _self.information.unit = result.unit;
+                        _self.obj.description = result.description;
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
+            },
+            jump(){
+                let _self=this;
+                common.$emit("setParam", 'lowPrice', {keyWord:_self.information.name});
+                common.$emit('lowPriceRes', {keyWord:_self.information.name});
+                this.$router.push('/lowPriceRes');
+            },
+            back() {
+                window.history.go(-1);
+            }
         },
         components: {
             resourceInformation,
             contactType,
-            auditProgress
+            auditProgress,
+            myHeader
         },
         created() {
-            /*common.$emit('show-load');
-            this.$http.get(common.apiUrl.drug_information_list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
             var _self = this;
             var str = _self.$route.fullPath;
-            var id = str.substring(20,str.length);
+            var id = str.substring(20, str.length);
             console.log(id)
             _self.obj.id = id;
-             
-             _self.getHttp(id);
-             
-                 common.$on('informNeedSuccess',function (item){
-                        _self.getHttp(item);
-                 });
-
-        }
+            _self.getHttp(id);
+            common.$on('informNeedSuccess', function(item) {
+                _self.getHttp(item);
+            });
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 50;
+        },
 }
 </script>
 <style scoped>

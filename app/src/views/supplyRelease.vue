@@ -11,13 +11,11 @@
                        <p class="good_photo_header">上传货物图片</p>
                     </div> 
                     <div class="good_information">
-                        
                         <div class="upload_image" v-for="item in imageArr">
                             <div><imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload></div>
                             <p class="img-name">{{item.title}}</p>
                         </div>
                     </div>
-                   
                     <div class="remarks">  
                         <div class="title_name">
                            <p class="remarks_header">备注</p>
@@ -151,11 +149,10 @@ export default {
                     let checkSamplePrice = validation.checkNull(_self.obj.price, '请输入样品价格');
                     checkArr.push(checkSamplePrice);
                 }
-                let count = false;
-                let a = 0;
+                let count = '请上传图片';
                 for (let i = 0; i < _self.imgArr.length; i++) { //_self.imgArr.length
-                    if (!_self.imgArr[i]) {
-                         count = '请上传图片';
+                    if (_self.imgArr[i]) {
+                         count = false;
                          break;
                     }
                 }

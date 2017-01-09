@@ -281,6 +281,7 @@ export default {
         },
         created() {
             let _self = this;
+            _self.headParam.keyword =common.pageParam.Urgentneed;
             _self.getHttp();
             common.$on('Urgentneed', function(item) {
                 _self.headParam.keyword = item.keyWord;

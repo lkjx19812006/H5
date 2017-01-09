@@ -1,42 +1,44 @@
 <template>
     <div class="need_release_success">
-        <mt-header title="发布成功">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header>
-        <div class="source_information">
-            <resourceInformation :information='information'></resourceInformation>
-        </div>
-        <div class="source_information">
-            <div class="bg_white">
-                <div class="title">
-                    <p class="index_title">资源图片</p>
-                </div>
-                <div class="more_content">
-                    <img :src="todo" v-for="todo in imgArr">
-                </div>
+        <myHeader :param="param"></myHeader>
+        <div class="bg_white">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                    <div class="source_information">
+                        <resourceInformation :information='information'></resourceInformation>
+                    </div>
+                    <div class="source_information">
+                        <div class="bg_white">
+                            <div class="title">
+                                <p class="index_title">资源图片</p>
+                            </div>
+                            <div class="more_content">
+                                <img :src="todo" v-for="todo in imgArr">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="source_information">
+                        <div class="bg_white">
+                            <div class="title">
+                                <p class="index_title">备注</p>
+                            </div>
+                            <div class="more_content">
+                                <p>{{obj.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="source_information">
+                        <contactType :information='person'></contactType>
+                    </div>
+                    <div class="source_information">
+                        <auditProgress :auditProgress='auditProgress'></auditProgress>
+                    </div>
+                </mt-loadmore>
             </div>
-        </div>
-        <div class="source_information">
-            <div class="bg_white">
-                <div class="title">
-                    <p class="index_title">备注</p>
-                </div>
-                <div class="more_content">
-                    <p>{{obj.description}}</p>
-                </div>
+            <div class="bottom">
+                <button class="mint-button mint-button--primary mint-button--large" @click="back()">继续放布</button>
+                <button class="mint-button mint-button--primary mint-button--large" @click="jump()">查看匹配求购信息</button>
             </div>
-        </div>
-        <div class="source_information">
-            <contactType :information='person'></contactType>
-        </div>
-        <div class="source_information">
-            <auditProgress :auditProgress='auditProgress'></auditProgress>
-        </div>
-        <div class="bottom">
-            <button class="mint-button mint-button--primary mint-button--large" @click="back()">继续放布</button>
-            <button class="mint-button mint-button--primary mint-button--large">查看匹配求购信息</button>
         </div>
     </div>
 </template>
@@ -46,10 +48,15 @@ import resourceInformation from '../components/tools/resourceInformation'
 import contactType from '../components/tools/contactType'
 import auditProgress from '../components/tools/auditProgress'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
                 todos: {},
+                wrapperHeight: '',
+                param: {
+                    name: '资源发布成功'
+                },
                 information: {
                     name: "人参",
                     spec: "统货",
@@ -59,6 +66,7 @@ export default {
                     number: "100",
                     unit: "kg",
                 },
+
                 obj: {
                     description: 'hahhahah'
                 },
@@ -106,14 +114,24 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            back(){
+            jump(){
+                let _self=this;
+                common.$emit("setParam", 'Urgentneed', _self.information.name);
+                common.$emit('Urgentneed', {keyWord:_self.information.name});
+                this.$router.push('/urgentNeed');
+            },
+            back() {
                 window.history.go(-1);
             }
         },
         components: {
             resourceInformation,
             contactType,
-            auditProgress
+            auditProgress,
+            myHeader
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-50;
         },
         created() {
             var _self = this;
@@ -139,11 +157,15 @@ export default {
     float: left;
     width: 100%;
 }
+.need_release_success .bg_white{
+    background-color: #f0f0f0;
+}
 
 .need_release_success .source_information {
     margin-top: 0.8rem;
     float: left;
     width: 100%;
+    background-color: #fff; 
 }
 
 .need_release_success .source_information .bg_white {

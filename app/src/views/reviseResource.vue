@@ -1,52 +1,50 @@
 <template>
     <div class="revise_resource">
-        <!-- <mt-header title="修改资源">
-            <router-link to="/myResource" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header> -->
-        <myHeader :param = "param"></myHeader>
-        <mt-loadmore>
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-        <releaseGrugInformation :obj="obj"></releaseGrugInformation>
-        <div class="title_name">
-            <p class="good_photo_header">上传货物图片</p>
-        </div>
-        <div class="good_information">
-              
-            <div class="upload_image" v-for="item in imgageArr">
-                <div><imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload></div>
+        <myHeader :param="param"></myHeader>
+        <div class="">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                    <releaseGrugInformation :obj="obj"></releaseGrugInformation>
+                    <div class="title_name">
+                        <p class="good_photo_header">上传货物图片</p>
+                    </div>
+                    <div class="good_information">
+                        <div class="upload_image" v-for="item in imgageArr">
+                            <div>
+                                <imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="remarks">
+                        <div class="title_name">
+                            <p class="remarks_header">备注</p>
+                        </div>
+                        <div class="remarks_content">
+                            <textarea :placeholder="obj.selling_point" v-model="obj.selling_point"></textarea>
+                        </div>
+                    </div>
+                    <div class="contact">
+                        <div class="title_name">
+                            <p class="contact_header">联系方式</p>
+                        </div>
+                        <div class="contact_name">
+                            <P>姓名：</P>
+                            <div>
+                                <input type="text" :placeholder="obj.name" v-model="obj.name">
+                            </div>
+                        </div>
+                        <div class="contact_phone">
+                            <P>手机：</P>
+                            <div>
+                                <input type="text" :placeholder="obj.phone" v-model="obj.phone">
+                            </div>
+                        </div>
+                    </div>
+                </mt-loadmore>
+                <div class="confirm" @click="release()">确认修改</div>
             </div>
         </div>
-        <div class="remarks">
-            <div class="title_name">
-                <p class="remarks_header">备注</p>
-            </div>
-            <div class="remarks_content">
-                <textarea :placeholder="obj.selling_point" v-model="obj.selling_point"></textarea>
-            </div>
-        </div>
-        <div class="contact">
-             <div class="title_name">
-                 <p class="contact_header">联系方式</p>
-            </div>  
-            <div class="contact_name">
-                <P>姓名：</P>
-                <div>
-                    <input type="text" :placeholder="obj.name" v-model="obj.name">
-                </div>
-            </div>
-            <div class="contact_phone">
-                <P>手机：</P>
-                <div>
-                    <input type="text" :placeholder="obj.phone" v-model="obj.phone">
-                </div>
-            </div>
-        </div>
-        <div class="confirm" @click="release()">确认修改</div>
     </div>
-    </mt-loadmore>
-   </div> 
 </template>
 <script>
 import common from '../common/common.js'
@@ -59,12 +57,12 @@ import releaseGrugInformation from '../components/tools/releaseGrugInformation'
 export default {
     data() {
             return {
-                param:{
-                    name:'修改资源',
-                    
+                param: {
+                    name: '修改资源',
+
                 },
                 obj: {
-                    update:true,
+                    update: true,
                     drug_name: '',
                     spec: '',
                     place: '',
@@ -81,9 +79,9 @@ export default {
                     imgArr: ['', '', '', ''],
                     id: '',
                     address: '',
-                    sampling:1
+                    sampling: 1
                 },
-                imgArr: ['', '', '', '', '','',''],
+                imgArr: ['', '', '', '', '', '', ''],
                 imgageArr: [{
                     name: 'intention',
                     index: 0,
@@ -104,15 +102,15 @@ export default {
                     name: 'intention',
                     index: 4,
                     url: '/static/images/upload-image.png'
-                },{
+                }, {
                     name: 'intention',
                     index: 5,
                     url: '/static/images/upload-image.png'
-                },{
+                }, {
                     name: 'intention',
                     index: 6,
                     url: '/static/images/upload-image.png'
-                },]
+                }, ]
 
             }
         },
@@ -146,8 +144,8 @@ export default {
                     _self.obj.name = result.customerName;
                     _self.obj.phone = result.customerPhone;
                     _self.obj.address = result.address;
-                    _self.obj.sampling=result.sampling;
-                    _self.obj.breedId=result.breedId;
+                    _self.obj.sampling = result.sampling;
+                    _self.obj.breedId = result.breedId;
                     _self.imgageArr[0].url = result.image[0];
                     _self.imgageArr[1].url = result.image[1];
                     _self.imgageArr[2].url = result.image[2];
@@ -155,7 +153,7 @@ export default {
                     _self.imgageArr[4].url = result.image[4];
                     _self.imgageArr[5].url = result.image[5];
                     _self.imgageArr[6].url = result.image[6];
-                    _self.imgArr=result.image;
+                    _self.imgArr = result.image;
                     if (result.image[0] != undefined) {
                         _self.obj.imgArr[0] = result.image[0];
                     }
@@ -199,11 +197,11 @@ export default {
                     let checkSamplePrice = validation.checkNull(_self.obj.price, '请输入样品价格');
                     checkArr.push(checkSamplePrice);
                 }
-                let count = false;
+                let count = '请上传图片';
                 for (let i = 0; i < _self.imgArr.length; i++) {
-                    if (!_self.imgArr[i]) {
-                         count = '请上传图片';
-                         break;
+                    if (_self.imgArr[i]) {
+                        count = false;
+                        break;
                     }
                 }
                 if (count) {
@@ -211,9 +209,9 @@ export default {
                 }
                 let checkDes = validation.checkNull(_self.obj.selling_point, '请输入药材资源卖点');
                 checkArr.push(checkDes);
-                let checkName = validation.checkNull(_self.obj.name,'请输入姓名');
+                let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
                 checkArr.push(checkName);
-                let checkPhone = validation.checkPhone(_self.obj.phone,'请输入电话');
+                let checkPhone = validation.checkPhone(_self.obj.phone, '请输入电话');
                 checkArr.push(checkPhone);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
@@ -263,9 +261,12 @@ export default {
                 })
             },
             release() {
-                common.$emit('confirm', '确认修改信息后,将等待审核！', '确定修改');
                 let _self = this;
-                _self.tabRevise();
+                common.$emit('confirm', {
+                    message: '确认修改信息后,将等待审核！',
+                    title: '确定修改',
+                    ensure: _self.tabRevise
+                });
             },
             getUrl(param) {
                 this.obj.imgArr[param.index] = param.url;
@@ -298,28 +299,34 @@ textarea {
     border-radius: 0;
 }
 
+.revise_resource .bg_white {
+    background: #fff;
+}
 .revise_resource .mint-header {
     background-color: white;
     color: #313232;
     border-bottom: 1px solid #C9C9C9;
 }
 
-.revise_resource .good_information{
+.revise_resource .good_information {
     /*padding: 1.28rem;*/
     /*margin-bottom: 0.8533rem;*/
     background: white;
 }
+
 .revise_resource .remarks,
-.contact{
+.contact {
     background: white;
     float: left;
     width: 100%;
 }
+
 .revise_resource .good_information {
     float: left;
     width: 100%;
     padding: 1.28rem;
 }
+
 
 /*.revise_resource .contact {
     float: left;
@@ -342,32 +349,35 @@ textarea {
     background-size: 1.11rem 1.11rem;
 }
 
-.revise_resource .title_name{
-    width:100%;
+.revise_resource .title_name {
+    width: 100%;
     background: #F1F0F0;
 }
+
 .revise_resource .title_name .good_photo_header {
     background: url('/static/images/upload.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
-    line-height:3.75rem; 
-    height:3.58rem;
+    line-height: 3.75rem;
+    height: 3.58rem;
     margin-left: 1.28rem;
 }
 
-.revise_resource .title_name .remarks_header{
+.revise_resource .title_name .remarks_header {
     background: url('/static/images/remarks.png') no-repeat 0 center;
-    background-size:1.11rem 1.11rem;  
-    line-height:3.75rem; 
-    height:3.58rem;
+    background-size: 1.11rem 1.11rem;
+    line-height: 3.75rem;
+    height: 3.58rem;
     margin-left: 1.28rem;
 }
-.revise_resource .title_name .contact_header{
-    background:url('../../static/images/contact.png') no-repeat 0 center;
-    background-size:1.11rem 1.11rem;
-    line-height:3.75rem; 
-    height:3.58rem;
+
+.revise_resource .title_name .contact_header {
+    background: url('../../static/images/contact.png') no-repeat 0 center;
+    background-size: 1.11rem 1.11rem;
+    line-height: 3.75rem;
+    height: 3.58rem;
     margin-left: 1.28rem;
 }
+
 .revise_resource .good_infor_header,
 .good_delivery_header,
 .good_sample_header,
@@ -385,22 +395,25 @@ textarea {
     float: left;
     margin: 1rem 2% 0 0;
 }
-.revise_resource .good_information .upload_image>div{
-    height:5rem;
+
+.revise_resource .good_information .upload_image>div {
+    height: 5rem;
     overflow: hidden;
 }
+
 .revise_resource .good_name,
 .good_spec,
 .good_place,
 .good_number,
 .contact_name,
 .contact_phone {
-    height:3.5rem;
+    height: 3.5rem;
 }
+
 .revise_resource .contact {
-    
     margin-bottom: 10px;
 }
+
 .revise_resource .good_place select {
     background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
     background-size: 1.067rem 1.067rem;
@@ -416,7 +429,7 @@ textarea {
 .revise_resource .good_name p,
 .good_spec p,
 .good_place p,
-.good_number p{
+.good_number p {
     float: left;
     line-height: 3.5rem;
     font-size: 1.19rem;
@@ -438,7 +451,7 @@ textarea {
 
 .revise_resource .good_name div .select,
 .good_spec div select,
-.good_place div select{
+.good_place div select {
     font-size: 1.024rem;
     height: 2.9rem;
     width: 14.847rem;
@@ -534,9 +547,11 @@ textarea {
     padding: 1.279rem;
     border: 1px solid #D2D2D2;
 }
-.revise_resource .remarks_content{
+
+.revise_resource .remarks_content {
     padding-bottom: 1.279rem;
 }
+
 .revise_resource .confirm {
     width: 100%;
     height: 4.267rem;
@@ -586,32 +601,32 @@ textarea {
     overflow: hidden;
 }
 
-
 .revise_resource .contact_name,
-.revise_resource .contact_phone{
+.revise_resource .contact_phone {
     margin-top: 0px;
     border-bottom: 1px solid #D2D2D2;
     position: relative;
 }
+
 .revise_resource .contact_name div,
-.revise_resource .contact_phone div{
+.revise_resource .contact_phone div {
     position: absolute;
-    right:1.28rem;
-
-
+    right: 1.28rem;
 }
+
 .revise_resource .contact_name input,
-.revise_resource .contact_phone input{
+.revise_resource .contact_phone input {
     text-align: right;
-    border:none;
-    height:3.1rem;
+    border: none;
+    height: 3.1rem;
     line-height: 3.5rem;
     font-size: 1.19rem;
 }
+
 .revise_resource .contact_name p,
-.contact_phone p{
+.contact_phone p {
     position: absolute;
-    left:1.28rem;
+    left: 1.28rem;
     line-height: 3.5rem;
     font-size: 1.19rem;
 }
