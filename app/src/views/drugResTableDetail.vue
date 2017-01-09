@@ -101,6 +101,7 @@ export default {
         methods: {
             drugDetail(name) {
                 let _self = this;
+                common.$emit('show-load');
                 httpService.drugResTable(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'breedService',
                     biz_method: 'queryDrugPropertiesInfo',
@@ -108,10 +109,16 @@ export default {
                         herbName: name
                     }
                 }, function(suc) {
-                    common.$emit('message', suc.data.msg);
+                    common.$emit('close-load');   
                     let result = suc.data.biz_result;
-                    _self.obj = result;
+                    if(suc.data.code == '1c01'){
+                        _self.obj = result;
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
                 }, function(err) {
+                    common.$emit('close-load');   
                     common.$emit('message', err.data.msg);
                 })
             }

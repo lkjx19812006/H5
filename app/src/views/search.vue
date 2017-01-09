@@ -161,6 +161,7 @@ export default {
                 let _self = this;
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
+                    common.$emit('show-load');
                     httpService.searchWord(common.urlCommon + common.apiUrl.most, {
                         biz_module: 'searchKeywordService',
                         biz_method: 'querySearchKeyword',
@@ -170,10 +171,16 @@ export default {
                             pSize: 20
                         }
                     }, function(suc) {
-                        common.$emit('message', suc.data.msg);
+                        common.$emit('close-load');
                         let result = suc.data.biz_result.list;
-                        _self.datas = result;
+                        if(suc.data.code == '1c01'){
+                            _self.datas = result;
+                        }else{
+                            common.$emit('message', suc.data.msg);
+                        }
+                        
                     }, function(err) {
+                        common.$emit('close-load');
                         common.$emit('message', err.data.msg);
                     })
                 }, 0)
@@ -196,9 +203,13 @@ export default {
                 }
             }, function(suc) {
                 common.$emit('close-load');
-                common.$emit('message', suc.data.msg);
                 let result = suc.data.biz_result.list;
-                _self.todos = result;
+                if(suc.data.code == '1c01'){
+                    _self.todos = result;
+                }else{
+                    common.$emit('message', suc.data.msg);
+                }
+                
             }, function(err) {
                 common.$emit('close-load');
                 common.$emit('message', err.data.msg);
