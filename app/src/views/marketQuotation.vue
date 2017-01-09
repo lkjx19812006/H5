@@ -2,7 +2,7 @@
     <div class="market_quotation">
         <myHeader :param="param"></myHeader>
         <div class="search" @click="jump">
-           <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
+            <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
         </div>
         <div class="good_list">
             <div class="good_list_content">
@@ -13,8 +13,8 @@
                     <p>价格</p>
                     <input type="button" value="跌涨(元)">
                 </div>
-                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }"  v-show="todos.length!=0">
+                    <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                         <ul class="first_ul">
                             <li v-for="(todo,index) in todos">
                                 <div class="second_level" v-on:click="firstLevel(index,todos)">
@@ -41,16 +41,16 @@
                                 </ul>
                             </li>
                         </ul>
-                    </div>
-                    <div slot="top" class="mint-loadmore-top">
-                        <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
-                        <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                    </div>
-                    <div slot="bottom" class="mint-loadmore-bottom">
-                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
-                        <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                    </div>
-                </mt-loadmore>
+                        <div slot="top" class="mint-loadmore-top">
+                            <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+                            <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                        </div>
+                        <div slot="bottom" class="mint-loadmore-bottom">
+                            <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                            <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                        </div>
+                    </mt-loadmore>
+                </div>
             </div>
         </div>
     </div>
@@ -63,8 +63,8 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                myShow:{
-                    myShow:false
+                myShow: {
+                    myShow: false
                 },
                 param: {
                     name: '市场行情'
@@ -81,8 +81,8 @@ export default {
                 show: false,
                 httpPraram: {
                     page: 1,
-                    pageSize: 10,
-                    keyword:''
+                    pageSize: 20,
+                    keyword: ''
                 }
             }
         },
@@ -97,7 +97,9 @@ export default {
                     biz_module: 'breedService',
                     biz_method: 'queryBreedPrice',
                     biz_param: {
-                        name: _self.httpPraram.keyword
+                        name: _self.httpPraram.keyword,
+                        pn: _self.httpPraram.page,
+                        pSize: _self.httpPraram.pageSize,
                     }
                 }, function(suc) {
                     let data = suc.data.biz_result.list;
@@ -171,7 +173,7 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top -160;
         }
 }
 </script>
@@ -188,12 +190,10 @@ export default {
     vertical-align: middle;
 }
 
-.market_quotation {
+.market_quotation {}
 
-}
-
-.market_quotation .search .long_search .search_div .search_content{
-    background-color:#fff; 
+.market_quotation .search .long_search .search_div .search_content {
+    background-color: #fff;
 }
 
 .market_quotation .mint-header {
@@ -218,17 +218,15 @@ export default {
     border: 1px solid #ddd;
     margin-top: 15px;
     text-align: left;
-
 }
 
 .market_quotation .search .search_image {
-   max-width: 24px;
+    max-width: 24px;
     width: 18px;
     height: 18px;
     position: absolute;
-    left:25%;
+    left: 25%;
     top: 21px;
-
 }
 
 .market_quotation .good_list {
@@ -267,7 +265,7 @@ export default {
 }
 
 .market_quotation .list_content_header input {
-    margin-right:0.8rem ;
+    margin-right: 0.8rem;
     outline: none;
     border: 0;
     height: 30px;

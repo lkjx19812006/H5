@@ -36,12 +36,19 @@ export default {
                 default: null
             }
         },
-        created() {},
+        created() {
+            console.log(this.param);
+        },
         methods: {
             jump(router) {
                 let _self = this;
                 if (router == 'detailsPage') {
-                    common.$emit('message', '暂未提供该服务');
+                    if(_self.param.employee<100000){
+                       common.$emit('message', '暂无客服'); 
+                    }else{
+                        this.$router.push('/detailsPage');
+                    }
+                    
                 } else {
                     switch (router) {
                         case 'addressManage':
@@ -54,7 +61,6 @@ export default {
                         default:
                             break;
                     }
-
                     if (!common.customerId) {
                         function loadApp() {
                             _self.$router.push('/login');

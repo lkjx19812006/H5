@@ -1,7 +1,7 @@
 <template>
     <div class="mine">
         <accountOverview :param="param"></accountOverview>
-        <myInformation></myInformation>
+        <myInformation :param="information"></myInformation>
         <div class="all_order">
             <p>全部订单</p>
             <div @click="jumpOrder(-1)">
@@ -48,26 +48,6 @@ export default {
                 information: {
 
                 },
-                content: [{
-                    name: '扬帆',
-                    company: '康美药业',
-                    money: '31232.89',
-                    integration: '1223',
-                    customer: '余鹏飞',
-                    customerGender: '',
-                    my_service: '我的专属客服',
-                    details: '点击详情',
-                    gender: '',
-                    my_apply: '申请专属客服'
-                }],
-                entrance: [{
-                    name: '待审核',
-                    router: '',
-                    his_name: '余鹏飞',
-                    my_service: '我的专属客服',
-                    details: '点击详情',
-                    img_src: '/static/images/woman.png'
-                }],
                 entrance: [{
                     name: '待确认',
                     router: 'myOrder',
@@ -153,9 +133,6 @@ export default {
                 httpService.queryEmployeeInfo(otherurl, otherbody, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code = "1c01") {
-                        console.log(suc.data.biz_result);
-                        _self.content[0].customer = suc.data.biz_result.name;
-                        _self.content[0].customerGender = suc.data.biz_result.gender;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -181,6 +158,8 @@ export default {
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code = "1c01") {
+                        _self.information=suc.data.biz_result;
+                        console.log(_self.information);
                         _self.param.name = suc.data.biz_result.name;
                         _self.param.company = suc.data.biz_result.company;
                         _self.param.normalMoney = suc.data.biz_result.normalMoney;
