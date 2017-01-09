@@ -9,9 +9,7 @@
                 <img :src="todo.second_img" class="arrow">
             </li>
         </ul>
-        <!-- <router-link to="login"> -->
         <div class="quit" @click="quit">退出当前账号</div>
-        <!-- </router-link> -->
     </div>
 </template>
 <script>

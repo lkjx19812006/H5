@@ -41,8 +41,8 @@ export default {
                 param: {
                     url: '',
                     company: '',
-                    normalMoney: '',
-                    score: '',
+                    normalMoney:0,
+                    score: 0,
                     name: ''
                 },
                 information: {
@@ -156,8 +156,6 @@ export default {
                         console.log(suc.data.biz_result);
                         _self.content[0].customer = suc.data.biz_result.name;
                         _self.content[0].customerGender = suc.data.biz_result.gender;
-                        common.customerId = suc.data.biz_result.id;
-                        window.localStorage.ID = suc.data.biz_result.id;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -189,6 +187,8 @@ export default {
                         _self.param.score = suc.data.biz_result.score;
                         _self.param.url = suc.data.biz_result.avatar;
                         _self.url = suc.data.biz_result.avatar;
+                         common.customerId = suc.data.biz_result.customerId;
+                        window.localStorage.ID = suc.data.biz_result.customerId;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -222,7 +222,7 @@ export default {
                             break;
                     }
                     let _self = this;
-                    if (!common.customerId) {
+                    if (!common.customerId&&router!='mySet') {
                         function loadApp() {
                             _self.$router.push('/login');
                         }
@@ -232,8 +232,10 @@ export default {
                             ensure: loadApp
                         });
                         return;
+                    }else{
+                       this.$router.push(router); 
                     }
-                    this.$router.push(router);
+                    
                 }
 
             }
@@ -245,8 +247,19 @@ export default {
             common.$on("toMine", function(obj) {
                 _self.getHttp();
                 _self.salesmanData();
+            });
+            common.$on("clear_Information", function() { //来自资源页面的提示刷新
+                console.log('dfdfdfdfdfdf');
+                _self.param = {
+                    url: '',
+                    company: '',
+                    normalMoney: 0,
+                    score: 0,
+                    name: ''
+                };
+                console.log( _self.param);
 
-            })
+            });
         }
 }
 </script>
