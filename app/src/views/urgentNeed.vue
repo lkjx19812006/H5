@@ -47,6 +47,8 @@
                 </mt-loadmore>
             </div>
         </div>
+
+        <errPage  :err="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -54,11 +56,13 @@ import common from '../common/common.js'
 import headFix from '../components/tools/head'
 import sort from '../components/tools/sort'
 import httpService from '../common/httpService.js'
+import errPage from '../components/tools/err'
 import filters from '../filters/filters'
 export default {
     data() {
             return {
                 sortRouter: 'urgentNeed',
+                err:"暂无求购资源",
                 sortArr: [{
                     name: '上架时间',
                     asc: 'top',
@@ -164,7 +168,8 @@ export default {
         },
         components: {
             headFix,
-            sort
+            sort,
+            errPage
         },
         methods: {
             getHttp(back) {
@@ -189,6 +194,7 @@ export default {
                     }
                 }, function(suc) {
                     common.$emit('close-load');
+                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
                     let result = suc.data.biz_result.list;
                     if(suc.data.code == '1c01'){
                         /*common.$emit('translateDate', result, _self.todos);*/
@@ -218,14 +224,12 @@ export default {
                 let _self = this;
                 _self.param = true;
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp();
             },
             clearKeyword() {
                 let _self = this;
                 this.httpPraram.page = 1;
-                this.todos.splice(0, _self.todos.length);
                 this.httpPraram.keyword = '';
                 this.getHttp();
             },
@@ -259,7 +263,6 @@ export default {
                 let _self = this;
                 setTimeout(() => {
                     _self.httpPraram.page = 1;
-                    _self.todos.splice(0, _self.todos.length);
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
@@ -277,7 +280,6 @@ export default {
                 _self.headParam.keyword = item.keyWord;
                 _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             });
             common.$on('urgentNeed-sort', function(item) {
@@ -293,7 +295,6 @@ export default {
                     _self.sortArr[3].url = "/static/icons/screen.png";
                 }
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             });
         },

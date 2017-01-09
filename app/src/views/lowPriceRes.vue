@@ -4,7 +4,8 @@
         <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
-                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+               
+                    <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
                             <img v-lazy="todo.image[0]" class="list_images">
@@ -33,8 +34,16 @@
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
                 </mt-loadmore>
-            </div>
+                        
+          </div>          
         </div>
+       
+            <errPage  :err="err"  v-show="todos.length==0"></errPage>
+       
+       
+        <!-- <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length==0">
+             <errPage  :err="err"></errPage>
+        </div> -->
     </div>
 </template>
 <script>
@@ -43,10 +52,12 @@ import sort from '../components/tools/sort'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
 import headFix from '../components/tools/head'
+import errPage from '../components/tools/err'
 import filters from '../filters/filters'
 export default {
     data() {
             return {
+                err:"暂无低价资源",
                 sortRouter: 'lowRes',
                 sortArr: [{
                     name: '上架时间',
@@ -156,7 +167,8 @@ export default {
         },
         components: {
             sort,
-            headFix
+            headFix,
+            errPage
         },
         methods: {
             getHttp(back) {
@@ -181,6 +193,7 @@ export default {
                     }
                 }, function(suc) {
                     common.$emit('close-load');
+                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
                     let result = suc.data.biz_result.list;
                     if(suc.data.code == '1c01'){
                         for(var i = 0; i < result.length; i++){
@@ -206,13 +219,11 @@ export default {
             getId(param) {
                 let _self = this;
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp();
             },
             clearKeyword() {
                 this.httpPraram.page = 1;
-                this.todos.splice(0, this.todos.length);
                 this.httpPraram.keyword = '';
                 this.getHttp();
             },
@@ -243,7 +254,6 @@ export default {
                 let _self = this;
                 setTimeout(() => {
                     _self.httpPraram.page = 1;
-                    _self.todos.splice(0, _self.todos.length);
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
@@ -262,7 +272,6 @@ export default {
                 _self.headParam.keyword = item.keyWord;
                 _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             })
             common.$on('lowRes-sort', function(item) {
@@ -278,7 +287,6 @@ export default {
                     _self.sortArr[3].url = "/static/icons/screen.png";
                 }
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             });
         },

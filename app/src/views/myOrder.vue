@@ -53,6 +53,7 @@
                 </mt-loadmore>
             </div>
         </div>
+        <errPage  :err="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -61,9 +62,11 @@ import httpService from '../common/httpService.js'
 import landscapeScroll from '../components/tools/landscapeScroll'
 import attentionHead from '../components/tools/attentionHead'
 import filters from '../filters/filters'
+import errPage from '../components/tools/err'
 export default {
     data() {
             return {
+                err:'暂无此类订单',
                 param: {
                     name: '采购订单',
                     other_name: '销售订单',
@@ -155,7 +158,6 @@ export default {
             changeOrderStatus(item) {
                 this.httpPraram.orderstatus = item.id;
                 this.httpPraram.page = 1;
-                this.todos.splice(0, this.todos.length);
                 this.getHttp();
             },
             cancelOrder(id, no, type) {
@@ -199,9 +201,7 @@ export default {
             },
             getHttp(back) {
                 let _self = this;
-                if (_self.httpPraram.page == 1) {
-                    _self.todos.splice(0, _self.todos.length);
-                }
+                
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -222,6 +222,7 @@ export default {
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
+                        if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
                         let listArr = suc.data.biz_result.list;
 
                         if (listArr.length < _self.httpPraram.pageSize) {
@@ -253,7 +254,7 @@ export default {
                     _self.httpPraram.type = 1;
                 }
                 this.allLoaded = false;
-                this.todos.splice(0, this.todos.length);
+               
                 this.httpPraram.page = 1;
                 _self.getHttp();
             },
@@ -285,7 +286,7 @@ export default {
                 let _self = this;
                 setTimeout(() => {
                     _self.httpPraram.page = 1;
-                    _self.todos.splice(0, _self.todos.length);
+                    
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
@@ -307,7 +308,8 @@ export default {
         }),
         components: {
             landscapeScroll,
-            attentionHead
+            attentionHead,
+            errPage
         },
         created() {
             let _self = this;

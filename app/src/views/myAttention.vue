@@ -64,6 +64,8 @@
                 </mt-loadmore>
             </div>
         </div>
+
+        <errPage  :err="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -73,9 +75,11 @@ import attentionHead from '../components/tools/attentionHead'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
 import filters from '../filters/filters'
+import errPage from '../components/tools/err'
 export default {
     data() {
             return {
+                err:'暂无关注资源',
                 myShow:{
                     myShow:true
                 },
@@ -106,7 +110,8 @@ export default {
         },
         components: {
             longSearch,
-            attentionHead
+            attentionHead,
+            errPage
         },
         methods: {
             jumpSearch() {
@@ -123,9 +128,7 @@ export default {
             },
             resorceHttp(back) {
                 let _self = this;
-                if(_self.httpPraram.page==1){
-                    _self.todos.splice(0,_self.todos.length)
-                }
+                
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -146,6 +149,7 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
+                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
                     let result = suc.data.biz_result.list;
                     console.log(result);
                     for (let i = 0; i < result.length; i++) {
@@ -166,7 +170,7 @@ export default {
             clearKeyword() {
                 let _self = this;
                 this.httpPraram.page = 1;
-                this.todos.splice(0, _self.todos.length);
+                
                 this.httpPraram.keyword = '';
                 this.resorceHttp();
             },
@@ -193,8 +197,7 @@ export default {
             loadTop(id) {
                 let _self = this;
                 setTimeout(() => {
-                    _self.httpPraram.page = 1;
-                    _self.todos.splice(0, _self.todos.length);
+                    _self.httpPraram.page = 1;                  
                     _self.resorceHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
@@ -206,11 +209,9 @@ export default {
                 console.log(param)
                 if (param == true) {
                     _self.httpPraram.intentionType = 1;
-                    _self.todos.splice(0, _self.todos.length);
                     _self.resorceHttp();
                 }else if(param == false){
                     _self.httpPraram.intentionType = 0;
-                    _self.todos.splice(0, _self.todos.length);
                     _self.resorceHttp();
                 }
             }
@@ -238,7 +239,6 @@ export default {
                 //console.log(item)
                 _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.resorceHttp();
             });
 

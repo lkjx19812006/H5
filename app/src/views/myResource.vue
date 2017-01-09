@@ -41,6 +41,8 @@
                 </mt-loadmore>
             </div>
         </div>
+
+        <errPage  :err="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -51,9 +53,11 @@ import myPurchaseSort from '../components/tools/myPurchaseSort'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
 import filters from '../filters/filters'
+import errPage from '../components/tools/err'
 export default {
     data() {
             return {
+                err:'暂无我的资源',
                 sortRouter: 'home',
                 param: {
                     name: '我的资源',
@@ -192,7 +196,8 @@ export default {
         components: {
             searchInput,
             myPurchaseSort,
-            myHeader
+            myHeader,
+            errPage
         },
         filters: (filters, {
            
@@ -226,6 +231,7 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
+                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
                     let result = suc.data.biz_result.list;             
                     if(suc.data.code == '1c01'){
                         for(var i = 0; i < result.length; i++){
@@ -248,7 +254,6 @@ export default {
             getId(param) {
                 let _self = this;
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp();
             },
@@ -288,7 +293,6 @@ export default {
                 let _self = this;
                 setTimeout(() => {
                     _self.httpPraram.page = 1;
-                    _self.todos.splice(0, _self.todos.length);
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
@@ -302,13 +306,11 @@ export default {
             //修改成功通知刷新
             common.$on('reviseResource', function(obj) {
                     _self.httpPraram.page = 1;
-                    _self.todos.splice(0, _self.todos.length);
                     _self.getHttp();
                 })
                 //发布成功通知刷新
             common.$on("informMyRes", function(id) {
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             })
         },
