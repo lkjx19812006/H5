@@ -5,7 +5,7 @@
                  <img :src="param.url" v-show="param.url">
                  <img src="/static/images/my-header.png" v-show="!param.url">
                  <p>{{param.name}}</p>
-                 <p class="company-name">{{param.companyShort}}</p>
+                 <p class="company-name">{{param.company}}</p>
                  <div>
                       <p class="left">我的储值 <span>{{param.normalMoney}}</span></p>
                       <p class="right">我的积分 <span>{{param.score}}</span></p>

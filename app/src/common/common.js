@@ -13,6 +13,7 @@ let common = new Vue({
         SID: window.localStorage.SID,
         difTime: window.localStorage.difTime,
         servicePhone:'',
+        appUrl:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai',
         apiUrl: {
             list: '/static/data/list.json',
             market_list: '/static/data/market_list.json',
@@ -112,82 +113,7 @@ common.$on('confirm',(obj) => {
     })
 })
 
-common.$on('translateDate', (result, todos) => {
-    for (var i = 0; i < result.length; i++) {
-        var item = result[i];
-        var duedate = item.duedate;
-        var pubdate = item.pubdate;
-        if (duedate != '') duedate = duedate.substring(0, 10);
-        if (pubdate != '') pubdate = pubdate.substring(0, 10);
-        item.duedate = duedate;
-        item.pubdate = pubdate;
-        if (duedate != '' && pubdate != '') {
-            duedate = duedate.replace(/-/g, '/');
-            pubdate = pubdate.replace(/-/g, '/');
-            var duedateDate = new Date(duedate);
-            var pubdateDate = new Date(pubdate);
-            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-            var days = Math.floor(dateValue / (24 * 3600 * 1000));
-            item.days = Number(days);
-        } else {
-            item.days = '';
-        }
-        todos.push(item);
-    }
-})
 
-common.$on('translateDays',(item,obj) => {  //针对单一的对苹果求天数
-        var duedate = item.duedate;
-        var pubdate = item.pubdate;
-        if (duedate != '') duedate = duedate.substring(0, 10);
-        if (pubdate != '') pubdate = pubdate.substring(0, 10);
-        item.duedate = duedate;
-        item.pubdate = pubdate;
-        if (duedate != '' && pubdate != '') {
-            duedate = duedate.replace(/-/g, '/');
-            pubdate = pubdate.replace(/-/g, '/');
-            var duedateDate = new Date(duedate);
-            var pubdateDate = new Date(pubdate);
-            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-            var days = Math.floor(dateValue / (24 * 3600 * 1000));
-            item.days = Number(days);
-        } else {
-            item.days = '';
-        }
-        obj = item;
-})
-
-common.$on("translatePubdate", (result, todos) => {
-    for (var i = 0; i < result.length; i++) {
-        var item = result[i];
-        var onSell = item.onSell;
-        var pubdate = item.pubdate;
-        var duedate = item.duedate;
-        if (duedate != '') duedate = duedate.substring(0, 10);
-        if (pubdate != '') pubdate = pubdate.substring(0, 10);
-        if (onSell == 1) {
-            onSell = '待审核'
-        } else if (onSell == 2) {
-            onSell = '正在匹配买家'
-        } else {
-            onSell = ''
-        }
-        item.pubdate = pubdate;
-        item.onSell = onSell;
-        if (duedate != '' && pubdate != '') {
-            duedate = duedate.replace(/-/g, '/');
-            pubdate = pubdate.replace(/-/g, '/');
-            var duedateDate = new Date(duedate);
-            var pubdateDate = new Date(pubdate);
-            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-            var days = Math.floor(dateValue / (24 * 3600 * 1000));
-            item.days = Number(days);
-        } else {
-            item.days = '';
-        }
-        todos.push(item);
-    }
-})
 
 common.$on('setParam', (key, value) => {
     common.pageParam[key] = value;

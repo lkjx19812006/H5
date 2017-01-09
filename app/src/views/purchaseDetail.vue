@@ -12,11 +12,11 @@
             </div>
             <div class="detail ">
                 <p>规格：<span>{{obj.spec}}</span></p>
-                <p class="right">发布时间：<span>{{obj.pubdate}}</span></p>
+                <p class="right">发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
             </div>
             <div class="detail">
                 <p>产地：<span>{{obj.place}}</span></p>
-                <p class="right">剩余：<span>{{obj.duedate}}天</span></p>
+                <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}天</span></p>
             </div class="detail">
             <div class="detail">
                 <p>需求数量：<span>{{obj.number}}{{obj.number_unit}}</span></p>
@@ -42,6 +42,7 @@
 import common from '../common/common.js'
 import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
+import filters from '../filters/filters'
 export default {
     data() {
             return {
@@ -90,11 +91,11 @@ export default {
                     }, function(suc) {
                         let result = suc.data.biz_result;
                         console.log(result);
-                        var duedateDate = new Date(result.duedate);
+                        /*var duedateDate = new Date(result.duedate);
                         var pubdateDate = new Date(result.pubdate);
                         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
                         var days = Math.floor(dateValue / (24 * 3600 * 1000));
-                        var pubdate = result.pubdate.substring(0, 10);
+                        var pubdate = result.pubdate.substring(0, 10);*/
                         _self.obj.drug_name = result.breedName;
                         _self.obj.spec = result.spec;
                         _self.obj.place = result.location;
@@ -106,8 +107,8 @@ export default {
                         _self.obj.phone = result.customerPhone;
                         _self.obj.offer = result.offer;
                         _self.obj.offerVprice = result.offerVprice;
-                        _self.obj.pubdate = pubdate;
-                        _self.obj.duedate = days;
+                        _self.obj.pubdate = result.pubdate;
+                        _self.obj.duedate = result.duedate;
                     }, function(err) {
                         common.$emit('message', err.data.msg);
                     })

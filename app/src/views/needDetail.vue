@@ -1,17 +1,9 @@
 <template>
     <div class="content need_detail">
-       <!--  <mt-header title="需求详情">
-            <router-link to="" slot="left">
-                <mt-button icon="back" @click="back()"></mt-button>
-            </router-link>
-        </mt-header> -->
         <myHeader :param = "param"></myHeader>
-        
-        <div class="page-loadmore-wrapper"  >
-            
+        <div   >
                 <div class="center">
                     <div class="title">
-                        <!-- <img src="/static/icons/impatient.png"> -->
                         <p>{{obj.breedName}}</p>
                     </div>
                     <div class="detail">
@@ -61,7 +53,6 @@ export default {
                 obj: {},
                 param:{
                     name:'需求详情'
-                    
                 },
             }
         },
@@ -89,29 +80,12 @@ export default {
                 }
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
-                    
                     let result = suc.data.biz_result;
                     if(suc.data.code == '1c01'){
                         _self.obj = result;
                     }else{
                         common.$emit('message', suc.data.msg);
                     }
-                   /* var duedate = result.duedate;
-                    var pubdate = result.pubdate;
-                    if(duedate != '' && pubdate != ''){
-                        duedate = duedate.replace(/-/g, '/');
-                        pubdate = pubdate.replace(/-/g, '/');
-                        var duedateDate = new Date(duedate);
-                        var pubdateDate = new Date(pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
-                        result.days = days;
-                    }else{
-                        result.days = '';
-                    }                       
-                    if(pubdate != '')result.pubdate = result.pubdate.substring(0, 10);*/
-                    
-                    
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
@@ -140,7 +114,6 @@ export default {
 
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .need_detail .page-loadmore-wrapper{
    margin-bottom: 0px;

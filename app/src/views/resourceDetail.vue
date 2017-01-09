@@ -2,7 +2,7 @@
     <div class="resource_detail">
         <myHeader :param = "param"></myHeader>
      <mt-loadmore>
-        <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <div class=""  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <div class="swipe_height" v-if="obj.image">
                     <swiper :options="swiperOption" class="swipe_height">
                         <swiper-slide v-for="item in obj.image">
@@ -22,19 +22,19 @@
                     <div class="title">
                         <img src="/static/icons/impatient.png">
                         <p>{{obj.breedName}}</p>
-                        <p class="price_right"><span>{{obj.price}}</span>元/kg</p>
+                        <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
                     </div>
                     <div class="detail ">
                         <p>产地：<span>{{obj.location}}</span></p>
                         <p class="right">规格：<span>{{obj.spec}}</span></p>
                     </div>
                     <div class="detail">
-                        <p>库存：<span>{{obj.number}}kg</span></p>
-                        <p class="right">起订量：<span>{{obj.moq}}kg</span></p>
+                        <p>库存：<span>{{obj.number}}{{obj.unit}}</span></p>
+                        <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
                     </div class="detail">
-                    <div class="detail">
+                   <!--  <div class="detail">
                         <p>样品：<span v-if="obj.sampling == 0">不提供</span><span v-if="obj.sampling == 1">提供</span></p>
-                    </div>
+                    </div> -->
                     <div class="detail">
                         <p>卖点：<span>{{obj.description}}</span></p>
                     </div>

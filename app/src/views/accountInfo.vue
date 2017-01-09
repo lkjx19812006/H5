@@ -124,6 +124,11 @@ export default {
          gender:'',
          
      },
+     arr:{
+        name:'',
+        company:'',
+        url:''
+     },
      url:'/static/images/my-header.png'
      
 
@@ -181,7 +186,9 @@ export default {
             _self.companyDataArr[4].content = suc.data.biz_result.invoice;
             _self.companyDataArr[5].content = suc.data.biz_result.ctype;
             _self.param.url = suc.data.biz_result.avatar;
-            console.log(suc.data.biz_result.avatar)
+          
+            common.$emit("toMine", _self.arr);
+            //console.log(suc.data.biz_result.avatar)
           },function(err){
             common.$emit('close-load');
           })

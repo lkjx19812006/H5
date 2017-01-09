@@ -355,7 +355,7 @@ export default {
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
-    height: 9.55rem;
+    height: 9.6rem;
     margin-top: 10px;
     background: white;
     border-radius: 3px;
@@ -387,11 +387,11 @@ export default {
     float: left;
     width: 100%;
     padding-right: 90px;
-    line-height: 18px;
+    line-height: 1.2rem;
     text-align: left;
     font-size: 1.2rem;
     color: #666;
-    margin-top: 0.5rem;
+    margin-top: 0.8rem;
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec {
@@ -407,7 +407,7 @@ export default {
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
     max-width: 80px;
-    height: 95px;
+    height: 8.1rem;
     margin: 0;
     right: 10px;
 }

@@ -6,7 +6,7 @@
         <mt-loadmore>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
 
-        <ul>
+        <ul >
             <li v-for="(todo,index) in todos" v-show="todo.show">
                 <div class="address_top" @click="jumpBack(todo)">
                     <div class="receiver">
@@ -321,5 +321,6 @@ export default {
     line-height: 50px;
     position: absolute;
     bottom: 0;
+    
 }
 </style>

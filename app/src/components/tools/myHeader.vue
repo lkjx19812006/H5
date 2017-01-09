@@ -32,11 +32,9 @@ export default {
             },
             jumpRevise() {
                 let _self = this;
-                //console.log(this.param.reviseRouter)
                 if (_self.param.t_show == true) {
-
                     _self.$emit('myUpData', 'genxin');
-                    
+
                 } else if (_self.param.tt == true) {
                     common.$emit("informAccountFinish", "refurbish");
                     _self.$router.push(_self.param.reviseRouter);
@@ -44,7 +42,6 @@ export default {
                     common.$emit("res-id", this.param.item);
                     _self.$router.push(_self.param.reviseRouter); //跳转到修改资源
                 }
-
             }
         }
 }
@@ -62,6 +59,7 @@ export default {
     top: 0;
     width: 100%;
     height: 50px;
+    z-index: 2000;
 }
 
 .my-header .title-name {
@@ -71,7 +69,7 @@ export default {
     font-size: 1.7rem;
     line-height: 50px;
     color: white;
-    padding-right: 16.5%;
+    /*padding-right: 16.5%;*/
 }
 
 .my-header .go-back {
@@ -89,7 +87,7 @@ export default {
     height: 20px;
 }
 
-.my-header>p {
+.my-header .header_content>p {
     position: absolute;
     right: 0;
     font-size: 14px;

@@ -190,15 +190,12 @@ export default {
                     let result = suc.data.biz_result.list;
                     common.$emit('close-load');
                     if(suc.data.code == '1c01'){
-                        /*common.$emit('translateDate',result,_self.todos);*/
                          for(var i = 0; i < result.length; i++){
                             _self.todos.push(result[i]);
                         }
                     }else{
                         common.$emit('message', suc.data.msg);
                     }
-                    
-                 
                     if (back) {
                         back();
                     }
@@ -233,7 +230,14 @@ export default {
                 this.$router.push('needDetail/' + id);
             },
             jump(){
-                //去下载app
+                function loadApp(){
+                    window.location.href = common.appUrl; 
+                }
+               common.$emit('confirm', {
+                    message:'要报价请下载App',
+                    title:'提示',
+                    ensure:loadApp
+                });
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -299,15 +303,6 @@ export default {
 }
 </script>
 <style scoped>
-/*.page-loadmore-listitem {
-    height: 50px;
-    line-height: 50px;
-    border-bottom: solid 1px #eee;
-    text-align: center;
-    &:first-child {
-        border-top: solid 1px #eee;
-    }
-}*/
 
 .page-loadmore-wrapper {
     margin-top: -1px;
@@ -384,9 +379,6 @@ export default {
     margin-top: 100px;
 }
 
-
-
-
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag{
     position: absolute;
     top:0px;
@@ -394,8 +386,6 @@ export default {
     width:1.7rem;
     height:1.23rem;
 }
-
-
 
 .need  .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom {
     float: left;
@@ -428,23 +418,14 @@ export default {
     margin-top: 0.8955rem;
 }
 
-
-
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center {
     float: left;
     width: 100%;
     border-bottom: 1px solid #ddd;
-   /* padding-bottom: 10px;*/
     position: relative;
     padding: 0 10px 1.066rem 10px;
 }
-/*.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag{
-    position: absolute;
-    top:0px;
-    right:0px;
-    width:1.7rem;
-    height:1.23rem;
-}*/
+
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center div {
     float: left;
 }

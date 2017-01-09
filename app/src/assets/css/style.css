@@ -319,7 +319,7 @@ a {
 }
 
 .page-loadmore-wrapper {
-    overflow: scroll;
+    overflow-y: scroll;
     width: 100%;
     overflow-y: visible;
     margin-bottom: -6px;

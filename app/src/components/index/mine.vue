@@ -40,7 +40,7 @@ export default {
                 url: '',
                 param: {
                     url: '',
-                    companyShort: '',
+                    company: '',
                     normalMoney: '',
                     score: '',
                     name: ''
@@ -173,7 +173,7 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code = "1c01") {
                         _self.param.name = suc.data.biz_result.name;
-                        _self.param.companyShort = suc.data.biz_result.companyShort;
+                        _self.param.company = suc.data.biz_result.company;
                         _self.param.normalMoney = suc.data.biz_result.normalMoney;
                         _self.param.score = suc.data.biz_result.score;
                         _self.param.url = suc.data.biz_result.avatar;
@@ -209,10 +209,7 @@ export default {
             common.$on("toMine", function(obj) {
                 _self.getHttp();
                 _self.salesmanData();
-                _self.param.name = obj.name;
-                _self.param.url = obj.url;
-                _self.param.companyShort = obj.companyShort;
-
+                
             })
         }
 }

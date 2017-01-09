@@ -41,7 +41,7 @@
                         <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
                     <div slot="bottom" class="mint-loadmore-bottom">
-                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop'}">↑</span>
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
                 </mt-loadmore>
@@ -468,12 +468,21 @@ export default {
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail {
     width: 100%;
     display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction: column;
 }
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div {
     flex: 1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
     display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction: row;
     margin-top: 1.279rem;
 }
@@ -484,6 +493,9 @@ export default {
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div p {
     flex: 1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
     font-size: 1.109rem;
     color: #424242;
 }

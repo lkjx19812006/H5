@@ -226,26 +226,14 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
-
                     let result = suc.data.biz_result.list;             
                     if(suc.data.code == '1c01'){
                         for(var i = 0; i < result.length; i++){
-                            /*let onSell = result[i].onSell;
-                            if (onSell == 1) {
-                                onSell = '待审核'
-                            } else if (onSell == 2) {
-                                onSell = '正在匹配买家'
-                            } else {
-                                onSell = ''
-                            }
-                            result[i].onSell = onSell;*/
                             _self.todos.push(result[i]);
                         }
                     }else{
                         common.$emit('message', suc.data.msg);
                     }
-                    /*common.$emit("translatePubdate",result,_self.todos);*/
-
                     if(back){
                         back();
                     }
@@ -265,7 +253,6 @@ export default {
                 _self.getHttp();
             },
             jumpDetail(id) {
-                /*this.$router.push('resourceDetail/' + id);*/
                 common.$emit("inform-goodDetail", id);
                 this.$router.push("goodDetail/" + id);
             },
