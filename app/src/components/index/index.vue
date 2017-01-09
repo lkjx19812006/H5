@@ -1,7 +1,7 @@
 <template>
     <div>
         <mt-header fixed>
-            <router-link to="" slot="left" >     
+            <router-link to="" slot="left">
                 <img src="/static/images/my-logo.png" class="logo">
                 <div class="search_div" @click="fromIndex">
                     请输入您想要的货物资源
@@ -9,16 +9,15 @@
                 </div>
             </router-link>
         </mt-header>
-        <mt-loadmore>
         <div class="whole">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                
+                <mt-loadmore>
                     <div class="content">
                         <div class="swipe_height">
                             <mt-swipe :auto="4000" :prevent="true">
                                 <mt-swipe-item v-for="item in imgArray">
                                     <div>
-                                        <img v-bind:src="item.url">
+                                        <img v-bind:src="item.activityUrl">
                                     </div>
                                 </mt-swipe-item>
                             </mt-swipe>
@@ -32,7 +31,7 @@
                             </a>
                         </div>
                         <div class="supply_demond">
-                            <div class="supply_demond_path" v-for="item in supplyDemandArray" @click="jump(item.router)">
+                            <div class="supply_demond_path" v-for="item in supplyDemandArray" @click="loginJump(item.router)">
                                 <p>
                                     {{item.name}}
                                     <img :src="item.image">
@@ -164,10 +163,9 @@
                             </div>
                         </div>
                     </div>
-                
+                </mt-loadmore>
             </div>
         </div>
-        </mt-loadmore>
     </div>
 </template>
 <script>
@@ -180,11 +178,11 @@ export default {
                 wrapperHeight: 0,
                 selected: 'tab-container1',
                 imgArray: [{
-                    url: '/static/images/1.jpg'
+                    activityUrl: '/static/images/1.jpg'
                 }, {
-                    url: '/static/images/2.jpg'
+                    activityUrl: '/static/images/2.jpg'
                 }, {
-                    url: '/static/images/3.jpg'
+                    activityUrl: '/static/images/3.jpg'
                 }],
                 todos: [{
                     "name": "人参",
@@ -233,25 +231,21 @@ export default {
             }
         },
         methods: {
-
-           /* drugGuidePrice(){
-                  let _self = this;
-                   common.$emit('show-load');
-                  httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'breedService',
-                        biz_method:'breedPriceGuide',
-                            biz_param: {   
-                                pn:1,
-                                pSize:20
-                            }
-                        }, function(suc) {
-                            let result = suc.data.biz_result.list;
-                            _self.drugGuidePrice = result;
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        }) */
-
+            getImgArr() {
+                let _self = this;
+                httpService.commonPost(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'activityService',
+                    biz_method: 'queryActivityList',
+                    biz_param: {
+                    }
+                }, function(suc) {
+                    let result = suc.data.biz_result.list;
+                    console.log(result);
+                    _self.imgArray=result;
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
+            },
             drugGuidePrice() {
                 let _self = this;
                 httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
@@ -265,7 +259,6 @@ export default {
                     let result = suc.data.biz_result.list;
                     _self.drugGuidePrice = result;
                 }, function(err) {
-
                     common.$emit('message', err.data.msg);
                 })
 
@@ -317,13 +310,27 @@ export default {
                 })
             },
             jump: function(router) {
-                console.log(router);
                 this.$router.push(router);
             },
             fromIndex() {
                 let _self = this;
-                common.$emit('setParam','router','index');
-                _self.$router.push("search");
+                common.$emit('setParam', 'router', 'index');
+                _self.$router.push("/search");
+            },
+            loginJump(router) {
+                let _self = this;
+                if (!common.customerId) {
+                    function loadApp() {
+                        _self.$router.push('/login');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                }
+                this.$router.push(router);
             },
             jumpRes(router, id) {
                 common.$emit('resourceDetail', id);
@@ -339,6 +346,7 @@ export default {
             this.resourceHttp()
             this.transaction();
             this.drugGuidePrice();
+            this.getImgArr();
         },
         computed: {
             drugArray: function() {
@@ -355,15 +363,18 @@ export default {
             let _self = this;
 
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
+
             function startmarquee(lh, speed, delay) {
                 var count = 1;
                 var t;
                 var o = document.getElementById("scrollText");
                 var top = 0;
                 o.style.marginTop = 0;
+
                 function start() {
                     t = setInterval(scrolling, speed);
                 }
+
                 function scrolling() {
                     if (top % lh != 0 || top == 0) {
                         if (count == _self.scroll_length) {
@@ -408,21 +419,21 @@ export default {
     line-height: 30px;
     text-indent: 1rem;
     font-size: 14px;
+}
 
+.logo {
+    height: 30px;
 }
-.logo{
-    height:30px;
-}
+
 .search_div img {
     float: left;
     max-height: 20px;
     margin-top: 5px;
-   /* margin-right: 10px;*/
-   margin-left: 15%;
+    margin-left: 15%;
 }
 
 .swipe_height {
-    height: 15rem;
+    height: 13rem;
 }
 
 .swipe_height img {
@@ -479,18 +490,20 @@ export default {
     font-weight: 500;
     font-size: 1.3rem;
     float: left;
-    width:100%;
+    width: 100%;
     padding-left: 40%;
     height: 100%;
     position: relative;
 }
-.supply_demond p img{
-    position: absolute;
-    left:25%;
-    width:1.919rem;
-    top:1.5905rem;
 
+.supply_demond p img {
+    position: absolute;
+    left: 25%;
+    width: 1.919rem;
+    top: 1.5905rem;
 }
+
+
 /*.supply_demond img {
     float: left;
     max-width: 80px;

@@ -1,7 +1,6 @@
 <template>
     <div class="content resource">
         <div >
-           
             <div @click="jumpSearch" class="search_content">
                 <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
             </div>

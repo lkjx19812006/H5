@@ -51,7 +51,6 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     if (!getCookie('no')) {
-      console.log('login')
       next()
     } else {
       next()
@@ -60,11 +59,9 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(route => {
-  console.log(route.path);
   if (route.path !== '/home') {
     document.body.scrollTop = 0;
   } else {
-    console.log(indexScrollTop);
     Vue.nextTick(() => {
       document.body.scrollTop = indexScrollTop;
     });
@@ -77,7 +74,7 @@ Vue.http.interceptors.push((request, next) => {
     console.log(response.status)
 
     if (response.status==403) {
-      return router.push('/login');
+      // return router.push('/login');
     }
 
     return response
