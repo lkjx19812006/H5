@@ -323,6 +323,7 @@ a {
     padding-bottom: 10px;
     width: 100%;
     overflow-y: visible;
+    overflow-x: hidden;
 }
 
 /* .page-loadmore-wrapper {

@@ -143,8 +143,9 @@ export default {
 }
 .revise_password_confirm .bg_white .fill_in li  input{
    float:left;
-   height:4rem;
-   line-height: 4rem;
+   margin-top: 1rem;
+   height:2rem;
+   line-height: 2rem;
    border:none;
    outline: none;
    margin-left: 25px;

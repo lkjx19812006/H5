@@ -103,6 +103,9 @@ common.$on('success', () => {
 
 
 common.$on('message', message => {
+    if(!message){
+        return;
+    }
     Toast({
         message: message,
         duration: 2000

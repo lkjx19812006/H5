@@ -123,14 +123,13 @@ export default {
                                 listArr[item].first_img = '/static/images/default.png';
                             }
                         }
-                        console.log(listArr)
                         _self.todos = listArr
                     } else {
                         if(suc.data.msg){common.$emit('message', suc.data.msg);}
                     }
                 }, function(err) {
                     common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
+                    if(err.data.msg)common.$emit('message', err.data.msg);
                 })
             },
             delet: function(todo) {

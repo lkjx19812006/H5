@@ -1,5 +1,5 @@
 <template>
-    <div class="login" >
+    <div class="login">
         <myHeader :param="my_header"></myHeader>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -49,7 +49,7 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
-                wrapperHeight:'',
+                wrapperHeight: '',
                 my_header: {
                     name: '登陆',
                     goBack: true
@@ -155,18 +155,20 @@ export default {
                             _self.buttonDisabled = false;
                         }
                     }, 1000);
+
+                    httpService.register(common.urlCommon + common.apiUrl.most, {
+                        biz_module: 'userSmsService',
+                        biz_method: 'getLoginCode',
+                        biz_param: {
+                            mobile: _self.param.phone
+                        }
+                    }, function(response) {
+                        common.$emit('message', response.data.msg);
+                    }, function(err) {
+                        common.$emit('message', err.data.msg);
+                    })
                 }
-                httpService.register(common.urlCommon + common.apiUrl.most, {
-                    biz_module: 'userSmsService',
-                    biz_method: 'getLoginCode',
-                    biz_param: {
-                        mobile: _self.param.phone
-                    }
-                }, function(response) {
-                    common.$emit('message', response.data.msg);
-                }, function(err) {
-                    common.$emit('message', err.data.msg);
-                })
+
             },
             login() {
                 var checkArr = [];
@@ -191,7 +193,7 @@ export default {
             }
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -270,6 +272,8 @@ export default {
 
 .login .password .pass-name .pass_code {
     width: 80%;
+    text-align: center;
+    padding-left: 0;
 }
 
 .login .password .pass-name .my_code {

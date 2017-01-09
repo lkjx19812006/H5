@@ -164,8 +164,9 @@ export default {
 
 .find_password .bg_white .fill_in li input {
     float: left;
-    height: 4rem;
-    line-height: 4rem;
+    margin-top: 1rem;
+    height: 2rem;
+    line-height: 2rem;
     border: none;
     outline: none;
     margin-left: 25px;
@@ -206,12 +207,13 @@ export default {
     margin-left: 10px;
     line-height: 2rem;
     background: white;
+    margin-top: 0;
 }
 
 .find_password .bg_white .fill_in .my_code_nor {
     float: right;
     right: 0;
-    width: 30%;
+    width: 33%;
     color: #CECEBF;
     padding: 1rem 10px;
     height: 4rem;
@@ -226,6 +228,7 @@ export default {
     margin-left: 10px;
     line-height: 2rem;
     background: white;
+    margin-top: 0;
 }
 
 .find_password .bg_white .fill_in .my_code_nor>p {
