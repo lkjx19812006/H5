@@ -7,7 +7,7 @@
                 <input type="text" placeholder="请输入用户名/手机号/邮箱" v-model="param.phone">
             </div>
             <div class="pass-word">
-                <input type="text" placeholder="请输入密码" v-model="param.password">
+                <input type="password" placeholder="请输入密码" v-model="param.password">
             </div>
         </div>
         <div class="password" v-show="!myShow.show">

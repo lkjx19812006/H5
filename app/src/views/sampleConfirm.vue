@@ -84,8 +84,6 @@ export default {
                     if (suc.data.code == "1c01") {
                         _self.id = result.id;
                         _self.person = result;
-
-                        common.$emit('message', suc.data.msg);
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -97,6 +95,7 @@ export default {
             },
             gethttp(id) {
                 let _self = this;
+                common.$emit('show-load');
                 httpService.myAttention(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'intentionService',
                     biz_method: 'queryIntentionInfo',
@@ -104,15 +103,21 @@ export default {
                         id: id
                     }
                 }, function(suc) {
-                    common.$emit('message', suc.data.msg);
+                    common.$emit('close-load');
                     let result = suc.data.biz_result;
                     result.value = 1;
                     if (!result.image.length) {
                         result.image.push('/static/images/default_image.png');
                     }
                     result.from = "order";
-                    _self.param = result;
+                    if(suc.data.code == '1c01'){
+                        _self.param = result;
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
                 }, function(err) {
+                    common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                 })
             },

@@ -2,7 +2,7 @@
     <div class="address_manage">
 
         <myHeader :param="my_header"></myHeader>
-        <mt-loadmore>
+        
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <ul>
                     <li v-for="(todo,index) in todos" v-show="todo.show">
