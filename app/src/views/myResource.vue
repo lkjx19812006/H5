@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <errPage  :err="err"  v-show="todos.length==0"></errPage>
+        <errPage  :param="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -56,7 +56,11 @@ import errPage from '../components/tools/err'
 export default {
     data() {
             return {
-                err:'暂无我的资源',
+                 err:{
+                    err:"很抱歉，没有找到相关资源",
+                    url:'/static/icons/maomao.png',
+                    
+                },
                 sortRouter: 'home',
                 param: {
                     name: '我的资源',

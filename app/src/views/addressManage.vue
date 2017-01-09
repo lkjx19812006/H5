@@ -1,6 +1,7 @@
 <template>
     <div class="address_manage">
         <myHeader :param="my_header"></myHeader>
+
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore>
@@ -25,6 +26,7 @@
                                 <p class="top_p">
                                     <img :src="todo.first_img" class="first_img" v-on:click="changeColor(todos,todo,index)">
                                     <span>默认地址</span>
+
                                 </p>
                                 <div class="address_box">
                                     <p class="center_p">
@@ -41,18 +43,29 @@
                     </ul>
                 </mt-loadmore>
             </div>
+
         </div>
         <div class="add_address" v-on:click="addAddress">添加新地址</div>
+        <errPage  :param="err"  v-show="todos.length==0"></errPage>
+
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
+import errPage from '../components/tools/err'
 export default {
     data() {
             return {
+
+                err:{
+                    err:"很抱歉，没有设置地址",
+                    url:'/static/icons/maomao.png',
+                },
+
                 wrapperHeight:'',
+
                 my_header: {
                     name: '地址管理',
                 },
@@ -70,7 +83,8 @@ export default {
             })
         },
         components: {
-            myHeader
+            myHeader,
+            errPage
         },
         methods: {
             back() {

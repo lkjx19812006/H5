@@ -1,32 +1,37 @@
 <template>
     <div class="feed_back">
-       <!--  <mt-header title="意见反馈">
-            <router-link to="/mySet" slot="left">
-                <mt-button icon="back" ></mt-button>
-            </router-link>
-        </mt-header> -->
+   
         <myHeader :param = "my_header" ></myHeader>
-        <mt-loadmore>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        
+       <div class="bg_white">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                    <div class="main">
+                         <textarea placeholder="请填写您的反馈内容" v-model="param.content"></textarea>
+                         <p>您的反馈对我们至关重要！</p>
+                    </div>
+                    <div class="info">
+                         <div class="info_top info_bottom">
+                           <p>姓名</p>
+                           <input type="text" placeholder="请输入" v-model="param.name">
+                         </div>
+                         <div class="info_top">
+                           <p>联系方式</p>
+                           <input type="text" placeholder="请输入" v-model="param.phone">
+                         </div>
+                    </div>
 
-        <div class="main">
-             <textarea placeholder="请填写您的反馈内容" v-model="param.content"></textarea>
-             <p>您的反馈对我们至关重要！</p>
+         
+           
+        
+              
+                  
+                  </mt-loadmore>
+
+            </div>
+             <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
         </div>
-        <div class="info">
-             <div class="info_top">
-               <p>姓名：</p>
-               <input type="text" placeholder="请填写您的名字！" v-model="param.name">
-             </div>
-             <div class="info_bottom">
-               <p>联系方式：</p>
-               <input type="text" placeholder="请填写您的手机号！" v-model="param.phone">
-             </div>
-        </div>
-        </div>
-         </mt-loadmore>
-     <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
-    
+
     </div>
 </template>
 <script>
@@ -111,8 +116,8 @@ export default {
 .feed_back .page-loadmore-wrapper{
   margin-bottom: 0px;
 }
-.feed_back{
-
+.feed_back .bg_white{
+    background: #f0f0f0;
 }
 .feed_back .main{
    padding: 2rem 1.5rem 0 1.5rem;
@@ -127,6 +132,7 @@ export default {
    margin-bottom: 1rem;
    font-size: 1.2rem;
    color:#666666;
+   border:1px solid #ddd;
 }
 .feed_back .main p{
    text-align: left;
@@ -134,32 +140,31 @@ export default {
    color:#FF0000;
 
 }
-.feed_back .info{
-   background:white;
-   padding: 1rem 1.5rem 2rem 1.5rem;
-   height:12rem;
-}
-.feed_back .info div{
-   margin-top: 1rem;
-   height:3.5rem;
-}
-.feed_back .info p{
-   font-size:1.2rem;
-   width:6rem;
-   height:3.5rem;
-   line-height: 3.5rem;
-   text-align: right;
-   float:left;
 
+.feed_back .info{
+   width:100%;
+   padding: 0 4%;
+   
+   float:left;
+   background: white;
 }
-.feed_back .info input{
-  float:left;
-  margin-left:3rem;
-  height:3.4rem;
-  text-align: center;
-  width:50%;
-  font-size:1.2rem;
+.feed_back .info .info_top{
+   float:left;
   
+   width:100%;
+   background: white;
+}
+.feed_back .info .info_top p{
+   float:left;
+   height:50px;
+   line-height: 50px;
+}
+.feed_back .info .info_top input{
+   float:right;
+   border:none;
+   outline: none;
+   height:50px;
+   text-align: right;
 }
 .feed_back .confirm_submit{
   height:50px;
@@ -169,9 +174,10 @@ export default {
   font-size: 1.7rem;
   text-align: center;
   line-height: 50px;
- /* margin-top: 14rem;*/
- position: fixed;
- bottom: 0;
-  
+   position: fixed;
+   bottom: 0;
+}
+.feed_back .info .info_bottom{
+   border-bottom: 1px solid #ddd;
 }
 </style>

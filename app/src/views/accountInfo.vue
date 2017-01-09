@@ -258,6 +258,7 @@ export default {
 .company_data{
   width:100%;
   text-align: left;
+
 }
 .account_overview  .company_data{
   margin-bottom: 2.5599rem;
@@ -265,10 +266,13 @@ export default {
 .account_overview  .basic_data_title,
 .company_data_title{
   height:2.99rem;
-  border-top:0.0427rem solid #E5E5E5;
-  border-bottom:0.0427rem solid #E5E5E5;
-  padding: 0 8.8% 0 4%;
-  line-height:2.99rem; 
+  border-top:1px solid #E5E5E5;
+  border-bottom:1px solid #E5E5E5;
+  padding: 0 75% 0 4%;
+  line-height:2.99rem;
+  
+  text-align: left;
+
 }
 .account_overview  .company_data ul{
   /*padding-bottom: 50px;
@@ -277,10 +281,12 @@ export default {
 .account_overview  .basic_data ul li,
 .company_data ul li{
   padding: 0 8.8% 0 4%;
-  height:4.267rem;
-  line-height: 4.267rem;
-  border-bottom:0.0427rem solid #E5E5E5;
+  min-height:4.267rem;
+  line-height: 4.15rem;
+  border-bottom:1px solid #E5E5E5;
   background:white;
+
+ 
 }
 .account_overview  .name{
   float: left;
@@ -299,7 +305,7 @@ export default {
 }
 .account_overview  .name_content img{
   height:1.536rem;
-  margin-top:1.36rem;
+  margin-top:1.2rem;
 
 }
 .account_overview  .name_content{

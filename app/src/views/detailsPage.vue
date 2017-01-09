@@ -1,7 +1,9 @@
 <template>
     <div class="details_page">
         <myHeader :param="myHeader"></myHeader>
+
         <div class="bg_white">
+
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
                     <ul class="info_list">
@@ -26,7 +28,9 @@
                     </div>
                 </mt-loadmore>
             </div>
+
         </div>
+
     </div>
 </template>
 <script>

@@ -210,9 +210,8 @@ export default {
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.queryUserInfo(url,body,function(suc){
                      common.$emit('close-load');
-                     console.log(suc)
-
-                      
+                     common.$emit('message', suc.data.msg);   
+                     console.log(suc)               
                   },function(err){
                     common.$emit('close-load');
                   })
@@ -318,6 +317,7 @@ export default {
     height:9rem;
     width:100%;
     background:#E1DDDA;
+    overflow: hidden;
 } 
 .company_authentication .first_item>div .point,.company_authentication .second_item>div .point{
     font-size: 1rem;

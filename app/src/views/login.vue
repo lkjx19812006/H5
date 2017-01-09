@@ -1,5 +1,12 @@
 <template>
+
+    
     <div class="login" :style="{ height: wholeHeight + 'px' }">
+    
+        <myHeader :param="my_header"></myHeader>
+<div class="bg_white">
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <mt-loadmore >
         <img src="/static/images/logo-login.png" class="my-logo">
         <myTab :param="myShow"></myTab>
         <div class="password" v-show="myShow.show">
@@ -17,7 +24,9 @@
             </div>
             <div class="pass-name">
                 <input type="text" placeholder="请输入验证码" v-model="param.code">
-                <p v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }" v-on:click="confirmLogin()">{{code}}</p>
+                <p v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
+                <input  v-on:click="confirmLogin()" :value = 'code' type="button">
+                </p>
             </div>
         </div>
         <div class="prompt" id="prompt">
@@ -29,6 +38,10 @@
             </router-link>
         </div>
         <div class="confirm" @click="login()">登陆</div>
+
+            </mt-loadmore>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -36,9 +49,15 @@ import common from '../common/common.js'
 import myTab from '../components/tools/tab'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+
+                my_header:{
+                    name:'登陆',
+
+                },
                 myShow: {
                     show: true,
                     left_name: '密码登陆',
@@ -61,7 +80,8 @@ export default {
             this.getCode();
         },
         components: {
-            myTab
+            myTab,
+            myHeader
         },
         methods: {
             passWordLogin() {
@@ -254,10 +274,11 @@ export default {
 }
 
 .login .password .pass-name .my_code {
-    float: right;
-    width: 40%;
+    float:right;
+    width:40%;
     border-left: 1px solid #333333;
     color: #FA6705;
+
 }
 
 .login .password .pass-name .my_code_nor {
@@ -265,6 +286,7 @@ export default {
     width: 40%;
     border-left: 1px solid #333333;
     color: #CECEBF;
+    text-align: center;
 }
 
 .login .password .pass-name input {

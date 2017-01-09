@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <errPage  :err="err"  v-show="todos.length==0"></errPage>
+        <errPage  :param="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -61,8 +61,14 @@ import filters from '../filters/filters'
 export default {
     data() {
             return {
+                err:{
+                    err:"很抱歉，没有找到相关资源",
+                    url:'/static/icons/maomao.png',
+                    next_step:'去发布',
+                    router:'/needRelease'
+                },
                 sortRouter: 'urgentNeed',
-                err:"暂无求购资源",
+                
                 sortArr: [{
                     name: '上架时间',
                     asc: 'top',

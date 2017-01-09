@@ -117,8 +117,10 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .my_set .bg_white {
     background-color: #F0F0F0;
+
 }
 .my_set .mylist {
     padding: 0 4.7%;
@@ -126,7 +128,7 @@ export default {
 }
 
 .my_set .mylist li {
-    height: 4.4rem;
+    min-height: 4.4rem;
     border-bottom: 1px solid #DADADA;
     position: relative;
 }
@@ -146,7 +148,7 @@ export default {
 
 .my_set .mylist li p {
     float: left;
-    line-height: 4.4rem;
+    line-height: 4.2rem;
     margin-left: 1.2rem;
     color: #333333;
 }
@@ -163,8 +165,8 @@ export default {
 
 .my_set .mylist li .last_word {
     float: right;
-    line-height: 4.4rem;
-    margin-left: 1.2rem;
+    line-height: 4.2rem;
+    /*margin-left: 1.2rem;*/
     color: #666666;
 }
 

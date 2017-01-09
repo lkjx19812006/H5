@@ -1,30 +1,39 @@
 <template>
     <div class="revise_password_confirm">
+
         <myHeader :param="my_header"></myHeader>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
                     <ul class="fill_in">
                         <li>
-                            <p>手机号：</p>
-                            <input type="text" class='top_text' v-model="param.phone">
+                            <p><img src="/static/icons/my-phone.png"></p>
+                            <input type="text" class='top_text' v-model="param.phone" placeholder="请输入手机号码">
                         </li>
                         <li>
-                            <p>新密码：</p>
-                            <input type="password" class='top_text' v-model="param.new_passWord">
+                            <p><img src="/static/icons/my-password.png"></p>
+                            <input type="password" class='top_text' v-model="param.new_passWord" placeholder="请输入新密码">
+                        </li>
+                         <li>
+                            <p><img src="/static/icons/my-password.png"></p>
+                            <input type="password" class='top_text' v-model="param.again_new_passWord" placeholder="请确认新密码">
                         </li>
                         <li class="last_li">
-                            <p>&nbsp;&nbsp;&nbsp;&nbsp;密码：</p>
-                            <input type="password" class='top_text' v-model="param.passWord">
+                            <p><img src="/static/icons/my-password.png"></p>
+                            <input type="password" class='top_text' v-model="param.passWord" placeholder="请输入">
+                        </li>
+                        <li  v-on:click="confirm" class="confirm">
+                                下一步
                         </li>
                     </ul>
-                       <div class="next_step" v-on:click="confirm">确定</div>
+                       <!-- <div class="next_step" v-on:click="confirm">下一步</div> -->
                 </mt-loadmore>
                
                  
                 
             </div>
         </div>
+
     </div>
 </template>
 <script>
@@ -42,7 +51,8 @@ export default {
                 param: {
                     phone: '',
                     new_passWord: '',
-                    passWord: ''
+                    passWord: '',
+                    again_new_passWord:''
                 }
             }
         },
@@ -57,8 +67,14 @@ export default {
                 checkArr.push(checkPhone);
                 let checkNewPassWord = validation.checkNull(_self.param.new_passWord, '请输入新密码！');
                 checkArr.push(checkNewPassWord);
-                let checkPassword = validation.checkNull(_self.param.passWord, '请输入原密码！');
+                let checkAgainPassWord = validation.checkNull(_self.param.again_new_passWord, '请确认新密码！');
+                checkArr.push(checkAgainPassWord);
+                let checkCommon = validation.checkCommon(_self.param.new_passWord, _self.param.again_new_passWord);
+                checkArr.push(checkCommon);
+                let checkPassword = validation.checkNull(_self.param.passWord, '请输入原密码！'); 
                 checkArr.push(checkPassword);
+                let checkDifferent = validation.checkDifferent(_self.param.new_passWord,_self.param.passWord);
+                checkArr.push(checkDifferent);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);
@@ -103,7 +119,55 @@ export default {
 .revise_password_confirm .bg_white{
     background-color: #F0F0F0;
 }
-.revise_password_confirm .fill_in {
+.revise_password_confirm .bg_white .fill_in{
+    padding: 0 15px;
+    float:left;
+    width:100%;
+}
+.revise_password_confirm .bg_white .fill_in li{
+   background:white;
+   float:left;
+   width:100%;
+   margin-top:1.5rem;
+   border-radius: 4px;
+}
+.revise_password_confirm .bg_white .fill_in li p{
+   float:left;
+   height:4rem;
+   
+}
+.revise_password_confirm .bg_white .fill_in li p img{
+   height:2rem;
+   margin:1rem 0 0 0.8rem;
+}
+.revise_password_confirm .bg_white .fill_in li  input{
+   float:left;
+   height:4rem;
+   line-height: 4rem;
+   border:none;
+   outline: none;
+   margin-left: 25px;
+}
+.revise_password_confirm .bg_white .fill_in .confirm{
+    background: #FA6705;
+    color: white;
+    height:4rem;
+    line-height: 4rem;
+    text-align: center;
+
+}
+/*.revise_password_confirm .next_step {
+    width: 78%;
+    height: 3.5rem;
+    background: #FA6705;
+    color: white;
+    font-size: 1.7rem;
+    text-align: center;
+    line-height: 3.5rem;
+    border-radius: 1.75rem;
+    margin: 7.5rem 11% 0 11%;
+}*/
+/*.revise_password_confirm .fill_in {
     background: white;
     padding: 2rem 0 5rem 4.7%;
 }
@@ -143,5 +207,5 @@ export default {
     line-height: 3.5rem;
     border-radius: 1.75rem;
     margin: 7.5rem 11% 0 11%;
-}
+}*/
 </style>

@@ -304,7 +304,7 @@ textarea {
 .good_place p,
 .good_number p {
     float: left;
-    line-height: 3.5rem;
+    line-height: 3.3rem;
     font-size: 1.19rem;
     color: #333333;
 }
