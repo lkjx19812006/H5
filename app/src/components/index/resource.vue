@@ -1,7 +1,6 @@
 <template>
     <div class="content resource">
         <div >
-           
             <div @click="jumpSearch" class="search_content">
                 <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
             </div>
@@ -214,21 +213,6 @@ export default {
                 this.$router.push('search');
             },
             jumpDetail(id) {
-                // let _self = this;
-                // httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                //         biz_module:'intentionService',
-                //         biz_method:'queryIntentionInfo',
-                //             biz_param: {
-                //                 id:id
-                //             }
-                //         }, function(suc) {
-                //             common.$emit('message', suc.data.msg);
-                //             let result = suc.data.biz_result;
-                //              _self.obj = result;
-                //              common.$emit('post-res-detail',_self.obj);
-                //         }, function(err) {  
-                //              common.$emit('message', err.data.msg);
-                //         })
                 common.$emit("resourceDetail",id);
                 this.$router.push('resourceDetail/' + id);
             },
