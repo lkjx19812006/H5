@@ -1,18 +1,12 @@
 <template>
   <div class="my_attention">        
          <attentionHead :param = "param" v-on:tab="tabAttention"></attentionHead>
-       
-
-           <div @click="jumpSearch">
+           <div @click="jumpSearch" style="float:left;width:100%">
                 <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
            </div>
-      
-        
                 <div class="bg_white">
-                <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                 
-
                     <ul class="page-loadmore-list" v-show="param.show">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  v-on:click="jump(todo.id)">
                             <img :src="todo.image[0]" class="list_images">
@@ -96,7 +90,6 @@ export default {
                 resourceArr:[],
                 needArr:[],
                 keyword:'',
-
                 todos: [],
                 topStatus: '',
                 wrapperHeight: 0,
@@ -112,12 +105,8 @@ export default {
             }
         },
         components: {
-
             longSearch,
             attentionHead
-            
-
-
         },
         methods: {
             jumpSearch() {
@@ -134,6 +123,9 @@ export default {
             },
             resorceHttp(back) {
                 let _self = this;
+                if(_self.httpPraram.page==1){
+                    _self.todos.splice(0,_self.todos.length)
+                }
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -154,13 +146,15 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
-
                     let result = suc.data.biz_result.list;
-                    common.$emit('translateDate', result,_self.todos);
+                    console.log(result);
+                    for (let i = 0; i < result.length; i++) {
+                            _self.todos.push(result[i]);
+                        }
+                    // common.$emit('translateDate', result,_self.todos);
                     if (back) {
                         back();
                     }
-
 
                 }, function(err) {
                     common.$emit('close-load');
@@ -230,12 +224,16 @@ export default {
             _self.resorceHttp();
 
             common.$on("informResAttention", function(id) { //来自资源页面的提示刷新
+                // if(id==0){
+                //     _self.param.show=true;
+                // }else{
+                //     _self.param.show=false;
+                // }
+                // _self.httpPraram.intentionType = id;
+                _self.httpPraram.page = 1;
                 _self.resorceHttp();
             });
 
-            common.$on("informPurAttention", function(id) { //来自求购页的提示刷新       
-                _self.resorceHttp();
-            });
             common.$on('attention', function(item) { //来自搜索的提示刷新
                 //console.log(item)
                 _self.httpPraram.keyword = item.keyWord;
@@ -247,7 +245,7 @@ export default {
         },
 
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 100;
 
         }
 

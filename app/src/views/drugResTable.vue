@@ -1,201 +1,172 @@
 <template>
-
     <div class="drug_table">
-        <!-- <mt-header fixed title="药材百科">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back" @click="iosBack()"></mt-button>
-            </router-link>
-        </mt-header> -->
-        <myHeader :param = "param" ></myHeader>
-        <div class="search" @click="jumpIosSearch()">
+        <iosHead :param="param"></iosHead>
+        <div class="search">
             <input type="text" placeholder="输入你想要的货物资源" v-model="keyword">
             <img src="/static/images/search.png" class="search_image">
         </div>
         <mt-loadmore>
-        <div class="page-loadmore-wrapper"   ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <div  v-show="!keyword">
-                 <div class="hot_drug">
-                    <p>热门药材</p>
-                </div>
-                <div class="drug_show" >
-                    <a @click="jumpDetail(obj.name)">
-                        <img :src="obj.icon">
-                        <div class="drug_introduce">
-                            <p class="drug_name" id="drug_name">{{obj.name}}</p>
-                            <p class="drug_chinese_name" id="drug_chinese_name">英文名：{{obj.eName}}</p>
-                            <p class="drug_english_name" id="drug_english_name">拉丁：{{obj.lName}}</p>
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <div v-show="!keyword">
+                    <div class="hot_drug">
+                        <p>热门药材</p>
+                    </div>
+                    <div class="drug_show" >
+                        <a @click="jumpDetail(obj.name)">
+                            <img :src="obj.icon">
+                            <div class="drug_introduce">
+                                <p class="drug_name" id="drug_name">{{obj.name}}</p>
+                                <p class="drug_chinese_name" id="drug_chinese_name">英文名：{{obj.eName}}</p>
+                                <p class="drug_english_name" id="drug_english_name">拉丁：{{obj.lName}}</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="hot_search_drug">
+                        <p>热搜药材</p>
+                        <div class="hot_drugs">
+                            <p v-for="(todo,index) in todos" @click="jumpDetail(todo.keyWord)">{{todo.keyWord}}</p>
                         </div>
-                    </a>
+                    </div>
                 </div>
-                <div class="hot_search_drug">
-                    <p>热搜药材</p>
-                    <div class="hot_drugs">
-                        <p v-for="(todo,index) in todos" @click="jumpDetail(todo.keyWord)">{{todo.keyWord}}</p>
+                <div v-show="keyword">
+                    <div class="search_result">
+                        <ul class="page-loadmore-list">
+                            <li v-for="todo in datas" class="page-loadmore-listitem list_content_item"  @click="jumpDetail(todo.keyWord)">
+                                <div>
+                                    <img src="/static/icons/search.png">
+                                    <p>{{todo.keyWord}}</p>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-                
 
-        
-         
 
-        <div v-show="keyword"  >
-            <div class="search_result">
-                <ul class="page-loadmore-list">
-                    <li v-for="todo in datas" class="page-loadmore-listitem list_content_item" @click = "jumpDetail(todo.keyWord)">
-                        <div >
-                            <img src="/static/icons/search.png">
-                            <p>{{todo.keyWord}}</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-       </div>
-       </mt-loadmore> 
+        </mt-loadmore>
+
     </div>
 </template>
 <script>
 import common from '../common/common.js'
-import myHeader from '../components/tools/myHeader'
+import iosHead from '../components/tools/iosHead'
 import httpService from '../common/httpService.js'
 export default {
-
     data() {
             return {
-                param:{
-                    name:'药材百科',
-                    router:'home'
+                param: {
+                    name: '药材百科',
+                    router: 'home',
+                    appBack:true
                 },
-                keyword:'',
+                type: '',
+                headHeight: '',
+                keyword: '',
                 showHead: true,
                 todos: [],
-                datas:[],
+                datas: [],
                 title: 'test',
-                obj:{
-
-                },
-                detail_obj:{
-
-                },
+                obj: {},
+                detail_obj: {},
             }
         },
         created() {
-             let _self = this;
-             _self.hotKeySearch();
-             _self.hotDrug();
-            
+            let _self = this;
+            _self.hotKeySearch();
+            _self.hotDrug();
+            _self.type = '';
+            let ua = navigator.userAgent.toLowerCase();
+            if (/iphone|ipad|ipod/.test(ua)) {
+                _self.type = 'ios';
+            } else if (/android/.test(ua)) {
+                _self.type = 'android';
+            } else {
+                _self.type = '';
+            }
         },
         components: {
-            myHeader
+            iosHead
         },
         watch: {
             keyword: function(newValue, oldValue) {
-                //console.log(newValue);
-                //console.log(oldValue);
                 let _self = this;
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
-                    //console.log('dssdsdsd');
-
-                   //搜索分词
                     httpService.searchWord(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'searchKeywordService',
-                        biz_method:'querySearchKeyword',
-              
-                            biz_param: {
-                                keyWord:_self.keyword,
-                                pn:1,
-                                pSize:20
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            
-                            console.log(suc.data.biz_result.list)
-                            let result = suc.data.biz_result.list;
-                            _self.datas = result;
-                            
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                        biz_module: 'searchKeywordService',
+                        biz_method: 'querySearchKeyword',
+                        biz_param: {
+                            keyWord: _self.keyword,
+                            pn: 1,
+                            pSize: 20
+                        }
+                    }, function(suc) {
+                        common.$emit('message', suc.data.msg);
+                        let result = suc.data.biz_result.list;
+                        _self.datas = result;
+                    }, function(err) {
+                        common.$emit('message', err.data.msg);
+                    })
                 }, 0)
             }
         },
         methods: {
-            hotDrug(){
+            hotDrug() {
                 let _self = this;
                 httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'breedService',
-                        biz_method:'hotDrugPropertiesInfo',
-              
-                            biz_param: {                              
-                                pn:1,
-                                pSize:20
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list[0];
-                            console.log(result)
-                            _self.obj = result;
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                    biz_module: 'breedService',
+                    biz_method: 'hotDrugPropertiesInfo',
+                    biz_param: {
+                        pn: 1,
+                        pSize: 20
+                    }
+                }, function(suc) {
+                    common.$emit('message', suc.data.msg);
+                    let result = suc.data.biz_result.list[0];
+                    _self.obj = result;
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
             },
-            hotKeySearch(){
+            hotKeySearch() {
                 let _self = this;
                 httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'searchKeywordService',
-                        biz_method:'queryHotKeyword',
-              
-                            biz_param: {
-                                
-                                pn:1,
-                                pSize:20
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            let result = suc.data.biz_result.list;
-                           
-                            _self.todos = result;
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                    biz_module: 'searchKeywordService',
+                    biz_method: 'queryHotKeyword',
+                    biz_param: {
+                        pn: 1,
+                        pSize: 20
+                    }
+                }, function(suc) {
+                    common.$emit('message', suc.data.msg);
+                    let result = suc.data.biz_result.list;
+                    _self.todos = result;
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
             },
-            
+
             jumpIosSearch: function() {
                 window.jumpSearch();
             },
             getValue: function(param) {
                 this.title = param;
             },
-            iosBack: function() {
+            jumpBack: function() {
                 window.back();
             },
-            jumpDetail(id){
-                common.$emit("informdrugDetail",id); //通知药性表详情刷新
+            jumpDetail(id) {
+                common.$emit("informdrugDetail", id); //通知药性表详情刷新
                 this.$router.push('drugResTableDetail/' + id);
             }
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
             let _self = this;
-            let type = 'ios';
-            let ua = navigator.userAgent.toLowerCase();
-            if (/iphone|ipad|ipod/.test(ua)) {
-                type = 'ios';
-            } else if (/android/.test(ua)) {
-                type = 'android'
-            }
             setTimeout(function() {
                 window.back = function() {
                     try {
-                        if (type == 'ios') {
+                        if (_self.type == 'ios') {
                             window.webkit.messageHandlers.AppModel.postMessage({
                                 body: 'iosResult'
                             });
@@ -203,12 +174,12 @@ export default {
                             window.Android.back();
                         }
                     } catch (e) {
-                        console.log(e);
+                        window.history.go(-1);
                     }
                 }
                 window.jumpSearch = function() {
                     try {
-                        if (type == 'ios') {
+                        if (_self.type == 'ios') {
                             window.webkit.messageHandlers.AppModel.postMessage({
                                 body: 'ios'
                             });
@@ -218,7 +189,6 @@ export default {
                     } catch (e) {
                         console.log(e);
                     }
-
                 }
                 window.getValue = function(param) {
                     _self.getValue(param);
@@ -246,7 +216,6 @@ export default {
     height: 60px;
     background: white;
     position: relative;
-    background: white;
 }
 
 .drug_table .search input {
@@ -256,7 +225,6 @@ export default {
     border: 0;
     outline: none;
     padding-left: 5%;
-    
     background: #F2F2F2;
     margin-top: 15px;
 }
@@ -277,7 +245,6 @@ export default {
 .drug_table .hot_search_drug {
     width: 100%;
     height: 4rem;
-
 }
 
 .drug_table .hot_drug p,
@@ -342,7 +309,7 @@ export default {
     width: 100%;
     padding: 1.27995rem 0 1.27995rem 0;
     background: white;
-    float:left;
+    float: left;
 }
 
 .drug_table .hot_drugs p {
@@ -355,6 +322,7 @@ export default {
     margin-bottom: 1.27995rem;
     font-size: 1.10929rem;
 }
+
 .drug_table .search_result {
     /*margin-top: 40px;*/
     background-color: #fff;
@@ -384,6 +352,7 @@ export default {
     float: left;
     margin-left: 15px;
 }
+
 
 /*.short_hot{
   width:10rem;

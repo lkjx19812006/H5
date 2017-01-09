@@ -1,43 +1,39 @@
 <template>
     <div class="content need_detail">
-        <myHeader :param = "param"></myHeader>
-        <div   >
-                <div class="center">
-                    <div class="title">
-                        <p>{{obj.breedName}}</p>
-                    </div>
-                    <div class="detail">
-                        <p>规格：<span>{{obj.spec}}</span></p>
-                        <p class="right">发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
-                    </div>
-                    <div class="detail">
-                        <p>产地：<span>{{obj.location}}</span></p>
-                        <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}天</span></p>
-                    </div class="detail">
-                    <div class="detail">
-                        <p>需求数量：<span>{{obj.number}}{{obj.unit}}</span></p>
-                    </div>
-                    
-                    <div class="detail">
-                        <p>已报价：<span class="orange_font">{{obj.offer}}</span>人</p>
-                    </div>
-                    <div class="detail">
-                        <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
-                    </div>
-                    <div class="detail">
-                        <p>备注：<span>{{obj.description}}</span></p>
-                    </div>
+        <myHeader :param="param"></myHeader>
+        <div>
+            <div class="center">
+                <div class="title">
+                    <p>{{obj.breedName}}</p>
                 </div>
-         
-        <div class="fix_bottom">
-            <div class="attention">
-                <telAndAttention :obj='obj'></telAndAttention>
+                <div class="detail">
+                    <p>规格：<span>{{obj.spec}}</span></p>
+                    <p class="right">发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
+                </div>
+                <div class="detail">
+                    <p>产地：<span>{{obj.location}}</span></p>
+                    <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}天</span></p>
+                </div class="detail">
+                <div class="detail">
+                    <p>需求数量：<span>{{obj.number}}{{obj.unit}}</span></p>
+                </div>
+                <div class="detail">
+                    <p>已报价：<span class="orange_font">{{obj.offer}}</span>人</p>
+                </div>
+                <div class="detail">
+                    <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
+                </div>
+                <div class="detail">
+                    <p>备注：<span>{{obj.description}}</span></p>
+                </div>
             </div>
-            <button class="mint-button mint-button--primary mint-button--normal orange_button">立即报价</button>
+            <div class="fix_bottom">
+                <div class="attention">
+                    <telAndAttention :obj='obj'></telAndAttention>
+                </div>
+                <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="loadApp()">立即报价</button>
+            </div>
         </div>
-        
-    </div>  
-   
     </div>
 </template>
 <script>
@@ -51,8 +47,8 @@ export default {
             return {
                 id: '',
                 obj: {},
-                param:{
-                    name:'需求详情'
+                param: {
+                    name: '需求详情'
                 },
             }
         },
@@ -61,6 +57,16 @@ export default {
             myHeader
         },
         methods: {
+            loadApp() {
+                function loadApp() {
+                    window.location.href = common.appUrl;
+                }
+                common.$emit('confirm', {
+                    message: '要报价请下载App',
+                    title: '提示',
+                    ensure: loadApp
+                });
+            },
             getHttp(id) {
                 let _self = this;
                 common.$emit('show-load');
@@ -81,9 +87,9 @@ export default {
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     let result = suc.data.biz_result;
-                    if(suc.data.code == '1c01'){
+                    if (suc.data.code == '1c01') {
                         _self.obj = result;
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
                 }, function(err) {
@@ -110,13 +116,13 @@ export default {
                 _self.getHttp(item);
             });*/
         }
-       
+
 
 }
 </script>
 <style scoped>
-.need_detail .page-loadmore-wrapper{
-   margin-bottom: 0px;
+.need_detail .page-loadmore-wrapper {
+    margin-bottom: 0px;
 }
 
 .need_detail .fix_bottom {
@@ -159,7 +165,7 @@ export default {
 
 .need_detail .center .title p {
     float: left;
-   /* margin-left: 10px;*/
+    /* margin-left: 10px;*/
     font-size: 1.8rem;
     line-height: 1.7rem;
     color: #333;

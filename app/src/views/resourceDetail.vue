@@ -1,8 +1,8 @@
 <template>
     <div class="resource_detail">
-        <myHeader :param = "param"></myHeader>
-     <mt-loadmore>
-        <div class=""  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <myHeader :param="param"></myHeader>
+        <mt-loadmore>
+            <div class="" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <div class="swipe_height" v-if="obj.image">
                     <swiper :options="swiperOption" class="swipe_height">
                         <swiper-slide v-for="item in obj.image">
@@ -32,24 +32,23 @@
                         <p>库存：<span>{{obj.number}}{{obj.unit}}</span></p>
                         <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
                     </div class="detail">
-                   <!--  <div class="detail">
+                    <!--  <div class="detail">
                         <p>样品：<span v-if="obj.sampling == 0">不提供</span><span v-if="obj.sampling == 1">提供</span></p>
                     </div> -->
                     <div class="detail">
                         <p>卖点：<span>{{obj.description}}</span></p>
                     </div>
                 </div>
-            </mt-loadmore>
-            <div class="fix_bottom">
+        </mt-loadmore>
+        <div class="fix_bottom">
             <div class="attention">
                 <telAndAttention :obj='obj'></telAndAttention>
             </div>
             <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
             <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
             <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
-            </div>
         </div>
-        
+        </div>
     </div>
 </template>
 <script>
@@ -66,8 +65,8 @@ export default {
     data() {
             let _self = this;
             return {
-                param:{
-                    name:'商品详情'
+                param: {
+                    name: '商品详情'
                 },
                 number: 0,
                 obj: {},
@@ -118,7 +117,7 @@ export default {
                     if (pubdate != '') pubdate = pubdate.substring(0, 10);
                     result.pubdate = pubdate;
                     _self.obj = result;
-                    
+
                     if (_self.obj.image.length == 0) {
                         _self.obj.image.push('/static/images/default_image.png');
                     }
@@ -131,6 +130,17 @@ export default {
                 this.$router.go(-1);
             },
             jump(id) {
+                if (!common.customerId) {
+                    function loadApp() {
+                        this.$router.push('/login');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return ;
+                }
                 common.$emit('orderConfirm', id);
                 this.$router.push('/orderConfirm/' + id);
             },
@@ -146,11 +156,11 @@ export default {
             _self.refurbish(id);
             common.$on('resourceDetail', function(item) {
                 _self.refurbish(item);
-                _self.obj={};
+                _self.obj = {};
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -159,17 +169,17 @@ export default {
 .resource_detail {
     position: relative;
 }
-.resource_detail .page-loadmore-wrapper{
+
+.resource_detail .page-loadmore-wrapper {
     /*margin-top: -1px;*/
     overflow: scroll;
     /*padding-bottom: 10px;*/
     width: 100%;
     margin-bottom: 0px;
+}
 
-}
-.page-loadmore-wrapper {
-    
-}
+.page-loadmore-wrapper {}
+
 .resource_detail .swipe_height {
     height: 16rem;
     max-height: 160px;
@@ -231,7 +241,6 @@ export default {
     bottom: 0px;
     z-index: 2;
     width: 100%;
-    
 }
 
 .resource_detail .fix_bottom .attention {

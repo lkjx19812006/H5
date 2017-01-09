@@ -229,7 +229,6 @@ export default {
                         }
                         for (let i = 0; i < listArr.length; i++) {
                             _self.todos.push(listArr[i]);
-
                         }
                     } else {
                         common.$emit('message', suc.data.msg);

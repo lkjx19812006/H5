@@ -1,183 +1,145 @@
 <template>
-
     <div class="drug_table_detail">
-        <!-- <mt-header fixed title="药性表">
-            <router-link to="/drugResTable" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header>  -->
-        <myHeader :param = "param" ></myHeader>
-         <div class="nav-header" >
+        <iosHead :param="param"></iosHead>
+        <div class="nav-header">
             <mt-navbar v-model="selected">
-            <mt-tab-item id="1">基本信息</mt-tab-item>
-            <mt-tab-item id="2">药材特性</mt-tab-item>
-            <mt-tab-item id="3">真伪鉴别</mt-tab-item>
-            <mt-tab-item id="4">药典标准</mt-tab-item>
+                <mt-tab-item id="1">基本信息</mt-tab-item>
+                <mt-tab-item id="2">药材特性</mt-tab-item>
+                <mt-tab-item id="3">真伪鉴别</mt-tab-item>
+                <mt-tab-item id="4">药典标准</mt-tab-item>
             </mt-navbar>
-        </div> 
-       <mt-loadmore>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-              
-               <div class="info_content">
-                <mt-tab-container v-model="selected">
-                    <mt-tab-container-item id="1">
-                        <div class="information" >
-                            <div class="drug_name">
-                                <div class="name_type">
-                                    <p class="what_name">别名：</p>
-                                    <p class="answer_name" v-html="obj.alias"></p>
+        </div>
+        <mt-loadmore>
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <div class="info_content">
+                    <mt-tab-container v-model="selected">
+                        <mt-tab-container-item id="1">
+                            <div class="information">
+                                <div class="drug_name">
+                                    <div class="name_type">
+                                        <p class="what_name">别名：</p>
+                                        <p class="answer_name" v-html="obj.alias"></p>
+                                    </div>
+                                    <div class="name_type">
+                                        <p class="what_name">拼音：</p>
+                                        <p class="answer_name" v-html="obj.pinyin"></p>
+                                    </div>
+                                    <div class="name_type" id="last_name_type">
+                                        <p class="what_name">英文：</p>
+                                        <p class="answer_name" v-html="obj.eName"></p>
+                                    </div>
                                 </div>
-                                <div class="name_type">
-                                    <p class="what_name">拼音：</p>
-                                    <p class="answer_name" v-html="obj.pinyin"></p>
+                                <div class="drug_effect">
+                                    <div class="drug_effect_type">
+                                        <p class="what_effect">概述：</p>
+                                        <p class="effect_content" v-html="obj.summary">
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="name_type" id="last_name_type">
-                                    <p class="what_name">英文：</p>
-                                    <p class="answer_name" v-html="obj.eName"></p>
+                                <div class="spec">
+                                    <div class="spec_type">
+                                        <p class="what_spec">产地分布：</p>
+                                        <p class="spec_content" v-html="obj.producingArea"></p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="drug_effect">
-                                <div class="drug_effect_type">
-                                    <p class="what_effect">概述：</p>
-                                    <p class="effect_content" v-html="obj.summary">
-                                    </p>
+                        </mt-tab-container-item>
+                        <mt-tab-container-item id="2">
+                            <div class="information">
+                                <div class="spec">
+                                    <div class="spec_type">
+                                        <p class="what_spec">形态特征：</p>
+                                        <p class="spec_content" v-html="obj.morphology"></p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="spec">
-                                <div class="spec_type">
-                                    <p class="what_spec">产地分布：</p>
-                                    <p class="spec_content" v-html="obj.producingArea"></p>
-                                </div>          
-                            </div>
-                        </div>
-                    </mt-tab-container-item>
-
-                    <mt-tab-container-item id="2">
-                         <div class="information" >
-                            
-                               <div class="spec">
-                                <div class="spec_type">
-                                    <p class="what_spec">形态特征：</p>
-                                    <p class="spec_content" v-html="obj.morphology"></p>
-                                </div>                              
-                            </div>
-                         </div>
-                    </mt-tab-container-item>
-
-                    <mt-tab-container-item id="3">
-                            <div class="information" >
-                            
-                               <div class="spec">
+                        </mt-tab-container-item>
+                        <mt-tab-container-item id="3">
+                            <div class="information">
+                                <div class="spec">
                                     <div class="spec_type">
                                         <p class="what_spec">鉴别真伪：</p>
                                         <p class="spec_content" v-html="obj.identify"></p>
-                                    </div>                         
-                              </div>
+                                    </div>
+                                </div>
                             </div>
-                    </mt-tab-container-item>
-
-                    <mt-tab-container-item id="4">
-                            <div class="information" >
-                              <div class="spec">                                
-                                            <p class="what_spec" id="what_spec">2015年药典标准：</p>
-                                            <p class="spec_content" v-html="obj.standard"></p>                   
-                              </div>
+                        </mt-tab-container-item>
+                        <mt-tab-container-item id="4">
+                            <div class="information">
+                                <div class="spec">
+                                    <p class="what_spec" id="what_spec">2015年药典标准：</p>
+                                    <p class="spec_content" v-html="obj.standard"></p>
+                                </div>
                             </div>
-                    </mt-tab-container-item>
-                 
-                </mt-tab-container>
-              </div> 
-        </div>
-        </mt-loadmore> 
+                        </mt-tab-container-item>
+                    </mt-tab-container>
+                </div>
+            </div>
+        </mt-loadmore>
     </div>
-
 </template>
 <script>
 import common from '../common/common.js'
-import myHeader from '../components/tools/myHeader'
+import iosHead from '../components/tools/iosHead'
 import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                param:{
-                    name:'药性表'
+                param: {
+                    name: '药性表',
+                    appBack: false
                 },
                 selected: '1',
-                obj:{
-
-                },
-                id:'',
-                breedName:''
+                obj: {},
+                id: '',
+                breedName: ''
             }
         },
         components: {
-            myHeader
+            iosHead
         },
         methods: {
-
-            drugDetail(name){
+            drugDetail(name) {
                 let _self = this;
                 httpService.drugResTable(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'breedService',
-                        biz_method:'queryDrugPropertiesInfo',
-              
-                            biz_param: {
-                                herbName:name
-                            }
-                        }, function(suc) {
-                            
-                            common.$emit('message', suc.data.msg);
-                            
-                            
-                            let result = suc.data.biz_result;
-                            _self.obj = result;
-                           
-                        }, function(err) {
-                            
-                            common.$emit('message', err.data.msg);
-                        })
+                    biz_module: 'breedService',
+                    biz_method: 'queryDrugPropertiesInfo',
+                    biz_param: {
+                        herbName: name
+                    }
+                }, function(suc) {
+                    common.$emit('message', suc.data.msg);
+                    let result = suc.data.biz_result;
+                    _self.obj = result;
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
             }
         },
 
-        mounted(){
+        mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         },
         created() {
-           
-             
             var _self = this;
-            let name = _self.$route.params.drugId;           
+            let name = _self.$route.params.drugId;
             _self.drugDetail(name);
-
-            common.$on("informdrugDetail",function (item){
-                    _self.drugDetail(item);
+            common.$on("informdrugDetail", function(item) {
+                _self.drugDetail(item);
             });
-
-           
-            
         }
 }
 </script>
 <style scoped>
-
-.drug_table_detail{
+.drug_table_detail {
     position: relative;
 }
 
-/*.drug_table_detail .page-loadmore-wrapper{
-    padding-top: 100px;
-}*/
-.drug_table_detail .mint-header {
-    background-color: white;
-    color: #313232;
-    font-size: 1.36528rem;
+.drug_table_detail .nav-header {
+
+    position: relative;
 }
-.drug_table_detail .nav-header{
-    /*position: fixed;
-    background: white;
-    top:100px;*/
-   position: relative;
-}
+
 .drug_table_detail .mint-navbar {
     background: #F7F5F5;
 }
@@ -189,9 +151,8 @@ export default {
 
 .drug_table_detail .mint-navbar .mint-tab-item.is-selected {
     color: #FA6705;
-    border-bottom: 3px solid #FA6705;   
+    border-bottom: 3px solid #FA6705;
 }
-
 
 .drug_table_detail .drug_name {
     width: 92%;
@@ -327,13 +288,10 @@ export default {
     color: #666666;
     line-height: 1.5rem;
 }
-.drug_table_detail #what_spec{
+
+.drug_table_detail #what_spec {
     margin-bottom: 1.5rem;
 }
-.drug_table_detail  .info_content{
-    
-    
-    
-}
-</style>
 
+.drug_table_detail .info_content {}
+</style>
