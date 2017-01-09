@@ -1,20 +1,14 @@
 <template>
   <div class="account_overview">
-  <!--  <mt-header title="账户信息" class="header">
-   <router-link to="/" slot="left">
-   <mt-button icon="back"></mt-button>
- </router-link>
- <mt-button  slot="right"><div v-on:click="upData('accountInfoFinish')">编辑</div></mt-button> 
-</mt-header> -->
    <myHeader :param = "my_header" ></myHeader>
-   <mt-loadmore>
+   
+  
 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+ <mt-loadmore>
       <div class="header_photo_box">
         <p class="header_word">头像<span>(点击更改头像)</span></p>
         <div class="photo-div"><headerPhoto :param = "param"></headerPhoto></div>
-        
       </div>
-
       <div class="basic_data">
         <p class="basic_data_title">基础信息</p>
         <ul>
@@ -55,10 +49,9 @@
         
       </ul>
       </div>
-
+ </mt-loadmore>
 </div>
 
- </mt-loadmore>
 </div>
 </template>
 
@@ -207,7 +200,7 @@ export default {
   },    
   mounted() {
 
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
         }
 
  
@@ -217,6 +210,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+.page-loadmore-wrapper {
+    margin-top: -1px;
+    overflow: scroll;
+    padding-bottom: 10px;
+    width: 100%;
+}
 .account_overview .header{
 	color:#313232;
 }
@@ -270,6 +269,10 @@ export default {
   border-bottom:0.0427rem solid #E5E5E5;
   padding: 0 8.8% 0 4%;
   line-height:2.99rem; 
+}
+.account_overview  .company_data ul{
+  /*padding-bottom: 50px;
+  border:1px solid red;*/
 }
 .account_overview  .basic_data ul li,
 .company_data ul li{

@@ -472,6 +472,9 @@ export default {
     display:-webkit-flex;
     display:-ms-flexbox;
     flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
 }
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div {
@@ -484,6 +487,9 @@ export default {
     display:-webkit-flex;
     display:-ms-flexbox;
     flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
     margin-top: 1.279rem;
 }
 

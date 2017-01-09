@@ -78,6 +78,7 @@ export default {
     width: 100%;
     float: left;
     border-bottom: 1px solid #ddd;
+    background: white;
 }
 
 .sort .sort_content .sort_content_detail {

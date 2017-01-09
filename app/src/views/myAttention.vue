@@ -384,129 +384,6 @@ export default {
     font-size: 1rem;
     color: #999;
 }
-/*.my_attention .right_text {
-    font-size: 1.2rem;
-    padding-left: 1.5rem;
-    background: url(/static/images/tab.png) no-repeat left center;
-    background-size: 1.2rem;
-}
-
-.my_attention .select_box {
-    
-    margin-top: 50px;
-    border-bottom: 1px solid #DFDFDF;
-    font-size: 2.5rem;
-    background-color: white;
-    padding: 1rem;
-}
-
-.my_attention .bg_white {
-    
-}
-
-.my_attention .mint-navbar {
-    width: 70%;
-    margin-left: 15%;
-}
-
-.my_attention .mint-navbar .mint-tab-item {
-    padding: 1.2rem 0;
-    line-height: 0 !important;
-    border: 1px solid #FA6705;
-}
-
-.my_attention .mint-navbar .mint-tab-item.is-selected {
-    background-color: #FA6705;
-    color: white;
-    margin: 0;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
-    float: left;
-    width: 100%;
-    min-height: 11.5rem;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    
-    height: 9.4rem;
-    width: 8.533rem;
-    position: absolute;
-    left: 10px;
-    margin: 10px 10px 10px 0;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
-    float: left;
-    text-align: left;
-    line-height: 20px;
-    font-size: 1.3rem;
-    margin-bottom: 8px;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
-    float: left;
-    max-height: 1.4rem;
-    margin-bottom: 1.5rem;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center div {
-    font-size: 1.6rem;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
-    float: left;
-    width: 100%;
-    padding-right: 90px;
-    line-height: 18px;
-    text-align: left;
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 0.3rem;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
-    width: 100%;
-    padding-left: 120px;
-    padding-top: 10px;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
-    position: absolute;
-    max-width: 80px;
-    height: 10rem;
-    margin: 0;
-    right: 10px;
-   
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
-    font-size: 1.6rem;
-    margin-top: 10px;
-    color: #EC6817;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p span {
-    font-size: 1rem;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
-    position: absolute;
-    bottom: 10px;
-    background: #EC6817;
-    width: 6.5rem;
-    right: 0px;
-    height: 2.5rem;
-    line-height: 2rem;
-    font-size: 1.2rem;
-    padding: 0;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {
-    font-size: 1.2rem;
-    color: #999;
-    margin-top: 0.2rem;
-}*/
 
 
 
@@ -612,15 +489,29 @@ export default {
     margin-right: 5px;
 }
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail{
-    width:100%;
-    
+    width:100%;   
     display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction:column;
+    -webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
 }
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail div{
     flex:1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
     display:flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction:row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
     margin-top: 1.279rem;
     
 }
@@ -629,119 +520,11 @@ export default {
 }
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail div p{
     flex:1;
-    
-    
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
     font-size: 1.109rem;
     color:#424242;
 }
-/*.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem {
-    float: left;
-    width: 100%;
-    min-height: 100px;
-    padding: 10px;
-    height: auto;
-    background: white;
-}
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .flag {
-    float: left;
-    width: 100%;
-    padding-bottom: 10px;
-    line-height: 17px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .flag img {
-    max-height: 15px;
-    float: left;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .flag span {
-    margin-left: 5px;
-    color: #666;
-    font-size: 1.1rem;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom {
-    float: left;
-    width: 100%;
-    margin-top: 10px;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom p {
-    line-height: 24px;
-    float: left;
-    font-size: 1.2rem;
-    color: #666;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom span {
-    color: #EC6817;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom button {
-    float: right;
-    background: #EC6817;
-    font-size: 10px;
-    width: 6.5rem;
-    height: 2.5rem;
-    padding: 0;
-    border: none;
-    color: #fff;
-    font-size: 1.2rem;
-    line-height: 0;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center {
-    float: left;
-    width: 100%;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center div {
-    float: left;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title {
-    width: 100%;
-    font-size: 1.3rem;
-    color: #333;
-    line-height: 15px;
-    margin: 10px 0;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title div {
-    font-size: 1.6rem;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title p {
-    float: right;
-    font-size: 1.1rem;
-    color: #999;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title img {
-    max-height: 1.4rem;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail {
-    width: 100%;
-    line-height: 18px;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail p {
-    float: left;
-    font-size: 1.2rem;
-    color: #666;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail span {
-    color: #EC6817;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail p:last-child {
-    float: right;
-}*/
 </style>
