@@ -51,6 +51,8 @@
                 </mt-loadmore>
             </div>
         </div>
+
+        <errPage  :err="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -60,9 +62,11 @@ import myHeader from '../components/tools/myHeader'
 import myPurchaseSort from '../components/tools/myPurchaseSort'
 import httpService from '../common/httpService.js'
 import filters from '../filters/filters'
+import errPage from '../components/tools/err'
 export default {
     data() {
             return {
+                err:'暂无我的采购',
                 sortRouter: 'home',
                 param: {
                     name: '我的求购',
@@ -201,7 +205,8 @@ export default {
         components: {
             searchInput,
             myPurchaseSort,
-            myHeader
+            myHeader,
+            errPage
         },
         filters: (filters, {
 
@@ -236,25 +241,17 @@ export default {
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
 
-                    
+                   if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
                    let result = suc.data.biz_result.list;
                    if(suc.data.code == '1c01'){
                         for(var i = 0; i < result.length; i++){
-                            /*let onSell = result[i].onSell;
-                            if (onSell == 1) {
-                                onSell = '待审核'
-                            } else if (onSell == 2) {
-                                onSell = '正在匹配买家'
-                            } else {
-                                onSell = ''
-                            }
-                            result[i].onSell = onSell;*/
+                           
                             _self.todos.push(result[i]);
                         }
                     }else{
                         common.$emit('message', suc.data.msg);
                     }
-                    /*common.$emit("translatePubdate",listArr,_self.todos);*/
+                
                     
                     if(back){
 
@@ -270,7 +267,6 @@ export default {
             getId(param) {
                 let _self = this;
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp()
             },
@@ -309,7 +305,6 @@ export default {
                 let _self = this;
                 setTimeout(() => {
                     _self.httpPraram.page = 1;
-                    _self.todos.splice(0, _self.todos.length);
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
@@ -322,12 +317,10 @@ export default {
             _self.getHttp();
             common.$on('informMyPurchase', function(item) {
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             });
             common.$on("revisePurtoPur", function(item) {
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             })
         },

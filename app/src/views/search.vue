@@ -182,7 +182,7 @@ export default {
 
         created() {
             let _self = this;
-            _self.historyArr = window.localStorage.historyArr.split('},');
+            if(window.localStorage.historyArr)_self.historyArr = window.localStorage.historyArr.split('},');
             for(let i = 0;i<_self.historyArr.length;i++){
                 _self.historyArr[i]=JSON.parse(_self.historyArr[i]);
             }

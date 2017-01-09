@@ -38,17 +38,21 @@
                 </mt-loadmore>
             </div>
         </div>
+
+        <errPage  :err="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
 import common from '../../common/common.js'
 import longSearch from '../../components/tools/longSearch'
 import sort from '../../components/tools/sort'
+import errPage from '../../components/tools/err'
 import httpService from '../../common/httpService.js'
 import filters from '../../filters/filters'
 export default {
     data() {
             return {
+               err:'暂无低价资源',
                myShow:{
                     myShow:false
                 },
@@ -152,7 +156,8 @@ export default {
         },
         components: {
             longSearch,
-            sort
+            sort,
+            errPage
         },
         methods: {
             getHttp(back) {
@@ -174,7 +179,7 @@ export default {
                     }
                 }, function(suc) {
                     common.$emit('close-load');
-                    
+                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
                     let result = suc.data.biz_result.list;
                     if(suc.data.code == '1c01'){
                         /*common.$emit('translateDate',result,_self.todos);*/
@@ -199,13 +204,11 @@ export default {
             getId(param) {
                 let _self = this;
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp();
             },
             clearKeyword() {
                 this.httpPraram.page = 1;
-                this.todos.splice(0, this.todos.length);
                 this.httpPraram.keyword = '';
                 this.getHttp();
             },
@@ -214,21 +217,6 @@ export default {
                 this.$router.push('search');
             },
             jumpDetail(id) {
-                // let _self = this;
-                // httpService.myAttention(common.urlCommon + common.apiUrl.most, {
-                //         biz_module:'intentionService',
-                //         biz_method:'queryIntentionInfo',
-                //             biz_param: {
-                //                 id:id
-                //             }
-                //         }, function(suc) {
-                //             common.$emit('message', suc.data.msg);
-                //             let result = suc.data.biz_result;
-                //              _self.obj = result;
-                //              common.$emit('post-res-detail',_self.obj);
-                //         }, function(err) {  
-                //              common.$emit('message', err.data.msg);
-                //         })
                 common.$emit("resourceDetail",id);
                 this.$router.push('resourceDetail/' + id);
             },
@@ -256,7 +244,6 @@ export default {
                 let _self = this;
                 setTimeout(() => {
                     _self.httpPraram.page = 1;
-                    _self.todos.splice(0, _self.todos.length);
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
@@ -270,7 +257,6 @@ export default {
             common.$on('resource', function(item) {
                 _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             })
             common.$on('resource-sort', function(item) {
@@ -286,7 +272,6 @@ export default {
                     _self.sortArr[3].url = "/static/icons/screen.png";
                 }
                 _self.httpPraram.page = 1;
-                _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             });
         },
