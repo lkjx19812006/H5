@@ -1,8 +1,11 @@
 <template>
     <div class="account_overview">
         <div class="header">
-            <img :src="param.url" v-show="param.url">
-            <img src="/static/images/my-header.png" v-show="!param.url">
+            
+               <img :src="param.url" v-show="param.url">
+               <img src="/static/images/my-header.png" v-show="!param.url">
+            
+            
             <p>{{param.name}}</p>
             <p class="company-name">{{param.company}}</p>
             <div>
@@ -25,6 +28,11 @@ export default {
                 normalMoney: '',
                 score: '',
                 name: ''
+            }
+        },
+        methods:{
+            jump(){
+                this.$router.push('/login');
             }
         },
         created() {

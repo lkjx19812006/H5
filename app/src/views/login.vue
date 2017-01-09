@@ -22,7 +22,7 @@
                         <div class="pass-name">
                             <input type="text" placeholder="请输入验证码" v-model="param.code">
                             <p v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
-                                <input v-on:click="confirmLogin()" :value='code' type="button">
+                                <input v-on:click="confirmLogin()" :value='code' type="button" :disabled="buttonDisabled" class="pass_code">
                             </p>
                         </div>
                     </div>
@@ -51,7 +51,7 @@ export default {
             return {
                 my_header: {
                     name: '登陆',
-                    goBack:true
+                    goBack: true
                 },
                 myShow: {
                     show: true,
@@ -190,7 +190,7 @@ export default {
             }
         },
         mounted() {
-            this.wholeHeight = document.documentElement.clientHeight- this.$refs.wrapper.getBoundingClientRect().top;
+            this.wholeHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -261,6 +261,10 @@ export default {
     border-right: 1px solid #333333;
     height: 100%;
     padding: 0 1rem;
+}
+
+.login .password .pass-name .pass_code {
+    width: 80%;
 }
 
 .login .password .pass-name .my_code {

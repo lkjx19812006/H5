@@ -10,18 +10,19 @@
                             <p><img src="/static/icons/my-phone.png"></p>
                             <input type="text" class='top_text' v-model="param.phone" placeholder="请输入手机号码">
                         </li>
+                        <li >
+                            <p><img src="/static/icons/my-password.png"></p>
+                            <input type="password" class='top_text' v-model="param.passWord" placeholder="请输入旧密码">
+                        </li>
                         <li>
                             <p><img src="/static/icons/my-password.png"></p>
                             <input type="password" class='top_text' v-model="param.new_passWord" placeholder="请输入新密码">
                         </li>
-                         <li>
+                         <li class="last_li">
                             <p><img src="/static/icons/my-password.png"></p>
                             <input type="password" class='top_text' v-model="param.again_new_passWord" placeholder="请确认新密码">
                         </li>
-                        <li class="last_li">
-                            <p><img src="/static/icons/my-password.png"></p>
-                            <input type="password" class='top_text' v-model="param.passWord" placeholder="请输入">
-                        </li>
+                        
                         <li  v-on:click="confirm" class="confirm">
                                 下一步
                         </li>
