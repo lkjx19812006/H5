@@ -1,5 +1,5 @@
 <template>
-    <div class="login" :style="{ height: wholeHeight + 'px' }">
+    <div class="login" >
         <myHeader :param="my_header"></myHeader>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
