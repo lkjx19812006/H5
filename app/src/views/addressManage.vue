@@ -1,50 +1,47 @@
 <template>
     <div class="address_manage">
-       
-        <myHeader :param = "my_header" ></myHeader>
 
-        
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
-       <mt-loadmore>
-        <ul >
-            <li v-for="(todo,index) in todos" v-show="todo.show">
-                <div class="address_top" @click="jumpBack(todo)">
-                    <div class="receiver">
-                        <p class="receiver_left">
-                            <span>收货人：{{todo.contactName}}</span>
-                            <!-- <span v-show="todo.reviseShow">收货人：<input type="text" :placeholder="todo.name"></span> -->
-                        </p>
-                        <p class="receiver_right">{{todo.contactPhone}}</p>
-                    </div>
-                    <div class="address">
-                        <p>
-                            <span>地址：{{todo.address}}</span>
-                            <!-- <span v-show="todo.reviseShow">地址：<input type="text" :placeholder="todo.address"></span> -->
-                        </p>
-                    </div>
-                </div>
-                <div class="address_bottom">
-                    <p class="top_p">
-                        <img :src="todo.first_img" class="first_img" v-on:click="changeColor(todos,todo,index)">
-                        <span>默认地址</span>
-                    </p>
-                    <div class="address_box">
-                        <p class="center_p">
-                            <img :src="todo.second_img" class="second_img">
-                            <span v-on:click="revise(todo)">修改</span>
-                        </p>
-                        <p class="bottom_p">
-                            <img :src="todo.last_img" class="last_img">
-                            <span v-on:click="delet(todo)">删除</span>
-                        </p>
-                    </div>
-                </div>
-            </li>
-        </ul>
-        </mt-loadmore>
-       </div>
-       <div class="add_address" v-on:click="addAddress">添加新地址</div>
-       
+        <myHeader :param="my_header"></myHeader>
+        <mt-loadmore>
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
+                <ul>
+                    <li v-for="(todo,index) in todos" v-show="todo.show">
+                        <div class="address_top" @click="jumpBack(todo)">
+                            <div class="receiver">
+                                <p class="receiver_left">
+                                    <span>收货人：{{todo.contactName}}</span>
+                                    <!-- <span v-show="todo.reviseShow">收货人：<input type="text" :placeholder="todo.name"></span> -->
+                                </p>
+                                <p class="receiver_right">{{todo.contactPhone}}</p>
+                            </div>
+                            <div class="address">
+                                <p>
+                                    <span>地址：{{todo.address}}</span>
+                                    <!-- <span v-show="todo.reviseShow">地址：<input type="text" :placeholder="todo.address"></span> -->
+                                </p>
+                            </div>
+                        </div>
+                        <div class="address_bottom">
+                            <p class="top_p">
+                                <img :src="todo.first_img" class="first_img" v-on:click="changeColor(todos,todo,index)">
+                                <span>默认地址</span>
+                            </p>
+                            <div class="address_box">
+                                <p class="center_p">
+                                    <img :src="todo.second_img" class="second_img">
+                                    <span v-on:click="revise(todo)">修改</span>
+                                </p>
+                                <p class="bottom_p">
+                                    <img :src="todo.last_img" class="last_img">
+                                    <span v-on:click="delet(todo)">删除</span>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="add_address" v-on:click="addAddress">添加新地址</div>
+
     </div>
 </template>
 <script>
@@ -54,9 +51,8 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
-                my_header:{
-                    name:'地址管理',
-                    
+                my_header: {
+                    name: '地址管理',
                 },
                 id: '',
                 index: '',
@@ -68,10 +64,11 @@ export default {
             let _self = this;
             _self.listHttp();
             common.$on("informAddress", function(id) {
+                console.log('dddddd');
                 _self.listHttp();
             })
         },
-        components: {           
+        components: {
             myHeader
         },
         methods: {
@@ -197,7 +194,7 @@ export default {
             }
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top -50;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 50;
         }
 
 
@@ -205,6 +202,12 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.page-loadmore-wrapper {
+    margin-top: -1px;
+    overflow: scroll;
+    padding-bottom: 10px;
+    width: 100%;
+}
 .address_manage ul {
     margin-bottom: 100px;
 }
@@ -213,9 +216,11 @@ export default {
     background: white;
     margin-top: 1rem;
 }
-.address_manage .page-loadmore-wrapper{
+
+.address_manage .page-loadmore-wrapper {
     margin-bottom: 0;
 }
+
 .address_manage ul li {
     position: relative;
 }
@@ -255,7 +260,6 @@ export default {
     height: 1.2rem;
     line-height: 1.2rem;
     margin-top: -0.1rem;
-
 }
 
 .address_manage ul li .address_top .address {
@@ -321,6 +325,5 @@ export default {
     line-height: 50px;
     position: absolute;
     bottom: 0;
-    
 }
 </style>

@@ -7,7 +7,7 @@
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
-                            <img :src="todo.image[0]" class="list_images">
+                            <img v-lazy="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div><img src="/static/images/bao.png"><img src="/static/images/zheng.png">{{todo.breedName}}</div>
@@ -16,7 +16,9 @@
                                     <p class="time_font">发布时间:<span>{{todo.pubdate | timeFormat}}</span></p>
                                 </div>
                                 <div class="res_content_right">
+
                                     <p>{{todo.price}}<span>{{todo.unit}}</span></p>
+
                                     <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
                                 </div>
                             </div>
@@ -181,7 +183,6 @@ export default {
                     common.$emit('close-load');
                     let result = suc.data.biz_result.list;
                     if(suc.data.code == '1c01'){
-                        /*common.$emit('translateDate', result, _self.todos);*/
                         for(var i = 0; i < result.length; i++){
                             _self.todos.push(result[i]);
                         }
@@ -191,7 +192,6 @@ export default {
                     if(result.length<_self.httpPraram.pageSize){
                         _self.allLoaded = true;
                     }
-                    
                     if (back) {
                         back();
                     }

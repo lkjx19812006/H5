@@ -41,7 +41,12 @@ let common = new Vue({
     },
     methods: {
         addSID(url) {
-            return url + ';jsessionid=' + this.SID;
+            if(this.SID){
+              return url + ';jsessionid=' + this.SID;  
+          }else{
+            return url;
+          }
+            
         },
         getDate() {
             let _self = this;
@@ -50,6 +55,7 @@ let common = new Vue({
                     var timestamp = Date.parse(new Date());
                     window.localStorage.difTime = response.data.biz_result.time - timestamp;
                     _self.difTime = window.localStorage.difTime;
+                    common.$emit('toMine');
                 }
             }, (err) => {
                 common.$emit('message', err.data.msg);

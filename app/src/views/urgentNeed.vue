@@ -376,6 +376,7 @@ export default {
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list {
     padding: 0 10px;
+    float: left;
 }
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {

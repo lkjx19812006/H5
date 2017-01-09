@@ -197,6 +197,19 @@ export default {
                         ensure: this.loadApp
                     });
                 } else {
+                    switch(router){
+                        case 'myResource':
+                        common.$emit("informMyRes",1);
+                        break;
+                        case 'myPurchase':
+                        common.$emit("informMyPurchase",1);
+                        break;
+                        case 'myAttention':
+                        common.$emit("informResAttention",1);
+                        break;
+                        default :
+                        break;
+                    }
                     this.$router.push(router);
                 }
 
@@ -204,8 +217,8 @@ export default {
         },
         created() {
             let _self = this;
-            _self.getHttp();
-            _self.salesmanData();
+            if(common.SID)_self.getHttp();
+            if(common.SID)_self.salesmanData();
             common.$on("toMine", function(obj) {
                 _self.getHttp();
                 _self.salesmanData();

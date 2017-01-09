@@ -1,41 +1,34 @@
 <template>
     <div class="login" :style="{ height: wholeHeight + 'px' }">
-       
-
         <img src="/static/images/logo-login.png" class="my-logo">
-        <myTab :param = "myShow" ></myTab> 
+        <myTab :param="myShow"></myTab>
         <div class="password" v-show="myShow.show">
-               <div class="account-number">
-                     <input type="text" placeholder="请输入用户名/手机号/邮箱" v-model="param.phone">
-               </div> 
-               <div  class="pass-word">
-                    <input type="text" placeholder="请输入密码" v-model="param.password">
-               </div>
+            <div class="account-number">
+                <input type="text" placeholder="请输入用户名/手机号/邮箱" v-model="param.phone">
+            </div>
+            <div class="pass-word">
+                <input type="text" placeholder="请输入密码" v-model="param.password">
+            </div>
         </div>
-               
-         
-
-         <div class="password" v-show="!myShow.show">
-               <div class="phone">
-                     <p class="tel">+86</p>
-                     <input type="text" placeholder="请输入手机号" v-model="param.phone">
-               </div> 
-               <div  class="pass-name">
-                    <input type="text" placeholder="请输入验证码" v-model="param.code">
-                    <p  v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }" v-on:click="confirmLogin()">{{code}}</p>
-               </div>
+        <div class="password" v-show="!myShow.show">
+            <div class="phone">
+                <p class="tel">+86</p>
+                <input type="text" placeholder="请输入手机号" v-model="param.phone">
+            </div>
+            <div class="pass-name">
+                <input type="text" placeholder="请输入验证码" v-model="param.code">
+                <p v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }" v-on:click="confirmLogin()">{{code}}</p>
+            </div>
         </div>
-               <div class="prompt" id="prompt" >
-                    <router-link to="findPassWord">
-                       <p class="left">忘记密码</p>
-                    </router-link>   
-                    <router-link to="register"> 
-                       <p class="right">立即注册</p>
-                    </router-link>
-               </div>
-
-               <div  class="confirm" @click="login()">登陆</div>
-         
+        <div class="prompt" id="prompt">
+            <router-link to="findPassWord">
+                <p class="left">忘记密码</p>
+            </router-link>
+            <router-link to="register">
+                <p class="right">立即注册</p>
+            </router-link>
+        </div>
+        <div class="confirm" @click="login()">登陆</div>
     </div>
 </template>
 <script>
@@ -46,10 +39,10 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                myShow:{
-                    show:true,
-                    left_name:'密码登陆',
-                    right_name:'短信登陆'
+                myShow: {
+                    show: true,
+                    left_name: '密码登陆',
+                    right_name: '短信登陆'
                 },
                 selected: 'identiCode',
                 identify_code: '',
@@ -67,60 +60,59 @@ export default {
             this.wholeHeight = document.documentElement.clientHeight;
             this.getCode();
         },
-        components:{
+        components: {
             myTab
         },
         methods: {
-            passWordLogin(){
-                   let _self = this;
-                    common.$emit('show-load');
-                    httpService.login(common.urlCommon + common.apiUrl.login, {
-                        biz_param: {
-                            phone: _self.param.phone,
-                            password: _self.param.password
-                        }
-                    }, function(response) {
-                        common.$emit('close-load');
-                        if (response.data.code == '1c01') {
-                            window.localStorage.KEY = response.data.biz_result.KEY;
-                            window.localStorage.SID = response.data.biz_result.SID;
-                            common.KEY = window.localStorage.KEY;
-                            common.SID = window.localStorage.SID;
-                            common.getDate();
-                            // common.$emit('message', response.data.msg);
-                            _self.$router.push('/home');
-                        } else {
-                            common.$emit('message', response.data.msg);
-                        }
-                    }, function(err) {
-                        common.$emit('close-load');
-                        common.$emit('message', err.data.msg);
-                    })
+            passWordLogin() {
+                let _self = this;
+                common.$emit('show-load');
+                httpService.login(common.urlCommon + common.apiUrl.login, {
+                    biz_param: {
+                        phone: _self.param.phone,
+                        password: _self.param.password
+                    }
+                }, function(response) {
+                    common.$emit('close-load');
+                    if (response.data.code == '1c01') {
+                        window.localStorage.KEY = response.data.biz_result.KEY;
+                        window.localStorage.SID = response.data.biz_result.SID;
+                        common.KEY = window.localStorage.KEY;
+                        common.SID = window.localStorage.SID;
+                        common.getDate();
+                        _self.$router.push('/home');
+                    } else {
+                        common.$emit('message', response.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
             },
-            codeLogin(){
-                    let _self = this;
-                    common.$emit('show-load');
-                    httpService.login(common.urlCommon + common.apiUrl.code_login, {
-                        biz_param: {
-                            phone: _self.param.phone,
-                            code: _self.param.code
-                        }
-                    }, function(response) {
-                        common.$emit('close-load');
-                        if (response.data.code == '1c01') {
-                            window.localStorage.KEY = response.data.biz_result.KEY;
-                            window.localStorage.SID = response.data.biz_result.SID;
-                            common.KEY = window.localStorage.KEY;
-                            common.SID = window.localStorage.SID;
-                            common.getDate();
-                            _self.$router.push('/home');
-                        } else {
-                            common.$emit('message', response.data.msg);
-                        }
-                    }, function(err) {
-                        common.$emit('close-load');
-                        common.$emit('message', err.data.msg);
-                    })
+            codeLogin() {
+                let _self = this;
+                common.$emit('show-load');
+                httpService.login(common.urlCommon + common.apiUrl.code_login, {
+                    biz_param: {
+                        phone: _self.param.phone,
+                        code: _self.param.code
+                    }
+                }, function(response) {
+                    common.$emit('close-load');
+                    if (response.data.code == '1c01') {
+                        window.localStorage.KEY = response.data.biz_result.KEY;
+                        window.localStorage.SID = response.data.biz_result.SID;
+                        common.KEY = window.localStorage.KEY;
+                        common.SID = window.localStorage.SID;
+                        common.getDate();
+                        _self.$router.push('/home');
+                    } else {
+                        common.$emit('message', response.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
             },
             getCode: function() {
                 let str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLNOPQRSTUVWXYZ0123456789';
@@ -166,10 +158,10 @@ export default {
                 let _self = this;
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
-                if(_self.myShow.show == true){
+                if (_self.myShow.show == true) {
                     let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
                     checkArr.push(checkPassword);
-                }else if(_self.myShow.show == false){
+                } else if (_self.myShow.show == false) {
                     let checkCode = validation.checkCode(_self.param.code, '666000');
                     checkArr.push(checkCode);
                 }
@@ -179,11 +171,11 @@ export default {
                         return;
                     }
                 }
-                  if(_self.myShow.show == false){
-                      _self.codeLogin()
-                  }else if(_self.myShow.show == true){
-                     _self.passWordLogin()
-                  }  
+                if (_self.myShow.show == false) {
+                    _self.codeLogin()
+                } else if (_self.myShow.show == true) {
+                    _self.passWordLogin()
+                }
             }
         },
         mounted() {
@@ -192,93 +184,102 @@ export default {
 }
 </script>
 <style scoped>
-.login{
+.login {
     background: url("/static/images/background-img.png") no-repeat;
     background-size: 100% 100%;
-    width:100%; 
+    width: 100%;
     /*height:1000px;*/
     height:100%;
 }
-.login .my-logo{
-    width:66.5%;
-    margin-top:10.6%;
+
+.login .my-logo {
+    width: 66.5%;
+    margin-top: 10.6%;
     margin-bottom: 10.6%;
 }
-.login .password div{
-    width:86%;
+
+.login .password div {
+    width: 86%;
     margin-left: 7%;
     padding: 0.8rem 0;
-    border:1px solid #313232;
+    border: 1px solid #313232;
     margin-top: 1.8rem;
     border-radius: 3px;
+}
 
-}
-.login .password input{
+.login .password input {
     outline: none;
-    border:none;
-    background-color:transparent;
-    text-align:left;
-    width:70%;
+    border: none;
+    background-color: transparent;
+    text-align: left;
+    width: 70%;
 }
-.login .account-number{
+
+.login .account-number {
     background: url("/static/icons/my-phone.png") no-repeat 1.25rem center;
     background-size: 20px;
-
 }
-.login .account-number{
+
+.login .account-number {
     background: url("/static/icons/my-phone.png") no-repeat 1.25rem center;
     background-size: 15px;
-
 }
-.login .pass-word{
+
+.login .pass-word {
     background: url("/static/icons/my-password.png") no-repeat 1.25rem center;
     background-size: 17px;
 }
-.login #prompt{
-    width:86%;
-    padding:1.5rem;
-    border:0;
-    margin:0 0 2.7rem 7%;  
+
+.login #prompt {
+    width: 86%;
+    padding: 1.5rem;
+    border: 0;
+    margin: 0 0 2.7rem 7%;
 }
-.login .prompt .left{
-    float:left;
+
+.login .prompt .left {
+    float: left;
 }
-.login .prompt .right{
-    float:right;
+
+.login .prompt .right {
+    float: right;
 }
-.login .password .phone .tel{
-    float:left;
-    border-right:1px solid #333333;
-    height:100%;
+
+.login .password .phone .tel {
+    float: left;
+    border-right: 1px solid #333333;
+    height: 100%;
     padding: 0 1rem;
 }
-.login .password .pass-name .my_code{
-    float:right;
-    width:40%;
-    border-left:1px solid #333333;
-    color:#FA6705;
-}
-.login .password .pass-name .my_code_nor{
-    float:right;
-    width:40%;
-    border-left:1px solid #333333;
-    color:#CECEBF;
-}
-.login .password  .pass-name input{
-    
-    width:60%;
-    padding-left:1rem;
-    
 
+.login .password .pass-name .my_code {
+    float: right;
+    width: 40%;
+    border-left: 1px solid #333333;
+    color: #FA6705;
 }
-.login .confirm{
-    width:86%;
+
+.login .password .pass-name .my_code_nor {
+    float: right;
+    width: 40%;
+    border-left: 1px solid #333333;
+    color: #CECEBF;
+}
+
+.login .password .pass-name input {
+    width: 60%;
+    padding-left: 1rem;
+}
+
+.login .confirm {
+    width: 86%;
     font-size: 1.8rem;
     background: #FA6804;
     padding: 1rem 0;
-    color:white;
+    color: white;
     border-radius: 3px;
     margin-left: 7%;
 }
+
 
 </style>
