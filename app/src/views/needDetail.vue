@@ -30,13 +30,14 @@
                         </div>
                     </div>
                 </mt-loadmore>
-                <div class="fix_bottom">
+               
+            </div>
+             <div class="fix_bottom">
                     <div class="attention">
                         <telAndAttention :obj='obj'></telAndAttention>
                     </div>
                     <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="loadApp()">立即报价</button>
                 </div>
-            </div>
         </div>
     </div>
 </template>
