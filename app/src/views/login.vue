@@ -204,6 +204,10 @@ export default {
     height: 100%;
 }
 
+.page-loadmore-wrapper {
+    overflow-x: hidden;
+}
+
 .login .my-logo {
     width: 66.5%;
     margin-top: 10.6%;

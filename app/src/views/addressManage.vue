@@ -58,12 +58,10 @@ import errPage from '../components/tools/err'
 export default {
     data() {
             return {
-
                 err:{
                     err:"很抱歉，没有设置地址",
                     url:'/static/icons/maomao.png',
                 },
-
                 wrapperHeight:'',
 
                 my_header: {
@@ -112,7 +110,6 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.addressManage(url, body, function(suc) {
                     common.$emit('close-load');
-                    console.log(suc)
                     let listArr = suc.data.biz_result.list;
                     if (suc.data.code == "1c01") {
                         for (var item in listArr) {
@@ -129,7 +126,7 @@ export default {
                         console.log(listArr)
                         _self.todos = listArr
                     } else {
-                        common.$emit('message', suc.data.msg);
+                        if(suc.data.msg){common.$emit('message', suc.data.msg);}
                     }
                 }, function(err) {
                     common.$emit('close-load');

@@ -116,6 +116,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+.page-loadmore-wrapper {
+    overflow-x: hidden;
+}
 .my_set .bg_white {
     background-color: #F0F0F0;
 
