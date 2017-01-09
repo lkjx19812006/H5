@@ -106,18 +106,15 @@ export default {
                         }
                     }, function(response) {
                         common.$emit('close-load');
-                        console.log(response);
                         if (response.data.code == '1c01') {
                             window.localStorage.KEY = response.data.biz_result.KEY;
                             window.localStorage.SID = response.data.biz_result.SID;
                             common.KEY = window.localStorage.KEY;
                             common.SID = window.localStorage.SID;
                             common.getDate();
-                            
                             _self.$router.push('/home');
                         } else {
                             common.$emit('message', response.data.msg);
-
                         }
                     }, function(err) {
                         common.$emit('close-load');
@@ -168,15 +165,6 @@ export default {
                 let _self = this;
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
-                /*if (_self.selected == 'identiCode') {
-                    let checkCode = validation.checkCode(_self.param.code, '666000');
-                    checkArr.push(checkCode);
-                } else if(_self.selected == 'password'){
-                    let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
-                    let checkCode = validation.checkCode(_self.param.imageCode, _self.identify_code);
-                    checkArr.push(checkPassword);
-                    checkArr.push(checkCode);
-                }*/
                 if(_self.myShow.show == true){
                     let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
                     checkArr.push(checkPassword);

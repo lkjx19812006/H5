@@ -3,7 +3,7 @@
         <div class="search_div">
             <div class="search_content">
                 <input type="text" placeholder="请输入关键字" v-model="keyword">
-                <img src="/static/images/search.png" class="search_image" v-on:click="search">
+                <img src="/static/images/search.png" class="search_image">
             </div>
             <span @click="back()">取消</span>
         </div>
@@ -24,7 +24,7 @@
                         历史搜索
                     </div>
                     <div class="history_search_content_result_detail" v-show="historyArr.length>0">
-                        <button class="mint-button mint-button--default mint-button--small" v-for="item in historyArr" v-on:click="jumpRes(item)">{{item.name}}</button>
+                        <button class="mint-button mint-button--default mint-button--small" v-for="item in historyArr" v-on:click="jumpRes(item)">{{item.keyWord}}</button>
                         <div class="clear_result">
                             <div class="click_district" @click="clearResult()"><img src="/static/icons/resource.png"><span>清空历史搜索</span></div>
                         </div>
@@ -135,16 +135,25 @@ export default {
                         common.$emit("lowPriceRes", item);
                         break;
                 }
+
+                let count = 1;
+                for (let i = 0; i < _self.historyArr.length; i++) {
+                    if (_self.historyArr[i].id == item.id) {
+                        count = 0;
+                    }
+                }
+                if (count) _self.historyArr.unshift(item);
+                let arr = []; 
+                for(let i=0;i<_self.historyArr.length;i++){
+                    arr[i]=JSON.stringify(_self.historyArr[i]);
+                }
+                window.localStorage.historyArr = arr.join('},');
                 if (common.pageParam.router == 'index') {
                     common.$emit("setParam", 'lowPrice', item);
                     _self.$router.push('lowPriceRes');
-
                 } else {
                     window.history.go(-1);
                 }
-            },
-            search() {
-                let _self = this;
             }
         },
         watch: {
@@ -163,7 +172,6 @@ export default {
                     }, function(suc) {
                         common.$emit('message', suc.data.msg);
                         let result = suc.data.biz_result.list;
-
                         _self.datas = result;
                     }, function(err) {
                         common.$emit('message', err.data.msg);
@@ -174,6 +182,11 @@ export default {
 
         created() {
             let _self = this;
+            _self.historyArr = window.localStorage.historyArr.split('},');
+            for(let i = 0;i<_self.historyArr.length;i++){
+                _self.historyArr[i]=JSON.parse(_self.historyArr[i]);
+            }
+            common.$emit('show-load');
             httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
                 biz_module: 'searchKeywordService',
                 biz_method: 'queryHotKeyword',
@@ -182,11 +195,12 @@ export default {
                     pSize: 20
                 }
             }, function(suc) {
+                common.$emit('close-load');
                 common.$emit('message', suc.data.msg);
                 let result = suc.data.biz_result.list;
-                //console.log(result);
                 _self.todos = result;
             }, function(err) {
+                common.$emit('close-load');
                 common.$emit('message', err.data.msg);
             })
 

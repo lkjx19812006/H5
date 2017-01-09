@@ -354,6 +354,7 @@ export default {
 }
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list {
     padding: 0 10px;
+    float: left;
 }
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;

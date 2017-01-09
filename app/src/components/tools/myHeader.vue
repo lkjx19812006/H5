@@ -18,12 +18,10 @@ import common from '../../common/common.js'
 export default {
     data() {
             return {
-
             }
         },
         props: {
             param: {
-
             }
         },
         methods: {
@@ -69,11 +67,9 @@ export default {
     font-size: 1.7rem;
     line-height: 50px;
     color: white;
-    /*padding-right: 16.5%;*/
 }
 
 .my-header .go-back {
-    /*position: absolute;*/
     float: left;
     width: 15%;
     padding-right: 5%;
