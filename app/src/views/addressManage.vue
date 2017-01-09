@@ -1,47 +1,48 @@
 <template>
     <div class="address_manage">
-
         <myHeader :param="my_header"></myHeader>
-        <mt-loadmore>
+        <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
-                <ul>
-                    <li v-for="(todo,index) in todos" v-show="todo.show">
-                        <div class="address_top" @click="jumpBack(todo)">
-                            <div class="receiver">
-                                <p class="receiver_left">
-                                    <span>收货人：{{todo.contactName}}</span>
-                                    <!-- <span v-show="todo.reviseShow">收货人：<input type="text" :placeholder="todo.name"></span> -->
-                                </p>
-                                <p class="receiver_right">{{todo.contactPhone}}</p>
+                <mt-loadmore>
+                    <ul>
+                        <li v-for="(todo,index) in todos" v-show="todo.show">
+                            <div class="address_top" @click="jumpBack(todo)">
+                                <div class="receiver">
+                                    <p class="receiver_left">
+                                        <span>收货人：{{todo.contactName}}</span>
+                                        <!-- <span v-show="todo.reviseShow">收货人：<input type="text" :placeholder="todo.name"></span> -->
+                                    </p>
+                                    <p class="receiver_right">{{todo.contactPhone}}</p>
+                                </div>
+                                <div class="address">
+                                    <p>
+                                        <span>地址：{{todo.address}}</span>
+                                        <!-- <span v-show="todo.reviseShow">地址：<input type="text" :placeholder="todo.address"></span> -->
+                                    </p>
+                                </div>
                             </div>
-                            <div class="address">
-                                <p>
-                                    <span>地址：{{todo.address}}</span>
-                                    <!-- <span v-show="todo.reviseShow">地址：<input type="text" :placeholder="todo.address"></span> -->
+                            <div class="address_bottom">
+                                <p class="top_p">
+                                    <img :src="todo.first_img" class="first_img" v-on:click="changeColor(todos,todo,index)">
+                                    <span>默认地址</span>
                                 </p>
+                                <div class="address_box">
+                                    <p class="center_p">
+                                        <img :src="todo.second_img" class="second_img">
+                                        <span v-on:click="revise(todo)">修改</span>
+                                    </p>
+                                    <p class="bottom_p">
+                                        <img :src="todo.last_img" class="last_img">
+                                        <span v-on:click="delet(todo)">删除</span>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="address_bottom">
-                            <p class="top_p">
-                                <img :src="todo.first_img" class="first_img" v-on:click="changeColor(todos,todo,index)">
-                                <span>默认地址</span>
-                            </p>
-                            <div class="address_box">
-                                <p class="center_p">
-                                    <img :src="todo.second_img" class="second_img">
-                                    <span v-on:click="revise(todo)">修改</span>
-                                </p>
-                                <p class="bottom_p">
-                                    <img :src="todo.last_img" class="last_img">
-                                    <span v-on:click="delet(todo)">删除</span>
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </mt-loadmore>
             </div>
-            <div class="add_address" v-on:click="addAddress">添加新地址</div>
-
+        </div>
+        <div class="add_address" v-on:click="addAddress">添加新地址</div>
     </div>
 </template>
 <script>
@@ -51,6 +52,7 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                wrapperHeight:'',
                 my_header: {
                     name: '地址管理',
                 },
@@ -64,7 +66,6 @@ export default {
             let _self = this;
             _self.listHttp();
             common.$on("informAddress", function(id) {
-                console.log('dddddd');
                 _self.listHttp();
             })
         },
@@ -208,6 +209,11 @@ export default {
     padding-bottom: 10px;
     width: 100%;
 }
+
+.address_manage .bg_white {
+    background-color: #F0F0F0;
+}
+
 .address_manage ul {
     margin-bottom: 100px;
 }

@@ -275,7 +275,7 @@ export default {
             });
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 145;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 155;
         }
 }
 </script>
@@ -386,7 +386,7 @@ export default {
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
     width: 100%;
-    padding-right: 90px;
+    padding-right: 70px;
     line-height: 1.2rem;
     text-align: left;
     font-size: 1.2rem;

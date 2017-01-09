@@ -1,35 +1,32 @@
 <template>
     <div class="details_page">
-        <!-- <mt-header title="详情">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back" ></mt-button>
-            </router-link>
-        </mt-header> -->
         <myHeader :param="myHeader"></myHeader>
-        <mt-loadmore>
+        <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <ul class="info_list">
-                    <li v-for="(todo,index) in todos" v-if="index == 0" class="header_phone">
+                <mt-loadmore>
+                    <ul class="info_list">
+                        <li v-for="(todo,index) in todos" v-if="index == 0" class="header_phone">
+                            <div>
+                                <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
+                            </div>
+                            <p class="name_content">{{todo.content}}</p>
+                        </li>
+                        <li v-for="(todo,index) in todos" v-if="index > 0">
+                            <img :src="todo.img_src">
+                            <p class="name">{{todo.name}}</p>
+                            <p class="name_content">{{todo.content}}</p>
+                        </li>
+                    </ul>
+                    <div class="advantage" v-for="item in data">
+                        <img :src="item.img_src">
+                        <p>{{item.name}}</p>
                         <div>
-                            <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
+                            {{item.content}}
                         </div>
-                        <p class="name_content">{{todo.content}}</p>
-                    </li>
-                    <li v-for="(todo,index) in todos" v-if="index > 0">
-                        <img :src="todo.img_src">
-                        <p class="name">{{todo.name}}</p>
-                        <p class="name_content">{{todo.content}}</p>
-                    </li>
-                </ul>
-                <div class="advantage" v-for="item in data">
-                    <img :src="item.img_src">
-                    <p>{{item.name}}</p>
-                    <div>
-                        {{item.content}}
                     </div>
-                </div>
+                </mt-loadmore>
             </div>
-        </mt-loadmore>
+        </div>
     </div>
 </template>
 <script>
@@ -40,6 +37,7 @@ import imageUpload from '../components/tools/imageUpload'
 export default {
     data() {
             return {
+                wrapperHeight: '',
                 myHeader: {
                     name: '详情'
 

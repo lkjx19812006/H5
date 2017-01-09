@@ -3,7 +3,7 @@
         <myHeader :param="myHeader"></myHeader>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore>
+                <mt-loadmore >
                     <ul class="fill_in">
                         <li>
                             <p>手机号：</p>
@@ -34,7 +34,7 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                wrapperHeight: 0,
+                wrapperHeight: '',
                 myHeader: {
                     name: '找回密码'
                 },
@@ -162,7 +162,7 @@ export default {
 }
 
 .find_password .fill_in li p {
-    width: 17.5%;
+    width: 22%;
     text-align: right;
     float: left;
 }
@@ -175,7 +175,7 @@ export default {
 }
 
 .find_password .fill_in li .get_code {
-    width: 100px;
+    width: 31%;
     border: 1px solid #BFBFBF;
     height: 2.3rem;
     border-radius: 5px;

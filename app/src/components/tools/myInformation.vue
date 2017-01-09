@@ -46,7 +46,8 @@ export default {
                     if(_self.param.employee<100000){
                        common.$emit('message', '暂无客服'); 
                     }else{
-                        this.$router.push('/detailsPage');
+                        // this.$router.push('/detailsPage');
+                        common.$emit('message', '暂无客服');
                     }
                     
                 } else {

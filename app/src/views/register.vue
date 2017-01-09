@@ -37,7 +37,7 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                wrapperHeight: 0,
+                wrapperHeight: '',
                 myHeader: {
                     name: '注册'
                 },
@@ -105,8 +105,8 @@ export default {
                     let differentPassword = '您输入的密码不一致'
                     checkArr.push(differentPassword);
                 }
-                let checkCode = validation.checkCode(_self.param.code, '666000');
-                checkArr.push(checkCode);
+                // let checkCode = validation.checkCode(_self.param.code, '666000');
+                // checkArr.push(checkCode);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);

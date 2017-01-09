@@ -294,7 +294,6 @@ a {
 
 .bg_white {
     background-color: #fff;
-    float: left;
     width: 100%;
 }
 
@@ -319,21 +318,28 @@ a {
 }
 
 .page-loadmore-wrapper {
+    margin-top: -1px;
+    overflow: scroll;
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+/* .page-loadmore-wrapper {
     overflow-y: scroll;
     width: 100%;
     overflow-y: visible;
-}
+} */
 
 .page-wrap{
     padding-bottom: 55px;
 }
 
-.page-loadmore-wrapper {
+/* .page-loadmore-wrapper {
     margin-top: -1px;
     overflow: scroll;
-    padding-bottom: 0px;
+    padding-bottom: 10px;
     width: 100%;
-}
+} */
 
 
 

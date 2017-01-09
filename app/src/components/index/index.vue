@@ -175,7 +175,7 @@ import longSearch from '../../components/tools/longSearch'
 export default {
     data() {
             return {
-                wrapperHeight: 0,
+                wrapperHeight: '',
                 selected: 'tab-container1',
                 imgArray: [{
                     activityUrl: '/static/images/1.jpg'

@@ -7,7 +7,7 @@
                 <input type="text" placeholder="请输入用户名/手机号/邮箱" v-model="param.phone">
             </div>
             <div class="pass-word">
-                <input type="text" placeholder="请输入密码" v-model="param.password">
+                <input type="password" placeholder="请输入密码" v-model="param.password">
             </div>
         </div>
         <div class="password" v-show="!myShow.show">
@@ -161,10 +161,11 @@ export default {
                 if (_self.myShow.show == true) {
                     let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
                     checkArr.push(checkPassword);
-                } else if (_self.myShow.show == false) {
-                    let checkCode = validation.checkCode(_self.param.code, '666000');
-                    checkArr.push(checkCode);
-                }
+                } 
+                // else if (_self.myShow.show == false) {
+                //     let checkCode = validation.checkCode(_self.param.code, '666000');
+                //     checkArr.push(checkCode);
+                // }
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);

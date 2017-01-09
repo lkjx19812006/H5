@@ -1,15 +1,21 @@
 <template>
     <div class="my_set">
         <myHeader :param="my_header"></myHeader>
-        <ul class="mylist">
-            <li v-for="(todo,index) in todos" @click="jump(todo)">
-                <img :src="todo.first_img" class="herder">
-                <p>{{todo.left_word}}</p>
-                <p class="last_word">{{todo.right_word}}</p>
-                <img :src="todo.second_img" class="arrow">
-            </li>
-        </ul>
-        <div class="quit" @click="quit">退出当前账号</div>
+        <div class="bg_white">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                    <ul class="mylist">
+                        <li v-for="(todo,index) in todos" @click="jump(todo)">
+                            <img :src="todo.first_img" class="herder">
+                            <p>{{todo.left_word}}</p>
+                            <p class="last_word">{{todo.right_word}}</p>
+                            <img :src="todo.second_img" class="arrow">
+                        </li>
+                    </ul>
+                </mt-loadmore>
+            </div>
+            <div class="quit" @click="quit">退出当前账号</div>
+        </div>
     </div>
 </template>
 <script>
@@ -18,11 +24,11 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                wrapperHeight: '',
                 my_header: {
                     name: '我的设置',
                     router: 'home'
                 },
-                msg: 'Welcome to Your Vue.js App',
                 todos: [{
                     first_img: '/static/images/password-modification.png',
                     left_word: '修改密码',
@@ -73,7 +79,7 @@ export default {
                 window.localStorage.SID = '';
                 window.localStorage.difTime = '';
                 common.$emit('clear_Information');
-                 this.$router.push('/login');
+                this.$router.push('/login');
 
             },
             getCustomerPhone() {
@@ -93,18 +99,27 @@ export default {
                 if (item.func) {
                     item.func();
                 } else {
+                    if (item.router == 'addressManage') {
+                        common.$emit("informAddress", 1);
+                    }
                     this.$router.push(item.router);
                 }
             }
         },
         created() {
             if (!common.servicePhone) this.getCustomerPhone();
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.my_set .bg_white {
+    background-color: #F0F0F0;
+}
 .my_set .mylist {
     padding: 0 4.7%;
     background: white;
@@ -159,7 +174,7 @@ export default {
     font-size: 1.7rem;
     color: white;
     line-height: 50px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
 }
 </style>
