@@ -6,7 +6,7 @@
             </router-link>
         </mt-header> -->
         <myHeader :param = "param"></myHeader>
-        <mt-loadmore>
+        <!-- <mt-loadmore> -->
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <druginformation :obj="obj"></druginformation>
                 <div class="title_name">
@@ -38,7 +38,7 @@
 
                 <div class="confirm" @click="release()">确认修改</div>
     </div> 
-     </mt-loadmore>
+     <!-- </mt-loadmore> -->
     </div>
 </template>
 <script>
@@ -216,6 +216,9 @@ textarea {
     background: #F1F0F0;
     width:100%;
 
+}
+.revise_purchase .page-loadmore-wrapper{
+    margin-bottom: 0px;
 }
 .revise_purchase .mint-header {
     background-color: white;

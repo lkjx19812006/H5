@@ -469,15 +469,36 @@ export default {
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail {
     width: 100%;
     display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
     border-bottom: 1px solid #f1f1f1;
     padding-bottom: 1rem;
+    
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail div {
-    flex: 1;
+    /*flex: 1;
     display: flex;
     flex-direction: row;
+    margin-top: 1rem;
+*/
+    flex: 1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
+    display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
+    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
     margin-top: 1rem;
 }
 
@@ -487,6 +508,9 @@ export default {
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail div p {
     flex: 1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
     font-size: 1.109rem;
     color: #424242;
 }

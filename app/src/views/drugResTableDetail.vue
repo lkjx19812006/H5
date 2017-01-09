@@ -205,7 +205,13 @@ export default {
 .drug_table_detail .drug_name .name_type {
     word-break: break-all;
     display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
     margin-bottom: 1.27995rem;
 }
 
@@ -213,11 +219,17 @@ export default {
     font-size: 1.19462rem;
     color: #333333;
     flex: 2;
+    -webkit-box-flex:2;
+    -webkit-flex:2;
+    -ms-flex:2;
     line-height: 1.5rem;
 }
 
 .drug_table_detail .answer_name {
     flex: 12;
+    -webkit-box-flex:12;
+    -webkit-flex:12;
+    -ms-flex:12;
     font-size: 1.02396rem;
     color: #666666;
     line-height: 1.5rem;
@@ -239,7 +251,14 @@ export default {
 .drug_table_detail .drug_effect .drug_effect_type {
     word-break: break-all;
     display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
+    
     /*margin-bottom: 1.27995rem;*/
 }
 
@@ -247,11 +266,17 @@ export default {
     font-size: 1.19462rem;
     color: #333333;
     flex: 2;
+    -webkit-box-flex:2;
+    -webkit-flex:2;
+    -ms-flex:2;
     line-height: 1.5rem;
 }
 
 .drug_table_detail .effect_content {
     flex: 12;
+    -webkit-box-flex:12;
+    -webkit-flex:12;
+    -ms-flex:12;
     font-size: 1.02396rem;
     color: #666666;
     line-height: 1.5rem;
@@ -273,7 +298,13 @@ export default {
 .drug_table_detail .spec_type {
     word-break: break-all;
     display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
     margin-bottom: 1.27995rem;
 }
 
@@ -281,11 +312,17 @@ export default {
     font-size: 1.19462rem;
     color: #333333;
     flex: 2;
+    -webkit-box-flex:2;
+    -webkit-flex:2;
+    -ms-flex:2;
     line-height: 1.5rem;
 }
 
 .drug_table_detail .spec_content {
     flex: 7;
+    -webkit-box-flex:7;
+    -webkit-flex:7;
+    -ms-flex:7;
     font-size: 1.02396rem;
     color: #666666;
     line-height: 1.5rem;

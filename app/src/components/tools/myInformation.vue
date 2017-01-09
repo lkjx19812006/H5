@@ -13,6 +13,7 @@
     </div>
 </template>
 <script>
+import common from '../../common/common.js'
 export default {
     data() {
             return {
@@ -42,7 +43,12 @@ export default {
         },
         methods:{
             jump(router){
-            	this.$router.push(router)
+            	
+                if(router == 'detailsPage'){
+                    common.$emit('message','暂未提供该服务');
+                }else{
+                    this.$router.push(router);
+                }
             }
         }
 }

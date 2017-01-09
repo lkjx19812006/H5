@@ -454,15 +454,29 @@ export default {
 }
 
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail{
-    width:100%;
-    
+    width: 100%;
     display: flex;
-    flex-direction:column;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
+    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
 }
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div{
-    flex:1;
-    display:flex;
-    flex-direction:row;
+    flex: 1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
+    display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
+    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
     margin-top: 1.279rem;
     
 }
@@ -470,8 +484,11 @@ export default {
     color:#666666;
 }
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div p{
-    flex:1;   
+    flex: 1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
     font-size: 1.109rem;
-    color:#424242;
+    color: #424242;
 }
 </style>

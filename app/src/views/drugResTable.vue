@@ -42,8 +42,8 @@
         <div v-show="keyword"  >
             <div class="search_result">
                 <ul class="page-loadmore-list">
-                    <li v-for="todo in datas" class="page-loadmore-listitem list_content_item">
-                        <div @click = "jumpDetail(todo.keyWord)">
+                    <li v-for="todo in datas" class="page-loadmore-listitem list_content_item" @click = "jumpDetail(todo.keyWord)">
+                        <div >
                             <img src="/static/icons/search.png">
                             <p>{{todo.keyWord}}</p>
                         </div>

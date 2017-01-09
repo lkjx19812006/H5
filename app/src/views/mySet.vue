@@ -9,9 +9,9 @@
                 <img :src="todo.second_img" class="arrow">
             </li>
         </ul>
-        <router-link to="login">
-            <div class="quit">退出当前账号</div>
-        </router-link>
+        <!-- <router-link to="login"> -->
+            <div class="quit" @click="quit">退出当前账号</div>
+        <!-- </router-link> -->
     </div>
 </template>
 <script>
@@ -64,6 +64,13 @@ export default {
             myHeader
         },
         methods: {
+            quit(){
+               
+                console.log(common.KEY);
+                console.log(common.SID);
+                /*common.urlCommon = '';*/
+
+            },
             getCustomerPhone() {
                 let _self = this;
                 this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {

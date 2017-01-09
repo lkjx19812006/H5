@@ -1,14 +1,10 @@
 <template>
     <div class="account_overview_finish">
-        <!-- <mt-header title="账户信息" class="header">
-      <router-link to="/" slot="left">
-        <mt-button icon="back"></mt-button>
-      </router-link>
-    <mt-button  slot="right" ><div id="right" v-on:click="myUpData">完成</div></mt-button> 
-   </mt-header> -->
+     
         <myHeader :param="my_header" v-on:myUpData="upData"></myHeader>
         <mt-loadmore>
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                
                 <div class="header_photo_box">
                     <p class="header_word">头像<span>(点击更改头像)</span></p>
                     <div class="header_photo">
@@ -19,51 +15,37 @@
                     <p class="basic_data_title">基础信息</p>
                     <ul>
                         <li>
-                            <!-- v-for="(item,index) in personalDataArr" v-if="index==0" -->
                             <p class="name name_smart_size">姓名</p>
                             <p class="name_content">
                                 <input type="text" :placeholder="arr.name" v-model="arr.name" maxlength="5">
                             </p>
                         </li>
                         <li>
-                            <!-- v-for="(item,index) in personalDataArr" v-if="index>=1 && index<=2" -->
                             <p class="name name_smart_size">生日</p>
                             <p class="name_content">
-                                <!-- @click.native="open('picker')" size="large" -->
                                 {{arr.birthday}}
-                                <!-- <input type="text" :placeholder="arr.birthday" v-model="arr.birthday" disabled = fasle > -->
                             </p>
                             <mt-button @click.native="open('picker')" size="large" class="button"></mt-button>
-                            <!-- <img src="/static/images/down-arrow.png" class="down-arrow"> -->
                         </li>
                         <li>
                             <p class="name name_smart_size">性别</p>
                             <div>
                                 <p class="name_content">
-                                    <!-- v-if="arr.gender == 1" -->
                                     <select class="sex-select" v-model="arr.gender">
                                         <option>男</option>
                                         <option>女</option>
                                     </select>
-                                    <!-- <img src="/static/images/woman.png" v-show="!arr.sex">  
-                     <img src="/static/images/man.png" v-show="arr.sex">   -->
                                 </p>
-                                <!-- <img src="/static/images/down-arrow.png" class="down-arrow"> -->
                             </div>
                         </li>
                         <li>
-                            <!-- v-for="(item,index) in personalDataArr" v-if="index==3" -->
                             <p class="name name_big_size">电话</p>
                             <p class="name_content">
                                 <input type="text" :placeholder="arr.phone" v-model="arr.phone">
                             </p>
                         </li>
-                        <li>
-                            <!--  v-for="(item,index) in personalDataArr" v-if="index==4" -->
+                        <li  @click="jumpPersonal">
                             <p class="name name_big_size">个人认证</p>
-                            <!-- <p class="name_content" >
-                 <input type="text" :placeholder="arr.ucomment" v-model="arr.ucomment" disabled="true">
-              </p> -->
                             <p class="name_content" v-if="arr.ucomment == 0">未认证</p>
                             <p class="name_content" v-if="arr.ucomment == 1">待审核</p>
                             <p class="name_content" v-if="arr.ucomment == 2">已认证</p>
@@ -74,9 +56,8 @@
                 </div>
                 <div class="company_data">
                     <p class="company_data_title">企业信息</p>
-                    <ul>
+                    <ul class="my_box">
                         <li>
-                            <!-- v-for="(item,index) in companyDataArr" v-if="index < 2" -->
                             <p class="name  name_smart_size">公司</p>
                             <p class="name_content">
                                 <input type="text" :placeholder="arr.company" v-model="arr.company">
@@ -89,35 +70,28 @@
                             </p>
                         </li>
                         <li>
-                            <!-- v-for="(item,index) in companyDataArr" v-if="index == 2"  -->
                             <p class="name  name_smart_size">职位</p>
                             <p class="name_content">
-                                <!-- <input type="text" :placeholder="arr.companyJob" v-model="arr.companyJob"> -->
                                 <select class="sex-select" v-model="arr.companyJob">
                                     <option>业务员</option>
                                     <option>客服</option>
                                 </select>
                             </p>
-                            <!-- <img src="/static/images/down-arrow.png" class="down-arrow"> -->
                         </li>
                         <li>
-                            <!-- v-for="(item,index) in companyDataArr" v-if="index > 2 && index < 5" -->
                             <p class="name  name_big_size">主营品类</p>
                             <p class="name_content">
                                 <input type="text" :placeholder="arr.bizMain" v-model="arr.bizMain">
                             </p>
                         </li>
                         <li>
-                            <!-- v-for="(item,index) in companyDataArr" v-if="index > 2 && index < 5" -->
                             <p class="name  name_big_size">开票信息</p>
                             <p class="name_content">
                                 <input type="text" :placeholder="arr.invoice" v-model="arr.invoice">
                             </p>
                         </li>
-                        <li>
-                            <!-- v-for="(item,index) in companyDataArr" v-if="index == 5" -->
+                        <li  @click="jumpCompany">
                             <p class="name  name_big_size">企业认证</p>
-                            <!-- <p class="name_content"><input type="text" :placeholder="arr.ccomment" v-model="arr.ccomment"></p> -->
                             <p class="name_content" v-if="arr.ccomment == 0">未认证</p>
                             <p class="name_content" v-if="arr.ccomment == 1">待审核</p>
                             <p class="name_content" v-if="arr.ccomment == 2">已认证</p>
@@ -126,20 +100,11 @@
                         </li>
                     </ul>
                 </div>
+                
             </div>
         </mt-loadmore>
-        <!-- <mt-datetime-picker
-                      v-model="pickerVisible"
-                      
-                      ref="picker"
-                      type="date"
-                      year-format="{value} 年"
-                      month-format="{value} 月"
-                      date-format="{value} 日">
-                    </mt-datetime-picker> -->
         <mt-datetime-picker ref="picker" type="date" v-model="pickerValue">
         </mt-datetime-picker>
-        <!-- <mt-button @click.native="open('picker')" size="large">点击弹出 DateTime Picker</mt-button> -->
     </div>
 </template>
 <script>
@@ -247,6 +212,13 @@ export default {
             }
         },
         methods: {
+            jumpPersonal(){
+                   common.$emit("certification","refurbish");
+                   this.$router.push("certification");
+              },
+              jumpCompany(){
+                  this.$router.push("companyAuthentication");
+              },
             jump(router) {
                 this.$router.push(router);
             },
@@ -370,7 +342,15 @@ textarea {
     -webkit-appearance: none;
     border-radius: 0;
 }
+.page-loadmore-wrapper {
+    margin-top: -1px;
+    overflow: scroll;
+    padding-bottom: 10px;
+    width: 100%;
+}
+.account_overview_finish .my_box{
 
+}
 .account_overview_finish .header {
     color: #313232;
 }
@@ -378,7 +358,7 @@ textarea {
 .account_overview_finish #right {
     color: #EC6817;
 }
-
+.account_overview_finish
 .birthday {
     width: 100px;
     height: 100px;
@@ -386,7 +366,7 @@ textarea {
 }
 
 .account_overview_finish .header_photo_box {
-    height: 7.253rem;
+    min-height: 7.253rem;
     width: 100%;
     padding: 0 4%;
     margin-top: 0.8533rem;
@@ -424,6 +404,7 @@ textarea {
 .company_data {
     width: 100%;
     text-align: left;
+
 }
 
 .account_overview_finish .company_data {
@@ -477,12 +458,6 @@ textarea {
 .account_overview_finish .name_content {
     font-size: 1.024rem;
 }
-
-
-/*.account_overview_finish .name_content>div{
-  height: 2rem;
-  width:100px;
-}*/
 
 .account_overview_finish .name_big_size {
     font-size: 1.195rem;
