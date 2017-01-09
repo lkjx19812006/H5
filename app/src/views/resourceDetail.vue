@@ -14,7 +14,7 @@
                     <div class="swipe_number"><span>{{number}}</span>/{{obj.image.length}}</div>
                 </div>
                 <div class="top">
-                    <p>发布时间：<span>{{obj.pubdate}}</span></p>
+                    <p>发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
                     <img src="/static/icons/xique.gif" v-show="imageShow">
                     <img src="/static/icons/xique.png" v-show="!imageShow">
                 </div>
@@ -56,6 +56,7 @@ import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
 import telAndAttention from '../components/tools/telAndAttention'
+import filters from '../filters/filters'
 import {
     swiper,
     swiperSlide,
@@ -111,12 +112,14 @@ export default {
                 }
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
-                    common.$emit('message', suc.data.msg);
+                    
                     let result = suc.data.biz_result;
-                    var pubdate = result.pubdate;
-                    if (pubdate != '') pubdate = pubdate.substring(0, 10);
-                    result.pubdate = pubdate;
-                    _self.obj = result;
+                    if(suc.data.code == '1c01'){
+                        _self.obj = result;
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                     
 
                     if (_self.obj.image.length == 0) {
                         _self.obj.image.push('/static/images/default_image.png');

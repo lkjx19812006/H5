@@ -71,14 +71,19 @@ export default {
                         id: id
                     }
                 }, function(suc) {
-                    common.$emit('message', suc.data.msg);
+                    
                     let result = suc.data.biz_result;
                     result.value=1;
                     if(!result.image.length){
                       result.image.push('/static/images/default_image.png');
                     }
                     result.from="order";
-                    _self.param = result;
+                    if(suc.data.code == '1c01'){
+                        _self.param = result;         
+                    }else{
+                        common.$emit('message', suc.data.msg);
+                    }
+                    
                 }, function(err) {
                     common.$emit('message', err.data.msg);
                 })
