@@ -49,6 +49,7 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                wrapperHeight:'',
                 my_header: {
                     name: '登陆',
                     goBack: true
@@ -190,7 +191,7 @@ export default {
             }
         },
         mounted() {
-            this.wholeHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
