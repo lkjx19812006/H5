@@ -322,7 +322,6 @@ a {
     overflow-y: scroll;
     width: 100%;
     overflow-y: visible;
-    margin-bottom: -6px;
 }
 
 .page-wrap{
@@ -332,7 +331,7 @@ a {
 .page-loadmore-wrapper {
     margin-top: -1px;
     overflow: scroll;
-    padding-bottom: 10px;
+    padding-bottom: 0px;
     width: 100%;
 }
 
