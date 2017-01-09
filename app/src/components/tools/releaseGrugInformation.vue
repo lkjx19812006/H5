@@ -385,7 +385,7 @@ textarea {
     color: #FA6705;
     text-align: left;
     padding-left: 1.536rem;
-    line-height:3.75rem; 
+    line-height:3.7rem; 
     height:3.58rem;
     margin-left: 1.28rem;
 }
@@ -431,7 +431,7 @@ textarea {
 .good_place p,
 .good_number p {
     float: left;
-    line-height: 3.5rem;
+    line-height: 3.2rem;
     font-size: 1.19rem;
     color: #333333;
     margin-left: 1.28rem;

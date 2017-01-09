@@ -53,7 +53,7 @@
                 </mt-loadmore>
             </div>
         </div>
-        <errPage  :err="err"  v-show="todos.length==0"></errPage>
+        <errPage  :param="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -66,7 +66,11 @@ import errPage from '../components/tools/err'
 export default {
     data() {
             return {
-                err:'暂无此类订单',
+                 err:{
+                    err:"很抱歉，没有找到相关订单",
+                    url:'/static/icons/maomao.png',
+                    
+                },
                 param: {
                     name: '采购订单',
                     other_name: '销售订单',

@@ -6,7 +6,7 @@
             </router-link>
         </mt-header> -->
         <myHeader :param="myHeader"></myHeader>
-        <mt-loadmore>
+        
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <ul class="info_list">
                     <li v-for="(todo,index) in todos" v-if="index == 0" class="header_phone">
@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </div>
-        </mt-loadmore>
+        
     </div>
 </template>
 <script>

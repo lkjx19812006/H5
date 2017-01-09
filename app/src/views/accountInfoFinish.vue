@@ -74,8 +74,10 @@
                             <p class="name_content">
                                 <select class="sex-select" v-model="arr.companyJob">
                                     <option>业务员</option>
+                                    <option>采购人员</option>
+                                    <option>销售人员</option>
                                     <option>客服</option>
-                                </select>
+                                </select>   
                             </p>
                         </li>
                         <li>
@@ -415,9 +417,9 @@ textarea {
 .account_overview_finish .basic_data_title,
 .company_data_title {
     height: 2.99rem;
-    border-top: 0.0427rem solid #E5E5E5;
-    border-bottom: 0.0427rem solid #E5E5E5;
-    padding: 0 8.8% 0 4%;
+    border-top: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E5E5E5;
+    padding: 0 75% 0 4%;
     line-height: 2.99rem;
 }
 
@@ -425,8 +427,8 @@ textarea {
 .company_data ul li {
     padding: 0 8.8% 0 4%;
     height: 4.267rem;
-    line-height: 4.267rem;
-    border-bottom: 0.0427rem solid #E5E5E5;
+    line-height: 4.15rem;
+    border-bottom: 1px solid #E5E5E5;
     background: white;
     position: relative;
 }
@@ -503,5 +505,6 @@ textarea {
     padding-right: 20px;
     background: url(/static/images/down-arrow.png ) no-repeat right center;
     background-size: 1.024rem 0.6826rem;
+    
 }
 </style>

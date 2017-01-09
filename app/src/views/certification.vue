@@ -1,10 +1,6 @@
 <template>
   <div class="certification">
-       <!--  <mt-header title="实名认证" fixed>
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header> -->
+       
    <myHeader :param = "param"></myHeader>
   <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">      
              <div class="main">
@@ -89,10 +85,10 @@ export default {
                 },
                 todos:[{
                     title:'身份证正面',
-                    point:'暂未认证'
+                    point:'请使用原件拍照扫描'
                 },{
                     title:'身份证反面',
-                    point:'等待审核'
+                    point:'请使用原件拍照扫描'
                 }],
                 
                 imgageArr:[
@@ -132,6 +128,7 @@ export default {
                     _self.obj.name = suc.data.biz_result.name;
                     _self.obj.gender = suc.data.biz_result.gender;
                     _self.obj.phone = suc.data.biz_result.phone;
+
                       
                   },function(err){
                     common.$emit('close-load');
@@ -165,7 +162,8 @@ export default {
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.queryUserInfo(url,body,function(suc){
-                     common.$emit('close-load');
+                     common.$emit('close-load'); 
+                     common.$emit('message', suc.data.msg);               
                      console.log(suc);                  
                   },function(err){
                     common.$emit('close-load');
@@ -299,6 +297,7 @@ export default {
     height:9rem;
     width:100%;
     background:#E1DDDA;
+    overflow: hidden;
 } 
 .certification .first_item>div .point{
     font-size: 1rem;
@@ -312,7 +311,8 @@ export default {
     margin-top:1rem;
     text-align: center;
     width:100%;
-    color:#FF0000;
+    /*color:#FF0000;*/
+    color:#999999;
 }
 .certification .common_problem{
     height:8.2rem;
@@ -342,10 +342,10 @@ export default {
 }
 .certification .confirm{
     width:100%;
-    height:5rem;
+    height:50px;
     background:#FA6705;
     color:white;
-    line-height: 5rem;
+    line-height: 50px;
     text-align: center;
     /*margin-top:7.5rem;*/
 }

@@ -1,10 +1,6 @@
 <template>
     <div class="revise_password_confirm">
-        <!-- <mt-header title="修改密码">
-            <router-link to="/mySet" slot="left">
-                <mt-button icon="back" ></mt-button>
-            </router-link>
-        </mt-header> -->
+        
         <myHeader :param = "my_header" ></myHeader>
         <ul class="fill_in">
             <li>

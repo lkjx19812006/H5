@@ -13,10 +13,11 @@
                     <p>价格</p>
                     <input type="button" value="跌涨(元)">
                 </div>
+              </div>  
                 <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }"  v-show="todos.length!=0">
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                         <ul class="first_ul">
-                            <li v-for="(todo,index) in todos">
+                            <li v-for="(todo,index) in todos" class="first_li">
                                 <div class="second_level" v-on:click="firstLevel(index,todos)">
                                     <p>{{todo.name}}</p>
                                     <p>{{todo.spec}}</p>
@@ -26,8 +27,9 @@
                                         <img src="/static/images/up.png" v-if="todo.weekdowns > 0">
                                         <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
                                     </p>
+                                    <img src="/static/icons/to-down.png" class="to_down">
                                 </div>
-                                <ul class="second_level_content" v-show="todo.show">
+                                <ul class="second_level_content" v-show="todo.show" >
                                     <li v-for="item in todo.list">
                                         <p>{{item.name}}</p>
                                         <p>{{item.spec}}</p>
@@ -39,6 +41,7 @@
                                         </p>
                                     </li>
                                 </ul>
+                                <img src="/static/icons/to-up.png" class="to_up" v-show="todo.show">
                             </li>
                         </ul>
                         <div slot="top" class="mint-loadmore-top">
@@ -51,7 +54,7 @@
                         </div>
                     </mt-loadmore>
                 </div>
-            </div>
+            
         </div>
     </div>
 </template>
@@ -191,7 +194,23 @@ export default {
 }
 
 .market_quotation {}
-
+.market_quotation .first_li{
+    position: relative;
+}
+.market_quotation .first_li .to_down{
+    width:1rem;
+    position: absolute;
+    margin-left: -0.5rem;
+    left:50%;
+    bottom: 3px;
+}
+.market_quotation .first_li .to_up{
+    width:1rem;
+    position: absolute;
+    margin-left: -0.5rem;
+    left:50%;
+    bottom: 3px;
+}
 .market_quotation .search .long_search .search_div .search_content {
     background-color: #fff;
 }
@@ -257,6 +276,7 @@ export default {
     flex-direction: row;
     height: 50px;
     line-height: 50px;
+
 }
 
 .market_quotation .list_content_header p {
@@ -284,6 +304,7 @@ export default {
     height: 4.267rem;
     border-top: 1px solid #CCCCCC;
     padding-right: 0.8rem;
+    position: relative;
 }
 
 .market_quotation .second_level p {
@@ -304,6 +325,8 @@ export default {
     line-height: 4.267rem;
     display: flex;
     flex-direction: row;
+    background:#F2F2F2;
+    border-bottom: 1px solid white;
 }
 
 .market_quotation .second_level_content li p {

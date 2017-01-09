@@ -1,8 +1,9 @@
 <template>
     <div class="err"  :style="{ height: wholeHeight + 'px' }">
         <div class="img">
-              <img src="/static/icons/err.png">
-              <p>{{err}}</p>
+              <img :src="param.url">
+              <p>{{param.err}}</p>
+              <div @click="jump" v-show="param.router">{{param.next_step}}</div>
         </div>
         
     </div>
@@ -11,12 +12,23 @@
 import common from '../../common/common.js'
 export default {
     data() {
-            return {}
+            return {
+
+
+            }
         },
         props: {
-            err:''
+            param:{
+
+            }
         },
-       
+        methods:{
+            jump(){
+                let _self = this;
+                if(_self.param.router)this.$router.push(_self.param.router);
+                
+            }
+        }
 
 }
 </script>
@@ -27,22 +39,32 @@ export default {
 
 }
 .err .img{
-    width:120px;
+    width:200px;
     height:120px;
-    margin-left: -60px;
+    margin-left: -100px;
     margin-top: -60px;
     position: absolute;
     left:50%;
-    top:55%;
+    top:50%;
     
 }
 .err img{
     width:80px;
     height:80px;
-    
+    margin-bottom: 10px;
 }
 .err .img p{
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     line-height: 1.5rem;
+}
+.err .img div{
+    padding: 5px;
+    width:80px;
+    font-size: 12px;
+    color:white;
+    background: #FA6705;
+    border-radius: 4px;
+    margin-left: 60px;
+    margin-top:10px;
 }
 </style>

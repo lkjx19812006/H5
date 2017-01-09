@@ -2,7 +2,7 @@
     <div class="address_manage">
 
         <myHeader :param="my_header"></myHeader>
-        
+           
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <ul>
                     <li v-for="(todo,index) in todos" v-show="todo.show">
@@ -10,14 +10,12 @@
                             <div class="receiver">
                                 <p class="receiver_left">
                                     <span>收货人：{{todo.contactName}}</span>
-                                    <!-- <span v-show="todo.reviseShow">收货人：<input type="text" :placeholder="todo.name"></span> -->
                                 </p>
                                 <p class="receiver_right">{{todo.contactPhone}}</p>
                             </div>
                             <div class="address">
                                 <p>
                                     <span>地址：{{todo.address}}</span>
-                                    <!-- <span v-show="todo.reviseShow">地址：<input type="text" :placeholder="todo.address"></span> -->
                                 </p>
                             </div>
                         </div>
@@ -41,16 +39,22 @@
                 </ul>
             </div>
             <div class="add_address" v-on:click="addAddress">添加新地址</div>
-
+            
+            <errPage  :param="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
+import errPage from '../components/tools/err'
 export default {
     data() {
             return {
+                err:{
+                    err:"很抱歉，没有设置地址",
+                    url:'/static/icons/maomao.png',
+                },
                 my_header: {
                     name: '地址管理',
                 },
@@ -69,7 +73,8 @@ export default {
             })
         },
         components: {
-            myHeader
+            myHeader,
+            errPage
         },
         methods: {
             back() {

@@ -1,5 +1,8 @@
 <template>
+
+    
     <div class="login" :style="{ height: wholeHeight + 'px' }">
+        <myHeader :param="my_header"></myHeader>
         <img src="/static/images/logo-login.png" class="my-logo">
         <myTab :param="myShow"></myTab>
         <div class="password" v-show="myShow.show">
@@ -36,9 +39,14 @@ import common from '../common/common.js'
 import myTab from '../components/tools/tab'
 import validation from '../validation/validation.js'
 import httpService from '../common/httpService.js'
+import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                my_header:{
+                    name:'登陆',
+
+                },
                 myShow: {
                     show: true,
                     left_name: '密码登陆',
@@ -61,7 +69,8 @@ export default {
             this.getCode();
         },
         components: {
-            myTab
+            myTab,
+            myHeader
         },
         methods: {
             passWordLogin() {

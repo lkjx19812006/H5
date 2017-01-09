@@ -61,7 +61,7 @@ export default {
 }
 
 .my-header .title-name {
-    width: 70%;
+    width: 60%;
     height: 50px;
     float: left;
     font-size: 1.7rem;
@@ -71,7 +71,7 @@ export default {
 
 .my-header .go-back {
     float: left;
-    width: 15%;
+    width: 20%;
     padding-right: 5%;
     height: 50px;
     z-index: 20000;
