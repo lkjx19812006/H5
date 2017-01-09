@@ -5,7 +5,7 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
                     <ul class="fill_in">
-                        <li>
+                        <!-- <li>
                             <p>手机号：</p>
                             <input type="text" placeholder="请输入手机号码" v-model="param.phone" />
                         </li>
@@ -21,9 +21,35 @@
                             <p>验证码：</p>
                             <input type="text" placeholder="请输入验证码" v-model="param.code" />
                             <input v-bind:class="{ get_code: !buttonDisabled, 'get_code_nor': buttonDisabled }" id="get_code" v-on:click="confirm" type="button" :value="code">
+                        </li> -->
+                        <li>
+                            <p><img src="/static/icons/my-phone.png"></p>
+                            <input type="text" class='top_text' v-model="param.phone" placeholder="请输入手机号码">
+                        </li>           
+                         <li>
+                            <p><img src="/static/icons/my-password.png"></p>
+                            <input type="password" class='top_text' v-model="param.password" placeholder="请输入密码">
+                        </li>
+                        <li>
+                            <p><img src="/static/icons/my-password.png"></p>
+                            <input type="password" class='top_text' v-model="param.againPassword" placeholder="请确认密码">
+                        </li>
+                         <li>
+                            <p><img src="/static/icons/my-password.png"></p>
+                            <input type="password" class='top_text' v-model="param.code" placeholder="请输入验证码">
+                            
+                           <!-- <div  v-on:click="confirm" v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
+                             <p>{{code}}</p>
+                          </div> -->
+                           <div  v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }" >
+                                 <p><input  :value="code" type="button" v-on:click="confirm" :disabled = 'buttonDisabled'  ></p>
+                            </div> 
+                        </li>
+                        <li  v-on:click="register" class="confirm">
+                                注册
                         </li>
                     </ul>
-                    <div class="confirm_register" v-on:click="register">注册</div>
+                    <!-- <div class="confirm_register" v-on:click="register">注册</div> -->
                 </mt-loadmore>
             </div>
         </div>
@@ -37,7 +63,8 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                wrapperHeight: 0,
+                buttonDisabled:false,
+                wrapperHeight: '',
                 myHeader: {
                     name: '注册'
                 },
@@ -60,7 +87,7 @@ export default {
                 let _self = this;
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 if (checkPhone) {
-                    common.$emit('message', checkPhone);
+                    //common.$emit('message', checkPhone);
                 } else {
                     _self.buttonDisabled = true;
                     let wait = 60;
@@ -99,14 +126,11 @@ export default {
                 checkArr.push(checkPhone);
                 let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
                 checkArr.push(checkPassword);
-                let checkagainPassword = validation.checkNull(_self.param.againPassword, '请再次输入密码！');
+                let checkagainPassword = validation.checkNull(_self.param.againPassword, '请确认密码！');
                 checkArr.push(checkagainPassword);
-                if (_self.param.password != _self.param.againPassword) {
-                    let differentPassword = '您输入的密码不一致'
-                    checkArr.push(differentPassword);
-                }
-                let checkCode = validation.checkCode(_self.param.code, '666000');
-                checkArr.push(checkCode);
+                let checkCommon = validation.checkCommon(_self.param.password, _self.param.againPassword);
+                checkArr.push(checkCommon);
+                
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);
@@ -145,8 +169,97 @@ export default {
 .register{
 
 }
+.register .bg_white{
+   background-color: #F0F0F0;
+}
+.register .bg_white .fill_in{
+    padding: 0 15px;
+    float:left;
+    width:100%;
+}
+.register .bg_white .fill_in li{
+   background:white;
+   float:left;
+   width:100%;
+   margin-top:1.5rem;
+   border-radius: 4px;
+   position: relative;
+}
+.register .bg_white .fill_in li p{
+   float:left;
+   height:4rem;
+   
+}
+.register .bg_white .fill_in li p img{
+   height:2rem;
+   margin:1rem 0 0 0.8rem;
+}
+.register .bg_white .fill_in li  input{
+   float:left;
+   height:4rem;
+   line-height: 4rem;
+   border:none;
+   outline: none;
+   margin-left: 25px;
+}
+.register .bg_white .fill_in .confirm{
+    background: #FA6705;
+    color: white;
+    height:4rem;
+    line-height: 4rem;
+    text-align: center;
 
-.register .fill_in {
+}
+.register .bg_white .fill_in .my_code {
+    float: right;
+    right:0;
+    width: 30%;
+    color: #FA6705;
+    padding: 1rem 10px;
+    height:4rem;
+    text-align: center;   
+    line-height: 2rem;
+    text-align: center;
+}
+.register .bg_white .fill_in .my_code>p{
+    border-left: 1px solid #333333;
+    height:2rem;
+    text-align: center;
+    width:100%;
+}
+.register .bg_white .fill_in .my_code>p input{
+    height:100%;
+    width:100%;
+    padding: 0;
+    margin-left: 10px;
+    line-height: 2rem;
+    background: white;
+
+}
+.register .bg_white .fill_in .my_code_nor{
+    float: right;
+    right:0;
+    width: 30%;
+    color: #CECEBF;
+    padding: 1rem 10px;
+    height:4rem;
+    text-align: center;
+    line-height: 2rem;  
+} 
+.register .bg_white .fill_in .my_code_nor input{
+     height:100%;
+     width:100%;
+     padding: 0;
+     margin-left: 10px;
+     line-height: 2rem;
+     background: white;
+}
+.register .bg_white .fill_in .my_code_nor>p{
+    border-left: 1px solid #333333;
+    height:2rem; 
+    width:100%;
+}
+/*.register .fill_in {
     padding: 0 4.6%;
     margin-top: 1rem;
     background: white;
@@ -180,12 +293,7 @@ export default {
 }
 
 
-/*.register .fill_in li div{
-    border-left: 1px solid #E0E0E0;
-    width:70px;
-    float:right;
-    font-size: 1.4rem;
-}*/
+
 
 .register .fill_in li .get_code {
     width: 80px;
@@ -220,5 +328,5 @@ export default {
     text-align: center;
     border-radius: 1.75rem;
     margin-top: 9rem;
-}
+}*/
 </style>

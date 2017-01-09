@@ -3,28 +3,35 @@
    
         <myHeader :param = "my_header" ></myHeader>
         
-        <div >
-         <mt-loadmore>
-        <div class="main">
-             <textarea placeholder="请填写您的反馈内容" v-model="param.content"></textarea>
-             <p>您的反馈对我们至关重要！</p>
-        </div>
-        <div class="info">
-             <div class="info_top">
-               <p>姓名</p>
-               <input type="text" placeholder="请输入" v-model="param.name">
-             </div>
-             <div class="info_top">
-               <p>联系方式</p>
-               <input type="text" placeholder="请输入" v-model="param.phone">
-             </div>
+       <div class="bg_white">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                    <div class="main">
+                         <textarea placeholder="请填写您的反馈内容" v-model="param.content"></textarea>
+                         <p>您的反馈对我们至关重要！</p>
+                    </div>
+                    <div class="info">
+                         <div class="info_top info_bottom">
+                           <p>姓名</p>
+                           <input type="text" placeholder="请输入" v-model="param.name">
+                         </div>
+                         <div class="info_top">
+                           <p>联系方式</p>
+                           <input type="text" placeholder="请输入" v-model="param.phone">
+                         </div>
+                    </div>
+
+         
+           
+        
+              
+                  
+                  </mt-loadmore>
+
+            </div>
+             <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
         </div>
 
-         </mt-loadmore>
-        </div>
-        
-     
-      <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
     </div>
 </template>
 <script>
@@ -98,7 +105,7 @@ export default {
             },
              mounted() {
 
-           /* this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;*/
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 
          
@@ -109,8 +116,8 @@ export default {
 .feed_back .page-loadmore-wrapper{
   margin-bottom: 0px;
 }
-.feed_back{
-
+.feed_back .bg_white{
+    background: #f0f0f0;
 }
 .feed_back .main{
    padding: 2rem 1.5rem 0 1.5rem;
@@ -125,6 +132,7 @@ export default {
    margin-bottom: 1rem;
    font-size: 1.2rem;
    color:#666666;
+   border:1px solid #ddd;
 }
 .feed_back .main p{
    text-align: left;
@@ -166,9 +174,10 @@ export default {
   font-size: 1.7rem;
   text-align: center;
   line-height: 50px;
- 
    position: fixed;
    bottom: 0;
-  
+}
+.feed_back .info .info_bottom{
+   border-bottom: 1px solid #ddd;
 }
 </style>

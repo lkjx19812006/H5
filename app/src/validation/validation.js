@@ -32,6 +32,25 @@ validation.checkNull = (param, show) => {
         return false;
     }
 }
-
-
+validation.checkCommon = (newName,oldName) =>{
+    if(newName !== oldName){
+        return '新密码不一致'
+    }else{
+        return false;
+    }
+}
+validation.checkCommon = (newName,oldName) =>{
+    if(newName !== oldName){
+        return '新密码不一致'
+    }else{
+        return false;
+    }
+}
+validation.checkDifferent = (newName,oldName) =>{
+    if(newName == oldName){
+        return '与原密码不能相同'
+    }else{
+        return false;
+    }
+}
 module.exports = validation;

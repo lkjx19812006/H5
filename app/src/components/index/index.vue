@@ -176,7 +176,7 @@ import filters from '../../filters/filters'
 export default {
     data() {
             return {
-                wrapperHeight: 0,
+                wrapperHeight: '',
                 selected: 'tab-container1',
                 imgArray: [{
                     activityUrl: '/static/images/1.jpg'
