@@ -19,11 +19,9 @@
                                     <div>{{todo.breedName }}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
-                                    <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}<span>元/kg</span></p>
-                                    <!-- <button class="mint-button mint-button--primary mint-button--small">编辑</button> -->
                                 </div>
                                 <p class="num">数量：<span>{{todo.number}}</span>kg</p>
                             </div>

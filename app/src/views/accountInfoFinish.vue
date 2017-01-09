@@ -1,10 +1,8 @@
 <template>
     <div class="account_overview_finish">
-     
         <myHeader :param="my_header" v-on:myUpData="upData"></myHeader>
         <mt-loadmore>
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                
                 <div class="header_photo_box">
                     <p class="header_word">头像<span>(点击更改头像)</span></p>
                     <div class="header_photo">
@@ -20,12 +18,12 @@
                                 <input type="text" :placeholder="arr.name" v-model="arr.name" maxlength="5">
                             </p>
                         </li>
-                        <li>
+                        <li @click="open('picker')">
                             <p class="name name_smart_size">生日</p>
                             <p class="name_content">
                                 {{arr.birthday}}
                             </p>
-                            <mt-button @click.native="open('picker')" size="large" class="button"></mt-button>
+                            <mt-button size="large" class="button"></mt-button>
                         </li>
                         <li>
                             <p class="name name_smart_size">性别</p>
@@ -44,7 +42,7 @@
                                 <input type="text" :placeholder="arr.phone" v-model="arr.phone">
                             </p>
                         </li>
-                        <li  @click="jumpPersonal">
+                        <li @click="jumpPersonal">
                             <p class="name name_big_size">个人认证</p>
                             <p class="name_content" v-if="arr.ucomment == 0">未认证</p>
                             <p class="name_content" v-if="arr.ucomment == 1">待审核</p>
@@ -92,7 +90,7 @@
                                 <input type="text" :placeholder="arr.invoice" v-model="arr.invoice">
                             </p>
                         </li>
-                        <li  @click="jumpCompany">
+                        <li @click="jumpCompany">
                             <p class="name  name_big_size">企业认证</p>
                             <p class="name_content" v-if="arr.ccomment == 0">未认证</p>
                             <p class="name_content" v-if="arr.ccomment == 1">待审核</p>
@@ -102,10 +100,9 @@
                         </li>
                     </ul>
                 </div>
-                
             </div>
         </mt-loadmore>
-        <mt-datetime-picker ref="picker" type="date" v-model="pickerValue">
+        <mt-datetime-picker ref="picker" type="date" v-model="pickerValue" :startDate="start " :endDate="end" @confirm="handleConfirm">
         </mt-datetime-picker>
     </div>
 </template>
@@ -119,6 +116,8 @@ export default {
 
     data() {
             return {
+                start: '',
+                end: '',
                 sex: '',
                 my_header: {
                     name: '账户信息',
@@ -194,33 +193,67 @@ export default {
         created() {
             let _self = this;
             _self.getHttp();
+            _self.start = new Date("1900-01-10");
+            _self.end = new Date("2017-01-10");
+            let type = '';
+            let ua = navigator.userAgent.toLowerCase();
+            if (/iphone|ipad|ipod/.test(ua)) {
+                type = 'ios';
+            }
+            if (type == 'ios') {
+                _self.start = new Date("1900/01/10");
+                _self.end = new Date("2017/01/10");
+            }
             common.$on("informAccountFinish", function(item) {
                 _self.getHttp();
             });
         },
-        watch: {
-            pickerValue: function(newValue, oldValue) {
-                let _self = this;
-                window.clearTimeout(this.time);
-                this.time = setTimeout(() => {
-                    let birthday = JSON.stringify(_self.pickerValue);
-                    birthday = birthday.substring(1, 11);
-                    birthday = new Date(birthday).getTime() + (24 * 3600 * 1000);
-                    birthday = JSON.stringify(new Date(birthday));
-                    birthday = birthday.substring(1, 11);
-                    _self.arr.birthday = birthday;
 
-                }, 0)
-            }
-        },
         methods: {
-            jumpPersonal(){
-                   common.$emit("certification","refurbish");
-                   this.$router.push("certification");
-              },
-              jumpCompany(){
-                  this.$router.push("companyAuthentication");
-              },
+            formatTime(time, format) {
+                var t = new Date(time);
+                var tf = function(i) {
+                    return (i < 10 ? '0' : '') + i
+                };
+                return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a) {
+                    switch (a) {
+                        case 'yyyy':
+                            return tf(t.getFullYear());
+                            break;
+                        case 'MM':
+                            return tf(t.getMonth() + 1);
+                            break;
+                        case 'mm':
+                            return tf(t.getMinutes());
+                            break;
+                        case 'dd':
+                            return tf(t.getDate());
+                            break;
+                        case 'HH':
+                            return tf(t.getHours());
+                            break;
+                        case 'ss':
+                            return tf(t.getSeconds());
+                            break;
+                    }
+                })
+            },
+            getTimeStamp(str) {
+                str = str.replace(/-/g, '/'); 
+                var date = new Date(str);
+                return date.getTime();
+            },
+            handleConfirm(value) {
+
+                this.arr.birthday = this.formatTime(value, 'yyyy-MM-dd');
+            },
+            jumpPersonal() {
+                common.$emit("certification", "refurbish");
+                this.$router.push("certification");
+            },
+            jumpCompany() {
+                this.$router.push("companyAuthentication");
+            },
             jump(router) {
                 this.$router.push(router);
             },
@@ -244,21 +277,14 @@ export default {
                     sign: '',
                     biz_param: {}
                 };
-                console.log(common.difTime);
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
-                    let birthday = JSON.stringify(_self.pickerValue);
-                    birthday = birthday.substring(1, 11);
-                    birthday = new Date(birthday).getTime() + (24 * 3600 * 1000);
-                    birthday = JSON.stringify(new Date(birthday));
-                    birthday = birthday.substring(1, 11);
-                    _self.birthday = birthday;
-                    let gender = suc.data.biz_result.gender;
+                    var date = new Date(suc.data.biz_result.birthday);
                     _self.arr.name = suc.data.biz_result.name;
-                    _self.pickerValue = _self.birthday;
-                    _self.arr.gender = gender;
+                    _self.arr.birthday = _self.formatTime(date, 'yyyy-MM-dd');;
+                    _self.arr.gender = suc.data.biz_result.gender;
                     _self.arr.phone = suc.data.biz_result.phone;
                     _self.arr.ucomment = suc.data.biz_result.utype;
                     _self.arr.company = suc.data.biz_result.company;
@@ -268,7 +294,6 @@ export default {
                     _self.arr.invoice = suc.data.biz_result.invoice;
                     _self.arr.ccomment = suc.data.biz_result.ctype;
                     _self.param.url = suc.data.biz_result.avatar;
-                    /*common.$emit('setParam','accountPhoto',suc.data.biz_result.avatar)*/
                 }, function(err) {
                     common.$emit('close-load');
                 })
@@ -276,17 +301,19 @@ export default {
 
             upData() {
                 let _self = this;
-                
-                    common.$emit("confirm", {
-                        message: '确定修改账户信息',
-                        title: '提示',
-                        ensure: _self.confirmUpData
-                    });
-               
+
+                common.$emit("confirm", {
+                    message: '确定修改账户信息',
+                    title: '提示',
+                    ensure: _self.confirmUpData
+                });
+
             },
-            confirmUpData(){
-                let _self = this;              
-                let birthday = new Date(_self.birthday).getTime();
+            confirmUpData() {
+                let _self = this;
+                let birthday = _self.getTimeStamp(_self.arr.birthday);
+                console.log(birthday);
+               
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -315,7 +342,7 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == "1c01") {
                         common.$emit("informAccountinfo", "refurbish");
-                        
+
                         window.history.go(-1);
                     } else {
                         common.$emit('message', suc.data.msg);
@@ -344,6 +371,7 @@ textarea {
     -webkit-appearance: none;
     border-radius: 0;
 }
+
 .page-loadmore-wrapper {
     margin-top: -1px;
     overflow: scroll;
@@ -351,9 +379,8 @@ textarea {
     width: 100%;
 }
 
-.account_overview_finish .my_box{
+.account_overview_finish .my_box {}
 
-}
 .account_overview_finish .header {
     color: #313232;
 }
@@ -361,8 +388,8 @@ textarea {
 .account_overview_finish #right {
     color: #EC6817;
 }
-.account_overview_finish
-.birthday {
+
+.account_overview_finish .birthday {
     width: 100px;
     height: 100px;
     background: red;
@@ -407,7 +434,6 @@ textarea {
 .company_data {
     width: 100%;
     text-align: left;
-
 }
 
 .account_overview_finish .company_data {
