@@ -1,45 +1,41 @@
 <template>
-
-    
     <div class="login" :style="{ height: wholeHeight + 'px' }">
-    
         <myHeader :param="my_header"></myHeader>
-<div class="bg_white">
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-        <mt-loadmore >
-        <img src="/static/images/logo-login.png" class="my-logo">
-        <myTab :param="myShow"></myTab>
-        <div class="password" v-show="myShow.show">
-            <div class="account-number">
-                <input type="text" placeholder="请输入用户名/手机号/邮箱" v-model="param.phone">
-            </div>
-            <div class="pass-word">
-                <input type="password" placeholder="请输入密码" v-model="param.password">
-            </div>
-        </div>
-        <div class="password" v-show="!myShow.show">
-            <div class="phone">
-                <p class="tel">+86</p>
-                <input type="text" placeholder="请输入手机号" v-model="param.phone">
-            </div>
-            <div class="pass-name">
-                <input type="text" placeholder="请输入验证码" v-model="param.code">
-                <p v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
-                <input  v-on:click="confirmLogin()" :value = 'code' type="button">
-                </p>
-            </div>
-        </div>
-        <div class="prompt" id="prompt">
-            <router-link to="findPassWord">
-                <p class="left">忘记密码</p>
-            </router-link>
-            <router-link to="register">
-                <p class="right">立即注册</p>
-            </router-link>
-        </div>
-        <div class="confirm" @click="login()">登陆</div>
-
-            </mt-loadmore>
+        <div class="bg_white">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                    <img src="/static/images/logo-login.png" class="my-logo">
+                    <myTab :param="myShow"></myTab>
+                    <div class="password" v-show="myShow.show">
+                        <div class="account-number">
+                            <input type="text" placeholder="请输入用户名/手机号/邮箱" v-model="param.phone">
+                        </div>
+                        <div class="pass-word">
+                            <input type="password" placeholder="请输入密码" v-model="param.password">
+                        </div>
+                    </div>
+                    <div class="password" v-show="!myShow.show">
+                        <div class="phone">
+                            <p class="tel">+86</p>
+                            <input type="text" placeholder="请输入手机号" v-model="param.phone">
+                        </div>
+                        <div class="pass-name">
+                            <input type="text" placeholder="请输入验证码" v-model="param.code">
+                            <p v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
+                                <input v-on:click="confirmLogin()" :value='code' type="button">
+                            </p>
+                        </div>
+                    </div>
+                    <div class="prompt" id="prompt">
+                        <router-link to="findPassWord">
+                            <p class="left">忘记密码</p>
+                        </router-link>
+                        <router-link to="register">
+                            <p class="right">立即注册</p>
+                        </router-link>
+                    </div>
+                    <div class="confirm" @click="login()">登陆</div>
+                </mt-loadmore>
             </div>
         </div>
     </div>
@@ -53,10 +49,9 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
-
-                my_header:{
-                    name:'登陆',
-
+                my_header: {
+                    name: '登陆',
+                    goBack:true
                 },
                 myShow: {
                     show: true,
@@ -76,7 +71,6 @@ export default {
             }
         },
         created() {
-            this.wholeHeight = document.documentElement.clientHeight;
             this.getCode();
         },
         components: {
@@ -181,11 +175,7 @@ export default {
                 if (_self.myShow.show == true) {
                     let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
                     checkArr.push(checkPassword);
-                } 
-                // else if (_self.myShow.show == false) {
-                //     let checkCode = validation.checkCode(_self.param.code, '666000');
-                //     checkArr.push(checkCode);
-                // }
+                }
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);
@@ -200,7 +190,7 @@ export default {
             }
         },
         mounted() {
-            this.wholeHeight = document.documentElement.clientHeight;
+            this.wholeHeight = document.documentElement.clientHeight- this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -210,7 +200,7 @@ export default {
     background-size: 100% 100%;
     width: 100%;
     /*height:1000px;*/
-    height:100%;
+    height: 100%;
 }
 
 .login .my-logo {
@@ -274,11 +264,10 @@ export default {
 }
 
 .login .password .pass-name .my_code {
-    float:right;
-    width:40%;
+    float: right;
+    width: 40%;
     border-left: 1px solid #333333;
     color: #FA6705;
-
 }
 
 .login .password .pass-name .my_code_nor {
@@ -303,6 +292,4 @@ export default {
     border-radius: 3px;
     margin-left: 7%;
 }
-
-
 </style>

@@ -26,7 +26,12 @@ export default {
         },
         methods: {
             jumpBack() {
-                window.history.go(-1);
+                if(this.param.goBack){
+                    this.$router.push('/home');
+                }else{
+                    window.history.go(-1); 
+                }
+               
             },
             jumpRevise() {
                 let _self = this;

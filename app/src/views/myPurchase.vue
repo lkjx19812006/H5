@@ -9,30 +9,25 @@
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jump(router,todo.id)">
                             <div class="header_list">
                                 <p class="left_p">发布日期：{{todo.pubdate | timeFormat}}</p>
-
-
                                 <p class="right_p">{{todo.onSell | shellStatus}}</p>
-
                             </div>
                             <div class="first_line">
                                 <p class="left">{{todo.breedName}}</p>
                                 <p class="right"><span>{{todo.offer}}</span>人已报价</p>
                             </div>
                             <div class="detail">
-
-                                    <div>
-                                        <p>规格</p>
-                                        <p>产地</p>
-                                        <p>剩余</p>
-                                        <p>需求数量</p>
-                                    </div>
-                                    <div class="last">
-                                        <p>{{todo.spec}}</p>
-                                        <p>{{todo.location}}</p>
-                                        <p>{{todo.duedate | timeDays(todo.pubdate)}}<span>天</span></p>
-                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
-                                    </div>
-
+                                <div>
+                                    <p>规格</p>
+                                    <p>产地</p>
+                                    <p>剩余</p>
+                                    <p>需求数量</p>
+                                </div>
+                                <div class="last">
+                                    <p>{{todo.spec}}</p>
+                                    <p>{{todo.location}}</p>
+                                    <p>{{todo.duedate | timeDays(todo.pubdate)}}<span>天</span></p>
+                                    <p>{{todo.number}}<span>{{todo.unit}}</span></p>
+                                </div>
                             </div>
                             <div class="button">
                                 <p class="first_button" v-on:click.stop="jump(other_router,todo.id)">编辑</p>
@@ -51,8 +46,7 @@
                 </mt-loadmore>
             </div>
         </div>
-
-        <errPage  :param="err"  v-show="todos.length==0"></errPage>
+        <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -66,10 +60,10 @@ import errPage from '../components/tools/err'
 export default {
     data() {
             return {
-                err:{
-                    err:"很抱歉，没有找到相关资源",
-                    url:'/static/icons/maomao.png',
-                    
+                err: {
+                    err: "很抱歉，没有找到相关资源",
+                    url: '/static/icons/maomao.png',
+
                 },
                 sortRouter: 'home',
                 param: {
@@ -245,20 +239,21 @@ export default {
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
 
-                   if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
-                   let result = suc.data.biz_result.list;
-                   if(suc.data.code == '1c01'){
-                        for(var i = 0; i < result.length; i++){
-                           
+                    if (_self.httpPraram.page == 1) {
+                        _self.todos.splice(0, _self.todos.length);
+                    }
+                    let result = suc.data.biz_result.list;
+                    if (suc.data.code == '1c01') {
+                        for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);
                         }
-                    }else{
+                        if (result.length < _self.httpPraram.pageSize) {
+                            _self.allLoaded = true;
+                        }
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                
-                    
-                    if(back){
-
+                    if (back) {
                         back();
                     }
                 }, function(err) {
@@ -279,11 +274,15 @@ export default {
                 common.$emit("myPurToPurDetail", id);
                 this.$router.push(router + '/' + id);
             },
-            loadApp(){
-                window.location.href='http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
+            loadApp() {
+                window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
             },
             jumpApp() {
-               common.$emit("confirm", {message:'查看报价请下载App',title:'提示',ensure:this.loadApp});
+                common.$emit("confirm", {
+                    message: '查看报价请下载App',
+                    title: '提示',
+                    ensure: this.loadApp
+                });
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -466,16 +465,15 @@ export default {
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail {
     width: 100%;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: column;
     -webkit-box-orient: vertical;
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     border-bottom: 1px solid #f1f1f1;
     padding-bottom: 1rem;
-    
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail div {
@@ -485,16 +483,16 @@ export default {
     margin-top: 1rem;
 */
     flex: 1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
     margin-top: 1rem;
 }
@@ -505,9 +503,9 @@ export default {
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .detail div p {
     flex: 1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
     font-size: 1.109rem;
     color: #424242;
 }
