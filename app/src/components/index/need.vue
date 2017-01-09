@@ -6,7 +6,7 @@
             </div>
             <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         </div>
-        <div class="bg_white">
+        <div class="bg_white" style="margin-top:100px">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
@@ -299,7 +299,7 @@ export default {
             });
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 165;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 50;
         }
 }
 </script>
@@ -328,6 +328,10 @@ export default {
 }
 
 .need {}
+
+.need .fixed{
+    top: 0;
+}
 
 .need .fixed .search_content{
     float: left;
@@ -371,9 +375,6 @@ export default {
     background: #fff;
 }
 
-.need .bg_white {
-    margin-top: 100px;
-}
 
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag{
     position: absolute;

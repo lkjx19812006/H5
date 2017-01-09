@@ -1,8 +1,9 @@
 <template>
     <div class="sample_confirm">
-        <myHeader :param = "myhead"></myHeader>
-        <mt-loadmore>
-        <div class="page-loadmore-wrapper"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <myHeader :param="myhead"></myHeader>
+
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <mt-loadmore>
                 <div @click="jumpAddress">
                     <orderAddress :param="person"></orderAddress>
                 </div>
@@ -12,10 +13,10 @@
                         <orderTotal :order="param"></orderTotal>
                     </div>
                 </div>
-        </mt-loadmore>
-        <div class="fix_bottom" v-on:click="confirm">
-            提交订单
-        </div>
+            </mt-loadmore>
+            <div class="fix_bottom" v-on:click="confirm">
+                提交订单
+            </div>
         </div>
     </div>
 </template>
@@ -30,8 +31,8 @@ export default {
     data() {
             return {
                 data: "",
-                myhead:{
-                     name:'样品确认单'
+                myhead: {
+                    name: '样品确认单'
                 },
                 param: {
                     image: []
@@ -84,6 +85,7 @@ export default {
                     if (suc.data.code == "1c01") {
                         _self.id = result.id;
                         _self.person = result;
+
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -110,12 +112,16 @@ export default {
                         result.image.push('/static/images/default_image.png');
                     }
                     result.from = "order";
-                    if(suc.data.code == '1c01'){
+                    if (suc.data.code == '1c01') {
                         _self.param = result;
-                    }else{
+                         _self.param.price  =_self.param.sampleAmount;
+                        _self.param.number =  _self.param.sampleNumber;
+                         _self.param.unit =_self.param.sampleUnit;
+                         console.log(result);
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    
+
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
@@ -147,7 +153,7 @@ export default {
                 httpService.intentResOrder(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
-                       common.$emit("mineToOrder", 0);
+                        common.$emit("mineToOrder", 0);
                         _self.$router.push("/myOrder")
                     } else {
                         common.$emit('message', suc.data.msg);
@@ -196,6 +202,6 @@ export default {
 }
 
 .sample_confirm .page-loadmore-wrapper {
-   margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 </style>

@@ -434,7 +434,7 @@ export default {
 }
 
 .swipe_height {
-    height: 13rem;
+    height: 12rem;
 }
 
 .swipe_height img {

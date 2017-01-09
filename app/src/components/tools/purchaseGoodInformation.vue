@@ -64,7 +64,7 @@
             <div class="good_number">
                 <p>求购有效期：</p>
                 <div  class="div_content">
-                    <input type="number" placeholder="请输入" v-model="obj.duedate" class="last_input"/>
+                    <input type="number" placeholder="请输入有效天数" v-model="obj.duedate" class="last_input"/>
                     <p class="right">天</p>
                 </div>
             </div>

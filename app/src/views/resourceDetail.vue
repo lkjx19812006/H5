@@ -32,9 +32,6 @@
                         <p>库存：<span>{{obj.number}}{{obj.unit}}</span></p>
                         <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
                     </div class="detail">
-                    <!--  <div class="detail">
-                        <p>样品：<span v-if="obj.sampling == 0">不提供</span><span v-if="obj.sampling == 1">提供</span></p>
-                    </div> -->
                     <div class="detail">
                         <p>卖点：<span>{{obj.description}}</span></p>
                     </div>
@@ -119,8 +116,6 @@ export default {
                     }else{
                         common.$emit('message', suc.data.msg);
                     }
-                     
-
                     if (_self.obj.image.length == 0) {
                         _self.obj.image.push('/static/images/default_image.png');
                     }
@@ -167,6 +162,11 @@ export default {
         },
         created() {
             let _self = this;
+            function countSecond() {
+                _self.imageShow=false;
+            }
+            setTimeout(countSecond, 2500)
+            
             var id = _self.$route.params.sourceId;
             _self.id = id;
             _self.refurbish(id);

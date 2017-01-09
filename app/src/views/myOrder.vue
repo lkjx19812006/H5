@@ -37,7 +37,7 @@
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('查看物流')">查看物流</button>
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('确认收货')">确认收货</button>
                                     <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('催促发货')">催促发货</button>
-                                    <!-- <button v-if="'pay' ==judgeOrderStatus(todo.orderStatus)" >立即支付</button> -->
+                                    <button v-if="'pay' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('支付')">立即支付</button>
                                 </p>
                             </div>
                         </li>

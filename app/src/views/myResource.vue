@@ -12,7 +12,6 @@
                                     <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
 
                                     <p class="audit_state">{{todo.onSell | shellStatus}}</p>
-
                                 </div>
                             </div>
                             <img v-bind:src="todo.image[0]" class="list_images">
@@ -180,7 +179,7 @@ export default {
                 obj: {},
                 index: '',
                 topStatus: '',
-                wrapperHeight: 0,
+                wrapperHeight: '',
                 allLoaded: false,
                 bottomStatus: '',
                 httpPraram: {
@@ -315,7 +314,7 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
         }
 }
 </script>

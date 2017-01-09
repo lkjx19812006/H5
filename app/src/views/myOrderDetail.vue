@@ -51,7 +51,7 @@
         </div>
         <div class="footer">
             <p @click="call()">联系我们</p>
-            <!-- <p class="pay-money" v-if="todo.type == 0">立即付款</p> -->
+            <p class="pay-money" v-if="todo.orderStatus == 20" @click="prompt('支付')">立即付款</p>
         </div>
     </div>
 </template>
@@ -85,6 +85,16 @@ export default {
             if (!common.servicePhone) this.getCustomerPhone();
         },
         methods: {
+            prompt(text) {
+                function loadApp(){
+                    window.location.href = common.appUrl;
+                }
+               common.$emit('confirm', {
+                    message:text+'请下载App',
+                    title:'提示',
+                    ensure:loadApp
+                });
+            },
             back() {
               window.history.go(-1);
             },

@@ -1,10 +1,5 @@
 <template>
     <div class="purchase_detail">
-        <!-- <mt-header title="求购详情">
-            <router-link to="myPurchase" slot="left">
-                <mt-button icon="back" @click="back()"></mt-button>
-            </router-link>
-        </mt-header> -->
         <myHeader :param = "param"></myHeader>
         <div class="center">
             <div class="title">

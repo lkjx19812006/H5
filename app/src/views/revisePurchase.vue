@@ -1,44 +1,39 @@
 <template>
     <div class="revise_purchase">
-        <!-- <mt-header title="修改求购">
-            <router-link to="/myPurchase" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header> -->
-        <myHeader :param = "param"></myHeader>
-        <!-- <mt-loadmore> -->
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <druginformation :obj="obj"></druginformation>
-                <div class="title_name">
-                    <p class="remarks_header">备注</p>
-                </div> 
-                <div class="remarks">
-                   
-                    <div class="remarks_content">
-                        <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
+        <myHeader :param="param"></myHeader>
+        <div class="bg_white">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                    <druginformation :obj="obj"></druginformation>
+                    <div class="title_name">
+                        <p class="remarks_header">备注</p>
                     </div>
-                </div>
-                <div class="title_name">
-                   <p class="contact_header">联系方式</p>
-                </div>
-                <div class="contact">
-                    <div class="contact_name">
-                        <P>姓名：</P>
-                        <div>
-                            <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
+                    <div class="remarks">
+                        <div class="remarks_content">
+                            <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
                         </div>
                     </div>
-                    <div class="contact_phone">
-                        <P>手机：</P>
-                        <div>
-                            <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
+                    <div class="title_name">
+                        <p class="contact_header">联系方式</p>
+                    </div>
+                    <div class="contact">
+                        <div class="contact_name">
+                            <P>姓名：</P>
+                            <div>
+                                <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
+                            </div>
+                        </div>
+                        <div class="contact_phone">
+                            <P>手机：</P>
+                            <div>
+                                <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="confirm" @click="release()">确认修改</div>
-    </div> 
-     <!-- </mt-loadmore> -->
+                    <div class="confirm" @click="release()">确认修改</div>
+                </mt-loadmore>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -51,13 +46,13 @@ export default {
     data() {
             return {
                 selected: '1',
-                param:{
-                     name:'修改求购'
+                param: {
+                    name: '修改求购'
 
                 },
                 todos: {},
                 obj: {
-                    update:true,
+                    update: true,
                     drug_name: '白术',
                     spec: '',
                     place: '',
@@ -68,7 +63,7 @@ export default {
                     phone: '',
                     duedate: '',
                     id: '',
-                    breedId:''
+                    breedId: ''
                 },
             }
         },
@@ -90,10 +85,21 @@ export default {
 
                     if (suc.data.code == '1c01') {
                         let result = suc.data.biz_result;
-                        var duedateDate = new Date(result.duedate);
-                        var pubdateDate = new Date(result.pubdate);
+                        let type = '';
+                        let ua = navigator.userAgent.toLowerCase();
+                        if (/iphone|ipad|ipod/.test(ua)) {
+                            type = 'ios';
+                        }
+                        if (type == 'ios') {
+                            result.duedate =result.duedate.replace(/-/g, "/");
+                            result.pubdate =result.pubdate.replace(/-/g, "/");
+                            
+                        }
+                        var duedateDate = new Date(result.duedate.split(' ')[0]);
+                        var pubdateDate = new Date(result.pubdate.split(' ')[0]);
                         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
                         var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                       
                         _self.obj.drug_name = result.breedName;
                         _self.obj.spec = result.spec;
                         _self.obj.place = result.location;
@@ -103,8 +109,8 @@ export default {
                         _self.obj.name = result.customerName;
                         _self.obj.phone = result.customerPhone;
                         _self.obj.duedate = days;
-                        _self.obj.id=result.id;
-                        _self.obj.breedId=result.breedId;
+                        _self.obj.id = result.id;
+                        _self.obj.breedId = result.breedId;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -130,7 +136,7 @@ export default {
                 checkArr.push(checkDuedate);
                 let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
                 checkArr.push(checkName);
-                let checkPhone = validation.checkPhone(_self.obj.phone,'请输入电话');
+                let checkPhone = validation.checkPhone(_self.obj.phone, '请输入电话');
                 checkArr.push(checkPhone);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
@@ -157,7 +163,7 @@ export default {
                         customerName: _self.obj.name,
                         customerPhone: _self.obj.phone,
                         duedate: _self.obj.duedate,
-                        breedId:_self.obj.breedId,
+                        breedId: _self.obj.breedId,
                         unit: _self.obj.number_unit,
                         id: _self.obj.id
                     }
@@ -170,7 +176,7 @@ export default {
                     console.log(suc);
                     if (suc.data.code == '1c01') {
                         common.$emit('message', suc.data.msg);
-                        common.$emit('revisePurtoPur','refurbish');
+                        common.$emit('revisePurtoPur', 'refurbish');
                         _self.$router.push("/myPurchase");
                     } else {
                         common.$emit('message', suc.data.msg);
@@ -212,14 +218,16 @@ textarea {
     -webkit-appearance: none;
     border-radius: 0;
 }
-.revise_purchase .remarks .title_name{
-    background: #F1F0F0;
-    width:100%;
 
+.revise_purchase .remarks .title_name {
+    background: #F1F0F0;
+    width: 100%;
 }
-.revise_purchase .page-loadmore-wrapper{
+
+.revise_purchase .page-loadmore-wrapper {
     margin-bottom: 0px;
 }
+
 .revise_purchase .mint-header {
     background-color: white;
     color: #313232;
@@ -227,13 +235,15 @@ textarea {
 }
 
 .revise_purchase .good_information,
-.remarks{
-    padding: 1.28rem;   
+.remarks {
+    padding: 1.28rem;
     background: white;
 }
-.revise_purchase .contact{
+
+.revise_purchase .contact {
     background: white;
 }
+
 .revise_purchase .good_information {
     height: 10.24rem;
 }
@@ -245,7 +255,6 @@ textarea {
 .revise_purchase .good_infor_header {
     background: url('../../static/images/information.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
-
 }
 
 .revise_purchase .good_infor_header,
@@ -264,36 +273,38 @@ textarea {
 .contact_name,
 .contact_phone {
     height: 3.5rem;
-    
 }
+
 .revise_purchase .contact_name,
-.revise_purchase .contact_phone{
+.revise_purchase .contact_phone {
     margin-top: 0px;
     border-bottom: 1px solid #D2D2D2;
     position: relative;
 }
+
 .revise_purchase .contact_name div,
-.revise_purchase .contact_phone div{
+.revise_purchase .contact_phone div {
     position: absolute;
-    right:1.28rem;
-
-
+    right: 1.28rem;
 }
+
 .revise_purchase .contact_name input,
-.revise_purchase .contact_phone input{
+.revise_purchase .contact_phone input {
     text-align: right;
-    border:none;
-    height:3.1rem;
+    border: none;
+    height: 3.1rem;
     line-height: 3.5rem;
     font-size: 1.19rem;
 }
+
 .revise_purchase .contact_name p,
-.revise_purchase .contact_phone p{
+.revise_purchase .contact_phone p {
     position: absolute;
-    left:1.28rem;
+    left: 1.28rem;
     line-height: 3.5rem;
     font-size: 1.19rem;
 }
+
 .revise_purchase .good_place select {
     background: url('../../static/images/drop-down.png') no-repeat 13.3rem center;
     background-size: 1.067rem 1.067rem;
@@ -404,21 +415,21 @@ textarea {
     margin-top: 5rem;
 }
 
-.revise_purchase .title_name  .remarks_header{
+.revise_purchase .title_name .remarks_header {
     background: url('../../static/images/remarks.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
-    line-height:3.75rem; 
-    height:3.58rem;
-    margin-left: 1.28rem;
-}
-.revise_purchase .title_name  .contact_header{
-    background: url('../../static/images/contact.png') no-repeat 0 center;
-    background-size: 1.11rem 1.11rem;
-    line-height:3.7rem; 
-    height:3.58rem;
+    line-height: 3.75rem;
+    height: 3.58rem;
     margin-left: 1.28rem;
 }
 
+.revise_purchase .title_name .contact_header {
+    background: url('../../static/images/contact.png') no-repeat 0 center;
+    background-size: 1.11rem 1.11rem;
+    line-height: 3.7rem;
+    height: 3.58rem;
+    margin-left: 1.28rem;
+}
 
 .revise_purchase .good_number .number_unit {
     width: 100%;
