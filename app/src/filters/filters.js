@@ -24,7 +24,21 @@ Vue.filter('timeDays',function(due,pub){
         return days;    
     });
 
+Vue.filter('successTimeFormat', function(val){
+        if(val){
+            var date = new Date(val);
+            let Y = date.getFullYear() + '-';
+            let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+            let D = date.getDate() + ' ';
+            /*let h = date.getHours() + ':';
+            let m = date.getMinutes() + ':';
+            let s = date.getSeconds(); */
+            val = Y+M+D;
+            
+        }
 
+        return  val;
+    });
 
 
 Vue.filter('shellStatus', function(val) {

@@ -1,12 +1,7 @@
 <template>
     <div class="transaction">
-        <!-- <mt-header title="实时成交">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header> -->
+        
         <myHeader :param = "param" ></myHeader>
-        <!-- <div class="transaction_title"> *查看最新成交信息，坐等客户上门！</div> -->
         <div class="bg_white">
             <div class="list_head">
                 <div class="list_font">品种</div>
@@ -24,7 +19,7 @@
                             <div class="list_font">{{todo.breedSpec}}</div>
                             <div class="list_font">{{todo.number}}</div>
                             <div class="list_font">{{todo.location}}</div>
-                            <div class="list_font">{{todo.successTime}}</div>
+                            <div class="list_font">{{todo.successTime | successTimeFormat}}</div>
                         </li>
                     </ul>
                     <div slot="top" class="mint-loadmore-top">
@@ -45,6 +40,7 @@
 import common from '../common/common.js'
 import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
+import filters from '../filters/filters'
 export default {
     data() {
             return {
@@ -52,16 +48,7 @@ export default {
                     name:'实时成交'
                 },
                 msg: 'Welcome to Your Vue.js App',
-                todos: [/*{
-                    "name": "人参",
-                    "spec": "统货",
-                    "place": "东北",
-                    "price": "98.9元/kg",
-                    "up_price": "9元/kg",
-                    "down_price": "9元/kg",
-                    "phone": "15301546832",
-                    "time": "12:26"
-                }*/],
+                todos: [],
                 topStatus: '',
                 wrapperHeight: 0,
                 allLoaded: false,
@@ -142,15 +129,7 @@ export default {
             },
         created() {
             let _self = this;
-            /*common.$emit('show-load');
-            this.$http.get(common.apiUrl.list).then((response) => {
-                common.$emit('close-load');
-                let data = response.data.biz_result.list;
-                this.todos = data;
-            }, (err) => {
-                common.$emit('close-load');
-                common.$emit('message', response.data.msg);
-            });*/
+            
             _self.getHttp();
 
         },
@@ -222,19 +201,29 @@ export default {
 .transaction .bg_white .list_head .list_font {
     width: 20%;
     float: left;
-
 }
 
 .transaction .bg_white  .list_font {
-    /*width: 20%;
-    float: left;*/
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     flex:1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
 }
 
 .transaction .bg_white  .list_content_item {
     font-size: 1.1rem;
     color: #666;
     display:flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction:row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
 }
 </style>

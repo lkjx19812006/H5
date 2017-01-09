@@ -1,14 +1,10 @@
 <template>
     <div class="supply_release">
-        <!-- <mt-header fixed title="资源发布">
-            <router-link to="/home" slot="left">
-                <mt-button icon="back"></mt-button>
-            </router-link>
-        </mt-header> -->
+        
         <myHeader :param = "param"></myHeader>
-        <!-- <mt-loadmore> -->
+       
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-
+               <!-- <mt-loadmore> -->
                 <releaseGrugInformation :obj="obj"></releaseGrugInformation>
                 
                     <div class="title_name">
@@ -50,9 +46,8 @@
                     </div>
                     <div class="confirm" @click="release()">确认发布</div>
                
-           
+           <!-- </mt-loadmore> -->
         </div>
-         <!-- </mt-loadmore> -->
     </div>
 </template>
 <script>

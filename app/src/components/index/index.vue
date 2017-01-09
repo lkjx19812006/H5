@@ -45,10 +45,10 @@
                             <div class="news_content">
                                 <ul id="scrollText">
                                     <li v-for="todo in transaction">
-                                        <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+' '+todo.location+' '+todo.successTime}}</div>
+                                        <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+' '+todo.location+' '}}{{todo.successTime | successTimeFormat}}</div>
                                     </li>
                                     <li v-if="transaction[0]">
-                                        <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+' '+transaction[0].location+' '+transaction[0].successTime}}</div>
+                                        <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+' '+transaction[0].location+' '}}{{transaction[0].successTime | successTimeFormat}}</div>
                                     </li>
                                 </ul>
                             </div>
@@ -172,6 +172,7 @@
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import longSearch from '../../components/tools/longSearch'
+import filters from '../../filters/filters'
 export default {
     data() {
             return {
@@ -216,7 +217,7 @@ export default {
                     image: '/static/images/market.png'
                 }, {
                     name: '药材百科',
-                    router: 'drugResTable',
+                    router: 'drugResTable/my',
                     image: '/static/images/drugType.png'
                 }],
                 supplyDemandArray: [{

@@ -87,7 +87,8 @@ export default {
             return {
                 param: {
                     name: '药性表',
-                    appBack: false
+                    appBack: false,
+                    type:'my'
                 },
                 selected: '1',
                 obj: {},

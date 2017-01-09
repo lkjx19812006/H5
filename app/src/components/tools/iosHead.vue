@@ -1,6 +1,6 @@
 <template>
     <div class="iosHead">
-        <div v-bind:class="[type=='ios' ?  'ios_header' : 'my-header']">
+        <div v-bind:class="[param.type=='ios' ?  'ios_header' : 'my-header']">
             <div class="header_content">
                 <div class="go-back" @click="jumpBack()">
                     <img src="/static/images/go-back.png">

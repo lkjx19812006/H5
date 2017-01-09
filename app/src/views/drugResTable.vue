@@ -57,7 +57,8 @@ export default {
                 param: {
                     name: '药材百科',
                     router: 'home',
-                    appBack:true
+                    appBack:true,
+                    type:'my'
                 },
                 type: '',
                 headHeight: '',
@@ -173,7 +174,7 @@ export default {
             },
             jumpDetail(id) {
                 common.$emit("informdrugDetail", id); //通知药性表详情刷新
-                this.$router.push('drugResTableDetail/' + id);
+                this.$router.push('/drugResTableDetail/my/' + id);
             }
         },
         mounted() {
