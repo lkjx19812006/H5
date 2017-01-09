@@ -64,6 +64,7 @@ export default {
             }
         },
         created() {
+            this.wholeHeight = document.documentElement.clientHeight;
             this.getCode();
         },
         components:{
@@ -196,6 +197,7 @@ export default {
     background-size: 100% 100%;
     width:100%; 
     /*height:1000px;*/
+    height:100%;
 }
 .login .my-logo{
     width:66.5%;
@@ -278,132 +280,5 @@ export default {
     border-radius: 3px;
     margin-left: 7%;
 }
-/*.login .out_select_box {
-    width: 100%;
-    padding: 1.5rem 0;
-    background: white;
-}
 
-.login .select_box {
-    width: 62%;
-    height: 4rem;
-    text-align: center;
-    line-height: 4rem;
-    margin-left: 19%;
-}
-
-.login .mint-navbar .mint-tab-item {
-    border-bottom: 0;
-    border: 1px solid #FA6705;
-}
-
-.login .mint-navbar .mint-tab-item.is-selected {
-    background-color: #FA6705;
-    color: white;
-    margin: 0;
-}
-
-.login .selected_box .fill_in_first {
-    padding: 0 4.6%;
-    margin-top: 1rem;
-    background: white;
-}
-
-.login .selected_box li {
-    height: 5rem;
-    font-size: 1.2rem;
-    color: #333333;
-    border-bottom: 1px solid #E0E0E0;
-    line-height: 2rem;
-    padding: 1.5rem 0;
-}
-
-.login .selected_box li input {
-    outline: none;
-    border: 0;
-    height: 2rem;
-    float: left;
-    padding-left: 0.5rem;
-    width: 47%;
-}
-
-.login .selected_box .fill_in_first li p {
-    width: 17.5%;
-    text-align: right;
-    float: left;
-}
-
-.login .selected_box .fill_in_first li .get_code {
-    width: 100px;
-    border: 1px solid #BFBFBF;
-    height: 2.3rem;
-    border-radius: 5px;
-    background: #F5F5F5;
-    float: right;
-    line-height: 2.3rem;
-}
-
-.login .selected_box .fill_in_first li .get_code_nor {
-    width: 100px;
-    border: 1px solid #BFBFBF;
-    height: 2.3rem;
-    border-radius: 5px;
-    background: #F5F5F5;
-    float: right;
-    line-height: 2.3rem;
-    color: #CECEBF;
-}
-
-.login .selected_box .fill_in_second {
-    padding: 0 4.6%;
-    margin-top: 1rem;
-    background: white;
-}
-
-.login .selected_box .fill_in_second li p {
-    width: 22.5%;
-    text-align: right;
-    float: left;
-}
-
-.login .selected_box .fill_in_second li div {
-    border-left: 1px solid #E0E0E0;
-    width: 70px;
-    float: right;
-    font-size: 1.4rem;
-}
-
-.login .fast_register,
-.forget_password {
-    font-size: 1.1rem;
-    color: #FA6705;
-}
-
-.login .prompt_box {
-    width: 100%;
-    margin-top: 1.5rem;
-    margin-bottom: 5rem;
-    height: 1.1rem;
-}
-
-.login .prompt_box .fast_register {
-    float: left;
-    margin-left: 7.8%;
-}
-
-.login .prompt_box .forget_password {
-    float: right;
-    margin-right: 7.8%;
-}
-
-.login .confirm_login {
-    width: 90%;
-    height: 3.5rem;
-    margin-left: 5%;
-    background: #FA6705;
-    color: white;
-    line-height: 3.5rem;
-    text-align: center;
-    border-radius: 1.75rem;
-}*/
 </style>

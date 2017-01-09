@@ -1,12 +1,8 @@
 <template>
     <div class="register">
-        <!-- <mt-header title="注册">
-            <router-link to="/login" slot="left">
-                <mt-button icon="back" ></mt-button>
-            </router-link>
-        </mt-header> -->
+        
         <myHeader :param = "myHeader"></myHeader>
-        <form action="#" method="post" name="personalForm" id="personalForm">
+        
             <ul class="fill_in">
                <li>
                   <p>手机号：</p><input type="text" placeholder="请输入手机号码" v-model="param.phone"/>
@@ -24,7 +20,7 @@
             </ul>
             
             <div class="confirm_register" v-on:click="register">注册</div>
-       </form>
+      
     </div>
 </template>
 <script>
@@ -193,6 +189,7 @@ export default {
     padding: 0 4.6%;
     margin-top:1rem;
     background:white;
+    overflow: hidden;
 }
 
 .register .fill_in li{
@@ -202,6 +199,7 @@ export default {
     border-bottom: 1px solid #E0E0E0;
     line-height: 2rem;
     padding:1.5rem 0;
+    overflow: hidden;
     
 }
 .register .fill_in li input{

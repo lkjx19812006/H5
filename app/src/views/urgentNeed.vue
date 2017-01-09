@@ -10,7 +10,7 @@
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
                             <div class="center">
-                                <img src="/static/icons/england.png" class="flag">
+                                <img :src="todo.cFlagsPath" class="flag">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png">{{todo.breedName}}</div>
                                     <p>发布时间：{{todo.pubdate | timeFormat}}</p>
@@ -193,6 +193,7 @@ export default {
                     if(suc.data.code == '1c01'){
                         /*common.$emit('translateDate', result, _self.todos);*/
                         for(var i = 0; i < result.length; i++){
+                            console.log(result)
                             _self.todos.push(result[i]);
                         }
                     }else{

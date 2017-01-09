@@ -26,12 +26,21 @@ export default {
 .tab{
     width:86%;
     display: flex;
-    flex-direction:row;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
+    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
     margin-left:7%;
     padding-bottom: 5px;
 }
 .tab div{
     flex:1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
 }
 .tab .left,
 .right{

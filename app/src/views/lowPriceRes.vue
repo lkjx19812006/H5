@@ -16,8 +16,7 @@
                                     <p class="time_font">发布时间:<span>{{todo.pubdate | timeFormat}}</span></p>
                                 </div>
                                 <div class="res_content_right">
-                                    <p>{{todo.price}}
-                                        <!-- {{todo.unit}} -->kg/元</p>
+                                    <p>{{todo.price}}<span>{{todo.unit}}</span></p>
                                     <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
                                 </div>
                             </div>
@@ -410,12 +409,15 @@ export default {
     height: 8.1rem;
     margin: 0;
     right: 10px;
+    
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
     font-size: 1.25rem;
     margin-top: 0px;
     color: #EC6817;
+    text-align: right;
+    white-space:nowrap;
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {

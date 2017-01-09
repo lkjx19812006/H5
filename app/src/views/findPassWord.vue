@@ -6,7 +6,7 @@
             </router-link>
         </mt-header> -->
         <myHeader :param = "myHeader"></myHeader>
-        <form action="#" method="post" name="personalForm" id="personalForm">
+        
             <ul class="fill_in">
                <li>
                   <p>手机号：</p><input type="text" placeholder="请输入手机号码" v-model="param.phone"/>
@@ -22,7 +22,7 @@
             </ul>
             
             <div class="confirm" v-on:click="confirm">确定</div>
-       </form>
+       
     </div>
 </template>
 <script>
@@ -176,6 +176,7 @@ export default {
     padding: 0 4.6%;
     margin-top:1rem;
     background:white;
+    
 }
 
 .find_password .fill_in li{

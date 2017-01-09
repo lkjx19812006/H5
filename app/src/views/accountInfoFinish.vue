@@ -348,6 +348,7 @@ textarea {
     padding-bottom: 10px;
     width: 100%;
 }
+
 .account_overview_finish .my_box{
 
 }

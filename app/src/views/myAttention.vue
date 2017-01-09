@@ -18,7 +18,7 @@
                                     <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
                                 </div>
                                 <div class="res_content_right">
-                                    <p>{{todo.price}}<span>元/kg</span></p>
+                                    <p>{{todo.price}}<span>{{todo.unit}}</span></p>
                                     <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
                                 </div>
                             </div>
@@ -27,7 +27,7 @@
                     <ul class="page-loadmore-list_second" v-show="!param.show"  >
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  v-on:click="jumpNeed(todo.id)">
                             <div class="center">
-                                <img src="/static/icons/england.png"  class="flag">
+                                <img :src="todo.cFlagsPath"  class="flag">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
                                     <p>发布时间：{{todo.pubdate | timeFormat}}</p>

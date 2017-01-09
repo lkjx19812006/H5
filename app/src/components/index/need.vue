@@ -13,7 +13,7 @@
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  @click="jumpDetail(todo.id)">
                             
                             <div class="center">
-                                <img src="/static/icons/england.png" class="flag">
+                                <img :src="todo.cFlagsPath" class="flag">
                                 <div class="title">
                                     <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
                                     <p>发布时间：{{todo.pubdate | timeFormat}}</p>

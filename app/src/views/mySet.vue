@@ -66,9 +66,7 @@ export default {
         methods: {
             quit(){
                
-                console.log(common.KEY);
-                console.log(common.SID);
-                /*common.urlCommon = '';*/
+                this.$router.push('login')
 
             },
             getCustomerPhone() {

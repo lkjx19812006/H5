@@ -3,9 +3,9 @@
        
         <myHeader :param = "my_header" ></myHeader>
 
-        <mt-loadmore>
+        
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
-
+       <mt-loadmore>
         <ul >
             <li v-for="(todo,index) in todos" v-show="todo.show">
                 <div class="address_top" @click="jumpBack(todo)">
@@ -41,7 +41,7 @@
                 </div>
             </li>
         </ul>
-        
+        </mt-loadmore>
        </div>
        <div class="add_address" v-on:click="addAddress">添加新地址</div>
        
