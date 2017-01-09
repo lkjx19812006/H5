@@ -318,10 +318,11 @@ a {
 }
 
 .page-loadmore-wrapper {
-    margin-top: -1px;
+    margin-top: 0px;
     overflow: scroll;
     padding-bottom: 10px;
     width: 100%;
+    overflow-y: visible;
 }
 
 /* .page-loadmore-wrapper {
