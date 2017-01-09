@@ -9,7 +9,7 @@
                     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list" v-show="param.show">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  v-on:click="jump(todo.id)">
-                            <img :src="todo.image[0]" class="list_images">
+                            <img v-lazy="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div><img src="/static/images/bao.png"><img src="/static/images/zheng.png">{{todo.breedName}}</div>
@@ -251,7 +251,6 @@ export default {
 
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .page-loadmore-listitem {
     height: 50px;

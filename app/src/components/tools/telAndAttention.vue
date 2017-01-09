@@ -44,7 +44,18 @@ export default {
         },
         myAttention(type) {
             if (!common.customerId) {
-                return common.$emit('message', '请先登录！');
+
+                 let _self=this;
+               
+                    function loadApp() {
+                        _self.$router.push('/login');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return ;
             }
             let _self = this;
             common.$emit('show-load');
@@ -100,6 +111,8 @@ export default {
     float: left;
     background: #EEEEEE;
     border: 1px solid #ddd;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .telAndAttention .small_button img {

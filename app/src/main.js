@@ -75,10 +75,10 @@ router.afterEach(route => {
 Vue.http.interceptors.push((request, next) => {
   next((response) => {
     console.log(response.status)
-/*
+
     if (response.status==403) {
-      return router.push('login');
-    }*/
+      return router.push('/login');
+    }
 
     return response
   })

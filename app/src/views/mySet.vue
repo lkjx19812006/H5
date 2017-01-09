@@ -10,7 +10,7 @@
             </li>
         </ul>
         <!-- <router-link to="login"> -->
-            <div class="quit" @click="quit">退出当前账号</div>
+        <div class="quit" @click="quit">退出当前账号</div>
         <!-- </router-link> -->
     </div>
 </template>
@@ -49,8 +49,8 @@ export default {
                     first_img: '/static/images/customer-service.png',
                     left_word: '联系客服',
                     right_word: common.servicePhone,
-                    func: function(){
-                      window.location.href = "tel:" + common.servicePhone;
+                    func: function() {
+                        window.location.href = "tel:" + common.servicePhone;
                     }
                 }, {
                     first_img: '/static/images/current-version.png',
@@ -64,12 +64,17 @@ export default {
             myHeader
         },
         methods: {
-            quit(){
-               
-                console.log(common.KEY);
-                console.log(common.SID);
-                /*common.urlCommon = '';*/
-
+            quit() {
+                common.customerId = '';
+                common.KEY = '';
+                common.SID = '';
+                common.difTime = '';
+                window.localStorage.ID = '';
+                window.localStorage.KEY = '';
+                window.localStorage.SID = '';
+                window.localStorage.difTime = '';
+                common.$emit('clear_Information');
+                 this.$router.push('/login');
             },
             getCustomerPhone() {
                 let _self = this;
@@ -84,12 +89,12 @@ export default {
                 });
             },
             jump: function(item) {
-              console.log(item)
-                if(item.func){
+                console.log(item)
+                if (item.func) {
                     item.func();
-                }else{
-                  this.$router.push(item.router);
-                } 
+                } else {
+                    this.$router.push(item.router);
+                }
             }
         },
         created() {

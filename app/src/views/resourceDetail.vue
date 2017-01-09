@@ -68,6 +68,7 @@ export default {
                 param: {
                     name: '商品详情'
                 },
+                imageShow:true,
                 number: 0,
                 obj: {},
                 id: '',
@@ -79,7 +80,6 @@ export default {
                     loop: true,
                     autoplayDisableOnInteraction: false,
                     onTransitionStart: function(swiper) {
-                        //console.log(swiper.realIndex);
                         _self.number = parseInt(swiper.realIndex) + 1;
                     }
                 }
@@ -130,9 +130,10 @@ export default {
                 this.$router.go(-1);
             },
             jump(id) {
+                let _self=this;
                 if (!common.customerId) {
                     function loadApp() {
-                        this.$router.push('/login');
+                        _self.$router.push('/login');
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -145,6 +146,18 @@ export default {
                 this.$router.push('/orderConfirm/' + id);
             },
             jumpBuy(id) {
+                 let _self=this;
+                if (!common.customerId) {
+                    function loadApp() {
+                        _self.$router.push('/login');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return ;
+                }
                 common.$emit('orderConfirm', id);
                 this.$router.push('/sampleConfirm/' + id);
             }
@@ -164,16 +177,13 @@ export default {
         }
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .resource_detail {
     position: relative;
 }
 
 .resource_detail .page-loadmore-wrapper {
-    /*margin-top: -1px;*/
     overflow: scroll;
-    /*padding-bottom: 10px;*/
     width: 100%;
     margin-bottom: 0px;
 }

@@ -1,6 +1,5 @@
 <template>
     <div class="my_information">
-        
             <div class="information">
              <ul>
                  <li v-for="todo in todos" @click="jump(todo.router)">
@@ -9,7 +8,6 @@
                  </li>
              </ul>
            </div>     
-        
     </div>
 </template>
 <script>
@@ -39,14 +37,23 @@ export default {
             }
         },
         created() {
-
         },
         methods:{
             jump(router){
-            	
                 if(router == 'detailsPage'){
                     common.$emit('message','暂未提供该服务');
                 }else{
+                    switch (router){
+                        case 'addressManage':
+                        console.log('ssssss');
+                         common.$emit("informAddress",1)
+                        break;
+                        case 'accountInfo':
+                         common.$emit("informAccountinfo",1)
+                        break;
+                        default:
+                        break;
+                    }
                     this.$router.push(router);
                 }
             }
