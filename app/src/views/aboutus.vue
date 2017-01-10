@@ -1,6 +1,6 @@
 <template>
     <div class="aboutus">
-        <myHeader :param="my_header"></myHeader>
+        <myHeader :param="my_header" v-if="show"></myHeader>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
@@ -30,6 +30,7 @@ export default {
     data() {
             return {
                 wrapperHeight:'',
+                show:true,
                 my_header: {
                     name: '关于我们',
                 }
@@ -42,15 +43,22 @@ export default {
 
         },
         created() {
-
+             let from = this.$route.params.from;
+           if(from=='ios') {
+              this.show=false; 
+           }
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 50;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
         }
 }
 </script>
 <style scoped>
 .aboutus {}
+
+.aboutus .bg_white{
+    background-color: #fff; 
+}
 
 .aboutus p {
     text-indent: 32px;

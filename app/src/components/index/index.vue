@@ -9,12 +9,12 @@
                 </div>
             </router-link>
         </mt-header>
-        <div class="whole">
+        <div class="whole" style="margin-top:0;padding-top:60px">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
                     <div class="content">
                         <div class="swipe_height">
-                            <mt-swipe :auto="4000" :prevent="true">
+                            <mt-swipe :auto="4000" :prevent="false">
                                 <mt-swipe-item v-for="item in imgArray">
                                     <div>
                                         <img v-bind:src="item.activityUrl">
@@ -60,7 +60,7 @@
                                     <p>更多</p><img src="/static/images/right.png">
                                 </router-link>
                             </div>
-                            <mt-swipe :auto="4000" :showIndicators="false" :prevent="true">
+                            <mt-swipe :auto="4000" :showIndicators="false" :prevent="false">
                                 <mt-swipe-item v-for="(todo,index) in drugGuidePrice" v-if="index%2==0">
                                     <div class="drug_price_box">
                                         <div class="drug_price_swipe">
