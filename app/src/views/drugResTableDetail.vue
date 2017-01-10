@@ -17,7 +17,7 @@
                             <div class="information">
                                 <div class="drug_name">
                                     <div class="name_type">
-                                        <p class="what_name">别名：</p>
+                                        <p class="what_name">名称：</p>
                                         <p class="answer_name" v-html="obj.alias"></p>
                                     </div>
                                     <div class="name_type">

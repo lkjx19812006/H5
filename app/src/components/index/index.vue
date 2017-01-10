@@ -14,11 +14,9 @@
                 <mt-loadmore>
                     <div class="content">
                         <div class="swipe_height">
-                            <mt-swipe :auto="4000" :prevent="true">
-                                <mt-swipe-item v-for="item in imgArray">
-                                    <div>
-                                        <img v-bind:src="item.activityUrl">
-                                    </div>
+                            <mt-swipe :auto="4000" :prevent="true" > 
+                                <mt-swipe-item v-for="item in imgArray">                                   
+                                       <img v-bind:src="item.activityUrl">              
                                 </mt-swipe-item>
                             </mt-swipe>
                         </div>
@@ -120,11 +118,11 @@
                                             <img src="/static/images/bao.png" class="first_image">
                                             <img src="/static/images/zheng.png">
                                         </div>
-                                        <div class="list_image">{{todo.breedName}}</div>
-                                        <div class="list_font">{{todo.spec}}</div>
+                                        <div class="list_myimage">{{todo.breedName}}</div>
+                                        <!-- <div class="list_font">{{todo.spec}}</div> -->
                                         <div class="list_font">{{todo.location}}</div>
-                                        <div class="list_font">{{todo.price}}</div>
-                                        <div class="list_font">
+                                        <div class="list_font">{{todo.price}}元/{{todo.unit}}</div>
+                                        <div class="list_button">
                                             <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpRes('resourceDetail/',todo.id)">
                                                 我要购买
                                             </button>
@@ -149,11 +147,11 @@
                                             <img src="/static/icons/impatient.png" class="first_image">
                                             <img src="/static/images/zheng.png">
                                         </div>
-                                        <div class="list_image">{{todo.breedName}}</div>
-                                        <div class="list_font">{{todo.spec}}</div>
+                                        <div class="list_myimage">{{todo.breedName}}</div>
+                                        <!-- <div class="list_font">{{todo.spec}}</div> -->
                                         <div class="list_font">{{todo.location}}</div>
-                                        <div class="list_font">{{todo.duedate}}</div>
-                                        <div class="list_font">
+                                        <div class="list_font">剩余{{todo.duedate | timeDays(todo.pubdate)}}天</div>
+                                        <div class="list_button">
                                             <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/',todo.id)">
                                                 我要报价
                                             </button>
@@ -178,13 +176,14 @@ export default {
             return {
                 wrapperHeight: '',
                 selected: 'tab-container1',
-                imgArray: [{
+                imgArray: [/*{
                     activityUrl: '/static/images/1.jpg'
                 }, {
                     activityUrl: '/static/images/2.jpg'
                 }, {
                     activityUrl: '/static/images/3.jpg'
-                }],
+                }*/],
+                imgArr:[],
                 todos: [{
                     "name": "人参",
                     "spec": "统货",
@@ -434,7 +433,7 @@ export default {
 }
 
 .swipe_height {
-    height: 12rem;
+    height: 13rem;
 }
 
 .swipe_height img {
@@ -667,7 +666,7 @@ export default {
 .bg_white .list_content .cell_class .list_font {
     font-size: 1.1rem;
     text-align: center;
-    width: 20%;
+    width: 30%;
     height: 30px;
     line-height: 30px;
     word-break: keep-all;
@@ -675,7 +674,15 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
+.bg_white .list_content .cell_class .list_myimage{
+    width:20%;
+    font-size: 1.1rem;
+    text-align: center;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .bg_white .list_content .cell_class .list_image {
     font-size: 1.1rem;
     text-align: center;
@@ -685,7 +692,9 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
+.bg_white .list_content .cell_class .list_button{
+    width:25%;
+}
 .bg_white .list_content .cell_class .list_image img {
     float: left;
     max-width: 49%;

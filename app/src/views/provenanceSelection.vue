@@ -176,12 +176,13 @@ export default {
                 biz_module: 'breedService',
                 biz_method: 'queryBreedLocalList',
                 biz_param: {
-                    breedId: 1153,
+                    breedId: 0,
                 }
             }, function(suc) {
                 common.$emit('close-load');
                 let result = suc.data.biz_result.list;
                 _self.list = result;
+                console.log(result);
             }, function(err) {
                 common.$emit('close-load');
                 common.$emit('message', err.data.msg);

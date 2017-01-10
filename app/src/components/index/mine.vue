@@ -59,11 +59,11 @@ export default {
                 }, {
                     name: '待发货',
                     router: '',
-                    img_src: '/static/icons/To-be-shipped.png'
+                    img_src: '/static/icons/out-goods.png'
                 }, {
                     name: '待收货',
                     router: '',
-                    img_src: '/static/icons/Receipt-of-goods.png'
+                    img_src: '/static/icons/receipt.png'
                 }],
                 my_list: [{ //         
                     name: '我的药款',
