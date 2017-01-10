@@ -42,7 +42,7 @@ export default {
                 }, {
                     first_img: '/static/images/about.png',
                     left_word: '关于我们',
-                    router: 'aboutus',
+                    router: 'aboutus/us',
                     second_img: '/static/images/right-arrow.png'
                 }, {
                     first_img: '/static/images/ider.png',

@@ -132,6 +132,10 @@ export default {
         created() {
             var _self = this;
             let name = _self.$route.params.drugId;
+            let from = _self.$route.params.from;
+           if(from=='ios') {
+               _self.param.type='ios'; 
+           }
             _self.drugDetail(name);
             common.$on("informdrugDetail", function(item) {
                 _self.drugDetail(item);

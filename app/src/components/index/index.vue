@@ -9,10 +9,11 @@
                 </div>
             </router-link>
         </mt-header>
+
         <div class="whole" >
             <div class="page-loadmore-wrapper" ref="wrapper"  :style="{ height: wrapperHeight + 'px' }" >
                 <mt-loadmore>
-                    <div class="content" >
+                  <!--   <div class="content" > -->
                         <div class="swipe_height">
                             <mt-swipe :auto="4000" :prevent="false" > 
                                 <mt-swipe-item v-for="item in imgArray">                                   
@@ -58,7 +59,6 @@
                                     <p>更多</p><img src="/static/images/right.png">
                                 </router-link>
                             </div>
-                            
                             <mt-swipe :auto="4000" :showIndicators="false" :prevent="false">
                                 <mt-swipe-item v-for="(todo,index) in drugGuidePrice" v-if="index%2==0">
                                     <div class="drug_price_box" @click="jump('marketQuotation')">
@@ -161,7 +161,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                <!--     </div> -->
                 </mt-loadmore>
             </div>
         </div>
@@ -363,7 +363,7 @@ export default {
         mounted() {
             let _self = this;
 
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 73;
 
             function startmarquee(lh, speed, delay) {
                 var count = 1;

@@ -26,29 +26,36 @@ export default {
         },
         methods: {
             jumpBack: function() {
-                if(this.param.appBack)window.back();
-                else{
+                let _slef=this;
+                if (_slef.param.appBack) {
+                    // window.goback();
+                    try {
+                        if (_slef.param.appBack) {
+                            window.webkit.messageHandlers.AppModel.postMessage({
+                                body: 'iosResult'
+                            });
+                        } else {
+                            window.Android.back();
+                        }
+                    } catch (e) {
+                        window.history.go(-1);
+                    }
+
+                } else {
                     window.history.go(-1);
                 }
             },
         },
         created() {
-            let _self = this;
-            let ua = navigator.userAgent.toLowerCase();
-            if (/iphone|ipad|ipod/.test(ua)) {
-                _self.type = 'ios';
-            } else if (/android/.test(ua)) {
-                _self.type = 'android';
-            } else {
-                _self.type = '';
-            }
+
+
         },
         mounted() {
             let _self = this;
             setTimeout(function() {
-                window.back = function() {
+                window.goback = function() {
                     try {
-                        if (_self.type == 'ios') {
+                        if (_self.param.appBack) {
                             window.webkit.messageHandlers.AppModel.postMessage({
                                 body: 'iosResult'
                             });

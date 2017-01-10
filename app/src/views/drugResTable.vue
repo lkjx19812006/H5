@@ -75,15 +75,13 @@ export default {
             let _self = this;
             _self.hotKeySearch();
             _self.hotDrug();
-            _self.type = '';
-            let ua = navigator.userAgent.toLowerCase();
-            if (/iphone|ipad|ipod/.test(ua)) {
-                _self.type = 'ios';
-            } else if (/android/.test(ua)) {
-                _self.type = 'android';
-            } else {
-                _self.type = '';
-            }
+           let from = _self.$route.params.from;
+           if(from=='ios') {
+               _self.param.type='ios'; 
+               _self.param.appBack=true;
+           }else{
+             _self.param.appBack=false;
+           }
         },
         components: {
             iosHead
@@ -174,7 +172,7 @@ export default {
             },
             jumpDetail(id) {
                 common.$emit("informdrugDetail", id); //通知药性表详情刷新
-                this.$router.push('/drugResTableDetail/my/' + id);
+                this.$router.push('/drugResTableDetail/'+this.param.type+'/' + id);
             }
         },
         mounted() {

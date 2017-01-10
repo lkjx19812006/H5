@@ -60,14 +60,14 @@ module.exports = {
             ]
         },
         { name: 'home', path: '/home', component: home },
-        { name: 'drugResTable', path: '/drugResTable/:drugT', component: drugResTable },
+        { name: 'drugResTable', path: '/drugResTable/:from', component: drugResTable },
         { name: 'marketQuotation', path: '/marketQuotation', component: marketQuotation },
         { name: 'supplyRelease', path: '/supplyRelease', component: supplyRelease },
         { name: 'needRelease', path: '/needRelease', component: needRelease },
         { name: 'provenanceSelection', path: '/provenanceSelection/:from', component: provenanceSelection },
         { name: 'accountInfo', path: '/accountInfo', component: accountInfo },
         { name: 'accountInfoFinish', path: '/accountInfoFinish', component: accountInfoFinish },
-        { name: 'drugResTableDetail', path: '/drugResTableDetail/:drugT/:drugId', component: drugResTableDetail },
+        { name: 'drugResTableDetail', path: '/drugResTableDetail/:from/:drugId', component: drugResTableDetail },
         { name: 'transaction', path: '/transaction', component: transaction },
         { name: 'search', path: '/search', component: search },
         { name: 'lowPriceRes', path: '/lowPriceRes', component: lowPriceRes },
@@ -101,7 +101,7 @@ module.exports = {
         { name: 'sampleConfirm', path: '/sampleConfirm/:sourceId', component: sampleConfirm },
         { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
-        { name: 'aboutus', path: '/aboutus', component: aboutus },
+        { name: 'aboutus', path: '/aboutus/:from', component: aboutus },
         { path: '*', redirect: '/home' }
     ]
 }
