@@ -188,13 +188,12 @@ export default {
             var id = _self.$route.params.sourceId;
             _self.id = id;
             _self.refurbish(id);
-            common.$on('formPopUpBack',function(item){
-                
-            })
+            
             common.$on('resourceDetail', function(item) {
                 _self.refurbish(item);
                 _self.obj = {};
-                _self.my_param.show = !_self.my_param.show;
+                _self.my_param.show = false;
+                
             })
             
         },

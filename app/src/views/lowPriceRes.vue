@@ -228,6 +228,7 @@ export default {
             },
             jumpDetail(id) {
                 common.$emit('resourceDetail', id);
+                
                 this.$router.push('resourceDetail/' + id);
             },
             handleBottomChange(status) {
