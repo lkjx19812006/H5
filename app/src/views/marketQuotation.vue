@@ -272,8 +272,15 @@ export default {
 }
 
 .market_quotation .list_content_header {
+    word-break: break-all;
     display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
     height: 50px;
     line-height: 50px;
 
@@ -281,6 +288,9 @@ export default {
 
 .market_quotation .list_content_header p {
     flex: 1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
     font-size: 1.11rem;
 }
 
@@ -299,8 +309,15 @@ export default {
 
 .market_quotation .second_level {
     width: 100%;
+    word-break: break-all;
     display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
     height: 4.267rem;
     border-top: 1px solid #CCCCCC;
     padding-right: 0.8rem;
@@ -309,9 +326,16 @@ export default {
 
 .market_quotation .second_level p {
     flex: 1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
     font-size: 1.02396rem;
     color: #666666;
     line-height: 4.267rem;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .market_quotation .second_level_content {
@@ -323,17 +347,31 @@ export default {
     font-size: 1.024rem;
     color: #666666;
     line-height: 4.267rem;
+    
     display: flex;
+    display:-webkit-box;
+    display:-webkit-flex;
+    display:-ms-flexbox;
     flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction:row;
+    -ms-flex-direction: row;
     background:#F2F2F2;
     border-bottom: 1px solid white;
 }
 
 .market_quotation .second_level_content li p {
     flex: 1;
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    -ms-flex:1;
     font-size: 1.024rem;
     color: #666666;
     line-height: 4.267rem;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .market_quotation .second_level_content li p img {

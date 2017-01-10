@@ -5,7 +5,7 @@
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                
-                    <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                  <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
                             <img v-bind:src="todo.image[0]" class="list_images">
@@ -36,14 +36,8 @@
                 </mt-loadmore>
                         
           </div>          
-        </div>
-       
+        </div>   
             <errPage  :param="err"  v-show="todos.length==0"></errPage>
-       
-       
-        <!-- <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length==0">
-             <errPage  :err="err"></errPage>
-        </div> -->
     </div>
 </template>
 <script>

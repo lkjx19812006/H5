@@ -147,7 +147,6 @@
                                     <div class="mint-cell-wrapper cell_class" v-for="todo in begBuyList">
                                         <div class="list_image">
                                             <img src="/static/icons/impatient.png" class="first_image">
-                                            <img src="/static/images/zheng.png">
                                         </div>
                                         <div class="list_myimage">{{todo.breedName}}</div>
                                         <!-- <div class="list_font">{{todo.spec}}</div> -->
