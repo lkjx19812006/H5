@@ -18,7 +18,7 @@ Vue.filter('timeDays',function(due,pub){
                 var dateValue = duedateDate.getTime() - pubdateDate.getTime();
                 var days = Math.floor(dateValue / (24 * 3600 * 1000));
             }else{
-                days=" ";
+                days="7";
             }
             
         return days;    

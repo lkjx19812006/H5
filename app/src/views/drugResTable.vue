@@ -55,7 +55,7 @@ export default {
     data() {
             return {
                 param: {
-                    name: '药材百科',
+                    name: '药性表',
                     router: 'home',
                     appBack:true,
                     type:'my'

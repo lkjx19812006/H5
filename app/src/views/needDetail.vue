@@ -38,6 +38,8 @@
                 <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="loadApp()">立即报价</button>
             </div>
         </div>
+
+        
     </div>
 </template>
 <script>
@@ -46,9 +48,13 @@ import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
 import filters from '../filters/filters'
 import telAndAttention from '../components/tools/telAndAttention'
+import popUpBigImg from '../components/tools/popUpBigImg'
 export default {
     data() {
             return {
+                my_param:{
+                    url:'',
+                },
                 wrapperHeight: '',
                 id: '',
                 obj: {},
@@ -59,7 +65,8 @@ export default {
         },
         components: {
             telAndAttention,
-            myHeader
+            myHeader,
+            popUpBigImg
         },
         methods: {
             loadApp() {

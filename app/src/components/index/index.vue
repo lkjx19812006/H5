@@ -9,16 +9,15 @@
                 </div>
             </router-link>
         </mt-header>
-        <div class="whole" style="margin-top:0;padding-top:60px">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+
+        <div class="whole" >
+            <div class="page-loadmore-wrapper" ref="wrapper"  :style="{ height: wrapperHeight + 'px' }" >
                 <mt-loadmore>
-                    <div class="content">
+                  <!--   <div class="content" > -->
                         <div class="swipe_height">
-                            <mt-swipe :auto="4000" :prevent="false">
-                                <mt-swipe-item v-for="item in imgArray">
-                                    <div>
-                                        <img v-bind:src="item.activityUrl">
-                                    </div>
+                            <mt-swipe :auto="4000" :prevent="false" > 
+                                <mt-swipe-item v-for="item in imgArray">                                   
+                                       <img v-bind:src="item.activityUrl">              
                                 </mt-swipe-item>
                             </mt-swipe>
                         </div>
@@ -62,8 +61,8 @@
                             </div>
                             <mt-swipe :auto="4000" :showIndicators="false" :prevent="false">
                                 <mt-swipe-item v-for="(todo,index) in drugGuidePrice" v-if="index%2==0">
-                                    <div class="drug_price_box">
-                                        <div class="drug_price_swipe">
+                                    <div class="drug_price_box" @click="jump('marketQuotation')">
+                                        <div class="drug_price_swipe" >
                                             <div class="drug_price_swipe_left">
                                                 <p class="price_swiper_name">{{todo.name}}</p>
                                                 <div class="price_swiper_div">
@@ -103,6 +102,7 @@
                                     </div>
                                 </mt-swipe-item>
                             </mt-swipe>
+
                         </div>
                         <div class="bg_white">
                             <div>
@@ -118,13 +118,13 @@
                                     <div class="mint-cell-wrapper cell_class" v-for="todo in supplyList">
                                         <div class="list_image">
                                             <img src="/static/images/bao.png" class="first_image">
-                                            <img src="/static/images/zheng.png">
+                                            <img src="/static/icons/sample.png">
                                         </div>
-                                        <div class="list_image">{{todo.breedName}}</div>
-                                        <div class="list_font">{{todo.spec}}</div>
+                                        <div class="list_myimage">{{todo.breedName}}</div>
+                                        <!-- <div class="list_font">{{todo.spec}}</div> -->
                                         <div class="list_font">{{todo.location}}</div>
-                                        <div class="list_font">{{todo.price}}</div>
-                                        <div class="list_font">
+                                        <div class="list_font">{{todo.price}}元/{{todo.unit}}</div>
+                                        <div class="list_button">
                                             <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpRes('resourceDetail/',todo.id)">
                                                 我要购买
                                             </button>
@@ -149,11 +149,11 @@
                                             <img src="/static/icons/impatient.png" class="first_image">
                                             <img src="/static/images/zheng.png">
                                         </div>
-                                        <div class="list_image">{{todo.breedName}}</div>
-                                        <div class="list_font">{{todo.spec}}</div>
+                                        <div class="list_myimage">{{todo.breedName}}</div>
+                                        <!-- <div class="list_font">{{todo.spec}}</div> -->
                                         <div class="list_font">{{todo.location}}</div>
-                                        <div class="list_font">{{todo.duedate}}</div>
-                                        <div class="list_font">
+                                        <div class="list_font">剩余{{todo.duedate | timeDays(todo.pubdate)}}天</div>
+                                        <div class="list_button">
                                             <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/',todo.id)">
                                                 我要报价
                                             </button>
@@ -162,7 +162,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                <!--     </div> -->
                 </mt-loadmore>
             </div>
         </div>
@@ -178,13 +178,14 @@ export default {
             return {
                 wrapperHeight: '',
                 selected: 'tab-container1',
-                imgArray: [{
+                imgArray: [/*{
                     activityUrl: '/static/images/1.jpg'
                 }, {
                     activityUrl: '/static/images/2.jpg'
                 }, {
                     activityUrl: '/static/images/3.jpg'
-                }],
+                }*/],
+                imgArr:[],
                 todos: [{
                     "name": "人参",
                     "spec": "统货",
@@ -363,7 +364,7 @@ export default {
         mounted() {
             let _self = this;
 
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 73;
 
             function startmarquee(lh, speed, delay) {
                 var count = 1;
@@ -434,7 +435,7 @@ export default {
 }
 
 .swipe_height {
-    height: 12rem;
+    height: 13rem;
 }
 
 .swipe_height img {
@@ -667,7 +668,7 @@ export default {
 .bg_white .list_content .cell_class .list_font {
     font-size: 1.1rem;
     text-align: center;
-    width: 20%;
+    width: 30%;
     height: 30px;
     line-height: 30px;
     word-break: keep-all;
@@ -675,7 +676,15 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
+.bg_white .list_content .cell_class .list_myimage{
+    width:20%;
+    font-size: 1.1rem;
+    text-align: center;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .bg_white .list_content .cell_class .list_image {
     font-size: 1.1rem;
     text-align: center;
@@ -685,7 +694,9 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
+.bg_white .list_content .cell_class .list_button{
+    width:25%;
+}
 .bg_white .list_content .cell_class .list_image img {
     float: left;
     max-width: 49%;

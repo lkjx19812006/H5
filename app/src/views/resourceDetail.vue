@@ -1,12 +1,14 @@
 <template>
     <div class="resource_detail">
-        <myHeader :param="param"></myHeader>
-        <mt-loadmore>
-            <div class="" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <myHeader :param="param"  v-show="!my_param.show"></myHeader>
+        <div  v-show="!my_param.show">
+        
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+             <mt-loadmore>
                 <div class="swipe_height" v-if="obj.image">
                     <swiper :options="swiperOption" class="swipe_height">
-                        <swiper-slide v-for="item in obj.image">
-                            <div class="img_content">
+                        <swiper-slide v-for="(item,index) in obj.image">
+                            <div class="img_content"  @click="popUp(index,obj.image)">
                                 <img v-bind:src="item">
                             </div>
                         </swiper-slide>
@@ -36,16 +38,20 @@
                         <p>卖点：<span>{{obj.description}}</span></p>
                     </div>
                 </div>
-        </mt-loadmore>
-        <div class="fix_bottom">
-            <div class="attention">
-                <telAndAttention :obj='obj'></telAndAttention>
-            </div>
-            <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
-            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
-            <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
+            </mt-loadmore>
+                <div class="fix_bottom">
+                    <div class="attention">
+                        <telAndAttention :obj='obj'></telAndAttention>
+                    </div>
+                    <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
+                    <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
+                    <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
+                </div>
         </div>
+        
         </div>
+
+         <popUpBigImg  :param="my_param" v-show="my_param.show"></popUpBigImg>
     </div>
 </template>
 <script>
@@ -54,6 +60,7 @@ import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
 import telAndAttention from '../components/tools/telAndAttention'
 import filters from '../filters/filters'
+import popUpBigImg from '../components/tools/popUpBigImg'
 import {
     swiper,
     swiperSlide,
@@ -63,6 +70,11 @@ export default {
     data() {
             let _self = this;
             return {
+                my_param:{
+                    url:'',
+                    show:false,
+                    whole_height:''
+                },
                 param: {
                     name: '商品详情'
                 },
@@ -87,9 +99,15 @@ export default {
             swiper,
             swiperSlide,
             telAndAttention,
-            myHeader
+            myHeader,
+            popUpBigImg
         },
         methods: {
+            popUp(index,imgArr){
+                 this.my_param.url = imgArr;
+                 this.my_param.show = !this.my_param.show;
+                 this.my_param.whole_height = document.documentElement.clientHeight;
+            },
             refurbish(id) {
                 let _self = this;
                 common.$emit('show-load');
@@ -170,10 +188,15 @@ export default {
             var id = _self.$route.params.sourceId;
             _self.id = id;
             _self.refurbish(id);
+            common.$on('formPopUpBack',function(item){
+                
+            })
             common.$on('resourceDetail', function(item) {
                 _self.refurbish(item);
                 _self.obj = {};
+                _self.my_param.show = !_self.my_param.show;
             })
+            
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -195,14 +218,14 @@ export default {
 
 .resource_detail .swipe_height {
     height: 16rem;
-    max-height: 160px;
+    max-height: 180px;
     position: relative;
 }
 
 .resource_detail .swipe_height .img_content {
     float: left;
     width: 100%;
-    height: 160px;
+    height: 180px;
 }
 
 .resource_detail .swipe_height img {

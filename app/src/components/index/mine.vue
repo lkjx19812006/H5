@@ -51,19 +51,19 @@ export default {
                 entrance: [{
                     name: '待确认',
                     router: 'myOrder',
-                    img_src: '/static/icons/All-orders.png'
+                    img_src: '/static/images/All-orders.png'
                 }, {
                     name: '待付款',
                     router: '',
-                    img_src: '/static/icons/Pending-payment.png'
+                    img_src: '/static/images/Pending-payment.png'
                 }, {
                     name: '待发货',
                     router: '',
-                    img_src: '/static/icons/To-be-shipped.png'
+                    img_src: '/static/icons/out-goods.png'
                 }, {
                     name: '待收货',
                     router: '',
-                    img_src: '/static/icons/Receipt-of-goods.png'
+                    img_src: '/static/icons/receipt.png'
                 }],
                 my_list: [{ //         
                     name: '我的药款',
