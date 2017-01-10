@@ -46,6 +46,11 @@ export default {
             var id = _self.$route.params.sourceId;
             _self.getAddress();
             _self.gethttp(id);
+             common.$on('clearAddress', function(item) {
+                if(item.id==_self.person.id){
+                     _self.person={};
+                }
+            });
             common.$on('orderConfirm', function(item) {
                 _self.getAddress();
                 _self.gethttp(item);

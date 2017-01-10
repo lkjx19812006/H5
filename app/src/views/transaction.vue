@@ -151,12 +151,6 @@ export default {
     }
 }
 
-.page-loadmore-wrapper {
-    margin-top: -1px;
-    overflow: scroll;
-    padding-bottom: 10px;
-    width: 100%;
-}
 
 .mint-load {
     background: #fff;

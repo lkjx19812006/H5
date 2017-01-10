@@ -8,6 +8,7 @@ Vue.filter('timeFormat', function(val){
     });
 
 Vue.filter('timeDays',function(due,pub){
+        let days='7';
         if(due)due=due.split(' ')[0];
         if(pub)pub=pub.split(' ')[0];
             if(due)due = due.replace(/-/g, '/');
@@ -16,7 +17,7 @@ Vue.filter('timeDays',function(due,pub){
                 var duedateDate = new Date(due);
                 var pubdateDate = new Date(pub);
                 var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                 days = Math.floor(dateValue / (24 * 3600 * 1000));
             }else{
                 days="7";
             }

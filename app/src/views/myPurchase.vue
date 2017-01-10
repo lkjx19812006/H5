@@ -243,6 +243,7 @@ export default {
                         _self.todos.splice(0, _self.todos.length);
                     }
                     let result = suc.data.biz_result.list;
+                    console.log(result);
                     if (suc.data.code == '1c01') {
                         for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);

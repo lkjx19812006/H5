@@ -1,7 +1,7 @@
 <template>
     <div class="my_order_detail">
         <!--  <myHeader :param="my_header"></myHeader> -->
-        <mt-header :title="todo.my_title" fixed='true'>
+        <mt-header :title="todo.my_title" :fixed="show">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
@@ -51,7 +51,7 @@
         </div>
         <div class="footer">
             <p @click="call()">联系我们</p>
-            <p class="pay-money" v-if="todo.orderStatus == 20" @click="prompt('支付')">立即付款</p>
+            <p class="pay-money" v-if="todo.orderStatus == 20&&todo.type == 0" @click="prompt('支付')">立即付款</p>
         </div>
     </div>
 </template>
@@ -63,6 +63,7 @@ export default {
     data() {
             let _self = this;
             return {
+                show:true,
                 todo: {
                     my_title: '采购订单'
                 },
