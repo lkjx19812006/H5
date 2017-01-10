@@ -117,8 +117,8 @@
                                 <div class="mint-cell cell_class">
                                     <div class="mint-cell-wrapper cell_class" v-for="todo in supplyList">
                                         <div class="list_image">
-                                            <img src="/static/images/bao.png" class="first_image">
-                                            <img src="/static/icons/sample.png">
+                                            <img src="/static/images/bao.png" class="first_image" v-if="todo.especial == 1 && todo.type == 1">
+                                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
                                         </div>
                                         <div class="list_myimage">{{todo.breedName}}</div>
                                         <!-- <div class="list_font">{{todo.spec}}</div> -->
@@ -146,7 +146,8 @@
                                 <div class="mint-cell cell_class">
                                     <div class="mint-cell-wrapper cell_class" v-for="todo in begBuyList">
                                         <div class="list_image">
-                                            <img src="/static/icons/impatient.png" class="first_image">
+                                            <img src="/static/icons/impatient.png" class="first_image" v-if="todo.especial == 1 && todo.type == 0">
+                                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
                                         </div>
                                         <div class="list_myimage">{{todo.breedName}}</div>
                                         <!-- <div class="list_font">{{todo.spec}}</div> -->
@@ -688,6 +689,7 @@ export default {
     font-size: 1.1rem;
     text-align: center;
     width: 10%;
+    margin-left: 2px;
     word-break: keep-all;
     white-space: nowrap;
     overflow: hidden;

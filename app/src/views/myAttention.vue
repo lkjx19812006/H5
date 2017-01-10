@@ -12,7 +12,11 @@
                             <img v-bind:src="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div><img src="/static/images/bao.png"><img src="/static/images/zheng.png">{{todo.breedName}}</div>
+                                    <div>
+                                        <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
+                                        {{todo.breedName}}
+                                    </div>
                                     <p class="spec">规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                     <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
@@ -29,7 +33,11 @@
                             <div class="center">
                                 <img :src="todo.cFlagsPath"  class="flag">
                                 <div class="title">
-                                    <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
+                                    <div>
+                                        <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
+                                        <span>{{todo.breedName}}</span>
+                                    </div>
                                     <p>发布时间：{{todo.pubdate | timeFormat}}</p>
                                 </div>
                                 <div class="detail">
