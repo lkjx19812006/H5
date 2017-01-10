@@ -9,12 +9,12 @@
                 </div>
             </router-link>
         </mt-header>
-        <div class="whole">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <div class="whole" >
+            <div class="page-loadmore-wrapper" ref="wrapper"  :style="{ height: wrapperHeight + 'px' }" >
                 <mt-loadmore>
-                    <div class="content">
+                    <div class="content" >
                         <div class="swipe_height">
-                            <mt-swipe :auto="4000" :prevent="true" > 
+                            <mt-swipe :auto="4000" :prevent="false" > 
                                 <mt-swipe-item v-for="item in imgArray">                                   
                                        <img v-bind:src="item.activityUrl">              
                                 </mt-swipe-item>
@@ -58,10 +58,11 @@
                                     <p>更多</p><img src="/static/images/right.png">
                                 </router-link>
                             </div>
-                            <mt-swipe :auto="4000" :showIndicators="false" :prevent="true">
+                            
+                            <mt-swipe :auto="4000" :showIndicators="false" :prevent="false">
                                 <mt-swipe-item v-for="(todo,index) in drugGuidePrice" v-if="index%2==0">
-                                    <div class="drug_price_box">
-                                        <div class="drug_price_swipe">
+                                    <div class="drug_price_box" @click="jump('marketQuotation')">
+                                        <div class="drug_price_swipe" >
                                             <div class="drug_price_swipe_left">
                                                 <p class="price_swiper_name">{{todo.name}}</p>
                                                 <div class="price_swiper_div">
@@ -101,6 +102,7 @@
                                     </div>
                                 </mt-swipe-item>
                             </mt-swipe>
+
                         </div>
                         <div class="bg_white">
                             <div>
@@ -116,7 +118,7 @@
                                     <div class="mint-cell-wrapper cell_class" v-for="todo in supplyList">
                                         <div class="list_image">
                                             <img src="/static/images/bao.png" class="first_image">
-                                            <img src="/static/images/zheng.png">
+                                            <img src="/static/icons/sample.png">
                                         </div>
                                         <div class="list_myimage">{{todo.breedName}}</div>
                                         <!-- <div class="list_font">{{todo.spec}}</div> -->

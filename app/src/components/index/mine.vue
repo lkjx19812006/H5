@@ -51,11 +51,11 @@ export default {
                 entrance: [{
                     name: '待确认',
                     router: 'myOrder',
-                    img_src: '/static/icons/All-orders.png'
+                    img_src: '/static/images/All-orders.png'
                 }, {
                     name: '待付款',
                     router: '',
-                    img_src: '/static/icons/Pending-payment.png'
+                    img_src: '/static/images/Pending-payment.png'
                 }, {
                     name: '待发货',
                     router: '',

@@ -112,16 +112,9 @@ common.$on('message', message => {
     });
 })
 
-/*common.$on('confirm', (confirmButtonText, cancelButtonText, message, title) => {
-    MessageBox({
-        showCancelButton: true,
-        confirmButtonText: confirmButtonText,
-        cancelButtonText: cancelButtonText,
-        message: message,
-        title: title
-    });
-   confirmButtonText, cancelButtonText, 
-})*/
+
+common.$on('touch',)
+
 common.$on('confirm',(obj) => {
     MessageBox.confirm(obj.message, obj.title).then(action =>{
            obj.ensure();

@@ -124,6 +124,7 @@ export default {
             },
             jump(id){
                 common.$emit('resourceDetail', id);
+                common.$emit('formPopUpBack',id);
                 this.$router.push('resourceDetail/' + id);
             },
             jumpNeed(id){

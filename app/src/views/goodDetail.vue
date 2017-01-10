@@ -5,14 +5,18 @@
                 <mt-button icon="back"></mt-button>
             </router-link>
         </mt-header> -->
-      <myHeader :param = "param"></myHeader>
+      <myHeader :param = "param"  v-show="!my_param.show"></myHeader>
+
+       <div  v-show="!my_param.show">
     <mt-loadmore>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-       <div class="swipe_height" >
-            <mt-swipe :auto="4000" :prevent="true" :show-indicators="false">        
-              <mt-swipe-item v-for="(item,index) in imgArray" >
-                   <img :src="item">
-                   <div class="index"><span>{{index+1}}</span>/{{arrLength}}</div>
+       <div class="swipe_height">
+            <mt-swipe :auto="4000"  :show-indicators="false">        
+              <mt-swipe-item v-for="(item,index) in imgArray">
+                <div  @click="popUp(index,imgArray)">
+                    <img :src="item">
+                    <div class="index"><span>{{index+1}}</span>/{{arrLength}}</div>
+                </div>           
               </mt-swipe-item>   
             </mt-swipe>
         </div>
@@ -52,7 +56,10 @@
         </div> 
 
        </div> 
-     </mt-loadmore>  
+     </mt-loadmore> 
+     </div> 
+
+     <popUpBigImg  :param="my_param" v-show="my_param.show"></popUpBigImg>
   </div>
 </template>
 
@@ -60,9 +67,15 @@
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
+import popUpBigImg from '../components/tools/popUpBigImg'
 export default {
     data() {
             return {
+                my_param:{
+                    url:'',
+                    show:false,
+                    whole_height:''
+                },
                 param:{
                     name:'商品详情',
                     show:true,
@@ -92,9 +105,15 @@ export default {
             }
         },
         components: {
-            myHeader
+            myHeader,
+            popUpBigImg
         },
         methods:{
+             popUp(index,imgArr){
+                 this.my_param.url = imgArr;
+                 this.my_param.show = !this.my_param.show;
+                 this.my_param.whole_height = document.documentElement.clientHeight;
+            },
              getHttp(id){
                      let _self = this;
                      //common.$emit('show-load');
@@ -160,6 +179,7 @@ export default {
                   _self.getHttp(item);
                    _self.param.reviseRouter = '/reviseResource/' + item;
                    _self.param.item = item;
+                   _self.my_param.show = !_self.my_param.show;
             });
         },
         mounted() {

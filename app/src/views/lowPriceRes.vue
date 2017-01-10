@@ -11,7 +11,7 @@
                             <img v-bind:src="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div><img src="/static/images/bao.png"><img src="/static/images/zheng.png">{{todo.breedName}}</div>
+                                    <div><img src="/static/images/bao.png"><img src="/static/icons/sample.png">{{todo.breedName}}</div>
                                     <p class="spec">规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                     <p class="time_font">发布时间:<span>{{todo.pubdate | timeFormat}}</span></p>
