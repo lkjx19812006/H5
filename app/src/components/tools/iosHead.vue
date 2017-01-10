@@ -26,29 +26,23 @@ export default {
         },
         methods: {
             jumpBack: function() {
-                if(this.param.appBack)window.back();
+                if(this.param.appBack){
+                  window.goback();}
                 else{
                     window.history.go(-1);
                 }
             },
         },
         created() {
-            let _self = this;
-            let ua = navigator.userAgent.toLowerCase();
-            if (/iphone|ipad|ipod/.test(ua)) {
-                _self.type = 'ios';
-            } else if (/android/.test(ua)) {
-                _self.type = 'android';
-            } else {
-                _self.type = '';
-            }
+         
+          
         },
         mounted() {
             let _self = this;
             setTimeout(function() {
-                window.back = function() {
+                window.goback = function() {
                     try {
-                        if (_self.type == 'ios') {
+                        if (_self.param.appBack) {
                             window.webkit.messageHandlers.AppModel.postMessage({
                                 body: 'iosResult'
                             });

@@ -78,6 +78,9 @@ export default {
            let from = _self.$route.params.from;
            if(from=='ios') {
                _self.param.type='ios'; 
+               _self.param.appBack=true;
+           }else{
+             _self.param.appBack=false;
            }
         },
         components: {
