@@ -2,37 +2,42 @@
     <div class="content need_detail">
         <myHeader :param="param"></myHeader>
         <div>
-            <div class="center">
-                <div class="title">
-                    <p>{{obj.breedName}}</p>
-                </div>
-                <div class="detail">
-                    <p>规格：<span>{{obj.spec}}</span></p>
-                    <p class="right">发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
-                </div>
-                <div class="detail">
-                    <p>产地：<span>{{obj.location}}</span></p>
-                    <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}天</span></p>
-                </div class="detail">
-                <div class="detail">
-                    <p>需求数量：<span>{{obj.number}}{{obj.unit}}</span></p>
-                </div>
-                <div class="detail">
-                    <p>已报价：<span class="orange_font">{{obj.offer}}</span>人</p>
-                </div>
-                <div class="detail">
-                    <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
-                </div>
-                <div class="detail">
-                    <p>备注：<span>{{obj.description}}</span></p>
-                </div>
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                    <div class="center">
+                        <div class="title">
+                            <p>{{obj.breedName}}</p>
+                        </div>
+                        <div class="detail">
+                            <p>规格：<span>{{obj.spec}}</span></p>
+                            <p class="right">发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
+                        </div>
+                        <div class="detail">
+                            <p>产地：<span>{{obj.location}}</span></p>
+                            <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}天</span></p>
+                        </div class="detail">
+                        <div class="detail">
+                            <p>需求数量：<span>{{obj.number}}{{obj.unit}}</span></p>
+                        </div>
+                        <div class="detail">
+                            <p>已报价：<span class="orange_font">{{obj.offer}}</span>人</p>
+                        </div>
+                        <div class="detail">
+                            <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
+                        </div>
+                        <div class="detail">
+                            <p>备注：<span>{{obj.description}}</span></p>
+                        </div>
+                    </div>
+                </mt-loadmore>
+               
             </div>
-            <div class="fix_bottom">
-                <div class="attention">
-                    <telAndAttention :obj='obj'></telAndAttention>
+             <div class="fix_bottom">
+                    <div class="attention">
+                        <telAndAttention :obj='obj'></telAndAttention>
+                    </div>
+                    <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="loadApp()">立即报价</button>
                 </div>
-                <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="loadApp()">立即报价</button>
-            </div>
         </div>
     </div>
 </template>
@@ -45,6 +50,7 @@ import telAndAttention from '../components/tools/telAndAttention'
 export default {
     data() {
             return {
+                wrapperHeight: '',
                 id: '',
                 obj: {},
                 param: {
@@ -101,6 +107,9 @@ export default {
                 this.$router.go(-1);
             }
         },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        },
         created() {
             let _self = this;
             let id = _self.$route.params.needId;
@@ -109,12 +118,6 @@ export default {
             common.$on("needToDetail", function(item) {
                 _self.getHttp(item);
             });
-            /*common.$on('post-need-detail', function(item) {
-                _self.getHttp(item);
-            });
-            common.$on('indexToNeeddetail', function(item) {
-                _self.getHttp(item);
-            });*/
         }
 
 

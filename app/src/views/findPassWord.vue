@@ -3,22 +3,8 @@
         <myHeader :param="myHeader"></myHeader>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore >
+                <mt-loadmore>
                     <ul class="fill_in">
-                        <!-- <li>
-                            <p>手机号：</p>
-                            <input type="text" placeholder="请输入手机号码" v-model="param.phone" />
-                        </li>
-                        <li>
-                            <p>验证码：</p>
-                            <input type="text" placeholder="请输入验证码" v-model="param.code" />
-                            <div id="identify_code">{{identify_code}}</div>
-                            <input v-bind:class="{ get_code: !buttonDisabled, 'get_code_nor': buttonDisabled }" id="get_code" v-on:click="getCode" :value="code" type="button">
-                        </li>
-                        <li>
-                            <p>新密码：</p>
-                            <input type="password" placeholder="请输入新密码" v-model="param.passWord" />
-                        </li> -->
                         <li>
                             <p><img src="/static/icons/my-phone.png"></p>
                             <input type="text" class='top_text' v-model="param.phone" placeholder="请输入手机号码">
@@ -26,23 +12,20 @@
                         <li>
                             <p><img src="/static/icons/my-password.png"></p>
                             <input type="password" class='top_text' v-model="param.code" placeholder="请输入验证码">
-                            <div  v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }" >
-                                 <p><input  :value="code" type="button" :disabled = 'buttonDisabled' v-on:click="getCode"></p>
+                            <div v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
+                                <p>
+                                    <input :value="code" type="button" :disabled='buttonDisabled' v-on:click="getCode">
+                                </p>
                             </div>
-                            
-                             
-                         
-                            
                         </li>
-                         <li>
+                        <li>
                             <p><img src="/static/icons/my-password.png"></p>
                             <input type="password" class='top_text' v-model="param.passWord" placeholder="请输入新密码">
                         </li>
-                        <li  v-on:click="confirm" class="confirm">
-                                下一步
+                        <li v-on:click="confirm" class="confirm">
+                            下一步
                         </li>
                     </ul>
-                    <!-- <div class="confirm" v-on:click="confirm">确定</div> -->
                 </mt-loadmore>
             </div>
         </div>
@@ -56,7 +39,7 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                buttonDisabled:false,
+                buttonDisabled: false,
                 wrapperHeight: '',
                 myHeader: {
                     name: '找回密码'
@@ -100,8 +83,7 @@ export default {
                     }
                 }, function(response) {
                     common.$emit('close-load');
-                    if (response.data.code == '1c01') {
-                    } else {
+                    if (response.data.code == '1c01') {} else {
                         common.$emit('message', response.data.msg);
                     }
                 }, function(err) {
@@ -134,11 +116,6 @@ export default {
                 }, function(response) {
                     common.$emit('close-load');
                     if (response.data.code == '1c01') {
-                        window.localStorage.KEY = response.data.biz_result.KEY;
-                        window.localStorage.SID = response.data.biz_result.SID;
-                        common.KEY = window.localStorage.KEY;
-                        common.SID = window.localStorage.SID;
-                        common.getDate();
                         common.$emit('message', response.data.msg);
                     } else {
                         common.$emit('message', response.data.msg);
@@ -150,102 +127,117 @@ export default {
             }
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
 <style scoped>
-.find_password .bg_white{
-   background-color: #F0F0F0;
+.find_password .bg_white {
+    background-color: #F0F0F0;
 }
-.find_password .bg_white .fill_in{
+
+.find_password .bg_white .fill_in {
     padding: 0 15px;
-    float:left;
-    width:100%;
+    float: left;
+    width: 100%;
 }
-.find_password .bg_white .fill_in li{
-   background:white;
-   float:left;
-   width:100%;
-   margin-top:1.5rem;
-   border-radius: 4px;
-   position: relative;
-   overflow: hidden;
+
+.find_password .bg_white .fill_in li {
+    background: white;
+    float: left;
+    width: 100%;
+    margin-top: 1.5rem;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
 }
-.find_password .bg_white .fill_in li p{
-   float:left;
-   height:4rem;
-   
+
+.find_password .bg_white .fill_in li p {
+    float: left;
+    height: 4rem;
 }
-.find_password .bg_white .fill_in li p img{
-   height:2rem;
-   margin:1rem 0 0 0.8rem;
+
+.find_password .bg_white .fill_in li p img {
+    height: 2rem;
+    margin: 1rem 0 0 0.8rem;
 }
-.find_password .bg_white .fill_in li  input{
-   float:left;
-   height:4rem;
-   line-height: 4rem;
-   border:none;
-   outline: none;
-   margin-left: 25px;
+
+.find_password .bg_white .fill_in li input {
+    float: left;
+    margin-top: 1rem;
+    height: 2rem;
+    line-height: 2rem;
+    border: none;
+    outline: none;
+    margin-left: 25px;
+    width: 125px;
 }
-.find_password .bg_white .fill_in .confirm{
+
+.find_password .bg_white .fill_in .confirm {
     background: #FA6705;
     color: white;
-    height:4rem;
+    height: 4rem;
     line-height: 4rem;
     text-align: center;
-
 }
+
 .find_password .bg_white .fill_in .my_code {
     float: right;
-    right:0;
-    width: 30%;
+    right: 0;
+    width: 35%;
     color: #FA6705;
     padding: 1rem 10px;
-    height:4rem;
-    text-align: center;   
+    height: 4rem;
+    text-align: center;
     line-height: 2rem;
     text-align: center;
 }
-.find_password .bg_white .fill_in .my_code>p{
+
+.find_password .bg_white .fill_in .my_code>p {
     border-left: 1px solid #333333;
-    height:2rem;
+    height: 2rem;
     text-align: center;
-    width:100%;
+    width: 100%;
 }
-.find_password .bg_white .fill_in .my_code>p input{
-    height:100%;
-    width:100%;
+
+.find_password .bg_white .fill_in .my_code>p input {
+    height: 100%;
+    width: 100%;
     padding: 0;
     margin-left: 10px;
     line-height: 2rem;
     background: white;
-
+    margin-top: 0;
 }
-.find_password .bg_white .fill_in .my_code_nor{
+
+.find_password .bg_white .fill_in .my_code_nor {
     float: right;
-    right:0;
-    width: 30%;
+    right: 0;
+    width: 33%;
     color: #CECEBF;
     padding: 1rem 10px;
-    height:4rem;
+    height: 4rem;
     text-align: center;
-    line-height: 2rem;  
-} 
-.find_password .bg_white .fill_in .my_code_nor input{
-     height:100%;
-     width:100%;
-     padding: 0;
-     margin-left: 10px;
-     line-height: 2rem;
-     background: white;
+    line-height: 2rem;
 }
-.find_password .bg_white .fill_in .my_code_nor>p{
+
+.find_password .bg_white .fill_in .my_code_nor input {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin-left: 10px;
+    line-height: 2rem;
+    background: white;
+    margin-top: 0;
+}
+
+.find_password .bg_white .fill_in .my_code_nor>p {
     border-left: 1px solid #333333;
-    height:2rem; 
-    width:100%;
+    height: 2rem;
+    width: 100%;
 }
+
+
 /*.find_password .fill_in {
     padding: 0 4.6%;
     margin-top: 1rem;

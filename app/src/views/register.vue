@@ -66,7 +66,7 @@ export default {
                 let _self = this;
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 if (checkPhone) {
-                    //common.$emit('message', checkPhone);
+                    common.$emit('message', checkPhone);
                 } else {
                     _self.buttonDisabled = true;
                     let wait = 60;
@@ -79,24 +79,26 @@ export default {
                             _self.buttonDisabled = false;
                         }
                     }, 1000);
-                }
-                common.$emit('show-load');
-                httpService.register(common.urlCommon + common.apiUrl.most, {
+
+                     httpService.register(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'userSmsService',
                     biz_method: 'getVervifyCode',
                     biz_param: {
                         mobile: _self.param.phone
                     }
                 }, function(response) {
-                    common.$emit('close-load');
+                   
                     if (response.data.code == '1c01') {
                     } else {
                         common.$emit('message', response.data.msg);
                     }
                 }, function(err) {
-                    common.$emit('close-load');
+                
                     common.$emit('message', err.data.msg);
                 })
+                }
+              
+               
             },
             register() {
                 var checkArr = [];
@@ -168,7 +170,7 @@ export default {
 }
 .register .bg_white .fill_in li p{
    float:left;
-   height:4rem;
+   height:40px;
    
 }
 .register .bg_white .fill_in li p img{
@@ -177,11 +179,14 @@ export default {
 }
 .register .bg_white .fill_in li  input{
    float:left;
-   height:4rem;
-   line-height: 4rem;
+   margin-top: 10px;
+   height:20px;
+   line-height: 20px;
    border:none;
    outline: none;
    margin-left: 25px;
+   max-width: 120px;
+   font-size: 14px;
 }
 .register .bg_white .fill_in .confirm{
     background: #FA6705;
@@ -193,10 +198,10 @@ export default {
 }
 .register .bg_white .fill_in .my_code {
     float: right;
-    right:0;
-    width: 30%;
+    margin-right:10px;
+    width: 33%;
     color: #FA6705;
-    padding: 1rem 10px;
+    padding: 1rem 0;
     height:4rem;
     text-align: center;   
     line-height: 2rem;
@@ -209,6 +214,7 @@ export default {
     width:100%;
 }
 .register .bg_white .fill_in .my_code>p input{
+    margin-top: 0;
     height:100%;
     width:100%;
     padding: 0;
@@ -220,7 +226,7 @@ export default {
 .register .bg_white .fill_in .my_code_nor{
     float: right;
     right:0;
-    width: 30%;
+    width: 33%;
     color: #CECEBF;
     padding: 1rem 10px;
     height:4rem;
@@ -234,6 +240,8 @@ export default {
      margin-left: 10px;
      line-height: 2rem;
      background: white;
+     margin-top: 0;
+     margin-right: 10px;
 }
 .register .bg_white .fill_in .my_code_nor>p{
     border-left: 1px solid #333333;

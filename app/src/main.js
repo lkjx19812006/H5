@@ -74,7 +74,7 @@ Vue.http.interceptors.push((request, next) => {
     console.log(response.status)
 
     if (response.status==403) {
-      // return router.push('/login');
+      return router.push('/login');
     }
 
     return response

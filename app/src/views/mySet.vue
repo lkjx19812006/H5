@@ -68,7 +68,6 @@ export default {
             myHeader
         },
         methods: {
-
             quit() {
                 common.customerId = '';
                 common.KEY = '';
@@ -80,7 +79,6 @@ export default {
                 window.localStorage.difTime = '';
                 common.$emit('clear_Information');
                 this.$router.push('/login');
-
             },
             getCustomerPhone() {
                 let _self = this;
@@ -110,7 +108,7 @@ export default {
             if (!common.servicePhone) this.getCustomerPhone();
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
         }
 
 }
@@ -118,6 +116,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+.page-loadmore-wrapper {
+    overflow-x: hidden;
+}
 .my_set .bg_white {
     background-color: #F0F0F0;
 

@@ -49,7 +49,7 @@ let common = new Vue({
     },
     methods: {
         addSID(url) {
-            if(this.SID){
+            if(this.SID&&this.SID!=undefined){
               return url + ';jsessionid=' + this.SID;  
           }else{
             return url;
@@ -103,6 +103,9 @@ common.$on('success', () => {
 
 
 common.$on('message', message => {
+    if(!message){
+        return;
+    }
     Toast({
         message: message,
         duration: 2000
