@@ -26,16 +26,29 @@ export default {
         },
         methods: {
             jumpBack: function() {
-                if(this.param.appBack){
-                  window.goback();}
-                else{
+                let _slef=this;
+                if (_slef.param.appBack) {
+                    // window.goback();
+                    try {
+                        if (_slef.param.appBack) {
+                            window.webkit.messageHandlers.AppModel.postMessage({
+                                body: 'iosResult'
+                            });
+                        } else {
+                            window.Android.back();
+                        }
+                    } catch (e) {
+                        window.history.go(-1);
+                    }
+
+                } else {
                     window.history.go(-1);
                 }
             },
         },
         created() {
-         
-          
+
+
         },
         mounted() {
             let _self = this;
