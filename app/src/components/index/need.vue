@@ -15,7 +15,11 @@
                             <div class="center">
                                 <img :src="todo.cFlagsPath" class="flag">
                                 <div class="title">
-                                    <div><img src="/static/icons/impatient.png"><span>{{todo.breedName}}</span></div>
+                                    <div>
+                                        <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
+                                        <span>{{todo.breedName}}</span>
+                                    </div>
                                     <p>发布时间：{{todo.pubdate | timeFormat}}</p>
                                 </div>
                                 

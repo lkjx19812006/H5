@@ -15,7 +15,7 @@
               <mt-swipe-item v-for="(item,index) in imgArray">
                 <div  @click="popUp(index,imgArray)">
                     <img :src="item">
-                    <div class="index"><span>{{index+1}}</span>/{{arrLength}}</div>
+                    <div class="index"><span>{{index + 1}}</span>/{{imgArray.length}}</div>
                 </div>           
               </mt-swipe-item>   
             </mt-swipe>
@@ -100,8 +100,20 @@ export default {
                     price:'',
                     id:'',
                     onSell:''
-
+                },
+                number:0,
+                swiperOption: {
+                    name: 'currentSwiper',
+                    autoplay: 3000,
+                    setWrapperSize: true,
+                    debugger: true,
+                    loop: true,
+                    autoplayDisableOnInteraction: false,
+                    onTransitionStart: function(swiper) {
+                        _self.number = parseInt(swiper.realIndex) + 1;
+                    }
                 }
+
             }
         },
         components: {
@@ -153,9 +165,11 @@ export default {
                                  console.log(imageArr[item]);
                                  _self.imgArray[item].url = imageArr[item];
                             }*/
-                            for(var i = 0; i < imageArr.length; i ++){
+                            /*for(var i = 0; i < imageArr.length; i ++){
                                   _self.imgArray.push(imageArr[i]);
-                            }
+
+                            }*/
+                            _self.imgArray = result.image;
                             _self.arrLength = imageArr.length;
                         }, function(err) {
                             
@@ -179,7 +193,7 @@ export default {
                   _self.getHttp(item);
                    _self.param.reviseRouter = '/reviseResource/' + item;
                    _self.param.item = item;
-                   _self.my_param.show = !_self.my_param.show;
+                   _self.my_param.show = false;
             });
         },
         mounted() {

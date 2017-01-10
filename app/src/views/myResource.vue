@@ -17,7 +17,11 @@
                             <img v-bind:src="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div><img src="/static/icons/sample.png">{{todo.breedName}}</div>
+                                    <div>
+                                        <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
+                                        {{todo.breedName}}
+                                    </div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                     <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->

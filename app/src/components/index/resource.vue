@@ -14,13 +14,17 @@
                             <img :src="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div><img src="/static/images/bao.png"><img src="/static/images/zheng.png">{{todo.breedName}}</div>
+                                    <div>
+                                        <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
+                                        <img src="/static/images/zheng.png" v-if="todo.sampling == 1 && todo.type == 1">
+                                        {{todo.breedName}}
+                                    </div>
                                     <p class="spec">规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                     <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
                                 </div>
                                 <div class="res_content_right">
-                                    <p>{{todo.price}}<span>{{todo.unit}}</span></p>
+                                    <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>
                                     <button class="mint-button mint-button--primary mint-button--small" >立即购买</button>
                                 </div>
                             </div>
@@ -410,7 +414,7 @@ export default {
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
-    max-width: 80px;
+    max-width: 100px;
     height: 8.1rem;
     margin: 0;
     right: 10px;
