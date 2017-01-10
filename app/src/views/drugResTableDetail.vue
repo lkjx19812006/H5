@@ -16,8 +16,9 @@
                         <mt-tab-container-item id="1">
                             <div class="information">
                                 <div class="drug_name">
+                                    <div class="main_name">{{obj.herbName}}</div>
                                     <div class="name_type">
-                                        <p class="what_name">名称：</p>
+                                        <p class="what_name">别名：</p>
                                         <p class="answer_name" v-html="obj.alias"></p>
                                     </div>
                                     <div class="name_type">
@@ -170,7 +171,11 @@ export default {
     padding: 1.9199rem 0rem;
     margin-left: 1.27995rem;
 }
-
+.drug_table_detail .drug_name  .main_name{
+    font-size: 2.4rem;
+    color:black;
+    margin-bottom: 1rem;
+}
 .drug_table_detail .drug_name .name_type {
     word-break: break-all;
     display: flex;
