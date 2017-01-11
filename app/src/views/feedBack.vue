@@ -20,8 +20,9 @@
                     </div>
                 </mt-loadmore>
             </div>
-            <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
+            
         </div>
+        <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
     </div>
 </template>
 <script>

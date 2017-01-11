@@ -15,7 +15,7 @@
                         <li>
                             <p class="name name_smart_size">姓名</p>
                             <p class="name_content">
-                                <input type="text" :placeholder="arr.name" v-model="arr.name" maxlength="5">
+                                <input type="text" :placeholder="arr.name" v-model="arr.name" maxlength="6">
                             </p>
                         </li>
                         <li @click="open('picker')">
@@ -58,13 +58,13 @@
                         <li>
                             <p class="name  name_smart_size">公司</p>
                             <p class="name_content">
-                                <input type="text" :placeholder="arr.company" v-model="arr.company">
+                                <input type="text" :placeholder="arr.company" v-model="arr.company" maxlength="16">
                             </p>
                         </li>
                         <li>
                             <p class="name  name_smart_size">公司简称</p>
                             <p class="name_content">
-                                <input type="text" :placeholder="arr.companyShort" v-model='arr.companyShort'>
+                                <input type="text" :placeholder="arr.companyShort" v-model='arr.companyShort' maxlength="10">
                             </p>
                         </li>
                         <li>
@@ -81,13 +81,13 @@
                         <li>
                             <p class="name  name_big_size">主营品类</p>
                             <p class="name_content">
-                                <input type="text" :placeholder="arr.bizMain" v-model="arr.bizMain">
+                                <input type="text" :placeholder="arr.bizMain" v-model="arr.bizMain" maxlength="16">
                             </p>
                         </li>
                         <li>
                             <p class="name  name_big_size">开票信息</p>
                             <p class="name_content">
-                                <input type="text" :placeholder="arr.invoice" v-model="arr.invoice">
+                                <input type="text" :placeholder="arr.invoice" v-model="arr.invoice" maxlength="16">
                             </p>
                         </li>
                         <li @click="jumpCompany">
@@ -111,6 +111,7 @@ import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
 import imageUpload from '../components/tools/imageUpload'
+import validation from '../validation/validation.js'
 
 export default {
 
@@ -129,7 +130,7 @@ export default {
                 param: {
                     name: 'intention',
                     index: 0,
-                    url: ''
+                    header_url:true
                 },
                 birthday: '',
                 pickerValue: '',
@@ -252,6 +253,7 @@ export default {
                 this.$router.push("certification");
             },
             jumpCompany() {
+                common.$emit("companyAuthentication","refurbish");
                 this.$router.push("companyAuthentication");
             },
             jump(router) {
@@ -260,6 +262,7 @@ export default {
 
             getUrl(param) {
                 this.arr.url = param.url;
+                this.param.header_url = false;
             },
             open(picker) {
                 this.$refs[picker].open();
@@ -301,7 +304,12 @@ export default {
 
             upData() {
                 let _self = this;
-
+                let checkArr = [];
+                let checkPhone = validation.checkPhoneTrue(_self.arr.phone);
+                if(checkPhone){
+                    common.$emit('message',checkPhone);
+                    return;
+                }
                 common.$emit("confirm", {
                     message: '确定修改账户信息',
                     title: '提示',
@@ -312,8 +320,7 @@ export default {
             confirmUpData() {
                 let _self = this;
                 let birthday = _self.getTimeStamp(_self.arr.birthday);
-                console.log(birthday);
-               
+                //console.log(birthday);
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -422,14 +429,13 @@ textarea {
     width: 5.1198rem;
     height: 5.1198rem;
     border-radius: 50%;
-    background: #FED77A;
+    background: #fff;
     right: 10%;
     margin-top: 1.0666rem;
     overflow: hidden;
     position: absolute;
-    z-index: 10000000;
+    z-index: 20000000;
 }
-
 .account_overview_finish .basic_data,
 .company_data {
     width: 100%;

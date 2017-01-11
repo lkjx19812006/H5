@@ -26,8 +26,8 @@ export default {
 </script>
 <style scoped>
 .header-photo img{
-  width:5.1198rem;
-  height:5.1198rem;
-  border-radius: 50%; 
+  width:100%;
+  /*height:5.1198rem;*/
+  /*border-radius: 50%; */
 }
 </style>

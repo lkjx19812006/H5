@@ -19,12 +19,6 @@
             <li @click="selectPlace">
                 <p>省市区(县)</p>
                 <p class="selectPlace">
-                    <!-- <span v-model="obj.province">{{obj.province}}</span>
-                  <span v-model="obj.city">{{obj.city}}</span>
-                  <span v-model="obj.area">{{obj.area}}</span> -->
-                    <!-- <input type="text" v-model="obj.province" />
-                  <input type="text" v-model="obj.city" />
-                  <input type="text" v-model="obj.area" /> -->
                     {{ obj.addressProvince }},{{ obj.addressCity }},{{obj.addressDistrict}}
                 </p>
                 <img src="/static/images/right-arrow.png">
@@ -314,9 +308,10 @@ export default {
     border: none;
     outline: none;
     font-size: 1.2rem;
-    height: 4.2rem;
+    height: 2.2rem;
     color: #666666;
-    line-height: 4.4rem;
+    margin-top: 1rem;
+    line-height: 2.2rem;
 }
 
 .address_revise ul li .selectPlace {

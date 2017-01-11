@@ -43,23 +43,18 @@
 
                 <div class="other_item">
                       <p>已通过审核照片</p>
-                      <div><!-- <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload> --></div>
+                      <div class="pass_image"><img :src="obj.url"></div>
                 </div>
 
              </div>
-                 
-              
-              
                 
-      
-                
-       <div class="common_problem">
-          <div class="common_problem_inner">
-                <img src="/static/images/common-problem.png">
-                <p><span>认证常见问题</span></p>
-          </div>    
-       </div>
-        <div class="confirm" @click="confirm">申请认证</div>
+                 <div class="common_problem">
+                    <div class="common_problem_inner">
+                          <img src="/static/images/common-problem.png">
+                          <p><span>认证常见问题</span></p>
+                    </div>    
+                 </div>
+                  <div class="confirm" @click="confirm">申请认证</div>
        </div> 
   </div>
 </template>
@@ -80,7 +75,9 @@ export default {
                 obj:{
                     gender:'',
                     phone:'',
-                    name:''
+                    name:'',
+                    url:'',
+                    authenType:''
                     
                 },
                 todos:[{
@@ -114,8 +111,6 @@ export default {
         methods: {
             getHttp(){
                  let _self = this;
-
-
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
@@ -124,15 +119,36 @@ export default {
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.queryUserInfo(url,body,function(suc){
                      common.$emit('close-load');
-                     console.log(suc.data.biz_result.gender);
+                     //console.log(suc.data.biz_result.gender);
                     _self.obj.name = suc.data.biz_result.name;
                     _self.obj.gender = suc.data.biz_result.gender;
-                    _self.obj.phone = suc.data.biz_result.phone;
-
-                      
+                    _self.obj.phone = suc.data.biz_result.phone;                   
                   },function(err){
                     common.$emit('close-load');
                   })
+            },
+            inquiry(){
+                let _self = this;
+                common.$emit('show-load');
+                let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                let body={biz_module:'userService',biz_method:'queryUserAuthenList',version:1,time:0,sign:'',biz_param:{
+                    type:0
+                }};
+                console.log(common.difTime);
+                body.time=Date.parse(new Date())+parseInt(common.difTime);
+                body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                httpService.queryUserInfo(url,body,function(suc){
+                   common.$emit('close-load');
+                   if(suc.data.code == '1c01'){
+                        _self.obj.url = suc.data.biz_result.list[0];
+                        _self.obj.authenType = suc.data.biz_result.authenType;
+                   }else{
+                       common.$emit('message',suc.data.msg)
+                   }                     
+                },function(err){
+                  common.$emit('close-load');
+                  common.$emit('message',err.data.msg)
+                })
             },
             getUrl(param){
                 let _self = this;
@@ -140,18 +156,10 @@ export default {
                      _self.arr[0] = param.url;
                 }else if(param.index == 1){
                      _self.arr[1] = param.url;
-                }
-                 
-                
+                }   
             },
-            confirm(){
+            referTo(){
                   let _self = this;
-                  for(var i = 0; i < _self.arr.length; i++){
-                      if (_self.arr[i] == '') {
-                        common.$emit('message','请上传实名认证凭证');
-                        return;
-                      }
-                  }
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'userService',biz_method:'submitAuthen',version:1,time:0,sign:'',biz_param:{
@@ -169,36 +177,41 @@ export default {
                     common.$emit('close-load');
                   })
 
+            },
+            confirm(){
+                  let _self = this;
+                  if(_self.obj.authenType != 0){
+                      switch (_self.obj.authenType) {
+                          case 1:
+                              common.$emit("message", '已申请认证，正在审核中');
+                              break;
+                          case 2:
+                              common.$emit("message", '已通过认证');
+                              break;
+                          default:
+                              break;    
+                      } 
+                  }else{
+                      for(var i = 0; i < _self.arr.length; i++){
+                        if (_self.arr[i] == '') {
+                          common.$emit('message','请上传实名认证凭证');
+                          return;
+                        }
+                       }
+                       _self.referTo();
+                  }                    
             }
-            
         },
         
         created() {
           let _self = this;
-          common.$emit('show-load');
-          let url=common.addSID(common.urlCommon+common.apiUrl.most);
-          let body={biz_module:'userService',biz_method:'queryUserInfo',version:1,time:0,sign:'',biz_param:{}};
-          console.log(common.difTime);
-          body.time=Date.parse(new Date())+parseInt(common.difTime);
-          body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
-          httpService.queryUserInfo(url,body,function(suc){
-             common.$emit('close-load');
-             console.log(suc.data.biz_result.gender);
-            _self.obj.name = suc.data.biz_result.name;
-            _self.obj.gender = suc.data.biz_result.gender;
-            _self.obj.phone = suc.data.biz_result.phone;
-              
-          },function(err){
-            common.$emit('close-load');
-          })
-
+          _self.getHttp();
+          _self.inquiry();
             common.$on("post-my-info", function (obj){
                 console.log(obj.name)
                 _self.obj.name = obj.name;
                 _self.obj.phone = obj.phone;
                 _self.obj.gender = obj.gender;
-
-
             })
         },
         mounted() {
@@ -216,10 +229,10 @@ export default {
     padding: 1.5rem 0;
     border-top: 1px solid #BFBFBF;
     border-bottom: 1px solid #BFBFBF;
-    min-height: 17.9rem;
+    min-height: 18.9rem;
     margin: 1rem 0 0 0;
 }
-.certification .other_item{
+.certification .other_item .pass_image{
     
 }
 .certification .other_item p{
@@ -236,6 +249,10 @@ export default {
     background:#E1DDDA;
     margin:1.5rem 0 0 15.625%;
 }
+.certification .other_item  div img{
+   width:100%;
+   height:100%;
+}
 .certification .main{
     padding:0 1.5rem;
     height:51rem;
@@ -249,6 +266,7 @@ export default {
     font-size: 1.2rem;
     color:#313232;
 }
+
 .certification .main .personal_info img{
     height:1.5rem;
 }
@@ -294,11 +312,12 @@ export default {
     margin-bottom: 1.5rem;
 }
 .certification .first_item>div .photo{
-    height:9rem;
+    height:11rem;
     width:100%;
-    background:#E1DDDA;
+    background:#fff;
     overflow: hidden;
 } 
+
 .certification .first_item>div .point{
     font-size: 1rem;
     margin-top:1rem;

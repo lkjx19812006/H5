@@ -220,6 +220,7 @@ export default {
             }
         },
         created() {
+            
             let _self = this;
             if (common.SID) _self.getHttp();
             if (common.SID) _self.salesmanData();
@@ -250,7 +251,13 @@ export default {
 .mine {
     background: #F0F0F0;
 }
-
+/*.mine .pointOut{
+    width:100%;
+    height:15rem;
+    background:red;
+    position: absolute;
+    bottom: -50px;
+}*/
 .mine .entrance {
     display: flex;
     flex-direction: row;

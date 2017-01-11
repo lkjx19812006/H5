@@ -89,6 +89,7 @@ export default {
 .head .title_right {
     float: left;
     width: 15%;
+    height:50px;
     
 }
 

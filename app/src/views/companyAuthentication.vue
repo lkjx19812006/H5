@@ -1,15 +1,11 @@
 <template>
-  <div class="company_authentication">
-
-                
+  <div class="company_authentication">               
                <div class="box">
                    <myHeader :param = "headerName"></myHeader>  
                    <div class="select"><myTab :param = "myShow" ></myTab></div>
                </div> 
-                
-               
-     <mt-loadmore>
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">  
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }"> 
+       <mt-loadmore> 
           <div class="content">
                
                     <div class="first_item" v-show="myShow.show">
@@ -29,22 +25,22 @@
                              <imageUpload :param="companyArr[index]" v-on:postUrl="getUrl"></imageUpload>
                            </div>
                            <p class="point">{{todo.point}}</p>
-                        </div>
-                         
-                    </div>
-                
+                        </div>                    
+                    </div>          
           </div>  
                     
-           <div class="common_problem">
-              
-              <div class="common_problem_inner">
-                    <img src="/static/images/common-problem.png">
-                    <p><span>认证常见问题</span></p>
-              </div>      
-           </div>
-            <div class="confirm" @click="confirm">申请认证</div>
+             <div class="common_problem">
+                
+                <div class="common_problem_inner">
+                      <img src="/static/images/common-problem.png">
+                      <p><span>认证常见问题</span></p>
+                </div>      
+             </div>
+             
+         </mt-loadmore>   
+          <div class="confirm" @click="confirm">申请认证</div>   
     </div>
-    </mt-loadmore>
+   
   </div>
 </template>
 
@@ -70,6 +66,9 @@ export default {
                 hasError: false,
                 param:{
                     name:'sdfsdf'
+                },
+                obj:{
+                    authenType:''
                 },
                 personImgArr:[
                       {
@@ -158,16 +157,57 @@ export default {
             myTab
         },
         methods: {
-           
+            inquiry(){
+                let _self = this;
+                common.$emit('show-load');
+                let url=common.addSID(common.urlCommon+common.apiUrl.most);
+                let body={biz_module:'userService',biz_method:'queryUserAuthenList',version:1,time:0,sign:'',biz_param:{
+                    type:0
+                }};
+                console.log(common.difTime);
+                body.time=Date.parse(new Date())+parseInt(common.difTime);
+                body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
+                httpService.queryUserInfo(url,body,function(suc){
+                   common.$emit('close-load');
+                   if(suc.data.code == '1c01'){
+                        _self.obj.authenType = suc.data.biz_result.authenType;
+                        console.log(suc)
+                   }else{
+                       common.$emit('message',suc.data.msg)
+                   }                     
+                },function(err){
+                  common.$emit('close-load');
+                  common.$emit('message',err.data.msg)
+                })
+            },
             confirm(){
                 let _self = this;
                 if(_self.selected == 1){
-                    _self.authentication(_self.leftArr);
+                    if(_self.obj.authenType != 0){
+                         _self.referTo(_self.obj.authenType);
+                    }else{
+                          for(var i = 0; i < _self.leftArr.length; i++){
+                            if (_self.leftArr[i] == '') {
+                              common.$emit('message','请上传企业认证凭证');
+                              return;
+                            }
+                          }
+                          _self.authentication(_self.leftArr);
+                    }     
 
                 }
                 if(_self.selected == 2){
-                    /*_self.authentication(_self.rightArr);*/
-                    console.log(_self.rightArr)
+                    if(_self.obj.authenType != 0){
+                         _self.referTo(_self.obj.authenType);
+                    }else{
+                         for(var i = 0; i < _self.leftArr.length; i++){
+                            if (_self.leftArr[i] == '') {
+                              common.$emit('message','请上传企业认证凭证');
+                              return;
+                            }
+                         }
+                         _self.authentication(_self.rightArr);
+                    }   
                 }
             },
             getUrl(param){
@@ -195,14 +235,25 @@ export default {
                 }
                 
             },
+            referTo(authenType){
+                  let _self = this;
+                  switch (authenType) {
+                          case 1:
+                              common.$emit("message", '已申请认证，正在审核中');
+                              break;
+                          case 2:
+                              common.$emit("message", '已通过认证');
+                              break;
+                          default:
+                              break;    
+                      }           
+            },
             authentication(arr){
-
                   let _self = this;
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
                   let body={biz_module:'userService',biz_method:'submitAuthen',version:1,time:0,sign:'',biz_param:{
-                         type:1,
-                         
+                         type:1,                     
                          authenImage:arr
                   }};
                   console.log(common.difTime);
@@ -220,8 +271,10 @@ export default {
         },
         created() {
             let _self = this;
-            
-            
+            _self.inquiry();
+            common.$on("companyAuthentication",function (item){
+                 _self.inquiry();
+            })
 
         },
         
@@ -241,11 +294,12 @@ export default {
 .company_authentication .box{
 
 }
-.page-loadmore-wrapper {
+.company_authentication .page-loadmore-wrapper {
     margin-top: -1px;
     overflow: scroll;
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
     width: 100%;
+    margin-bottom: 0px;
 }
 .company_authentication .select{
     background: white;
@@ -314,9 +368,9 @@ export default {
     margin-bottom: 1.5rem;
 }
 .company_authentication .first_item>div .photo,.company_authentication .second_item>div .photo{
-    height:9rem;
+    height:11rem;
     width:100%;
-    background:#E1DDDA;
+    background:#fff;
     overflow: hidden;
 } 
 .company_authentication .first_item>div .point,.company_authentication .second_item>div .point{
@@ -365,10 +419,10 @@ export default {
 }
 .company_authentication .confirm{
     width:100%;
-    height:5rem;
+    height:50px;
     background:#FA6705;
     color:white;
-    line-height: 5rem;
+    line-height: 50px;
     text-align: center;
     /*margin-top:7.5rem;*/
 }

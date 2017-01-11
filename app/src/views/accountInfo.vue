@@ -149,6 +149,7 @@ export default {
            this.$router.push("certification");
       },
       jumpCompany(){
+          common.$emit("companyAuthentication","refurbish");
           this.$router.push("companyAuthentication");
       },
       getHttp(){

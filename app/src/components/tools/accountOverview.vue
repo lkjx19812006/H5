@@ -5,7 +5,6 @@
                <img :src="param.url" v-show="param.url">
                <img src="/static/images/my-header.png" v-show="!param.url">
             
-            
             <p>{{param.name}}</p>
             <p class="company-name">{{param.company}}</p>
             <div>
@@ -57,6 +56,7 @@ export default {
     width: 5.119rem;
     height: 5.119rem;
     border-radius: 50%;
+    overflow: hidden;
 }
 
 .account_overview .header>p {
