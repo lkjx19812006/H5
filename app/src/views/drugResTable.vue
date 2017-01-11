@@ -11,7 +11,7 @@
                     <div class="hot_drug">
                         <p>热门药材</p>
                     </div>
-                    <div class="drug_show" >
+                    <div class="drug_show">
                         <a @click="jumpDetail(obj.name)">
                             <img :src="obj.icon">
                             <div class="drug_introduce">
@@ -31,7 +31,7 @@
                 <div v-show="keyword">
                     <div class="search_result">
                         <ul class="page-loadmore-list">
-                            <li v-for="todo in datas" class="page-loadmore-listitem list_content_item"  @click="jumpDetail(todo.keyWord)">
+                            <li v-for="todo in datas" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.keyWord)">
                                 <div>
                                     <img src="/static/icons/search.png">
                                     <p>{{todo.keyWord}}</p>
@@ -41,10 +41,7 @@
                     </div>
                 </div>
             </div>
-
-
         </mt-loadmore>
-
     </div>
 </template>
 <script>
@@ -57,8 +54,8 @@ export default {
                 param: {
                     name: '药材百科',
                     router: 'home',
-                    appBack:true,
-                    type:'my'
+                    appBack: true,
+                    type: 'my'
                 },
                 type: '',
                 headHeight: '',
@@ -75,13 +72,16 @@ export default {
             let _self = this;
             _self.hotKeySearch();
             _self.hotDrug();
-           let from = _self.$route.params.from;
-           if(from=='ios') {
-               _self.param.type='ios'; 
-               _self.param.appBack=true;
-           }else{
-             _self.param.appBack=false;
-           }
+            let from = _self.$route.params.from;
+            if (from == 'ios') {
+                _self.param.type = 'ios';
+                _self.param.appBack = true;
+            } else if (from == 'android') {
+                _self.param.type = 'android';
+                _self.param.appBack = true;
+            } else {
+                _self.param.appBack = false;
+            }
         },
         components: {
             iosHead
@@ -103,12 +103,11 @@ export default {
                     }, function(suc) {
                         common.$emit('close-load');
                         let result = suc.data.biz_result.list;
-                        if(suc.data.code == '1c01'){
-                             _self.datas = result;
-                         }else{
+                        if (suc.data.code == '1c01') {
+                            _self.datas = result;
+                        } else {
                             common.$emit('message', suc.data.msg);
-                         }
-                       
+                        }
                     }, function(err) {
                         common.$emit('close-load');
                         common.$emit('message', err.data.msg);
@@ -127,14 +126,12 @@ export default {
                         pSize: 20
                     }
                 }, function(suc) {
-                    
                     let result = suc.data.biz_result.list[0];
-                    if(suc.data.code == '1c01'){
+                    if (suc.data.code == '1c01') {
                         _self.obj = result;
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    
                 }, function(err) {
                     common.$emit('message', err.data.msg);
                 })
@@ -148,19 +145,17 @@ export default {
                         pn: 1,
                         pSize: 20
                     }
-                }, function(suc) {      
+                }, function(suc) {
                     let result = suc.data.biz_result.list;
-                    if(suc.data.code == '1c01'){
+                    if (suc.data.code == '1c01') {
                         _self.todos = result;
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    
                 }, function(err) {
                     common.$emit('message', err.data.msg);
                 })
             },
-
             jumpIosSearch: function() {
                 window.jumpSearch();
             },
@@ -172,7 +167,7 @@ export default {
             },
             jumpDetail(id) {
                 common.$emit("informdrugDetail", id); //通知药性表详情刷新
-                this.$router.push('/drugResTableDetail/'+this.param.type+'/' + id);
+                this.$router.push('/drugResTableDetail/' + this.param.type + '/' + id);
             }
         },
         mounted() {

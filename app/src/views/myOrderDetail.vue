@@ -14,7 +14,7 @@
 
                 <p>下单时间：<span>{{todo.ctime}}</span></p>
                 <p>订单号：<span>{{todo.no}}</span></p>
-                <p>收件人：<span>{{todo.consignee}}</span>&nbsp;|&nbsp;<span>{{todo.onsigneePhone}}</span></p>
+                <p>收件人：<span>{{todo.consignee}}</span>&nbsp;|&nbsp;<span>{{todo.consigneePhone}}</span></p>
                 <p class="last_p">收货地址：<span>{{todo.consigneeAddr}}</span></p>
             </div>
             <p class="info_right">

@@ -6,6 +6,7 @@ import VueResource from 'vue-resource'
 import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import './assets/css/style.css'
+import common  from "./common/common"
 
 document.addEventListener('DOMContentLoaded', function() {
   if (window.FastClick) window.FastClick.attach(document.body);
@@ -17,6 +18,16 @@ Vue.use(VueResource)
 
 Vue.config.debug = true
 
+function isWeiXin(){
+    var ua = window.navigator.userAgent.toLowerCase();
+    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+if(isWeiXin())common.getWeixinSign(window.location.href.split('#')[0]);
 
 document.getElementsByTagName("html")[0].style.fontSize=Math.floor(document.documentElement.clientWidth*100000/32)/100000+"px";
 const router = new VueRouter(
@@ -59,6 +70,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(route => {
+    common.share();
   if (route.path !== '/home') {
     document.body.scrollTop = 0;
   } else {
@@ -80,11 +92,6 @@ Vue.http.interceptors.push((request, next) => {
     return response
   })
 })
-
-
-
-
-
 
 
 

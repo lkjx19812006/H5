@@ -29,7 +29,12 @@ export default {
                 if(this.param.goBack){
                     this.$router.push('/home');
                 }else{
-                    window.history.go(-1); 
+                    if(window.history.length==1){
+                        this.$router.push('/home');
+                    }else{
+                         this.$router.go(-1)
+                    }
+                    
                 }
                
             },
