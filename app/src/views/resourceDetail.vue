@@ -48,7 +48,6 @@
             <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
             <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
         </div>
-    </div>
     <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>
     </div>
 </template>
