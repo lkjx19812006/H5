@@ -19,10 +19,14 @@
                         </div>
                     </div>
                 </mt-loadmore>
+
+                 <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div> 
+               
             </div>
+
             
         </div>
-        <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
+        
     </div>
 </template>
 <script>
@@ -33,6 +37,7 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                wrapperHeight:'',
                 my_header: {
                     name: '意见反馈'
 
@@ -91,7 +96,6 @@ export default {
 
         },
         mounted() {
-
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 
@@ -100,8 +104,9 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.feed_back .page-loadmore-wrapper {
-    margin-bottom: 0px;
+
+.feed_back{
+
 }
 
 .feed_back .bg_white {
@@ -161,16 +166,14 @@ export default {
 .feed_back .confirm_submit {
     height: 50px;
     width: 100%;
-    background: #FA6705;
+    background-color: #FA6705;
     color: white;
     font-size: 1.7rem;
     text-align: center;
     line-height: 50px;
     position: fixed;
     bottom: 0;
+    z-index: 99;
 }
 
-.feed_back .info .info_bottom {
-    border-bottom: 1px solid #ddd;
-}
 </style>
