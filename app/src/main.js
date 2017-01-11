@@ -27,7 +27,7 @@ function isWeiXin(){
     }
 }
 
-if(isWeiXin())common.getWeixinSign(window.location.href.split('#')[0]);
+if(isWeiXin())common.getWeixinSign(common.shareUrl);
 
 document.getElementsByTagName("html")[0].style.fontSize=Math.floor(document.documentElement.clientWidth*100000/32)/100000+"px";
 const router = new VueRouter(
