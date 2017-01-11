@@ -4,6 +4,7 @@ import crypto from "crypto"
 import { Indicator, Toast, MessageBox, DatetimePicker } from 'mint-ui'
 import wx from 'weixin-js-sdk'
 let shareUrl=window.location.href.split('#')[0];
+shareUrl=window.location.href.split('?')[0];
 
 //百度统计代码
 var _hmt = _hmt || [];
@@ -105,7 +106,7 @@ let common = new Vue({
             let _self = this;
             console.log(data);
             wx.config({ //微信配置
-                debug: true,
+                debug: false,
                 appId: data.appId,
                 nonceStr: data.nonceStr,
                 signature: data.signature,

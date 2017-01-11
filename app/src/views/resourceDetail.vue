@@ -1,29 +1,18 @@
 <template>
     <div class="resource_detail">
-        <myHeader :param="param"  v-show="!my_param.show"></myHeader>
-        <div  v-show="!my_param.show">
+        <myHeader :param="param" v-show="!my_param.show"></myHeader>
+        <div v-show="!my_param.show">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-              <mt-loadmore>
-                <div class="swipe_height" v-if="obj.image">
-                    <swiper :options="swiperOption" class="swipe_height">
-                        <swiper-slide v-for="(item,index) in obj.image">
-                            <div class="img_content"  @click="popUp(index,obj.image)">
-                                <img v-bind:src="item">
-                            </div>
-                        </swiper-slide>
-                    </swiper>
-                    <div class="swipe_number"><span>{{number}}</span>/{{obj.image.length}}</div>
-                </div>
-                <div class="top">
-                    <p>发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
-                    <img src="/static/icons/xique.gif" v-show="imageShow">
-                    <img src="/static/icons/xique.png" v-show="!imageShow">
-                </div>
-                <div class="center">
-                    <div class="title">
-                        <img src="/static/icons/impatient.png">
-                        <p>{{obj.breedName}}</p>
-                        <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
+                <mt-loadmore>
+                    <div class="swipe_height" v-if="obj.image">
+                        <swiper :options="swiperOption" class="swipe_height">
+                            <swiper-slide v-for="(item,index) in obj.image">
+                                <div class="img_content" @click="popUp(index,obj.image)">
+                                    <img v-bind:src="item">
+                                </div>
+                            </swiper-slide>
+                        </swiper>
+                        <div class="swipe_number"><span>{{number}}</span>/{{obj.image.length}}</div>
                     </div>
                     <div class="top">
                         <p>发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
@@ -48,19 +37,19 @@
                             <p>卖点：<span>{{obj.description}}</span></p>
                         </div>
                     </div>
-                </div>
-               </mt-loadmore>
-               </div>
-                <div class="fix_bottom">
-                    <div class="attention">
-                        <telAndAttention :obj='obj'></telAndAttention>
-                    </div>
-                    <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
-                    <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
-                    <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
-                </div>
+            </div>
+            </mt-loadmore>
         </div>
-         <popUpBigImg  :param="my_param" v-show="my_param.show"></popUpBigImg>
+        <div class="fix_bottom">
+            <div class="attention">
+                <telAndAttention :obj='obj'></telAndAttention>
+            </div>
+            <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
+            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
+            <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
+        </div>
+    </div>
+    <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>
     </div>
 </template>
 <script>
