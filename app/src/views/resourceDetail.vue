@@ -200,7 +200,7 @@ export default {
             
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
         }
 }
 </script>
@@ -209,11 +209,6 @@ export default {
     position: relative;
 }
 
-.resource_detail .page-loadmore-wrapper {
-    overflow: scroll;
-    width: 100%;
-    margin-bottom: 0px;
-}
 
 .page-loadmore-wrapper {}
 

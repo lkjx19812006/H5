@@ -1,7 +1,6 @@
 <template>
     <div class="sample_confirm">
         <myHeader :param="myhead"></myHeader>
-
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
             <mt-loadmore>
                 <div @click="jumpAddress">
@@ -45,6 +44,11 @@ export default {
             var id = _self.$route.params.sourceId;
             _self.getAddress();
             _self.gethttp(id);
+            common.$on('clearAddress', function(item) {
+                if (item.id == _self.person.id) {
+                    _self.person = {};
+                }
+            });
             common.$on('sampleConfirm', function(item) {
                 _self.getAddress();
                 _self.gethttp(item);
@@ -114,10 +118,10 @@ export default {
                     result.from = "order";
                     if (suc.data.code == '1c01') {
                         _self.param = result;
-                         _self.param.price  =_self.param.sampleAmount;
-                        _self.param.number =  _self.param.sampleNumber;
-                         _self.param.unit =_self.param.sampleUnit;
-                         console.log(result);
+                        _self.param.price = _self.param.sampleAmount;
+                        _self.param.number = _self.param.sampleNumber;
+                        _self.param.unit = _self.param.sampleUnit;
+                        console.log(result);
                     } else {
                         common.$emit('message', suc.data.msg);
                     }

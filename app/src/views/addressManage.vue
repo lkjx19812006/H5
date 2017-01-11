@@ -35,7 +35,7 @@
                                     </p>
                                     <p class="bottom_p">
                                         <img :src="todo.last_img" class="last_img">
-                                        <span v-on:click="delet(todo)">删除</span>
+                                        <span v-on:click="delet(index)">删除</span>
                                     </p>
                                 </div>
                             </div>
@@ -132,8 +132,9 @@ export default {
                     if(err.data.msg)common.$emit('message', err.data.msg);
                 })
             },
-            delet: function(todo) {
+            delet: function(index) {
                 let _self = this;
+                let todo = _self.todos[index];
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -151,7 +152,8 @@ export default {
                 httpService.addressManage(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
-                        todo.show = !todo.show;
+                        _self.todos.splice(index,1);
+                        common.$emit('clearAddress', todo);
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -211,15 +213,7 @@ export default {
 
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.page-loadmore-wrapper {
-    margin-top: -1px;
-    overflow: scroll;
-    padding-bottom: 10px;
-    width: 100%;
-}
-
 .address_manage .bg_white {
     background-color: #F0F0F0;
 }

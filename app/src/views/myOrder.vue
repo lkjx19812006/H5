@@ -9,7 +9,9 @@
                         <li v-for="todo in todos" class="page-loadmore-listitem" @click="jump(todo.id)">
                             <div class="list_header">
                                 <div>
-                                    <p class="time_font"><span>{{todo.ctime | timeFormat}}</span><span style="margin-left:10px">订单编号：{{todo.no}}</span></p>
+                                    <p class="time_font"><span>{{todo.ctime | timeFormat}}</span>
+                                   <!--  <span style="margin-left:10px">订单编号：{{todo.no}}</span> -->
+                                    </p>
                                     <p class="audit_state">{{todo.orderStatus | orderStatus}}</p>
                                 </div>
                             </div>
@@ -21,9 +23,9 @@
                                     <p>产地：<span>{{todo.location}}</span></p>
                                 </div>
                                 <div class="res_content_right">
-                                    <p>{{todo.price}}<span>元/kg</span></p>
+                                    <p>{{todo.price}}<span>元/{{todo.unit}}</span></p>
                                 </div>
-                                <p class="num">数量：<span>{{todo.number}}</span>kg</p>
+                                <p class="num">数量：<span>{{todo.number}}</span></p>
                             </div>
                             <div class="sum">
                                 <div class="sum_top">
@@ -32,10 +34,10 @@
                                 </div>
                                 <p class="sum_bottom">
                                     <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click.stop="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
-                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('查看物流')">查看物流</button>
-                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('确认收货')">确认收货</button>
-                                    <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('催促发货')">催促发货</button>
-                                    <button v-if="'pay' ==judgeOrderStatus(todo.orderStatus)" @click.stop="prompt('支付')">立即支付</button>
+                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('查看物流')">查看物流</button>
+                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('确认收货')">确认收货</button>
+                                    <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('催促发货')">催促发货</button>
+                                    <button v-if="'pay' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('支付')">立即支付</button>
                                 </p>
                             </div>
                         </li>
@@ -560,7 +562,7 @@ export default {
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
-    max-width: 80px;
+    max-width: 110px;
     height: 90px;
     margin: 0;
     right: 10px;

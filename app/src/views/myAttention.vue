@@ -267,21 +267,11 @@ export default {
 <style scoped>
 .page-loadmore-listitem {
     height: 50px;
-    
     border-bottom: solid 1px #eee;
     text-align: center;
-
     &:first-child {
         border-top: solid 1px #eee;
     }
-
-}
-
-.page-loadmore-wrapper {
-    margin-top: -1px;
-    overflow: scroll;
-    padding-bottom: 10px;
-    width: 100%;
 }
 
 .mint-load {

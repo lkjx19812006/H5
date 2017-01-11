@@ -75,13 +75,13 @@ export default {
                         name: '由新到旧',
                         asc: 'low',
                         show: false,
-                        time: 1,
+                        time: 2,
                         key: 'time'
                     }, {
                         name: '由旧到新',
                         asc: 'top',
                         show: false,
-                        time: 2,
+                        time: 1,
                         key: 'time'
                     }, {
                         name: '全部',
