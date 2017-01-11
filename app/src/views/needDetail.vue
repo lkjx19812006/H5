@@ -38,8 +38,6 @@
                 <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="loadApp()">立即报价</button>
             </div>
         </div>
-
-        
     </div>
 </template>
 <script>
@@ -52,8 +50,8 @@ import popUpBigImg from '../components/tools/popUpBigImg'
 export default {
     data() {
             return {
-                my_param:{
-                    url:'',
+                my_param: {
+                    url: '',
                 },
                 wrapperHeight: '',
                 id: '',
@@ -99,8 +97,13 @@ export default {
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     let result = suc.data.biz_result;
+                    let shareData = common.shareParam;
                     if (suc.data.code == '1c01') {
                         _self.obj = result;
+                        shareData.title = "【紧急求购】" + result.breedName + "-上【药材买卖网】你报价我就要了！";
+                        shareData.desc = result.breedName + ',规格:' + result.spec + ',需要' + result.number + result.unit + '要求：' + result.description + '。--买卖药材就上药材买卖网！';
+                        shareData.link = window.location.href;
+                        common.share(shareData);
                     } else {
                         common.$emit('message', suc.data.msg);
                     }

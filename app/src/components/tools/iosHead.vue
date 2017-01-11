@@ -28,9 +28,8 @@ export default {
             jumpBack: function() {
                 let _slef=this;
                 if (_slef.param.appBack) {
-                    // window.goback();
                     try {
-                        if (_slef.param.appBack) {
+                        if (_self.param.type=='ios') {
                             window.webkit.messageHandlers.AppModel.postMessage({
                                 body: 'iosResult'
                             });

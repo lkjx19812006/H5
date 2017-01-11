@@ -9,74 +9,76 @@
                 <mt-tab-item id="4">药典标准</mt-tab-item>
             </mt-navbar>
         </div>
-        <mt-loadmore>
+        <div >
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <div class="info_content">
-                    <mt-tab-container v-model="selected">
-                        <mt-tab-container-item id="1">
-                            <div class="information">
-                                <div class="drug_name">
-                                    <div class="main_name">{{obj.herbName}}</div>
-                                    <div class="name_type">
-                                        <p class="what_name">别名：</p>
-                                        <p class="answer_name" v-html="obj.alias"></p>
+                <mt-loadmore>
+                    <div class="info_content">
+                        <mt-tab-container v-model="selected">
+                            <mt-tab-container-item id="1">
+                                <div class="information">
+                                    <div class="drug_name">
+                                        <div class="main_name">{{obj.herbName}}</div>
+                                        <div class="name_type">
+                                            <p class="what_name">别名：</p>
+                                            <p class="answer_name" v-html="obj.alias"></p>
+                                        </div>
+                                        <div class="name_type">
+                                            <p class="what_name">拼音：</p>
+                                            <p class="answer_name" v-html="obj.pinyin"></p>
+                                        </div>
+                                        <div class="name_type" id="last_name_type">
+                                            <p class="what_name">英文：</p>
+                                            <p class="answer_name" v-html="obj.eName"></p>
+                                        </div>
                                     </div>
-                                    <div class="name_type">
-                                        <p class="what_name">拼音：</p>
-                                        <p class="answer_name" v-html="obj.pinyin"></p>
+                                    <div class="drug_effect">
+                                        <div class="drug_effect_type">
+                                            <p class="what_effect">概述：</p>
+                                            <p class="effect_content" v-html="obj.summary">
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="name_type" id="last_name_type">
-                                        <p class="what_name">英文：</p>
-                                        <p class="answer_name" v-html="obj.eName"></p>
-                                    </div>
-                                </div>
-                                <div class="drug_effect">
-                                    <div class="drug_effect_type">
-                                        <p class="what_effect">概述：</p>
-                                        <p class="effect_content" v-html="obj.summary">
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="spec">
-                                    <div class="spec_type">
-                                        <p class="what_spec">产地分布：</p>
-                                        <p class="spec_content" v-html="obj.producingArea"></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </mt-tab-container-item>
-                        <mt-tab-container-item id="2">
-                            <div class="information">
-                                <div class="spec">
-                                    <div class="spec_type">
-                                        <p class="what_spec">形态特征：</p>
-                                        <p class="spec_content" v-html="obj.morphology"></p>
+                                    <div class="spec">
+                                        <div class="spec_type">
+                                            <p class="what_spec">产地分布：</p>
+                                            <p class="spec_content" v-html="obj.producingArea"></p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </mt-tab-container-item>
-                        <mt-tab-container-item id="3">
-                            <div class="information">
-                                <div class="spec">
-                                    <div class="spec_type">
-                                        <p class="what_spec">鉴别真伪：</p>
-                                        <p class="spec_content" v-html="obj.identify"></p>
+                            </mt-tab-container-item>
+                            <mt-tab-container-item id="2">
+                                <div class="information">
+                                    <div class="spec">
+                                        <div class="spec_type">
+                                            <p class="what_spec">形态特征：</p>
+                                            <p class="spec_content" v-html="obj.morphology"></p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </mt-tab-container-item>
-                        <mt-tab-container-item id="4">
-                            <div class="information">
-                                <div class="spec">
-                                    <p class="what_spec" id="what_spec">2015年药典标准：</p>
-                                    <p class="spec_content" v-html="obj.standard"></p>
+                            </mt-tab-container-item>
+                            <mt-tab-container-item id="3">
+                                <div class="information">
+                                    <div class="spec">
+                                        <div class="spec_type">
+                                            <p class="what_spec">鉴别真伪：</p>
+                                            <p class="spec_content" v-html="obj.identify"></p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </mt-tab-container-item>
-                    </mt-tab-container>
-                </div>
+                            </mt-tab-container-item>
+                            <mt-tab-container-item id="4">
+                                <div class="information">
+                                    <div class="spec">
+                                        <p class="what_spec" id="what_spec">2015年药典标准：</p>
+                                        <p class="spec_content" v-html="obj.standard"></p>
+                                    </div>
+                                </div>
+                            </mt-tab-container-item>
+                        </mt-tab-container>
+                    </div>
+                </mt-loadmore>
             </div>
-        </mt-loadmore>
+        </div>
     </div>
 </template>
 <script>
@@ -89,7 +91,7 @@ export default {
                 param: {
                     name: '药性表',
                     appBack: false,
-                    type:'my'
+                    type: 'my'
                 },
                 selected: '1',
                 obj: {},
@@ -111,16 +113,16 @@ export default {
                         herbName: name
                     }
                 }, function(suc) {
-                    common.$emit('close-load');   
+                    common.$emit('close-load');
                     let result = suc.data.biz_result;
-                    if(suc.data.code == '1c01'){
+                    if (suc.data.code == '1c01') {
                         _self.obj = result;
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    
+
                 }, function(err) {
-                    common.$emit('close-load');   
+                    common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                 })
             }
@@ -133,9 +135,9 @@ export default {
             var _self = this;
             let name = _self.$route.params.drugId;
             let from = _self.$route.params.from;
-           if(from=='ios') {
-               _self.param.type='ios'; 
-           }
+            if (from == 'ios') {
+                _self.param.type = 'ios';
+            }
             _self.drugDetail(name);
             common.$on("informdrugDetail", function(item) {
                 _self.drugDetail(item);
@@ -149,7 +151,6 @@ export default {
 }
 
 .drug_table_detail .nav-header {
-
     position: relative;
 }
 
@@ -175,20 +176,22 @@ export default {
     padding: 1.9199rem 0rem;
     margin-left: 1.27995rem;
 }
-.drug_table_detail .drug_name  .main_name{
+
+.drug_table_detail .drug_name .main_name {
     font-size: 2.4rem;
-    color:black;
+    color: black;
     margin-bottom: 1rem;
 }
+
 .drug_table_detail .drug_name .name_type {
     word-break: break-all;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
     margin-bottom: 1.27995rem;
 }
@@ -197,17 +200,17 @@ export default {
     font-size: 1.19462rem;
     color: #333333;
     flex: 2;
-    -webkit-box-flex:2;
-    -webkit-flex:2;
-    -ms-flex:2;
+    -webkit-box-flex: 2;
+    -webkit-flex: 2;
+    -ms-flex: 2;
     line-height: 1.5rem;
 }
 
 .drug_table_detail .answer_name {
     flex: 12;
-    -webkit-box-flex:12;
-    -webkit-flex:12;
-    -ms-flex:12;
+    -webkit-box-flex: 12;
+    -webkit-flex: 12;
+    -ms-flex: 12;
     font-size: 1.02396rem;
     color: #666666;
     line-height: 1.5rem;
@@ -229,14 +232,13 @@ export default {
 .drug_table_detail .drug_effect .drug_effect_type {
     word-break: break-all;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
-    
     /*margin-bottom: 1.27995rem;*/
 }
 
@@ -244,17 +246,17 @@ export default {
     font-size: 1.19462rem;
     color: #333333;
     flex: 2;
-    -webkit-box-flex:2;
-    -webkit-flex:2;
-    -ms-flex:2;
+    -webkit-box-flex: 2;
+    -webkit-flex: 2;
+    -ms-flex: 2;
     line-height: 1.5rem;
 }
 
 .drug_table_detail .effect_content {
     flex: 12;
-    -webkit-box-flex:12;
-    -webkit-flex:12;
-    -ms-flex:12;
+    -webkit-box-flex: 12;
+    -webkit-flex: 12;
+    -ms-flex: 12;
     font-size: 1.02396rem;
     color: #666666;
     line-height: 1.5rem;
@@ -276,12 +278,12 @@ export default {
 .drug_table_detail .spec_type {
     word-break: break-all;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
     margin-bottom: 1.27995rem;
 }
@@ -290,17 +292,17 @@ export default {
     font-size: 1.19462rem;
     color: #333333;
     flex: 2;
-    -webkit-box-flex:2;
-    -webkit-flex:2;
-    -ms-flex:2;
+    -webkit-box-flex: 2;
+    -webkit-flex: 2;
+    -ms-flex: 2;
     line-height: 1.5rem;
 }
 
 .drug_table_detail .spec_content {
     flex: 7;
-    -webkit-box-flex:7;
-    -webkit-flex:7;
-    -ms-flex:7;
+    -webkit-box-flex: 7;
+    -webkit-flex: 7;
+    -ms-flex: 7;
     font-size: 1.02396rem;
     color: #666666;
     line-height: 1.5rem;

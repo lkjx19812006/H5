@@ -4,7 +4,6 @@
         <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
-               
                   <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
@@ -21,9 +20,7 @@
                                     <p class="time_font">发布时间:<span>{{todo.pubdate | timeFormat}}</span></p>
                                 </div>
                                 <div class="res_content_right">
-
                                     <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>
-
                                     <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
                                 </div>
                             </div>

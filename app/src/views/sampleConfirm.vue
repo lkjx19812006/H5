@@ -52,10 +52,11 @@ export default {
             common.$on('sampleConfirm', function(item) {
                 _self.getAddress();
                 _self.gethttp(item);
-            })
-            common.$on('orderConfirm', function(item) {
-                _self.gethttp(item);
             });
+            common.$on('backAddress', function(todo) {
+                 _self.person = todo;
+                 console.log(todo.id)
+            })
         },
         components: {
             orderAddress,
@@ -115,7 +116,7 @@ export default {
                     if (!result.image.length) {
                         result.image.push('/static/images/default_image.png');
                     }
-                    result.from = "order";
+                   
                     if (suc.data.code == '1c01') {
                         _self.param = result;
                         _self.param.price = _self.param.sampleAmount;

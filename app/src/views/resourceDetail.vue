@@ -1,59 +1,55 @@
 <template>
     <div class="resource_detail">
-        <myHeader :param="param"  v-show="!my_param.show"></myHeader>
-        <div  v-show="!my_param.show">
-       
+        <myHeader :param="param" v-show="!my_param.show"></myHeader>
+        <div v-show="!my_param.show">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-              <mt-loadmore>
-                <div class="swipe_height" v-if="obj.image">
-                    <swiper :options="swiperOption" class="swipe_height">
-                        <swiper-slide v-for="(item,index) in obj.image">
-                            <div class="img_content"  @click="popUp(index,obj.image)">
-                                <img v-bind:src="item">
-                            </div>
-                        </swiper-slide>
-                    </swiper>
-                    <div class="swipe_number"><span>{{number}}</span>/{{obj.image.length}}</div>
-                </div>
-                <div class="top">
-                    <p>发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
-                    <img src="/static/icons/xique.gif" v-show="imageShow">
-                    <img src="/static/icons/xique.png" v-show="!imageShow">
-                </div>
-                <div class="center">
-                    <div class="title">
-                        <img src="/static/icons/impatient.png">
-                        <p>{{obj.breedName}}</p>
-                        <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
+                <mt-loadmore>
+                    <div class="swipe_height" v-if="obj.image">
+                        <swiper :options="swiperOption" class="swipe_height">
+                            <swiper-slide v-for="(item,index) in obj.image">
+                                <div class="img_content" @click="popUp(index,obj.image)">
+                                    <img v-bind:src="item">
+                                </div>
+                            </swiper-slide>
+                        </swiper>
+                        <div class="swipe_number"><span>{{number}}</span>/{{obj.image.length}}</div>
                     </div>
-                    <div class="detail ">
-                        <p>产地：<span>{{obj.location}}</span></p>
-                        <p class="right">规格：<span>{{obj.spec}}</span></p>
+                    <div class="top">
+                        <p>发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
+                        <img src="/static/icons/xique.gif" v-show="imageShow">
+                        <img src="/static/icons/xique.png" v-show="!imageShow">
                     </div>
-                    <div class="detail">
-                        <p>库存：<span>{{obj.number}}{{obj.unit}}</span></p>
-                        <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
-                    </div class="detail">
-                    <div class="detail">
-                        <p>卖点：<span>{{obj.description}}</span></p>
+                    <div class="center">
+                        <div class="title">
+                            <img src="/static/icons/impatient.png">
+                            <p>{{obj.breedName}}</p>
+                            <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
+                        </div>
+                        <div class="detail ">
+                            <p>产地：<span>{{obj.location}}</span></p>
+                            <p class="right">规格：<span>{{obj.spec}}</span></p>
+                        </div>
+                        <div class="detail">
+                            <p>库存：<span>{{obj.number}}{{obj.unit}}</span></p>
+                            <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
+                        </div class="detail">
+                        <div class="detail">
+                            <p>卖点：<span>{{obj.description}}</span></p>
+                        </div>
                     </div>
-                </div>
-               </mt-loadmore>
-               </div>
-                <div class="fix_bottom">
-                    <div class="attention">
-                        <telAndAttention :obj='obj'></telAndAttention>
-                    </div>
-                    <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
-                    <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
-                    <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
-                </div>
-          
-        
-        
+            </div>
+            </mt-loadmore>
         </div>
-
-         <popUpBigImg  :param="my_param" v-show="my_param.show"></popUpBigImg>
+        <div class="fix_bottom">
+            <div class="attention">
+                <telAndAttention :obj='obj'></telAndAttention>
+            </div>
+            <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
+            <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
+            <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
+        </div>
+    </div>
+    <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>
     </div>
 </template>
 <script>
@@ -72,15 +68,15 @@ export default {
     data() {
             let _self = this;
             return {
-                my_param:{
-                    url:'',
-                    show:false,
-                    whole_height:''
+                my_param: {
+                    url: '',
+                    show: false,
+                    whole_height: ''
                 },
                 param: {
                     name: '商品详情'
                 },
-                imageShow:true,
+                imageShow: true,
                 number: 0,
                 obj: {},
                 id: '',
@@ -105,10 +101,10 @@ export default {
             popUpBigImg
         },
         methods: {
-            popUp(index,imgArr){
-                 this.my_param.url = imgArr;
-                 this.my_param.show = !this.my_param.show;
-                 this.my_param.whole_height = document.documentElement.clientHeight;
+            popUp(index, imgArr) {
+                this.my_param.url = imgArr;
+                this.my_param.show = !this.my_param.show;
+                this.my_param.whole_height = document.documentElement.clientHeight;
             },
             refurbish(id) {
                 let _self = this;
@@ -128,27 +124,35 @@ export default {
                     body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 }
                 httpService.myAttention(url, body, function(suc) {
-                    common.$emit('close-load');
-                    
-                    let result = suc.data.biz_result;
-                    if(suc.data.code == '1c01'){
-                        _self.obj = result;
-                    }else{
-                        common.$emit('message', suc.data.msg);
-                    }
-                    if (_self.obj.image.length == 0) {
-                        _self.obj.image.push('/static/images/default_image.png');
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
+                        common.$emit('close-load');
+                        let result = suc.data.biz_result;
+                        let shareData = common.shareParam;
+                        if (suc.data.code == '1c01') {
+                            _self.obj = result;
+                            if (result.image.length > 0) {
+                                shareData.imgUrl = result.image[0];
+                            }
+                            shareData.title = "【低价资源】" + result.breedName + "-上【药材买卖网】买我你就赚了！";
+                            shareData.desc = result.breedName + ',规格:' + result.spec + ',剩余' + result.number + result.unit + '卖点：' + result.description + '。--买卖药材就上药材买卖网！';
+                            shareData.link = window.location.href;
+                            common.share(shareData);
+                        } else {
+                            common.$emit('message', suc.data.msg);
+                        }
+                        if (_self.obj.image.length == 0) {
+                            _self.obj.image.push('/static/images/default_image.png');
+                        }
+                    },
+                    function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
             },
             back() {
                 this.$router.go(-1);
             },
             jump(id) {
-                let _self=this;
+                let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
                         _self.$router.push('/login');
@@ -158,13 +162,13 @@ export default {
                         title: '提示',
                         ensure: loadApp
                     });
-                    return ;
+                    return;
                 }
                 common.$emit('orderConfirm', id);
                 this.$router.push('/orderConfirm/' + id);
             },
             jumpBuy(id) {
-                 let _self=this;
+                let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
                         _self.$router.push('/login');
@@ -174,33 +178,34 @@ export default {
                         title: '提示',
                         ensure: loadApp
                     });
-                    return ;
+                    return;
                 }
-                common.$emit('orderConfirm', id);
+                common.$emit('sampleConfirm', id);
                 this.$router.push('/sampleConfirm/' + id);
             }
         },
         created() {
             let _self = this;
+
             function countSecond() {
-                _self.imageShow=false;
+                _self.imageShow = false;
             }
             setTimeout(countSecond, 2500)
-            
+
             var id = _self.$route.params.sourceId;
             _self.id = id;
             _self.refurbish(id);
-            
+
             common.$on('resourceDetail', function(item) {
                 _self.refurbish(item);
                 _self.obj = {};
                 _self.my_param.show = false;
-                
+
             })
-            
+
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -208,7 +213,6 @@ export default {
 .resource_detail {
     position: relative;
 }
-
 
 .page-loadmore-wrapper {}
 

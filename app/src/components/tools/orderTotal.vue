@@ -1,20 +1,20 @@
 <template>
     <div class=" order_total">
         <div class="title">
-            <span v-if="order.from=='order'">{{orderName}}</span>
-            <span v-if="order.from!='order'">{{name}}</span>
+            <span v-if="order.from">{{orderName}}</span>
+            <span v-if="!order.from">{{name}}</span>
         </div>
         <div class="detail">
-            <p class="p_left"><span v-if="order.from!='order'">{{title[0]}}</span><span v-if="order.from=='order'">{{orderTitle[0]}}</span></p>
-            <p class="p_right">￥<span v-if="order.from!='order'">{{order.sampleAmount}}</span><span v-if="order.from=='order'">{{order.price}}</span></p>
+            <p class="p_left"><span v-if="!order.from">{{title[0]}}</span><span v-if="order">{{orderTitle[0]}}</span></p>
+            <p class="p_right">￥{{order.price}}</span></p>
         </div>
         <div class="detail">
-            <p class="p_left"><span v-if="order.from!='order'">{{title[1]}}</span><span v-if="order.from=='order'">{{orderTitle[1]}}</span></p>
+            <p class="p_left"><span v-if="!order.from">{{title[1]}}</span><span v-if="order.from">{{orderTitle[1]}}</span></p>
             <p class="p_right">{{Number(order.value)}}</p>
         </div>
         <div class="detail">
-            <p class="p_left"><span v-if="order.from!='order'">{{title[2]}}</span><span v-if="order.from=='order'">{{orderTitle[2]}}</span></p>
-            <p class="p_right">￥<span v-if="order.from!='order'">{{Number(order.sampleAmount * order.value)}}</span><span v-if="order.from=='order'">{{Number(order.price * order.value)}}</span></p>
+            <p class="p_left"><span v-if="!order.from">{{title[2]}}</span><span v-if="order.from">{{orderTitle[2]}}</span></p>
+            <p class="p_right">￥<span >{{Number(order.price * order.value)}}</span></p>
         </div>
         <div class="detail">
             <p class="p_left">{{title[3]}}</p>
@@ -22,7 +22,7 @@
         </div>
         <div class="count">
             <p>合计</p>
-            <p class="p_right">￥<span v-if="order.from!='order'">{{Number(order.sampleAmount * order.value)}}</span><span v-if="order.from=='order'">{{Number(order.price * order.value)}}</span></p>
+            <p class="p_right">￥<span >{{Number(order.price * order.value)}}</span></p>
         </div>
     </div>
 </template>
