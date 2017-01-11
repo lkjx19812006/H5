@@ -2,9 +2,9 @@
     <div class="resource_detail">
         <myHeader :param="param"  v-show="!my_param.show"></myHeader>
         <div  v-show="!my_param.show">
-        
+       
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-             <mt-loadmore>
+              <mt-loadmore>
                 <div class="swipe_height" v-if="obj.image">
                     <swiper :options="swiperOption" class="swipe_height">
                         <swiper-slide v-for="(item,index) in obj.image">
@@ -38,7 +38,8 @@
                         <p>卖点：<span>{{obj.description}}</span></p>
                     </div>
                 </div>
-            </mt-loadmore>
+               </mt-loadmore>
+               </div>
                 <div class="fix_bottom">
                     <div class="attention">
                         <telAndAttention :obj='obj'></telAndAttention>
@@ -47,7 +48,8 @@
                     <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
                     <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
                 </div>
-        </div>
+          
+        
         
         </div>
 

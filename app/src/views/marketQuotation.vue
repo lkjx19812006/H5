@@ -24,7 +24,7 @@
                                     <p>{{todo.area}}</p>
                                     <p>{{todo.unitprice}}</p>
                                     <p>{{todo.weekdowns}}&nbsp;
-                                        <img src="/static/images/up.png" v-if="todo.weekdowns > 0">
+                                        <img src="/static/images/up.png" v-if="todo.weekdowns >= 0">
                                         <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
                                     </p>
                                     <img src="/static/icons/to-down.png" class="to_down">
@@ -36,7 +36,7 @@
                                         <p>{{item.area}}</p>
                                         <p>{{item.unitprice}}</p>
                                         <p>{{item.weekdowns}}&nbsp;
-                                            <img src="/static/images/up.png" v-if="todo.weekdowns > 0">
+                                            <img src="/static/images/up.png" v-if="todo.weekdowns >= 0">
                                             <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
                                         </p>
                                     </li>
@@ -105,6 +105,7 @@ export default {
                         pSize: _self.httpPraram.pageSize,
                     }
                 }, function(suc) {
+                    
                     let data = suc.data.biz_result.list;
                     for (var i = 0; i < data.length; i++) {
                         let item = data[i];

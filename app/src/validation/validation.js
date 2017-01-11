@@ -12,6 +12,14 @@ validation.checkPhone = (phone) => {
 
 }
 
+validation.checkPhoneTrue = (phone) => {
+    let pattern = /^1[34578]\d{9}$/;
+    if(!pattern.test(phone) || phone == '') {
+        return '手机号码有误'
+    } else {
+        return false;
+    }
+}
 
 validation.checkCode = (code, confirmCode) => {
 	console.log(code)

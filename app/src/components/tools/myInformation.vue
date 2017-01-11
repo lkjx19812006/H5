@@ -27,7 +27,8 @@ export default {
                     url: '/static/images/my-account.png',
                     name: '我的账户',
                     router: 'accountInfo'
-                }, ]
+                }, ],
+                phone:common.servicePhone
 
             }
         },
@@ -37,17 +38,41 @@ export default {
             }
         },
         created() {
-            console.log(this.param);
+           // console.log(this.param);
+            if(!common.servicePhone)this.getCustomerPhone();
         },
         methods: {
+             getCustomerPhone() {
+                let _self = this;
+                this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
+                    if (response.data.code == '1c01') {
+                        console.log(response.data);
+                        common.servicePhone=response.data.biz_result.serviceMobile;
+                        _self.phone=response.data.biz_result.serviceMobile;
+                    }
+                }, (err) => {
+                    common.$emit('message', err.data.msg);
+                });
+            },
+            call(){
+                window.location.href = "tel:"+this.phone;
+            },
             jump(router) {
                 let _self = this;
                 if (router == 'detailsPage') {
-                    if(_self.param.employee<100000){
-                       common.$emit('message', '暂无客服'); 
+                        if(_self.param.employee<100000){
+                            common.$emit("confirm", {
+                            message: '未设置专属客户，去设置？',
+                            title: '提示',
+                            ensure: _self.call
+                        });
                     }else{
-                        // this.$router.push('/detailsPage');
-                        common.$emit('message', '暂无客服');
+                            common.$emit("confirm", {
+                            message: '未设置专属客户，拨号去设置？',
+                            title: '提示',
+                            ensure: _self.call
+                        });
+
                     }
                     
                 } else {

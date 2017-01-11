@@ -276,9 +276,10 @@ export default {
     border: none;
     outline: none;
     font-size: 1.2rem;
-    height: 4.2rem;
+    margin-top: 1rem;
+    height: 2.2rem;
     color: #666666;
-    line-height: 4.4rem;
+    line-height: 2.2rem;
 }
 
 .add_address ul li .selectPlace {

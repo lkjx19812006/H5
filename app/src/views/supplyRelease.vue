@@ -470,8 +470,9 @@ textarea {
 .supply_release .contact_phone input{
     text-align: right;
     border:none;
-    height:3.1rem;
-    line-height: 3.5rem;
+    height:2rem;
+    margin-top: 0.75rem;
+    line-height: 2rem;
     font-size: 1.19rem;
 }
 .supply_release .contact_name p,

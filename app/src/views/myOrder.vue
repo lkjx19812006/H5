@@ -66,7 +66,7 @@ export default {
             return {
                  err:{
                     err:"很抱歉，没有找到相关订单",
-                    url:'/static/icons/maomao.png',
+                    url:'/static/icons/order-point.png',
                     
                 },
                 param: {
