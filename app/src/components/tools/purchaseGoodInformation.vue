@@ -420,7 +420,7 @@ textarea {
 
 .purchase_good_information .good_number div .last_input {
     width: 60%;
-    padding-right: 20px;
+    padding-right: 7px;
 }
 
 .purchase_good_information .good_number div .right {
