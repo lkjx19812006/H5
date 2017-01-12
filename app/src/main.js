@@ -17,7 +17,7 @@ import common  from "./common/common"
 Vue.use(Mint);
 Vue.use(VueRouter)
 Vue.use(VueResource)
-Vue.use(infiniteScroll)
+// Vue.use(infiniteScroll)
 
 Vue.config.debug = true
 

@@ -44,7 +44,6 @@
                 </mt-loadmore>
             </div>
         </div>
-
         <errPage  :param="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
@@ -215,7 +214,6 @@ export default {
                 if (_self.httpPraram.page == 1) {
                     _self.allLoaded = false;
                 }
-                 if(_self.httpPraram.page==1)common.$emit('show-load');
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -242,6 +240,9 @@ export default {
                     if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
                     let result = suc.data.biz_result.list;             
                     if(suc.data.code == '1c01'){
+                        if(result.length<_self.httpPraram.pageSize){
+                            _self.allLoaded = true;
+                        }
                         for(var i = 0; i < result.length; i++){
                             _self.todos.push(result[i]);
                         }
@@ -323,27 +324,11 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top -50;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top -90 ;
         }
 }
 </script>
 <style scoped>
-.page-loadmore-listitem {
-    height: 50px;
-    line-height: 50px;
-    border-bottom: solid 1px #eee;
-    text-align: center;
-    &:first-child {
-        border-top: solid 1px #eee;
-    }
-}
-
-.page-loadmore-wrapper {
-    margin-top: -1px;
-    overflow: scroll;
-    padding-bottom: 10px;
-    width: 100%;
-}
 
 .mint-load {
     background: #fff;

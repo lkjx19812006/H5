@@ -130,7 +130,8 @@ export default {
                 param: {
                     name: 'intention',
                     index: 0,
-                    header_url: true
+                    header_url: '',
+                    url:''
                 },
                 birthday: '',
                 pickerValue: '',
@@ -265,7 +266,6 @@ export default {
             },
             open(picker) {
                 this.$refs[picker].open();
-
             },
             getHttp() {
                 let _self = this;
@@ -298,7 +298,8 @@ export default {
                     _self.arr.bizMain = suc.data.biz_result.bizMain;
                     _self.arr.invoice = suc.data.biz_result.invoice;
                     _self.arr.ccomment = suc.data.biz_result.ctype;
-                    _self.param.url = suc.data.biz_result.avatar;
+                    _self.param.header_url = suc.data.biz_result.avatar;
+                    console.log(_self.param.url)
                 }, function(err) {
                     common.$emit('close-load');
                 })
