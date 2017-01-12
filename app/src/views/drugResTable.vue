@@ -31,10 +31,10 @@
                 <div v-show="keyword">
                     <div class="search_result">
                         <ul class="page-loadmore-list">
-                            <li v-for="todo in datas" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.keyWord)">
+                            <li v-for="todo in datas" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.breedName)">
                                 <div>
                                     <img src="/static/icons/search.png">
-                                    <p>{{todo.keyWord}}</p>
+                                    <p>{{todo.keyWord}}({{todo.breedName}})</p>
                                 </div>
                             </li>
                         </ul>
@@ -73,6 +73,7 @@ export default {
             _self.hotKeySearch();
             _self.hotDrug();
             let from = _self.$route.params.from;
+            console.log(from);
             if (from == 'ios') {
                 _self.param.type = 'ios';
                 _self.param.appBack = true;
@@ -94,7 +95,7 @@ export default {
                     common.$emit('show-load');
                     httpService.searchWord(common.urlCommon + common.apiUrl.most, {
                         biz_module: 'searchKeywordService',
-                        biz_method: 'querySearchKeyword',
+                        biz_method: 'querySearchKeywordBreed',
                         biz_param: {
                             keyWord: _self.keyword,
                             pn: 1,

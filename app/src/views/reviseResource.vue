@@ -59,7 +59,6 @@ export default {
             return {
                 param: {
                     name: '修改资源',
-
                 },
                 obj: {
                     update: true,
@@ -175,6 +174,11 @@ export default {
                     if (result.image[6] != undefined) {
                         _self.obj.imgArr[6] = result.image[6];
                     }
+
+                    // common.$emit("supplyRelease", {
+                    //     id:result.breedId,
+                    //     keyWord:result.breedName
+                    // });
                 }, function(err) {
 
                     common.$emit('message', err.data.msg);
@@ -281,6 +285,7 @@ export default {
                 _self.getResource(item);
             })
 
+
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -302,6 +307,7 @@ textarea {
 .revise_resource .bg_white {
     background: #fff;
 }
+
 .revise_resource .mint-header {
     background-color: white;
     color: #313232;

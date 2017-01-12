@@ -87,7 +87,7 @@ export default {
                     show:true
                 }],
                 param: {
-                    name: '药性表',
+                    name: '药材百科',
                     appBack: false,
                     type: 'my'
                 },
@@ -123,6 +123,7 @@ export default {
                     let result = suc.data.biz_result;
                     if (suc.data.code == '1c01') {
                         _self.obj = result;
+                        _self.param.name=result.herbName;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -141,6 +142,7 @@ export default {
             var _self = this;
             let name = _self.$route.params.drugId;
             let from = _self.$route.params.from;
+
             if (from == 'ios') {
                 _self.param.type = 'ios';
             }

@@ -7,14 +7,17 @@ import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import './assets/css/style.css'
 import common  from "./common/common"
+import infiniteScroll from 'vue-infinite-scroll'
 
-document.addEventListener('DOMContentLoaded', function() {
-  if (window.FastClick) window.FastClick.attach(document.body);
-}, false);
+
+// document.addEventListener('DOMContentLoaded', function() {
+//   if (window.FastClick) window.FastClick.attach(document.body);
+// }, false);
 
 Vue.use(Mint);
 Vue.use(VueRouter)
 Vue.use(VueResource)
+Vue.use(infiniteScroll)
 
 Vue.config.debug = true
 
@@ -52,30 +55,18 @@ function getCookie (name) {
 let indexScrollTop = 0;
 router.beforeEach((to, from, next) => {
 
-  if (to.path !== '/home') {
-    indexScrollTop = document.body.scrollTop;
-  }
-
-  console.log(to.path);
-
-  if (to.name === 'login') {
-    next()
-  } else {
-    if (!getCookie('no')) {
-      next()
-    } else {
-      next()
-    }
-  }
+    next(vm=>{
+       
+      })
 })
 
 router.afterEach(route => {
     common.share();
   if (route.path !== '/home') {
-    document.body.scrollTop = 0;
+   
   } else {
     Vue.nextTick(() => {
-      document.body.scrollTop = indexScrollTop;
+     
     });
   }
 });

@@ -44,6 +44,7 @@ export default {
                 this.$emit("postClear"); 
             },
             jumpSearch(){
+                common.searchType='keyword';
                 common.$emit('setParam', 'router', this.param.router)
                 this.$router.push('search');
             }

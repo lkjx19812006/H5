@@ -2,75 +2,67 @@
     <div class="content purchase_good_information">
         <div class="good_information">
             <div class="title_name">
-                 <p class="good_infor_header">求购货物信息</p>
+                <p class="good_infor_header">求购货物信息</p>
             </div>
             <div class="good_name">
                 <p>求购的产品：</p>
-                 
-                    <div class="select" @click="jumpSearch('/search')" v-show="!obj.update" >
-                        <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
-                    </div>
-                     <div class="select" v-show="obj.update">
-                        <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
-                    </div>
-                    
+                <div class="select" @click="jumpSearch('/search')" v-show="!obj.update">
+                    <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
+                </div>
+                <div class="select" v-show="obj.update">
+                    <input text="text" disabled="false" placeholder="请选择你需要的药材" v-model="obj.drug_name">
+                </div>
             </div>
             <div class="good_number">
                 <p>求购的规格：</p>
-                
-                     <div v-show="obj.drug_name" class="div_content">
-                        <div v-show="breedSpec.length">
-                            <input type="text" v-model="obj.spec" />
-                            <p class="my-p" @click="showAction('spec')">
-                                <img src="/static/images/right.png"   >
-                            </p>
-                        </div>
-                        <input text="text" v-model="obj.spec" class="alert_input  right_input" v-show="!breedSpec.length" >
-
+                <div v-show="obj.drug_name" class="div_content">
+                    <div v-show="breedSpec.length" @click="showAction('spec')">
+                        <input type="text" v-model="obj.spec" disabled="false" />
+                        <p class="my-p">
+                            <img src="/static/images/right.png">
+                        </p>
                     </div>
-                    <div v-show="!obj.drug_name"  class="select div_content">
-                        <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">                               
-                    </div>
-                    <!-- <img src="/static/images/right.png" class="right_image" v-show="breedLocation.length"> -->
-               
+                    <input text="text" disabled="false" v-model="obj.spec" class="alert_input  right_input" v-show="!breedSpec.length">
+                </div>
+                <div v-show="!obj.drug_name" class="select div_content">
+                    <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
+                </div>
+                <!-- <img src="/static/images/right.png" class="right_image" v-show="breedLocation.length"> -->
             </div>
             <div class="good_number">
                 <p>求购的产地：</p>
-                
-                    <div v-show="obj.drug_name"  class="div_content">
-                        <div v-show="breedLocation.length">
-                            <input type="text" v-model="obj.place" />
-                            <p class="my-p" @click="showAction('place')">
-                                <img src="/static/images/right.png" >
-                            </p>
-                        </div>
-                        <input text="text" v-model="obj.place" class="alert_input  right_input" v-show="!breedLocation.length">
+                <div v-show="obj.drug_name" class="div_content">
+                    <div v-show="breedLocation.length" @click="showAction('place')">
+                        <input type="text" v-model="obj.place" disabled="false" />
+                        <p class="my-p">
+                            <img src="/static/images/right.png">
+                        </p>
                     </div>
-                    <div v-show="!obj.drug_name" class="select div_content">
-                        <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
-                    </div>
-                    <!-- <img src="/static/images/right.png" class="right_image" v-show="breedLocation.length"> -->
-                
+                    <input text="text" disabled="false" v-model="obj.place" class="alert_input  right_input" v-show="!breedLocation.length">
+                </div>
+                <div v-show="!obj.drug_name" class="select div_content">
+                    <input text="text" disabled="false" placeholder="请选择你需要的药材" class="alert_input">
+                </div>
+                <!-- <img src="/static/images/right.png" class="right_image" v-show="breedLocation.length"> -->
             </div>
             <div class="good_number">
                 <p>求购的数量：</p>
-                <div  class="div_content">
-                    <input type="number" placeholder="请输入" v-model="obj.number" class="last_input"/>
+                <div class="div_content">
+                    <input type="number" placeholder="请输入" v-model="obj.number" class="last_input" />
                     <p @click="showAction('unit')" class="right">
-                      {{obj.number_unit}}
+                        {{obj.number_unit}}
                     </p>
                 </div>
             </div>
             <div class="good_number">
                 <p>求购有效期：</p>
-                <div  class="div_content">
-                    <input type="number" placeholder="请输入有效天数" v-model="obj.duedate" class="last_input"/>
+                <div class="div_content">
+                    <input type="number" placeholder="请输入有效天数" v-model="obj.duedate" class="last_input" />
                     <p class="right">天</p>
                 </div>
             </div>
         </div>
-
-         <mt-popup v-model="sheetVisible" position="center" class="mint-popup-1" style="width:60%">
+        <mt-popup v-model="sheetVisible" position="center" class="mint-popup-1" style="width:60%">
             <div v-for="item in actions">
                 <div style="color: #656b79;background-color: #f6f8fa;box-shadow: 0 0 1px #b8bbbf;padding:10px 0" @click="setObj(item.key,item.name)">{{item.name}}</div>
             </div>
@@ -101,10 +93,11 @@ export default {
         },
         methods: {
             jumpSearch(router) {
+                common.searchType = 'breed';
                 common.$emit("setParam", "router", "needRelease");
                 this.$router.push(router);
             },
-            getBreedInformation(breedId) {
+            getBreedInformation(name) {
                 let _self = this;
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -115,7 +108,7 @@ export default {
                     time: 0,
                     sign: '',
                     biz_param: {
-                        breedId: breedId
+                        name: name
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -157,7 +150,7 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         _self.unit = suc.data.biz_result.list;
-                        if(!_self.obj.number_unit)_self.obj.number_unit = _self.unit[0].name;
+                        if (!_self.obj.number_unit) _self.obj.number_unit = _self.unit[0].name;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -181,21 +174,21 @@ export default {
                             key: 'spec'
                         });
                     }
-                } else if(param=="unit"){
-                   
+                } else if (param == "unit") {
+
                     for (var i = 0; i < _self.unit.length; i++) {
                         _self.actions.push({
                             name: _self.unit[i].name,
                             key: 'number_unit'
                         });
                     }
-                }else{
-                   for (var i = 0; i < _self.breedLocation.length; i++) {
+                } else {
+                    for (var i = 0; i < _self.breedLocation.length; i++) {
                         _self.actions.push({
                             name: _self.breedLocation[i].name,
                             key: 'place'
                         });
-                    }  
+                    }
                 }
             }
         },
@@ -203,9 +196,15 @@ export default {
             let _self = this;
             this.getUnit();
             common.$on("Needrelease", function(item) {
-                _self.getBreedInformation(item.id);
-                _self.obj.drug_name = item.keyWord;
-                _self.obj.breedId = item.id;
+                if (item.breedName) {
+                    _self.getBreedInformation(item.breedName);
+                    _self.obj.drug_name = item.breedName;
+                    _self.obj.breedId = item.breedId;
+                } else {
+                    _self.getBreedInformation(item.keyWord);
+                    _self.obj.drug_name = item.keyWord;
+                    _self.obj.breedId = item.id;
+                }
             });
         }
 }
@@ -234,18 +233,22 @@ textarea {
     height: 12.8rem;
     margin-bottom: 10px;
 }
-.purchase_good_information .title_name{
+
+.purchase_good_information .title_name {
     background: #F1F0F0;
-    width:100%;
+    width: 100%;
 }
+
 .purchase_good_information .good_infor_header {
     background: url('/static/images/information.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
 }
-.purchase_good_information  input {
-    outline:none;
-    border:0;
+
+.purchase_good_information input {
+    outline: none;
+    border: 0;
 }
+
 .purchase_good_information .good_infor_header,
 .remarks_header,
 .contact_header {
@@ -253,8 +256,8 @@ textarea {
     color: #FA6705;
     text-align: left;
     padding-left: 1.536rem;
-    line-height:3.75rem; 
-    height:3.58rem;
+    line-height: 3.75rem;
+    height: 3.58rem;
     margin-left: 1.28rem;
 }
 
@@ -285,19 +288,20 @@ textarea {
     /*padding: 10px;*/
     float: left;
 }
-.purchase_good_information .good_name>p{
+
+.purchase_good_information .good_name>p {
     font-size: 1.19rem;
 }
+
 .purchase_good_information .good_number select {
-    background-color:#fff;
+    background-color: #fff;
     text-align: center;
 }
 
-.purchase_good_information .good_number select option{
-    background-color:#fff;
+.purchase_good_information .good_number select option {
+    background-color: #fff;
     text-align: center;
 }
-
 
 .purchase_good_information .good_name p,
 .good_spec p,
@@ -308,12 +312,14 @@ textarea {
     font-size: 1.19rem;
     color: #333333;
 }
+
 .purchase_good_information .good_name>p,
 .good_spec>p,
 .good_place>p,
-.good_number>p{
+.good_number>p {
     margin-left: 1.28rem;
 }
+
 .purchase_good_information .good_name div,
 .good_spec div,
 .good_place div,
@@ -339,9 +345,6 @@ textarea {
     width: 14.847rem;
     text-align: center;
     outline: none;
-
-    
-
 }
 
 .purchase_good_information .select input {
@@ -351,29 +354,32 @@ textarea {
     text-align: right;
     outline: none;
     /*border: 1px solid #D2D2D2;*/
-    background:white;
+    background: white;
     margin-right: 1.28rem;
 }
-.purchase_good_information .good_number{
-    position:relative;
+
+.purchase_good_information .good_number {
+    position: relative;
     line-height: 3.5rem;
 }
+
 .purchase_good_information .alert_input {
     width: 100% !important;
     background-color: #fff;
     padding-right: 1.28rem !important;
 }
 
-.purchase_good_information .right_image{
-    width:0.64rem;
+.purchase_good_information .right_image {
+    width: 0.64rem;
     position: absolute;
-    right:1.28rem;
-    top:0.8rem;
+    right: 1.28rem;
+    top: 0.8rem;
 }
-.purchase_good_information .right_input{
-    padding-right: 2.28rem;
 
+.purchase_good_information .right_input {
+    padding-right: 2.28rem;
 }
+
 .purchase_good_information .good_name div .select input {
     text-align: center;
     outline: none;
@@ -398,6 +404,7 @@ textarea {
     outline: none;
     border: 0;
     padding-right: 2px;
+    background-color: #fff;
 }
 
 .purchase_good_information .good_number div p {
@@ -406,23 +413,24 @@ textarea {
     border-left: 1px solid #D2D2D2;
     position: relative;
 }
-.purchase_good_information .good_number div .my-p{
+
+.purchase_good_information .good_number div .my-p {
     border-left: 0;
 }
-.purchase_good_information .good_number div .last_input{
-    width:60%;
+
+.purchase_good_information .good_number div .last_input {
+    width: 60%;
     padding-right: 20px;
-
-
-}
-.purchase_good_information .good_number div .right{
-    width:40%;
 }
 
-.purchase_good_information .good_number div .my-p img{
-    height:1.0rem;
+.purchase_good_information .good_number div .right {
+    width: 40%;
+}
+
+.purchase_good_information .good_number div .my-p img {
+    height: 1.0rem;
     position: absolute;
-    left:1.3rem;
-    top:1.1rem;
+    left: 1.3rem;
+    top: 1.1rem;
 }
 </style>

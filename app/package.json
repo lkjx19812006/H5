@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "mint-ui": "^2.0.5",
-    "vue": "^2.0.1"
+    "vue": "^2.0.1",
+    "vue-infinite-scroll": "^2.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

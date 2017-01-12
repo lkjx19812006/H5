@@ -1,6 +1,5 @@
 <template>
     <div class="transaction">
-        
         <myHeader :param = "param" ></myHeader>
         <div class="bg_white">
             <div class="list_head">
@@ -47,7 +46,6 @@ export default {
                 param:{
                     name:'实时成交'
                 },
-                msg: 'Welcome to Your Vue.js App',
                 todos: [],
                 topStatus: '',
                 wrapperHeight: 0,

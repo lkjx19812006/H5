@@ -209,7 +209,6 @@ export default {
                     if(suc.data.code == '1c01'){
                         /*common.$emit('translateDate', result, _self.todos);*/
                         for(var i = 0; i < result.length; i++){
-                            console.log(result)
                             _self.todos.push(result[i]);
                         }
                     }else{

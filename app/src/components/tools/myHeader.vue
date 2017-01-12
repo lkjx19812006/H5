@@ -32,7 +32,8 @@ export default {
                     if(window.history.length==1){
                         this.$router.push('/home');
                     }else{
-                         this.$router.go(-1)
+                         // this.$router.go(-1)
+                         window.history.go(-1);
                     }
                     
                 }
