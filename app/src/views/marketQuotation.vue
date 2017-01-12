@@ -43,15 +43,15 @@
                                 </li>
                             </ul>
                         </li>
-                      </ul>  
-                            <div slot="top" class="mint-loadmore-top">
-                                <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
-                                <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                            </div>
-                            <div slot="bottom" class="mint-loadmore-bottom">
-                                <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
-                                <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                            </div>
+                    </ul>
+                    <div slot="top" class="mint-loadmore-top">
+                        <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+                        <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                    </div>
+                    <div slot="bottom" class="mint-loadmore-bottom">
+                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                        <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                    </div>
                 </mt-loadmore>
             </div>
         </div>
@@ -103,7 +103,7 @@ export default {
         methods: {
             getHttp(back) {
                 let _self = this;
-                common.$emit('show-load');
+                if (_self.httpPraram.page == 1) common.$emit('show-load');
                 httpService.marketQuotation(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'breedService',
                     biz_method: 'queryBreedPrice',

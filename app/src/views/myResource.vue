@@ -215,6 +215,7 @@ export default {
                 if (_self.httpPraram.page == 1) {
                     _self.allLoaded = false;
                 }
+                 if(_self.httpPraram.page==1)common.$emit('show-load');
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -322,7 +323,7 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top -50;
         }
 }
 </script>
