@@ -45,6 +45,8 @@ import revisePurchase from './views/revisePurchase'
 import cityName from './views/cityName'
 import areaName from './views/areaName'
 import aboutus from './views/aboutus'
+import perfectInfo from './views/perfectInfo'
+
 
 module.exports = {
     mode: 'hash',
@@ -102,6 +104,7 @@ module.exports = {
         { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
         { name: 'aboutus', path: '/aboutus/:from', component: aboutus },
+        { name: 'perfectInfo', path: '/perfectInfo', component: perfectInfo },
         { path: '*', redirect: '/home' }
     ]
 }

@@ -226,7 +226,6 @@ export default {
             if (common.SID) _self.salesmanData();
             common.$on("toMine", function(obj) {
                 _self.getHttp();
-                _self.salesmanData();
             });
             common.$on("clear_Information", function() { //来自资源页面的提示刷新
                 console.log('dfdfdfdfdfdf');

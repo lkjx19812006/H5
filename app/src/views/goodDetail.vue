@@ -7,57 +7,57 @@
         </mt-header> -->
       <myHeader :param = "param"  v-show="!my_param.show"></myHeader>
 
-       <div  v-show="!my_param.show">
+  <div  v-show="!my_param.show">
     <mt-loadmore>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-       <div class="swipe_height">
-            <mt-swipe :auto="4000"  :show-indicators="false">        
-              <mt-swipe-item v-for="(item,index) in imgArray">
-                <div  @click="popUp(index,imgArray)">
-                    <img :src="item">
-                    <div class="index"><span>{{index + 1}}</span>/{{imgArray.length}}</div>
-                </div>           
-              </mt-swipe-item>   
-            </mt-swipe>
-        </div>
-        <div class="release_time">
-            <p>发布时间：<span>{{obj.pubdate}}</span></p>
-        </div>
-        <div class="drug_info">
-            <div class="first_level">
-                <img src="/static/images/bao.png">
-                <p>{{obj.drug_name}}</p>
-                <p class="price"><span>{{obj.price}}</span>元/kg</p>
-            </div>
-           <div class="box">
-                <div class="second_level">
-                    <p class="the_left">产地：<span>{{obj.place}}</span></p>
-                    <p class="the_right">规格：<span>{{obj.spec}}</span></p>
-                </div>
+             <div class="swipe_height">
+                  <mt-swipe :auto="4000"  :show-indicators="false">        
+                    <mt-swipe-item v-for="(item,index) in imgArray">
+                      <div  @click="popUp(index,imgArray)">
+                          <img :src="item">
+                          <div class="index"><span>{{index + 1}}</span>/{{imgArray.length}}</div>
+                      </div>           
+                    </mt-swipe-item>   
+                  </mt-swipe>
+              </div>
+              <div class="release_time">
+                  <p>发布时间：<span>{{obj.pubdate}}</span></p>
+              </div>
+              <div class="drug_info">
+                  <div class="first_level">
+                      <img src="/static/images/bao.png">
+                      <p>{{obj.drug_name}}</p>
+                      <p class="price"><span>{{obj.price}}</span>元/kg</p>
+                  </div>
+                 <div class="box">
+                      <div class="second_level">
+                          <p class="the_left">产地：<span>{{obj.place}}</span></p>
+                          <p class="the_right">规格：<span>{{obj.spec}}</span></p>
+                      </div>
 
-                <div class="third_level">
-                    <p class="the_left">库存：<span>{{obj.number}}</span>{{obj.number_unit}}</p>
-                    <p class="the_right">起订量：<span>{{obj.moq}}</span>kg</p>
-                </div>
-                
-                <div class="fourth_level">
-                    <p class="the_left">样品：<span>{{obj.sampling}}</span></p> 
-                </div>
-           </div>
-            <div class="fifth_level">
-                <p class="left">卖点：</p>
-                <p class="right"><span>{{obj.selling_point}}</span></p>
-            </div>
-        </div>
-        <div class="flowsheet">
-            <p>流程图</p>
-            <img src="/static/images/progress_1.png"  v-if="obj.onSell == 1">
-            <img src="/static/images/progress_4.png"  v-if="obj.onSell == 2">
-        </div> 
+                      <div class="third_level">
+                          <p class="the_left">库存：<span>{{obj.number}}</span>{{obj.number_unit}}</p>
+                          <p class="the_right">起订量：<span>{{obj.moq}}</span>kg</p>
+                      </div>
+                      
+                      <div class="fourth_level">
+                          <p class="the_left">样品：<span>{{obj.sampling}}</span></p> 
+                      </div>
+                 </div>
+                  <div class="fifth_level">
+                      <p class="left">卖点：</p>
+                      <p class="right"><span>{{obj.selling_point}}</span></p>
+                  </div>
+              </div>
+              <div class="flowsheet">
+                  <p>流程图</p>
+                  <img src="/static/images/progress_1.png"  v-if="obj.onSell == 1">
+                  <img src="/static/images/progress_4.png"  v-if="obj.onSell == 2">
+              </div> 
 
        </div> 
      </mt-loadmore> 
-     </div> 
+    </div> 
 
      <popUpBigImg  :param="my_param" v-show="my_param.show"></popUpBigImg>
   </div>

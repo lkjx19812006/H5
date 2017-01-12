@@ -8,7 +8,7 @@
                     <div class="personal_info">
                      <div class="info_header">
                          <p class="left">个人信息</p>
-                         <p class="right">暂未通过审核</p>
+                         <p class="right">{{authen_title}}</p>
                      </div>
                      <div>
                          <p class="left">姓名</p>
@@ -54,7 +54,7 @@
                           <p><span>认证常见问题</span></p>
                     </div>    
                  </div>
-                  <div class="confirm" @click="confirm">申请认证</div>
+                  <div class="confirm" @click="confirm">{{authen_name}}</div>
        </div> 
   </div>
 </template>
@@ -68,6 +68,8 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                 authen_name:'申请认证',
+                 authen_title:'未审核',
                  param:{
                     name:'实名认证',
                     
@@ -142,6 +144,16 @@ export default {
                    if(suc.data.code == '1c01'){
                         _self.obj.url = suc.data.biz_result.list[0];
                         _self.obj.authenType = suc.data.biz_result.authenType;
+                        if(suc.data.biz_result.authenType == 1){
+                              _self.authen_name = '审核中';
+                              _self.authen_title = "正在审核";
+                        }else if(suc.data.biz_result.authenType == 2){
+                              _self.authen_name = '已通过';
+                              _self.authen_title = "已通过审核";
+                        }else if(suc.data.biz_result.authenType == 3){
+                             _self.authen_name = '未通过';
+                             _self.authen_title = "未通过审核";
+                        }
                    }else{
                        common.$emit('message',suc.data.msg)
                    }                     
@@ -170,7 +182,12 @@ export default {
                   body.time=Date.parse(new Date())+parseInt(common.difTime);
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.queryUserInfo(url,body,function(suc){
-                     common.$emit('close-load'); 
+                     common.$emit('close-load');
+                     if(suc.data.code == '1c01'){
+                          _self.inquiry();
+                          common.$emit("informAccountinfo",1);
+                          common.$emit("informAccountFinish",1);
+                     } 
                      common.$emit('message', suc.data.msg);               
                      console.log(suc);                  
                   },function(err){
@@ -188,17 +205,23 @@ export default {
                           case 2:
                               common.$emit("message", '已通过认证');
                               break;
+                          case 3:
+                              common.$emit("message", '未通过认证');
+                              break;
                           default:
                               break;    
                       } 
                   }else{
                       for(var i = 0; i < _self.arr.length; i++){
-                        if (_self.arr[i] == '') {
-                          common.$emit('message','请上传实名认证凭证');
-                          return;
-                        }
+                          if (_self.arr[i] == '') {
+                            common.$emit('message','请上传身份证照片');
+                            return;
+                          }
                        }
+
                        _self.referTo();
+
+                       
                   }                    
             }
         },
@@ -207,12 +230,15 @@ export default {
           let _self = this;
           _self.getHttp();
           _self.inquiry();
-            common.$on("post-my-info", function (obj){
+            common.$on("certification",function (item){
+                  _self.inquiry();
+            })
+           /* common.$on("post-my-info", function (obj){
                 console.log(obj.name)
                 _self.obj.name = obj.name;
                 _self.obj.phone = obj.phone;
                 _self.obj.gender = obj.gender;
-            })
+            })*/
         },
         mounted() {
 

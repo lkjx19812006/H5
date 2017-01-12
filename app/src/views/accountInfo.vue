@@ -132,11 +132,11 @@ export default {
       //用户信息
            let _self = this;
            _self.getHttp();
-
+           
            common.$on("informAccountinfo",function (item){
                 _self.getHttp();
            })
-           
+          
 
  },
  components: {
@@ -167,28 +167,30 @@ export default {
              birthday = JSON.stringify(new Date(birthday));
              birthday = birthday.substring(1,11);
             
-            _self.personalDataArr[0].content = suc.data.biz_result.name;
-            _self.personalDataArr[1].content = birthday;
-            _self.personalDataArr[2].content = suc.data.biz_result.gender;
-            _self.personalDataArr[3].content = suc.data.biz_result.phone;
-            _self.personalDataArr[4].content = suc.data.biz_result.utype;
+               _self.personalDataArr[0].content = suc.data.biz_result.name;
+                _self.personalDataArr[1].content = birthday;
+                _self.personalDataArr[2].content = suc.data.biz_result.gender;
+                _self.personalDataArr[3].content = suc.data.biz_result.phone;
+                _self.personalDataArr[4].content = suc.data.biz_result.utype;
+                
+                _self.companyDataArr[0].content = suc.data.biz_result.company;
+                _self.companyDataArr[1].content = suc.data.biz_result.companyShort;
+                _self.companyDataArr[2].content = suc.data.biz_result.companyJob;
+                _self.companyDataArr[3].content = suc.data.biz_result.bizMain;
+                _self.companyDataArr[4].content = suc.data.biz_result.invoice;
+                _self.companyDataArr[5].content = suc.data.biz_result.ctype;
+                _self.param.url = suc.data.biz_result.avatar;
+              
+                common.$emit("toMine", _self.arr);
+           
             
-            _self.companyDataArr[0].content = suc.data.biz_result.company;
-            _self.companyDataArr[1].content = suc.data.biz_result.companyShort;
-            _self.companyDataArr[2].content = suc.data.biz_result.companyJob;
-            _self.companyDataArr[3].content = suc.data.biz_result.bizMain;
-            _self.companyDataArr[4].content = suc.data.biz_result.invoice;
-            _self.companyDataArr[5].content = suc.data.biz_result.ctype;
-            _self.param.url = suc.data.biz_result.avatar;
-          
-            common.$emit("toMine", _self.arr);
             //console.log(suc.data.biz_result.avatar)
           },function(err){
             common.$emit('close-load');
           })
       },
       upData:function(router){
-           /*common.$emit("post-my-info",this.url);*/
+           
            
            
            

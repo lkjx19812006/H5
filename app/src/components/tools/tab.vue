@@ -17,7 +17,8 @@ export default {
         methods:{
              change(){
                    this.param.show = !this.param.show;
-                   
+                   this.param.left = !this.param.left;
+                   this.param.right = !this.param.right;
              }
         }
 }
