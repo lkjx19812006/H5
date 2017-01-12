@@ -41,5 +41,7 @@ export default {
 }
 </script>
 <style scoped>
-
+.perfect_info .head{
+     
+}
 </style>
