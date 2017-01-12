@@ -1,5 +1,5 @@
 <template>
-    <div class="aboutus">
+    <div class="perfect_info">
         <myHeader :param="my_header" v-if="show"></myHeader>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
            <mt-loadmore>
@@ -36,7 +36,7 @@ export default {
            
         },
         mounted() {
-            // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>

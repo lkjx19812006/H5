@@ -54,8 +54,10 @@
                         </div>
                     </mt-loadmore>
                 </div>
-            
+                 
         </div>
+
+        <errPage  :param="err"  v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -63,9 +65,14 @@ import longSearch from '../components/tools/longSearch'
 import common from '../common/common.js'
 import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
+import errPage from '../components/tools/err'
 export default {
     data() {
             return {
+                err:{
+                    err:"很抱歉，没有找到相关资源",
+                    url:'/static/icons/maomao.png'
+                },
                 myShow: {
                     myShow: false
                 },
@@ -91,11 +98,13 @@ export default {
         },
         components: {
             myHeader,
-            longSearch
+            longSearch,
+            errPage
         },
         methods: {
             getHttp(back) {
                 let _self = this;
+                common.$emit('show-load');
                 httpService.marketQuotation(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'breedService',
                     biz_method: 'queryBreedPrice',
@@ -105,7 +114,7 @@ export default {
                         pSize: _self.httpPraram.pageSize,
                     }
                 }, function(suc) {
-                    
+                    common.$emit('close-load');
                     let data = suc.data.biz_result.list;
                     for (var i = 0; i < data.length; i++) {
                         let item = data[i];
@@ -116,6 +125,7 @@ export default {
                         back();
                     }
                 }, function(err) {
+                    common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                     if (back) {
                         back();
