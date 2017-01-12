@@ -205,8 +205,7 @@ export default {
             },
             getHttp(back) {
                 let _self = this;
-                
-                common.$emit('show-load');
+                if(_self.httpPraram.page==1)common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'orderService',

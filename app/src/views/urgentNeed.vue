@@ -185,9 +185,10 @@ export default {
             getHttp(back) {
                 if (this.httpPraram.page == 1) {
                     this.allLoaded = false;
+                    common.$emit('show-load');
                 }
                 let _self = this;
-                common.$emit('show-load');
+                
                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'intentionService',
                     biz_method: 'queryBegBuyList',

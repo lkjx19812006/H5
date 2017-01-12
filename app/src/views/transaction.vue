@@ -60,13 +60,11 @@ export default {
         methods: {
             getHttp(back){
                 let _self = this;
-                common.$emit('show-load');
+                 if(_self.httpPraram.page==1)common.$emit('show-load');
                  httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
                         biz_module:'tradeNewService',
                         biz_method:'currentTradeList',
-              
                             biz_param: {
-                                
                                 pn:_self.httpPraram.page,
                                 pSize:_self.httpPraram.pageSize
                             }

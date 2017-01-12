@@ -182,7 +182,7 @@ export default {
         methods: {
             getHttp(back) {
                 let _self = this;
-                common.$emit('show-load');
+                if(_self.httpPraram.page==1)common.$emit('show-load');
                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'intentionService',
                     biz_method: 'queryBegBuyList',
