@@ -2,20 +2,13 @@
     <div class="drug_table_detail">
         <iosHead :param="param"></iosHead>
         <div class="nav-header">
-            <mt-navbar v-model="selected">
-                <mt-tab-item id="1">基本信息</mt-tab-item>
-                <mt-tab-item id="2">药材特性</mt-tab-item>
-                <mt-tab-item id="3">真伪鉴别</mt-tab-item>
-                <mt-tab-item id="4">药典标准</mt-tab-item>
-            </mt-navbar>
+            <div v-bind:class="{ nav: todo.show, 'nav_nor': !todo.show }" v-for="(todo,index) in navArr" @click="tabNav(navArr,todo)">{{todo.name}}</div>
         </div>
-        <div >
+        <div class="main">
+             <mt-loadmore >
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore>
                     <div class="info_content">
-                        <mt-tab-container v-model="selected">
-                            <mt-tab-container-item id="1">
-                                <div class="information">
+                                <div class="information" v-show = "!navArr[0].show">
                                     <div class="drug_name">
                                         <div class="main_name">{{obj.herbName}}</div>
                                         <div class="name_type">
@@ -45,9 +38,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </mt-tab-container-item>
-                            <mt-tab-container-item id="2">
-                                <div class="information">
+                                <div class="information" v-show = "!navArr[1].show">
                                     <div class="spec">
                                         <div class="spec_type">
                                             <p class="what_spec">形态特征：</p>
@@ -55,9 +46,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </mt-tab-container-item>
-                            <mt-tab-container-item id="3">
-                                <div class="information">
+                                <div class="information" v-show = "!navArr[2].show">
                                     <div class="spec">
                                         <div class="spec_type">
                                             <p class="what_spec">鉴别真伪：</p>
@@ -65,19 +54,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </mt-tab-container-item>
-                            <mt-tab-container-item id="4">
-                                <div class="information">
+                                <div class="information" v-show = "!navArr[3].show">
                                     <div class="spec">
                                         <p class="what_spec" id="what_spec">2015年药典标准：</p>
                                         <p class="spec_content" v-html="obj.standard"></p>
                                     </div>
                                 </div>
-                            </mt-tab-container-item>
-                        </mt-tab-container>
-                    </div>
-                </mt-loadmore>
+                    </div>  
             </div>
+             </mt-loadmore>     
         </div>
     </div>
 </template>
@@ -88,6 +73,19 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                navArr:[{
+                    name:'基本信息',
+                    show:false,
+                },{
+                    name:'药材特性',
+                    show:true
+                },{
+                    name:'真伪鉴别',
+                    show:true
+                },{
+                    name:'药典标准',
+                    show:true
+                }],
                 param: {
                     name: '药材百科',
                     appBack: false,
@@ -96,13 +94,21 @@ export default {
                 selected: '1',
                 obj: {},
                 id: '',
-                breedName: ''
+                breedName: '',
+                wrapperHeight:''
             }
         },
         components: {
             iosHead
         },
         methods: {
+            tabNav(todos,todo){
+                for(var i = 0; i < todos.length; i++){
+                     todos[i].show = true;
+                }
+                todo.show = false;
+
+            },
             drugDetail(name) {
                 let _self = this;
                 common.$emit('show-load');
@@ -150,12 +156,40 @@ export default {
 <style scoped>
 .drug_table_detail {
     position: relative;
+    overflow: hidden;
+    
 }
-
+.drug_table_detail .main{
+    margin-top: 40px;
+   /* overflow: hidden;*/
+}
 .drug_table_detail .nav-header {
-    position: relative;
+    width:100%;
+    z-index: 20; 
+    position: fixed;
 }
 
+.drug_table_detail .nav-header .nav{
+    width:25%;
+    height:40px;
+    color:#313232;
+    background-color: #F7F5F5;
+    float:left;
+    line-height: 40px;
+    text-align: center;
+    font-size: 14px;
+}
+.drug_table_detail .nav-header .nav_nor{
+    width:25%;
+    height:40px;
+    color:#FA6705;
+    background-color: #F7F5F5;
+    float:left;
+    line-height: 40px;
+    text-align: center;
+    font-size: 14px;
+    border-bottom: 2px solid #FA6705;
+}
 .drug_table_detail .mint-navbar {
     background: #F7F5F5;
 }
@@ -314,5 +348,9 @@ export default {
     margin-bottom: 1.5rem;
 }
 
-.drug_table_detail .info_content {}
+.drug_table_detail .info_content {
+    float: left;
+    width: 100%;
+    height: 100%;
+}
 </style>

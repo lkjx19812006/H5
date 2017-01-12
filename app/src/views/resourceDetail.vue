@@ -2,45 +2,46 @@
     <div class="resource_detail">
         <myHeader :param="param" v-show="!my_param.show"></myHeader>
         <div v-show="!my_param.show">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore>
-                    <div class="swipe_height" v-if="obj.image">
-                        <swiper :options="swiperOption" class="swipe_height">
-                            <swiper-slide v-for="(item,index) in obj.image">
-                                <div class="img_content" @click="popUp(index,obj.image)">
-                                    <img v-bind:src="item">
+                    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                        <mt-loadmore>
+                            <div class="swipe_height" v-if="obj.image">
+                                <swiper :options="swiperOption" class="swipe_height">
+                                    <swiper-slide v-for="(item,index) in obj.image">
+                                        <div class="img_content" @click="popUp(index,obj.image)">
+                                            <img v-bind:src="item">
+                                        </div>
+                                    </swiper-slide>
+                                </swiper>
+                                <div class="swipe_number"><span>{{number}}</span>/{{obj.image.length}}</div>
+                            </div>
+                            <div class="top">
+                                <p>发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
+                                <img src="/static/icons/xique.gif" v-show="imageShow">
+                                <img src="/static/icons/xique.png" v-show="!imageShow">
+                            </div>
+                            <div class="center">
+                                <div class="title">
+                                    <img src="/static/icons/impatient.png">
+                                    <p>{{obj.breedName}}</p>
+                                    <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
                                 </div>
-                            </swiper-slide>
-                        </swiper>
-                        <div class="swipe_number"><span>{{number}}</span>/{{obj.image.length}}</div>
+                                <div class="detail ">
+                                    <p>产地：<span>{{obj.location}}</span></p>
+                                    <p class="right">规格：<span>{{obj.spec}}</span></p>
+                                </div>
+                                <div class="detail">
+                                    <p>库存：<span>{{obj.number}}{{obj.unit}}</span></p>
+                                    <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
+                                </div class="detail">
+                                <div class="detail">
+                                    <p>卖点：<span>{{obj.description}}</span></p>
+                                </div>
+                            </div>
+                          </mt-loadmore>  
                     </div>
-                    <div class="top">
-                        <p>发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
-                        <img src="/static/icons/xique.gif" v-show="imageShow">
-                        <img src="/static/icons/xique.png" v-show="!imageShow">
-                    </div>
-                    <div class="center">
-                        <div class="title">
-                            <img src="/static/icons/impatient.png">
-                            <p>{{obj.breedName}}</p>
-                            <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
-                        </div>
-                        <div class="detail ">
-                            <p>产地：<span>{{obj.location}}</span></p>
-                            <p class="right">规格：<span>{{obj.spec}}</span></p>
-                        </div>
-                        <div class="detail">
-                            <p>库存：<span>{{obj.number}}{{obj.unit}}</span></p>
-                            <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
-                        </div class="detail">
-                        <div class="detail">
-                            <p>卖点：<span>{{obj.description}}</span></p>
-                        </div>
-                    </div>
-            </div>
-            </mt-loadmore>
-        </div>
-        <div class="fix_bottom">
+            
+           </div>
+        <div class="fix_bottom"  v-show="!my_param.show">
             <div class="attention">
                 <telAndAttention :obj='obj'></telAndAttention>
             </div>

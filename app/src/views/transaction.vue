@@ -16,7 +16,7 @@
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
                             <div class="list_font">{{todo.breedName}}</div>
                             <div class="list_font">{{todo.breedSpec}}</div>
-                            <div class="list_font">{{todo.number}}</div>
+                            <div class="list_font">{{todo.number}}{{todo.unit}}</div>
                             <div class="list_font">{{todo.location}}</div>
                             <div class="list_font">{{todo.successTime | successTimeFormat}}</div>
                         </li>

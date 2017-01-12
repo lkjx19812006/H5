@@ -38,7 +38,7 @@
              </div>
              
          </mt-loadmore>   
-          <div class="confirm" @click="confirm">申请认证</div>   
+          <div class="confirm" @click="confirm">{{authen_name}}</div>   
     </div>
    
   </div>
@@ -53,8 +53,11 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                authen_name:'申请认证',
                 myShow:{
                     show:true,
+                    left:true,
+                    right:false,
                     left_name:'传统三证',
                     right_name:'三证合一'
                 },
@@ -124,13 +127,13 @@ export default {
                     title:'税务登记证',
                     point:'请使用原件拍照或扫描'
                 },{
+                    title:'银行开户许可证',
+                    point:'请使用原件拍照或扫描'
+                },{
                     title:'GSM资质证书',
                     point:'请使用原件拍照或扫描'
                 },{
                     title:'GPM资质证书',
-                    point:'请使用原件拍照或扫描'
-                },{
-                    title:'银行开户许可证',
                     point:'请使用原件拍照或扫描'
                 }],
 
@@ -138,13 +141,13 @@ export default {
                     title:'三证合一',
                     point:'请使用原件拍照或扫描'
                 },{
+                    title:'银行开户许可证',
+                    point:'请使用原件拍照或扫描'
+                },{
                     title:'GSM资质证书',
                     point:'请使用原件拍照或扫描'
                 },{
                     title:'GPM资质证书',
-                    point:'请使用原件拍照或扫描'
-                },{
-                    title:'银行开户许可证',
                     point:'请使用原件拍照或扫描'
                 }],
                 leftArr:['','','','','',''],
@@ -162,7 +165,7 @@ export default {
                 common.$emit('show-load');
                 let url=common.addSID(common.urlCommon+common.apiUrl.most);
                 let body={biz_module:'userService',biz_method:'queryUserAuthenList',version:1,time:0,sign:'',biz_param:{
-                    type:0
+                    type:1
                 }};
                 console.log(common.difTime);
                 body.time=Date.parse(new Date())+parseInt(common.difTime);
@@ -171,7 +174,17 @@ export default {
                    common.$emit('close-load');
                    if(suc.data.code == '1c01'){
                         _self.obj.authenType = suc.data.biz_result.authenType;
-                        console.log(suc)
+                        if(suc.data.biz_result.authenType == 1){
+                              _self.authen_name = '审核中';
+                              
+                        }else if(suc.data.biz_result.authenType == 2){
+                              _self.authen_name = '已通过';
+                              
+                        }else if(suc.data.biz_result.authenType == 3){
+                             _self.authen_name = '未通过';
+                             
+                        }
+                        
                    }else{
                        common.$emit('message',suc.data.msg)
                    }                     
@@ -182,33 +195,41 @@ export default {
             },
             confirm(){
                 let _self = this;
-                if(_self.selected == 1){
-                    if(_self.obj.authenType != 0){
+
+                if(_self.myShow.left){
+
+                    if(_self.obj.authenType !== 0){
                          _self.referTo(_self.obj.authenType);
                     }else{
-                          for(var i = 0; i < _self.leftArr.length; i++){
+
+                         for(var i = 0; i < 4; i++){
                             if (_self.leftArr[i] == '') {
-                              common.$emit('message','请上传企业认证凭证');
+                              common.$emit('message','请至少上传前四张照片');
+                              console.log(_self.leftArr)
                               return;
                             }
-                          }
-                          _self.authentication(_self.leftArr);
+                         }
+                         _self.authentication(_self.leftArr);            
                     }     
 
                 }
-                if(_self.selected == 2){
-                    if(_self.obj.authenType != 0){
+               
+
+                if(_self.myShow.right){
+                    if(_self.obj.authenType !== 0){
                          _self.referTo(_self.obj.authenType);
+
                     }else{
-                         for(var i = 0; i < _self.leftArr.length; i++){
-                            if (_self.leftArr[i] == '') {
-                              common.$emit('message','请上传企业认证凭证');
+                         for(var i = 0; i < 2; i++){
+                            if (_self.rightArr[i] == '') {
+                              common.$emit('message','请至少上传前两张张照片');
                               return;
                             }
                          }
                          _self.authentication(_self.rightArr);
                     }   
                 }
+                
             },
             getUrl(param){
                 let _self = this;
@@ -219,7 +240,7 @@ export default {
                 }else if(param.index == 2){
                      _self.leftArr[2] = param.url;
                 }else if(param.index == 3){
-                     _self.leftArr[4] = param.url;
+                     _self.leftArr[3] = param.url;
                 }else if(param.index == 4){
                      _self.leftArr[4] = param.url;
                 }else if(param.index == 5){
@@ -244,6 +265,9 @@ export default {
                           case 2:
                               common.$emit("message", '已通过认证');
                               break;
+                          case 3:
+                              common.$emit("message", '未通过认证');
+                              break;    
                           default:
                               break;    
                       }           
@@ -261,8 +285,16 @@ export default {
                   body.sign=common.getSign('biz_module='+body.biz_module+'&biz_method='+body.biz_method+'&time='+body.time);
                   httpService.queryUserInfo(url,body,function(suc){
                      common.$emit('close-load');
-                     common.$emit('message', suc.data.msg);   
-                     console.log(suc)               
+                     if(suc.data.code == '1c01'){
+                           _self.inquiry();
+                          common.$emit("informAccountinfo",1);
+                          common.$emit("informAccountFinish",1);
+                     }
+                         common.$emit('message', suc.data.msg); 
+                         //console.log(suc.data.msg)  
+                    
+                     
+                                    
                   },function(err){
                     common.$emit('close-load');
                   })
