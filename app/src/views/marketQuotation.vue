@@ -40,35 +40,23 @@
                                         <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
                                     </p>
                                     <img src="/static/icons/to-down.png" class="to_down">
-                                </div>
-                                <ul class="second_level_content" v-show="todo.show" >
-                                    <li v-for="item in todo.list">
-                                        <p>{{item.name}}</p>
-                                        <p>{{item.spec}}</p>
-                                        <p>{{item.area}}</p>
-                                        <p>{{item.unitprice}}</p>
-                                        <p>{{item.weekdowns}}&nbsp;
-                                            <img src="/static/images/up.png" v-if="todo.weekdowns >= 0">
-                                            <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
-                                        </p>
-                                    </li>
-                                </ul>
-                                <img src="/static/icons/to-up.png" class="to_up" v-show="todo.show">
-                            </li>
-                        </ul>
-                        <div slot="top" class="mint-loadmore-top">
-                            <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
-                            <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                        </div>
-                        <div slot="bottom" class="mint-loadmore-bottom">
-                            <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
-                            <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                        </div>
-                    </mt-loadmore>
-                </div>
+                                </li>
+                            </ul>
+                        </li>
+                      </ul>  
+                            <div slot="top" class="mint-loadmore-top">
+                                <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+                                <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                            </div>
+                            <div slot="bottom" class="mint-loadmore-bottom">
+                                <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                                <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                            </div>
+                </mt-loadmore>
+            </div>
         </div>
-         
-        <errPage  :param="err"  v-show="todos.length==0"></errPage>
+        <errPage :param="err" v-show="todos.length==0"></errPage>
+
     </div>
 </template>
 <script>
@@ -80,9 +68,9 @@ import errPage from '../components/tools/err'
 export default {
     data() {
             return {
-                err:{
-                    err:"很抱歉，没有找到相关资源",
-                    url:'/static/icons/maomao.png'
+                err: {
+                    err: "很抱歉，没有找到相关资源",
+                    url: '/static/icons/maomao.png'
                 },
                 myShow: {
                     myShow: false

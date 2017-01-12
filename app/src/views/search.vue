@@ -38,8 +38,8 @@
         <div v-show="keyword">
             <div class="search_result">
                 <ul class="page-loadmore-list">
-                    <li v-for="todo in datas" class="page-loadmore-listitem list_content_item">
-                        <div @click="jumpRes(todo)">
+                    <li v-for="todo in datas" class="page-loadmore-listitem list_content_item" @click="jumpRes(todo)">
+                        <div >
                             <img src="/static/icons/search.png">
                             <p>{{todo.keyWord}}<span v-if="searchType!='keyword'">({{todo.breedName}})</span></p>
                         </div>
@@ -161,6 +161,7 @@ export default {
         watch: {
             keyword: function(newValue, oldValue) {
                 let _self = this;
+                this.searchType=common.searchType;
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
                     common.$emit('show-load');
