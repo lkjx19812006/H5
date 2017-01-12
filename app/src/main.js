@@ -7,7 +7,7 @@ import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import './assets/css/style.css'
 import common  from "./common/common"
-import infiniteScroll from 'vue-infinite-scroll'
+// import infiniteScroll from 'vue-infinite-scroll'
 
 
 // document.addEventListener('DOMContentLoaded', function() {
