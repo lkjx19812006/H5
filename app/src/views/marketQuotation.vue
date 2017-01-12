@@ -13,48 +13,47 @@
                     <p>价格</p>
                     <input type="button" value="跌涨(元)">
                 </div>
-              </div>  
-                <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }"  v-show="todos.length!=0">
-                    <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                        <ul class="first_ul">
-                            <li v-for="(todo,index) in todos" class="first_li">
-                                <div class="second_level" v-on:click="firstLevel(index,todos)">
-                                    <p>{{todo.name}}</p>
-                                    <p>{{todo.spec}}</p>
-                                    <p>{{todo.area}}</p>
-                                    <p>{{todo.unitprice}}</p>
-                                    <p>{{todo.weekdowns}}&nbsp;
+            </div>
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
+                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                    <ul class="first_ul">
+                        <li v-for="(todo,index) in todos" class="first_li">
+                            <div class="second_level" v-on:click="firstLevel(index,todos)">
+                                <p>{{todo.name}}</p>
+                                <p>{{todo.spec}}</p>
+                                <p>{{todo.area}}</p>
+                                <p>{{todo.unitprice}}</p>
+                                <p>{{todo.weekdowns}}&nbsp;
+                                    <img src="/static/images/up.png" v-if="todo.weekdowns >= 0">
+                                    <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
+                                </p>
+                                <img src="/static/icons/to-down.png" class="to_down">
+                            </div>
+                            <ul class="second_level_content" v-show="todo.show">
+                                <li v-for="item in todo.list">
+                                    <p>{{item.name}}</p>
+                                    <p>{{item.spec}}</p>
+                                    <p>{{item.area}}</p>
+                                    <p>{{item.unitprice}}</p>
+                                    <p>{{item.weekdowns}}&nbsp;
                                         <img src="/static/images/up.png" v-if="todo.weekdowns >= 0">
                                         <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
                                     </p>
-                                    <img src="/static/icons/to-down.png" class="to_down">
-                                </div>
-                                <ul class="second_level_content" v-show="todo.show" >
-                                    <li v-for="item in todo.list">
-                                        <p>{{item.name}}</p>
-                                        <p>{{item.spec}}</p>
-                                        <p>{{item.area}}</p>
-                                        <p>{{item.unitprice}}</p>
-                                        <p>{{item.weekdowns}}&nbsp;
-                                            <img src="/static/images/up.png" v-if="todo.weekdowns >= 0">
-                                            <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
-                                        </p>
-                                    </li>
-                                </ul>
-                                <img src="/static/icons/to-up.png" class="to_up" v-show="todo.show">
-                            </li>
-                        </ul>
-                        <div slot="top" class="mint-loadmore-top">
-                            <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
-                            <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                        </div>
-                        <div slot="bottom" class="mint-loadmore-bottom">
-                            <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
-                            <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                        </div>
-                    </mt-loadmore>
-                </div>
-            
+                                </li>
+                            </ul>
+                            <img src="/static/icons/to-up.png" class="to_up" v-show="todo.show">
+                        </li>
+                    </ul>
+                    <div slot="top" class="mint-loadmore-top">
+                        <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+                        <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                    </div>
+                    <div slot="bottom" class="mint-loadmore-bottom">
+                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                        <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                    </div>
+                </mt-loadmore>
+            </div>
         </div>
     </div>
 </template>
@@ -105,7 +104,6 @@ export default {
                         pSize: _self.httpPraram.pageSize,
                     }
                 }, function(suc) {
-                    
                     let data = suc.data.biz_result.list;
                     for (var i = 0; i < data.length; i++) {
                         let item = data[i];
@@ -133,6 +131,7 @@ export default {
                 this.getHttp();
             },
             jump() {
+                common.searchType = 'breed';
                 common.$emit("setParam", "router", 'marketQuotation');
                 this.$router.push("search");
             },
@@ -170,14 +169,18 @@ export default {
             let _self = this;
             _self.getHttp();
             common.$on('marketQuotation', function(item) {
-                _self.httpPraram.keyword = item.keyWord;
+                if (item.breedName) {
+                    _self.httpPraram.keyword = item.breedName;
+                } else {
+                    _self.httpPraram.keyword = item.keyWord;
+                }
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
                 _self.getHttp();
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top -160;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 160;
         }
 }
 </script>
@@ -195,23 +198,27 @@ export default {
 }
 
 .market_quotation {}
-.market_quotation .first_li{
+
+.market_quotation .first_li {
     position: relative;
 }
-.market_quotation .first_li .to_down{
-    width:1rem;
+
+.market_quotation .first_li .to_down {
+    width: 1rem;
     position: absolute;
     margin-left: -0.5rem;
-    left:50%;
+    left: 50%;
     bottom: 3px;
 }
-.market_quotation .first_li .to_up{
-    width:1rem;
+
+.market_quotation .first_li .to_up {
+    width: 1rem;
     position: absolute;
     margin-left: -0.5rem;
-    left:50%;
+    left: 50%;
     bottom: 3px;
 }
+
 .market_quotation .search .long_search .search_div .search_content {
     background-color: #fff;
 }
@@ -275,23 +282,22 @@ export default {
 .market_quotation .list_content_header {
     word-break: break-all;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
     height: 50px;
     line-height: 50px;
-
 }
 
 .market_quotation .list_content_header p {
     flex: 1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
     font-size: 1.11rem;
 }
 
@@ -312,12 +318,12 @@ export default {
     width: 100%;
     word-break: break-all;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
     height: 4.267rem;
     border-top: 1px solid #CCCCCC;
@@ -327,9 +333,9 @@ export default {
 
 .market_quotation .second_level p {
     flex: 1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
     font-size: 1.02396rem;
     color: #666666;
     line-height: 4.267rem;
@@ -348,24 +354,23 @@ export default {
     font-size: 1.024rem;
     color: #666666;
     line-height: 4.267rem;
-    
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
-    background:#F2F2F2;
+    background: #F2F2F2;
     border-bottom: 1px solid white;
 }
 
 .market_quotation .second_level_content li p {
     flex: 1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
     font-size: 1.024rem;
     color: #666666;
     line-height: 4.267rem;

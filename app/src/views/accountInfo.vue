@@ -128,16 +128,11 @@ export default {
    }
  },
  created(){
-
-      //用户信息
            let _self = this;
            _self.getHttp();
-
            common.$on("informAccountinfo",function (item){
                 _self.getHttp();
            })
-           
-
  },
  components: {
             headerPhoto,
@@ -164,9 +159,9 @@ export default {
              common.$emit('close-load');
              console.log(suc);
              let birthday = suc.data.biz_result.birthday;
+             birthday=(birthday+24*60*60)*1000;
              birthday = JSON.stringify(new Date(birthday));
              birthday = birthday.substring(1,11);
-            
             _self.personalDataArr[0].content = suc.data.biz_result.name;
             _self.personalDataArr[1].content = birthday;
             _self.personalDataArr[2].content = suc.data.biz_result.gender;

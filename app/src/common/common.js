@@ -4,8 +4,6 @@ import crypto from "crypto"
 import { Indicator, Toast, MessageBox, DatetimePicker } from 'mint-ui'
 import wx from 'weixin-js-sdk'
 let shareUrl=window.location.href.split('#')[0];
-shareUrl=shareUrl.split('?')[0];
-
 
 //百度统计代码
 var _hmt = _hmt || [];
@@ -21,10 +19,11 @@ let common = new Vue({
         shareUrl:shareUrl,
         customerId: window.localStorage.ID,
         show: true,
-        urlCommon: 'front',
+        urlCommon: '/front',
         KEY: window.localStorage.KEY,
         SID: window.localStorage.SID,
         difTime: window.localStorage.difTime,
+        searchType:'keyword',
         servicePhone: '',
         appUrl: 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai',
         apiUrl: {
@@ -52,22 +51,21 @@ let common = new Vue({
             orderStatus: 0
         },
         shareParam: {
-            imgUrl: shareUrl+'static/icons/err.png',
+            imgUrl: 'http://apps.yaocaimaimai.com/htm5/static/icons/err.png',
             title: "买卖药材就上药材买卖网！",
             desc: '药材买卖网（yaocaimaimai.com）隶属于上海冕冠电子商务有限公司，是由知名VC、天使投资人投资千万人民币，旨在打造全球最大的药材交易平台!',
-            link: shareUrl+'#/home'
+            link: 'http://apps.yaocaimaimai.com/htm5/#/home'
         }
     },
     methods: {
         share(data) {
-            console.log(data);
             let _self = this;
             if (!data) {
                 _self.shareParam = {
-                    imgUrl: shareUrl+'static/icons/err.png',
+                    imgUrl: 'http://apps.yaocaimaimai.com/htm5/static/icons/err.png',
                     title: "买卖药材就上药材买卖网！",
                     desc: '药材买卖网（yaocaimaimai.com）隶属于上海冕冠电子商务有限公司，是由知名VC、天使投资人投资千万人民币，旨在打造全球最大的药材交易平台!',
-                    link: shareUrl+'#/home'
+                    link: 'http://apps.yaocaimaimai.com/htm5/#/home'
                 };
             }else{
                 _self.shareParam = {

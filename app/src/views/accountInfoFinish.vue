@@ -75,7 +75,7 @@
                                     <option>采购人员</option>
                                     <option>销售人员</option>
                                     <option>客服</option>
-                                </select>   
+                                </select>
                             </p>
                         </li>
                         <li>
@@ -130,7 +130,7 @@ export default {
                 param: {
                     name: 'intention',
                     index: 0,
-                    header_url:true
+                    header_url: true
                 },
                 birthday: '',
                 pickerValue: '',
@@ -240,12 +240,11 @@ export default {
                 })
             },
             getTimeStamp(str) {
-                str = str.replace(/-/g, '/'); 
+                str = str.replace(/-/g, '/');
                 var date = new Date(str);
                 return date.getTime();
             },
             handleConfirm(value) {
-
                 this.arr.birthday = this.formatTime(value, 'yyyy-MM-dd');
             },
             jumpPersonal() {
@@ -253,7 +252,7 @@ export default {
                 this.$router.push("certification");
             },
             jumpCompany() {
-                common.$emit("companyAuthentication","refurbish");
+                common.$emit("companyAuthentication", "refurbish");
                 this.$router.push("companyAuthentication");
             },
             jump(router) {
@@ -284,9 +283,12 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
-                    var date = new Date(suc.data.biz_result.birthday);
+                    let birthday = suc.data.biz_result.birthday;
+                    birthday = (birthday + 24 * 60 * 60) * 1000;
+                    birthday = JSON.stringify(new Date(birthday));
+                    birthday = birthday.substring(1, 11);
                     _self.arr.name = suc.data.biz_result.name;
-                    _self.arr.birthday = _self.formatTime(date, 'yyyy-MM-dd');;
+                    _self.arr.birthday = birthday;
                     _self.arr.gender = suc.data.biz_result.gender;
                     _self.arr.phone = suc.data.biz_result.phone;
                     _self.arr.ucomment = suc.data.biz_result.utype;
@@ -306,8 +308,8 @@ export default {
                 let _self = this;
                 let checkArr = [];
                 let checkPhone = validation.checkPhoneTrue(_self.arr.phone);
-                if(checkPhone){
-                    common.$emit('message',checkPhone);
+                if (checkPhone) {
+                    common.$emit('message', checkPhone);
                     return;
                 }
                 common.$emit("confirm", {
@@ -319,8 +321,7 @@ export default {
             },
             confirmUpData() {
                 let _self = this;
-                let birthday = _self.getTimeStamp(_self.arr.birthday);
-                //console.log(birthday);
+                let birthday = _self.getTimeStamp(_self.arr.birthday)/1000;
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -361,14 +362,10 @@ export default {
             }
         },
         mounted() {
-
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
-
-
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 input[type="text"],
 input[type="submit"],
@@ -436,6 +433,7 @@ textarea {
     position: absolute;
     z-index: 20000000;
 }
+
 .account_overview_finish .basic_data,
 .company_data {
     width: 100%;
@@ -537,6 +535,5 @@ textarea {
     padding-right: 20px;
     background: url(/static/images/down-arrow.png ) no-repeat right center;
     background-size: 1.024rem 0.6826rem;
-    
 }
 </style>

@@ -316,6 +316,7 @@ export default {
             },
             fromIndex() {
                 let _self = this;
+                common.searchType='keyword';
                 common.$emit('setParam', 'router', 'index');
                 _self.$router.push("/search");
             },

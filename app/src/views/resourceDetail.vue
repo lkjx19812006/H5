@@ -128,7 +128,7 @@ export default {
                         let shareData = common.shareParam;
                         if (suc.data.code == '1c01') {
                             _self.obj = result;
-                            if (result.image.length > 0) {
+                            if (result.image&&result.image.length > 0) {
                                 shareData.imgUrl = result.image[0];
                             }
                             shareData.title = "【低价资源】" + result.breedName + "-上【药材买卖网】买我你就赚了！";

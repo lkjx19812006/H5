@@ -221,6 +221,7 @@ export default {
                 this.getHttp();
             },
             jumpSearch() {
+                common.searchType='keyword';
                 common.$emit('setParam', 'router', 'resource')
                 this.$router.push('search');
             },

@@ -2,29 +2,27 @@
     <div class="content release_good_information">
         <div class="good_information">
             <div class="title_name">
-                 <p class="good_infor_header">货物基本信息</p>
+                <p class="good_infor_header">货物基本信息</p>
             </div>
             <div class="good_name">
                 <p>产品：</p>
-                
-                    <div class="select" @click="jumpSearch('/search')" v-show="!obj.update">
-                        <input text="text" disabled="false" placeholder="请选择你的药材" v-model="obj.drug_name">
-                    </div>
-                     <div class="select"  v-show="obj.update">
-                        <input text="text" disabled="false"  v-model="obj.drug_name">
-                    </div>
-                
+                <div class="select" @click="jumpSearch('/search')" v-show="!obj.update">
+                    <input text="text" disabled="false" placeholder="请选择你的药材" v-model="obj.drug_name">
+                </div>
+                <div class="select" v-show="obj.update">
+                    <input text="text" disabled="false" v-model="obj.drug_name">
+                </div>
             </div>
             <div class="good_number">
                 <p>规格：</p>
                 <div v-show="obj.drug_name" class="content_div">
-                    <div v-show="breedSpec.length">
-                        <input type="text" v-model="obj.spec" class="goods-info"/>
-                        <p class="my-p" @click="showAction('spec')">
-                            <img src="/static/images/right.png" >
+                    <div v-show="breedSpec.length" @click="showAction('spec')">
+                        <input type="text" v-model="obj.spec" disabled="false" class="goods-info" />
+                        <p class="my-p">
+                            <img src="/static/images/right.png">
                         </p>
                     </div>
-                    <input text="text" v-model="obj.spec" class="alert_input right_input" v-show="!breedSpec.length">
+                    <input text="text" disabled="false" v-model="obj.spec" class="alert_input right_input" v-show="!breedSpec.length">
                 </div>
                 <div v-show="!obj.drug_name" class="select content_div">
                     <input text="text" disabled="false" placeholder="请选择你的药材" class="alert_input">
@@ -33,13 +31,13 @@
             <div class="good_number">
                 <p>产地：</p>
                 <div v-show="obj.drug_name" class="content_div">
-                    <div v-show="breedLocation.length">
-                        <input type="text" v-model="obj.place" class="goods-info"/>
-                        <p class="my-p" @click="showAction('place')">
-                            <img src="/static/images/right.png" >
+                    <div v-show="breedLocation.length" @click="showAction('place')">
+                        <input type="text" v-model="obj.place" disabled="false" class="goods-info" />
+                        <p class="my-p">
+                            <img src="/static/images/right.png">
                         </p>
                     </div>
-                    <input text="text" v-model="obj.place" class="alert_input right_input" v-show="!breedLocation.length">
+                    <input text="text" disabled="false" v-model="obj.place" class="alert_input right_input" v-show="!breedLocation.length">
                 </div>
                 <div v-show="!obj.drug_name" class="select content_div">
                     <input text="text" disabled="false" placeholder="请选择你的药材" class="alert_input">
@@ -51,7 +49,7 @@
             <div class="good_number">
                 <p>数量：</p>
                 <div class="content_div">
-                    <input type="number" placeholder="请输入" v-model="obj.number" class="last_input"/>
+                    <input type="number" placeholder="请输入" v-model="obj.number" class="last_input" />
                     <p @click="showAction('unit')">
                         {{obj.number_unit}}
                     </p>
@@ -60,7 +58,7 @@
             <div class="good_number">
                 <p>销售价格：</p>
                 <div class="content_div">
-                    <input type="number" placeholder="请输入" v-model="obj.sales_price" class="last_input"/>
+                    <input type="number" placeholder="请输入" v-model="obj.sales_price" class="last_input" />
                     <p>元/份</p>
                 </div>
             </div>
@@ -69,42 +67,41 @@
                 <div @click="show=true" class="select-address content_div">
                     {{ obj.address }}
                 </div>
-                
             </div>
         </div>
         <p class="good_sample_header">样品信息</p>
         <div class="good_information">
-            
             <div class="good_number">
                 <p>是否提供样品：</p>
                 <div class="sample_button content_div">
                     <!-- <button v-on:click="judgeValue(1)" v-bind:class=" obj.sampling ? 'button_active':''">是</button>
-                    <button v-on:click="judgeValue(0)" v-bind:class=" obj.sampling ? '':'button_active'">否</button>  -->  
-                    <div  class="left_button" v-on:click="judgeValue(1)">
+                    <button v-on:click="judgeValue(0)" v-bind:class=" obj.sampling ? '':'button_active'">否</button>  -->
+                    <div class="left_button" v-on:click="judgeValue(1)">
                         <img src="/static/images/no-select.png" v-show="!obj.sampling">
                         <img src="/static/images/over-select.png" v-show="obj.sampling">
                         <p>是</p>
-                    </div> 
-                    <div  class="right_button" v-on:click="judgeValue(0)">
+                    </div>
+                    <div class="right_button" v-on:click="judgeValue(0)">
                         <img src="/static/images/no-select.png" v-show="obj.sampling">
                         <img src="/static/images/over-select.png" v-show="!obj.sampling">
                         <p>否</p>
-                    </div>              
+                    </div>
                 </div>
             </div>
             <div class="good_number" v-show="obj.sampling">
                 <p>样品重量：</p>
                 <div class="content_div">
-                    <input type="number" placeholder="请输入" v-model="obj.weight" class="last_input"/>
+                    <input type="number" placeholder="请输入" v-model="obj.weight" class="last_input" />
                     <p @click="showAction('sample_unit')">
-                        {{obj.sample_unit}}<!-- sampleUnit -->
+                        {{obj.sample_unit}}
+                        <!-- sampleUnit -->
                     </p>
                 </div>
             </div>
             <div class="good_number" v-show="obj.sampling">
                 <p>样品价格：</p>
                 <div class="content_div">
-                    <input type="number" placeholder="请输入" v-model="obj.price" class="last_input"/>
+                    <input type="number" placeholder="请输入" v-model="obj.price" class="last_input" />
                     <p>元</p>
                 </div>
             </div>
@@ -188,7 +185,7 @@ export default {
                 this.obj.addressProvince = this.areaParam.addressProvince;
                 this.obj.addressCity = this.areaParam.addressCity;
                 this.obj.addressDistrict = this.areaParam.addressDistrict;
-                this.obj.address=this.obj.addressProvince+''+this.obj.addressCity+''+this.obj.addressDistrict;
+                this.obj.address = this.obj.addressProvince + '' + this.obj.addressCity + '' + this.obj.addressDistrict;
                 this.show = false;
             },
             onAddressChange(picker, values) {
@@ -232,10 +229,11 @@ export default {
 
             },
             jumpSearch(router) {
+                common.searchType = 'breed';
                 common.$emit("setParam", "router", "supplyRelease");
                 this.$router.push(router);
             },
-            getBreedInformation(breedId) {
+            getBreedInformation(name) {
                 let _self = this;
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -246,7 +244,7 @@ export default {
                     time: 0,
                     sign: '',
                     biz_param: {
-                        breedId: breedId
+                        name: name
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -254,8 +252,6 @@ export default {
                 httpService.commonPost(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
-                        _self.obj.spec = '';
-                        _self.obj.place = '';
                         _self.breedLocation = suc.data.biz_result.localList;
                         _self.breedSpec = suc.data.biz_result.specList;
                         if (_self.breedSpec.length > 0) _self.obj.spec = _self.breedSpec[0].name;
@@ -288,9 +284,9 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         _self.unit = suc.data.biz_result.list;
-                        if (!_self.obj.number_unit){
-                             _self.obj.number_unit = _self.unit[0].name;
-                             _self.obj.sample_unit = _self.unit[0].name;
+                        if (!_self.obj.number_unit) {
+                            _self.obj.number_unit = _self.unit[0].name;
+                            _self.obj.sample_unit = _self.unit[0].name;
                         }
                     } else {
                         common.$emit('message', suc.data.msg);
@@ -315,13 +311,13 @@ export default {
                             key: 'spec'
                         });
                     }
-                }else if(param == "sample_unit"){
+                } else if (param == "sample_unit") {
                     for (var i = 0; i < _self.unit.length; i++) {
                         _self.actions.push({
                             name: _self.unit[i].name,
                             key: 'sample_unit'
                         });
-                     }   
+                    }
                 } else if (param == "unit") {
 
                     for (var i = 0; i < _self.unit.length; i++) {
@@ -345,9 +341,15 @@ export default {
             let _self = this;
             this.getUnit();
             common.$on("supplyRelease", function(item) {
-                _self.getBreedInformation(item.id);
-                _self.obj.drug_name = item.keyWord;
-                _self.obj.breedId = item.id;
+                if (item.breedName) {
+                    _self.getBreedInformation(item.breedName);
+                    _self.obj.drug_name = item.breedName;
+                    _self.obj.breedId = item.breedId;
+                }else{
+                    _self.getBreedInformation(item.keyWord);
+                    _self.obj.drug_name = item.keyWord;
+                    _self.obj.breedId = item.id;
+                }
             });
         }
 }
@@ -369,10 +371,12 @@ textarea {
     margin-bottom: 0rem;
     background: white;
 }
-.release_good_information .title_name{
+
+.release_good_information .title_name {
     background: #F1F0F0;
-    width:100%;
+    width: 100%;
 }
+
 .release_good_information .good_infor_header {
     background: url('/static/images/information.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
@@ -385,8 +389,8 @@ textarea {
     color: #FA6705;
     text-align: left;
     padding-left: 1.536rem;
-    line-height:3.7rem; 
-    height:3.58rem;
+    line-height: 3.7rem;
+    height: 3.58rem;
     margin-left: 1.28rem;
 }
 
@@ -403,8 +407,7 @@ textarea {
 .good_number {
     height: 3.5rem;
     border-bottom: 1px solid #D2D2D2;
-
-   /* margin-top: 0.8533rem;*/
+    /* margin-top: 0.8533rem;*/
 }
 
 .release_good_information .good_number div p img {
@@ -463,7 +466,7 @@ textarea {
     width: 14.847rem;
     text-align: center;
     outline: none;
-    line-height:3.5rem;
+    line-height: 3.5rem;
     /*border: 1px solid #D2D2D2;*/
 }
 
@@ -486,11 +489,12 @@ textarea {
     /*height: 3.5rem;
     line-height: 3.5rem;*/
     padding-right: 1.28rem !important;
-
 }
-.release_good_information .good_number div .last_input{
+
+.release_good_information .good_number div .last_input {
     padding-right: 20px;
 }
+
 .release_good_information .good_name div .select input {
     text-align: center;
     outline: none;
@@ -503,7 +507,6 @@ textarea {
 .release_good_information .good_number .content_div {
     height: 3.5rem;
     width: 14.847rem;
-    /*border: 1px solid #D2D2D2;*/
 }
 
 .release_good_information .good_number div input {
@@ -516,6 +519,7 @@ textarea {
     outline: none;
     border: 0;
     padding-right: 2px;
+    background-color: #fff;
 }
 
 .release_good_information .good_number div p {
@@ -523,29 +527,29 @@ textarea {
     width: 40%;
     border-left: 1px solid #D2D2D2;
     position: absolute;
-    right:0;
+    right: 0;
 }
 
-.release_good_information .good_number div .goods-info{
+.release_good_information .good_number div .goods-info {
     width: 70%;
 }
-.release_good_information .good_number div .my-p{
+
+.release_good_information .good_number div .my-p {
     border-left: 0;
-    height:3.5rem;
-    width:3.5rem;
+    height: 3.5rem;
+    width: 3.5rem;
     position: absolute;
-    right:0;
-    width:30%;
-
+    right: 0;
+    width: 30%;
 }
 
-.release_good_information .good_number div .my-p img{
-    height:1.0rem;
+.release_good_information .good_number div .my-p img {
+    height: 1.0rem;
     /*position: absolute;*/
-    margin-left:1.3rem;
-    margin-top:1.1rem;
-
+    margin-left: 1.3rem;
+    margin-top: 1.1rem;
 }
+
 .release_good_information .good_delivery_header {
     background: url('/static/images/deliveryInformation.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
@@ -562,53 +566,60 @@ textarea {
     background: white;
     border: 1px solid #D2D2D2;
     outline: none;
-   
 }
 
-.release_good_information .good_number .sample_button{
+.release_good_information .good_number .sample_button {
     border: none;
-    width:8rem;
+    width: 8rem;
     margin-right: 1.28rem;
-
 }
-.release_good_information .good_number .sample_button img{
-    width:1rem;
+
+.release_good_information .good_number .sample_button img {
+    width: 1rem;
     margin-top: 1.1rem;
 }
+
 .release_good_information .good_number .sample_button .left_button p,
-.release_good_information .good_number .sample_button .right_button p{
+.release_good_information .good_number .sample_button .right_button p {
     border: none;
     float: left;
     line-height: 3.5rem;
 }
+
 .release_good_information .good_number .sample_button .left_button img,
-.release_good_information .good_number .sample_button .right_button img{
-    float:left;
+.release_good_information .good_number .sample_button .right_button img {
+    float: left;
 }
-.release_good_information .good_number .sample_button .left_button{
-    float:left;
-    width:40%;
+
+.release_good_information .good_number .sample_button .left_button {
+    float: left;
+    width: 40%;
 }
-.release_good_information .good_number .sample_button .right_button{
-    float:right;
-    width:40%;
+
+.release_good_information .good_number .sample_button .right_button {
+    float: right;
+    width: 40%;
 }
+
+
 /*.release_good_information .good_number .sample_button .button_active {
     background: #FA6705;
 }*/
 
-.release_good_information .address_outbox{
+.release_good_information .address_outbox {
     position: fixed;
     background: white;
-    width:100%;
+    width: 100%;
     z-index: 999;
     bottom: 0;
 }
-.release_good_information .address_box{
+
+.release_good_information .address_box {
     position: relative;
     background: white;
     padding-top: 4rem;
 }
+
 .release_good_information .address_box .left-button {
     position: absolute;
     left: 10%;
@@ -626,8 +637,8 @@ textarea {
     height: 30px;
     font-size: 16px;
 }
-.release_good_information .right_input{
-    padding-right: 2.28rem;
 
+.release_good_information .right_input {
+    padding-right: 2.28rem;
 }
 </style>

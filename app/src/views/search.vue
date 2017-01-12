@@ -41,7 +41,7 @@
                     <li v-for="todo in datas" class="page-loadmore-listitem list_content_item">
                         <div @click="jumpRes(todo)">
                             <img src="/static/icons/search.png">
-                            <p>{{todo.keyWord}}</p>
+                            <p>{{todo.keyWord}}<span v-if="searchType!='keyword'">({{todo.breedName}})</span></p>
                         </div>
                     </li>
                 </ul>
@@ -62,6 +62,7 @@ export default {
                 todos: [],
                 datas: [],
                 customerId: '',
+                searchType:common.searchType,
                 searchArr: [{
                     "name": "人参",
                     "spec": "统货",
@@ -100,6 +101,7 @@ export default {
                 this.historyArr = [];
             },
             jumpRes(item) {
+                console.log(item);
                 let _self = this;
                 switch (common.pageParam.router) {
                     case 'lowPriceRes':
@@ -162,15 +164,23 @@ export default {
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
                     common.$emit('show-load');
-                    httpService.searchWord(common.urlCommon + common.apiUrl.most, {
+                    let body={
                         biz_module: 'searchKeywordService',
-                        biz_method: 'querySearchKeyword',
+                        biz_method: 'querySearchKeywordBreed',
                         biz_param: {
                             keyWord: _self.keyword,
                             pn: 1,
                             pSize: 20
                         }
-                    }, function(suc) {
+                    }
+                    if(common.searchType=='keyword'){
+                        body.biz_module='searchKeywordService';
+                        body.biz_method='querySearchKeyword';
+                    }else{
+                        body.biz_module='searchKeywordService';
+                        body.biz_method='querySearchKeywordBreed';
+                    }
+                    httpService.searchWord(common.urlCommon + common.apiUrl.most, body, function(suc) {
                         common.$emit('close-load');
                         let result = suc.data.biz_result.list;
                         if(suc.data.code == '1c01'){
@@ -178,12 +188,11 @@ export default {
                         }else{
                             common.$emit('message', suc.data.msg);
                         }
-                        
                     }, function(err) {
                         common.$emit('close-load');
                         common.$emit('message', err.data.msg);
                     })
-                }, 0)
+                }, 300)
             }
         },
 

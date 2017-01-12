@@ -26,8 +26,8 @@ export default {
         },
         methods: {
             jumpBack: function() {
-                let _slef=this;
-                if (_slef.param.appBack) {
+                let _self=this;
+                if (_self.param.appBack) {
                     try {
                         if (_self.param.type=='ios') {
                             window.webkit.messageHandlers.AppModel.postMessage({

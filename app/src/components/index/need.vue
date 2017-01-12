@@ -7,44 +7,42 @@
             <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         </div>
         <div class="bg_white" style="margin-top:100px">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+               <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                    <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  @click="jumpDetail(todo.id)">
-                            
-                            <div class="center">
-                                <img :src="todo.cFlagsPath" class="flag">
-                                <div class="title">
-                                    <div>
-                                        <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
-                                        <span>{{todo.breedName}}</span>
-                                    </div>
-                                    <p>发布时间：{{todo.pubdate | timeFormat}}</p>
+                <ul class="page-loadmore-list">
+                    <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
+                        <div class="center">
+                            <img :src="todo.cFlagsPath" class="flag">
+                            <div class="title">
+                                <div>
+                                    <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
+                                    <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
+                                    <span>{{todo.breedName}}</span>
                                 </div>
-                                
-                                <div class="detail">
-                                    <div>
-                                        <p>规格</p>
-                                        <p>产地</p>
-                                        <p>剩余</p>
-                                        <p>需求数量</p>
-                                    </div>
-                                    <div class="last">
-                                        <p>{{todo.spec}}</p>
-                                        <p>{{todo.location}}</p>
-                                        <p>{{todo.duedate | timeDays(todo.pubdate)}}<span>天</span></p>
-                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
-                                    </div>
+                                <p>发布时间：{{todo.pubdate | timeFormat}}</p>
+                            </div>
+                            <div class="detail">
+                                <div>
+                                    <p>规格</p>
+                                    <p>产地</p>
+                                    <p>剩余</p>
+                                    <p>需求数量</p>
+                                </div>
+                                <div class="last">
+                                    <p>{{todo.spec}}</p>
+                                    <p>{{todo.location}}</p>
+                                    <p>{{todo.duedate | timeDays(todo.pubdate)}}<span>天</span></p>
+                                    <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                 </div>
                             </div>
-                            <div class="bottom">
-                                <p>已报价<span>{{todo.offer}}</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump()">我要报价</button>
-                            </div>
-                        </li>
-                    </ul>
-                    <div slot="top" class="mint-loadmore-top">
+                        </div>
+                        <div class="bottom">
+                            <p>已报价<span>{{todo.offer}}</span>人</p>
+                            <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump()">我要报价</button>
+                        </div>
+                    </li>
+                </ul>
+              <div slot="top" class="mint-loadmore-top">
                         <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
                         <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
@@ -55,8 +53,7 @@
                 </mt-loadmore>
             </div>
         </div>
-
-        <errPage  :param="err"  v-show="todos.length==0"></errPage>
+        <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -69,14 +66,14 @@ import filters from '../../filters/filters'
 export default {
     data() {
             return {
-                err:{
-                    err:"很抱歉，没有找到相关资源",
-                    url:'/static/icons/maomao.png',
-                    next_step:'去发布',
-                    router:'/needRelease'
+                err: {
+                    err: "很抱歉，没有找到相关资源",
+                    url: '/static/icons/maomao.png',
+                    next_step: '去发布',
+                    router: '/needRelease'
                 },
-                myShow:{
-                    myShow:false
+                myShow: {
+                    myShow: false
                 },
                 sortRouter: 'need',
                 sortArr: [{
@@ -200,15 +197,17 @@ export default {
                         pn: _self.httpPraram.page,
                         pSize: _self.httpPraram.pageSize
                     }
-                },  function(suc) {
-                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
+                }, function(suc) {
+                    if (_self.httpPraram.page == 1) {
+                        _self.todos.splice(0, _self.todos.length);
+                    }
                     let result = suc.data.biz_result.list;
                     common.$emit('close-load');
-                    if(suc.data.code == '1c01'){
-                         for(var i = 0; i < result.length; i++){
+                    if (suc.data.code == '1c01') {
+                        for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);
                         }
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
                     if (back) {
@@ -235,21 +234,22 @@ export default {
                 this.getHttp();
             },
             jumpSearch() {
+                common.searchType='keyword';
                 common.$emit('setParam', 'router', 'need')
                 this.$router.push('search');
             },
             jumpDetail(id) {
-                common.$emit('post-need-detail', id);
+                common.$emit('needToDetail', id);
                 this.$router.push('needDetail/' + id);
             },
-            jump(){
-                function loadApp(){
-                    window.location.href = common.appUrl; 
+            jump() {
+                function loadApp() {
+                    window.location.href = common.appUrl;
                 }
-               common.$emit('confirm', {
-                    message:'要报价请下载App',
-                    title:'提示',
-                    ensure:loadApp
+                common.$emit('confirm', {
+                    message: '要报价请下载App',
+                    title: '提示',
+                    ensure: loadApp
                 });
             },
             handleBottomChange(status) {
@@ -308,13 +308,11 @@ export default {
             });
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 155;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 165;
         }
 }
 </script>
 <style scoped>
-
-
 .mint-load {
     background: #fff;
 }
@@ -338,44 +336,45 @@ export default {
 
 .need {}
 
-.need .fixed{
+.need .fixed {
     top: 0;
 }
 
-.need .fixed .search_content{
+.need .fixed .search_content {
     float: left;
     width: 100%;
     background: #EC6817;
 }
 
-.need .go-back{
+.need .go-back {
     position: absolute;
-    width:15%;
-    padding-right:5%;
-    height:50px;
+    width: 15%;
+    padding-right: 5%;
+    height: 50px;
     border-bottom: 1px solid #ccc;
-    background:#EC6817;
+    background: #EC6817;
 }
 
-.need .bg_white{
-    background:#fff;
+.need .bg_white {
+    background: #fff;
 }
+
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list {
     padding: 0 10px;
     float: left;
 }
+
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
     min-height: 100px;
-    padding:0;
+    padding: 0;
     height: auto;
     background: white;
     margin-top: 10px;
     border-radius: 3px;
     box-shadow: 0px 0px 20px #F5F5F5;
 }
-
 
 .need .fixed {
     position: fixed;
@@ -384,34 +383,33 @@ export default {
     background: #fff;
 }
 
-
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag{
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag {
     position: absolute;
-    top:0px;
-    right:0px;
-    width:1.7rem;
-    height:1.23rem;
+    top: 0px;
+    right: 0px;
+    width: 1.7rem;
+    height: 1.23rem;
 }
 
-.need  .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom {
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom {
     float: left;
     width: 100%;
     padding: 0 10px;
-    height:4.18rem;
+    height: 4.18rem;
 }
 
-.need  .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom p {
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom p {
     line-height: 4.18rem;
     float: left;
     font-size: 1.2rem;
     color: #666;
 }
 
-.need  .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom span {
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom span {
     color: #EC6817;
 }
 
-.need  .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom button {
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom button {
     float: right;
     background: #EC6817;
     font-size: 1.2rem;
@@ -447,53 +445,55 @@ export default {
     float: right;
     font-size: 1rem;
     color: #999;
-    margin:1.2rem 2.559rem 0 0;
-
+    margin: 1.2rem 2.559rem 0 0;
 }
 
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img {
-    width:1.2rem;
+    width: 1.2rem;
     margin-right: 5px;
 }
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title>div{
-    margin-top:1.06rem;
+
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title>div {
+    margin-top: 1.06rem;
 }
 
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail{
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail {
     width: 100%;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: column;
     -webkit-box-orient: vertical;
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
 }
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div{
+
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div {
     flex: 1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
     margin-top: 1.279rem;
-    
 }
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail .last p{
-    color:#666666;
+
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail .last p {
+    color: #666666;
 }
-.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div p{
+
+.need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div p {
     flex: 1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
     font-size: 1.109rem;
     color: #424242;
 }

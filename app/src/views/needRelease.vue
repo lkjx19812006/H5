@@ -33,10 +33,7 @@
                         </div>
                     </div>
                     <div class="confirm" @click="release()">确认发布</div>
-               
-           
         </div>
-        <!-- </mt-loadmore> -->
     </div>
 </template>
 <script>
