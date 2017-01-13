@@ -1,5 +1,5 @@
 <template>
-    <div class="pop_up" :style="{ height: param.whole_height + 'px' }" v-on:click="backDetail()">     
+    <div class="pop_up" :style="{ height: param.whole_height + 'px' }" v-on:click="backDetail()">    
             <mt-swipe :auto="0" :prevent="false" > 
                 <mt-swipe-item v-for="item in param.url">
                 <div>

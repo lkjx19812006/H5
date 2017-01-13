@@ -48,7 +48,8 @@ let common = new Vue({
             resourceId: '',
             Needrelease: '',
             backAddress: '',
-            orderStatus: 0
+            orderStatus: 0,
+            myParam:''
         },
         shareParam: {
             imgUrl: 'http://apps.yaocaimaimai.com/htm5/static/icons/err.png',

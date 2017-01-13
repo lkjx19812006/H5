@@ -47,13 +47,7 @@ validation.checkCommon = (newName,oldName) =>{
         return false;
     }
 }
-validation.checkCommon = (newName,oldName) =>{
-    if(newName !== oldName){
-        return '新密码不一致'
-    }else{
-        return false;
-    }
-}
+
 validation.checkDifferent = (newName,oldName) =>{
     if(newName == oldName){
         return '与原密码不能相同'

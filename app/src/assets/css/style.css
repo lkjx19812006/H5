@@ -314,8 +314,7 @@ a {
 .whole {
     margin-top: 60px;
     width: 100%;
-    overflow: hidden;
-    
+    overflow: hidden; 
 }
 
 .page-loadmore-wrapper {

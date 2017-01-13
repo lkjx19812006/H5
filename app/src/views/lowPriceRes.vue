@@ -15,8 +15,8 @@
                                         <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
                                         {{todo.breedName}}
                                     </div>
-                                    <p class="spec">规格：<span>{{todo.spec}}</span></p>
-                                    <p>产地：<span>{{todo.location}}</span></p>
+                                    <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
+                                    <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
                                     <p class="time_font">发布时间:<span>{{todo.pubdate | timeFormat}}</span></p>
                                 </div>
                                 <div class="res_content_right">
@@ -390,7 +390,20 @@ export default {
     width: 1.2rem;
     margin-right: 4px;
 }
-
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center>div{
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width:40%;
+}
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .over_lenght{
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width:200px;
+}
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
     width: 100%;

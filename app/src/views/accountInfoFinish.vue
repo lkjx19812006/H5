@@ -287,7 +287,7 @@ export default {
                     birthday = (birthday + 24 * 60 * 60) * 1000;
                     birthday = JSON.stringify(new Date(birthday));
                     birthday = birthday.substring(1, 11);
-                    _self.arr.name = suc.data.biz_result.name;
+                    _self.arr.name = suc.data.biz_result.fullname;
                     _self.arr.birthday = birthday;
                     _self.arr.gender = suc.data.biz_result.gender;
                     _self.arr.phone = suc.data.biz_result.phone;
@@ -332,7 +332,6 @@ export default {
                     time: 0,
                     sign: '',
                     biz_param: {
-                        name: _self.arr.name,
                         gender: _self.arr.gender,
                         fullname: _self.arr.name,
                         phone: _self.arr.phone,

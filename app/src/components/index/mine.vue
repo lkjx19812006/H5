@@ -160,7 +160,7 @@ export default {
                     if (suc.data.code = "1c01") {
                         _self.information=suc.data.biz_result;
                         console.log(_self.information);
-                        _self.param.name = suc.data.biz_result.name;
+                        _self.param.name = suc.data.biz_result.fullname;
                         _self.param.company = suc.data.biz_result.company;
                         _self.param.normalMoney = suc.data.biz_result.normalMoney;
                         _self.param.score = suc.data.biz_result.score;
