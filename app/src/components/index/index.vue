@@ -44,10 +44,10 @@
                             <div class="news_content">
                                 <ul id="scrollText">
                                     <li v-for="todo in transaction">
-                                        <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+' '+todo.location+' '}}{{todo.successTime | successTimeFormat}}</div>
+                                        <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+todo.unit+' '+todo.location+' '}}{{todo.successTime | successTimeFormat}}</div>
                                     </li>
                                     <li v-if="transaction[0]">
-                                        <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+' '+transaction[0].location+' '}}{{transaction[0].successTime | successTimeFormat}}</div>
+                                        <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+transaction[0].unit+' '+transaction[0].location+' '}}{{transaction[0].successTime | successTimeFormat}}</div>
                                     </li>
                                 </ul>
                             </div>
@@ -73,7 +73,7 @@
                                                     <span>产地:<span>{{todo.area}}</span></span>
                                                     <span class="price_swiper_right_span">
                                                         <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
-                                                        <img src="/static/images/up.png" v-if="todo.weekdowns > 0">&nbsp;
+                                                        <img src="/static/images/up.png" v-if="todo.weekdowns >= 0">&nbsp;
                                                         {{todo.weekdowns}}
                                                     </span>
                                                 </div>
@@ -93,7 +93,7 @@
                                                     <span>产地:<span>{{drugGuidePrice[index+1].area}}</span></span>
                                                     <span class="price_swiper_right_span">
                                                         <img src="/static/images/down.png" v-if="drugGuidePrice[index+1].weekdowns < 0">
-                                                        <img src="/static/images/up.png" v-if="drugGuidePrice[index+1].weekdowns > 0">&nbsp;
+                                                        <img src="/static/images/up.png" v-if="drugGuidePrice[index+1].weekdowns >= 0">&nbsp;
                                                         {{drugGuidePrice[index+1].weekdowns}}
                                                     </span>
                                                 </div>
@@ -259,6 +259,7 @@ export default {
                     }
                 }, function(suc) {
                     let result = suc.data.biz_result.list;
+                    console.log(result)
                     _self.drugGuidePrice = result;
                 }, function(err) {
                     common.$emit('message', err.data.msg);

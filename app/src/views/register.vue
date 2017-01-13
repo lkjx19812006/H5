@@ -100,6 +100,31 @@ export default {
               
                
             },
+            login(){
+                let _self = this;
+                common.$emit('show-load');
+                httpService.login(common.urlCommon + common.apiUrl.login, {
+                    biz_param: {
+                        phone: _self.param.phone,
+                        password: _self.param.password
+                    }
+                }, function(response) {
+                    common.$emit('close-load');
+                    if (response.data.code == '1c01') {
+                        window.localStorage.KEY = response.data.biz_result.KEY;
+                        window.localStorage.SID = response.data.biz_result.SID;
+                        common.KEY = window.localStorage.KEY;
+                        common.SID = window.localStorage.SID;
+                        common.getDate();
+                        _self.$router.push('perfectInfo');
+                    } else {
+                        //common.$emit('message', response.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    //common.$emit('message', err.data.msg);
+                })
+            },
             register() {
                 var checkArr = [];
                 let _self = this;
@@ -134,6 +159,8 @@ export default {
                     common.$emit('close-load');
                     if (response.data.code == '1c01') {
                         common.$emit('message', response.data.msg);
+                        _self.login();
+                        
                     } else {
                         common.$emit('message', response.data.msg);
                     }

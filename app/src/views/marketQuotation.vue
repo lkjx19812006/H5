@@ -52,6 +52,7 @@
                         <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
+                    
                 </mt-loadmore>
             </div>
         </div>
@@ -115,6 +116,7 @@ export default {
                 }, function(suc) {
                     common.$emit('close-load');
                     let data = suc.data.biz_result.list;
+                    console.log(data);
                     for (var i = 0; i < data.length; i++) {
                         let item = data[i];
                         item.show = false;
