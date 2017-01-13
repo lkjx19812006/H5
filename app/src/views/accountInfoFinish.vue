@@ -87,7 +87,11 @@
                         <li>
                             <p class="name  name_big_size">开票信息</p>
                             <p class="name_content">
-                                <input type="text" :placeholder="arr.invoice" v-model="arr.invoice" maxlength="16">
+                                <!-- <input type="text" :placeholder="arr.invoice" v-model="arr.invoice" maxlength="16"> -->
+                                <select class="sex-select" v-model="arr.invoice">
+                                    <option>增值税发票</option>
+                                    <option>普通发票</option>
+                                </select>
                             </p>
                         </li>
                         <li @click="jumpCompany">
@@ -138,14 +142,14 @@ export default {
                 arr: {
                     name: '',
                     birthday: '',
-                    gender: '',
+                    gender: '请选择',
                     phone: '',
                     ucomment: '',
                     company: '',
                     companyShort: '',
-                    companyJob: '',
+                    companyJob: '请选择',
                     bizMain: '',
-                    invoice: '',
+                    invoice: '请选择',
                     ccomment: '',
                     url: ''
                 },

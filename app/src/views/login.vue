@@ -30,9 +30,12 @@
                         <router-link to="findPassWord">
                             <p class="left">忘记密码</p>
                         </router-link>
-                        <router-link to="register">
-                            <p class="right">立即注册</p>
-                        </router-link>
+                        <!-- <router-link to="register"> -->
+                        <div @click="jump('register')">
+                           <p class="right">立即注册</p>
+                        </div>
+                            
+                        <!-- </router-link> -->
                     </div>
                     <div class="confirm" @click="login()">登陆</div>
                 </mt-loadmore>
@@ -79,6 +82,10 @@ export default {
             myHeader
         },
         methods: {
+            jump(router){
+                   /*common.$emit('inforRegister',1)*/
+                   this.$router.push(router);
+            },
             passWordLogin() {
                 let _self = this;
                 common.$emit('show-load');

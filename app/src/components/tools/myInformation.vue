@@ -60,12 +60,14 @@ export default {
             jump(router) {
                 let _self = this;
                 if (router == 'detailsPage') {
-                        if(_self.param.employee<100000){
+                        if(_self.param.employee <= 100000){
                             common.$emit("confirm", {
                             message: '未设置专属客户，去设置？',
                             title: '提示',
                             ensure: _self.call
                         });
+                    }else if(_self.param.employee > 100000){
+                            _self.$router.push('/detailsPage');
                     }else{
                             common.$emit("confirm", {
                             message: '未设置专属客户，拨号去设置？',

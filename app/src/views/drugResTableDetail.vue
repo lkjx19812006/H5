@@ -8,7 +8,7 @@
              <mt-loadmore >
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                     <div class="info_content">
-                                <div class="information" v-show = "!navArr[0].show">
+                                <div class="information" v-if = "!navArr[0].show">
                                     <div class="drug_name">
                                         <div class="main_name">{{obj.herbName}}</div>
                                         <div class="name_type">
@@ -38,7 +38,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="information" v-show = "!navArr[1].show">
+                                <div class="information" v-if = "!navArr[1].show">
                                     <div class="spec">
                                         <div class="spec_type">
                                             <p class="what_spec">形态特征：</p>
@@ -46,7 +46,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="information" v-show = "!navArr[2].show">
+                                <div class="information" v-if = "!navArr[2].show">
                                     <div class="spec">
                                         <div class="spec_type">
                                             <p class="what_spec">鉴别真伪：</p>
@@ -54,7 +54,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="information" v-show = "!navArr[3].show">
+                                <div class="information" v-if = "!navArr[3].show">
                                     <div class="spec">
                                         <p class="what_spec" id="what_spec">2015年药典标准：</p>
                                         <p class="spec_content" v-html="obj.standard"></p>
@@ -136,13 +136,16 @@ export default {
         },
 
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            let _self = this;
+             this.$nextTick(function () {
+                 _self.wrapperHeight = window.screen.height - _self.$refs.wrapper.getBoundingClientRect().top;
+              })
+           
         },
         created() {
             var _self = this;
             let name = _self.$route.params.drugId;
             let from = _self.$route.params.from;
-
             if (from == 'ios') {
                 _self.param.type = 'ios';
             }
@@ -349,7 +352,7 @@ export default {
 }
 
 .drug_table_detail .info_content {
-    float: left;
+    position: relative;
     width: 100%;
     height: 100%;
 }

@@ -166,8 +166,10 @@ export default {
                         _self.param.score = suc.data.biz_result.score;
                         _self.param.url = suc.data.biz_result.avatar;
                         _self.url = suc.data.biz_result.avatar;
+                        _self.information.employee = suc.data.biz_result.employee;
                          common.customerId = suc.data.biz_result.customerId;
                         window.localStorage.ID = suc.data.biz_result.customerId;
+
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -239,6 +241,7 @@ export default {
                 console.log( _self.param);
 
             });
+            
         }
 }
 </script>

@@ -89,7 +89,11 @@ export default {
         },
         watch: {
             keyword: function(newValue, oldValue) {
-                let _self = this;
+                 let _self = this;
+                if(!_self.keyword){
+                    return;
+                }
+               
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
                     common.$emit('show-load');

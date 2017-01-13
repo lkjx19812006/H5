@@ -61,6 +61,9 @@ export default {
         components: {
             myHeader
         },
+        created(){
+             
+        },
         methods: {
             confirm: function() {
                 let _self = this;
@@ -116,6 +119,7 @@ export default {
                         common.KEY = window.localStorage.KEY;
                         common.SID = window.localStorage.SID;
                         common.getDate();
+                        common.$emit('nextRegister',1);
                         _self.$router.push('perfectInfo');
                     } else {
                         //common.$emit('message', response.data.msg);
