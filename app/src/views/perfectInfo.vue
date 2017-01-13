@@ -117,7 +117,7 @@ export default {
                     common.$emit('close-load');
                     console.log(suc)
                     if (suc.data.code == "1c01") {
-                        
+                        common.$emit("toMine", _self.obj);              
                         _self.$router.push('/home');
                     } else {
                         common.$emit('message', suc.data.msg);
@@ -128,7 +128,7 @@ export default {
                 })
             },
             getUrl(param) {
-                this.url = param.url; 
+                this.obj.url = param.url; 
             },
             open(picker) {
                 this.$refs[picker].open();
