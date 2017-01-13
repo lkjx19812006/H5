@@ -90,8 +90,8 @@ export default {
 
 .iosHead .ios_header .header_content {
     background: #EC6817;
-    position: fixed;
-    top: 0;
+    /*position: fixed;
+    top: 0;*/
     width: 100%;
     height: 64px;
     z-index: 2000;

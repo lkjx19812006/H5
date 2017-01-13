@@ -43,12 +43,14 @@ export default {
             return {
                 wrapperHeight: '',
                 myHeader: {
-                    name: '详情'
+                    name: '详情',
+
 
                 },
                 param: {
                     name: 'intention',
-                    index: 0
+                    index: 0,
+                    url:'/static/icons/big_head.png'
                 },
                 msg: 'Welcome to Your Vue.js App',
                 todos: [{
@@ -89,42 +91,53 @@ export default {
             getUrl(param) {
                 console.log('dddddd');
                 console.log(param);
+            },
+            getHttp(){
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'queryEmployeeInfo',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {
+
+                    }
+                };
+
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.queryEmployeeInfo(url, body, function(suc) {
+                    common.$emit('close-load');
+                    console.log(suc.data.biz_result);
+                    let sex = suc.data.biz_result.gender;
+                    if(sex == 0){
+                        sex = '女'
+                    }else{
+                        sex = '男'
+                    }
+                    _self.todos[0].content = suc.data.biz_result.name;
+                    _self.todos[1].content = sex;
+                    _self.todos[2].content = suc.data.biz_result.mobile;
+                    _self.todos[3].content = suc.data.biz_result.extno;
+                    _self.todos[4].content = suc.data.biz_result.qq;
+                    _self.todos[5].content = suc.data.biz_result.wechat;
+                    _self.data[0].content = suc.data.biz_result.goodfield
+                }, function(err) {
+                    common.$emit('close-load');
+                })
             }
         },
         components: {
             imageUpload,
             myHeader
         },
+        
         created() {
             let _self = this;
-            common.$emit('show-load');
-            let url = common.addSID(common.urlCommon + common.apiUrl.most);
-            let body = {
-                biz_module: 'userService',
-                biz_method: 'queryEmployeeInfo',
-                version: 1,
-                time: 0,
-                sign: '',
-                biz_param: {
-
-                }
-            };
-
-            body.time = Date.parse(new Date()) + parseInt(common.difTime);
-            body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-            httpService.queryEmployeeInfo(url, body, function(suc) {
-                common.$emit('close-load');
-                console.log(suc.data.biz_result);
-                _self.todos[0].content = suc.data.biz_result.name;
-                _self.todos[1].content = suc.data.biz_result.gender;
-                _self.todos[2].content = suc.data.biz_result.mobile;
-                _self.todos[3].content = suc.data.biz_result.extno;
-                _self.todos[4].content = suc.data.biz_result.qq;
-                _self.todos[5].content = suc.data.biz_result.wechat;
-                _self.data[0].content = suc.data.biz_result.goodfield
-            }, function(err) {
-                common.$emit('close-load');
-            })
+            _self.getHttp();
 
         },
         mounted() {

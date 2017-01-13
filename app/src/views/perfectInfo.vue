@@ -93,6 +93,7 @@ export default {
             },
             confirmUpData() {
                 let _self = this;
+          
                 let birthday = _self.getTimeStamp(_self.obj.birthday)/1000;
                 console.log(_self.obj.name,_self.obj.bizMain)
                 common.$emit('show-load');
@@ -169,7 +170,14 @@ export default {
             let _self = this;
            _self.start = new Date("1900-01-10");
            _self.end = new Date("2017-01-10");
-          
+           
+           common.$on('nextRegister',function(item){
+                    _self.obj.url = '';
+                    _self.obj.company = '';
+                    _self.obj.name = '';
+                    _self.param.url = '/static/icons/big_head.png';
+                    _self.obj.bizMain = '';
+                   })
 
         },
         mounted() {
