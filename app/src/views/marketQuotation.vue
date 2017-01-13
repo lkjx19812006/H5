@@ -11,7 +11,8 @@
                     <p>规格</p>
                     <p>产地</p>
                     <p>价格</p>
-                    <input type="button" value="跌涨(元)">
+                    <p>跌涨(元)</p>
+                    <!-- <input type="button" value="跌涨(元)"> -->
                 </div>
             </div>
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
@@ -22,10 +23,10 @@
                                 <p>{{todo.name}}</p>
                                 <p>{{todo.spec}}</p>
                                 <p>{{todo.area}}</p>
-                                <p>{{todo.unitprice}}</p>
-                                <p>{{todo.weekdowns}}&nbsp;
-                                    <img src="/static/images/up.png" v-if="todo.weekdowns >= 0">
-                                    <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
+                                <p>{{todo.unitprice}}元</p>
+                                <p>{{todo.weekdowns | floatType}}%&nbsp;
+                                    <img src="/static/images/up.png" v-show="todo.weekdowns > 0">
+                                    <img src="/static/images/down.png" v-show="todo.weekdowns < 0">
                                 </p>
                                 <img src="/static/icons/to-down.png" class="to_down">
                             </div>
@@ -34,10 +35,10 @@
                                     <p>{{item.name}}</p>
                                     <p>{{item.spec}}</p>
                                     <p>{{item.area}}</p>
-                                    <p>{{item.unitprice}}</p>
-                                    <p>{{item.weekdowns}}&nbsp;
-                                        <img src="/static/images/up.png" v-if="todo.weekdowns >= 0">
-                                        <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
+                                    <p>{{item.unitprice}}元</p>
+                                    <p>{{item.weekdowns | floatType}}%&nbsp;
+                                        <img src="/static/images/up.png" v-show="item.weekdowns > 0">
+                                        <img src="/static/images/down.png" v-show="item.weekdowns < 0">
                                     </p>
                                     <img src="/static/icons/to-down.png" class="to_down">
                                 </li>
@@ -66,6 +67,7 @@ import common from '../common/common.js'
 import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
 import errPage from '../components/tools/err'
+import filters from '../filters/filters'
 export default {
     data() {
             return {
@@ -395,5 +397,9 @@ export default {
 
 .market_quotation .second_level_content li p img {
     height: 1.024rem;
+}
+.market_quotation .second_level p img{
+    height: 1.024rem;
+
 }
 </style>

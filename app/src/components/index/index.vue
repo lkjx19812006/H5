@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mt-header fixed>
+        <mt-header >
             <router-link to="" slot="left">
                 <img src="/static/images/my-logo.png" class="logo">
                 <div class="search_div" @click="fromIndex">
@@ -9,8 +9,7 @@
                 </div>
             </router-link>
         </mt-header>
-
-        <div class="whole" >
+        <div class="my_whole" >
             <div class="page-loadmore-wrapper" ref="wrapper"  :style="{ height: wrapperHeight + 'px' }" >
                 <mt-loadmore>
                   <!--   <div class="content" > -->
@@ -67,14 +66,14 @@
                                                 <p class="price_swiper_name">{{todo.name}}</p>
                                                 <div class="price_swiper_div">
                                                     <span>规格:<span>{{todo.spec}}</span></span>
-                                                    <span class="price_swiper_right_span">{{todo.unitprice}}</span>
+                                                    <span class="price_swiper_right_span">{{todo.unitprice}}元</span>
                                                 </div>
                                                 <div class="price_swiper_div price_swiper_place_div">
                                                     <span>产地:<span>{{todo.area}}</span></span>
                                                     <span class="price_swiper_right_span">
                                                         <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
-                                                        <img src="/static/images/up.png" v-if="todo.weekdowns >= 0">&nbsp;
-                                                        {{todo.weekdowns}}
+                                                        <img src="/static/images/up.png" v-if="todo.weekdowns > 0">&nbsp;
+                                                        {{todo.weekdowns | floatType}}%
                                                     </span>
                                                 </div>
                                             </div>
@@ -87,14 +86,14 @@
                                                         <span>{{drugGuidePrice[index+1].spec}}</span>
                                                     </span>
                                                     <span class="price_swiper_right_span">
-                                                        {{drugGuidePrice[index+1].unitprice}}</span>
+                                                        {{drugGuidePrice[index+1].unitprice}}元</span>
                                                 </div>
                                                 <div class="price_swiper_div price_swiper_place_div">
                                                     <span>产地:<span>{{drugGuidePrice[index+1].area}}</span></span>
                                                     <span class="price_swiper_right_span">
                                                         <img src="/static/images/down.png" v-if="drugGuidePrice[index+1].weekdowns < 0">
-                                                        <img src="/static/images/up.png" v-if="drugGuidePrice[index+1].weekdowns >= 0">&nbsp;
-                                                        {{drugGuidePrice[index+1].weekdowns}}
+                                                        <img src="/static/images/up.png" v-if="drugGuidePrice[index+1].weekdowns > 0">&nbsp;
+                                                        {{drugGuidePrice[index+1].weekdowns}}%
                                                     </span>
                                                 </div>
                                             </div>
@@ -410,7 +409,10 @@ export default {
     border: none;
     color: #fff;
 }
-
+.my_whole {
+    width: 100%;
+    overflow: hidden; 
+}
 .search_div {
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
@@ -681,6 +683,8 @@ export default {
 .bg_white .list_content .cell_class .list_myimage{
     width:20%;
     font-size: 1.1rem;
+    height: 30px;
+    line-height: 30px;
     text-align: center;
     word-break: keep-all;
     white-space: nowrap;

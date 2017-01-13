@@ -62,6 +62,7 @@ export default {
     position: absolute;
     width: 100%;
     height: 50px;
+    border-bottom: 1px solid #ccc;
 }
 
 .head .title-name {

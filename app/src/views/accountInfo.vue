@@ -163,7 +163,7 @@ export default {
                     birthday = (birthday + 24 * 60 * 60) * 1000;
                     birthday = JSON.stringify(new Date(birthday));
                     birthday = birthday.substring(1, 11);
-                    _self.personalDataArr[0].content = suc.data.biz_result.name;
+                    _self.personalDataArr[0].content = suc.data.biz_result.fullname;
                     _self.personalDataArr[1].content = birthday;
                     _self.personalDataArr[2].content = suc.data.biz_result.gender;
                     _self.personalDataArr[3].content = suc.data.biz_result.phone;
