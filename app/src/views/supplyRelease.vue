@@ -66,6 +66,8 @@ export default {
                 img_src: '/static/images/3.jpg',
                 drug: '请输入你的药材',
                 obj: {
+                    sample_id:'',
+                    number_id:'',
                     sampling:1,
                     update:false,
                     drug_name: '',
@@ -131,7 +133,9 @@ export default {
         methods: {
 
             release() {
+
                 let _self = this;
+                console.log(_self.obj.sample_id);
                 var checkArr = [];
                 let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种');
                 checkArr.push(checkBreedId);
@@ -196,8 +200,8 @@ export default {
                         sampleAmount: _self.obj.price,
                         duedate: _self.obj.duedate,
                         breedId: _self.obj.breedId,
-                        unit: _self.obj.number_unit,
-                        sampleUnit:_self.obj.sample_unit
+                        unit: _self.obj.number_id,
+                        sampleUnit:_self.obj.sample_id
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);

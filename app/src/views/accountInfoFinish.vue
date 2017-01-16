@@ -140,15 +140,15 @@ export default {
                 pickerValue: '',
                 arr: {
                     name: '',
-                    birthday: '',
-                    gender: '请选择',
+                    birthday: '请选择',
+                    gender: '男',
                     phone: '',
                     ucomment: '',
                     company: '',
                     companyShort: '',
-                    companyJob: '请选择',
+                    companyJob: '业务员',
                     bizMain: '',
-                    invoice: '请选择',
+                    invoice: '增值税发票',
                     ccomment: '',
                     url: ''
                 },
@@ -311,9 +311,16 @@ export default {
                 let _self = this;
                 let checkArr = [];
                 let checkPhone = validation.checkPhoneTrue(_self.arr.phone);
-                if (checkPhone) {
-                    common.$emit('message', checkPhone);
-                    return;
+                checkArr.push(checkPhone);
+                let checkName = validation.checkNameTrue(_self.arr.name);
+                checkArr.push(checkName);
+                let checkBizMain = validation.checkNull(_self.arr.bizMain,'主营品类不能为空！');
+                checkArr.push(checkBizMain);
+                for(let i = 0; i < checkArr.length; i++){
+                    if(checkArr[i]){
+                         common.$emit('message',checkArr[i]);
+                         return
+                    } 
                 }
                 common.$emit("confirm", {
                     message: '确定修改账户信息',

@@ -35,9 +35,12 @@ export default {
                 });
             },
             touch(event) {
+                
                 this.handleEvent(event);
+                 
             },
             handleEvent: function(event) {
+
                 var _self = this; //this指events对象
                 if (event.type == 'touchstart') {
                     _self.start(event);
@@ -46,6 +49,7 @@ export default {
                 } else if (event.type == 'touchend') {
                     _self.end(event);
                 }
+                
             },
             start: function(event) {
                 var touch = event.targetTouches[0];

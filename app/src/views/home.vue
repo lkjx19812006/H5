@@ -16,7 +16,7 @@
                 </mt-tab-container-item>
             </mt-tab-container>
         </div>
-        <mt-tabbar v-model="selected" fixed>
+        <mt-tabbar v-model="selected">
             <mt-tab-item id="index">
                 <img slot="icon" src="/static/icons/index_selected.png" v-if="selected=='index'">
                 <img slot="icon" src="/static/icons/index.png" v-else> 首页

@@ -11,8 +11,9 @@
                     <p>规格</p>
                     <p>产地</p>
                     <p>价格</p>
-                    <p>跌涨(元)</p>
-                    <!-- <input type="button" value="跌涨(元)"> -->
+                    <!-- <p>跌涨(元)</p> -->
+                    <input type="button" value="跌涨(元)" v-show = "!percent" @click="change">
+                    <input type="button" value="幅度(%)" v-show = "percent" @click="change">
                 </div>
             </div>
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
@@ -24,7 +25,8 @@
                                 <p>{{todo.spec}}</p>
                                 <p>{{todo.area}}</p>
                                 <p>{{todo.unitprice}}元</p>
-                                <p>{{todo.weekdowns | floatType}}%&nbsp;
+                                <p class="last_one"><span v-show = "!percent">{{todo.weekdowns | floatType}}</span>
+                                   <span v-show = "percent">{{todo.percent | percentType}}%</span>&nbsp;
                                     <img src="/static/images/up.png" v-show="todo.weekdowns > 0">
                                     <img src="/static/images/down.png" v-show="todo.weekdowns < 0">
                                 </p>
@@ -36,7 +38,8 @@
                                     <p>{{item.spec}}</p>
                                     <p>{{item.area}}</p>
                                     <p>{{item.unitprice}}元</p>
-                                    <p>{{item.weekdowns | floatType}}%&nbsp;
+                                    <p class="last_one"><span v-show = "!percent">{{item.weekdowns | floatType}}</span>
+                                       <span v-show = "percent">{{item.percent | percentType}}%</span>&nbsp;
                                         <img src="/static/images/up.png" v-show="item.weekdowns > 0">
                                         <img src="/static/images/down.png" v-show="item.weekdowns < 0">
                                     </p>
@@ -71,6 +74,7 @@ import filters from '../filters/filters'
 export default {
     data() {
             return {
+                percent:true,
                 err: {
                     err: "很抱歉，没有找到相关资源",
                     url: '/static/icons/maomao.png'
@@ -122,6 +126,10 @@ export default {
                     for (var i = 0; i < data.length; i++) {
                         let item = data[i];
                         item.show = false;
+                        item.percent = Number(item.weekdowns / item.unitprice);
+                        for (var j = 0; j < item.list.length; j++){
+                            item.list[j].percent = Number(item.list[j].weekdowns / item.list[j].unitprice);
+                        }
                         _self.todos.push(item);
                     }
                     if (back) {
@@ -134,6 +142,9 @@ export default {
                         back();
                     }
                 })
+            },
+            change(){
+                   this.percent = !this.percent;
             },
             firstLevel(index, todos) {
                 this.todos[index].show = !this.todos[index].show;
@@ -322,11 +333,15 @@ export default {
     border: 0;
     height: 30px;
     line-height: 30px;
-    padding: 0 10px;
+    padding: 0 8px;
     background: #FA6705;
     color: white;
     border-radius: 4px;
     margin-top: 10px;
+    flex:0.7;
+    -webkit-box-flex: 0.7;
+    -webkit-flex: 0.7;
+    -ms-flex: 0.7;
 }
 
 .market_quotation .second_level {
@@ -359,7 +374,12 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
+.market_quotation .second_level .last_one{
+    flex: 0.7;
+    -webkit-box-flex: 0.7;
+    -webkit-flex: 0.7;
+    -ms-flex: 0.7;
+}
 .market_quotation .second_level_content {
     border-top: 1px solid #DFDFDF;
     background: #fff;
@@ -394,7 +414,12 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
+.market_quotation .second_level_content li .last_one{
+    flex: 0.7;
+    -webkit-box-flex: 0.7;
+    -webkit-flex: 0.7;
+    -ms-flex: 0.7;
+}
 .market_quotation .second_level_content li p img {
     height: 1.024rem;
 }

@@ -61,12 +61,14 @@ export default {
                     name: '修改资源',
                 },
                 obj: {
+                    sample_id:'',
+                    number_id:'',
                     update: true,
                     drug_name: '',
                     spec: '',
                     place: '',
                     number: '',
-                    number_unit: 'kg',
+                    number_unit: '',
                     sales_price: '',
                     where: '',
                     weight: '',
@@ -145,6 +147,7 @@ export default {
                     _self.obj.address = result.address;
                     _self.obj.sampling = result.sampling;
                     _self.obj.breedId = result.breedId;
+
                     _self.imgageArr[0].url = result.image[0];
                     _self.imgageArr[1].url = result.image[1];
                     _self.imgageArr[2].url = result.image[2];
@@ -248,7 +251,8 @@ export default {
                         sampleAmount: _self.obj.price,
                         duedate: _self.obj.duedate,
                         breedId: _self.obj.breedId,
-                        unit: _self.obj.number_unit,
+                        unit: _self.obj.number_id,
+                        sampleUnit:_self.obj.sample_id,
                         id: _self.obj.id
                     }
                 };

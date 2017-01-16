@@ -52,6 +52,7 @@ export default {
                 router: 'search',
                 selected: '1',
                 obj: {
+                    number_id:'',
                     update:false,
                     drug_name: '',
                     spec: '',
@@ -73,6 +74,7 @@ export default {
         methods: {
             release() {
                 let _self = this;
+                console.log(_self.obj.number_id)
                 var checkArr = [];
                 let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
                 checkArr.push(checkBreedId);
@@ -113,7 +115,7 @@ export default {
                         customerPhone: _self.obj.phone,
                         duedate: _self.obj.duedate,
                         breedId: _self.obj.breedId,
-                        unit: _self.obj.number_unit,
+                        unit: _self.obj.number_id,
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);

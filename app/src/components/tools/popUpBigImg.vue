@@ -1,9 +1,9 @@
 <template>
     <div class="pop_up" :style="{ height: param.whole_height + 'px' }" v-on:click="backDetail()">    
             <mt-swipe :auto="0" :prevent="false" > 
-                <mt-swipe-item v-for="item in param.url">
+                <mt-swipe-item v-for="(item,index) in param.url">
                 <div>
-                    <img v-bind:src="item">      
+                    <img v-bind:src="item" id="img" @click="touch">      
                 </div>                                                    
                 </mt-swipe-item>
             </mt-swipe>      
@@ -13,7 +13,11 @@
 export default {
     data() {
             return {
-                
+                startPro1:'',
+                startPro2:'',
+                endPro1:'',
+                endPro2:'',
+                img:'',
             }
         },
         props: {
@@ -24,12 +28,11 @@ export default {
         methods:{
             backDetail(){
                 this.param.show = !this.param.show;
-            }
+            }         
         },
         created() {
             
-        }
-        
+        }      
 }
 </script>
 <style scoped>

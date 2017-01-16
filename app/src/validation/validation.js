@@ -20,7 +20,14 @@ validation.checkPhoneTrue = (phone) => {
         return false;
     }
 }
-
+validation.checkNameTrue = (name) => {
+    let pattern = /^[A-Za-z\u4e00-\u9fa5]+$/;
+    if(!pattern.test(name) || name == '') {
+        return '姓名请输入汉字或字母！'
+    } else {
+        return false;
+    }
+}
 validation.checkCode = (code, confirmCode) => {
 	console.log(code)
 	console.log(confirmCode)

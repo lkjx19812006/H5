@@ -24,6 +24,7 @@ Vue.filter('timeDays',function(due,pub){
             
         return days;    
     });
+
 Vue.filter('floatType',function(val){
       if(val){        
             val = parseFloat(val);
@@ -31,6 +32,16 @@ Vue.filter('floatType',function(val){
       }
       return val;
 })
+
+Vue.filter('percentType',function(val){
+     if(val){
+         val = val*100;
+         val = parseFloat(val);
+         val = val.toFixed(2);   
+     }
+     return val;
+})
+
 Vue.filter('successTimeFormat', function(val){
         if(val){
             var date = new Date(val);

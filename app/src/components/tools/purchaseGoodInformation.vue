@@ -64,7 +64,7 @@
         </div>
         <mt-popup v-model="sheetVisible" position="center" class="mint-popup-1" style="width:60%">
             <div v-for="item in actions">
-                <div style="color: #656b79;background-color: #f6f8fa;box-shadow: 0 0 1px #b8bbbf;padding:10px 0" @click="setObj(item.key,item.name)">{{item.name}}</div>
+                <div style="color: #656b79;background-color: #f6f8fa;box-shadow: 0 0 1px #b8bbbf;padding:10px 0" @click="setObj(item.key,item.name,item.id_key,item.id)">{{item.name}}</div>
             </div>
         </mt-popup>
     </div>
@@ -151,6 +151,7 @@ export default {
                     if (suc.data.code == '1c01') {
                         _self.unit = suc.data.biz_result.list;
                         if (!_self.obj.number_unit) _self.obj.number_unit = _self.unit[0].name;
+                        if(!_self.obj.number_id) _self.obj.number_id = _self.unit[0].id;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -159,8 +160,10 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            setObj(key, value) {
+            setObj(key, value, id_key, id) {
                 this.obj[key] = value;
+                this.obj[id_key] = id;
+                console.log(id)
                 this.sheetVisible = false;
             },
             showAction(param) {
@@ -179,7 +182,9 @@ export default {
                     for (var i = 0; i < _self.unit.length; i++) {
                         _self.actions.push({
                             name: _self.unit[i].name,
-                            key: 'number_unit'
+                            key: 'number_unit',
+                            id:_self.unit[i].id,
+                            id_key:'number_id'
                         });
                     }
                 } else {

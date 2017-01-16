@@ -111,7 +111,7 @@ export default {
             myHeader
         },
         methods: {
-            getHttp(){
+            getHttp(){//获取用户信息的接口
                  let _self = this;
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
@@ -129,7 +129,7 @@ export default {
                     common.$emit('close-load');
                   })
             },
-            inquiry(){
+            inquiry(){//查询用户认证列表接口
                 let _self = this;
                 common.$emit('show-load');
                 let url=common.addSID(common.urlCommon+common.apiUrl.most);
@@ -142,9 +142,9 @@ export default {
                 httpService.queryUserInfo(url,body,function(suc){
                    common.$emit('close-load');
                    if(suc.data.code == '1c01'){
-                        _self.obj.url = suc.data.biz_result.list[0];
+                        _self.obj.url = suc.data.biz_result.list[0];//将通过的照片显示出来；
                         _self.obj.authenType = suc.data.biz_result.authenType;
-                        if(suc.data.biz_result.authenType == 1){
+                        if(suc.data.biz_result.authenType == 1){ //通过获取的authenType值判断应该表述的状态
                               _self.authen_name = '审核中';
                               _self.authen_title = "正在审核";
                         }else if(suc.data.biz_result.authenType == 2){
@@ -162,7 +162,7 @@ export default {
                   common.$emit('message',err.data.msg)
                 })
             },
-            getUrl(param){
+            getUrl(param){//上传图片的url放入return中储存起来
                 let _self = this;
                 if(param.index == 0){
                      _self.arr[0] = param.url;
@@ -170,7 +170,7 @@ export default {
                      _self.arr[1] = param.url;
                 }   
             },
-            referTo(){
+            referTo(){//用户认证提交接口
                   let _self = this;
                   common.$emit('show-load');
                   let url=common.addSID(common.urlCommon+common.apiUrl.most);
@@ -213,7 +213,7 @@ export default {
                       } 
                   }else{
                       for(var i = 0; i < _self.arr.length; i++){
-                          if (_self.arr[i] == '') {
+                          if (_self.arr[i] == '') {//要求用户上传两张照片
                             common.$emit('message','请上传身份证照片');
                             return;
                           }
@@ -229,9 +229,9 @@ export default {
         created() {
           let _self = this;
           _self.getHttp();
-          _self.inquiry();
+          _self.inquiry();//页面刷新的时候调用1.用户信息接口，2.查询用户列表接口
             common.$on("certification",function (item){
-                  _self.inquiry();
+                  _self.inquiry(); //从账户信息完成页过来的通知，调用查询用户列表接口
             })
            /* common.$on("post-my-info", function (obj){
                 console.log(obj.name)

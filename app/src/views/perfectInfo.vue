@@ -93,9 +93,19 @@ export default {
             },
             confirmUpData() {
                 let _self = this;
-          
+                let checkArr = [];
+                let checkName = validation.checkNameTrue(_self.obj.name);
+                checkArr.push(checkName);
+                let checkBizMain = validation.checkNull(_self.obj.bizMain,'主营品类不能为空！');
+                checkArr.push(checkBizMain);
+                for(let i = 0; i < checkArr.length; i++){
+                     if(checkArr[i]){
+                        common.$emit('message',checkArr[i]);
+                        return;
+                     }
+                }
                 let birthday = _self.getTimeStamp(_self.obj.birthday)/1000;
-                console.log(_self.obj.name,_self.obj.bizMain)
+                //console.log(_self.obj.name,_self.obj.bizMain)
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -121,11 +131,11 @@ export default {
                         common.$emit("toMine", _self.obj);              
                         _self.$router.push('/home');
                     } else {
-                        common.$emit('message', suc.data.msg);
+                        //common.$emit('message', suc.data.msg);
                     }
                 }, function(err) {
                     common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
+                    //common.$emit('message', err.data.msg);
                 })
             },
             getUrl(param) {

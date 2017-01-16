@@ -122,7 +122,7 @@ export default {
             release() {
                 let _self = this;
 
-
+                console.log(_self.obj.number_id)
                 var checkArr = [];
                 let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
                 checkArr.push(checkBreedId);
@@ -164,7 +164,7 @@ export default {
                         customerPhone: _self.obj.phone,
                         duedate: _self.obj.duedate,
                         breedId: _self.obj.breedId,
-                        unit: _self.obj.number_unit,
+                        unit: _self.obj.number_id,
                         id: _self.obj.id
                     }
                 };
