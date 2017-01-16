@@ -57,7 +57,7 @@ export default {
                     spec: '',
                     place: '',
                     number: '',
-                    number_unit: 'kg',
+                    number_unit: '',
                     selling_point: '',
                     name: '',
                     phone: '',

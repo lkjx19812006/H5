@@ -150,8 +150,17 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         _self.unit = suc.data.biz_result.list;
-                        if (!_self.obj.number_unit) _self.obj.number_unit = _self.unit[0].name;
-                        if(!_self.obj.number_id) _self.obj.number_id = _self.unit[0].id;
+                        if (!_self.obj.number_unit) {
+                            _self.obj.number_unit = _self.unit[0].name;
+                            _self.obj.number_id = _self.unit[0].id;
+                        }else{
+                            for(var i = 0; i < _self.unit.length; i++){
+                                if(_self.obj.number_unit == _self.unit[i].name){
+                                    _self.obj.number_id =  _self.unit[i].id;
+                                }
+                            }
+                        }
+                        
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
