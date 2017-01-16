@@ -66,6 +66,7 @@ import filters from '../../filters/filters'
 export default {
     data() {
             return {
+                scrollTop:0,
                 err: {
                     err: "很抱歉，没有找到相关资源",
                     url: '/static/icons/maomao.png',
@@ -204,6 +205,9 @@ export default {
                     let result = suc.data.biz_result.list;
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
+                        if(result.length<_self.httpPraram.pageSize){
+                            _self.allLoaded=true;
+                        }
                         for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);
                         }
@@ -280,7 +284,16 @@ export default {
                     });
 
                 }, 1500);
+            },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+                this.$refs.wrapper.scrollTop = this.scrollTop;
             }
+        },
+        watch: {
+            '$route': 'getScrollTop'
         },
         created() {
             let _self = this;
@@ -308,7 +321,8 @@ export default {
             });
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 165;
+            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 165;
+             this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }
 </script>

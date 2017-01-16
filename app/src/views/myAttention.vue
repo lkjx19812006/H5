@@ -1,21 +1,20 @@
 <template>
-  <div class="my_attention">        
-         <attentionHead :param = "param" v-on:tab="tabAttention"></attentionHead>
-           <div @click="jumpSearch" style="float:left;width:100%">
-                <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
-           </div>
-                <div class="bg_white">
-                <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
-                    <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+    <div class="my_attention">
+        <attentionHead :param="param" v-on:tab="tabAttention"></attentionHead>
+        <div @click="jumpSearch" style="float:left;width:100%">
+            <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
+        </div>
+        <div class="bg_white">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
+                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list" v-show="param.show">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  v-on:click="jump(todo.id)">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" v-on:click="jump(todo.id)">
                             <img v-bind:src="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>
                                         <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
-                                        {{todo.breedName}}
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1"> {{todo.breedName}}
                                     </div>
                                     <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
                                     <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
@@ -28,10 +27,10 @@
                             </div>
                         </li>
                     </ul>
-                    <ul class="page-loadmore-list_second" v-show="!param.show"  >
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  v-on:click="jumpNeed(todo.id)">
+                    <ul class="page-loadmore-list_second" v-show="!param.show">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" v-on:click="jumpNeed(todo.id)">
                             <div class="center">
-                                <img :src="todo.cFlagsPath"  class="flag">
+                                <img :src="todo.cFlagsPath" class="flag">
                                 <div class="title">
                                     <div>
                                         <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
@@ -51,7 +50,7 @@
                                         <p>{{todo.spec}}</p>
                                         <p>{{todo.location}}</p>
                                         <p>{{todo.duedate | timeDays(todo.pubdate)}}<span>天</span></p>
-                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p> 
+                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                     </div>
                                 </div>
                             </div>
@@ -72,8 +71,7 @@
                 </mt-loadmore>
             </div>
         </div>
-
-        <errPage  :param="err"  v-show="todos.length==0"></errPage>
+        <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -87,25 +85,26 @@ import errPage from '../components/tools/err'
 export default {
     data() {
             return {
-                err:{
-                    err:"很抱歉，没有找到相关资源",
-                    url:'/static/icons/maomao.png',
-                    
+                scrollTop: 0,
+                err: {
+                    err: "很抱歉，没有找到相关资源",
+                    url: '/static/icons/maomao.png',
+
                 },
-                myShow:{
-                    myShow:true
+                myShow: {
+                    myShow: true
                 },
-                param:{
-                    name:'资源关注',
-                    other_name:'求购关注',
-                    show:true,
-                    router:"home"
+                param: {
+                    name: '资源关注',
+                    other_name: '求购关注',
+                    show: true,
+                    router: "home"
                 },
-                show:true,
-                selected:"1",
-                resourceArr:[],
-                needArr:[],
-                keyword:'',
+                show: true,
+                selected: "1",
+                resourceArr: [],
+                needArr: [],
+                keyword: '',
                 todos: [],
                 topStatus: '',
                 wrapperHeight: 0,
@@ -130,18 +129,18 @@ export default {
                 common.$emit('setParam', 'router', 'myAttention')
                 this.$router.push('search');
             },
-            jump(id){
+            jump(id) {
                 common.$emit('resourceDetail', id);
-                common.$emit('formPopUpBack',id);
+                common.$emit('formPopUpBack', id);
                 this.$router.push('resourceDetail/' + id);
             },
-            jumpNeed(id){
+            jumpNeed(id) {
                 common.$emit("needToDetail", id);
                 this.$router.push('needDetail/' + id);
             },
             resorceHttp(back) {
                 let _self = this;
-                
+
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -162,12 +161,14 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
-                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
+                    if (_self.httpPraram.page == 1) {
+                        _self.todos.splice(0, _self.todos.length);
+                    }
                     let result = suc.data.biz_result.list;
                     console.log(result);
                     for (let i = 0; i < result.length; i++) {
-                            _self.todos.push(result[i]);
-                        }
+                        _self.todos.push(result[i]);
+                    }
                     // common.$emit('translateDate', result,_self.todos);
                     if (back) {
                         back();
@@ -183,7 +184,7 @@ export default {
             clearKeyword() {
                 let _self = this;
                 this.httpPraram.page = 1;
-                
+
                 this.httpPraram.keyword = '';
                 this.resorceHttp();
             },
@@ -210,7 +211,7 @@ export default {
             loadTop(id) {
                 let _self = this;
                 setTimeout(() => {
-                    _self.httpPraram.page = 1;                  
+                    _self.httpPraram.page = 1;
                     _self.resorceHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
@@ -223,43 +224,38 @@ export default {
                 if (param == true) {
                     _self.httpPraram.intentionType = 1;
                     _self.resorceHttp();
-                }else if(param == false){
+                } else if (param == false) {
                     _self.httpPraram.intentionType = 0;
                     _self.resorceHttp();
                 }
+            },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+                this.$refs.wrapper.scrollTop = this.scrollTop;
             }
-
-
+        }, 
+        watch: {
+            '$route': 'getScrollTop'
         },
         created() {
-
             let _self = this;
-
             _self.resorceHttp();
-
-            common.$on("informResAttention", function(id) { //来自资源页面的提示刷新
-                // if(id==0){
-                //     _self.param.show=true;
-                // }else{
-                //     _self.param.show=false;
-                // }
-                // _self.httpPraram.intentionType = id;
+            common.$on("informResAttention", function(id) {
                 _self.httpPraram.page = 1;
                 _self.resorceHttp();
             });
-
-            common.$on('attention', function(item) { //来自搜索的提示刷新
-                //console.log(item)
+            common.$on('attention', function(item) { 
                 _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;
                 _self.resorceHttp();
             });
-
         },
 
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 100;
-
+            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 100;
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 
 }
@@ -297,15 +293,15 @@ export default {
 
 .low_price {}
 
-
-
-.my_attention .bg_white{
+.my_attention .bg_white {
     background: #F5F5F5;
     padding: 0 10px;
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list{
-    margin-top:-10px;
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list {
+    margin-top: -10px;
 }
+
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
@@ -331,25 +327,28 @@ export default {
     margin-bottom: 8px;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img{
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
     width: 1.2rem;
     margin-right: 4px;
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center>div{
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center>div {
     word-break: keep-all;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width:40%;
+    width: 40%;
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .over_lenght{
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .over_lenght {
     word-break: keep-all;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width:250px;
+    width: 250px;
 }
+
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
     width: 100%;
@@ -360,63 +359,59 @@ export default {
     color: #666;
     margin-top: 0.5rem;
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec{
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec {
     margin-top: 0.3rem;
 }
+
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
     width: 100%;
     padding-left: 30%;
     padding-top: 10px;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right{
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
     max-width: 100px;
     height: 95px;
     margin: 0;
     right: 10px;
-    
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p{
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
     font-size: 1.25rem;
     margin-top: 0px;
     color: #EC6817;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button{
-  position: absolute;
-  bottom: 0px;
-  background: #EC6817;
-  font-size: 1.109rem;
-  width: 5.97rem;
-  right: 0px;
-  height: 2.38rem;
-  padding: 0 5px;
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
+    position: absolute;
+    bottom: 0px;
+    background: #EC6817;
+    font-size: 1.109rem;
+    width: 5.97rem;
+    right: 0px;
+    height: 2.38rem;
+    padding: 0 5px;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font{
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {
     font-size: 1rem;
     color: #999;
 }
 
-
-
-
 .urgent_need {}
 
-
-
-
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second {
-     margin-top: -10px;
-     position: relative;
+    margin-top: -10px;
+    position: relative;
 }
+
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem {
     float: left;
     width: 100%;
     min-height: 100px;
-    padding:0;
+    padding: 0;
     height: auto;
     background: white;
     margin-top: 10px;
@@ -424,15 +419,11 @@ export default {
     box-shadow: 0px 0px 20px #F5F5F5;
 }
 
-
-
-
-
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom {
     float: left;
     width: 100%;
     padding: 0 10px;
-    height:4.18rem;
+    height: 4.18rem;
 }
 
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .bottom p {
@@ -464,19 +455,21 @@ export default {
     width: 100%;
     border-bottom: 1px solid #ddd;
     padding: 0 10px 1.066rem 10px;
-   
     position: relative;
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem{
-    position: 
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem {
+    position:
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .flag{
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .flag {
     position: absolute;
-    top:0px;
-    right:0px;
-    width:1.7rem;
-    height:1.23rem;
+    top: 0px;
+    right: 0px;
+    width: 1.7rem;
+    height: 1.23rem;
 }
+
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center div {
     float: left;
 }
@@ -488,58 +481,61 @@ export default {
     line-height: 1.365rem;
     /*margin: 10px 0;*/
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title>div{
-    margin-top:1.06rem;
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title>div {
+    margin-top: 1.06rem;
 }
+
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title p {
     float: right;
     font-size: 1rem;
     color: #999;
-    margin:1.2rem 2.559rem 0 0;
-
+    margin: 1.2rem 2.559rem 0 0;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title img { 
-    width:1.2rem;
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .title img {
+    width: 1.2rem;
     margin-right: 5px;
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail{
-    width:100%;   
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail {
+    width: 100%;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
-    flex-direction:column;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    flex-direction: column;
     -webkit-box-orient: vertical;
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail div{
-    flex:1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
-    display:flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
-    flex-direction:row;
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail div {
+    flex: 1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    display: flex;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
     margin-top: 1.279rem;
-    
-}
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail .last p{
-    color:#666666;
-}
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail div p{
-    flex:1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
-    font-size: 1.109rem;
-    color:#424242;
 }
 
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail .last p {
+    color: #666666;
+}
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list_second .page-loadmore-listitem .center .detail div p {
+    flex: 1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    font-size: 1.109rem;
+    color: #424242;
+}
 </style>

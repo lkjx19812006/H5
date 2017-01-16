@@ -60,6 +60,7 @@ import errPage from '../components/tools/err'
 export default {
     data() {
             return {
+                scrollTop: 0,
                 err: {
                     err: "很抱歉，没有找到相关资源",
                     url: '/static/icons/maomao.png',
@@ -314,7 +315,16 @@ export default {
                     });
 
                 }, 1500);
+            },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+                this.$refs.wrapper.scrollTop = this.scrollTop;
             }
+        },
+        watch: {
+            '$route': 'getScrollTop'
         },
         created() {
             let _self = this;
@@ -329,7 +339,8 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
+            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 90;
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 
 }

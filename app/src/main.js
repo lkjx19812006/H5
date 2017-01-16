@@ -10,9 +10,9 @@ import common  from "./common/common"
 // import infiniteScroll from 'vue-infinite-scroll'
 
 
-// document.addEventListener('DOMContentLoaded', function() {
-//   if (window.FastClick) window.FastClick.attach(document.body);
-// }, false);
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.FastClick) window.FastClick.attach(document.body);
+}, false);
 
 Vue.use(Mint);
 Vue.use(VueRouter)
@@ -52,23 +52,18 @@ function getCookie (name) {
   }
 }
 
-let indexScrollTop = 0;
-router.beforeEach((to, from, next) => {
 
+router.beforeEach((to, from, next) => {
     next(vm=>{
-       
+
       })
 })
 
 router.afterEach(route => {
     common.share();
-  if (route.path !== '/home') {
-   
-  } else {
     Vue.nextTick(() => {
      
     });
-  }
 });
 
 

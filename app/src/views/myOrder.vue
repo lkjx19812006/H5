@@ -10,7 +10,7 @@
                             <div class="list_header">
                                 <div>
                                     <p class="time_font"><span>{{todo.ctime | timeFormat}}</span>
-                                   <!--  <span style="margin-left:10px">订单编号：{{todo.no}}</span> -->
+                                        <!--  <span style="margin-left:10px">订单编号：{{todo.no}}</span> -->
                                     </p>
                                     <p class="audit_state">{{todo.orderStatus | orderStatus}}</p>
                                 </div>
@@ -53,7 +53,7 @@
                 </mt-loadmore>
             </div>
         </div>
-        <errPage  :param="err"  v-show="todos.length==0"></errPage>
+        <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -66,10 +66,10 @@ import errPage from '../components/tools/err'
 export default {
     data() {
             return {
-                 err:{
-                    err:"很抱歉，没有找到相关订单",
-                    url:'/static/icons/order-point.png',
-                    
+                scrollTop: 0,
+                err: {
+                    err: "很抱歉，没有找到相关订单",
+                    url: '/static/icons/order-point.png',
                 },
                 param: {
                     name: '采购订单',
@@ -166,6 +166,7 @@ export default {
             },
             cancelOrder(id, no, type) {
                 let _self = this;
+
                 function cancelOrder() {
                     common.$emit('show-load');
                     let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -198,14 +199,14 @@ export default {
                     })
                 }
                 common.$emit('confirm', {
-                    message:'确定取消订单？',
-                    title:'提示',
-                    ensure:cancelOrder
+                    message: '确定取消订单？',
+                    title: '提示',
+                    ensure: cancelOrder
                 });
             },
             getHttp(back) {
                 let _self = this;
-                if(_self.httpPraram.page==1)common.$emit('show-load');
+                if (_self.httpPraram.page == 1) common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'orderService',
@@ -225,7 +226,9 @@ export default {
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
-                        if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
+                        if (_self.httpPraram.page == 1) {
+                            _self.todos.splice(0, _self.todos.length);
+                        }
                         let listArr = suc.data.biz_result.list;
 
                         if (listArr.length < _self.httpPraram.pageSize) {
@@ -257,7 +260,7 @@ export default {
                     _self.httpPraram.type = 1;
                 }
                 this.allLoaded = false;
-               
+
                 this.httpPraram.page = 1;
                 _self.getHttp();
             },
@@ -289,25 +292,34 @@ export default {
                 let _self = this;
                 setTimeout(() => {
                     _self.httpPraram.page = 1;
-                    
+
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
                 }, 1500);
             },
             prompt(text) {
-                function loadApp(){
+                function loadApp() {
                     window.location.href = common.appUrl;
                 }
-               common.$emit('confirm', {
-                    message:text+'请下载App',
-                    title:'提示',
-                    ensure:loadApp
+                common.$emit('confirm', {
+                    message: text + '请下载App',
+                    title: '提示',
+                    ensure: loadApp
                 });
+            },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+                this.$refs.wrapper.scrollTop = this.scrollTop;
             }
         },
+        watch: {
+            '$route': 'getScrollTop'
+        },
         filters: (filters, {
-           
+
         }),
         components: {
             landscapeScroll,
@@ -336,8 +348,8 @@ export default {
             });
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 100;
-
+            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 100;
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 
 }
