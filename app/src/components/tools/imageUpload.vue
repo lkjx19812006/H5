@@ -4,7 +4,7 @@
             <input type="file" @change="previewImg" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
              <img  v-bind:src="image" class="image_show" v-show="!param.url && !param.header_url">
              <img v-bind:src="param.url" class="image_show" v-show="param.url && !param.header_url">
-             <img v-bind:src="url" class="image_show" v-show="param.header_url">
+             <img v-bind:src="param.header_url" class="image_show" v-show="param.header_url">
             <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
         </form>
     </div>

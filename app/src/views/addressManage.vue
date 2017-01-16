@@ -1,7 +1,6 @@
 <template>
     <div class="address_manage">
         <myHeader :param="my_header"></myHeader>
-
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore>
@@ -26,7 +25,6 @@
                                 <p class="top_p">
                                     <img :src="todo.first_img" class="first_img" v-on:click="changeColor(todos,todo,index)">
                                     <span>默认地址</span>
-
                                 </p>
                                 <div class="address_box">
                                     <p class="center_p">
@@ -43,11 +41,9 @@
                     </ul>
                 </mt-loadmore>
             </div>
-
         </div>
         <div class="add_address" v-on:click="addAddress">添加新地址</div>
-        <errPage  :param="err"  v-show="todos.length==0"></errPage>
-
+        <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -58,12 +54,12 @@ import errPage from '../components/tools/err'
 export default {
     data() {
             return {
-                err:{
-                    err:"很抱歉，没有设置地址",
-                    url:'/static/icons/maomao.png',
+                scrollTop: 0,
+                err: {
+                    err: "很抱歉，没有设置地址",
+                    url: '/static/icons/maomao.png',
                 },
-                wrapperHeight:'',
-
+                wrapperHeight: '',
                 my_header: {
                     name: '地址管理',
                 },
@@ -125,11 +121,13 @@ export default {
                         }
                         _self.todos = listArr
                     } else {
-                        if(suc.data.msg){common.$emit('message', suc.data.msg);}
+                        if (suc.data.msg) {
+                            common.$emit('message', suc.data.msg);
+                        }
                     }
                 }, function(err) {
                     common.$emit('close-load');
-                    if(err.data.msg)common.$emit('message', err.data.msg);
+                    if (err.data.msg) common.$emit('message', err.data.msg);
                 })
             },
             delet: function(index) {
@@ -152,7 +150,7 @@ export default {
                 httpService.addressManage(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
-                        _self.todos.splice(index,1);
+                        _self.todos.splice(index, 1);
                         common.$emit('clearAddress', todo);
                     } else {
                         common.$emit('message', suc.data.msg);
@@ -204,10 +202,21 @@ export default {
                 common.$emit('setParam', 'addressId', item.id);
                 common.$emit('revise-address', item.id);
                 _self.$router.push('/addressRevise' + '/' + item.id);
+            },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+                this.$refs.wrapper.scrollTop = this.scrollTop;
             }
         },
+        watch: {
+            '$route': 'getScrollTop'
+        },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 50;
+
+            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 50;
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 
 

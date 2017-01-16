@@ -1,9 +1,7 @@
 <template>
-
     <div class="content urgent_need">
         <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
         <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
-
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -14,8 +12,7 @@
                                 <div class="title">
                                     <div>
                                         <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
-                                        {{todo.breedName}}
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0"> {{todo.breedName}}
                                     </div>
                                     <p>发布时间：{{todo.pubdate | timeFormat}}</p>
                                 </div>
@@ -51,8 +48,7 @@
                 </mt-loadmore>
             </div>
         </div>
-
-        <errPage  :param="err"  v-show="todos.length==0"></errPage>
+        <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -65,14 +61,14 @@ import filters from '../filters/filters'
 export default {
     data() {
             return {
-                err:{
-                    err:"很抱歉，没有找到相关资源",
-                    url:'/static/icons/maomao.png',
-                    next_step:'去发布',
-                    router:'/needRelease'
+                scrollTop: 0,
+                err: {
+                    err: "很抱歉，没有找到相关资源",
+                    url: '/static/icons/maomao.png',
+                    next_step: '去发布',
+                    router: '/needRelease'
                 },
                 sortRouter: 'urgentNeed',
-                
                 sortArr: [{
                     name: '上架时间',
                     asc: 'top',
@@ -188,7 +184,6 @@ export default {
                     common.$emit('show-load');
                 }
                 let _self = this;
-                
                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'intentionService',
                     biz_method: 'queryBegBuyList',
@@ -205,20 +200,21 @@ export default {
                     }
                 }, function(suc) {
                     common.$emit('close-load');
-                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
+                    if (_self.httpPraram.page == 1) {
+                        _self.todos.splice(0, _self.todos.length);
+                    }
                     let result = suc.data.biz_result.list;
-                    if(suc.data.code == '1c01'){
-                        /*common.$emit('translateDate', result, _self.todos);*/
-                        for(var i = 0; i < result.length; i++){
+                    if (suc.data.code == '1c01') {
+                        for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);
                         }
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    if(result.length<_self.httpPraram.pageSize){
+                    if (result.length < _self.httpPraram.pageSize) {
                         _self.allLoaded = true;
                     }
-                    
+
                     if (back) {
                         back();
                     }
@@ -248,15 +244,13 @@ export default {
                 this.$router.push('needDetail/' + id);
             },
             jumpApp() {
-
-                 common.$emit("confirm", {
-                        message: '请下载App后，在App内报价',
-                        title: '提示',
-                        ensure: function(){
-                            window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
-                        }
-                    });
-                
+                common.$emit("confirm", {
+                    message: '请下载App后，在App内报价',
+                    title: '提示',
+                    ensure: function() {
+                        window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
+                    }
+                });
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -289,11 +283,20 @@ export default {
             },
             jump(router) {
                 this.$router.push(router);
+            },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+                this.$refs.wrapper.scrollTop = this.scrollTop;
             }
+        },
+        watch: {
+            '$route': 'getScrollTop'
         },
         created() {
             let _self = this;
-            _self.headParam.keyword =common.pageParam.Urgentneed;
+            _self.headParam.keyword = common.pageParam.Urgentneed;
             _self.getHttp();
             common.$on('Urgentneed', function(item) {
                 _self.headParam.keyword = item.keyWord;
@@ -318,7 +321,8 @@ export default {
             });
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
+            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 90;
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }
 </script>
@@ -326,7 +330,6 @@ export default {
 <style scoped>
 .page-loadmore-listitem {
     height: 50px;
-    
     border-bottom: solid 1px #eee;
     text-align: center;
     &:first-child {
@@ -490,9 +493,9 @@ export default {
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail {
     width: 100%;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: column;
     -webkit-box-orient: vertical;
     -webkit-flex-direction: column;
@@ -501,16 +504,16 @@ export default {
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div {
     flex: 1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
     display: flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
     margin-top: 1.279rem;
 }
@@ -521,9 +524,9 @@ export default {
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div p {
     flex: 1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
     font-size: 1.109rem;
     color: #424242;
 }

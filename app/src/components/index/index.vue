@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mt-header >
+        <mt-header>
             <router-link to="" slot="left">
                 <img src="/static/images/my-logo.png" class="logo">
                 <div class="search_div" @click="fromIndex">
@@ -9,159 +9,158 @@
                 </div>
             </router-link>
         </mt-header>
-        <div class="my_whole" >
-            <div class="page-loadmore-wrapper" ref="wrapper"  :style="{ height: wrapperHeight + 'px' }" >
+        <div class="my_whole">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" >
                 <mt-loadmore>
-                  <!--   <div class="content" > -->
-                        <div class="swipe_height">
-                            <mt-swipe :auto="4000" :prevent="false" > 
-                                <mt-swipe-item v-for="item in imgArray">                                   
-                                       <img v-bind:src="item.activityUrl">              
-                                </mt-swipe-item>
-                            </mt-swipe>
-                        </div>
-                        <div class="entrance">
-                            <a v-for="item in categoryArr" @click="jump(item.router)">
-                                <div>
-                                    <img v-bind:src="item.image">
-                                    <p>{{item.name}}</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="supply_demond">
-                            <div class="supply_demond_path" v-for="item in supplyDemandArray" @click="loginJump(item.router)">
-                                <p>
-                                    {{item.name}}
-                                    <img :src="item.image">
-                                </p>
+                    <!--   <div class="content" > -->
+                    <div class="swipe_height">
+                        <mt-swipe :auto="4000" :prevent="false">
+                            <mt-swipe-item v-for="item in imgArray">
+                                <img v-bind:src="item.activityImg">
+                            </mt-swipe-item>
+                        </mt-swipe>
+                    </div>
+                    <div class="entrance">
+                        <a v-for="item in categoryArr" @click="jump(item.router)">
+                            <div>
+                                <img v-bind:src="item.image">
+                                <p>{{item.name}}</p>
                             </div>
+                        </a>
+                    </div>
+                    <div class="supply_demond">
+                        <div class="supply_demond_path" v-for="item in supplyDemandArray" @click="loginJump(item.router)">
+                            <p>
+                                {{item.name}}
+                                <img :src="item.image">
+                            </p>
                         </div>
-                        <div class="real_news" @click="jump('transaction')">
-                            <div class="news_logo">
-                                <img src="../../../static/images/news.png">
-                            </div>
-                            <div class="news_content">
-                                <ul id="scrollText">
-                                    <li v-for="todo in transaction">
-                                        <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+todo.unit+' '+todo.location+' '}}{{todo.successTime | successTimeFormat}}</div>
-                                    </li>
-                                    <li v-if="transaction[0]">
-                                        <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+transaction[0].unit+' '+transaction[0].location+' '}}{{transaction[0].successTime | successTimeFormat}}</div>
-                                    </li>
-                                </ul>
-                            </div>
+                    </div>
+                    <div class="real_news" @click="jump('transaction')">
+                        <div class="news_logo">
+                            <img src="../../../static/images/news.png">
                         </div>
-                        <div class="bg_white">
-                            <p class="index_title">药材指导价</p>
-                            <div class="more_content">
-                                <router-link to="marketQuotation">
-                                    <p>更多</p><img src="/static/images/right.png">
-                                </router-link>
-                            </div>
-                            <mt-swipe :auto="4000" :showIndicators="false" :prevent="false">
-                                <mt-swipe-item v-for="(todo,index) in drugGuidePrice" v-if="index%2==0">
-                                    <div class="drug_price_box" @click="jump('marketQuotation')">
-                                        <div class="drug_price_swipe" >
-                                            <div class="drug_price_swipe_left">
-                                                <p class="price_swiper_name">{{todo.name}}</p>
-                                                <div class="price_swiper_div">
-                                                    <span>规格:<span>{{todo.spec}}</span></span>
-                                                    <span class="price_swiper_right_span">{{todo.unitprice}}元</span>
-                                                </div>
-                                                <div class="price_swiper_div price_swiper_place_div">
-                                                    <span>产地:<span>{{todo.area}}</span></span>
-                                                    <span class="price_swiper_right_span">
+                        <div class="news_content">
+                            <ul id="scrollText">
+                                <li v-for="todo in transaction">
+                                    <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+todo.unit+' '+todo.location+' '}}{{todo.successTime | successTimeFormat}}</div>
+                                </li>
+                                <li v-if="transaction[0]">
+                                    <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+transaction[0].unit+' '+transaction[0].location+' '}}{{transaction[0].successTime | successTimeFormat}}</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg_white">
+                        <p class="index_title">药材指导价</p>
+                        <div class="more_content">
+                            <router-link to="marketQuotation">
+                                <p>更多</p><img src="/static/images/right.png">
+                            </router-link>
+                        </div>
+                        <mt-swipe :auto="4000" :showIndicators="false" :prevent="false">
+                            <mt-swipe-item v-for="(todo,index) in drugGuidePrice" v-if="index%2==0">
+                                <div class="drug_price_box" @click="jump('marketQuotation')">
+                                    <div class="drug_price_swipe">
+                                        <div class="drug_price_swipe_left">
+                                            <p class="price_swiper_name">{{todo.name}}</p>
+                                            <div class="price_swiper_div">
+                                                <span>规格:<span>{{todo.spec}}</span></span>
+                                                <span class="price_swiper_right_span">{{todo.unitprice}}元</span>
+                                            </div>
+                                            <div class="price_swiper_div price_swiper_place_div">
+                                                <span>产地:<span>{{todo.area}}</span></span>
+                                                <span class="price_swiper_right_span">
                                                         <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
                                                         <img src="/static/images/up.png" v-if="todo.weekdowns > 0">&nbsp;
                                                         {{todo.weekdowns | floatType}}%
                                                     </span>
-                                                </div>
                                             </div>
                                         </div>
-                                        <div class=" drug_price_swipe " v-if="drugGuidePrice[index+1]">
-                                            <div class="drug_price_swipe_right">
-                                                <p class="price_swiper_name">{{drugGuidePrice[index+1].name}}</p>
-                                                <div class="price_swiper_div">
-                                                    <span>规格:
+                                    </div>
+                                    <div class=" drug_price_swipe " v-if="drugGuidePrice[index+1]">
+                                        <div class="drug_price_swipe_right">
+                                            <p class="price_swiper_name">{{drugGuidePrice[index+1].name}}</p>
+                                            <div class="price_swiper_div">
+                                                <span>规格:
                                                         <span>{{drugGuidePrice[index+1].spec}}</span>
-                                                    </span>
-                                                    <span class="price_swiper_right_span">
+                                                </span>
+                                                <span class="price_swiper_right_span">
                                                         {{drugGuidePrice[index+1].unitprice}}元</span>
-                                                </div>
-                                                <div class="price_swiper_div price_swiper_place_div">
-                                                    <span>产地:<span>{{drugGuidePrice[index+1].area}}</span></span>
-                                                    <span class="price_swiper_right_span">
+                                            </div>
+                                            <div class="price_swiper_div price_swiper_place_div">
+                                                <span>产地:<span>{{drugGuidePrice[index+1].area}}</span></span>
+                                                <span class="price_swiper_right_span">
                                                         <img src="/static/images/down.png" v-if="drugGuidePrice[index+1].weekdowns < 0">
                                                         <img src="/static/images/up.png" v-if="drugGuidePrice[index+1].weekdowns > 0">&nbsp;
                                                         {{drugGuidePrice[index+1].weekdowns}}%
                                                     </span>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </mt-swipe-item>
-                            </mt-swipe>
-
+                                </div>
+                            </mt-swipe-item>
+                        </mt-swipe>
+                    </div>
+                    <div class="bg_white">
+                        <div>
+                            <p class="index_title">推荐资源</p>
+                            <router-link to="/lowPriceRes">
+                                <div class="more_content">
+                                    <p>更多</p><img src="/static/images/right.png">
+                                </div>
+                            </router-link>
                         </div>
-                        <div class="bg_white">
-                            <div>
-                                <p class="index_title">推荐资源</p>
-                                <router-link to="/lowPriceRes">
-                                    <div class="more_content">
-                                        <p>更多</p><img src="/static/images/right.png">
+                        <div class="list_content">
+                            <div class="mint-cell cell_class">
+                                <div class="mint-cell-wrapper cell_class" v-for="todo in supplyList">
+                                    <div class="list_image">
+                                        <img src="/static/images/bao.png" class="first_image" v-if="todo.especial == 1 && todo.type == 1">
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
                                     </div>
-                                </router-link>
-                            </div>
-                            <div class="list_content">
-                                <div class="mint-cell cell_class">
-                                    <div class="mint-cell-wrapper cell_class" v-for="todo in supplyList">
-                                        <div class="list_image">
-                                            <img src="/static/images/bao.png" class="first_image" v-if="todo.especial == 1 && todo.type == 1">
-                                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
-                                        </div>
-                                        <div class="list_myimage">{{todo.breedName}}</div>
-                                        <!-- <div class="list_font">{{todo.spec}}</div> -->
-                                        <div class="list_font">{{todo.location}}</div>
-                                        <div class="list_font">{{todo.price}}元/{{todo.unit}}</div>
-                                        <div class="list_button">
-                                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpRes('resourceDetail/',todo.id)">
-                                                我要购买
-                                            </button>
-                                        </div>
+                                    <div class="list_myimage">{{todo.breedName}}</div>
+                                    <!-- <div class="list_font">{{todo.spec}}</div> -->
+                                    <div class="list_font">{{todo.location}}</div>
+                                    <div class="list_font">{{todo.price}}元/{{todo.unit}}</div>
+                                    <div class="list_button">
+                                        <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpRes('resourceDetail/',todo.id)">
+                                            我要购买
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg_white">
-                            <div>
-                                <p class="index_title">紧急求购</p>
-                                <router-link to="/urgentNeed">
-                                    <div class="more_content">
-                                        <p>更多</p><img src="/static/images/right.png">
+                    </div>
+                    <div class="bg_white">
+                        <div>
+                            <p class="index_title">紧急求购</p>
+                            <router-link to="/urgentNeed">
+                                <div class="more_content">
+                                    <p>更多</p><img src="/static/images/right.png">
+                                </div>
+                            </router-link>
+                        </div>
+                        <div class="list_content">
+                            <div class="mint-cell cell_class">
+                                <div class="mint-cell-wrapper cell_class" v-for="todo in begBuyList">
+                                    <div class="list_image">
+                                        <img src="/static/icons/impatient.png" class="first_image" v-if="todo.especial == 1 && todo.type == 0">
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
                                     </div>
-                                </router-link>
-                            </div>
-                            <div class="list_content">
-                                <div class="mint-cell cell_class">
-                                    <div class="mint-cell-wrapper cell_class" v-for="todo in begBuyList">
-                                        <div class="list_image">
-                                            <img src="/static/icons/impatient.png" class="first_image" v-if="todo.especial == 1 && todo.type == 0">
-                                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
-                                        </div>
-                                        <div class="list_myimage">{{todo.breedName}}</div>
-                                        <!-- <div class="list_font">{{todo.spec}}</div> -->
-                                        <div class="list_font">{{todo.location}}</div>
-                                        <div class="list_font">剩余{{todo.duedate | timeDays(todo.pubdate)}}天</div>
-                                        <div class="list_button">
-                                            <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/',todo.id)">
-                                                我要报价
-                                            </button>
-                                        </div>
+                                    <div class="list_myimage">{{todo.breedName}}</div>
+                                    <!-- <div class="list_font">{{todo.spec}}</div> -->
+                                    <div class="list_font">{{todo.location}}</div>
+                                    <div class="list_font">剩余{{todo.duedate | timeDays(todo.pubdate)}}天</div>
+                                    <div class="list_button">
+                                        <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/',todo.id)">
+                                            我要报价
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                <!--     </div> -->
+                    </div>
+                    <!--     </div> -->
                 </mt-loadmore>
             </div>
         </div>
@@ -175,16 +174,12 @@ import filters from '../../filters/filters'
 export default {
     data() {
             return {
+                scrollTop: 0,
                 wrapperHeight: '',
                 selected: 'tab-container1',
-                imgArray: [/*{
-                    activityUrl: '/static/images/1.jpg'
-                }, {
-                    activityUrl: '/static/images/2.jpg'
-                }, {
-                    activityUrl: '/static/images/3.jpg'
-                }*/],
-                imgArr:[],
+                imgArray: [
+                ],
+                imgArr: [],
                 todos: [{
                     "name": "人参",
                     "spec": "统货",
@@ -237,12 +232,11 @@ export default {
                 httpService.commonPost(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'activityService',
                     biz_method: 'queryActivityList',
-                    biz_param: {
-                    }
+                    biz_param: {}
                 }, function(suc) {
                     let result = suc.data.biz_result.list;
                     console.log(result);
-                    _self.imgArray=result;
+                    _self.imgArray = result;
                 }, function(err) {
                     common.$emit('message', err.data.msg);
                 })
@@ -316,7 +310,7 @@ export default {
             },
             fromIndex() {
                 let _self = this;
-                common.searchType='keyword';
+                common.searchType = 'keyword';
                 common.$emit('setParam', 'router', 'index');
                 _self.$router.push("/search");
             },
@@ -343,6 +337,15 @@ export default {
                 common.$emit('needToDetail', id);
                 this.$router.push(router + id);
             },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+                this.$refs.wrapper.scrollTop = this.scrollTop;
+            }
+        },
+        watch: {
+            '$route': 'getScrollTop'
         },
         created() {
             let _self = this;
@@ -363,9 +366,12 @@ export default {
             }
         },
         mounted() {
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
             let _self = this;
+            this.$nextTick(function() {
+                _self.wrapperHeight = window.screen.height - _self.$refs.wrapper.getBoundingClientRect().top - 73;
+            })
 
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 73;
 
             function startmarquee(lh, speed, delay) {
                 var count = 1;
@@ -409,10 +415,12 @@ export default {
     border: none;
     color: #fff;
 }
+
 .my_whole {
     width: 100%;
-    overflow: hidden; 
+    overflow: hidden;
 }
+
 .search_div {
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
@@ -680,8 +688,9 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.bg_white .list_content .cell_class .list_myimage{
-    width:20%;
+
+.bg_white .list_content .cell_class .list_myimage {
+    width: 20%;
     font-size: 1.1rem;
     height: 30px;
     line-height: 30px;
@@ -691,6 +700,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .bg_white .list_content .cell_class .list_image {
     font-size: 1.1rem;
     text-align: center;
@@ -701,9 +711,11 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.bg_white .list_content .cell_class .list_button{
-    width:25%;
+
+.bg_white .list_content .cell_class .list_button {
+    width: 25%;
 }
+
 .bg_white .list_content .cell_class .list_image img {
     float: left;
     max-width: 49%;

@@ -4,7 +4,7 @@
         <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
-                  <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
                             <img v-bind:src="todo.image[0]" class="list_images">
@@ -12,8 +12,7 @@
                                 <div class="res_content_center">
                                     <div>
                                         <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
-                                        {{todo.breedName}}
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1"> {{todo.breedName}}
                                     </div>
                                     <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
                                     <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
@@ -35,10 +34,9 @@
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
                 </mt-loadmore>
-                        
-          </div>          
-        </div>   
-            <errPage  :param="err"  v-show="todos.length==0"></errPage>
+            </div>
+        </div>
+        <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -52,11 +50,12 @@ import filters from '../filters/filters'
 export default {
     data() {
             return {
-                err:{
-                    err:"很抱歉，没有找到相关资源",
-                    url:'/static/icons/maomao.png',
-                    next_step:'去发布',
-                    router:'/supplyRelease'
+                scrollTop: 0,
+                err: {
+                    err: "很抱歉，没有找到相关资源",
+                    url: '/static/icons/maomao.png',
+                    next_step: '去发布',
+                    router: '/supplyRelease'
                 },
                 sortRouter: 'lowRes',
                 sortArr: [{
@@ -158,10 +157,10 @@ export default {
                     page: 1,
                     pageSize: 20
                 },
-                headParam:{
-                    title:'低价资源',
-                    keyword:'',
-                    router:'lowPriceRes'
+                headParam: {
+                    title: '低价资源',
+                    keyword: '',
+                    router: 'lowPriceRes'
                 }
             }
         },
@@ -172,11 +171,11 @@ export default {
         },
         methods: {
             getHttp(back) {
-                if(this.httpPraram.page==1){
-                    this.allLoaded=false;
+                if (this.httpPraram.page == 1) {
+                    this.allLoaded = false;
                 }
                 let _self = this;
-                if(_self.httpPraram.page==1)common.$emit('show-load');
+                if (_self.httpPraram.page == 1) common.$emit('show-load');
                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'intentionService',
                     biz_method: 'querySupplyList',
@@ -193,16 +192,18 @@ export default {
                     }
                 }, function(suc) {
                     common.$emit('close-load');
-                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
+                    if (_self.httpPraram.page == 1) {
+                        _self.todos.splice(0, _self.todos.length);
+                    }
                     let result = suc.data.biz_result.list;
-                    if(suc.data.code == '1c01'){
-                        for(var i = 0; i < result.length; i++){
+                    if (suc.data.code == '1c01') {
+                        for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);
                         }
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    if(result.length<_self.httpPraram.pageSize){
+                    if (result.length < _self.httpPraram.pageSize) {
                         _self.allLoaded = true;
                     }
                     if (back) {
@@ -262,11 +263,20 @@ export default {
             },
             jump(router) {
                 this.$router.push(router);
+            },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+                this.$refs.wrapper.scrollTop = this.scrollTop;
             }
+        },
+        watch: {
+            '$route': 'getScrollTop'
         },
         created() {
             let _self = this;
-             _self.headParam.keyword = common.pageParam.lowPrice.keyWord;
+            _self.headParam.keyword = common.pageParam.lowPrice.keyWord;
             _self.httpPraram.keyword = common.pageParam.lowPrice.keyWord;
             _self.getHttp();
             common.$on('lowPriceRes', function(item) {
@@ -292,7 +302,8 @@ export default {
             });
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top -90;
+            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 95;
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }
 </script>
@@ -390,20 +401,23 @@ export default {
     width: 1.2rem;
     margin-right: 4px;
 }
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center>div{
+
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center>div {
     word-break: keep-all;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width:40%;
+    width: 40%;
 }
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .over_lenght{
+
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .over_lenght {
     word-break: keep-all;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width:200px;
+    width: 200px;
 }
+
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
     width: 100%;
@@ -431,7 +445,6 @@ export default {
     height: 8.1rem;
     margin: 0;
     right: 10px;
-    
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
@@ -440,8 +453,7 @@ export default {
     margin-right: 2px;
     color: #EC6817;
     text-align: right;
-    white-space:nowrap;
-
+    white-space: nowrap;
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {

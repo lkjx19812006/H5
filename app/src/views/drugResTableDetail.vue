@@ -134,7 +134,6 @@ export default {
                 })
             }
         },
-
         mounted() {
             let _self = this;
              this.$nextTick(function () {

@@ -236,6 +236,8 @@ export default {
     width: 5.1198rem;
     height: 5.1198rem;
     border-radius: 50%;
+    width: 70px;
+    height: 70px;
 }
 
 .account_overview .basic_data,

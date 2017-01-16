@@ -10,7 +10,6 @@
                             <div class="list_header">
                                 <div>
                                     <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
-
                                     <p class="audit_state">{{todo.onSell | shellStatus}}</p>
                                 </div>
                             </div>
@@ -19,8 +18,7 @@
                                 <div class="res_content_center">
                                     <div>
                                         <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
-                                        {{todo.breedName}}
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1"> {{todo.breedName}}
                                     </div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
@@ -44,8 +42,7 @@
                 </mt-loadmore>
             </div>
         </div>
-
-        <errPage  :param="err"  v-show="todos.length==0"></errPage>
+        <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -60,10 +57,11 @@ import errPage from '../components/tools/err'
 export default {
     data() {
             return {
-                 err:{
-                    err:"很抱歉，没有找到相关资源",
-                    url:'/static/icons/maomao.png',
-                    
+                scrollTop: 0,
+                err: {
+                    err: "很抱歉，没有找到相关资源",
+                    url: '/static/icons/maomao.png',
+
                 },
                 sortRouter: 'home',
                 param: {
@@ -207,7 +205,7 @@ export default {
             errPage
         },
         filters: (filters, {
-           
+
         }),
         methods: {
             getHttp(back) {
@@ -215,7 +213,6 @@ export default {
                 if (_self.httpPraram.page == 1) {
                     _self.allLoaded = false;
                 }
-                 if(_self.httpPraram.page==1)common.$emit('show-load');
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -239,16 +236,21 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
-                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
-                    let result = suc.data.biz_result.list;             
-                    if(suc.data.code == '1c01'){
-                        for(var i = 0; i < result.length; i++){
+                    if (_self.httpPraram.page == 1) {
+                        _self.todos.splice(0, _self.todos.length);
+                    }
+                    let result = suc.data.biz_result.list;
+                    if (suc.data.code == '1c01') {
+                        if (result.length < _self.httpPraram.pageSize) {
+                            _self.allLoaded = true;
+                        }
+                        for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);
                         }
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    if(back){
+                    if (back) {
                         back();
                     }
                 }, function(err) {
@@ -306,12 +308,20 @@ export default {
                     });
 
                 }, 1500);
+            },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+                this.$refs.wrapper.scrollTop = this.scrollTop;
             }
+        },
+        watch: {
+            '$route': 'getScrollTop'
         },
         created() {
             let _self = this;
             this.getHttp();
-            //修改成功通知刷新
             common.$on('reviseResource', function(obj) {
                     _self.httpPraram.page = 1;
                     _self.getHttp();
@@ -323,28 +333,12 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top -50;
+            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 90;
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }
 </script>
 <style scoped>
-.page-loadmore-listitem {
-    height: 50px;
-    line-height: 50px;
-    border-bottom: solid 1px #eee;
-    text-align: center;
-    &:first-child {
-        border-top: solid 1px #eee;
-    }
-}
-
-.page-loadmore-wrapper {
-    margin-top: -1px;
-    overflow: scroll;
-    padding-bottom: 10px;
-    width: 100%;
-}
-
 .mint-load {
     background: #fff;
 }

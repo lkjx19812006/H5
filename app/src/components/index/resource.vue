@@ -1,6 +1,6 @@
 <template>
     <div class="content resource">
-        <div >
+        <div>
             <div @click="jumpSearch" class="search_content">
                 <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
             </div>
@@ -10,14 +10,13 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item"  @click="jumpDetail(todo.id)">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
                             <img :src="todo.image[0]" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>
                                         <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/images/zheng.png" v-if="todo.sampling == 1 && todo.type == 1">
-                                        {{todo.breedName}}
+                                        <img src="/static/images/zheng.png" v-if="todo.sampling == 1 && todo.type == 1"> {{todo.breedName}}
                                     </div>
                                     <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
                                     <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
@@ -25,7 +24,7 @@
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>
-                                    <button class="mint-button mint-button--primary mint-button--small" >立即购买</button>
+                                    <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
                                 </div>
                             </div>
                         </li>
@@ -41,8 +40,7 @@
                 </mt-loadmore>
             </div>
         </div>
-
-        <errPage  :param="err"  v-show="todos.length==0"></errPage>
+        <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
 <script>
@@ -55,14 +53,15 @@ import filters from '../../filters/filters'
 export default {
     data() {
             return {
-               err:{
-                    err:"很抱歉，没有找到相关资源",
-                    url:'/static/icons/maomao.png',
-                    next_step:'去发布',
-                    router:'/supplyRelease'
+                scrollTop: 0,
+                err: {
+                    err: "很抱歉，没有找到相关资源",
+                    url: '/static/icons/maomao.png',
+                    next_step: '去发布',
+                    router: '/supplyRelease'
                 },
-               myShow:{
-                    myShow:false
+                myShow: {
+                    myShow: false
                 },
                 sortRouter: 'resource',
                 sortArr: [{
@@ -170,7 +169,7 @@ export default {
         methods: {
             getHttp(back) {
                 let _self = this;
-                if(_self.httpPraram.page==1)common.$emit('show-load');
+                if (_self.httpPraram.page == 1) common.$emit('show-load');
                 httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'intentionService',
                     biz_method: 'querySupplyList',
@@ -187,17 +186,19 @@ export default {
                     }
                 }, function(suc) {
                     common.$emit('close-load');
-                    if(_self.httpPraram.page==1){_self.todos.splice(0, _self.todos.length);}
+                    if (_self.httpPraram.page == 1) {
+                        _self.todos.splice(0, _self.todos.length);
+                    }
                     let result = suc.data.biz_result.list;
-                    if(suc.data.code == '1c01'){
+                    if (suc.data.code == '1c01') {
                         /*common.$emit('translateDate',result,_self.todos);*/
-                        for(var i = 0; i < result.length; i++){
+                        for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);
                         }
-                    }else{
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    
+
                     if (back) {
                         back();
                     }
@@ -221,15 +222,15 @@ export default {
                 this.getHttp();
             },
             jumpSearch() {
-                common.searchType='keyword';
+                common.searchType = 'keyword';
                 common.$emit('setParam', 'router', 'resource')
                 this.$router.push('search');
             },
             jumpDetail(id) {
-                common.$emit("resourceDetail",id);
+                common.$emit("resourceDetail", id);
                 this.$router.push('resourceDetail/' + id);
             },
-            
+
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },
@@ -258,7 +259,17 @@ export default {
                     });
 
                 }, 1500);
+            },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+               
+                this.$refs.wrapper.scrollTop = this.scrollTop;
             }
+        },
+        watch: {
+            '$route': 'getScrollTop'
         },
         created() {
             let _self = this;
@@ -286,6 +297,8 @@ export default {
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 155;
+            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 165;
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }
 </script>
@@ -330,23 +343,20 @@ export default {
 
 .resource {}
 
-.resource  .search_content{
+.resource .search_content {
     float: left;
     width: 100%;
     background: #EC6817;
 }
-.resource .go-back{
+
+.resource .go-back {
     position: absolute;
-    width:15%;
-    padding-right:5%;
-    height:50px;
+    width: 15%;
+    padding-right: 5%;
+    height: 50px;
     border-bottom: 1px solid #ccc;
-    background:#EC6817;
+    background: #EC6817;
 }
-
-
-
-
 
 .resource .fixed {
     position: fixed;
@@ -358,10 +368,12 @@ export default {
 .resource .bg_white {
     /*margin-top: 90px;*/
 }
-.resource .bg_white{
+
+.resource .bg_white {
     background: #F5F5F5;
     padding: 0 10px;
 }
+
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
     width: 100%;
@@ -404,28 +416,30 @@ export default {
     margin-top: 0.8rem;
 }
 
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center>div{
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center>div {
     word-break: keep-all;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width:40%;
+    width: 40%;
 }
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .over_lenght{
+
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .over_lenght {
     word-break: keep-all;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width:200px;
+    width: 200px;
 }
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec{
+
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec {
     margin-top: 0.3rem;
 }
+
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
     width: 100%;
     padding-left: 30%;
     padding-top: 10px;
-   
 }
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
@@ -434,7 +448,7 @@ export default {
     height: 8.1rem;
     margin: 0;
     right: 10px;
-    white-space:nowrap;
+    white-space: nowrap;
 }
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
@@ -444,14 +458,14 @@ export default {
 }
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
-      position: absolute;
-      bottom: 0px;
-      background: #EC6817;
-      font-size: 1.109rem;
-      width: 5.97rem;
-      right: 0px;
-      height: 2.38rem;
-      padding: 0 5px;
+    position: absolute;
+    bottom: 0px;
+    background: #EC6817;
+    font-size: 1.109rem;
+    width: 5.97rem;
+    right: 0px;
+    height: 2.38rem;
+    padding: 0 5px;
 }
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {

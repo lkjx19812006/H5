@@ -49,6 +49,7 @@ import perfectInfo from './views/perfectInfo'
 
 
 const scrollBehavior = (to, from, savedPosition) => {
+     console.log(savedPosition);
   if (savedPosition) {
     // savedPosition is only available for popstate navigations.
     return savedPosition
@@ -67,20 +68,16 @@ const scrollBehavior = (to, from, savedPosition) => {
 }
 
 module.exports = {
-    mode: 'hash',
+    // mode: 'history',
     base: __dirname,
-    scrollBehavior,
+    // scrollBehavior,
     routes: [
         { name: 'login', path: '/login', component: login }, {
             name: 'main',
             path: '/main',
-            component: main,
-            children: [
-                { name: 'hello', path: '/hello', component: hello },
-                { name: 'menu', path: '/menu', component: menu }
-            ]
+            component: main
         },
-        { name: 'home', path: '/home', component: home },
+        { name: 'home', path: '/home', component: home},
         { name: 'drugResTable', path: '/drugResTable/:from', component: drugResTable },
         { name: 'marketQuotation', path: '/marketQuotation', component: marketQuotation },
         { name: 'supplyRelease', path: '/supplyRelease', component: supplyRelease },
