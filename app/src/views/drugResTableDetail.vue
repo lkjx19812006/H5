@@ -167,7 +167,7 @@ export default {
 }
 .drug_table_detail .nav-header {
     width:100%;
-    z-index: 20; 
+    z-index: 20000; 
     position: fixed;
 }
 

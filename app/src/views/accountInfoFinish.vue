@@ -135,7 +135,7 @@ export default {
                     name: 'intention',
                     index: 0,
                     header_url: '',
-                    url:''
+                    url:'/static/images/my-header.png'
                 },
                 birthday: '',
                 pickerValue: '',

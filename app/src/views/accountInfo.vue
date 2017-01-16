@@ -221,13 +221,9 @@ export default {
     color: #999999;
 }
 
-.account_overview .photo {
-    width: 5.1198rem;
-    height: 5.1198rem;
-    border-radius: 50%;
-}
 
-.photo-div {
+
+.account_overview .photo-div {
     overflow: hidden;
     background: #fff;
     float: right;
@@ -236,10 +232,11 @@ export default {
     width: 5.1198rem;
     height: 5.1198rem;
     border-radius: 50%;
-    width: 70px;
-    height: 70px;
 }
-
+.header-photo img{
+    width: 5.1198rem;
+    height: 5.1198rem;
+}
 .account_overview .basic_data,
 .company_data {
     width: 100%;

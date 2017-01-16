@@ -80,21 +80,27 @@ export default {
 }
 </script>
 <style scoped>
-.iosHead {}
+.iosHead {
+    position: relative;
+}
 
 .iosHead .ios_header {
     width: 100%;
     height: 64px;
     background: #EC6817;
+    overflow: hidden;
 }
 
 .iosHead .ios_header .header_content {
     background: #EC6817;
-    position: fixed;
-    top: 0;
+    /*position: fixed;
+    top: 0;*/
+    float:left;
     width: 100%;
     height: 64px;
     z-index: 2000;
+    overflow: hidden;
+
 }
 
 .iosHead .ios_header .title-name {
@@ -135,6 +141,7 @@ export default {
     width: 100%;
     height: 50px;
     z-index: 2000;
+    overflow: hidden;
 }
 
 .iosHead .my-header .title-name {
