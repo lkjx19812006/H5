@@ -1,9 +1,14 @@
 <template>
-    <div class="drug_table_detail">
-        <iosHead :param="param"></iosHead>
-        <div class="nav-header">
+    <div class="drug_table_detail"> 
+    
+         <iosHead :param="param"></iosHead>
+        <div  v-bind:class="[param.type=='ios' ?  'ios_nav' : 'nav-header']">
             <div v-bind:class="{ nav: todo.show, 'nav_nor': !todo.show }" v-for="(todo,index) in navArr" @click="tabNav(navArr,todo)">{{todo.name}}</div>
         </div>
+
+        
+       
+               
         <div class="main">
              <mt-loadmore >
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -169,9 +174,13 @@ export default {
     width:100%;
     z-index: 20000; 
     position: fixed;
-}
 
-.drug_table_detail .nav-header .nav{
+}
+.drug_table_detail .ios_nav{
+    width:100%;
+}
+.drug_table_detail .nav-header .nav,
+.ios_nav .nav{
     width:25%;
     height:40px;
     color:#313232;
@@ -180,8 +189,10 @@ export default {
     line-height: 40px;
     text-align: center;
     font-size: 14px;
+
 }
-.drug_table_detail .nav-header .nav_nor{
+.drug_table_detail .nav-header .nav_nor,
+.ios_nav .nav_nor{
     width:25%;
     height:40px;
     color:#FA6705;
