@@ -321,7 +321,7 @@ export default {
             });
         },
         mounted() {
-            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 90;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
             this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="content resource">
-        <div>
+        <div class="fixed">
             <div @click="jumpSearch" class="search_content">
                 <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
             </div>
@@ -296,8 +296,7 @@ export default {
             });
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 155;
-            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 165;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 165;
             this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }
@@ -359,7 +358,8 @@ export default {
 }
 
 .resource .fixed {
-    position: fixed;
+    /*position: fixed;*/
+    top:0;
     width: 100%;
     z-index: 2;
     background: #fff;

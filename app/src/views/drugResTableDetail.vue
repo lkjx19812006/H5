@@ -4,11 +4,7 @@
          <iosHead :param="param"></iosHead>
         <div  v-bind:class="[param.type=='ios' ?  'ios_nav' : 'nav-header']">
             <div v-bind:class="{ nav: todo.show, 'nav_nor': !todo.show }" v-for="(todo,index) in navArr" @click="tabNav(navArr,todo)">{{todo.name}}</div>
-        </div>
-
-        
-       
-               
+        </div>          
         <div class="main">
              <mt-loadmore >
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">

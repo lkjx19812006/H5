@@ -369,7 +369,7 @@ export default {
             this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
             let _self = this;
             this.$nextTick(function() {
-                _self.wrapperHeight = window.screen.height - _self.$refs.wrapper.getBoundingClientRect().top - 73;
+                _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
             })
 
 

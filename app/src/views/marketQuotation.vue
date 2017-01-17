@@ -415,10 +415,10 @@ export default {
     text-overflow: ellipsis;
 }
 .market_quotation .second_level_content li .last_one{
-    flex: 0.7;
-    -webkit-box-flex: 0.7;
-    -webkit-flex: 0.7;
-    -ms-flex: 0.7;
+    flex: 0.8;
+    -webkit-box-flex: 0.8;
+    -webkit-flex: 0.8;
+    -ms-flex: 0.8;
 }
 .market_quotation .second_level_content li p img {
     height: 1.024rem;

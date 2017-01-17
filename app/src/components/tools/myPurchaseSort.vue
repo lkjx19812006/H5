@@ -77,6 +77,7 @@ export default {
     float: left;
     border-bottom: 1px solid #ddd;
     background: white;
+   
 }
 
 .mypurchase_sort .sort_content .sort_content_detail {
