@@ -5,14 +5,14 @@
                     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                         <mt-loadmore>
                             <div class="swipe_height" v-if="obj.image">
-                                <swiper :options="swiperOption" class="swipe_height">
-                                    <swiper-slide v-for="(item,index) in obj.image">
-                                        <div class="img_content" @click="popUp(index,obj.image)">
-                                            <img v-bind:src="item">
-                                        </div>
-                                    </swiper-slide>
-                                </swiper>
-                                <div class="swipe_number"><span>{{number}}</span>/{{obj.image.length}}</div>
+                                  <mt-swipe :auto="4000"  :show-indicators="false">        
+                                    <mt-swipe-item v-for="(item,index) in obj.image">
+                                      <div  @click="popUp(index,obj.image)">
+                                          <img :src="item">
+                                          <div class="index"><span>{{index + 1}}</span>/{{obj.image.length}}</div>
+                                      </div>           
+                                    </mt-swipe-item>   
+                                  </mt-swipe>
                             </div>
                             <div class="top">
                                 <p>发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
@@ -86,6 +86,8 @@ export default {
                     setWrapperSize: true,
                     debugger: true,
                     loop: true,
+                    autoHeight: true,
+                    mousewheelControl : true,
                     autoplayDisableOnInteraction: false,
                     onTransitionStart: function(swiper) {
                         _self.number = parseInt(swiper.realIndex) + 1;
@@ -101,7 +103,15 @@ export default {
             popUpBigImg
         },
         methods: {
-            popUp(index, imgArr) {
+            popUp(index,imgArr) {
+                let j = index - 1;
+                if(imgArr){
+                    for(var i = 0; i < index; i++){
+                        imgArr.push(imgArr[i]);
+                    }
+                    imgArr.slice(0,j);
+
+                }
                 this.my_param.url = imgArr;
                 this.my_param.show = !this.my_param.show;
                 this.my_param.whole_height = document.documentElement.clientHeight;
@@ -217,11 +227,27 @@ export default {
 .page-loadmore-wrapper {}
 
 .resource_detail .swipe_height {
-    height: 16rem;
-    max-height: 180px;
-    position: relative;
+   height:18.8rem;
+   position: relative;
 }
-
+.resource_detail .swipe_height .index{
+   width:4rem;
+   height:1.6rem;
+   background: black;
+   z-index: 9000000000;
+   position: fixed;
+   right: 2rem;
+   opacity: 0.5;
+   border-radius: 0.8rem;
+   bottom: 1.5rem;
+   color:white;
+   line-height: 1.6rem;
+   text-align: center;
+   font-size: 1.4rem;  
+}
+.resource_detail .swipe_height .index span{
+   color:#FA6705;
+}
 .resource_detail .swipe_height .img_content {
     float: left;
     width: 100%;

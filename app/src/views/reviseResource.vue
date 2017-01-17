@@ -253,7 +253,7 @@ export default {
                         breedId: _self.obj.breedId,
                         unit: _self.obj.number_id,
                         sampleUnit:_self.obj.sample_id,
-                        id: _self.obj.id
+                        id: _self.$route.params.revId
                     }
                 };
 
@@ -283,7 +283,6 @@ export default {
         created() {
             var _self = this;
             var id = this.$route.params.revId;
-            _self.obj.id = id;
             _self.getResource(id);
             common.$on("res-id", function(item) {
                 _self.getResource(item);

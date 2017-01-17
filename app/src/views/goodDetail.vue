@@ -11,11 +11,11 @@
     <mt-loadmore>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
              <div class="swipe_height">
-                  <mt-swipe :auto="4000"  :show-indicators="false">        
-                    <mt-swipe-item v-for="(item,index) in imgArray">
-                      <div  @click="popUp(index,imgArray)">
+                  <mt-swipe :auto="param.time"  :show-indicators="false">        
+                    <mt-swipe-item v-for="(item,index) in param.imgArray">
+                      <div  @click="popUp(index,param.imgArray)">
                           <img :src="item">
-                          <div class="index"><span>{{index + 1}}</span>/{{imgArray.length}}</div>
+                          <div class="index"><span>{{index + 1}}</span>/{{param.imgArray.length}}</div>
                       </div>           
                     </mt-swipe-item>   
                   </mt-swipe>
@@ -74,16 +74,18 @@ export default {
                 my_param:{
                     url:'',
                     show:false,
+                    imgArray: [],
                     whole_height:''
                 },
                 param:{
                     name:'商品详情',
                     show:true,
                     reviseRouter:'',
+                    time:4000,
                     item:''
                     
                 },
-               imgArray: [],
+                
                arrLength:'',
                 obj:{
                     drug_name:'白术',
@@ -122,9 +124,13 @@ export default {
         },
         methods:{
              popUp(index,imgArr){
-                 this.my_param.url = imgArr;
+                 let _self = this;  
+                
+                 _self.my_param.url = imgArr;
                  this.my_param.show = !this.my_param.show;
+
                  this.my_param.whole_height = document.documentElement.clientHeight;
+                   
             },
              getHttp(id){
                      let _self = this;
@@ -169,7 +175,7 @@ export default {
                                   _self.imgArray.push(imageArr[i]);
 
                             }*/
-                            _self.imgArray = result.image;
+                            _self.param.imgArray = result.image;
                             _self.arrLength = imageArr.length;
                         }, function(err) {
                             

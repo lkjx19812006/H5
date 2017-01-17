@@ -28,7 +28,7 @@
                                     <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
                                 </div>
                                 <div class="res_content_right">
-                                    <p>{{todo.price}}<span>{{todo.unit}}</span></p>
+                                    <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                     <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump(todo.id,index)">编辑</button>
                                 </div>
                             </div>
