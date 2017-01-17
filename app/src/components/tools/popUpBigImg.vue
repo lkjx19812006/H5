@@ -3,7 +3,7 @@
             <mt-swipe :auto="0" :prevent="false" > 
                 <mt-swipe-item v-for="(item,index) in param.url">
                 <div>
-                    <img v-bind:src="item" id="img" @click="touch">      
+                    <img v-bind:src="item" id="img" >      
                 </div>                                                    
                 </mt-swipe-item>
             </mt-swipe>      
@@ -13,11 +13,6 @@
 export default {
     data() {
             return {
-                startPro1:'',
-                startPro2:'',
-                endPro1:'',
-                endPro2:'',
-                img:'',
             }
         },
         props: {

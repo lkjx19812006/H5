@@ -41,8 +41,9 @@
                     </ul>
                 </mt-loadmore>
             </div>
+
         </div>
-        <div class="add_address" v-on:click="addAddress">添加新地址</div>
+         <div class="add_address" v-on:click="addAddress">添加新地址</div>
         <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
@@ -86,8 +87,12 @@ export default {
             },
             jumpBack(todo) {
                 let _self = this;
-                common.$emit('backAddress', todo);
-                history.go(-1);
+                
+                if(common.pageParam.router == 'orderConfirm'){
+                    common.$emit('backAddress', todo);
+                    history.go(-1);
+                }
+                
             },
             listHttp() {
                 //本页面列表刷新接口
@@ -215,7 +220,7 @@ export default {
         },
         mounted() {
 
-            this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top - 50;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 50;
             this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 

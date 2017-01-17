@@ -7,7 +7,7 @@
             <div class="more_content">
                 <p>姓名：{{information.name}}</p>
             </div>
-            <div class="more_content">
+            <div class="more_content last_content">
                 <p>联系方式：{{information.phone}}</p>
             </div>
         </div>
@@ -58,7 +58,9 @@ export default {
     width: 100%;
     padding: 0 0.8rem;
 }
-
+.contact_information .bg_white .last_content{
+    padding-bottom: 1rem;
+}
 .contact_information .bg_white .more_content p {
     float: left;
     margin-top: 1.1rem;

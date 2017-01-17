@@ -12,7 +12,7 @@
                 <p>产地：{{information.place}}</p>
                 <p class="right_p">药材数量：{{information.number}}{{information.unit}}</p>
             </div>
-            <div class="more_content" v-if="information.sendPlace">
+            <div class="more_content last_content" v-if="information.sendPlace">
                 <p>发货地：{{information.sendPlace}}</p>
                 <p class="right_p">销售价格：{{information.price}}元/kg</p>
             </div>
@@ -39,6 +39,7 @@ export default {
     float: left;
     width: 100%;
 }
+
 .resource_information .bg_white{
     padding: 0.8rem 0;
 }
@@ -64,7 +65,9 @@ export default {
     width: 100%;
     padding:0 0.8rem ; 
 }
-
+.resource_information .bg_white .last_content{
+    padding-bottom: 1rem;
+}
 .resource_information .bg_white .more_content p {
     float: left;
     margin-top: 1.1rem;

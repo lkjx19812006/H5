@@ -320,7 +320,7 @@ a {
 .page-loadmore-wrapper {
     margin-top: 0px;
     overflow: scroll;
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
     width: 100%;
     overflow-y: visible;
     overflow-x: hidden;

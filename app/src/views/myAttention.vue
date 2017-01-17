@@ -1,9 +1,12 @@
 <template>
     <div class="my_attention">
-        <attentionHead :param="param" v-on:tab="tabAttention"></attentionHead>
-        <div @click="jumpSearch" style="float:left;width:100%">
-            <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
+        <div class="fixed_box">
+            <attentionHead :param="param" v-on:tab="tabAttention"></attentionHead>
+            <div @click="jumpSearch" class="fixed">
+                <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
+            </div>
         </div>
+       
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -296,8 +299,13 @@ export default {
 .my_attention .bg_white {
     background: #F5F5F5;
     padding: 0 10px;
-}
 
+}
+.my_attention .fixed{  
+    margin-top: 50px;
+    float:left;
+    width:100%;
+}
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list {
     margin-top: -10px;
 }

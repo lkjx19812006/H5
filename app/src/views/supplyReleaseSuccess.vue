@@ -165,7 +165,7 @@ export default {
     margin-top: 0.8rem;
     float: left;
     width: 100%;
-    background-color: #fff; 
+    background-color: #fff;
 }
 
 .need_release_success .source_information .bg_white {
@@ -175,6 +175,7 @@ export default {
 .need_release_success .source_information .bg_white .title {
     float: left;
     width: 100%;
+    padding-top: 1rem;
 }
 
 .need_release_success .source_information .bg_white .index_title {

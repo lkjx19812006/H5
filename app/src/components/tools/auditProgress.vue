@@ -58,6 +58,7 @@ export default {
     float: left;
     width: 100%;
     padding: 0 0.8rem;
+    padding-bottom: 1rem;
 }
 
 .progress .bg_white .more_content img{

@@ -1,7 +1,11 @@
 <template>
     <div class="my_order">
-        <attentionHead :param="param" v-on:tab="tabOrder"></attentionHead>
-        <landscapeScroll :param="data" v-on:postData="changeOrderStatus"></landscapeScroll>
+        <div>
+             <attentionHead :param="param" v-on:tab="tabOrder"></attentionHead>
+            <div  class="fixed">
+                 <landscapeScroll :param="data" v-on:postData="changeOrderStatus"></landscapeScroll>
+            </div>
+        </div>   
         <div class="bg_white ">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -401,6 +405,11 @@ export default {
 
 .my_order .mint-header-title {
     /*color:#FA6705;*/
+}
+.my_order .fixed{  
+    margin-top: 50px;
+    float:left;
+    width:100%;
 }
 
 .my_order .right_text {

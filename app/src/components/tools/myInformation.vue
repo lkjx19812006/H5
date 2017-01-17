@@ -81,7 +81,7 @@ export default {
                     switch (router) {
                         case 'addressManage':
                             console.log('ssssss');
-                            common.$emit("informAddress", 1)
+                            common.$emit("informAddress", 1);
                             break;
                         case 'accountInfo':
                             common.$emit("informAccountinfo", 1)

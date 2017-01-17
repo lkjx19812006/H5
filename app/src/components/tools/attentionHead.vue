@@ -1,14 +1,17 @@
 <template>
      <div  class="attention-header">
-                <div class="go-back" @click="jumpBack()">
-                  <img src="/static/images/go-back.png">
-                </div>         
-                <div  class="title-name">
-                     <p v-show="param.show">{{param.name}}</p>
-                     <p v-show="!param.show">{{param.other_name}}</p>           
-                </div>
-               <div class="right_text" @click="change" v-show="param.show">{{param.other_name}}</div>
-               <div class="right_text" @click="change" v-show="!param.show">{{param.name}}</div>
+        <div class="main_content">
+           <div class="go-back" @click="jumpBack()">
+              <img src="/static/images/go-back.png">
+            </div>         
+            <div  class="title-name">
+                 <p v-show="param.show">{{param.name}}</p>
+                 <p v-show="!param.show">{{param.other_name}}</p>           
+            </div>
+           <div class="right_text" @click="change" v-show="param.show">{{param.other_name}}</div>
+           <div class="right_text" @click="change" v-show="!param.show">{{param.name}}</div>
+
+        </div>          
      </div>
 </template>
 <script>
@@ -41,9 +44,12 @@ export default {
     width:100%;
     height:50px;
     border-bottom: 1px solid #ccc;
+    position: fixed;
+    z-index: 2000000;
+}
+.attention-header .main_content{
     position: relative;
 }
-
 .attention-header .right_text{   
     font-size: 1.2rem;
     padding-left: 1.5rem;

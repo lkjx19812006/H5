@@ -133,6 +133,7 @@ export default {
                 })
             },
             jumpAddress() {
+                common.$emit('setParam','router','orderConfirm');
                 this.$router.push("/addressManage");
             },
             confirm() {
