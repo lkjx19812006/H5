@@ -28,7 +28,7 @@
                                 <div class="last">
                                     <p>{{todo.spec}}</p>
                                     <p>{{todo.location}}</p>
-                                    <p>{{todo.duedate | timeDays(todo.pubdate)}}<span>天</span></p>
+                                    <p>{{todo.duedate | timeDays(todo.pubdate)}}<span v-if="disTime(todo.duedate)">天</span></p>
                                     <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                 </div>
                             </div>
@@ -67,8 +67,7 @@ export default {
                 scrollTop: 0,
                 err: {
                     err: "很抱歉，没有找到相关资源",
-                    url: '/static/icons/maomao.png',
-
+                    url: '/static/icons/maomao.png'
                 },
                 sortRouter: 'home',
                 param: {
@@ -299,7 +298,6 @@ export default {
                         common.$emit('message', err.data.msg);
                     })
                 }
-
                 common.$emit("confirm", {
                             message: '确认删除？',
                             title: '提示',
@@ -343,7 +341,19 @@ export default {
                     }
                 }, 1500);
             },
-
+            disTime:function(duedate){
+        		var now=new Date().getTime();
+        		console.log(now);
+        		var endDate=new Date(duedate).getTime();
+        		console.log(endDate);
+        		var dis=now-endDate;
+        		console.log(dis);
+        		if(dis<0){
+        			return true;
+        		}else{
+        			return false;
+        		}
+        	},
             handleTopChange(status) {
                 this.topStatus = status;
             },
