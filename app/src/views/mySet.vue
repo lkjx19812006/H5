@@ -78,7 +78,9 @@ export default {
                 window.localStorage.SID = '';
                 window.localStorage.difTime = '';
                 common.$emit('clear_Information');
-                this.$router.push('/login');
+                common.$emit('setParam','backRouter','mySet');
+                common.$emit('informBackMyself','mySet');
+                this.$router.replace('/login');
             },
             getCustomerPhone() {
                 let _self = this;

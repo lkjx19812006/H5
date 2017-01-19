@@ -55,7 +55,7 @@ export default {
                 wrapperHeight: '',
                 my_header: {
                     name: '登陆',
-                    goBack: true
+                    router:''
                 },
                 myShow: {
                     show: true,
@@ -75,7 +75,7 @@ export default {
             }
         },
         created() {
-            
+            let _self = this;
             this.getCode();
         },
         components: {
@@ -103,7 +103,9 @@ export default {
                         common.KEY = window.localStorage.KEY;
                         common.SID = window.localStorage.SID;
                         common.getDate();
-                        _self.$router.push('/home');
+                        /*_self.$router.push('/home');*/
+                        /*_self.$router.replace(common.pageParam.backRouter);*/
+                        window.history.go(-1);
                     } else {
                         common.$emit('message', response.data.msg);
                     }
@@ -128,7 +130,8 @@ export default {
                         common.KEY = window.localStorage.KEY;
                         common.SID = window.localStorage.SID;
                         common.getDate();
-                        _self.$router.push('/home');
+                        /*_self.$router.push('/home');*/
+                        _self.$router.replace(common.pageParam.backRouter);
                     } else {
                         common.$emit('message', response.data.msg);
                     }

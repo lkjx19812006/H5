@@ -9,8 +9,9 @@ Vue.filter('timeFormat', function(val){
 
 Vue.filter('timeDays',function(due,pub){
         let days='7';
-        if(due)due=due.split('.')[0];
-            var arr = due.split(/[- : \/]/);
+        if(due){
+            due=due.split('.')[0];
+            if(due)var arr = due.split(/[- : \/]/);
             if(due != ''){
                 var duedateDate = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
                 var pubdateDate = new Date();
@@ -19,7 +20,7 @@ Vue.filter('timeDays',function(due,pub){
             }else{
                 days="7";
             }
-            
+        }   
         return days;    
     });
 

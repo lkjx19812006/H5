@@ -120,7 +120,7 @@ export default {
                         common.SID = window.localStorage.SID;
                         common.getDate();
                         common.$emit('nextRegister',1);
-                        _self.$router.push('perfectInfo');
+                        _self.$router.replace('perfectInfo');
                     } else {
                         //common.$emit('message', response.data.msg);
                     }

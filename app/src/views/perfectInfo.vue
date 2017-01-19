@@ -56,7 +56,8 @@ export default {
                 param: {
                     name: 'intention',
                     index: 0,
-                    url:'/static/icons/big_head.png'    
+                    url:'/static/icons/big_head.png',
+
                 },
                 obj:{
                     name:'',
@@ -66,6 +67,7 @@ export default {
                     bizMain:'',
                     url:''
                 },
+                router:'',
                 phone:'',
                 password:'',
                 wrapperHeight:'',
@@ -73,7 +75,9 @@ export default {
                 show:true,
                 my_header: {
                     name: '完善信息',
-                    t_show:true
+                    t_show:true,
+                    goSecond:true
+                    
                 }
             }
         },
@@ -129,7 +133,9 @@ export default {
                     console.log(suc)
                     if (suc.data.code == "1c01") {
                         common.$emit("toMine", _self.obj);              
-                        _self.$router.push('/home');
+                        window.history.go(-2);
+
+                        //console.log(common.pageParam.backRouter)
                     } else {
                         //common.$emit('message', suc.data.msg);
                     }
@@ -188,7 +194,6 @@ export default {
                     _self.param.url = '/static/icons/big_head.png';
                     _self.obj.bizMain = '';
                    })
-
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

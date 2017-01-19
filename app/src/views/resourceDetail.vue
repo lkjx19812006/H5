@@ -157,8 +157,9 @@ export default {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
-                        let url = '/resourceDetail'
-                        _self.$router.push('/login?' + url);
+                        common.$emit('setParam','backRouter','resourceDetail/' + id);
+                       
+                        _self.$router.push('/login');
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -174,8 +175,9 @@ export default {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
-                        let url = '/resourceDetail'
-                        _self.$router.push('/login?' + url);
+                        common.$emit('setParam','backRouter','resourceDetail/' + id);
+                        
+                        _self.$router.push('/login');      
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -204,8 +206,9 @@ export default {
                 _self.refurbish(item);
                 _self.obj = {};
                 _self.my_param.show = false;
-
             })
+
+
 
         },
         mounted() {

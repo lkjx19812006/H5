@@ -102,6 +102,8 @@ export default {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
+                        common.$emit('setParam','backRouter','/home');
+                        
                         _self.$router.push('/login');
                     }
                     common.$emit('confirm', {
@@ -205,6 +207,8 @@ export default {
                     let _self = this;
                     if (!common.customerId&&router!='mySet') {
                         function loadApp() {
+                            common.$emit('setParam','backRouter','/home');
+
                             _self.$router.push('/login');
                         }
                         common.$emit('confirm', {

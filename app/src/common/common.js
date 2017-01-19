@@ -49,7 +49,8 @@ let common = new Vue({
             Needrelease: '',
             backAddress: '',
             orderStatus: 0,
-            myParam:''
+            myParam:'',
+            backRouter:''
         },
         shareParam: {
             imgUrl: 'http://apps.yaocaimaimai.com/htm5/static/icons/err.png',

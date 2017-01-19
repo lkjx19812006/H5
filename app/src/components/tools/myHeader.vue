@@ -26,14 +26,19 @@ export default {
         },
         methods: {
             jumpBack() {
-                if(this.param.goBack){
-                    this.$router.push('/home');
+                let _self = this;
+                if(this.param.goBack){   
+                        _self.$router.push('/home');  
                 }else{
                     if(window.history.length==1){
-                        this.$router.push('/home');
+                        _self.$router.push('/home');
                     }else{
-                         // this.$router.go(-1)
-                         window.history.go(-1);
+                         if(_self.param.goSecond){
+                             window.history.go(-2);
+                         }else{
+                            window.history.go(-1);
+                         }
+                         
                     }
                     
                 }
