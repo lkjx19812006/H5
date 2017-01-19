@@ -75,6 +75,7 @@ export default {
             }
         },
         created() {
+            
             this.getCode();
         },
         components: {

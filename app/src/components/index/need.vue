@@ -170,7 +170,7 @@ export default {
                     location: [],
                     keyword: '',
                     page: 1,
-                    pageSize: 20
+                    pageSize: 10
                 }
 
             }

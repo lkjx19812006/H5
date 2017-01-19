@@ -16,7 +16,7 @@
                         <li v-for="(todo,index) in todos" v-if="index > 0">
                             <img :src="todo.img_src">
                             <p class="name">{{todo.name}}</p>
-                            <p class="name_content">{{todo.content}}</p>
+                            <p class="name_content"  @click="call(index)">{{todo.content}}</p>
                         </li>
                     </ul>
                     <div class="advantage" v-for="item in data">
@@ -91,6 +91,12 @@ export default {
             getUrl(param) {
                 console.log('dddddd');
                 console.log(param);
+            },
+            call(index){
+                if(index == 2){
+                    window.location.href = "tel:" + this.todos[2].content;
+                }
+                 
             },
             getHttp(){
                 let _self = this;

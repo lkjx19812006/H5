@@ -104,14 +104,6 @@ export default {
         },
         methods: {
             popUp(index,imgArr) {
-                let j = index - 1;
-                if(imgArr){
-                    for(var i = 0; i < index; i++){
-                        imgArr.push(imgArr[i]);
-                    }
-                    imgArr.slice(0,j);
-
-                }
                 this.my_param.url = imgArr;
                 this.my_param.show = !this.my_param.show;
                 this.my_param.whole_height = document.documentElement.clientHeight;
@@ -165,7 +157,8 @@ export default {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
-                        _self.$router.push('/login');
+                        let url = '/resourceDetail'
+                        _self.$router.push('/login?' + url);
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -181,7 +174,8 @@ export default {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
-                        _self.$router.push('/login');
+                        let url = '/resourceDetail'
+                        _self.$router.push('/login?' + url);
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -251,12 +245,13 @@ export default {
 .resource_detail .swipe_height .img_content {
     float: left;
     width: 100%;
-    height: 180px;
+    height: 100%;
 }
 
 .resource_detail .swipe_height img {
     width: 100%;
-    margin-top: -80px;
+    height:18.8rem;
+    margin-top: 0;
 }
 
 .resource_detail .swipe_height .swipe_number {

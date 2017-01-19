@@ -124,11 +124,10 @@ export default {
         },
         methods:{
              popUp(index,imgArr){
-                 let _self = this;  
-                
-                 _self.my_param.url = imgArr;
+                 let _self = this;
+            
+                 _self.my_param.url = imgArr; 
                  this.my_param.show = !this.my_param.show;
-
                  this.my_param.whole_height = document.documentElement.clientHeight;
                    
             },
@@ -215,6 +214,7 @@ export default {
 }
 .good_detail .swipe_height img {
     width: 100%;
+    height:18.8rem;
     position: absolute;
     left:0;
 }

@@ -248,7 +248,7 @@ export default {
                     biz_method: 'breedPriceGuide',
                     biz_param: {
                         pn: 1,
-                        pSize: 20
+                        pSize: 10
                     }
                 }, function(suc) {
                     let result = suc.data.biz_result.list;
@@ -271,7 +271,7 @@ export default {
                     sign: '',
                     biz_param: {
                         pn: 1,
-                        pSize: 20
+                        pSize: 10
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -295,7 +295,7 @@ export default {
                     biz_method: 'currentTradeList',
                     biz_param: {
                         pn: 1,
-                        pSize: 20
+                        pSize: 10
                     }
                 }, function(suc) {
                     let result = suc.data.biz_result.list;

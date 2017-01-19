@@ -137,33 +137,48 @@ export default {
             },
             delet: function(index) {
                 let _self = this;
-                let todo = _self.todos[index];
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'userAddressService',
-                    biz_method: 'deleteUserAddress',
-                    version: 1,
-                    time: 0,
-                    sign: '',
-                    biz_param: {
-                        id: todo.id
+                /*common.$emit('confirm',{
+                    message:'确认删除？',
+                    title:'提示',
+                    ensure:_self.beforeDelet(index)
+                })*/
+                  function beforeDelet(){
+                        let todo = _self.todos[index];
+                        common.$emit('show-load');
+                        let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                        let body = {
+                            biz_module: 'userAddressService',
+                            biz_method: 'deleteUserAddress',
+                            version: 1,
+                            time: 0,
+                            sign: '',
+                            biz_param: {
+                                id: todo.id
+                            }
+                        };
+                        body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                        body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                        httpService.addressManage(url, body, function(suc) {
+                            common.$emit('close-load');
+                            if (suc.data.code == '1c01') {
+                                _self.todos.splice(index, 1);
+                                common.$emit('clearAddress', todo);
+                                
+                            } else {
+                                common.$emit('message', suc.data.msg);
+                            }
+                        }, function(err) {
+                            common.$emit('close-load');
+                            common.$emit('message', err.data.msg);
+                        })
                     }
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.addressManage(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code == '1c01') {
-                        _self.todos.splice(index, 1);
-                        common.$emit('clearAddress', todo);
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
+
+                       common.$emit("confirm", {
+                            message: '确认删除？',
+                            title: '提示',
+                            ensure: beforeDelet
+                       });
+
             },
             changeColor: function(todos, todo, index) {
                 let _self = this;

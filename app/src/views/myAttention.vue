@@ -118,7 +118,7 @@ export default {
                     keyword: '',
                     intentionType: 1,
                     page: 1,
-                    pageSize: 20
+                    pageSize: 10
                 }
             }
         },

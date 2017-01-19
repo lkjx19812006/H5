@@ -29,7 +29,11 @@
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.number}}<span>{{todo.unit}}</span></p>
-                                    <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump(todo.id,index)">编辑</button>
+                                    <div class="button_box">
+                                        <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump(todo.id,index)">编辑</button>
+                                        <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="delet(todo.id)">删除</button>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </li>
@@ -197,7 +201,7 @@ export default {
                     sample: '',
                     testing: 0,
                     page: 1,
-                    pageSize: 20
+                    pageSize: 10
                 }
             }
         },
@@ -279,6 +283,44 @@ export default {
                 common.$emit("res-id", id);
                 common.$emit('setParam', 'resourceId', id);
                 this.$router.push('reviseResource/' + id);
+            },
+            delet(id){
+                let _self = this;
+
+                function beforeDelet(){
+                    common.$emit('show-load');
+                    let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    let body = {
+                        biz_module: 'intentionService',
+                        biz_method: 'deleteIntentionInfo',
+                        version: 1,
+                        time: 0,
+                        sign: '',
+                        biz_param: {
+                            id:id
+                        }
+                    };
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                    httpService.myResource(url, body, function(suc) {
+                        common.$emit('close-load');
+                        if(suc.data.code == '1c01'){
+                            _self.getHttp();
+                        }else{
+                            common.$emit('message', suc.data.msg);
+                        }
+                        
+                    }, function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+                }
+
+                common.$emit("confirm", {
+                            message: '确认删除？',
+                            title: '提示',
+                            ensure: beforeDelet
+                });
             },
             jumpBack(router) {
                 this.$router.push(router)
@@ -368,7 +410,9 @@ export default {
 .my_resource .title {
     font-size: 1.7rem;
 }
-
+.my_resource .bg_white{
+    background: #F5F5F5;
+}
 .my_resource .bg_white .page-loadmore-wrapper .mint-loadmore {
     background: #F5F5F5;
 }
@@ -472,22 +516,26 @@ export default {
     font-size: 1rem;
 }
 
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right .button_box {
     position: absolute;
+    float: right;
     bottom: 0px;
-    background: white;
     font-size: 10px;
-    min-width: 50px;
-    right: 0px;
-    max-height: 4rem;
+    min-width: 150px;
+    right: 0px;   
+    z-index: 100000;
+    font-size: 1.1rem;
+}
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right .button_box button{
+    float:right;
+    margin-left: 5px;
+    max-height: 3rem;
     padding: 0 5px;
     color: black;
     border: 1px solid #BDBDBD;
     border-radius: 5px;
-    z-index: 100000;
-    font-size: 1.1rem;
+    background: white;
 }
-
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {
     font-size: 1.1rem;
     color: #999;

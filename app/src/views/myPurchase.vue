@@ -33,6 +33,7 @@
                                 </div>
                             </div>
                             <div class="button">
+                                <p class="first_button" v-on:click.stop="delet(todo.id)">删除</p>
                                 <p class="first_button" v-on:click.stop="jump(other_router,todo.id)">编辑</p>
                                 <p class="second_button" v-on:click.stop="jumpApp()">查看报价</p>
                             </div>
@@ -200,7 +201,7 @@ export default {
                     duedate: 0,
                     testing: 0,
                     page: 1,
-                    pageSize: 20
+                    pageSize: 10
                 }
             }
         },
@@ -267,6 +268,43 @@ export default {
                         back();
                     }
                 })
+            },
+            delet(id){
+                let _self = this;
+                function beforeDelet(){
+                    common.$emit('show-load');
+                    let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    let body = {
+                        biz_module: 'intentionService',
+                        biz_method: 'deleteIntentionInfo',
+                        version: 1,
+                        time: 0,
+                        sign: '',
+                        biz_param: {
+                            id:id
+                        }
+                    };
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                    httpService.myResource(url, body, function(suc) {
+                        common.$emit('close-load');
+                        if(suc.data.code == '1c01'){
+                            _self.getHttp();
+                        }else{
+                            common.$emit('message', suc.data.msg);
+                        }
+                        
+                    }, function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+                }
+
+                common.$emit("confirm", {
+                            message: '确认删除？',
+                            title: '提示',
+                            ensure: beforeDelet
+                });
             },
             getId(param) {
                 let _self = this;
@@ -390,7 +428,9 @@ export default {
 
 .low_price {}
 
-.my_purchase .bg_white {}
+.my_purchase .bg_white {
+    background: #F5F5F5;
+}
 
 .my_purchase .bg_white .page-loadmore-wrapper .mint-loadmore {
     background: #F5F5F5;
@@ -464,8 +504,8 @@ export default {
     line-height: 2rem;
     border: 1px solid #BFBFBF;
     border-radius: 3px;
-    float: left;
-    margin-right: 1rem;
+    float: right;
+    margin-left: 1rem;
 }
 
 .my_purchase .bg_white .page-loadmore-wrapper .page-loadmore-list li .button .second_button {

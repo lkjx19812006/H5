@@ -38,6 +38,7 @@
                                 </div>
                                 <p class="sum_bottom">
                                     <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click.stop="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
+                                    <button v-if="'success' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('查看物流')">查看物流</button>
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('查看物流')">查看物流</button>
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('确认收货')">确认收货</button>
                                     <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('催促发货')">催促发货</button>
@@ -113,7 +114,7 @@ export default {
                     name: '已完成',
                     back_id: 60,
                     show: false
-                }, {
+                },{
                     name: '已取消',
                     back_id: -1,
                     show: false
@@ -125,7 +126,7 @@ export default {
                     type: 1,
                     orderstatus: 0,
                     page: 1,
-                    pageSize: 20
+                    pageSize: 10
                 }
             }
         },
@@ -158,7 +159,10 @@ export default {
                         status = 'send';
                         break;
                     case 60:
-                        status = '';
+                        status = 'send';
+                        break;
+                    case 70:
+                        status = 'success';
                         break;
                 }
                 return status;

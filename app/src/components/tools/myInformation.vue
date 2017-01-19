@@ -44,6 +44,7 @@ export default {
         methods: {
              getCustomerPhone() {
                 let _self = this;
+                console.log(common.urlCommon + common.apiUrl.getDate);
                 this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
                     if (response.data.code == '1c01') {
                         console.log(response.data);
