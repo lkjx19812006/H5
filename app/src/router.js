@@ -68,7 +68,7 @@ const scrollBehavior = (to, from, savedPosition) => {
 }
 
 module.exports = {
-    // mode: 'history',
+    mode: 'history',
     base: __dirname,
     // scrollBehavior,
     routes: [

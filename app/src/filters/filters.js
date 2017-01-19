@@ -20,7 +20,13 @@ Vue.filter('timeDays',function(due,pub){
             }else{
                 days="7";
             }
+
         }   
+
+            if(days<0){
+            	days="已过期";
+            }    
+
         return days;    
     });
 
