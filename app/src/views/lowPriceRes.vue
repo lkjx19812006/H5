@@ -20,7 +20,8 @@
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>
-                                    <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
+                                    <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 0">立即购买</button>
+                                    <!-- <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 1">查看详情</button> -->
                                 </div>
                             </div>
                         </li>
