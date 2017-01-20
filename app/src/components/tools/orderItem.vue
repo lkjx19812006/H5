@@ -19,9 +19,9 @@
         <div class="count">
             <div class="number">购买数量：</div>
             <div class="operate">
-                <button class="mint-button mint-button--primary mint-button--small gray" v-on:click="subtraction">—</button>
+                <button class="mint-button mint-button--primary mint-button--small gray" @click="subtraction">—</button>
                 <input type="text" disabled='true' v-model="param.value">
-                <button class="mint-button mint-button--primary mint-button--small gray" v-on:click="addition">+</button>
+                <button class="mint-button mint-button--primary mint-button--small gray" @click="addition">+</button>
             </div>
         </div>
     </div>

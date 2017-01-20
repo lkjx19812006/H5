@@ -65,28 +65,28 @@ export default {
                     router: '',
                     img_src: '/static/icons/receipt.png'
                 }],
-                my_list: [{ //         
-                    name: '我的药款',
-                    img_src: '/static/icons/I-Yaokuan.png',
-                    router: 'app'
-                }, {
+                my_list: [{
                     name: '我的资源',
                     router: 'myResource',
                     img_src: '/static/icons/My-resources.png'
-                }, {
+                },{
                     name: '我的采购',
                     router: 'myPurchase',
                     img_src: '/static/icons/My-purchase.png'
-                }, {
+                },{
                     name: '我的报价',
                     img_src: '/static/icons/My-offer.png',
                     router: 'app'
-                }, {
+                },{
                     name: '我的关注',
                     router: 'myAttention',
                     img_src: '/static/icons/My-concern.png'
-                }, {
-                    name: '设置',
+                },{ //         
+                    name: '我的药款',
+                    img_src: '/static/icons/I-Yaokuan.png',
+                    router: 'app'
+                },{
+                    name: '更多',
                     router: 'mySet',
                     img_src: '/static/icons/Set-up.png'
                 }]
