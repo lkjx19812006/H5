@@ -1,14 +1,17 @@
 <template>
     <div>
-        <mt-header>
-            <router-link to="" slot="left">
+        <!-- <mt-header>
+            <router-link to="" slot="left"> -->
+            <div class="my_header">
                 <img src="/static/images/my-logo.png" class="logo">
-                <div class="search_div" @click="fromIndex">
+                <div class="search_div" v-on:click="fromIndex">
                     请输入您想要的货物资源
                     <img src="/static/icons/search.png">
                 </div>
-            </router-link>
-        </mt-header>
+            </div>
+                
+          <!--   </router-link>
+        </mt-header> -->
         <div class="my_whole">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" >
                 <mt-loadmore>
@@ -371,8 +374,6 @@ export default {
             this.$nextTick(function() {
                 _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
             })
-
-
             function startmarquee(lh, speed, delay) {
                 var count = 1;
                 var t;
@@ -410,10 +411,11 @@ export default {
 }
 </script>
 <style scoped>
-.mint-header {
+.my_header {
     background-color: #FA6705;
     border: none;
     color: #fff;
+    height:60px;
 }
 
 .my_whole {
@@ -433,10 +435,15 @@ export default {
     line-height: 30px;
     text-indent: 1rem;
     font-size: 14px;
+    text-align: left;
 }
 
-.logo {
+
+.my_header .logo {
     height: 30px;
+    float: left;
+    margin-top: 12px;
+    margin-left: 10px;
 }
 
 .search_div img {
