@@ -312,9 +312,8 @@ export default {
                 this.$router.push(router);
             },
             fromIndex() {
-                console.log('aaaaaa');
-                // common.searchType = 'keyword';
-                // common.$emit('setParam', 'router', 'index');
+                common.searchType = 'keyword';
+                common.$emit('setParam', 'router', 'index');
                 this.$router.push("/search");
             },
             loginJump(router) {
