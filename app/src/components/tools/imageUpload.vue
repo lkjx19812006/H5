@@ -5,7 +5,7 @@
              <img  v-bind:src="image" class="image_show" v-show="!param.url && !param.header_url">
              <img v-bind:src="param.url" class="image_show" v-show="param.url && !param.header_url">
              <img v-bind:src="param.header_url" class="image_show" v-show="param.header_url">
-            <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
+             <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
         </form>
     </div>
 </template>
@@ -42,7 +42,7 @@ export default {
                             img.onload = function() {
                                 _self.image = _self.compress(img);
                                 _self.upload(_self.image);
-                                 _self.param.url =_self.image;
+                                _self.param.url =_self.image;
                             }
                         } else {
                             _self.image = e.target.result;

@@ -19,9 +19,9 @@
         <div class="count">
             <div class="number">购买数量：</div>
             <div class="operate">
-                <button class="mint-button mint-button--primary mint-button--small gray" @click="subtraction">—</button>
+                <button class="mint-button mint-button--primary mint-button--small gray" @click="subtraction()">—</button>
                 <input type="text" disabled='true' v-model="param.value">
-                <button class="mint-button mint-button--primary mint-button--small gray" @click="addition">+</button>
+                <button class="mint-button mint-button--primary mint-button--small gray" @click="addition()">+</button>
             </div>
         </div>
     </div>
@@ -40,12 +40,13 @@ export default {
     },
     methods: {
         subtraction() {
+            
             let _self = this;
             if (_self.param.value > 1) {
                 _self.param.value = Number(_self.param.value - 1);
             }
         },
-        addition() {
+        addition(e) {
             let _self = this;
             if (_self.param.from == 'order') {
                 if (_self.param.value < _self.param.number) {
@@ -58,6 +59,10 @@ export default {
             }
 
         }
+        
+
+    },
+    mounted() {
 
     }
 }
@@ -150,7 +155,9 @@ export default {
     border-bottom: 1px solid #ddd;
     color: #333;
 }
-
+.order_item .count .operate button{
+    cursor: pointer;
+}
 .order_item .count .operate input {
     height: 3.5rem;
     width: 3.5rem;
@@ -172,4 +179,5 @@ export default {
     color: #000;
     font-weight: bold;
 }
+
 </style>

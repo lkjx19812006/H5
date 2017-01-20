@@ -447,11 +447,12 @@ export default {
 }
 
 .swipe_height {
-    height: 13rem;
+    height: 15rem;
 }
 
 .swipe_height img {
     width: 100%;
+    min-height: 15rem;
 }
 
 .entrance {
