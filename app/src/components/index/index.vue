@@ -3,7 +3,7 @@
         <mt-header>
             <router-link to="" slot="left">
                 <img src="/static/images/my-logo.png" class="logo">
-                <div class="search_div" @click="fromIndex">
+                <div class="search_div" v-on:click="fromIndex">
                     请输入您想要的货物资源
                     <img src="/static/icons/search.png">
                 </div>
@@ -371,8 +371,6 @@ export default {
             this.$nextTick(function() {
                 _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
             })
-
-
             function startmarquee(lh, speed, delay) {
                 var count = 1;
                 var t;
