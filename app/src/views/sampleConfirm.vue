@@ -26,6 +26,7 @@ import myHeader from '../components/tools/myHeader'
 import orderItem from '../components/tools/orderItem'
 import orderTotal from '../components/tools/orderTotal'
 import httpService from '../common/httpService.js'
+import validation from '../validation/validation.js'
 export default {
     data() {
             return {
@@ -36,7 +37,11 @@ export default {
                 param: {
                     image: []
                 },
-                person: {}
+                person: {},
+                perfect:{
+                    name:'',
+                    bizMain:''
+                }
             }
         },
         created() {
@@ -56,6 +61,10 @@ export default {
             common.$on('backAddress', function(todo) {
                  _self.person = todo;
                  console.log(todo.id)
+            })
+            if(common.KEY)_self.getInfo();
+            common.$on('getInfo',function(item){
+                _self.getInfo();
             })
         },
         components: {
@@ -100,6 +109,39 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
+            getInfo() {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'queryUserInfo',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {}
+                };
+                
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                console.log(common.difTime);
+                console.log(body.time);
+                console.log('sssss');
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.queryUserInfo(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == "1c01"){
+                        _self.perfect.name = suc.data.biz_result.fullname;
+                        _self.perfect.bizMain = suc.data.biz_result.bizMain;
+                        
+                    }else{
+                        console.log('cuowusasdada')
+                    }
+                    
+                    
+                }, function(err) {
+                    common.$emit('close-load');
+                })
+            },
             gethttp(id) {
                 let _self = this;
                 common.$emit('show-load');
@@ -139,6 +181,25 @@ export default {
             confirm() {
                 let _self = this;
                 var id = _self.$route.params.sourceId;
+                
+                if(_self.perfect.name == '' || _self.perfect.bizMain == ''){
+                    function perfect() {
+                        _self.$router.push('/perfectInfo');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先完善信息',
+                        title: '提示',
+                        ensure: perfect
+                    });
+                    return;
+                }
+
+               let checkNum = validation.checkNumber(_self.param.value);
+                if(!checkNum){
+                    common.$emit('message', '请输入购买数量');
+                    return
+                }
+
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {

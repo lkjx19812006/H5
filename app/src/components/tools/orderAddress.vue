@@ -3,11 +3,13 @@
         <div class="left_district">
             <div class="content">
                 <div class="left_content"><img src="/static/icons/consignee.png">收货人：</div>
-                <div><span>{{param.contactName}}</span>{{param.contactPhone}}</div>
+                <div v-show="param.contactName"><span>{{param.contactName}}</span>{{param.contactPhone}}</div>
+                <div v-show="!param.contactName"><span>未填写</span>未填写</div>
             </div>
             <div class="content address">
                 <div class="left_content"><img src="/static/icons/receipt_address.png">收货地址：</div>
-                <div class="address_detail">{{param.address}}</div>
+                <div class="address_detail" v-show="param.contactName">{{param.address}}</div>
+                <div class="address_detail" v-show="!param.contactName">未填写</div>
             </div>
         </div>
         <img src="/static/images/right.png" class="right_arrow">
@@ -18,7 +20,9 @@ import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 export default {
     props: {
-        param: {}
+        param: {
+             
+        }
     },
     created() {
         let _self = this;

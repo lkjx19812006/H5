@@ -21,7 +21,7 @@
                                     </div>
                                     <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
                                     <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
-                                    <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
+                                    <p class="time_font">上架时间：<span>{{todo.shelveTime | timeFormat}}</span></p>
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>
@@ -40,7 +40,7 @@
                                         <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
                                         <span>{{todo.breedName}}</span>
                                     </div>
-                                    <p>发布时间：{{todo.pubdate | timeFormat}}</p>
+                                    <p>上架时间：{{todo.shelveTime | timeFormat}}</p>
                                 </div>
                                 <div class="detail">
                                     <div>

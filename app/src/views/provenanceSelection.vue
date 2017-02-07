@@ -136,7 +136,6 @@ export default {
             },
             delItem: function(id) {
                 this.selectArr.splice(id, 1);
-
             },
             back: function() {
                 this.$router.go(-1);

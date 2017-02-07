@@ -83,7 +83,7 @@ export default {
                         }
                     }, 1000);
 
-                     httpService.register(common.urlCommon + common.apiUrl.most, {
+                    httpService.register(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'userSmsService',
                     biz_method: 'getVervifyCode',
                     biz_param: {
@@ -120,6 +120,7 @@ export default {
                         common.SID = window.localStorage.SID;
                         common.getDate();
                         common.$emit('nextRegister',1);
+                        common.$emit('getInfo',1);
                         _self.$router.replace('perfectInfo');
                     } else {
                         //common.$emit('message', response.data.msg);

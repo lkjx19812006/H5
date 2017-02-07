@@ -19,7 +19,7 @@
                                     <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
                                     <span>{{todo.breedName}}</span>
                                 </div>
-                                <p>发布时间：{{todo.pubdate | timeFormat}}</p>
+                                <p>上架时间：{{todo.shelveTime | timeFormat}}</p>
                             </div>
                             <div class="detail">
                                 <div>
@@ -38,7 +38,8 @@
                         </div>
                         <div class="bottom">
                             <p>已报价<span>{{todo.offer}}</span>人</p>
-                            <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump()">我要报价</button>
+                            <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump()" v-show="todo.isMy == 0">我要报价</button>
+                            <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 1">查看详情</button>
                         </div>
                     </li>
                 </ul>
@@ -184,7 +185,8 @@ export default {
             getHttp(back) {
                 let _self = this;
                 if(_self.httpPraram.page==1)common.$emit('show-load');
-                httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
                     biz_module: 'intentionService',
                     biz_method: 'queryBegBuyList',
                     biz_param: {
@@ -198,22 +200,30 @@ export default {
                         pn: _self.httpPraram.page,
                         pSize: _self.httpPraram.pageSize
                     }
-                }, function(suc) {
+                }
+                if (common.KEY) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.version = 1;
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                }
+                httpService.myAttention(url, body, function(suc) {
+                    common.$emit('close-load');
                     if (_self.httpPraram.page == 1) {
                         _self.todos.splice(0, _self.todos.length);
                     }
                     let result = suc.data.biz_result.list;
-                    common.$emit('close-load');
                     if (suc.data.code == '1c01') {
-                        if(result.length<_self.httpPraram.pageSize){
-                            _self.allLoaded=true;
-                        }
                         for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);
                         }
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
+                    if (result.length < _self.httpPraram.pageSize) {
+                        _self.allLoaded = true;
+                    }
+
                     if (back) {
                         back();
                     }
@@ -319,6 +329,9 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });
+            common.$on('getInfo',function(item){
+               _self.getHttp();
+            })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 165;

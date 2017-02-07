@@ -139,8 +139,7 @@ export default {
             let _self = this;
              this.$nextTick(function () {
                  _self.wrapperHeight = window.screen.height - _self.$refs.wrapper.getBoundingClientRect().top;
-              })
-           
+              })  
         },
         created() {
             var _self = this;

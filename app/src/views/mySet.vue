@@ -72,11 +72,9 @@ export default {
                 common.customerId = '';
                 common.KEY = '';
                 common.SID = '';
-                common.difTime = '';
                 window.localStorage.ID = '';
                 window.localStorage.KEY = '';
                 window.localStorage.SID = '';
-                window.localStorage.difTime = '';
                 common.$emit('clear_Information');
                 common.$emit('setParam','backRouter','mySet');
                 common.$emit('informBackMyself','mySet');

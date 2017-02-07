@@ -20,7 +20,7 @@
             <div class="number">购买数量：</div>
             <div class="operate">
                 <button class="mint-button mint-button--primary mint-button--small gray" @click="subtraction()">—</button>
-                <input type="text" disabled='true' v-model="param.value">
+                <input type="text"  v-model="param.value">
                 <button class="mint-button mint-button--primary mint-button--small gray" @click="addition()">+</button>
             </div>
         </div>
@@ -39,8 +39,7 @@ export default {
 
     },
     methods: {
-        subtraction() {
-            
+        subtraction() {  
             let _self = this;
             if (_self.param.value > 1) {
                 _self.param.value = Number(_self.param.value - 1);
@@ -57,10 +56,32 @@ export default {
                     _self.param.value = Number(_self.param.value + 1);
                 }
             }
-
+            
         }
         
 
+    },
+    watch: {
+        param:{        
+            handler:function(newVal,oldVal){
+                let _self = this;
+                console.log(newVal.value,oldVal.value);
+                console.log(typeof(newVal.value))
+                    
+                    if(parseInt(newVal.value)){
+                       newVal.value = parseInt(newVal.value);
+                       if(newVal.value > _self.param.number){
+                          newVal.value = _self.param.number;
+                       }else if(newVal.value < 1){
+                          newVal.value = 1;
+                       }
+                    }else{
+                          newVal.value = '';
+                    }   
+                    
+            },
+            deep:true
+        }
     },
     mounted() {
 

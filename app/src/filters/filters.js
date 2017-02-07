@@ -42,7 +42,7 @@ Vue.filter('percentType',function(val){
      if(val){
          val = val*100;
          val = parseFloat(val);
-         val = val.toFixed(2);   
+         val = val.toFixed(2);//四舍五入保留几位小数   
      }
      return val;
 })
@@ -56,13 +56,23 @@ Vue.filter('successTimeFormat', function(val){
             /*let h = date.getHours() + ':';
             let m = date.getMinutes() + ':';
             let s = date.getSeconds(); */
-            val = Y+M+D;
-            
+            val = Y+M+D;     
         }
-
         return  val;
     });
-
+Vue.filter('successTime', function(val){
+        if(val){
+            var date = new Date(val);
+            let Y = date.getFullYear() + '-';
+            let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+            let D = date.getDate() + ' ';
+            let h = date.getHours() + ':';
+            let m = date.getMinutes() + ':';
+            let s = date.getSeconds(); 
+            val = h+m+s;     
+        }
+        return  val;
+    });
 
 Vue.filter('shellStatus', function(val) {
     switch (val) {

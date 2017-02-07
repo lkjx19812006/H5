@@ -97,15 +97,15 @@ export default {
                     }
                 }, function(response) {
                     common.$emit('close-load');
-                    if (response.data.code == '1c01') {
+                    if (response.data.code == '1c01') {             
                         window.localStorage.KEY = response.data.biz_result.KEY;
                         window.localStorage.SID = response.data.biz_result.SID;
                         common.KEY = window.localStorage.KEY;
                         common.SID = window.localStorage.SID;
                         common.getDate();
-                        /*_self.$router.push('/home');*/
-                        /*_self.$router.replace(common.pageParam.backRouter);*/
+                        common.$emit('getInfo',1);
                         window.history.go(-1);
+
                     } else {
                         common.$emit('message', response.data.msg);
                     }
@@ -131,7 +131,9 @@ export default {
                         common.SID = window.localStorage.SID;
                         common.getDate();
                         /*_self.$router.push('/home');*/
-                        _self.$router.replace(common.pageParam.backRouter);
+                       // _self.$router.replace(common.pageParam.backRouter);
+                       common.$emit('getInfo',1);
+                       window.history.go(-1);
                     } else {
                         common.$emit('message', response.data.msg);
                     }
@@ -184,6 +186,7 @@ export default {
             login() {
                 var checkArr = [];
                 let _self = this;
+
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
                 if (_self.myShow.show == true) {
@@ -197,9 +200,9 @@ export default {
                     }
                 }
                 if (_self.myShow.show == false) {
-                    _self.codeLogin()
+                    _self.codeLogin();
                 } else if (_self.myShow.show == true) {
-                    _self.passWordLogin()
+                    _self.passWordLogin();
                 }
             }
         },

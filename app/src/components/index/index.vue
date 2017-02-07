@@ -46,7 +46,7 @@
                         <div class="news_content">
                             <ul id="scrollText">
                                 <li v-for="todo in transaction">
-                                    <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+todo.unit+' '+todo.location+' '}}{{todo.successTime | successTimeFormat}}</div>
+                                    <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+todo.unit+' '+todo.location+' '}}{{todo.successTime | successTime}}</div>
                                 </li>
                                 <li v-if="transaction[0]">
                                     <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+transaction[0].unit+' '+transaction[0].location+' '}}{{transaction[0].successTime | successTimeFormat}}</div>
@@ -127,7 +127,8 @@
                                     <div class="list_font">{{todo.price}}元/{{todo.unit}}</div>
                                     <div class="list_button">
                                         <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpRes('resourceDetail/',todo.id)">
-                                            我要购买
+                                            <span v-show = "todo.isMy == 0">我要购买</span>
+                                            <span v-show = "todo.isMy == 1">查看详情</span>
                                         </button>
                                     </div>
                                 </div>
@@ -156,7 +157,8 @@
                                     <div class="list_font">剩余{{todo.duedate | timeDays(todo.pubdate)}}天</div>
                                     <div class="list_button">
                                         <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/',todo.id)">
-                                            我要报价
+                                            <span v-show = "todo.isMy == 0">我要报价</span>
+                                            <span v-show = "todo.isMy == 1">查看详情</span>
                                         </button>
                                     </div>
                                 </div>
@@ -226,10 +228,47 @@ export default {
                     name: '我要采购',
                     router: 'needRelease',
                     image: '/static/images/my-purchase.png'
-                }]
+                }],
+                perfect:{
+                    name:'',
+                    bizMain:''
+                }
             }
         },
         methods: {
+            getInfo() {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'queryUserInfo',
+                    version: 1,
+                    time: 0,
+                    sign: '',
+                    biz_param: {}
+                };
+                
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                console.log(common.difTime);
+                console.log(body.time);
+                console.log('sssss');
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.queryUserInfo(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == "1c01"){
+                        _self.perfect.name = suc.data.biz_result.fullname;
+                        _self.perfect.bizMain = suc.data.biz_result.bizMain;
+                        
+                    }else{
+                        console.log('cuowusasdada')
+                    }
+                    
+                    
+                }, function(err) {
+                    common.$emit('close-load');
+                })
+            },
             getImgArr() {
                 let _self = this;
                 httpService.commonPost(common.urlCommon + common.apiUrl.most, {
@@ -277,8 +316,12 @@ export default {
                         pSize: 10
                     }
                 };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                if (common.KEY) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.version = 1;
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                } 
                 httpService.begBuyList(url, body, function(suc) {
                     common.$emit('close-load');
                     let result = suc.data.biz_result;
@@ -309,7 +352,21 @@ export default {
                 })
             },
             jump: function(router) {
-                this.$router.push(router);
+                let _self = this;
+                /*switch (router){
+                    case 'lowPriceRes':
+                        common.$emit('listOflowPrice',1);
+                        _self.$router.push(router);
+                        break;
+                    case 'urgentNeed':
+                        common.$emit('listOfUrgent',1);
+                        _self.$router.push(router);
+                        break;  
+                    default:
+                        _self.$router.push(router);
+                        break;
+                }*/
+                _self.$router.push(router);
             },
             fromIndex() {
                 common.searchType = 'keyword';
@@ -317,7 +374,7 @@ export default {
                 this.$router.push("/search");
             },
             loginJump(router) {
-                let _self = this;
+                let _self = this; 
                 if (!common.customerId) {
                     function loadApp() {
                         _self.$router.push('/login');
@@ -328,7 +385,20 @@ export default {
                         ensure: loadApp
                     });
                     return;
+                }else if(_self.perfect.name == '' || _self.perfect.bizMain == ''){
+                    function perfect() {
+                        
+                        //common.$emit('backInfo',1);
+                        _self.$router.push('/perfectInfo');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先完善信息',
+                        title: '提示',
+                        ensure: perfect
+                    });
+                    return;
                 }
+               
                 this.$router.push(router);
             },
             jumpRes(router, id) {
@@ -351,10 +421,16 @@ export default {
         },
         created() {
             let _self = this;
-            this.resourceHttp()
+            this.resourceHttp();
             this.transaction();
             this.drugGuidePrice();
             this.getImgArr();
+            if(common.KEY)_self.getInfo();
+            common.$on('getInfo',function(item){
+                _self.getInfo();
+               _self.resourceHttp();
+            })
+
         },
         computed: {
             drugArray: function() {

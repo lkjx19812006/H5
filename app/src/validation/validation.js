@@ -54,7 +54,13 @@ validation.checkCommon = (newName,oldName) =>{
         return false;
     }
 }
-
+validation.checkNumber = (value) =>{
+    if(parseInt(value)){
+        return true             
+    }else{
+        return false
+    }
+}
 validation.checkDifferent = (newName,oldName) =>{
     if(newName == oldName){
         return '与原密码不能相同'

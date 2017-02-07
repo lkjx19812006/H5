@@ -1,6 +1,6 @@
 <template>
     <div class="content telAndAttention">
-       <button class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="call()"> 
+        <button class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="call()"> 
             <img src="/static/icons/tel.png">
             <p>电话</p>
         </button>
@@ -44,9 +44,7 @@ export default {
         },
         myAttention(type) {
             if (!common.customerId) {
-
                  let _self=this;
-               
                     function loadApp() {
                         _self.$router.push('/login');
                     }

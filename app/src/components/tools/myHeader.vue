@@ -27,16 +27,19 @@ export default {
         methods: {
             jumpBack() {
                 let _self = this;
-                if(this.param.goBack){   
+                if(this.param.goBack){
                         _self.$router.push('/home');  
                 }else{
                     if(window.history.length==1){
                         _self.$router.push('/home');
                     }else{
                          if(_self.param.goSecond){
-                             window.history.go(-2);
+                              /* common.$emit('getInfo',1);                      
+                               window.history.go(-2);    */  
+                                 common.$emit('getInfo',1);
+                                 _self.$router.push('/home');             
                          }else{
-                            window.history.go(-1);
+                             window.history.go(-1);
                          }
                          
                     }
@@ -46,6 +49,7 @@ export default {
             },
             jumpRevise() {
                 let _self = this;
+                
                 if (_self.param.t_show == true) {
                     _self.$emit('myUpData', 'genxin');
 

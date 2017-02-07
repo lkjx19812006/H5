@@ -16,12 +16,12 @@
                                     </div>
                                     <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
                                     <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
-                                    <p class="time_font">发布时间:<span>{{todo.pubdate | timeFormat}}</span></p>
+                                    <p class="time_font">上架时间:<span>{{todo.shelveTime | timeFormat}}</span></p>
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>
                                     <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 0">立即购买</button>
-                                    <!-- <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 1">查看详情</button> -->
+                                    <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 1">查看详情</button>
                                 </div>
                             </div>
                         </li>
@@ -177,7 +177,8 @@ export default {
                 }
                 let _self = this;
                 if (_self.httpPraram.page == 1) common.$emit('show-load');
-                httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
                     biz_module: 'intentionService',
                     biz_method: 'querySupplyList',
                     biz_param: {
@@ -191,7 +192,14 @@ export default {
                         pSize: _self.httpPraram.pageSize,
                         location: _self.httpPraram.location
                     }
-                }, function(suc) {
+                }
+                if (common.KEY) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.version = 1;
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                } 
+                httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     if (_self.httpPraram.page == 1) {
                         _self.todos.splice(0, _self.todos.length);
@@ -301,6 +309,12 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });
+            /*common.$on('listOflowPrice',function(item){
+                _self.getHttp();
+            })*/
+            common.$on('getInfo',function(item){        
+                _self.getHttp();       
+            })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;

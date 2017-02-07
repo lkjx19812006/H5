@@ -14,7 +14,7 @@
                                         <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
                                         <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0"> {{todo.breedName}}
                                     </div>
-                                    <p>发布时间：{{todo.pubdate | timeFormat}}</p>
+                                    <p>上架时间：{{todo.shelveTime | timeFormat}}</p>
                                 </div>
                                 <div class="detail">
                                     <div>
@@ -33,7 +33,8 @@
                             </div>
                             <div class="bottom">
                                 <p>已报价<span>{{todo.offer}}</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jumpApp()">我要报价</button>
+                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jumpApp()" v-if="todo.isMy == 0">我要报价</button>
+                                <button class="mint-button mint-button--primary mint-button--small" v-if="todo.isMy == 1">查看详情</button>
                             </div>
                         </li>
                     </ul>
@@ -184,7 +185,9 @@ export default {
                     common.$emit('show-load');
                 }
                 let _self = this;
-                httpService.lowPriceRes(common.urlCommon + common.apiUrl.most, {
+                common.$emit('show-load');
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
                     biz_module: 'intentionService',
                     biz_method: 'queryBegBuyList',
                     biz_param: {
@@ -198,7 +201,14 @@ export default {
                         pn: _self.httpPraram.page,
                         pSize: _self.httpPraram.pageSize
                     }
-                }, function(suc) {
+                }
+                if (common.KEY) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.version = 1;
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                }
+                httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     if (_self.httpPraram.page == 1) {
                         _self.todos.splice(0, _self.todos.length);
@@ -319,6 +329,12 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });
+           /* common.$on('listOfUrgent',function(item){
+                _self.getHttp();
+            })*/
+            common.$on('getInfo',function(item){
+               _self.getHttp();
+            })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;

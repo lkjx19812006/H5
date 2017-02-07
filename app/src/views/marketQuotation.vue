@@ -55,8 +55,7 @@
                     <div slot="bottom" class="mint-loadmore-bottom">
                         <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                    </div>
-                    
+                    </div>    
                 </mt-loadmore>
             </div>
         </div>
@@ -110,7 +109,7 @@ export default {
         methods: {
             getHttp(back) {
                 let _self = this;
-                if (_self.httpPraram.page == 1) common.$emit('show-load');
+                if (_self.httpPraram.page == 1)common.$emit('show-load');
                 httpService.marketQuotation(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'breedService',
                     biz_method: 'queryBreedPrice',
@@ -121,17 +120,26 @@ export default {
                     }
                 }, function(suc) {
                     common.$emit('close-load');
+                    if (_self.httpPraram.page == 1) {
+                        _self.todos.splice(0, _self.todos.length);
+                    }
                     let data = suc.data.biz_result.list;
                     console.log(data);
-                    for (var i = 0; i < data.length; i++) {
-                        let item = data[i];
-                        item.show = false;
-                        item.percent = Number(item.weekdowns / item.unitprice);
-                        for (var j = 0; j < item.list.length; j++){
-                            item.list[j].percent = Number(item.list[j].weekdowns / item.list[j].unitprice);
+                    if(suc.data.code == '1c01'){
+                        for (var i = 0; i < data.length; i++) {
+                            let item = data[i];
+                            item.show = false;
+                            item.percent = Number(item.weekdowns / item.unitprice);
+                            for (var j = 0; j < item.list.length; j++){
+                                item.list[j].percent = Number(item.list[j].weekdowns / item.list[j].unitprice);
+                            }
+                            _self.todos.push(item);
                         }
-                        _self.todos.push(item);
+                    }else{
+
                     }
+                    
+
                     if (back) {
                         back();
                     }
@@ -166,12 +174,13 @@ export default {
             },
             loadBottom(id) {
                 let _self = this;
+
                 setTimeout(() => {
-                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
-                        this.allLoaded = true;
+                    if (_self.todos.length >= _self.httpPraram.page * _self.httpPraram.pageSize) {
+                        _self.allLoaded = true;
                     } else {
-                        this.httpPraram.page++;
-                        this.getHttp(function() {
+                        _self.httpPraram.page++;
+                        _self.getHttp(function() {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
@@ -184,7 +193,7 @@ export default {
                 let _self = this;
                 setTimeout(() => {
                     _self.httpPraram.page = 1;
-                    _self.todos.splice(0, _self.todos.length);
+                   // _self.todos.splice(0, _self.todos.length);
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });

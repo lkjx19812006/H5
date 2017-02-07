@@ -1,7 +1,7 @@
 <template>
     <div class="drug_table">
         <iosHead :param="param"></iosHead>
-        <div class="search">
+        <div class="search" @click="jumpSearch()">
             <input type="text" placeholder="输入你想要的货物资源" v-model="keyword">
             <img src="/static/images/search.png" class="search_image">
         </div>
@@ -12,15 +12,32 @@
                         <p>热门药材</p>
                     </div>
                     <div class="drug_show">
-                        <a @click="jumpDetail(obj.name)">
-                            <img :src="obj.icon">
-                            <div class="drug_introduce">
-                                <p class="drug_name" id="drug_name">{{obj.name}}</p>
-                                <p class="drug_chinese_name" id="drug_chinese_name">英文名：{{obj.eName}}</p>
-                                <p class="drug_english_name" id="drug_english_name">拉丁：{{obj.lName}}</p>
-                            </div>
-                        </a>
+                        <mt-swipe :auto="4000"  :show-indicators="false" :prevent="false">        
+                         <mt-swipe-item v-for="(item,index) in obj">
+                            <a @click="jumpDetail(item.name)">
+                                <img :src="item.icon">
+                                <div class="drug_introduce">
+                                    <p class="drug_name" id="drug_name">{{item.name}}</p>
+                                    <p class="drug_chinese_name" id="drug_chinese_name">英文名：{{item.eName}}</p>
+                                    <p class="drug_english_name" id="drug_english_name">拉丁：{{item.lName}}</p>
+                                </div>
+                            </a>
+                         </mt-swipe-item>   
+                        </mt-swipe>
                     </div>
+
+
+                            <!-- <div class="swipe_height" v-if="obj.image">
+                                  <mt-swipe :auto="4000"  :show-indicators="false">        
+                                    <mt-swipe-item v-for="(item,index) in obj.image">
+                                      <div  @click="popUp(index,obj.image)">
+                                          <img :src="item">
+                                          <div class="index"><span>{{index + 1}}</span>/{{obj.image.length}}</div>
+                                      </div>           
+                                    </mt-swipe-item>   
+                                  </mt-swipe>
+                            </div> -->
+
                     <div class="hot_search_drug">
                         <p>热搜药材</p>
                         <div class="hot_drugs">
@@ -28,7 +45,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-show="keyword">
+               <!--  <div v-show="keyword">
                     <div class="search_result">
                         <ul class="page-loadmore-list">
                             <li v-for="todo in datas" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.breedName)">
@@ -39,7 +56,7 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div> -->
             </div>
         </mt-loadmore>
     </div>
@@ -131,7 +148,7 @@ export default {
                         pSize: 20
                     }
                 }, function(suc) {
-                    let result = suc.data.biz_result.list[0];
+                    let result = suc.data.biz_result.list;
                     if (suc.data.code == '1c01') {
                         _self.obj = result;
                     } else {
@@ -169,6 +186,12 @@ export default {
             },
             jumpBack: function() {
                 window.back();
+            },
+            jumpSearch(){
+                let _self = this;
+                common.$emit('setParam', 'router', 'drugResTable');
+                common.$emit('setParam','myType',_self.param.type);
+                _self.$router.push('/search');
             },
             jumpDetail(id) {
                 common.$emit("informdrugDetail", id); //通知药性表详情刷新

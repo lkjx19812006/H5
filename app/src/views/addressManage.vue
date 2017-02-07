@@ -83,6 +83,7 @@ export default {
         },
         methods: {
             back() {
+                common.$emit('backAddress', todo);
                 history.go(-1);
             },
             jumpBack(todo) {
@@ -124,7 +125,8 @@ export default {
                                 listArr[item].first_img = '/static/images/default.png';
                             }
                         }
-                        _self.todos = listArr
+                         if(listArr.length == 1)listArr[0].first_img = '/static/images/default.png';
+                        _self.todos = listArr;
                     } else {
                         if (suc.data.msg) {
                             common.$emit('message', suc.data.msg);

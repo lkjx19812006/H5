@@ -10,7 +10,7 @@
                         </div>
                         <div class="detail">
                             <p>规格：<span>{{obj.spec}}</span></p>
-                            <p class="right">发布时间：<span>{{obj.pubdate | timeFormat}}</span></p>
+                            <p class="right">上架时间：<span>{{obj.shelveTime | timeFormat}}</span></p>
                         </div>
                         <div class="detail">
                             <p>产地：<span>{{obj.location}}</span></p>
@@ -31,11 +31,17 @@
                     </div>
                 </mt-loadmore>
             </div>
-            <div class="fix_bottom">
+            <div class="fix_bottom" v-show="obj.isMy == 0">
                 <div class="attention">
                     <telAndAttention :obj='obj'></telAndAttention>
                 </div>
                 <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="loadApp()">立即报价</button>
+            </div>
+            <div class="fix_bottom" v-show="obj.isMy == 1">
+                <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()"> 
+                    <img src="/static/icons/tel.png">
+                    <p>电话</p>
+                </button>
             </div>
         </div>
     </div>
@@ -50,6 +56,7 @@ import popUpBigImg from '../components/tools/popUpBigImg'
 export default {
     data() {
             return {
+                phone:common.servicePhone,
                 my_param: {
                     url: '',
                 },
@@ -88,7 +95,7 @@ export default {
                         id: id
                     }
                 }
-                if (common.customerId) {
+                if (common.KEY) {
                     url = common.addSID(common.urlCommon + common.apiUrl.most);
                     body.version = 1;
                     body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -114,6 +121,21 @@ export default {
             },
             back() {
                 this.$router.go(-1);
+            },
+            call(){
+             window.location.href = "tel:"+this.phone;
+            },
+            getCustomerPhone() {
+                let _self = this;
+                this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
+                    if (response.data.code == '1c01') {
+                        console.log(response.data);
+                        common.servicePhone=response.data.biz_result.serviceMobile;
+                        _self.phone=response.data.biz_result.serviceMobile;
+                    }
+                }, (err) => {
+                    common.$emit('message', err.data.msg);
+                });
             }
         },
         mounted() {
@@ -121,12 +143,16 @@ export default {
         },
         created() {
             let _self = this;
+            if(!common.servicePhone)this.getCustomerPhone();
             let id = _self.$route.params.needId;
             _self.id = id;
             _self.getHttp(id);
             common.$on("needToDetail", function(item) {
                 _self.getHttp(item);
             });
+            common.$on('getInfo',function(item){        
+                _self.getHttp(id);       
+            })
         }
 
 
@@ -205,5 +231,22 @@ export default {
 
 .need_detail .detail p .orange_font {
     color: #EC6817;
+}
+.need_detail .tel {
+    width: 100%;
+    float: left;
+    background: #EEEEEE;
+    border: 1px solid #ddd;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.need_detail .tel img {
+    max-height: 13px;
+}
+
+.need_detail .tel p {
+    font-size: 10px;
+    color: #333;
 }
 </style>

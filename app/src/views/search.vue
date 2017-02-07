@@ -139,6 +139,7 @@ export default {
                 }
 
                 let count = 1;
+
                 for (let i = 0; i < _self.historyArr.length; i++) {
                     if (_self.historyArr[i].id == item.id) {
                         count = 0;
@@ -153,6 +154,9 @@ export default {
                 if (common.pageParam.router == 'index') {
                     common.$emit("setParam", 'lowPrice', item);
                     _self.$router.push('lowPriceRes');
+                }else if(common.pageParam.router == 'drugResTable'){
+                         common.$emit("informdrugDetail", item.keyWord);
+                         _self.$router.push('/drugResTableDetail/' + common.pageParam.myType + '/' + item.keyWord);  
                 } else {
                     window.history.go(-1);
                 }
@@ -160,6 +164,7 @@ export default {
         },
         watch: {
             keyword: function(newValue, oldValue) {
+                //console.log(newValue, oldValue);
                 let _self = this;
                 this.searchType=common.searchType;
                 window.clearTimeout(this.time);

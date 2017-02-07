@@ -133,8 +133,14 @@ export default {
                     console.log(suc)
                     if (suc.data.code == "1c01") {
                         common.$emit("toMine", _self.obj);              
-                        window.history.go(-2);
-
+                        /*if(common.pageParam.router == 'forPerfectInfo'){
+                                window.history.go(-1);
+                            }else{
+                                window.history.go(-2);        
+                            }*/
+                            common.$emit('getInfo',1);//首页的完善信息提醒
+                            _self.$router.push('/home');
+                            //window.history.go(-2); 
                         //console.log(common.pageParam.backRouter)
                     } else {
                         //common.$emit('message', suc.data.msg);
