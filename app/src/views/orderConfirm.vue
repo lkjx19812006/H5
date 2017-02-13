@@ -33,11 +33,14 @@ export default {
     data() {
             return {
                 data: "",
+                isMy:'',
                 myhead:{
-                     name:'立即购买'
+                     name:'立即购买',
+                     
                 },
                 param: {
-                  image:[]
+                  image:[],
+                  value:1
                 },
                 person: {
                      
@@ -52,19 +55,22 @@ export default {
             let _self = this;
             var id = _self.$route.params.sourceId;
             _self.getAddress();
+            _self.refurbish(id);
             _self.gethttp(id);
+            
              common.$on('clearAddress', function(item) {
                 if(item.id==_self.person.id){
                      _self.person={};
                 }
             });
-            common.$on('orderConfirm', function(item) {
+            common.$on('orderConfirm', function(item) {             
                 _self.getAddress();
                 _self.gethttp(item);
+                _self.refurbish(item); 
+                    
             });
             common.$on('backAddress', function(todo) {
-                 _self.person = todo;
-                 console.log(todo.id)
+                 _self.getAddress();
             })
             if(common.KEY)_self.getInfo();
             common.$on('getInfo',function(item){
@@ -90,6 +96,7 @@ export default {
                     
                     let result = suc.data.biz_result;
                     result.value=1;
+                    //console.log(suc)
                     if(!result.image.length){
                       result.image.push('/static/images/default_image.png');
                     }
@@ -111,9 +118,6 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'queryUserInfo',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {}
                 };
                 
@@ -144,9 +148,6 @@ export default {
                 let otherbody = {
                     biz_module: 'userAddressService',
                     biz_method: 'queryDefaultAddress',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                     }
                 };
@@ -222,7 +223,53 @@ export default {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                 })
-            }
+            },
+            refurbish(id) {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+                    biz_param: {
+                        id: id
+                    }
+                }
+                if (common.KEY) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.version = 1;
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                }
+                httpService.myAttention(url, body, function(suc) {
+                        common.$emit('close-load');
+                        let result = suc.data.biz_result;
+                        /*let shareData = common.shareParam;*/
+                        if (suc.data.code == '1c01') {
+                            _self.isMy = result.isMy;
+                            if(result.isMy == 1){
+                                function loadApp() {
+                                    window.history.go(-1)
+                                }
+                                common.$emit('judge', {
+                                    message: '自己的资源不可购买',
+                                    title: '提示',
+                                    ensure: loadApp,
+                                    unensure:loadApp
+                                });
+                                return;    
+                            }
+                        } else {
+                            //common.$emit('message', suc.data.msg);
+                            console.log('hahhahhah')
+                        }
+                        
+                    },
+                    function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+            },
         },
          mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

@@ -161,10 +161,16 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code = "1c01") {
                         _self.information=suc.data.biz_result;
-                        console.log(_self.information);
+                        console.log(suc.data.biz_result);
+                        console.log(11111111222)
+                        let normalMoney = 0;
+                        let freezeMoney = 0;
+                        if(Number(suc.data.biz_result.normalMoney))normalMoney = Number(suc.data.biz_result.normalMoney);
+                        if(Number(suc.data.biz_result.freezeMoney))freezeMoney = Number(suc.data.biz_result.freezeMoney);
+                        let all_money = normalMoney + freezeMoney;
                         _self.param.name = suc.data.biz_result.fullname;
                         _self.param.company = suc.data.biz_result.company;
-                        _self.param.normalMoney = suc.data.biz_result.normalMoney;
+                        _self.param.normalMoney = all_money.toFixed(2);
                         _self.param.score = suc.data.biz_result.score;
                         _self.param.url = suc.data.biz_result.avatar;
                         _self.url = suc.data.biz_result.avatar;
@@ -205,7 +211,7 @@ export default {
                             break;
                     }
                     let _self = this;
-                    if (!common.customerId&&router!='mySet') {
+                    if (!common.customerId) {/*&&router!='mySet'*/
                         function loadApp() {
                             common.$emit('setParam','backRouter','/home');
 

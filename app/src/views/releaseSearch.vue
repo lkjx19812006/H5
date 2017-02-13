@@ -1,5 +1,5 @@
 <template>
-    <div class="content search">
+    <div class="content release_search">
         <div v-bind:class="[mytype=='ios' ?  'ios_header' : 'search_div']">
             <div class="search_content">
                 <input type="text" placeholder="请输入关键字" v-model="keyword">
@@ -8,7 +8,7 @@
             <span @click="back()">取消</span>
         </div>
         <div v-show="!keyword"  class='hot_box'>
-            <div class="history_search_content hot_div">
+            <!-- <div class="history_search_content hot_div">
                 <div class="history_search_content_result">
                     <div class="history_search_content_result_title">
                         热门搜索
@@ -17,19 +17,19 @@
                         <button class="mint-button mint-button--default mint-button--small" v-for="item in todos" v-on:click="jumpRes(item)">{{item.keyWord}}</button>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="history_search_content">
                 <div class="history_search_content_result">
                     <div class="history_search_content_result_title">
                         历史搜索
                     </div>
-                    <div class="history_search_content_result_detail" v-show="historyArr.length>0">
-                        <button class="mint-button mint-button--default mint-button--small" v-for="item in historyArr" v-on:click="jumpRes(item)">{{item.keyWord}}</button>
+                    <div class="history_search_content_result_detail" v-show="historyArrs.length>0">
+                        <button class="mint-button mint-button--default mint-button--small" v-for="item in historyArrs" v-on:click="jumpRes(item)">{{item.keyWord}}</button>
                         <div class="clear_result">
                             <div class="click_district" @click="clearResult()"><img src="/static/icons/resource.png"><span>清空历史搜索</span></div>
                         </div>
                     </div>
-                    <div class="history_search_content_result_detail" v-show="historyArr.length==0">
+                    <div class="history_search_content_result_detail" v-show="historyArrs.length==0">
                         暂无记录
                     </div>
                 </div>
@@ -59,7 +59,7 @@ export default {
                 mytype:'',
                 str: '',
                 keyword: '',
-                historyArr: [],
+                historyArrs: [],
                 todos: [],
                 datas: [],
                 customerId: '',
@@ -99,29 +99,21 @@ export default {
                 this.$router.go(-1);
             },
             clearResult: function() {
-                this.historyArr = [];
+                this.historyArrs = [];
             },
             jumpRes(item) {
                 console.log(item);
                 let _self = this;
                 switch (common.pageParam.router) {
-                    case 'lowPriceRes':
-                        common.$emit("setParam", 'lowPrice', item);
-                        common.$emit("lowPriceRes", item);
+                    case 'supplyRelease':
+                        common.$emit("setParam", 'supplyRelease', item);
+                        common.$emit("supplyRelease", item);
                         break;
-                    case 'urgentNeed':
-                        common.$emit("setParam", 'Urgentneed', item);
-                        common.$emit("Urgentneed", item);
+                    case 'needRelease':
+                        common.$emit("Needrelease", item);
                         break;
-                    case 'need':
-                        common.$emit("need", item);
-                        break;
-                    case 'resource':
-                        common.$emit("resource", item);
-                        break;
-                    case 'myAttention':
-                        common.$emit("setParam", 'myAttention', item);
-                        common.$emit("attention", item);
+                    case 'marketQuotation':
+                        common.$emit("marketQuotation", item);
                         break;
                     default:
                         common.$emit("setParam", 'lowPrice', item);
@@ -130,18 +122,17 @@ export default {
                 }
 
                 let count = 1;
-
-                for (let i = 0; i < _self.historyArr.length; i++) {
-                    if (_self.historyArr[i].id == item.id) {
+                for (let i = 0; i < _self.historyArrs.length; i++) {
+                    if (_self.historyArrs[i].id == item.id) {
                         count = 0;
                     }
                 }
-                if (count) _self.historyArr.unshift(item);
+                if (count) _self.historyArrs.unshift(item);
                 let arr = []; 
-                for(let i=0;i<_self.historyArr.length;i++){
-                    arr[i]=JSON.stringify(_self.historyArr[i]);
+                for(let i=0;i<_self.historyArrs.length;i++){
+                    arr[i]=JSON.stringify(_self.historyArrs[i]);
                 }
-                window.localStorage.historyArr = arr.join('},');
+                window.localStorage.historyArrs = arr.join('},');
                 if (common.pageParam.router == 'index') {
                     common.$emit("setParam", 'lowPrice', item);
                     _self.$router.push('lowPriceRes');
@@ -200,9 +191,9 @@ export default {
                   _self.mytype = item;
             })
             _self.mytype = common.pageParam.myType;
-            if(window.localStorage.historyArr)_self.historyArr = window.localStorage.historyArr.split('},');
-            for(let i = 0;i<_self.historyArr.length;i++){
-                _self.historyArr[i]=JSON.parse(_self.historyArr[i]);
+            if(window.localStorage.historyArrs)_self.historyArrs = window.localStorage.historyArrs.split('},');
+            for(let i = 0;i<_self.historyArrs.length;i++){
+                _self.historyArrs[i]=JSON.parse(_self.historyArrs[i]);
             }
             common.$emit('show-load');
             httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
@@ -219,7 +210,8 @@ export default {
                     _self.todos = result;
                 }else{
                     common.$emit('message', suc.data.msg);
-                }     
+                }
+                
             }, function(err) {
                 common.$emit('close-load');
                 common.$emit('message', err.data.msg);
@@ -229,11 +221,11 @@ export default {
 }
 </script>
 <style scoped>
-.search {
+.release_search {
     background: #F1EFEF;
 }
 
-.search .search_div {
+.release_search .search_div {
     height: 50px;
     position: fixed;
     background: #fff;
@@ -244,7 +236,7 @@ export default {
     background: #FA6705;
     
 }
-.search .ios_header{
+.release_search .ios_header{
     height: 65px;
     position: fixed;
     background: #fff;
@@ -255,87 +247,87 @@ export default {
     padding: 20px 0 5px 0;
     background: #FA6705;
 }
-.search .hot_box{
+.release_search .hot_box{
     margin-top: 10px;
 }
 
-.search .search_result {
+.release_search .search_result {
     margin-top: 50px;
     background-color: #fff;
 }
-.search .ios_result{
+.release_search .ios_result{
     margin-top: 65px;
     background-color: #fff;
 }
-.search .search_result ul li {
+.release_search .search_result ul li {
     min-height: 40px;
     border-bottom: 1px solid #ccc;
     margin: 0 15px;
 }
-.search .ios_result ul li {
+.release_search .ios_result ul li {
     min-height: 40px;
     border-bottom: 1px solid #ccc;
     margin: 0 15px;
 }
-.search .search_result ul li div {
+.release_search .search_result ul li div {
     font-size: 1.3rem;
     line-height: 40px;
     text-align: left;
     float: left;
     color: #666;
 }
-.search .ios_result ul li div {
+.release_search .ios_result ul li div {
     font-size: 1.3rem;
     line-height: 40px;
     text-align: left;
     float: left;
     color: #666;
 }
-.search .search_result ul li div img {
+.release_search .search_result ul li div img {
     max-height: 20px;
     margin-top: 10px;
     float: left;
 }
-.search .ios_result ul li div img{
+.release_search .ios_result ul li div img{
     max-height: 20px;
     margin-top: 10px;
     float: left;
 }
-.search .search_result ul li div p {
+.release_search .search_result ul li div p {
     float: left;
     margin-left: 15px;
 }
-.search .ios_result ul li div p{
+.release_search .ios_result ul li div p{
     float: left;
     margin-left: 15px;
 }
-.search .search_div .search_content {
+.release_search .search_div .search_content {
     background: #F1EFEF;
     height: 30px;
     margin: 10px 65px 5px 15px;
     border-radius: 10px;
 }
-.search .ios_header .search_content{
+.release_search .ios_header .search_content{
     background: #F1EFEF;
     height: 30px;
     margin: 5px 65px 5px 15px;
     border-radius: 10px;
 }
-.search .search_div .search_content input {
+.release_search .search_div .search_content input {
     background-color: #F1EFEF;
     height: 30px;
     position: absolute;
     left: 32px;
     border: none;
 }
-.search .ios_header .search_content input {
+.release_search .ios_header .search_content input {
     background-color: #F1EFEF;
     height: 30px;
     position: absolute;
     left: 32px;
     border: none;
 }
-.search .search_div span {
+.release_search .search_div span {
     position: absolute;
     height: 30px;
     bottom: 8px;
@@ -346,7 +338,7 @@ export default {
     font-size: 14px;
     font-weight: 400;
 }
-.search .ios_header span{
+.release_search .ios_header span{
     position: absolute;
     height: 30px;
     bottom: 8px;
@@ -357,63 +349,63 @@ export default {
     font-size: 14px;
     font-weight: 400;
 }
-.search .search_div .search_content img {
+.release_search .search_div .search_content img {
     float: right;
     max-height: 20px;
     margin: 5px 10px 0 0;
 }
-.search .ios_header .search_content img {
+.release_search .ios_header .search_content img {
     float: right;
     max-height: 20px;
     margin: 5px 10px 0 0;
 }
-.search .history_search_content {
-    margin-top: 20px;
+.release_search .history_search_content {
+    margin-top: 40px;
     float: left;
     width: 100%;
     background: #fff;
     padding-bottom: 10px;
 }
 
-.search .hot_div {
+.release_search .hot_div {
     margin-top: 40px;
 }
 
-.search .history_search_content .history_search_content_result {
+.release_search .history_search_content .history_search_content_result {
     margin: 15px;
 }
 
-.search .history_search_content .history_search_content_result .history_search_content_result_title {
+.release_search .history_search_content .history_search_content_result .history_search_content_result_title {
     text-align: left;
     font-size: 1.6rem;
     color: #333;
     font-weight: 400;
 }
 
-.search .history_search_content .history_search_content_result .history_search_content_result_detail {
+.release_search .history_search_content .history_search_content_result .history_search_content_result_detail {
     float: left;
     width: 100%;
     padding: 10px;
 }
 
-.search .history_search_content .history_search_content_result .history_search_content_result_detail .clear_result {
+.release_search .history_search_content .history_search_content_result .history_search_content_result_detail .clear_result {
     margin-top: 20px;
     float: left;
     width: 100%;
     text-align: right;
 }
 
-.search .history_search_content .history_search_content_result .history_search_content_result_detail .clear_result .click_district {
+.release_search .history_search_content .history_search_content_result .history_search_content_result_detail .clear_result .click_district {
     float: right;
     padding: 5px;
 }
 
-.search .history_search_content .history_search_content_result .history_search_content_result_detail .clear_result img {
+.release_search .history_search_content .history_search_content_result .history_search_content_result_detail .clear_result img {
     max-height: 15px;
     margin-right: 8px;
 }
 
-.search .history_search_content .history_search_content_result .history_search_content_result_detail button {
+.release_search .history_search_content .history_search_content_result .history_search_content_result_detail button {
     float: left;
     margin: 20px 10px 0 0;
 }

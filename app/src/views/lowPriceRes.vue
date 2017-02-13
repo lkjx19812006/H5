@@ -315,6 +315,8 @@ export default {
             common.$on('getInfo',function(item){        
                 _self.getHttp();       
             })
+
+            
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;

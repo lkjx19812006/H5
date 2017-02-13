@@ -25,25 +25,39 @@
                                 <p>{{todo.spec}}</p>
                                 <p>{{todo.area}}</p>
                                 <p>{{todo.unitprice}}元</p>
-                                <p class="last_one"><span v-show = "!percent">{{todo.weekdowns | floatType}}</span>
-                                   <span v-show = "percent">{{todo.percent | percentType}}%</span>&nbsp;
-                                    <img src="/static/images/up.png" v-show="todo.weekdowns > 0">
-                                    <img src="/static/images/down.png" v-show="todo.weekdowns < 0">
+                                <p class="last_one">
+                                    <span v-show = "!percent">{{todo.dayMoney | floatType}}</span>
+                                    <span v-show = "percent">{{todo.dayDowns | percentType}}</span>&nbsp;
+                                    <img src="/static/images/up.png" v-show="todo.dayMoney > 0">
+                                    <img src="/static/images/down.png" v-show="todo.dayMoney < 0"> 
                                 </p>
-                                <img src="/static/icons/to-down.png" class="to_down">
+                                <img src="/static/icons/to-down.png" class="to_down" v-show="todo.list.length != 0">
                             </div>
                             <ul class="second_level_content" v-show="todo.show">
-                                <li v-for="item in todo.list">
+                                <li v-for="(item,index) in todo.list" v-if="index < todo.list.length - 1">
                                     <p>{{item.name}}</p>
                                     <p>{{item.spec}}</p>
                                     <p>{{item.area}}</p>
                                     <p>{{item.unitprice}}元</p>
-                                    <p class="last_one"><span v-show = "!percent">{{item.weekdowns | floatType}}</span>
-                                       <span v-show = "percent">{{item.percent | percentType}}%</span>&nbsp;
-                                        <img src="/static/images/up.png" v-show="item.weekdowns > 0">
-                                        <img src="/static/images/down.png" v-show="item.weekdowns < 0">
+                                    <p class="last_one">
+                                       <span v-show = "!percent">{{item.dayMoney | floatType}}</span>
+                                       <span v-show = "percent">{{item.dayDowns | percentType}}</span>&nbsp;
+                                        <img src="/static/images/up.png" v-show="item.dayMoney > 0">
+                                        <img src="/static/images/down.png" v-show="item.dayMoney < 0">
                                     </p>
-                                    <img src="/static/icons/to-down.png" class="to_down">
+                                </li>
+                                <li v-for="(item,index) in todo.list" v-if="index == todo.list.length - 1" @click="close(todo)">
+                                    <p>{{item.name}}</p>
+                                    <p>{{item.spec}}</p>
+                                    <p>{{item.area}}</p>
+                                    <p>{{item.unitprice}}元</p>
+                                    <p class="last_one">
+                                       <span v-show = "!percent">{{item.dayMoney | floatType}}</span>
+                                       <span v-show = "percent">{{item.dayDowns | percentType}}</span>&nbsp;
+                                        <img src="/static/images/up.png" v-show="item.dayMoney > 0">
+                                        <img src="/static/images/down.png" v-show="item.dayMoney < 0">
+                                    </p>
+                                    <img src="/static/icons/to-up.png" class="to_down">
                                 </li>
                             </ul>
                         </li>
@@ -155,7 +169,10 @@ export default {
                    this.percent = !this.percent;
             },
             firstLevel(index, todos) {
-                this.todos[index].show = !this.todos[index].show;
+                if(this.todos[index].list.length != 0)this.todos[index].show = !this.todos[index].show;        
+            },
+            close(todo){
+                todo.show = !todo.show;
             },
             clearKeyword() {
                 let _self = this;
@@ -167,7 +184,7 @@ export default {
             jump() {
                 common.searchType = 'breed';
                 common.$emit("setParam", "router", 'marketQuotation');
-                this.$router.push("search");
+                this.$router.push("/releaseSearch");
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -176,7 +193,7 @@ export default {
                 let _self = this;
 
                 setTimeout(() => {
-                    if (_self.todos.length >= _self.httpPraram.page * _self.httpPraram.pageSize) {
+                    if (_self.todos.length < _self.httpPraram.page * _self.httpPraram.pageSize) {
                         _self.allLoaded = true;
                     } else {
                         _self.httpPraram.page++;
@@ -239,11 +256,12 @@ export default {
 }
 
 .market_quotation .first_li .to_down {
-    width: 1rem;
+    width:1.5rem;
     position: absolute;
-    margin-left: -0.5rem;
+    margin-left: -0.75rem;
     left: 50%;
-    bottom: 3px;
+    bottom: 5px;
+
 }
 
 .market_quotation .first_li .to_up {
@@ -366,7 +384,7 @@ export default {
     -ms-flex-direction: row;
     height: 4.267rem;
     border-top: 1px solid #CCCCCC;
-    padding-right: 0.8rem;
+    /*padding-right: 0.8rem;*/
     position: relative;
 }
 
@@ -382,12 +400,13 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
 }
 .market_quotation .second_level .last_one{
-    flex: 0.7;
-    -webkit-box-flex: 0.7;
-    -webkit-flex: 0.7;
-    -ms-flex: 0.7;
+    flex: 1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
 }
 .market_quotation .second_level_content {
     border-top: 1px solid #DFDFDF;
@@ -424,14 +443,16 @@ export default {
     text-overflow: ellipsis;
 }
 .market_quotation .second_level_content li .last_one{
-    flex: 0.8;
-    -webkit-box-flex: 0.8;
-    -webkit-flex: 0.8;
-    -ms-flex: 0.8;
+    flex: 1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
 }
 .market_quotation .second_level_content li p img {
     height: 1.024rem;
+
 }
+
 .market_quotation .second_level p img{
     height: 1.024rem;
 

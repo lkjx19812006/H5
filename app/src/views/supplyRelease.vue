@@ -82,7 +82,7 @@ export default {
                     selling_point: '',
                     name: '',
                     phone: '',
-                    duedate: '30',
+                    duedate: '90',
                     addressProvince: '北京市',
                     addressCity: '北京市',
                     addressDistrict: '东城区',

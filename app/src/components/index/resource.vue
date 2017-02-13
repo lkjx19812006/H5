@@ -16,7 +16,7 @@
                                 <div class="res_content_center">
                                     <div>
                                         <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/images/zheng.png" v-if="todo.sampling == 1 && todo.type == 1"> {{todo.breedName}}
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1"> {{todo.breedName}}
                                     </div>
                                     <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
                                     <p class="over_lenght">产地：<span>{{todo.location}}</span></p>

@@ -53,7 +53,7 @@ export default {
                 bottomStatus: '',
                 httpPraram: {
                     page: 1,
-                    pageSize: 10
+                    pageSize: 20
                 },
             }
         },

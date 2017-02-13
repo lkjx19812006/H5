@@ -6,7 +6,7 @@
             </div>
             <div class="good_name">
                 <p>产品：</p>
-                <div class="select" @click="jumpSearch('/search')" v-show="!obj.update">
+                <div class="select" @click="jumpSearch('/releaseSearch')" v-show="!obj.update">
                     <input text="text" disabled="false" placeholder="请选择你的药材" v-model="obj.drug_name">
                 </div>
                 <div class="select" v-show="obj.update">

@@ -46,7 +46,8 @@ import cityName from './views/cityName'
 import areaName from './views/areaName'
 import aboutus from './views/aboutus'
 import perfectInfo from './views/perfectInfo'
-
+import requestCode from './views/requestCode'
+import releaseSearch from './views/releaseSearch'
 
 const scrollBehavior = (to, from, savedPosition) => {
      console.log(savedPosition);
@@ -121,6 +122,8 @@ module.exports = {
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
         { name: 'aboutus', path: '/aboutus/:from', component: aboutus },
         { name: 'perfectInfo', path: '/perfectInfo', component: perfectInfo },
+        { name: 'requestCode', path: '/requestCode', component: requestCode },
+        { name: 'releaseSearch', path: '/releaseSearch', component: releaseSearch },
         { path: '*', redirect: '/home' }
     ]
 }

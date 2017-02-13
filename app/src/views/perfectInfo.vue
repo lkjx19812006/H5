@@ -53,6 +53,7 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                id:'',
                 param: {
                     name: 'intention',
                     index: 0,
@@ -133,15 +134,11 @@ export default {
                     console.log(suc)
                     if (suc.data.code == "1c01") {
                         common.$emit("toMine", _self.obj);              
-                        /*if(common.pageParam.router == 'forPerfectInfo'){
-                                window.history.go(-1);
-                            }else{
-                                window.history.go(-2);        
-                            }*/
-                            common.$emit('getInfo',1);//首页的完善信息提醒
+                       
+                            common.$emit('getInfo',1);
                             _self.$router.push('/home');
-                            //window.history.go(-2); 
-                        //console.log(common.pageParam.backRouter)
+                            
+                          
                     } else {
                         //common.$emit('message', suc.data.msg);
                     }
@@ -190,6 +187,7 @@ export default {
         },
         created() {
             let _self = this;
+             
            _self.start = new Date("1900-01-10");
            _self.end = new Date("2017-01-10");
            

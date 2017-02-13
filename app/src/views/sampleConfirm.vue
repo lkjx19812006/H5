@@ -1,8 +1,10 @@
+
 <template>
     <div class="sample_confirm">
         <myHeader :param="myhead"></myHeader>
+        <mt-loadmore>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <mt-loadmore>
+            
                 <div @click="jumpAddress">
                     <orderAddress :param="person"></orderAddress>
                 </div>
@@ -55,12 +57,12 @@ export default {
                 }
             });
             common.$on('sampleConfirm', function(item) {
+                _self.refurbish(item);
                 _self.getAddress();
                 _self.gethttp(item);
             });
             common.$on('backAddress', function(todo) {
-                 _self.person = todo;
-                 console.log(todo.id)
+                 _self.getAddress();
             })
             if(common.KEY)_self.getInfo();
             common.$on('getInfo',function(item){
@@ -229,7 +231,52 @@ export default {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                 })
-            }
+            },
+            refurbish(id) {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+                    biz_param: {
+                        id: id
+                    }
+                }
+                if (common.KEY) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.version = 1;
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                }
+                httpService.myAttention(url, body, function(suc) {
+                        common.$emit('close-load');
+                        let result = suc.data.biz_result;
+                        let shareData = common.shareParam;
+                        if (suc.data.code == '1c01') {
+                            _self.isMy = result.isMy;
+                            if(result.isMy == 1){
+                                function loadApp() {
+                                    window.history.go(-1)
+                                }
+                                common.$emit('judge', {
+                                    message: '自己的资源不可购买',
+                                    title: '提示',
+                                    ensure: loadApp,
+                                    unensure:loadApp
+                                });
+                                return;    
+                            }
+                        } else {
+                            common.$emit('message', suc.data.msg);
+                        }
+                        
+                    },
+                    function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+            },
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

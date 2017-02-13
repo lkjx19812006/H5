@@ -67,17 +67,18 @@ export default {
                 let _self = this;
                 console.log(newVal.value,oldVal.value);
                 console.log(typeof(newVal.value))
-                    
-                    if(parseInt(newVal.value)){
-                       newVal.value = parseInt(newVal.value);
-                       if(newVal.value > _self.param.number){
-                          newVal.value = _self.param.number;
-                       }else if(newVal.value < 1){
-                          newVal.value = 1;
-                       }
-                    }else{
-                          newVal.value = '';
-                    }   
+                   
+                        if(parseInt(newVal.value)){
+                           newVal.value = parseInt(newVal.value);
+                           if(newVal.value > _self.param.number){
+                              newVal.value = _self.param.number;
+                           }else if(newVal.value < 1){
+                              newVal.value = 1;
+                           }
+
+                           }else{
+                              newVal.value = '';
+                           }      
                     
             },
             deep:true

@@ -41,6 +41,7 @@ import index from '../components/index/index'
 import resource from '../components/index/resource'
 import need from '../components/index/need'
 import mine from '../components/index/mine'
+import common from '../common/common.js'
 export default {
     data() {
             return {
@@ -52,6 +53,12 @@ export default {
             resource,
             need,
             mine
+        },
+        created(){
+            let _self = this;
+            common.$on('go_home',function(item){
+                _self.selected = 'index';
+            })
         }
 
 }

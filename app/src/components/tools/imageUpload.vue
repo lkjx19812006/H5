@@ -1,10 +1,10 @@
 <template>
     <div class="img_upload">
         <form>
-            <input type="file" @change="previewImg" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
+             <input type="file" @change="previewImg" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
              <img  v-bind:src="image" class="image_show" v-show="!param.url && !param.header_url">
              <img v-bind:src="param.url" class="image_show" v-show="param.url && !param.header_url">
-             <img v-bind:src="param.header_url" class="image_show" v-show="param.header_url">
+             <img v-bind:src="param.header_url" class="" v-show="param.header_url" v-bind:class="{ active: param.tall, 'image_show': param.tall }">
              <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
         </form>
     </div>
@@ -212,7 +212,10 @@ export default {
     width: 100%;
     height: 100%;
 }
-
+.img_upload .active {
+    width: 100%;
+    height: 5.1198rem;
+}
 .img_upload .close_image {
     position: absolute;
     top: -5px;

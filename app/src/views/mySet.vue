@@ -78,6 +78,7 @@ export default {
                 common.$emit('clear_Information');
                 common.$emit('setParam','backRouter','mySet');
                 common.$emit('informBackMyself','mySet');
+                common.$emit('getInfo',1);
                 this.$router.replace('/login');
             },
             getCustomerPhone() {
@@ -99,6 +100,8 @@ export default {
                 } else {
                     if (item.router == 'addressManage') {
                         common.$emit("informAddress", 1);
+                    }else if(item.router == 'feedBack') {
+                        common.$emit('informFeedBack',1);
                     }
                     this.$router.push(item.router);
                 }
@@ -108,7 +111,7 @@ export default {
             if (!common.servicePhone) this.getCustomerPhone();
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top ;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 
 }

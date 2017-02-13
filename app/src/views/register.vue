@@ -19,7 +19,7 @@
                         </li>
                          <li>
                             <p><img src="/static/icons/my-password.png"></p>
-                            <input type="password" class='top_text' v-model="param.code" placeholder="请输入验证码">
+                            <input type="text" class='top_text' v-model="param.code" placeholder="请输入验证码">
                             
                            <div  v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }" >
                                  <p><input  :value="code" type="button" v-on:click="confirm" :disabled = 'buttonDisabled'  ></p>
@@ -42,10 +42,13 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
+                referralCode:'',
                 buttonDisabled:false,
                 wrapperHeight: '',
                 myHeader: {
-                    name: '注册'
+                    name: '注册',
+                    invite_code:true,
+                    code_name:'邀请码'
                 },
                 code: '获取验证码',
                 buttonDisabled: false,
@@ -62,7 +65,11 @@ export default {
             myHeader
         },
         created(){
-             
+            let _self = this;
+           
+             common.$on('broughtCode',function(item){
+                   _self.referralCode = item;
+             })
         },
         methods: {
             confirm: function() {
@@ -150,6 +157,7 @@ export default {
                         return;
                     }
                 }
+                console.log(_self.referralCode)
                 common.$emit('show-load');
                 httpService.register(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'userSmsService',
@@ -158,7 +166,8 @@ export default {
                         phone: _self.param.phone,
                         code: _self.param.code,
                         password: _self.param.password,
-                        rePassword: _self.param.againPassword
+                        rePassword: _self.param.againPassword,
+                        referralCode:_self.referralCode
                     }
                 }, function(response) {
                     common.$emit('close-load');

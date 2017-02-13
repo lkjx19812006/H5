@@ -189,9 +189,11 @@ export default {
             },
             jumpSearch(){
                 let _self = this;
+                common.searchType = 'breed';
                 common.$emit('setParam', 'router', 'drugResTable');
                 common.$emit('setParam','myType',_self.param.type);
-                _self.$router.push('/search');
+                common.$emit('informIosType',_self.param.type);
+                _self.$router.push('/releaseSearch');
             },
             jumpDetail(id) {
                 common.$emit("informdrugDetail", id); //通知药性表详情刷新
@@ -268,11 +270,11 @@ export default {
 }
 
 .drug_table .search_image {
-    width: 2rem;
-    height: 2rem;
+    width: 20px;
+    height: 20px;
     position: absolute;
     right: 13%;
-    top: 18px;
+    top: 20px;
 }
 
 .drug_table .hot_drug {

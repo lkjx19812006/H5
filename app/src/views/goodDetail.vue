@@ -49,11 +49,11 @@
                       <p class="right"><span>{{obj.selling_point}}</span></p>
                   </div>
               </div>
-              <div class="flowsheet">
+              <!-- <div class="flowsheet">
                   <p>流程图</p>
                   <img src="/static/images/progress_1.png"  v-if="obj.onSell == 1">
                   <img src="/static/images/progress_4.png"  v-if="obj.onSell == 2">
-              </div> 
+              </div>  -->
 
        </div> 
      </mt-loadmore> 

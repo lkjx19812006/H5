@@ -8,7 +8,7 @@ Vue.filter('timeFormat', function(val){
     });
 
 Vue.filter('timeDays',function(due,pub){
-        let days='7';
+        let days=7;
         if(due){
             due=due.split('.')[0];
             if(due)var arr = due.split(/[- : \/]/);
@@ -16,16 +16,22 @@ Vue.filter('timeDays',function(due,pub){
                 var duedateDate = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
                 var pubdateDate = new Date();
                 var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                 days = Math.floor(dateValue / (24 * 3600 * 1000));
+                days = Math.floor(dateValue / (24 * 3600 * 1000));
+                let hour = Math.floor((dateValue - days*(24 * 3600 * 1000))/((3600 * 1000)));
+                
+                if(days == 0){
+                    days = hour + '小时';
+                }else if(days < 0){
+                    days="已过期";
+                }else{
+                    days = days + '天';
+                }
+                   
             }else{
-                days="7";
+                days="7" + '天';
             }
 
         }   
-
-            if(days<0){
-            	days="已过期";
-            }    
 
         return days;    
     });
@@ -34,16 +40,30 @@ Vue.filter('floatType',function(val){
       if(val){        
             val = parseFloat(val);
             val = val.toFixed(2);    
+      }else if(parseInt(val) == 0){
+            val = '--';
       }
+
+      return val;
+})
+Vue.filter('indexFloatType',function(val){
+      if(val){
+            val = parseFloat(val);         
+            val = val.toFixed(2);   
+      }else if(parseInt(val) == 0){
+            val = '0.00';
+      }
+
       return val;
 })
 
 Vue.filter('percentType',function(val){
      if(val){
-         val = val*100;
          val = parseFloat(val);
-         val = val.toFixed(2);//四舍五入保留几位小数   
-     }
+         val = val.toFixed(2) + '%';//四舍五入保留几位小数   
+     }else if(parseInt(val) == 0){
+            val = '--';
+      }
      return val;
 })
 

@@ -164,8 +164,11 @@ export default {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
-                        common.$emit('setParam','backRouter','resourceDetail/' + id);
-                       
+                        common.$emit('back_login',{
+                            id:id,
+                            isMy:_self.obj.isMy
+                        });
+                        common.$emit('setParam','backRouter','resourceDetail/' + id);              
                         _self.$router.push('/login');
                     }
                     common.$emit('confirm', {
@@ -175,15 +178,18 @@ export default {
                     });
                     return;
                 }
-                common.$emit('orderConfirm', id);
+                common.$emit('orderConfirm',id);
                 this.$router.push('/orderConfirm/' + id);
             },
             jumpBuy(id) {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
-                        common.$emit('setParam','backRouter','resourceDetail/' + id);
-                        
+                        common.$emit('back_login',{
+                            id:id,
+                            isMy:_self.obj.isMy
+                        });
+                        common.$emit('setParam','backRouter','resourceDetails/' + id);       
                         _self.$router.push('/login');      
                     }
                     common.$emit('confirm', {

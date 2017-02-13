@@ -11,7 +11,7 @@
             </div>
             <div class="detail">
                 <p>产地：<span>{{obj.place}}</span></p>
-                <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}天</span></p>
+                <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}</span></p>
             </div class="detail">
             <div class="detail">
                 <p>需求数量：<span>{{obj.number}}{{obj.number_unit}}</span></p>
@@ -26,11 +26,11 @@
                 <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
             </div>
         </div>
-        <div class="flowsheet">
+        <!-- <div class="flowsheet">
             <p>流程图</p>
             <img src="/static/images/progress_1.png"  v-if="obj.onSell == 1">
             <img src="/static/images/progress_4.png"  v-if="obj.onSell == 2">
-        </div>
+        </div> -->
     </div>
 </template>
 <script>

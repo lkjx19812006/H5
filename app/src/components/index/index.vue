@@ -49,7 +49,7 @@
                                     <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+todo.unit+' '+todo.location+' '}}{{todo.successTime | successTime}}</div>
                                 </li>
                                 <li v-if="transaction[0]">
-                                    <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+transaction[0].unit+' '+transaction[0].location+' '}}{{transaction[0].successTime | successTimeFormat}}</div>
+                                    <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+transaction[0].unit+' '+transaction[0].location+' '}}{{transaction[0].successTime | successTime}}</div>
                                 </li>
                             </ul>
                         </div>
@@ -74,9 +74,9 @@
                                             <div class="price_swiper_div price_swiper_place_div">
                                                 <span>产地:<span>{{todo.area}}</span></span>
                                                 <span class="price_swiper_right_span">
-                                                        <img src="/static/images/down.png" v-if="todo.weekdowns < 0">
-                                                        <img src="/static/images/up.png" v-if="todo.weekdowns > 0">&nbsp;
-                                                        {{todo.weekdowns | floatType}}%
+                                                        <img src="/static/images/down.png" v-if="todo.dayMoney < 0">
+                                                        <img src="/static/images/up.png" v-if="todo.dayMoney > 0">&nbsp;
+                                                        {{todo.dayMoney | indexFloatType}}
                                                     </span>
                                             </div>
                                         </div>
@@ -94,9 +94,9 @@
                                             <div class="price_swiper_div price_swiper_place_div">
                                                 <span>产地:<span>{{drugGuidePrice[index+1].area}}</span></span>
                                                 <span class="price_swiper_right_span">
-                                                        <img src="/static/images/down.png" v-if="drugGuidePrice[index+1].weekdowns < 0">
-                                                        <img src="/static/images/up.png" v-if="drugGuidePrice[index+1].weekdowns > 0">&nbsp;
-                                                        {{drugGuidePrice[index+1].weekdowns}}%
+                                                        <img src="/static/images/down.png" v-if="drugGuidePrice[index+1].dayMoney < 0">
+                                                        <img src="/static/images/up.png" v-if="drugGuidePrice[index+1].dayMoney > 0">&nbsp;
+                                                        {{drugGuidePrice[index+1].dayMoney | indexFloatType}}
                                                     </span>
                                             </div>
                                         </div>
@@ -154,7 +154,7 @@
                                     <div class="list_myimage">{{todo.breedName}}</div>
                                     <!-- <div class="list_font">{{todo.spec}}</div> -->
                                     <div class="list_font">{{todo.location}}</div>
-                                    <div class="list_font">剩余{{todo.duedate | timeDays(todo.pubdate)}}天</div>
+                                    <div class="list_font">剩余{{todo.duedate | timeDays(todo.pubdate)}}</div>
                                     <div class="list_button">
                                         <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/',todo.id)">
                                             <span v-show = "todo.isMy == 0">我要报价</span>
@@ -243,16 +243,10 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'queryUserInfo',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {}
                 };
                 
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                console.log(common.difTime);
-                console.log(body.time);
-                console.log('sssss');
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
@@ -294,6 +288,7 @@ export default {
                     }
                 }, function(suc) {
                     let result = suc.data.biz_result.list;
+                    //console.log(222288990)
                     console.log(result)
                     _self.drugGuidePrice = result;
                 }, function(err) {
@@ -386,8 +381,7 @@ export default {
                     });
                     return;
                 }else if(_self.perfect.name == '' || _self.perfect.bizMain == ''){
-                    function perfect() {
-                        
+                    function perfect() {   
                         //common.$emit('backInfo',1);
                         _self.$router.push('/perfectInfo');
                     }
@@ -421,16 +415,17 @@ export default {
         },
         created() {
             let _self = this;
+            if(common.KEY)_self.getInfo();
+            common.$on('getInfo',function(item){
+                if(common.KEY)_self.getInfo();        
+                _self.resourceHttp();
+            })
             this.resourceHttp();
             this.transaction();
             this.drugGuidePrice();
             this.getImgArr();
-            if(common.KEY)_self.getInfo();
-            common.$on('getInfo',function(item){
-                _self.getInfo();
-               _self.resourceHttp();
-            })
-
+            
+           
         },
         computed: {
             drugArray: function() {
@@ -529,12 +524,12 @@ export default {
 }
 
 .swipe_height {
-    height: 15rem;
+    height: 16rem;
 }
 
 .swipe_height img {
     width: 100%;
-    min-height: 15rem;
+    min-height: 16rem;
 }
 
 .entrance {

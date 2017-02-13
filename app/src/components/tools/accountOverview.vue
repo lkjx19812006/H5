@@ -4,10 +4,10 @@
             
                <img :src="param.url" v-show="param.url">
                <img src="/static/images/my-header.png" v-show="!param.url">
-            
+            <div class="login" v-show='login_show' @click="jump">登录/注册</div>
             <p>{{param.name}}</p>
             <p class="company-name">{{param.company}}</p>
-            <div>
+            <div class="footer">
                 <p class="left">我的储值 <span>{{param.normalMoney}}</span></p>
                 <p class="right">我的积分 <span>{{param.score}}</span></p>
             </div>
@@ -18,7 +18,13 @@
 import common from '../../common/common.js'
 export default {
     data() {
-            return {}
+            return {
+                login_show:'',
+                perfect:{
+                    name:'',
+                    bizMain:''
+                }
+            }
         },
         props: {
             param: {
@@ -26,7 +32,7 @@ export default {
                 company: '',
                 normalMoney: '',
                 score: '',
-                name: ''
+                name: ''  
             }
         },
         methods:{
@@ -35,7 +41,21 @@ export default {
             }
         },
         created() {
-          
+            let _self = this;
+            
+            if(!common.KEY){
+                _self.login_show = true;
+            }else{
+                _self.login_show = false;
+            }
+            common.$on('getInfo',function(item){
+                 if(!common.KEY){
+                    _self.login_show = true;
+                 }else{
+                    _self.login_show = false;
+                 }
+            })
+
         }
 
 }
@@ -64,33 +84,52 @@ export default {
     line-height: 1.279rem;
     color: #333333;
 }
-
+.account_overview  .login{
+    font-size: 14px;
+    width:80px;
+    padding: 5px;
+    background:#FA6705;
+    border-radius: 3px;
+    color:white;
+    margin:auto;
+}
 .account_overview .header .company-name {
     font-size: 1.023rem;
     line-height: 1.023rem;
     margin-top: 0.8rem;
 }
 
-.account_overview .header>div {
+.account_overview .header .footer {
     margin-top: 1.5rem;
     font-size: 1.023rem;
     height: 1.2rem;
     padding: 0 15%;
 }
 
-.account_overview .header>div .left {
+.account_overview .header .footer .left {
     float: left;
     width: 50%;
     border-right: 1px solid white;
     text-align: left;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 
-.account_overview .header>div .right {
+.account_overview .header .footer .right {
+    width:50%;
     float: right;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
 }
 
-.account_overview .header>div .left span,
-.account_overview .header>div .right span {
+.account_overview .header .footer .left span,
+.account_overview .header .footer .right span {
     color: #FA6705;
 }
 </style>

@@ -135,6 +135,7 @@ export default {
                     name: 'intention',
                     index: 0,
                     header_url: '',
+                    tall:true,
                     url:'/static/images/my-header.png'
                 },
                 birthday: '',
@@ -214,7 +215,6 @@ export default {
                 _self.getHttp();
             });
         },
-
         methods: {
             formatTime(time, format) {
                 var t = new Date(time);
@@ -263,7 +263,6 @@ export default {
             jump(router) {
                 this.$router.push(router);
             },
-
             getUrl(param) {
                 this.arr.url = param.url;
                 this.param.header_url = false;
@@ -303,12 +302,11 @@ export default {
                     _self.arr.invoice = suc.data.biz_result.invoice;
                     _self.arr.ccomment = suc.data.biz_result.ctype;
                     _self.param.header_url = suc.data.biz_result.avatar;
-                    console.log(_self.param.url)
+                    console.log(_self.param.header_url)
                 }, function(err) {
                     common.$emit('close-load');
                 })
             },
-
             upData() {
                 let _self = this;
                 let checkArr = [];
@@ -329,11 +327,11 @@ export default {
                     title: '提示',
                     ensure: _self.confirmUpData
                 });
-
             },
             confirmUpData() {
                 let _self = this;
                 let birthday = _self.getTimeStamp(_self.arr.birthday)/1000;
+                if(!_self.arr.url)_self.arr.url = _self.param.header_url;//解决换一台机器登陆丢失图片的问题
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -361,8 +359,8 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == "1c01") {
                         common.$emit("informAccountinfo", "refurbish");
-
                         window.history.go(-1);
+                        //_self.$router.push('home')
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -444,7 +442,9 @@ textarea {
     position: absolute;
     z-index: 20000000;
 }
-
+.account_overview_finish .header_photo_box .header_photo .img_upload .image_show[data-v-95a56d46]{
+    height:100%;
+}
 .account_overview_finish .basic_data,
 .company_data {
     width: 100%;

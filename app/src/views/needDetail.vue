@@ -14,7 +14,7 @@
                         </div>
                         <div class="detail">
                             <p>产地：<span>{{obj.location}}</span></p>
-                            <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}天</span></p>
+                            <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}</span></p>
                         </div class="detail">
                         <div class="detail">
                             <p>需求数量：<span>{{obj.number}}{{obj.unit}}</span></p>
@@ -22,9 +22,9 @@
                         <div class="detail">
                             <p>已报价：<span class="orange_font">{{obj.offer}}</span>人</p>
                         </div>
-                        <div class="detail">
+                        <!-- <div class="detail">
                             <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
-                        </div>
+                        </div> -->
                         <div class="detail">
                             <p>备注：<span>{{obj.description}}</span></p>
                         </div>

@@ -26,7 +26,7 @@
                                     <div class="last">
                                         <p>{{todo.spec}}</p>
                                         <p>{{todo.location}}</p>
-                                        <p>{{todo.duedate | timeDays(todo.pubdate)}}<span>天</span></p>
+                                        <p>{{todo.duedate | timeDays(todo.pubdate)}}<span></span></p>
                                         <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                     </div>
                                 </div>
@@ -105,20 +105,20 @@ export default {
                         name: '由少到多',
                         asc: 'low',
                         show: false,
-                        price: 1,
-                        key: 'price'
+                        offer: 1,
+                        key: 'offer'
                     }, {
                         name: '由多到少',
                         asc: 'top',
                         show: false,
-                        price: 2,
-                        key: 'price'
+                        offer: 2,
+                        key: 'offer'
                     }, {
                         name: '全部',
                         asc: '',
                         show: false,
-                        price: 0,
-                        key: 'price'
+                        offer: 0,
+                        key: 'offer'
                     }]
                 }, {
                     name: '剩余时间',
@@ -130,20 +130,20 @@ export default {
                         name: '由短到长',
                         asc: 'low',
                         show: false,
-                        sample: 1,
-                        key: 'sample'
+                        duedate: 1,
+                        key: 'duedate'
                     }, {
                         name: '由长到短',
                         asc: 'top',
                         show: false,
-                        sample: 0,
-                        key: 'sample'
+                        duedate: 0,
+                        key: 'duedate'
                     }, {
                         name: '全部',
                         asc: '',
                         show: false,
-                        sample: '',
-                        key: 'sample'
+                        duedate: '',
+                        key: 'duedate'
                     }]
                 }, {
                     name: '产地',

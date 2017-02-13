@@ -52,6 +52,8 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                id:'',
+                isMy:'',
                 wrapperHeight: '',
                 my_header: {
                     name: '登陆',
@@ -76,6 +78,9 @@ export default {
         },
         created() {
             let _self = this;
+            common.$on('back_login',function(item){
+                _self.id = item.id;    
+            })
             this.getCode();
         },
         components: {
@@ -97,6 +102,7 @@ export default {
                     }
                 }, function(response) {
                     common.$emit('close-load');
+
                     if (response.data.code == '1c01') {             
                         window.localStorage.KEY = response.data.biz_result.KEY;
                         window.localStorage.SID = response.data.biz_result.SID;
@@ -104,8 +110,20 @@ export default {
                         common.SID = window.localStorage.SID;
                         common.getDate();
                         common.$emit('getInfo',1);
-                        window.history.go(-1);
-
+                        if(common.pageParam.backRouter.split('/')[0] == 'resourceDetail'){         
+                                    if(_self.id){
+                                       common.$emit('resourceDetail',_self.id);
+                                       common.$emit('orderConfirm',_self.id);
+                                       _self.$router.replace('orderConfirm/'+ _self.id);  
+                                    }else{
+                                       common.$emit('resourceDetail',common.pageParam.backRouter.split('/')[1]);
+                                       common.$emit('orderConfirm',common.pageParam.backRouter.split('/')[1]);
+                                       _self.$router.replace('orderConfirm/'+ common.pageParam.backRouter.split('/')[1]);  
+                                    }
+                           }else{
+                                common.$emit('go_home',1);
+                                _self.$router.replace('home');
+                           }  
                     } else {
                         common.$emit('message', response.data.msg);
                     }
@@ -133,7 +151,20 @@ export default {
                         /*_self.$router.push('/home');*/
                        // _self.$router.replace(common.pageParam.backRouter);
                        common.$emit('getInfo',1);
-                       window.history.go(-1);
+                       if(common.pageParam.backRouter.split('/')[0] == 'resourceDetail'){               
+                             if(_self.id){
+                                       common.$emit('resourceDetail',_self.id);
+                                       common.$emit('orderConfirm',_self.id);
+                                       _self.$router.replace('orderConfirm/'+ _self.id);  
+                             }else{
+                               common.$emit('resourceDetail',common.pageParam.backRouter.split('/')[1]);
+                               common.$emit('orderConfirm',common.pageParam.backRouter.split('/')[1]);
+                               _self.$router.replace('orderConfirm/'+ common.pageParam.backRouter.split('/')[1]);  
+                             }
+                       }else{
+                            common.$emit('go_home',1);
+                            _self.$router.replace('home');
+                       }        
                     } else {
                         common.$emit('message', response.data.msg);
                     }
@@ -186,7 +217,7 @@ export default {
             login() {
                 var checkArr = [];
                 let _self = this;
-
+                
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
                 if (_self.myShow.show == true) {
@@ -205,6 +236,7 @@ export default {
                     _self.passWordLogin();
                 }
             }
+            
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

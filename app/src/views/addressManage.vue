@@ -63,6 +63,7 @@ export default {
                 wrapperHeight: '',
                 my_header: {
                     name: '地址管理',
+                    go_where:true
                 },
                 id: '',
                 index: '',
@@ -83,15 +84,15 @@ export default {
         },
         methods: {
             back() {
-                common.$emit('backAddress', todo);
-                history.go(-1);
+                common.$emit('backAddress', 1);
+                window.history.go(-1);
             },
             jumpBack(todo) {
                 let _self = this;
                 
                 if(common.pageParam.router == 'orderConfirm'){
-                    common.$emit('backAddress', todo);
-                    history.go(-1);
+                    common.$emit('backAddress', 1);
+                    window.history.go(-1);
                 }
                 
             },

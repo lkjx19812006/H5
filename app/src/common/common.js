@@ -51,13 +51,15 @@ let common = new Vue({
             orderStatus: 0,
             myParam:'',
             backRouter:'',
-            myType:''
+            myType:'',
+            skipLogin:''
         },
         shareParam: {
             imgUrl: 'http://apps.yaocaimaimai.com/htm5/static/icons/err.png',
             title: "买卖药材就上药材买卖网！",
             desc: '药材买卖网（yaocaimaimai.com）隶属于上海冕冠电子商务有限公司，是由知名VC、天使投资人投资千万人民币，旨在打造全球最大的药材交易平台!',
             link: 'http://apps.yaocaimaimai.com/htm5/#/home'
+            /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
         }
     },
     methods: {
@@ -69,6 +71,7 @@ let common = new Vue({
                     title: "买卖药材就上药材买卖网！",
                     desc: '药材买卖网（yaocaimaimai.com）隶属于上海冕冠电子商务有限公司，是由知名VC、天使投资人投资千万人民币，旨在打造全球最大的药材交易平台!',
                     link: 'http://apps.yaocaimaimai.com/htm5/#/home'
+                    /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
                 };
             }else{
                 _self.shareParam = {
@@ -232,7 +235,13 @@ common.$on('confirm', (obj) => {
     })
 })
 
-
+common.$on('judge', (obj) => {
+    MessageBox.confirm(obj.message, obj.title).then(action => {
+        obj.ensure();
+    }, action => {
+        obj.unensure();
+    })
+})
 
 common.$on('setParam', (key, value) => {
     common.pageParam[key] = value;

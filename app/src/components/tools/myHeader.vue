@@ -9,6 +9,8 @@
             </div>
             <p v-show="param.show" @click="jumpRevise">编辑</p>
             <p v-show="param.t_show" @click="jumpRevise">完成</p>
+            <p v-show="param.invite_code" @click="fillIn">{{param.code_name}}</p>
+            <p v-show="param.confirm_fill" @click="fillInBack">{{param.code_name}}</p>
         </div>
     </div>
 </template>
@@ -34,12 +36,13 @@ export default {
                         _self.$router.push('/home');
                     }else{
                          if(_self.param.goSecond){
-                              /* common.$emit('getInfo',1);                      
-                               window.history.go(-2);    */  
                                  common.$emit('getInfo',1);
                                  _self.$router.push('/home');             
-                         }else{
+                         }else if(_self.param.go_where){
+                             common.$emit('backAddress', 1);//对于地址列表退回订单页
                              window.history.go(-1);
+                         }else{
+                            window.history.go(-1);
                          }
                          
                     }
@@ -48,8 +51,7 @@ export default {
                
             },
             jumpRevise() {
-                let _self = this;
-                
+                let _self = this;      
                 if (_self.param.t_show == true) {
                     _self.$emit('myUpData', 'genxin');
 
@@ -60,6 +62,14 @@ export default {
                     common.$emit("res-id", this.param.item);
                     _self.$router.push(_self.param.reviseRouter); //跳转到修改资源
                 }
+            },
+            fillIn(){
+               let _self = this;
+               _self.$router.push('requestCode');
+            },
+            fillInBack(){
+                let _self = this;
+                this.$emit("confirmFill",1);
             }
         }
 }
