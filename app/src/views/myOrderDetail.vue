@@ -1,24 +1,20 @@
 <template>
     <div class="my_order_detail">
-        <!--  <myHeader :param="my_header"></myHeader> -->
-        <mt-header :title="todo.my_title" :fixed="show">
-            <router-link to="" slot="left">
-                <mt-button icon="back" @click="back()"></mt-button>
-            </router-link>
-        </mt-header>
-
+        <myHeader :param="my_header"></myHeader>
         <div class="buy-img" v-if="todo.type == 0"></div>
         <div class="sale-img" v-if="todo.type == 1"></div>
         <div class="word_info">
             <div class="info_left">
-
                 <p>下单时间：<span>{{todo.ctime}}</span></p>
                 <p>订单号：<span>{{todo.no}}</span></p>
                 <p>收件人：<span>{{todo.consignee}}</span>&nbsp;|&nbsp;<span>{{todo.consigneePhone}}</span></p>
                 <p class="last_p">收货地址：<span>{{todo.consigneeAddr}}</span></p>
             </div>
-            <p class="info_right">
-                {{todo.orderStatus | orderStatus}}
+            <p class="info_right" v-if="todo.type == 0">
+                {{todo.orderStatus | purchaseStatus}}
+            </p>
+             <p class="info_right" v-if="todo.type == 1">
+                {{todo.orderStatus | sellStatus}}
             </p>
         </div>
         <div class="drug_info">
@@ -59,6 +55,7 @@
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
+import filters from '../filters/filters'
 export default {
     data() {
             let _self = this;
@@ -120,9 +117,6 @@ export default {
                 let body = {
                     biz_module: 'orderService',
                     biz_method: 'queryOrderInfo',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         id: id
                     }
@@ -158,7 +152,6 @@ export default {
     width: 100%;
     height: 14rem;
     margin-bottom: 1rem;
-    margin-top: 50px;
 }
 
 .my_order_detail .sale-img {
@@ -167,7 +160,6 @@ export default {
     width: 100%;
     height: 14rem;
     margin-bottom: 1rem;
-    margin-top: 50px;
 }
 
 .my_order_detail .word_info {

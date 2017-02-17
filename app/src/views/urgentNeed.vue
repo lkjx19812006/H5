@@ -10,7 +10,7 @@
                             <div class="center">
                                 <img :src="todo.cFlagsPath" class="flag">
                                 <div class="title">
-                                    <div>
+                                    <div class="small_pic">
                                         <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
                                         <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0"> {{todo.breedName}}
                                     </div>
@@ -502,10 +502,9 @@ export default {
 }
 
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img {
-    width: 1.2rem;
+    width: 16px;
     margin-right: 5px;
 }
-
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail {
     width: 100%;
     display: flex;

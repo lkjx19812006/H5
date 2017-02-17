@@ -7,17 +7,9 @@
             </div>
             <span @click="back()">取消</span>
         </div>
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <mt-loadmore> 
         <div v-show="!keyword"  class='hot_box'>
-            <!-- <div class="history_search_content hot_div">
-                <div class="history_search_content_result">
-                    <div class="history_search_content_result_title">
-                        热门搜索
-                    </div>
-                    <div class="history_search_content_result_detail">
-                        <button class="mint-button mint-button--default mint-button--small" v-for="item in todos" v-on:click="jumpRes(item)">{{item.keyWord}}</button>
-                    </div>
-                </div>
-            </div> -->
             <div class="history_search_content">
                 <div class="history_search_content_result">
                     <div class="history_search_content_result_title">
@@ -47,6 +39,8 @@
                 </ul>
             </div>
         </div>
+        </mt-loadmore>
+         </div>
     </div>
 </template>
 <script>
@@ -217,6 +211,9 @@ export default {
                 common.$emit('message', err.data.msg);
             })
 
+        },
+        mounted(){
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>

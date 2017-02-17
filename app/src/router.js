@@ -48,6 +48,7 @@ import aboutus from './views/aboutus'
 import perfectInfo from './views/perfectInfo'
 import requestCode from './views/requestCode'
 import releaseSearch from './views/releaseSearch'
+import news from './views/news'
 
 const scrollBehavior = (to, from, savedPosition) => {
      console.log(savedPosition);
@@ -78,6 +79,7 @@ module.exports = {
             path: '/main',
             component: main
         },
+        { name: 'news', path: '/news', component: news},
         { name: 'home', path: '/home', component: home},
         { name: 'drugResTable', path: '/drugResTable/:from', component: drugResTable },
         { name: 'marketQuotation', path: '/marketQuotation', component: marketQuotation },

@@ -29,14 +29,16 @@ import orderItem from '../components/tools/orderItem'
 import orderTotal from '../components/tools/orderTotal'
 import httpService from '../common/httpService.js'
 import validation from '../validation/validation.js'
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.FastClick) window.FastClick.attach(document.body);
+}, false);
 export default {
     data() {
             return {
                 data: "",
                 isMy:'',
                 myhead:{
-                     name:'立即购买',
-                     
+                     name:'立即购买'        
                 },
                 param: {
                   image:[],
@@ -58,7 +60,7 @@ export default {
             _self.refurbish(id);
             _self.gethttp(id);
             
-             common.$on('clearAddress', function(item) {
+            common.$on('clearAddress', function(item) {
                 if(item.id==_self.person.id){
                      _self.person={};
                 }
@@ -66,8 +68,7 @@ export default {
             common.$on('orderConfirm', function(item) {             
                 _self.getAddress();
                 _self.gethttp(item);
-                _self.refurbish(item); 
-                    
+                _self.refurbish(item);     
             });
             common.$on('backAddress', function(todo) {
                  _self.getAddress();

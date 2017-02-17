@@ -8,8 +8,9 @@
       <myHeader :param = "param"  v-show="!my_param.show"></myHeader>
 
   <div  v-show="!my_param.show">
-    <mt-loadmore>
+    
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+      <mt-loadmore>
              <div class="swipe_height">
                   <mt-swipe :auto="param.time"  :show-indicators="false">        
                     <mt-swipe-item v-for="(item,index) in param.imgArray">
@@ -54,9 +55,9 @@
                   <img src="/static/images/progress_1.png"  v-if="obj.onSell == 1">
                   <img src="/static/images/progress_4.png"  v-if="obj.onSell == 2">
               </div>  -->
-
+         </mt-loadmore> 
        </div> 
-     </mt-loadmore> 
+     
     </div> 
 
      <popUpBigImg  :param="my_param" v-show="my_param.show"></popUpBigImg>
@@ -207,7 +208,9 @@ export default {
 }
 </script>
 <style scoped>
-
+.good_detail .page-loadmore-wrapper{
+  float:left;
+}
 .good_detail .swipe_height{
   height:18.8rem;
   position: relative;

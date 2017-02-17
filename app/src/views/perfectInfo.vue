@@ -116,9 +116,6 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'updateUserInfo',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         fullname: _self.obj.name,
                         birthday: birthday,
@@ -133,12 +130,25 @@ export default {
                     common.$emit('close-load');
                     console.log(suc)
                     if (suc.data.code == "1c01") {
-                        common.$emit("toMine", _self.obj);              
-                       
+                        common.$emit("toMine", _self.obj);                           
                             common.$emit('getInfo',1);
-                            _self.$router.push('/home');
-                            
-                          
+                            /*_self.$router.push('/home');   */   
+                            if(common.pageParam.backRouter.split('/')[0] == 'resourceDetail'){         
+                                    if(_self.id){
+                                       common.$emit('resourceDetail',_self.id);
+                                       common.$emit('orderConfirm',_self.id);
+                                       common.$emit('setParam','skipLogin',true);
+                                       _self.$router.replace('orderConfirm/'+ _self.id);  
+                                    }else{
+                                       common.$emit('resourceDetail',common.pageParam.backRouter.split('/')[1]);
+                                       common.$emit('orderConfirm',common.pageParam.backRouter.split('/')[1]);
+                                       common.$emit('setParam','skipLogin',true);
+                                       _self.$router.replace('orderConfirm/'+ common.pageParam.backRouter.split('/')[1]);  
+                                    }
+                           }else{
+                                common.$emit('go_home',1);
+                                _self.$router.replace('home');
+                           } 
                     } else {
                         //common.$emit('message', suc.data.msg);
                     }
@@ -187,7 +197,9 @@ export default {
         },
         created() {
             let _self = this;
-             
+            common.$on('back_login',function(item){
+                _self.id = item.id;    
+            })
            _self.start = new Date("1900-01-10");
            _self.end = new Date("2017-01-10");
            

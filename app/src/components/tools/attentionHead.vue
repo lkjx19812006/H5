@@ -34,6 +34,7 @@ export default {
             },
             change(){
                 this.param.show = !this.param.show;
+                common.$emit("landscapeScroll",this.param.show);
                 this.$emit("tab",this.param.show)
             }
         }

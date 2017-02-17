@@ -60,6 +60,9 @@ export default {
         methods: {
             getHttp(back){
                 let _self = this;
+                 if (this.httpPraram.page == 1) {
+                    this.allLoaded = false;
+                }
                  if(_self.httpPraram.page==1)common.$emit('show-load');
                  httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
                         biz_module:'tradeNewService',
@@ -70,23 +73,30 @@ export default {
                             }
                         }, function(suc) {
                             common.$emit('close-load');
+                            let result = suc.data.biz_result.list;
+                            if (_self.httpPraram.page == 1) {
+                                _self.todos.splice(0, _self.todos.length);
+                            }
                             if(suc.data.code == '1c01'){
-                                let result = suc.data.biz_result.list;
+                                
                                 for(var i = 0; i < result.length; i++){
                                     _self.todos.push(result[i]);
                                 }
                             }else{
                                 common.$emit('message', suc.data.msg);
                             }
+                            if (result.length < _self.httpPraram.pageSize) {
+                                _self.allLoaded = true;
+                            }
                             if(back){
-                                        back();
-                                    }
+                                back();
+                            }
                         }, function(err) {
                             common.$emit('close-load');
                             common.$emit('message', err.data.msg);
                             if(back){
-                                        back();
-                                    }
+                                back();
+                            }
                         })
             },
             handleBottomChange(status) {
@@ -113,7 +123,6 @@ export default {
                 let _self = this;
                 setTimeout(() => {
                     _self.httpPraram.page = 1;
-                    _self.todos.splice(0, _self.todos.length);
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });

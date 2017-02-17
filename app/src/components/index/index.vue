@@ -243,7 +243,7 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'queryUserInfo',
-                    biz_param: {}
+                    biz_param: {},
                 };
                 
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -253,6 +253,7 @@ export default {
                     if (suc.data.code == "1c01"){
                         _self.perfect.name = suc.data.biz_result.fullname;
                         _self.perfect.bizMain = suc.data.biz_result.bizMain;
+                        //console.log(_self.perfect.bizMain)
                         
                     }else{
                         console.log('cuowusasdada')
@@ -417,6 +418,7 @@ export default {
             let _self = this;
             if(common.KEY)_self.getInfo();
             common.$on('getInfo',function(item){
+                console.log('广播okl吗')
                 if(common.KEY)_self.getInfo();        
                 _self.resourceHttp();
             })

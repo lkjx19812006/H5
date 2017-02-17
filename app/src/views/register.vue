@@ -48,7 +48,7 @@ export default {
                 myHeader: {
                     name: '注册',
                     invite_code:true,
-                    code_name:'邀请码'
+                    /*code_name:'邀请码'*/
                 },
                 code: '获取验证码',
                 buttonDisabled: false,
@@ -146,7 +146,8 @@ export default {
                 checkArr.push(checkPassword);
                 let checkagainPassword = validation.checkNull(_self.param.againPassword, '请确认密码！');
                 checkArr.push(checkagainPassword);
-
+                let checkMinNumber = validation.checkMinNumber(_self.param.password);
+                checkArr.push(checkMinNumber);
                 let checkCommon = validation.checkCommon(_self.param.password, _self.param.againPassword);
                 checkArr.push(checkCommon);
                 

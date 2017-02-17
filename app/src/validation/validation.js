@@ -11,6 +11,14 @@ validation.checkPhone = (phone) => {
     }
 
 }
+validation.checkMinNumber = (password) => {
+    let pattern = /^[a-zA-Z0-9]{6,16}$/
+    if(!pattern.test(password)){
+        return '密码必须为6~16位数字或字母'
+    }else {
+        return false
+    }
+}
 
 validation.checkPhoneTrue = (phone) => {
     let pattern = /^1[34578]\d{9}$/;

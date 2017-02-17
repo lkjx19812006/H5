@@ -10,10 +10,7 @@
                             <p><img src="/static/icons/my-phone.png"></p>
                             <input type="text" class='top_text' v-model="param.phone" placeholder="请输入手机号码">
                         </li>
-                        <li >
-                            <p><img src="/static/icons/my-password.png"></p>
-                            <input type="password" class='top_text' v-model="param.passWord" placeholder="请输入旧密码">
-                        </li>
+                        
                         <li>
                             <p><img src="/static/icons/my-password.png"></p>
                             <input type="password" class='top_text' v-model="param.new_passWord" placeholder="请输入新密码">
@@ -22,9 +19,12 @@
                             <p><img src="/static/icons/my-password.png"></p>
                             <input type="password" class='top_text' v-model="param.again_new_passWord" placeholder="请确认新密码">
                         </li>
-                        
+                        <li >
+                            <p><img src="/static/icons/my-password.png"></p>
+                            <input type="password" class='top_text' v-model="param.passWord" placeholder="请输入旧密码">
+                        </li>
                         <li  v-on:click="confirm" class="confirm">
-                                下一步
+                                确定
                         </li>
                     </ul>
                        <!-- <div class="next_step" v-on:click="confirm">下一步</div> -->
@@ -76,6 +76,8 @@ export default {
                 checkArr.push(checkPassword);
                 let checkDifferent = validation.checkDifferent(_self.param.new_passWord,_self.param.passWord);
                 checkArr.push(checkDifferent);
+                let checkMinNumber = validation.checkMinNumber(_self.param.new_passWord);
+                checkArr.push(checkMinNumber);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);
@@ -87,9 +89,6 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'updateUserPassword',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         password: _self.param.passWord,
                         newPassword: _self.param.new_passWord
@@ -100,6 +99,17 @@ export default {
                 httpService.queryEmployeeInfo(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == "1c01") {
+                        common.customerId = '';
+                        common.KEY = '';
+                        common.SID = '';
+                        window.localStorage.ID = '';
+                        window.localStorage.KEY = '';
+                        window.localStorage.SID = '';
+                        common.$emit('clear_Information');
+                        common.$emit('setParam','backRouter','mySet');
+                        common.$emit('informBackMyself','mySet');
+                        common.$emit('getInfo',1);
+                        _self.$router.replace('/login');
                         common.$emit('message', suc.data.msg);
                     } else {
                         common.$emit('message', suc.data.msg);

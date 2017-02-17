@@ -109,7 +109,7 @@ Vue.filter('shellStatus', function(val) {
     return val;
 });
 
-Vue.filter('orderStatus', function(val) {
+Vue.filter('purchaseStatus', function(val) {
     switch (val) {
         case -2:
             val = '已过期';
@@ -127,10 +127,10 @@ Vue.filter('orderStatus', function(val) {
             val = '待付款';
             break;
         case 30:
-            val = '待发货';
+            val = '待卖家发货';
             break;
         case 40:
-            val = '待发货';
+            val = '待卖家发货';
             break;
         case 50:
             val = '待收货';
@@ -138,6 +138,44 @@ Vue.filter('orderStatus', function(val) {
         case 60:
             val = '已完成';
             break;
+        case 70:
+            val = '已完成';
+            break;    
+    }
+    return val;
+});
+Vue.filter('sellStatus', function(val) {
+    switch (val) {
+        case -2:
+            val = '已过期';
+            break;
+        case -1:
+            val = '已取消';
+            break;
+        case 0:
+            val = '待审核';
+            break;
+        case 10:
+            val = '待审核';
+            break;
+        case 20:
+            val = '待买家付款';
+            break;
+        case 30:
+            val = '待收款';
+            break;
+        case 40:
+            val = '待发货';
+            break;
+        case 50:
+            val = '待买家收货';
+            break;
+        case 60:
+            val = '已完成';
+            break;
+        case 70:
+            val = '已完成';
+            break;    
     }
     return val;
 });

@@ -12,11 +12,14 @@
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
                             <img :src="todo.image[0]" class="list_images">
+                            <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1" class="small_img">
+                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" 
+                            v-bind:class="{small_img:!todo.especial == 1 && !todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>
-                                        <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1"> {{todo.breedName}}
+                                        <!-- <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1"> --> {{todo.breedName}}
                                     </div>
                                     <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
                                     <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
@@ -404,7 +407,23 @@ export default {
     margin: 10px 10px 10px 0;
     position: absolute;
 }
-
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li{
+    position: relative;
+}
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img{
+    width: 16px;
+    position: absolute;
+    top:10px;
+    left:10px;
+    z-index: 10;
+}
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img{
+    width: 16px;
+    position: absolute;
+    top:10px;
+    left:28px;
+    z-index: 10;
+}
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
     float: left;
     text-align: left;
@@ -413,11 +432,11 @@ export default {
     margin-bottom: 8px;
 }
 
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
+/*.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
-    width: 1.2rem;
+    width: 1.4rem;
     margin-right: 4px;
-}
+}*/
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;

@@ -11,7 +11,7 @@
                         </li>
                         <li>
                             <p><img src="/static/icons/my-password.png"></p>
-                            <input type="password" class='top_text' v-model="param.code" placeholder="请输入验证码">
+                            <input type="text" class='top_text' v-model="param.code" placeholder="请输入验证码">
                             <div v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
                                 <p>
                                     <input :value="code" type="button" :disabled='buttonDisabled' v-on:click="getCode">
@@ -96,8 +96,8 @@ export default {
                 let checkArr = [];
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
-                let checkpassWord = validation.checkNull(_self.param.passWord, '请输入新密码！');
-                checkArr.push(checkpassWord);
+                let checkMinNumber = validation.checkMinNumber(_self.param.passWord);
+                checkArr.push(checkMinNumber);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);
@@ -117,6 +117,7 @@ export default {
                     common.$emit('close-load');
                     if (response.data.code == '1c01') {
                         common.$emit('message', response.data.msg);
+                        _self.$router.push("login")
                     } else {
                         common.$emit('message', response.data.msg);
                     }

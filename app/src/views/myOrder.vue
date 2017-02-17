@@ -3,7 +3,8 @@
         <div>
              <attentionHead :param="param" v-on:tab="tabOrder"></attentionHead>
             <div  class="fixed">
-                 <landscapeScroll :param="data" v-on:postData="changeOrderStatus"></landscapeScroll>
+                 <landscapeScroll :param="data" :myshow='param.show' v-on:postData="changeOrderStatus" v-if="param.show"></landscapeScroll>
+                 <sellLandscape :param="data" :myshow='param.show' v-on:postData="changeOrderStatus" v-if="!param.show"></sellLandscape>
             </div>
         </div>   
         <div class="bg_white ">
@@ -16,7 +17,8 @@
                                     <p class="time_font"><span>{{todo.ctime | timeFormat}}</span>
                                         <!--  <span style="margin-left:10px">订单编号：{{todo.no}}</span> -->
                                     </p>
-                                    <p class="audit_state">{{todo.orderStatus | orderStatus}}</p>
+                                    <p class="audit_state" v-show="param.show">{{todo.orderStatus | purchaseStatus}}</p>
+                                    <p class="audit_state" v-show="!param.show">{{todo.orderStatus | sellStatus}}</p>
                                 </div>
                             </div>
                             <img v-bind:src="todo.image" class="list_images">
@@ -38,11 +40,14 @@
                                 </div>
                                 <p class="sum_bottom">
                                     <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click.stop="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
-                                    <button v-if="'success' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('查看物流')">查看物流</button>
-                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('查看物流')">查看物流</button>
+                                    <button v-if="'success' ==judgeOrderStatus(todo.orderStatus)" @click.stop="jump(todo.id)">查看订单</button>
+                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="jump(todo.id)">查看订单</button>
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('确认收货')">确认收货</button>
                                     <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('催促发货')">催促发货</button>
                                     <button v-if="'pay' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('支付')">立即支付</button>
+
+                                    <button v-if="'collectmoney' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==1" @click.stop="collectMoney(todo.id,todo.no)">确认收款</button>
+                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==1" @click.stop="jump(todo.id)">查看订单</button>
                                 </p>
                             </div>
                         </li>
@@ -65,6 +70,7 @@
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import landscapeScroll from '../components/tools/landscapeScroll'
+import sellLandscape from '../components/tools/sellLandscape'
 import attentionHead from '../components/tools/attentionHead'
 import filters from '../filters/filters'
 import errPage from '../components/tools/err'
@@ -95,15 +101,19 @@ export default {
                     back_id: 0,
                     show: true
                 }, {
-                    name: '待确认',
+                    name: '待审核',
                     back_id: 10,
                     show: false
                 }, {
                     name: '待付款',
                     back_id: 20,
                     show: false
-                }, {
-                    name: '待发货',
+                }, /*{
+                    name: '待收款',
+                    back_id: 30,
+                    show: false
+                },*/{
+                    name: '待卖家发货',
                     back_id: 40,
                     show: false
                 }, {
@@ -150,7 +160,7 @@ export default {
                         status = 'pay';
                         break;
                     case 30:
-                        status = 'waitsend';
+                        status = 'collectmoney';
                         break;
                     case 40:
                         status = 'waitsend';
@@ -159,7 +169,7 @@ export default {
                         status = 'send';
                         break;
                     case 60:
-                        status = 'send';
+                        status = 'success';
                         break;
                     case 70:
                         status = 'success';
@@ -181,9 +191,6 @@ export default {
                     let body = {
                         biz_module: 'orderService',
                         biz_method: 'cancelOrder',
-                        version: 1,
-                        time: 0,
-                        sign: '',
                         biz_param: {
                             id: id,
                             no: no
@@ -210,6 +217,41 @@ export default {
                     message: '确定取消订单？',
                     title: '提示',
                     ensure: cancelOrder
+                });
+            },
+            collectMoney(id,no){
+                 function collectMoney() {
+                    common.$emit('show-load');
+                    let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    let body = {
+                        biz_module: 'orderService',
+                        biz_method: 'confirmOrderPaySuccess',
+                        biz_param: {
+                            id: id,
+                            no: no
+                        }
+                    };
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                    httpService.myResource(url, body, function(suc) {
+                        common.$emit('close-load');
+                        if (suc.data.code == '1c01') {
+                            common.$emit('message', suc.data.msg);
+                            _self.todos.splice(0, _self.todos.length);
+                            _self.httpPraram.page = 1;
+                            _self.getHttp();
+                        } else {
+                            common.$emit('message', suc.data.msg);
+                        }
+                    }, function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+                }
+                common.$emit('confirm', {
+                    message: '确定确认收款？',
+                    title: '提示',
+                    ensure: collectMoney
                 });
             },
             getHttp(back) {
@@ -263,9 +305,24 @@ export default {
                 let _self = this;
 
                 if (param == true) {
+                    _self.data.splice(3, 1);
                     _self.httpPraram.type = 0;
+                    _self.data[2].name = '待付款';
+                    _self.data[3].name = '待卖家发货';
+                    _self.data[4].name = '待收货';
                 } else {
                     _self.httpPraram.type = 1;
+                    let obj = {
+                         name: '待收款',
+                         back_id: 30,
+                         show: false
+                    }
+                    _self.data.splice(3, 0, obj);
+                    _self.data[2].name = '待买家付款';
+                    _self.data[3].name = '待收款';
+                    _self.data[4].name = '待发货';
+                    _self.data[5].name = '待买家收货'
+                    console.log(_self.data)
                 }
                 this.allLoaded = false;
 
@@ -331,6 +388,7 @@ export default {
         }),
         components: {
             landscapeScroll,
+            sellLandscape,
             attentionHead,
             errPage
         },

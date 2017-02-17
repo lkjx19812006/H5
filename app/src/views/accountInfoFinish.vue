@@ -9,7 +9,7 @@
                         <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
                     </div>
                 </div>
-                <div class="basic_data">
+                    <div class="basic_data">
                     <p class="basic_data_title">基础信息</p>
                     <ul>
                         <li>

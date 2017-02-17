@@ -1,7 +1,8 @@
 <template>
     <div class="resource_detail">
         <myHeader :param="param" v-show="!my_param.show"></myHeader>
-        <div v-show="!my_param.show">
+        
+        <div v-show="!my_param.show" class="box">
                     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                         <mt-loadmore>
                             <div class="swipe_height" v-if="obj.image">
@@ -25,21 +26,20 @@
                                     <p>{{obj.breedName}}</p>
                                     <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
                                 </div>
-                                <div class="detail ">
+                                <div class="detail">
                                     <p>产地：<span>{{obj.location}}</span></p>
                                     <p class="right">规格：<span>{{obj.spec}}</span></p>
                                 </div>
                                 <div class="detail">
                                     <p>库存：<span>{{obj.number}}{{obj.unit}}</span></p>
                                     <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
-                                </div class="detail">
+                                </div>
                                 <div class="detail">
                                     <p>卖点：<span>{{obj.description}}</span></p>
                                 </div>
                             </div>
-                          </mt-loadmore>  
+                        </mt-loadmore>  
                     </div>
-            
            </div>
         <div class="fix_bottom"  v-show="!my_param.show && obj.isMy == 0">
             <div class="attention">
@@ -55,6 +55,8 @@
                 <p>电话</p>
             </button>
         </div>
+
+       
     <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>
     </div>
 </template>
@@ -240,7 +242,8 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 41;
+            console.log(this.wrapperHeight)
         }
 }
 </script>
@@ -248,9 +251,13 @@ export default {
 .resource_detail {
     position: relative;
 }
-
-.page-loadmore-wrapper {}
-
+.box
+.resource_detail .box{
+    float:left;
+}
+.resource_detail .page-loadmore-wrapper{
+    float:left;
+}
 .resource_detail .swipe_height {
    height:18.8rem;
    position: relative;
@@ -325,10 +332,11 @@ export default {
 }
 
 .resource_detail .fix_bottom {
-    position: absolute;
+   /* position: absolute;
     bottom: 0px;
-    z-index: 2;
+    z-index: 2;*/
     width: 100%;
+    float:left;
 }
 
 .resource_detail .fix_bottom .attention {
@@ -356,6 +364,7 @@ export default {
     background: #fff;
     float: left;
     width: 100%;
+
 }
 
 .resource_detail .center .title {
@@ -376,6 +385,7 @@ export default {
     font-size: 1.4rem;
     line-height: 1.7rem;
     color: #333;
+
 }
 
 .resource_detail .center .title .price_right {
@@ -397,6 +407,11 @@ export default {
 
 .resource_detail .detail p {
     float: left;
+    width:50%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .resource_detail .detail p span {

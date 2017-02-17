@@ -2,7 +2,7 @@
     <div class="drug_table">
         <iosHead :param="param"></iosHead>
         <div class="search" @click="jumpSearch()">
-            <input type="text" placeholder="输入你想要的货物资源" v-model="keyword">
+            <input type="text" placeholder="输入你想要的货物资源" v-model="keyword" disabled="disabled">
             <img src="/static/images/search.png" class="search_image">
         </div>
         <mt-loadmore>
@@ -265,7 +265,8 @@ export default {
     border: 0;
     outline: none;
     padding-left: 5%;
-    background: #F2F2F2;
+    background-color: #F2F2F2;
+    opacity:1;
     margin-top: 15px;
 }
 

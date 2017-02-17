@@ -476,7 +476,7 @@ export default {
 }
 
 .need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img {
-    width: 1.2rem;
+    width: 16px;
     margin-right: 5px;
 }
 

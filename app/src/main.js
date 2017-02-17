@@ -10,9 +10,9 @@ import common  from "./common/common"
 // import infiniteScroll from 'vue-infinite-scroll'
 
 
-document.addEventListener('DOMContentLoaded', function() {
+/*document.addEventListener('DOMContentLoaded', function() {
   if (window.FastClick) window.FastClick.attach(document.body);
-}, false);
+}, false);*/
 
 Vue.use(Mint);
 Vue.use(VueRouter)

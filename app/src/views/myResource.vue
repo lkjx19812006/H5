@@ -15,20 +15,25 @@
                                     <p class="time_font">发布时间：<span>{{todo.pubdate | timeFormat}}</span></p>
                                     <p class="audit_state">{{todo.onSell | shellStatus}}</p>
                                 </div>
+                                <!-- <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1" class="small_img">
+                                <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" 
+                                v-bind:class="{small_img:!todo.especial == 1 && !todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}"> -->
                             </div>
                             <img v-bind:src="todo.image[0]" class="list_images">
+                            
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>
-                                        <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1"> {{todo.breedName}}
+                                        
+                                        <!-- <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">  -->{{todo.breedName}}
                                     </div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                     <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
                                 </div>
                                 <div class="res_content_right">
-                                    <p>{{todo.number}}<span>{{todo.unit}}</span></p>
+                                    <p>{{todo.number}}元/<span>{{todo.unit}}</span></p>
                                     <div class="button_box">
                                         <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump(todo.id,index)">编辑</button>
                                         <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="delet(todo.id)">删除</button>
@@ -293,9 +298,6 @@ export default {
                     let body = {
                         biz_module: 'intentionService',
                         biz_method: 'deleteIntentionInfo',
-                        version: 1,
-                        time: 0,
-                        sign: '',
                         biz_param: {
                             id:id
                         }
@@ -419,7 +421,7 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
     float: left;
-    min-height: 12rem;
+    min-height: 14rem;
     border: 0;
 }
 
@@ -428,12 +430,12 @@ export default {
     margin: 1rem 1rem 0 1rem;
     border-radius: 4px;
 }
-
+/*19.375%*/
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    height: 6.5rem;
-    width: 19.375%;
+    height: 8.5rem;
+    width: 25%;
     left: 10px;
-    margin: 4.55rem 10px 0px 0.85rem;
+    margin: 55px 10px 0px 10px;
     position: absolute;
 }
 
@@ -441,13 +443,14 @@ export default {
     width: 100%;
     /*height: 2.8rem;*/
     border-bottom: 1px solid #C6C6C5;
+    position: relative;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header>div {
     padding: 0;
     width: 100%;
     height: 100%;
-    padding: 1rem 0.85rem;
+    padding: 1rem 10px;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_header .time_font {
@@ -468,7 +471,23 @@ export default {
     line-height: 20px;
     font-size: 1.3rem;
 }
-
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content_center{
+    
+}
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img{
+    height: 22px;
+    position: absolute;
+    bottom:-31px;
+    left:8px;
+    z-index: 10;
+}
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img{
+    height: 22px;
+    position: absolute;
+    bottom:-31px;
+    left:27px;
+    z-index: 10;
+}
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
     /*max-height: 1.6rem;*/
@@ -478,14 +497,14 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center div {
     font-size: 1.4rem;
-    margin-bottom: 1rem;
+    margin-bottom: 3.3rem;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
     float: left;
     width: 100%;
     padding-right: 90px;
-    line-height: 18px;
+    line-height: 20px;
     text-align: left;
     font-size: 1rem;
     color: #666;
@@ -494,14 +513,14 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
     width: 100%;
-    padding-left: 27%;
+    padding-left: 32%;
     padding-top: 10px;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
     max-width: 80px;
-    min-height: 6.5rem;
+    min-height: 8.5rem;
     margin: 0;
     right: 1.85rem;
 }

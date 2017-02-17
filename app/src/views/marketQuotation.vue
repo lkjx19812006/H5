@@ -152,7 +152,9 @@ export default {
                     }else{
 
                     }
-                    
+                    if (data.length < _self.httpPraram.pageSize) {
+                        _self.allLoaded = true;
+                    }
 
                     if (back) {
                         back();

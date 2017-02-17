@@ -17,7 +17,7 @@
                             <p class="name  name_smart_size" v-if="index <= 2">{{item.name}}</p>
                             <p class="name_content" v-if="index !== 2">{{item.content}}</p>
                             <p class="name_content" v-if="index == 2 && item.content == '女'"><img src="/static/images/woman.png"></p>
-                            <p class="name_content" v-if="index == 2 && item.content == '男'"><img src="/static/images/man.png"></p>
+                        <p class="name_content" v-if="index == 2 && item.content == '男'"><img src="/static/images/man.png"></p>
                         </li>
                         <li v-for="(item,index) in personalDataArr" v-if="index == 4" id="personal_authentication" @click="jumpPersonal">
                             <p class="name  name_big_size">{{item.name}}</p>

@@ -1,8 +1,8 @@
 <template>
-    <div class="content landscape">
-        <ul class="cnt" id="slider" :style="{ width: ctWidth + 'px' }">
-            <li v-for="(item,index) in param" @click="selectStatus(item)"  v-bind:class="{specific:index == 3}">
-            <p v-bind:class="{ active: item.show }">{{item.name}}</p>
+    <div class="content sell_landscape">
+         <ul class="cnt" id="slider" :style="{ width: ctWidth + 'px' }">
+            <li v-for="(item,index) in param" @click="selectStatus(item)" v-bind:class="{specific: index == 2 || index == 5}">
+               <p v-bind:class="{ active: item.show }">{{item.name}}</p>
             </li>
         </ul>
     </div>
@@ -121,8 +121,8 @@ export default {
             console.log(this.slider);
             this.slider.addEventListener('touchstart', this.touch, false);
             this.wrapperWidth = document.documentElement.clientWidth;  
-            _self.ctWidth = _self.param.length*70 + 20;
-            _self.widthDis = _self.wrapperWidth - _self.param.length*70 - 20;
+            _self.ctWidth = _self.param.length*70 + 40;
+            _self.widthDis = _self.wrapperWidth - _self.param.length*70 - 40;
         }
 }
 </script>
@@ -136,30 +136,30 @@ li {
     list-style: none;
 }
 
-.landscape {
+.sell_landscape {
     width: 100%;
     overflow: hidden;
     height: 40px;
 }
 
-.landscape .cnt {
+.sell_landscape .cnt {
     position: relative;
     left: 0;
     float: left;
     background-color: #fff;
 }
 
-.landscape .cnt li {
+.sell_landscape .cnt li {
     float: left;
     width: 70px;
     height: 40px;
     line-height: 40px;
     padding: 0 5px;
 }
-.landscape .cnt .specific{
+.sell_landscape .cnt .specific{
     width:90px;
 }
-.landscape .cnt li .active{
+.sell_landscape .cnt li .active{
     color: #fa6705;
     border-bottom: 2px solid #fa6705;
     height: 100%;

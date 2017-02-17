@@ -18,7 +18,7 @@
                     </ul>
                 </mt-loadmore>
             </div>
-            <div class="next_step" v-on:click="nextStep">下一步</div>
+            <div class="next_step" v-on:click="nextStep">确定</div>
         </div>
     </div>
 </template>
@@ -71,8 +71,8 @@ export default {
                 let checkArr = [];
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
-                let checkCode = validation.checkCode(_self.param.code, '123456');
-                checkArr.push(checkCode);
+                let checkMinNumber = validation.checkMinNumber(_self.param.passWord);
+                checkArr.push(checkMinNumber);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);

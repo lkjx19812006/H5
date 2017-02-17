@@ -9,8 +9,8 @@
             </div>
             <p v-show="param.show" @click="jumpRevise">编辑</p>
             <p v-show="param.t_show" @click="jumpRevise">完成</p>
-            <p v-show="param.invite_code" @click="fillIn">{{param.code_name}}</p>
-            <p v-show="param.confirm_fill" @click="fillInBack">{{param.code_name}}</p>
+            <!-- <p v-show="param.invite_code" @click="fillIn">{{param.code_name}}</p>
+            <p v-show="param.confirm_fill" @click="fillInBack">{{param.code_name}}</p> -->
         </div>
     </div>
 </template>
@@ -37,12 +37,16 @@ export default {
                     }else{
                          if(_self.param.goSecond){
                                  common.$emit('getInfo',1);
-                                 _self.$router.push('/home');             
+                                 /*_self.$router.push('/home');  */ 
+                                 window.history.go(-2)         
                          }else if(_self.param.go_where){
                              common.$emit('backAddress', 1);//对于地址列表退回订单页
                              window.history.go(-1);
+                         }else if(common.pageParam.skipLogin == true){
+                             common.pageParam.skipLogin = false;
+                             window.history.go(-2)
                          }else{
-                            window.history.go(-1);
+                             window.history.go(-1);
                          }
                          
                     }
