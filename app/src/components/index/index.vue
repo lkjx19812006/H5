@@ -244,22 +244,19 @@ export default {
                     biz_module: 'userService',
                     biz_method: 'queryUserInfo',
                     biz_param: {},
-                };
-                
+                }; 
+
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);   
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == "1c01"){
                         _self.perfect.name = suc.data.biz_result.fullname;
                         _self.perfect.bizMain = suc.data.biz_result.bizMain;
-                        //console.log(_self.perfect.bizMain)
-                        
                     }else{
                         console.log('cuowusasdada')
                     }
-                    
-                    
+                           
                 }, function(err) {
                     common.$emit('close-load');
                 })
@@ -314,7 +311,6 @@ export default {
                 };
                 if (common.KEY) {
                     url = common.addSID(common.urlCommon + common.apiUrl.most);
-                    body.version = 1;
                     body.time = Date.parse(new Date()) + parseInt(common.difTime);
                     body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 } 
@@ -417,17 +413,16 @@ export default {
         created() {
             let _self = this;
             if(common.KEY)_self.getInfo();
+            common.$on('toMine',function(item){
+                if(common.KEY)_self.getInfo();            
+            })
             common.$on('getInfo',function(item){
-                console.log('广播okl吗')
-                if(common.KEY)_self.getInfo();        
                 _self.resourceHttp();
             })
             this.resourceHttp();
             this.transaction();
             this.drugGuidePrice();
-            this.getImgArr();
-            
-           
+            this.getImgArr(); 
         },
         computed: {
             drugArray: function() {
@@ -798,7 +793,7 @@ export default {
 
 .bg_white .list_content .cell_class .list_image img {
     float: left;
-    max-width: 49%;
+    max-width: 48%;
 }
 
 .bg_white .list_content .cell_class .list_image .first_image {

@@ -15,7 +15,7 @@
                             <img v-bind:src="todo.image[0]" class="list_images">
                             <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1" class="small_img">
                             <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" 
-                            v-bind:class="{small_img:!todo.especial == 1 && !todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
+                            v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>

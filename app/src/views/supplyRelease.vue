@@ -165,8 +165,12 @@ export default {
                 }
                 let checkDes = validation.checkNull(_self.obj.selling_point, '请输入药材资源卖点');
                 checkArr.push(checkDes);
+                let checkLookDes = validation.checkLook(_self.obj.selling_point);
+                checkArr.push(checkLookDes);
                 let checkName = validation.checkNull(_self.obj.name,'请输入姓名');
                 checkArr.push(checkName);
+                let checkLookName = validation.checkLook(_self.obj.name);
+                checkArr.push(checkLookName);
                 let checkPhone = validation.checkPhone(_self.obj.phone,'请输入电话');
                 checkArr.push(checkPhone);
                 for (var i = 0; i < checkArr.length; i++) {
@@ -201,7 +205,7 @@ export default {
                         duedate: _self.obj.duedate,
                         breedId: _self.obj.breedId,
                         unit: _self.obj.number_id,
-                        sampleUnit:_self.obj.sample_id
+                        //sampleUnit:_self.obj.sample_id
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);

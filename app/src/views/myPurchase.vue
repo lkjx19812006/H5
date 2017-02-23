@@ -28,13 +28,13 @@
                                 <div class="last">
                                     <p>{{todo.spec}}</p>
                                     <p>{{todo.location}}</p>
-                                    <p>{{todo.duedate | timeDays(todo.pubdate)}}<span v-if="disTime(todo.duedate)"></span></p>
+                                    <p>{{todo.duedate | timeDays}}<span v-if="disTime(todo.duedate)"></span></p>
                                     <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                 </div>
                             </div>
                             <div class="button">
                                 <p class="first_button" v-on:click.stop="delet(todo.id)">删除</p>
-                                <p class="first_button" v-on:click.stop="jump(other_router,todo.id)">编辑</p>
+                                <p class="first_button" v-on:click.stop="jump(other_router,todo.id,todo.duedate)">编辑</p>
                                 <p class="second_button" v-on:click.stop="jumpApp()">查看报价</p>
                             </div>
                         </li>
@@ -310,7 +310,8 @@ export default {
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp()
             },
-            jump: function(router, id) {
+            jump: function(router,id,duedate) {
+                
                 common.$emit("purchase-id", id);
                 common.$emit("myPurToPurDetail", id);
                 this.$router.push(router + '/' + id);

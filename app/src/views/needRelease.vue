@@ -86,8 +86,12 @@ export default {
                 checkArr.push(checkNumber);
                 let checkDuedate = validation.checkNull(_self.obj.duedate, '请输入求购有效期');
                 checkArr.push(checkDuedate);
+                let checkLookDes = validation.checkLook(_self.obj.selling_point);
+                checkArr.push(checkLookDes);
                 let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
                 checkArr.push(checkName);
+                let checkLookName = validation.checkLook(_self.obj.name);
+                checkArr.push(checkLookName);
                 let checkPhone = validation.checkPhone(_self.obj.phone,'请输入电话');
                 checkArr.push(checkPhone);
                 for (var i = 0; i < checkArr.length; i++) {

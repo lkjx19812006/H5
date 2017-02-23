@@ -72,6 +72,7 @@
 <script>
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
+import filters from '../../filters/filters'
 export default {
     data() {
             return {

@@ -33,7 +33,7 @@
                                     <!-- <p class="time_font">发布时间：<span>{{todo.time}}</span></p> -->
                                 </div>
                                 <div class="res_content_right">
-                                    <p>{{todo.number}}元/<span>{{todo.unit}}</span></p>
+                                    <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>
                                     <div class="button_box">
                                         <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump(todo.id,index)">编辑</button>
                                         <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="delet(todo.id)">删除</button>
@@ -519,7 +519,7 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
-    max-width: 80px;
+    max-width: 110px;
     min-height: 8.5rem;
     margin: 0;
     right: 1.85rem;

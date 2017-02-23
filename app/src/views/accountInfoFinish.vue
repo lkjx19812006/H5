@@ -277,9 +277,6 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'queryUserInfo',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {}
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -316,6 +313,12 @@ export default {
                 checkArr.push(checkName);
                 let checkBizMain = validation.checkNull(_self.arr.bizMain,'主营品类不能为空！');
                 checkArr.push(checkBizMain);
+                let checkLookcompany = validation.checkLook(_self.arr.company);
+                checkArr.push(checkLookcompany);
+                let checkLookcompanyShort = validation.checkLook(_self.arr.companyShort);
+                checkArr.push(checkLookcompanyShort);
+                let checkLookbizMain = validation.checkLook(_self.arr.bizMain);
+                checkArr.push(checkLookbizMain);
                 for(let i = 0; i < checkArr.length; i++){
                     if(checkArr[i]){
                          common.$emit('message',checkArr[i]);
@@ -337,9 +340,6 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'updateUserInfo',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         gender: _self.arr.gender,
                         fullname: _self.arr.name,

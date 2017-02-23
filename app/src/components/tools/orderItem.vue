@@ -13,22 +13,24 @@
             <div class="item_right_div">
                 <p>产地：{{param.location}}</p>
                 <p class="right" v-if="param.from=='order'">数量：{{param.number}}</p>
-                <p class="right" v-if="param.from!='order'">数量：{{param.sampleNumber}}</p>
+                <p class="right" v-if="param.from!='order'">数量：{{param.sampleNumber}}份</p>
             </div>
         </div>
         <div class="count">
             <div class="number">购买数量：</div>
             <div class="operate">
-                <button class="mint-button mint-button--primary mint-button--small gray" @click="subtraction()">—</button>
+                <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:subtraction}">—</button>
                 <input type="text"  v-model="param.value">
-                <button class="mint-button mint-button--primary mint-button--small gray" @click="addition()">+</button>
+                <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:addition}">+</button>
             </div>
         </div>
     </div>
 </template>
 <script>
 import common from '../../common/common.js'
-
+/*document.addEventListener('DOMContentLoaded', function() {
+  if (window.FastClick) window.FastClick.attach(document.body);
+}, false);*/
 export default {
     props: {
         param: {

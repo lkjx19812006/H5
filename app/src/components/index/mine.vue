@@ -162,7 +162,7 @@ export default {
                     if (suc.data.code = "1c01") {
                         _self.information=suc.data.biz_result;
                         console.log(suc.data.biz_result);
-                        console.log(11111111222)
+                        //console.log(11111111222)
                         let normalMoney = 0;
                         let freezeMoney = 0;
                         if(Number(suc.data.biz_result.normalMoney))normalMoney = Number(suc.data.biz_result.normalMoney);
@@ -175,7 +175,7 @@ export default {
                         _self.param.url = suc.data.biz_result.avatar;
                         _self.url = suc.data.biz_result.avatar;
                         _self.information.employee = suc.data.biz_result.employee;
-                         common.customerId = suc.data.biz_result.customerId;
+                        common.customerId = suc.data.biz_result.customerId;
                         window.localStorage.ID = suc.data.biz_result.customerId;
 
                     } else {
@@ -236,9 +236,16 @@ export default {
             let _self = this;
             if (common.SID) _self.getHttp();
             if (common.SID) _self.salesmanData();
-            common.$on("toMine", function(obj) {
-                _self.getHttp();
+            common.$on("AccountToMine", function(obj) {
+                /*_self.getHttp();*/
+                _self.param.url = obj.url;
+                _self.param.name = obj.name;
+                _self.param.company = obj.company;
+
             });
+            common.$on("toMine",function(obj){
+                _self.getHttp();
+            })
             common.$on("clear_Information", function() { //来自资源页面的提示刷新
                 console.log('dfdfdfdfdfdf');
                 _self.param = {

@@ -59,8 +59,12 @@ export default {
                 let checkArr = [];
                 let checkContent = validation.checkNull(_self.param.content, '反馈内容为空！');
                 checkArr.push(checkContent);
+                let checkLookContent = validation.checkLook(_self.param.content);
+                checkArr.push(checkLookContent);
                 let checkName = validation.checkNull(_self.param.name, '姓名为空！');
                 checkArr.push(checkName);
+                let checkLookName = validation.checkLook(_self.param.name);
+                checkArr.push(checkLookName);
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
 

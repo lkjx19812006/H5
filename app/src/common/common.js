@@ -227,7 +227,7 @@ common.$on('message', message => {
 
 common.$on('touch', )
 
-common.$on('confirm', (obj) => {
+common.$on('confirm', (obj) => {  
     MessageBox.confirm(obj.message, obj.title).then(action => {
         obj.ensure();
     }, action => {

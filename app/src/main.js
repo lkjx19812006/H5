@@ -7,13 +7,15 @@ import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import './assets/css/style.css'
 import common  from "./common/common"
+import vueTap from 'v-tap';
+
 // import infiniteScroll from 'vue-infinite-scroll'
 
 
 /*document.addEventListener('DOMContentLoaded', function() {
   if (window.FastClick) window.FastClick.attach(document.body);
 }, false);*/
-
+Vue.use(vueTap);
 Vue.use(Mint);
 Vue.use(VueRouter)
 Vue.use(VueResource)

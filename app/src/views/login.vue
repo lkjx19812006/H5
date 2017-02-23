@@ -103,13 +103,15 @@ export default {
                 }, function(response) {
                     common.$emit('close-load');
 
-                    if (response.data.code == '1c01') {             
+                    if (response.data.code == '1c01') {  
+
                         window.localStorage.KEY = response.data.biz_result.KEY;
                         window.localStorage.SID = response.data.biz_result.SID;
                         common.KEY = window.localStorage.KEY;
                         common.SID = window.localStorage.SID;
                         common.getDate();
-                        common.$emit('getInfo',1);
+                        //console.log(window.localStorage.difTime)
+                        common.$emit('getInfo',1); 
                         if(common.pageParam.backRouter.split('/')[0] == 'resourceDetail'){         
                                     if(_self.id){
                                        common.$emit('resourceDetail',_self.id);
@@ -123,7 +125,8 @@ export default {
                            }else{
                                 common.$emit('go_home',1);
                                 _self.$router.replace('home');
-                           }  
+                           } 
+
                     } else {
                         common.$emit('message', response.data.msg);
                     }
@@ -150,6 +153,7 @@ export default {
                         common.getDate();
                         /*_self.$router.push('/home');*/
                        // _self.$router.replace(common.pageParam.backRouter);
+                       
                        common.$emit('getInfo',1);
                        if(common.pageParam.backRouter.split('/')[0] == 'resourceDetail'){               
                              if(_self.id){

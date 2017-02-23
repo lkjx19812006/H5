@@ -46,6 +46,7 @@
             </div>
         </div>
         <div class="footer">
+            <p @click="prompt('如需申请，')">申请售后</p>
             <p @click="call()">联系我们</p>
             <p class="pay-money" v-if="todo.orderStatus == 20&&todo.type == 0" @click="prompt('支付')">立即付款</p>
         </div>

@@ -11,6 +11,16 @@ validation.checkPhone = (phone) => {
     }
 
 }
+
+validation.checkLook = (look) => {
+    //let pattern = /[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]/
+    let pattern = /\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g
+    if(pattern.test(look)){
+        return '不可以输入表情'
+    }else{
+        return false
+    }
+}
 validation.checkMinNumber = (password) => {
     let pattern = /^[a-zA-Z0-9]{6,16}$/
     if(!pattern.test(password)){

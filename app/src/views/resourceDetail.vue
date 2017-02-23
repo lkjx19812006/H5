@@ -22,7 +22,9 @@
                             </div>
                             <div class="center">
                                 <div class="title">
-                                    <img src="/static/icons/impatient.png">
+                                    <!-- <img src="/static/icons/impatient.png"> -->
+                                    <img src="/static/images/bao.png" v-if="obj.especial == 1 && obj.type == 1">
+                                    <img src="/static/icons/sample.png" v-if="obj.sampling == 1 && obj.type == 1"> 
                                     <p>{{obj.breedName}}</p>
                                     <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
                                 </div>
@@ -377,6 +379,7 @@ export default {
     float: left;
     max-height: 40px;
     height: 1.7rem;
+    margin-right: 2px;
 }
 
 .resource_detail .center .title p {

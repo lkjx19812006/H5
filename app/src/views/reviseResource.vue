@@ -57,6 +57,7 @@ import releaseGrugInformation from '../components/tools/releaseGrugInformation'
 export default {
     data() {
             return {
+                id:'',
                 param: {
                     name: '修改资源',
                 },
@@ -69,6 +70,7 @@ export default {
                     place: '',
                     number: '',
                     number_unit: '',
+                    sample_unit:'',
                     sales_price: '',
                     where: '',
                     weight: '',
@@ -137,6 +139,7 @@ export default {
                     _self.obj.place = result.location;
                     _self.obj.number = result.number;
                     _self.obj.number_unit = result.unit;
+                    _self.obj.sample_unit = result.sampleUnit;
                     _self.obj.sales_price = result.price;
                     _self.obj.weight = result.sampleNumber;
                     _self.obj.price = result.sampleAmount;
@@ -158,24 +161,38 @@ export default {
                     _self.imgArr = result.image;
                     if (result.image[0] != undefined) {
                         _self.obj.imgArr[0] = result.image[0];
+                    }else{
+                        _self.obj.imgArr[0] = '';
                     }
                     if (result.image[1] != undefined) {
                         _self.obj.imgArr[1] = result.image[1];
+                    }else{
+                        _self.obj.imgArr[1] = '';
                     }
                     if (result.image[2] != undefined) {
                         _self.obj.imgArr[2] = result.image[2];
+                    }else{
+                        _self.obj.imgArr[2] = '';
                     }
                     if (result.image[3] != undefined) {
                         _self.obj.imgArr[3] = result.image[3];
+                    }else{
+                        _self.obj.imgArr[3] = '';
                     }
                     if (result.image[4] != undefined) {
                         _self.obj.imgArr[4] = result.image[4];
+                    }else{
+                        _self.obj.imgArr[4] = '';
                     }
                     if (result.image[5] != undefined) {
                         _self.obj.imgArr[5] = result.image[5];
+                    }else{
+                        _self.obj.imgArr[5] = '';
                     }
                     if (result.image[6] != undefined) {
                         _self.obj.imgArr[6] = result.image[6];
+                    }else{
+                        _self.obj.imgArr[6] = '';
                     }
 
                     // common.$emit("supplyRelease", {
@@ -216,8 +233,12 @@ export default {
                 }
                 let checkDes = validation.checkNull(_self.obj.selling_point, '请输入药材资源卖点');
                 checkArr.push(checkDes);
+                let checkLookDes = validation.checkLook(_self.obj.selling_point);
+                checkArr.push(checkLookDes);
                 let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
                 checkArr.push(checkName);
+                let checkLookName = validation.checkLook(_self.obj.name);
+                checkArr.push(checkLookName);
                 let checkPhone = validation.checkPhone(_self.obj.phone, '请输入电话');
                 checkArr.push(checkPhone);
                 for (var i = 0; i < checkArr.length; i++) {
@@ -227,13 +248,11 @@ export default {
                     }
                 }
                 common.$emit('show-load');
+                console.log(_self.obj.imgArr)
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'intentionService',
                     biz_method: 'updateEditSupplyInfo',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         customerId: common.customerId,
                         breedName: _self.obj.drug_name,
@@ -251,8 +270,8 @@ export default {
                         sampleAmount: _self.obj.price,
                         duedate: _self.obj.duedate,
                         breedId: _self.obj.breedId,
-                        unit: _self.obj.number_id,
-                        sampleUnit:_self.obj.sample_id,
+                        unit: _self.obj.number_unit,
+                        /*sampleUnit:_self.obj.sample_unit,*/
                         id: _self.$route.params.revId
                     }
                 };
@@ -262,6 +281,7 @@ export default {
                 httpService.supplyRelease(url, body, function(suc) {
                     common.$emit('close-load');
                     common.$emit("reviseResource", "refurbish");
+                    common.$emit("inform-goodDetail",_self.id);
                     window.history.go(-1);
                 }, function(err) {
                     common.$emit('close-load');
@@ -283,8 +303,10 @@ export default {
         created() {
             var _self = this;
             var id = this.$route.params.revId;
+            _self.id = this.$route.params.revId;
             _self.getResource(id);
             common.$on("res-id", function(item) {
+                _self.id = item;
                 _self.getResource(item);
             })
 

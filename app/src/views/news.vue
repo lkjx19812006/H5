@@ -77,7 +77,7 @@ export default {
             
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            this.wrapperHeight = /*document.documentElement.clientHeight*/window.screen.height - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
 </script>
@@ -112,7 +112,7 @@ export default {
     border-bottom: 1px solid #DEDDE0;
 }
 .news .main{
-   
+    padding-bottom: 10px;
     width:100%;
 }
 .news .main li{

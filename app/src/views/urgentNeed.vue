@@ -26,7 +26,7 @@
                                     <div class="last">
                                         <p>{{todo.spec}}</p>
                                         <p>{{todo.location}}</p>
-                                        <p>{{todo.duedate | timeDays(todo.pubdate)}}<span></span></p>
+                                        <p>{{todo.duedate | timeDays}}<span></span></p>
                                         <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                     </div>
                                 </div>

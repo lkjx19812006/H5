@@ -161,10 +161,14 @@ export default {
                 var checkArr = [];
                 let checkName = validation.checkNull(_self.obj.name, '请输入姓名！');
                 checkArr.push(checkName);
+                let checkLookName = validation.checkLook(_self.obj.name);
+                checkArr.push(checkLookName);
                 let checkPhone = validation.checkPhone(_self.obj.phone);
                 checkArr.push(checkPhone);
                 let checkdetailAddr = validation.checkNull(_self.obj.detailAddr, '请输入详细信息！');
                 checkArr.push(checkdetailAddr);
+                let checkLookDes = validation.checkLook(_self.obj.detailAddr);
+                checkArr.push(checkLookDes);
 
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {

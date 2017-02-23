@@ -12,8 +12,8 @@
                         <p>热门药材</p>
                     </div>
                     <div class="drug_show">
-                        <mt-swipe :auto="4000"  :show-indicators="false" :prevent="false">        
-                         <mt-swipe-item v-for="(item,index) in obj">
+                        <swiper :options="swiperOption">
+                          <swiper-slide v-for="(item,index) in obj">
                             <a @click="jumpDetail(item.name)">
                                 <img :src="item.icon">
                                 <div class="drug_introduce">
@@ -21,23 +21,10 @@
                                     <p class="drug_chinese_name" id="drug_chinese_name">英文名：{{item.eName}}</p>
                                     <p class="drug_english_name" id="drug_english_name">拉丁：{{item.lName}}</p>
                                 </div>
-                            </a>
-                         </mt-swipe-item>   
-                        </mt-swipe>
+                            </a>  
+                          </swiper-slide>
+                        </swiper>
                     </div>
-
-
-                            <!-- <div class="swipe_height" v-if="obj.image">
-                                  <mt-swipe :auto="4000"  :show-indicators="false">        
-                                    <mt-swipe-item v-for="(item,index) in obj.image">
-                                      <div  @click="popUp(index,obj.image)">
-                                          <img :src="item">
-                                          <div class="index"><span>{{index + 1}}</span>/{{obj.image.length}}</div>
-                                      </div>           
-                                    </mt-swipe-item>   
-                                  </mt-swipe>
-                            </div> -->
-
                     <div class="hot_search_drug">
                         <p>热搜药材</p>
                         <div class="hot_drugs">
@@ -45,18 +32,6 @@
                         </div>
                     </div>
                 </div>
-               <!--  <div v-show="keyword">
-                    <div class="search_result">
-                        <ul class="page-loadmore-list">
-                            <li v-for="todo in datas" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.breedName)">
-                                <div>
-                                    <img src="/static/icons/search.png">
-                                    <p>{{todo.keyWord}}({{todo.breedName}})</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div> -->
             </div>
         </mt-loadmore>
     </div>
@@ -65,9 +40,19 @@
 import common from '../common/common.js'
 import iosHead from '../components/tools/iosHead'
 import httpService from '../common/httpService.js'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
     data() {
             return {
+                swiperOption: {
+                    autoplay: 3500,
+                    setWrapperSize :true,
+                    pagination : '.swiper-pagination',
+                    paginationClickable :true,
+                    mousewheelControl : true,
+                    observeParents:true,
+                },
+                swiperSlides: [1, 2, 3, 4, 5],
                 param: {
                     name: '药材百科',
                     router: 'home',
@@ -102,15 +87,16 @@ export default {
             }
         },
         components: {
-            iosHead
+            iosHead,
+            swiper,
+            swiperSlide
         },
         watch: {
             keyword: function(newValue, oldValue) {
                  let _self = this;
                 if(!_self.keyword){
                     return;
-                }
-               
+                }         
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
                     common.$emit('show-load');
@@ -244,6 +230,12 @@ export default {
                 }
                 document.body.appendChild(iframe)
             }, 0)
+
+             setInterval(() => {
+              console.log('simulate async data')
+              let swiperSlides = this.swiperSlides
+              if (swiperSlides.length < 10) swiperSlides.push(swiperSlides.length + 1)
+             }, 3000)
         }
 }
 </script>

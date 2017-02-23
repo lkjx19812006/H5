@@ -175,7 +175,14 @@ export default {
                     _self.companyDataArr[4].content = suc.data.biz_result.invoice;
                     _self.companyDataArr[5].content = suc.data.biz_result.ctype;
                     _self.param.url = suc.data.biz_result.avatar;
-                    common.$emit("toMine", _self.arr);
+                    let url = suc.data.biz_result.avatar;
+                    let name = suc.data.biz_result.fullname;
+                    let company = suc.data.biz_result.company;
+                    common.$emit("AccountToMine", {
+                         url:url,
+                         name:name,
+                         company:company
+                    });
                 }, function(err) {
                     common.$emit('close-load');
                 })

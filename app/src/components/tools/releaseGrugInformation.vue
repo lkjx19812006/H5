@@ -89,11 +89,12 @@
                 </div>
             </div>
             <div class="good_number" v-show="obj.sampling">
-                <p>样品重量：</p>
+                <p>样品数量：</p>
                 <div class="content_div">
                     <input type="number" placeholder="请输入" v-model="obj.weight" class="last_input" />
-                    <p @click="showAction('sample_unit')">
-                        {{obj.sample_unit}}
+                    <p>
+                        <!-- {{obj.sample_unit}} -->
+                        份
                         <!-- sampleUnit -->
                     </p>
                 </div>

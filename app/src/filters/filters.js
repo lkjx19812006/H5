@@ -7,7 +7,7 @@ Vue.filter('timeFormat', function(val){
         return  val;
     });
 
-Vue.filter('timeDays',function(due,pub){
+Vue.filter('timeDays',function(due){
         let days=7;
         if(due){
             due=due.split('.')[0];
@@ -17,16 +17,13 @@ Vue.filter('timeDays',function(due,pub){
                 var pubdateDate = new Date();
                 var dateValue = duedateDate.getTime() - pubdateDate.getTime();
                 days = Math.floor(dateValue / (24 * 3600 * 1000));
-                let hour = Math.floor((dateValue - days*(24 * 3600 * 1000))/((3600 * 1000)));
                 
-                if(days == 0){
-                    days = hour + '小时';
-                }else if(days < 0){
-                    days="已过期";
-                }else{
-                    days = days + '天';
-                }
-                   
+                  if(days == 0){
+                     days = 1;
+                  }else if(days < 0){
+                      days="已过期";
+                  } 
+                  days = days + "天";
             }else{
                 days="7" + '天';
             }

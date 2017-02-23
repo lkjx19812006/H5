@@ -22,13 +22,14 @@
                   </mt-swipe>
               </div>
               <div class="release_time">
-                  <p>发布时间：<span>{{obj.pubdate}}</span></p>
+                  <p>上架时间：<span>{{obj.pubdate}}</span></p>
               </div>
               <div class="drug_info">
                   <div class="first_level">
-                      <img src="/static/images/bao.png">
+                      <!-- <img src="/static/images/bao.png" v-if="obj.especial == 1 && obj.type == 1"> -->
+                      <img src="/static/icons/sample.png" v-if="obj.samples == 1 && obj.type == 1"> 
                       <p>{{obj.drug_name}}</p>
-                      <p class="price"><span>{{obj.price}}</span>元/kg</p>
+                      <p class="price"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
                   </div>
                  <div class="box">
                       <div class="second_level">
@@ -148,6 +149,7 @@ export default {
                             console.log(suc.data.biz_result);
                             let result = suc.data.biz_result;
                             console.log(result.sampling);
+                            _self.obj.samples = result.sampling;
                             if(result.sampling == 1){
                                result.sampling = '提供'
                             }
@@ -166,6 +168,9 @@ export default {
                             _self.obj.moq = result.moq;
                             _self.obj.price = result.price;
                             _self.obj.onSell = result.onSell;
+                            _self.obj.unit = result.unit;
+                            
+                            _self.obj.type = result.type;
                             let imageArr = result.image;
                             /*for(var item in imageArr){
                                  console.log(imageArr[item]);
@@ -264,7 +269,6 @@ export default {
 }
 .good_detail .drug_info img{
   width: 1.5rem;
-  height:1.5rem;
   position: absolute;
   left:0;
   top:1.5rem;

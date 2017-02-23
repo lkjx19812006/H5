@@ -10,7 +10,7 @@
                             <img v-bind:src="todo.image[0]" class="list_images">
                             <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1" class="small_img">
                             <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" 
-                            v-bind:class="{small_img:!todo.especial == 1 && !todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
+                            v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>
@@ -241,9 +241,14 @@ export default {
                 this.getHttp();
             },
             jumpDetail(id) {
-                common.$emit('resourceDetail', id);
-
-                this.$router.push('resourceDetail/' + id);
+                let _self = this;
+                if(!_self.pull){
+                    common.$emit('resourceDetail', id);
+                    _self.$router.push('resourceDetail/' + id);
+                }else{
+                    console.log('在加载...')
+                }
+                
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -260,6 +265,7 @@ export default {
                         });
                     }
                 }, 1500);
+                
             },
             handleTopChange(status) {
                 this.topStatus = status;
@@ -272,6 +278,7 @@ export default {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
                 }, 1500);
+                 
             },
             jump(router) {
                 this.$router.push(router);
@@ -288,6 +295,7 @@ export default {
         },
         created() {
             let _self = this;
+            //console.log();
             _self.headParam.keyword = common.pageParam.lowPrice.keyWord;
             _self.httpPraram.keyword = common.pageParam.lowPrice.keyWord;
             _self.getHttp();

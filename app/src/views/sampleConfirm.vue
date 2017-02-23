@@ -29,9 +29,9 @@ import orderItem from '../components/tools/orderItem'
 import orderTotal from '../components/tools/orderTotal'
 import httpService from '../common/httpService.js'
 import validation from '../validation/validation.js'
-document.addEventListener('DOMContentLoaded', function() {
+/*document.addEventListener('DOMContentLoaded', function() {
   if (window.FastClick) window.FastClick.attach(document.body);
-}, false);
+}, false);*/
 export default {
     data() {
             return {

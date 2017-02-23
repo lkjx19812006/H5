@@ -85,7 +85,7 @@ export default {
 
                     if (suc.data.code == '1c01') {
                         let result = suc.data.biz_result;
-                        let type = '';
+                        /*let type = '';
                         let ua = navigator.userAgent.toLowerCase();
                         if (/iphone|ipad|ipod/.test(ua)) {
                             type = 'ios';
@@ -94,11 +94,14 @@ export default {
                             result.duedate =result.duedate.replace(/-/g, "/");
                             result.pubdate =result.pubdate.replace(/-/g, "/");
                             
-                        }
-                        var duedateDate = new Date(result.duedate.split(' ')[0]);
-                        var pubdateDate = new Date(result.pubdate.split(' ')[0]);
+                        }*/
+                        let due=result.duedate.split('.')[0];
+                        if(due)var arr = due.split(/[- : \/]/);
+                        var duedateDate = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);/*new Date(result.duedate.split(' ')[0]);*/
+                        var pubdateDate = new Date();
                         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
                         var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                        if(days == 0)days = 1;
                        
                         _self.obj.drug_name = result.breedName;
                         _self.obj.spec = result.spec;
@@ -134,8 +137,12 @@ export default {
                 checkArr.push(checkNumber);
                 let checkDuedate = validation.checkNull(_self.obj.duedate, '请输入求购有效期');
                 checkArr.push(checkDuedate);
+                let checkLookDes = validation.checkLook(_self.obj.selling_point);
+                checkArr.push(checkLookDes);
                 let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
                 checkArr.push(checkName);
+                let checkLookName = validation.checkLook(_self.obj.name);
+                checkArr.push(checkLookName);
                 let checkPhone = validation.checkPhone(_self.obj.phone, '请输入电话');
                 checkArr.push(checkPhone);
                 for (var i = 0; i < checkArr.length; i++) {
