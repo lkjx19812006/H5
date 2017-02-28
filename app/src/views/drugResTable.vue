@@ -13,7 +13,7 @@
                     </div>
                     <div class="drug_show">
                         <swiper :options="swiperOption">
-                          <swiper-slide v-for="(item,index) in obj">
+                          <swiper-slide v-for="(item,index) in obj" class="outbox">
                             <a @click="jumpDetail(item.name)">
                                 <img :src="item.icon">
                                 <div class="drug_introduce">
@@ -292,15 +292,17 @@ export default {
 .drug_table .drug_show {
     width: 100%;
     height: 13.6528rem;
-    padding: 1.27995rem;
+    padding: 1.27995rem 3%;
     background: white;
     position: relative;
+    overflow: hidden;
 }
 
 .drug_table .drug_show img {
-    width: 38%;
+    width: 40%;
     height: 11.0929rem;
     float: left;
+   
 }
 
 .drug_table .drug_introduce {
@@ -309,6 +311,7 @@ export default {
     float: left;
     text-align: left;
     padding: 0.64rem 0rem 0.64rem 1.27995rem;
+
 }
 
 .drug_table .drug_introduce p {

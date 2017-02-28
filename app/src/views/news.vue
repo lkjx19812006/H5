@@ -2,9 +2,17 @@
     <div class="news">
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
             <mt-loadmore>
-                <div class="swipe_height" @click="jump(banner.linkUrl)">    
-                        <img v-bind:src="banner.imgUrl">
-                        <p>{{banner.intro}}</p>
+                <div class="swipe_height">    
+                        <!-- <img v-bind:src="banner.imgUrl">
+                        <p>{{banner.title}}</p> -->
+                         <swiper :options="swiperOption">
+                          <swiper-slide v-for="(item,index) in banner">
+                            <a @click="jump(item.linkUrl)">
+                                <img v-bind:src="item.imgUrl">
+                                <p>{{item.title}}</p>
+                            </a>  
+                          </swiper-slide>
+                        </swiper>
                 </div>
                 <div class="report">
                      公司报道
@@ -27,17 +35,22 @@
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
     data() {
             return {
-                img:"/static/images/buy-order.png",
-                title:'当然我已经在报纸上看过一些关于你的报道了，”查利说道',
-                content:'2012年7月11日 - 沪江英语网是免费的英语学习网站,提供专题报道用英文怎么说信息,包含专题报道用英文怎么说的相关学习资料、单词测试、评论、学习推荐等信息',
                 banner:{
-                    intro:'',
-                    imgUrl:''
+                   
                 },
-                list:''
+                list:'',
+                swiperOption: {
+                    autoplay: 3500,
+                    setWrapperSize :true,
+                    pagination : '.swiper-pagination',
+                    paginationClickable :true,
+                    mousewheelControl : true,
+                    observeParents:true,
+                }
                 
             }
         },
@@ -46,7 +59,8 @@ export default {
             _self.getHttp();
         },
         components: {
-            
+            swiper,
+            swiperSlide
         },
         methods: {
             getHttp(){
@@ -61,7 +75,8 @@ export default {
                 }, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
-                       _self.banner = suc.data.biz_result.banners[0];
+                       _self.banner = suc.data.biz_result.banners;
+                       console.log(suc.data.biz_result.banners)
                        _self.list = suc.data.biz_result.newestTab;
                     } else {
                         common.$emit('message', suc.data.msg);
@@ -72,7 +87,7 @@ export default {
                 })
             },
             jump(linkUrl){
-                window.location.href = linkUrl;
+                if(linkUrl)window.location.href = linkUrl;
             }
             
         },
@@ -90,16 +105,16 @@ export default {
     width:100%;
     position: relative;
 }
-.news .swipe_height>p{
+.news .swipe_height p{
     position: absolute;
     bottom: 20px;
-    font-size: 14px;
+    font-size: 20px;
     color:white;
     white-space:nowrap;
     margin-left: 5%;
 }
 .news .swipe_height img{
-    height:100%;
+    height:280px;
     width:100%;
 }
 .news  .report{

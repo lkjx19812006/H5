@@ -105,36 +105,7 @@
                             </mt-swipe-item>
                         </mt-swipe>
                     </div>
-                    <div class="bg_white">
-                        <div>
-                            <p class="index_title">推荐资源</p>
-                            <router-link to="/lowPriceRes">
-                                <div class="more_content">
-                                    <p>更多</p><img src="/static/images/right.png">
-                                </div>
-                            </router-link>
-                        </div>
-                        <div class="list_content">
-                            <div class="mint-cell cell_class">
-                                <div class="mint-cell-wrapper cell_class" v-for="todo in supplyList">
-                                    <div class="list_image">
-                                        <img src="/static/images/bao.png" class="first_image" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
-                                    </div>
-                                    <div class="list_myimage">{{todo.breedName}}</div>
-                                    <!-- <div class="list_font">{{todo.spec}}</div> -->
-                                    <div class="list_font">{{todo.location}}</div>
-                                    <div class="list_font">{{todo.price}}元/{{todo.unit}}</div>
-                                    <div class="list_button">
-                                        <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpRes('resourceDetail/',todo.id)">
-                                            <span v-show = "todo.isMy == 0">我要购买</span>
-                                            <span v-show = "todo.isMy == 1">查看详情</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   
                     <div class="bg_white">
                         <div>
                             <p class="index_title">紧急求购</p>
@@ -158,6 +129,37 @@
                                     <div class="list_button">
                                         <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/',todo.id)">
                                             <span v-show = "todo.isMy == 0">我要报价</span>
+                                            <span v-show = "todo.isMy == 1">查看详情</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="bg_white">
+                        <div>
+                            <p class="index_title">推荐资源</p>
+                            <router-link to="/lowPriceRes">
+                                <div class="more_content">
+                                    <p>更多</p><img src="/static/images/right.png">
+                                </div>
+                            </router-link>
+                        </div>
+                        <div class="list_content">
+                            <div class="mint-cell cell_class">
+                                <div class="mint-cell-wrapper cell_class" v-for="todo in supplyList">
+                                    <div class="list_image">
+                                        <img src="/static/images/bao.png" class="first_image" v-if="todo.especial == 1 && todo.type == 1">
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
+                                    </div>
+                                    <div class="list_myimage">{{todo.breedName}}</div>
+                                    <!-- <div class="list_font">{{todo.spec}}</div> -->
+                                    <div class="list_font">{{todo.location}}</div>
+                                    <div class="list_font">{{todo.price}}元/{{todo.unit}}</div>
+                                    <div class="list_button">
+                                        <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpRes('resourceDetail/',todo.id)">
+                                            <span v-show = "todo.isMy == 0">我要购买</span>
                                             <span v-show = "todo.isMy == 1">查看详情</span>
                                         </button>
                                     </div>

@@ -125,9 +125,6 @@ export default {
                 let otherbody = {
                     biz_module: 'userService',
                     biz_method: 'queryEmployeeInfo',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {}
                 };
                 otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
