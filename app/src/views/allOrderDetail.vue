@@ -67,12 +67,24 @@
                     <p class="order_price_right">￥<span>{{todo.total}}</span>元</p>
                 </div>
             </div>
-            <!-- <ul class="logistics" v-if="todo.orderStatus == 50">
-                <li v-for="item in logistics">
-                    <div class="time">{{item.time}}</div>
-                    <div class="context">{{item.context}}</div>
-                </li>
-            </ul> -->
+            <div class="logistics" v-if="todo.orderStatus == 50">
+                <div>
+                    <img src="/static/icons/wuliu.png" class="logis_img">
+                    <p>物流信息</p>
+                </div>
+                <ul>
+                    <li>
+                        <img src="/static/icons/oranges.png">
+                        <div class="context">北京中关纯北京中关纯北京中关纯北京中关纯北京中关纯北京中关纯</div>
+                        <div class="time">2014-04-15</div>
+                    </li>
+                    <li>
+                        <img src="/static/icons/unoranges.png">
+                        <div class="context">啊睡觉的咯系啊老大垃圾啊辣椒的</div>
+                        <div class="time">2014-04-16</div>
+                    </li>
+                </ul>
+            </div>
             <div class="footer">
                 <p @click="prompt('如需申请，')" v-if="todo.orderStatus >= 60 && todo.type == 0">申请售后</p>
                 <p @click="cancelOrder()" v-if="todo.orderStatus == 0 || todo.orderStatus == 10 && todo.type == 0">取消订单</p>
@@ -300,14 +312,64 @@ export default {
     margin-top: 10px;
 }
 
-.all_order_detail .box .logistics {
+.all_order_detail .logistics {
     float: left;
     width: 100%;
+    padding: 0 15px;
+    margin-top: 10px;
+    background: white;
 }
 
-.all_order_detail .box .logistics li {
+.all_order_detail .logistics>div {
+    float: left;
+    padding: 10px 0 0 0;
+    color: #050607;
+    margin-bottom: 15px;
+}
+
+.all_order_detail .logistics>div img {
+    float: left;
+    width: 20px;
+}
+
+.all_order_detail .logistics>div p {
+    float: left;
+}
+
+.all_order_detail .logistics li {
     float: left;
     width: 100%;
+    height: 85px;
+    position: relative;
+}
+
+.all_order_detail .logistics ul {
+    float: left;
+    padding-bottom: 10px;
+}
+
+.all_order_detail .logistics li img {
+    height: 100%;
+    float: left;
+}
+
+.all_order_detail .logistics li .context {
+    float: right;
+    width: 93%;
+    text-align: left;
+    font-size: 14px;
+    line-height: 15px;
+    margin-top: 5px;
+}
+
+.all_order_detail .logistics li .time {
+    float: right;
+    width: 93%;
+    text-align: left;
+    font-size: 14px;
+    position: absolute;
+    bottom: 5px;
+    left: 7%;
 }
 
 .all_order_detail .box .status .status_top {
@@ -514,11 +576,11 @@ export default {
 
 .all_order_detail .footer {
     float: right;
-    /*margin-top: 1rem;
-    margin-bottom: 30px;*/
-    position: absolute;
+    margin-top: 1rem;
+    margin-bottom: 30px;
+    /*position: absolute;
     bottom: 10px;
-    right: 0;
+    right: 0;*/
 }
 
 .all_order_detail .footer p {
