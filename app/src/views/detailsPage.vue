@@ -1,22 +1,21 @@
 <template>
     <div class="details_page">
         <myHeader :param="myHeader"></myHeader>
-
         <div class="bg_white">
-
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
                     <ul class="info_list">
                         <li v-for="(todo,index) in todos" v-if="index == 0" class="header_phone">
                             <div>
-                                <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
+                                <!-- <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload> -->
+                                <img src="/static/images/my-header.png">
                             </div>
                             <p class="name_content">{{todo.content}}</p>
                         </li>
                         <li v-for="(todo,index) in todos" v-if="index > 0">
                             <img :src="todo.img_src">
                             <p class="name">{{todo.name}}</p>
-                            <p class="name_content"  @click="call(index)">{{todo.content}}</p>
+                            <p class="name_content" @click="call(index)">{{todo.content}}</p>
                         </li>
                     </ul>
                     <div class="advantage" v-for="item in data">
@@ -28,9 +27,7 @@
                     </div>
                 </mt-loadmore>
             </div>
-
         </div>
-
     </div>
 </template>
 <script>
@@ -50,7 +47,7 @@ export default {
                 param: {
                     name: 'intention',
                     index: 0,
-                    url:'/static/icons/big_head.png'
+                    url: '/static/icons/big_head.png'
                 },
                 msg: 'Welcome to Your Vue.js App',
                 todos: [{
@@ -92,13 +89,13 @@ export default {
                 console.log('dddddd');
                 console.log(param);
             },
-            call(index){
-                if(index == 2){
+            call(index) {
+                if (index == 2) {
                     window.location.href = "tel:" + this.todos[2].content;
                 }
-                 
+
             },
-            getHttp(){
+            getHttp() {
                 let _self = this;
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -119,9 +116,9 @@ export default {
                     common.$emit('close-load');
                     console.log(suc.data.biz_result);
                     let sex = suc.data.biz_result.gender;
-                    if(sex == 0){
+                    if (sex == 0) {
                         sex = '女'
-                    }else{
+                    } else {
                         sex = '男'
                     }
                     _self.todos[0].content = suc.data.biz_result.name;
@@ -140,7 +137,7 @@ export default {
             imageUpload,
             myHeader
         },
-        
+
         created() {
             let _self = this;
             _self.getHttp();
@@ -184,6 +181,11 @@ export default {
     border-radius: 50%;
     z-index: 200000;
     overflow: hidden;
+}
+
+.details_page .info_list .header_phone div img {
+    width: 5.1198rem;
+    height: 5.1198rem;
 }
 
 .details_page .info_list .header_phone .name_content {

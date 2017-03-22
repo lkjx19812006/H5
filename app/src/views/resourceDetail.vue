@@ -1,65 +1,82 @@
 <template>
     <div class="resource_detail">
+        <div class="shade" v-if="choose.push_num"></div>
         <myHeader :param="param" v-show="!my_param.show"></myHeader>
-        
         <div v-show="!my_param.show" class="box">
-                    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                        <mt-loadmore>
-                            <div class="swipe_height" v-if="obj.image">
-                                  <mt-swipe :auto="4000"  :show-indicators="false">        
-                                    <mt-swipe-item v-for="(item,index) in obj.image">
-                                      <div  @click="popUp(index,obj.image)">
-                                          <img :src="item">
-                                          <div class="index"><span>{{index + 1}}</span>/{{obj.image.length}}</div>
-                                      </div>           
-                                    </mt-swipe-item>   
-                                  </mt-swipe>
-                            </div>
-                            <div class="top">
-                                <p>上架时间：<span>{{obj.shelveTime | timeFormat}}</span></p>
-                                <img src="/static/icons/xique.gif" v-show="imageShow">
-                                <img src="/static/icons/xique.png" v-show="!imageShow">
-                            </div>
-                            <div class="center">
-                                <div class="title">
-                                    <!-- <img src="/static/icons/impatient.png"> -->
-                                    <img src="/static/images/bao.png" v-if="obj.especial == 1 && obj.type == 1">
-                                    <img src="/static/icons/sample.png" v-if="obj.sampling == 1 && obj.type == 1"> 
-                                    <p>{{obj.breedName}}</p>
-                                    <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore>
+                    <div class="swipe_height" v-if="obj.image">
+                        <mt-swipe :auto="4000" :show-indicators="false">
+                            <mt-swipe-item v-for="(item,index) in obj.image">
+                                <div @click="popUp(index,obj.image)" class="swipe_back">
+                                    <img :src="item">
+                                    <div class="index"><span>{{index + 1}}</span>/{{obj.image.length}}</div>
                                 </div>
-                                <div class="detail">
-                                    <p>产地：<span>{{obj.location}}</span></p>
-                                    <p class="right">规格：<span>{{obj.spec}}</span></p>
-                                </div>
-                                <div class="detail">
-                                    <p>库存：<span>{{obj.number}}{{obj.unit}}</span></p>
-                                    <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
-                                </div>
-                                <div class="detail">
-                                    <p>卖点：<span>{{obj.description}}</span></p>
-                                </div>
-                            </div>
-                        </mt-loadmore>  
+                            </mt-swipe-item>
+                        </mt-swipe>
                     </div>
-           </div>
-        <div class="fix_bottom"  v-show="!my_param.show && obj.isMy == 0">
+                    <div class="top">
+                        <div class="title">
+                            <img src="/static/images/bao.png" v-if="obj.especial == 1 && obj.type == 1">
+                            <img src="/static/icons/sample.png" v-if="obj.sampling == 1 && obj.type == 1">
+                            <p>{{obj.breedName}}</p>
+                            <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
+                        </div>
+                    </div>
+                    <div class="center_box">
+                        <div class="center">
+                            <div class="choose_type" v-if="obj.sampling == 1 && obj.type == 1">
+                                <div class="large_cargo" :class="{ active: choose.isRed,'default':!choose.isRed }" @click="chooseType()">大货</div>
+                                <div class="sample_cargo" :class="{ active: !choose.isRed,'default':choose.isRed }" @click="chooseType()">样品</div>
+                            </div>
+                        </div>
+                        <div class="center_content" v-if="choose.isRed">
+                            <div class="detail">
+                                <p>产地：<span>{{obj.location}}</span></p>
+                                <p class="right">规格：<span>{{obj.spec}}</span></p>
+                            </div>
+                            <div class="detail">
+                                <p>库存：<span>{{obj.number}}{{obj.unit}}</span></p>
+                                <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
+                            </div>
+                            <div class="detail">
+                                <p>卖点：<span>{{obj.description}}</span></p>
+                            </div>
+                        </div>
+                        <div class="center_content" v-if="!choose.isRed">
+                            <div class="detail">
+                                <p>产地：<span>{{obj.location}}</span></p>
+                                <p class="right">规格：<span>{{obj.spec}}</span></p>
+                            </div>
+                            <div class="detail">
+                                <p>库存：<span>{{obj.sampleNumber}}{{obj.sampleUnit}}</span></p>
+                                <p class="right">起订量：<span>{{obj.moq}}{{obj.sampleUnit}}</span></p>
+                            </div>
+                            <div class="detail">
+                                <p>卖点：<span>{{obj.description}}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </mt-loadmore>
+            </div>
+        </div>
+        <div class="fix_bottom" v-show="!my_param.show && obj.isMy == 0">
             <div class="attention">
                 <telAndAttention :obj='obj'></telAndAttention>
-            </div>         
-                <button class="mint-button mint-button--primary mint-button--normal disabled_button" disabled="true" v-if="!obj.sampling">无样品</button>
-                <button class="mint-button mint-button--primary mint-button--normal orange_button" v-if="obj.sampling" @click="jumpBuy(obj.id)">购买样品</button>
-                <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="jump(obj.id)">立即购买</button>
+            </div>
+            <button class="mint-button orange_button" @click="pushCart(obj.id)">加入购物车</button>
+            <button class="mint-button mint-button--primary mint-button--normal disabled_button" @click="jump(obj.id)">立即购买</button>
         </div>
-        <div class="fix_bottom"  v-show="!my_param.show && obj.isMy == 1">
-            <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()"> 
+        <div class="fix_bottom" v-show="!my_param.show && obj.isMy == 1">
+            <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()">
                 <img src="/static/icons/tel.png">
                 <p>电话</p>
             </button>
         </div>
-
-       
-    <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>
+        <div class="choose" v-show="choose.push_num" v-bind:class="{swipe_active:choose.push_num,'swipe_default':!choose.push_num  }">
+            <chooseNum :param="choose" v-on:addCart="addBuy"></chooseNum>
+        </div>
+        <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>
     </div>
 </template>
 <script>
@@ -67,6 +84,7 @@ import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
 import telAndAttention from '../components/tools/telAndAttention'
+import chooseNum from '../components/tools/chooseNum'
 import filters from '../filters/filters'
 import popUpBigImg from '../components/tools/popUpBigImg'
 import {
@@ -78,14 +96,24 @@ export default {
     data() {
             let _self = this;
             return {
-                phone:common.servicePhone,
+                phone: common.servicePhone,
+
+                choose: {
+                    value: 1,
+                    isRed: true,
+                    number: '',
+                    sampleNumber: '',
+                    push_num: false,
+                },
                 my_param: {
                     url: '',
                     show: false,
                     whole_height: ''
                 },
                 param: {
-                    name: '商品详情'
+                    name: '商品详情',
+                    topissue: true,
+                    mycart: true
                 },
                 imageShow: true,
                 number: 0,
@@ -98,7 +126,7 @@ export default {
                     debugger: true,
                     loop: true,
                     autoHeight: true,
-                    mousewheelControl : true,
+                    mousewheelControl: true,
                     autoplayDisableOnInteraction: false,
                     onTransitionStart: function(swiper) {
                         _self.number = parseInt(swiper.realIndex) + 1;
@@ -111,13 +139,79 @@ export default {
             swiperSlide,
             telAndAttention,
             myHeader,
-            popUpBigImg
+            popUpBigImg,
+            chooseNum
         },
         methods: {
-            popUp(index,imgArr) {
+            popUp(index, imgArr) {
                 this.my_param.url = imgArr;
                 this.my_param.show = !this.my_param.show;
                 this.my_param.whole_height = document.documentElement.clientHeight;
+            },
+            chooseType() {
+                let _self = this;
+                if (!_self.choose.push_num) {
+                    _self.choose.isRed = !_self.choose.isRed;
+                }
+
+            },
+            addBuy() {
+                let _self = this;
+                if (common.pageParam.router == 'addCart') {
+                    _self.addCart();
+                }
+                if (common.pageParam.router == 'atOnceBuy') {
+                    _self.atOnceBuy();
+                }
+            },
+            addCart() {
+                let _self = this;
+                var sample
+                if (_self.choose.isRed) sample = 0;
+                if (!_self.choose.isRed) sample = 1;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'cartService',
+                    biz_method: 'addToCart',
+                    biz_param: {
+                        breedName: _self.obj.breedName,
+                        intentionId: _self.obj.id,
+                        number: _self.choose.value,
+                        sample: sample
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addCart(url, body, function(suc) {
+                        common.$emit('close-load');
+                        common.$emit('message', suc.data.msg);
+                    },
+                    function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+            },
+            atOnceBuy() {
+                let _self = this;
+                let arr = [];
+                let allPrice = '';
+                _self.obj.cartNumber = _self.choose.value;
+                if (_self.choose.isRed) {
+                    _self.obj.cartSample = 0;
+                    allPrice = Number(_self.obj.price) * Number(_self.obj.cartNumber);
+                } else if (!_self.choose.isRed) {
+                    _self.obj.cartSample = 1;
+                    allPrice = Number(_self.obj.sampleAmount) * Number(_self.obj.cartNumber);
+                }
+                //console.log(allPrice)
+                arr.push(_self.obj);
+                localStorage.setItem('cartContent', JSON.stringify(arr));
+                localStorage.setItem('allPrice', JSON.stringify(allPrice));
+                common.$emit('cartContent', arr);
+                common.$emit('cartPrice', allPrice);
+                _self.choose.push_num = false;
+                _self.$router.push('/multipleOrders');
             },
             refurbish(id) {
                 let _self = this;
@@ -142,7 +236,19 @@ export default {
                         let shareData = common.shareParam;
                         if (suc.data.code == '1c01') {
                             _self.obj = result;
-                            if (result.image&&result.image.length > 0) {
+                            _self.choose.number = result.number;
+                            _self.choose.sampleNumber = result.sampleNumber;
+                            _self.choose.breedName = result.breedName;
+                            _self.choose.price = result.price;
+                            _self.choose.image = result.image[0];
+                            _self.choose.unit = result.unit;
+                            _self.choose.location = result.location;
+                            _self.choose.moq = result.moq;
+                            _self.choose.sampleAmount = result.sampleAmount;
+                            _self.choose.sampleUnit = result.sampleUnit;
+                            _self.param.id = result.id;
+                            _self.param.isMy = result.isMy;
+                            if (result.image && result.image.length > 0) {
                                 shareData.imgUrl = result.image[0];
                             }
                             shareData.title = "【低价资源】" + result.breedName + "-上【药材买卖网】买我你就赚了！";
@@ -166,13 +272,14 @@ export default {
             },
             jump(id) {
                 let _self = this;
+
                 if (!common.customerId) {
                     function loadApp() {
-                        common.$emit('back_login',{
-                            id:id,
-                            isMy:_self.obj.isMy
+                        common.$emit('back_login', {
+                            id: id,
+                            isMy: _self.obj.isMy
                         });
-                        common.$emit('setParam','backRouter','resourceDetail/' + id);              
+                        common.$emit('setParam', 'backRouter', 'resourceDetail/' + id);
                         _self.$router.push('/login');
                     }
                     common.$emit('confirm', {
@@ -182,19 +289,24 @@ export default {
                     });
                     return;
                 }
-                common.$emit('orderConfirm',id);
-                this.$router.push('/orderConfirm/' + id);
+                /*common.$emit('orderConfirm', {
+                    id: id,
+                    obj: _self.obj
+                });
+                this.$router.push('/orderConfirm/' + id);*/
+                common.$emit('setParam', 'router', 'atOnceBuy');
+                _self.choose.push_num = true;
             },
             jumpBuy(id) {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
-                        common.$emit('back_login',{
-                            id:id,
-                            isMy:_self.obj.isMy
+                        common.$emit('back_login', {
+                            id: id,
+                            isMy: _self.obj.isMy
                         });
-                        common.$emit('setParam','backRouter','resourceDetails/' + id);       
-                        _self.$router.push('/login');      
+                        common.$emit('setParam', 'backRouter', 'resourceDetails/' + id);
+                        _self.$router.push('/login');
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -205,17 +317,40 @@ export default {
                 }
                 common.$emit('sampleConfirm', id);
                 this.$router.push('/sampleConfirm/' + id);
+                //common.$emit('setParam', 'router', 'atOnceBuy');
+
             },
-            call(){
-             window.location.href = "tel:"+this.phone;
+            pushCart(id) {
+                let _self = this;
+                if (!common.customerId) {
+                    function loadApp() {
+                        common.$emit('back_login', {
+                            id: id,
+                            isMy: _self.obj.isMy
+                        });
+                        common.$emit('setParam', 'backRouter', 'resourceDetail/' + id);
+                        _self.$router.push('/login');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                }
+                common.$emit('setParam', 'router', 'addCart');
+                _self.choose.push_num = true;
+            },
+            call() {
+                window.location.href = "tel:" + this.phone;
             },
             getCustomerPhone() {
                 let _self = this;
                 this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
                     if (response.data.code == '1c01') {
                         console.log(response.data);
-                        common.servicePhone=response.data.biz_result.serviceMobile;
-                        _self.phone=response.data.biz_result.serviceMobile;
+                        common.servicePhone = response.data.biz_result.serviceMobile;
+                        _self.phone = response.data.biz_result.serviceMobile;
                     }
                 }, (err) => {
                     common.$emit('message', err.data.msg);
@@ -224,7 +359,8 @@ export default {
         },
         created() {
             let _self = this;
-            if(!common.servicePhone)this.getCustomerPhone();
+            if (!common.servicePhone) this.getCustomerPhone();
+
             function countSecond() {
                 _self.imageShow = false;
             }
@@ -236,11 +372,16 @@ export default {
 
             common.$on('resourceDetail', function(item) {
                 _self.refurbish(item);
-                _self.obj = {};
+                _self.id = item;
                 _self.my_param.show = false;
+                _self.obj = {};
+
             })
-            common.$on('getInfo',function(item){        
-                _self.refurbish(id);      
+            common.$on('inforCartPop', function(item) {
+                _self.choose.push_num = true;
+            })
+            common.$on('getInfo', function(item) {
+                _self.refurbish(id);
             })
         },
         mounted() {
@@ -252,36 +393,81 @@ export default {
 <style scoped>
 .resource_detail {
     position: relative;
+    float: left;
 }
-.box
-.resource_detail .box{
-    float:left;
+
+.resource_detail .shade {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: black;
+    z-index: 20;
+    opacity: 0.5;
 }
-.resource_detail .page-loadmore-wrapper{
-    float:left;
+
+.resource_detail .box {
+    float: left;
+    width: 100%;
 }
+
+.resource_detail .page-loadmore-wrapper {
+    float: left;
+    width: 100%;
+}
+
+@keyframes inner {
+    0% {
+        transform: scale(1, 0);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes out {
+    0% {
+        transform: scale(1, 1);
+    }
+    100% {
+        transform: scale(1, 0);
+    }
+}
+
+.resource_detail .swipe_active {
+    transform-origin: 50% 0%;
+    animation: inner 0.5s linear forwards;
+}
+
+.resource_detail .swipe_default {
+    transform-origin: 50% 0%;
+    animation: out 0.5s linear forwards;
+}
+
 .resource_detail .swipe_height {
-   height:18.8rem;
-   position: relative;
+    height: 18.8rem;
+    position: relative;
 }
-.resource_detail .swipe_height .index{
-   width:4rem;
-   height:1.6rem;
-   background: black;
-   z-index: 9000000000;
-   position: fixed;
-   right: 2rem;
-   opacity: 0.5;
-   border-radius: 0.8rem;
-   bottom: 1.5rem;
-   color:white;
-   line-height: 1.6rem;
-   text-align: center;
-   font-size: 1.4rem;  
+
+.resource_detail .swipe_height .index {
+    width: 4rem;
+    height: 1.6rem;
+    background: black;
+    z-index: 9000000000;
+    position: fixed;
+    right: 2rem;
+    opacity: 0.5;
+    border-radius: 0.8rem;
+    bottom: 1.5rem;
+    color: white;
+    line-height: 1.6rem;
+    text-align: center;
+    font-size: 1.4rem;
 }
-.resource_detail .swipe_height .index span{
-   color:#FA6705;
+
+.resource_detail .swipe_height .index span {
+    color: #FA6705;
 }
+
 .resource_detail .swipe_height .img_content {
     float: left;
     width: 100%;
@@ -290,7 +476,7 @@ export default {
 
 .resource_detail .swipe_height img {
     width: 100%;
-    height:18.8rem;
+    height: 18.8rem;
     margin-top: 0;
 }
 
@@ -316,6 +502,7 @@ export default {
     width: 100%;
     background: #fff;
     padding: 10px;
+    padding-top: 0px;
     margin-bottom: 10px;
 }
 
@@ -334,31 +521,42 @@ export default {
 }
 
 .resource_detail .fix_bottom {
-   /* position: absolute;
+    /* position: absolute;
     bottom: 0px;
     z-index: 2;*/
     width: 100%;
-    float:left;
+    float: left;
+}
+
+.resource_detail .choose {
+    width: 100%;
+    background: red;
+    float: left;
+    position: absolute;
+    bottom: 0;
+    z-index: 30;
 }
 
 .resource_detail .fix_bottom .attention {
     float: left;
-    width: 34%;
+    width: 32%;
 }
 
 .resource_detail .fix_bottom .orange_button {
-    background: #EC6817;
-    width: 33%;
+    width: 36%;
     float: left;
+    background-color: #EEEEEE;
+    border: 1px solid #CDCDCD;
 }
 
 .resource_detail .fix_bottom .disabled_button {
-    background: #EEEEEE;
-    width: 33%;
+    background: #EC6817;
+    width: 32%;
     float: left;
-    color: #333;
-    border: 1px solid #ddd;
 }
+
+
+/*购物车修改*/
 
 .resource_detail .center {
     padding: 20px;
@@ -366,37 +564,80 @@ export default {
     background: #fff;
     float: left;
     width: 100%;
-
+    border-bottom: 1px solid #F5F5F5;
 }
 
-.resource_detail .center .title {
+.resource_detail .center_content {
+    padding: 20px;
+    position: relative;
+    background: #fff;
     float: left;
     width: 100%;
-    margin-bottom: 20px;
 }
 
-.resource_detail .center .title img {
+.resource_detail .center .choose_type {
+    width: 54%;
+    float: left;
+    margin-left: 23%;
+    margin-bottom: 0px;
+    border: 1px solid #FA6705;
+    border-radius: 5px;
+    overflow: hidden;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+}
+
+.resource_detail .center .choose_type .large_cargo {
+    width: 50%;
+    float: left;
+    padding: 10px 0;
+}
+
+.resource_detail .center .choose_type .sample_cargo {
+    float: right;
+    width: 50%;
+    padding: 10px 0;
+}
+
+.resource_detail .center .choose_type .active {
+    background: #FA6705;
+    color: white;
+}
+
+.resource_detail .center .choose_type .default {
+    background: white;
+    color: #FA6705;
+    /*border: 1px solid #ccc;*/
+}
+
+.resource_detail .top .title {
+    float: left;
+    width: 100%;
+    /*margin-bottom: 20px;*/
+}
+
+.resource_detail .top .title img {
     float: left;
     max-height: 40px;
     height: 1.7rem;
     margin-right: 2px;
+    margin-top: 10px;
 }
 
-.resource_detail .center .title p {
+.resource_detail .top .title p {
     float: left;
     margin-left: 10px;
     font-size: 1.4rem;
     line-height: 1.7rem;
     color: #333;
-
 }
 
-.resource_detail .center .title .price_right {
+.resource_detail .top .title .price_right {
     float: right;
     color: #EC6817;
 }
 
-.resource_detail .center .title .price_right span {
+.resource_detail .top .title .price_right span {
     font-size: 1.8rem;
     font-weight: 500;
 }
@@ -410,7 +651,7 @@ export default {
 
 .resource_detail .detail p {
     float: left;
-    width:50%;
+    width: 50%;
     word-break: keep-all;
     white-space: nowrap;
     overflow: hidden;
@@ -424,6 +665,7 @@ export default {
 
 .resource_detail .detail .right {
     float: right;
+    text-align: right;
 }
 
 .resource_detail .detail p .orange_font {

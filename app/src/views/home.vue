@@ -54,10 +54,15 @@ export default {
             need,
             mine
         },
-        created(){
+        created() {
             let _self = this;
-            common.$on('go_home',function(item){
+            common.$on('go_home', function(item) {
                 _self.selected = 'index';
+            })
+            common.$on('selectRes', function(selected) {
+                console.log(selected)
+                console.log(111)
+                _self.selected = selected;
             })
         }
 
@@ -68,11 +73,13 @@ export default {
     overflow: hidden;
     height: 100vh;
 }
+
 .page-wrap {
     overflow: auto;
     height: 100%;
     padding-bottom: 60px;
 }
+
 .mint-tabbar > .mint-tab-item.is-selected {
     color: #FA6750;
 }

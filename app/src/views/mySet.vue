@@ -76,9 +76,9 @@ export default {
                 window.localStorage.KEY = '';
                 window.localStorage.SID = '';
                 common.$emit('clear_Information');
-                common.$emit('setParam','backRouter','mySet');
-                common.$emit('informBackMyself','mySet');
-                common.$emit('getInfo',1);
+                common.$emit('setParam', 'backRouter', 'mySet');
+                common.$emit('informBackMyself', 'mySet');
+                common.$emit('getInfo', 1);
                 this.$router.replace('/login');
             },
             getCustomerPhone() {
@@ -100,8 +100,10 @@ export default {
                 } else {
                     if (item.router == 'addressManage') {
                         common.$emit("informAddress", 1);
-                    }else if(item.router == 'feedBack') {
-                        common.$emit('informFeedBack',1);
+                    } else if (item.router == 'feedBack') {
+                        common.$emit('informFeedBack', 1);
+                    } else if (item.router == 'revisePassWordConfirm') {
+                        common.$emit('reviseMyPass', 1)
                     }
                     this.$router.push(item.router);
                 }
@@ -118,14 +120,14 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .page-loadmore-wrapper {
     overflow-x: hidden;
 }
+
 .my_set .bg_white {
     background-color: #F0F0F0;
-
 }
+
 .my_set .mylist {
     padding: 0 4.7%;
     background: white;

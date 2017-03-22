@@ -1,12 +1,12 @@
 <template>
     <div class="my_order">
         <div>
-             <attentionHead :param="param" v-on:tab="tabOrder"></attentionHead>
-            <div  class="fixed">
-                 <landscapeScroll :param="data" :myshow='param.show' v-on:postData="changeOrderStatus" v-if="param.show"></landscapeScroll>
-                 <sellLandscape :param="data" :myshow='param.show' v-on:postData="changeOrderStatus" v-if="!param.show"></sellLandscape>
+            <attentionHead :param="param" v-on:tab="tabOrder"></attentionHead>
+            <div class="fixed">
+                <landscapeScroll :param="data" :myshow='param.show' v-on:postData="changeOrderStatus" v-if="param.show"></landscapeScroll>
+                <sellLandscape :param="data" :myshow='param.show' v-on:postData="changeOrderStatus" v-if="!param.show"></sellLandscape>
             </div>
-        </div>   
+        </div>
         <div class="bg_white ">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -24,7 +24,7 @@
                             <img v-bind:src="todo.image" class="list_images">
                             <div class="res_content">
                                 <div class="res_content_center">
-                                    <div>{{todo.breedName }}</div>
+                                    <div>{{todo.breedName}}</div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
                                 </div>
@@ -45,7 +45,6 @@
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('确认收货')">确认收货</button>
                                     <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('催促发货')">催促发货</button>
                                     <button v-if="'pay' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('支付')">立即支付</button>
-
                                     <button v-if="'collectmoney' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==1" @click.stop="collectMoney(todo.id,todo.no)">确认收款</button>
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==1" @click.stop="jump(todo.id)">查看订单</button>
                                 </p>
@@ -97,38 +96,41 @@ export default {
                 allLoaded: false,
                 bottomStatus: '',
                 data: [{
-                    name: '全部订单',
-                    back_id: 0,
-                    show: true
-                }, {
-                    name: '待审核',
-                    back_id: 10,
-                    show: false
-                }, {
-                    name: '待付款',
-                    back_id: 20,
-                    show: false
-                }, /*{
-                    name: '待收款',
-                    back_id: 30,
-                    show: false
-                },*/{
-                    name: '待卖家发货',
-                    back_id: 40,
-                    show: false
-                }, {
-                    name: '待收货',
-                    back_id: 50,
-                    show: false
-                }, {
-                    name: '已完成',
-                    back_id: 60,
-                    show: false
-                },{
-                    name: '已取消',
-                    back_id: -1,
-                    show: false
-                }],
+                        name: '全部订单',
+                        back_id: 0,
+                        show: true
+                    }, {
+                        name: '待审核',
+                        back_id: 10,
+                        show: false
+                    }, {
+                        name: '待付款',
+                        back_id: 20,
+                        show: false
+                    },
+                    /*{
+                                       name: '待收款',
+                                       back_id: 30,
+                                       show: false
+                                   },*/
+                    {
+                        name: '待卖家发货',
+                        back_id: 40,
+                        show: false
+                    }, {
+                        name: '待收货',
+                        back_id: 50,
+                        show: false
+                    }, {
+                        name: '已完成',
+                        back_id: 60,
+                        show: false
+                    }, {
+                        name: '已取消',
+                        back_id: -1,
+                        show: false
+                    }
+                ],
                 buttonStatus: [{
 
                 }],
@@ -219,8 +221,8 @@ export default {
                     ensure: cancelOrder
                 });
             },
-            collectMoney(id,no){
-                 function collectMoney() {
+            collectMoney(id, no) {
+                function collectMoney() {
                     common.$emit('show-load');
                     let url = common.addSID(common.urlCommon + common.apiUrl.most);
                     let body = {
@@ -313,9 +315,9 @@ export default {
                 } else {
                     _self.httpPraram.type = 1;
                     let obj = {
-                         name: '待收款',
-                         back_id: 30,
-                         show: false
+                        name: '待收款',
+                        back_id: 30,
+                        show: false
                     }
                     _self.data.splice(3, 0, obj);
                     _self.data[2].name = '待买家付款';
@@ -468,10 +470,11 @@ export default {
 .my_order .mint-header-title {
     /*color:#FA6705;*/
 }
-.my_order .fixed{  
+
+.my_order .fixed {
     margin-top: 50px;
-    float:left;
-    width:100%;
+    float: left;
+    width: 100%;
 }
 
 .my_order .right_text {
@@ -644,7 +647,7 @@ export default {
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
-    max-width: 110px;
+    max-width: 140px;
     height: 90px;
     margin: 0;
     right: 10px;

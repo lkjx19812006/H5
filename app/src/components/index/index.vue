@@ -1,25 +1,18 @@
 <template>
-    <div>
-        <!-- <mt-header>
-            <router-link to="" slot="left"> -->
-            <div class="my_header">
-                <img src="/static/images/my-logo.png" class="logo">
-                <div class="search_div" v-on:click="fromIndex">
-                    请输入您想要的货物资源
-                    <img src="/static/icons/search.png">
-                </div>
-            </div>
-                
-          <!--   </router-link>
-        </mt-header> -->
+    <div class="my_index">
+        <div class="my_header">
+            <img src="/static/images/my-logo.png" class="logo">
+            <p class="website">药材买卖网</p>
+            <img src="/static/icons/clarity-search.png" class="search" v-on:click="fromIndex">
+        </div>
         <div class="my_whole">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" >
-                <mt-loadmore>
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
                     <!--   <div class="content" > -->
                     <div class="swipe_height">
                         <mt-swipe :auto="4000" :prevent="false">
                             <mt-swipe-item v-for="item in imgArray">
-                                <img v-bind:src="item.activityImg">
+                                <img v-bind:src="item.activityImg" @click="jumpLink(item.activityUrl)">
                             </mt-swipe-item>
                         </mt-swipe>
                     </div>
@@ -46,10 +39,10 @@
                         <div class="news_content">
                             <ul id="scrollText">
                                 <li v-for="todo in transaction">
-                                    <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+todo.unit+' '+todo.location+' '}}{{todo.successTime | successTime}}</div>
+                                    <div>{{todo.breedName+' '+todo.breedSpec+' '+todo.number+todo.unit+' '+todo.location+' '}}{{todo.successTime | successTimeFormat}}</div>
                                 </li>
                                 <li v-if="transaction[0]">
-                                    <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+transaction[0].unit+' '+transaction[0].location+' '}}{{transaction[0].successTime | successTime}}</div>
+                                    <div>{{transaction[0].breedName+' '+transaction[0].breedSpec+' '+transaction[0].number+transaction[0].unit+' '+transaction[0].location+' '}}{{transaction[0].successTime | successTimeFormat}}</div>
                                 </li>
                             </ul>
                         </div>
@@ -105,7 +98,6 @@
                             </mt-swipe-item>
                         </mt-swipe>
                     </div>
-                   
                     <div class="bg_white">
                         <div>
                             <p class="index_title">紧急求购</p>
@@ -128,16 +120,15 @@
                                     <div class="list_font">剩余{{todo.duedate | timeDays(todo.pubdate)}}</div>
                                     <div class="list_button">
                                         <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpNeed('needDetail/',todo.id)">
-                                            <span v-show = "todo.isMy == 0">我要报价</span>
-                                            <span v-show = "todo.isMy == 1">查看详情</span>
+                                            <span v-show="todo.isMy == 0">我要报价</span>
+                                            <span v-show="todo.isMy == 1">查看详情</span>
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                     <div class="bg_white">
+                    <div class="bg_white">
                         <div>
                             <p class="index_title">推荐资源</p>
                             <router-link to="/lowPriceRes">
@@ -159,8 +150,8 @@
                                     <div class="list_font">{{todo.price}}元/{{todo.unit}}</div>
                                     <div class="list_button">
                                         <button :type="nativeType" class="mint-button mint-button--primary mint-button--large button_list" @click="jumpRes('resourceDetail/',todo.id)">
-                                            <span v-show = "todo.isMy == 0">我要购买</span>
-                                            <span v-show = "todo.isMy == 1">查看详情</span>
+                                            <span v-show="todo.isMy == 0">我要购买</span>
+                                            <span v-show="todo.isMy == 1">查看详情</span>
                                         </button>
                                     </div>
                                 </div>
@@ -178,14 +169,17 @@ import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import longSearch from '../../components/tools/longSearch'
 import filters from '../../filters/filters'
+
 export default {
     data() {
             return {
                 scrollTop: 0,
-                wrapperHeight: '',
+                topStatus: '',
+                wrapperHeight: 0,
+                allLoaded: false,
+                bottomStatus: '',
                 selected: 'tab-container1',
-                imgArray: [
-                ],
+                imgArray: [],
                 imgArr: [],
                 todos: [{
                     "name": "人参",
@@ -231,9 +225,9 @@ export default {
                     router: 'needRelease',
                     image: '/static/images/my-purchase.png'
                 }],
-                perfect:{
-                    name:'',
-                    bizMain:''
+                perfect: {
+                    name: '',
+                    bizMain: ''
                 }
             }
         },
@@ -246,22 +240,57 @@ export default {
                     biz_module: 'userService',
                     biz_method: 'queryUserInfo',
                     biz_param: {},
-                }; 
+                };
 
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);   
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
-                    if (suc.data.code == "1c01"){
+                    if (suc.data.code == "1c01") {
                         _self.perfect.name = suc.data.biz_result.fullname;
                         _self.perfect.bizMain = suc.data.biz_result.bizMain;
-                    }else{
+
+                        let myInfo = suc.data.biz_result; //传给mine
+                        //common.$emit("setParam", 'myInfo', myInfo);
+                        common.customerId = suc.data.biz_result.customerId;
+                        window.localStorage.ID = suc.data.biz_result.customerId;
+                        console.log(myInfo)
+                        common.$emit('myInfo', myInfo);
+
+                    } else {
                         console.log('cuowusasdada')
                     }
-                           
+
                 }, function(err) {
                     common.$emit('close-load');
                 })
+            },
+            jumpLink(url) {
+                let _self = this;
+                if (url) window.location.href = url;
+            },
+            /*handleBottomChange(status) {
+                this.bottomStatus = status;
+            },
+            loadBottom(id) {
+                let _self = this;
+                setTimeout(() => {
+                    console.log(11111)
+                }, 1500);
+
+            },*/
+            handleTopChange(status) {
+                this.topStatus = status;
+            },
+            loadTop(id) {
+                let _self = this;
+                setTimeout(() => {
+                    console.log(222222);
+                    _self.resourceHttp();
+                    _self.getImgArr();
+                    _self.$refs.loadmore.onTopLoaded(id);
+                }, 1500);
+
             },
             getImgArr() {
                 let _self = this;
@@ -315,7 +344,7 @@ export default {
                     url = common.addSID(common.urlCommon + common.apiUrl.most);
                     body.time = Date.parse(new Date()) + parseInt(common.difTime);
                     body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                } 
+                }
                 httpService.begBuyList(url, body, function(suc) {
                     common.$emit('close-load');
                     let result = suc.data.biz_result;
@@ -368,7 +397,7 @@ export default {
                 this.$router.push("/search");
             },
             loginJump(router) {
-                let _self = this; 
+                let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
                         _self.$router.push('/login');
@@ -379,8 +408,8 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                }else if(_self.perfect.name == '' || _self.perfect.bizMain == ''){
-                    function perfect() {   
+                } else if (_self.perfect.name == '' || _self.perfect.bizMain == '') {
+                    function perfect() {
                         //common.$emit('backInfo',1);
                         _self.$router.push('/perfectInfo');
                     }
@@ -391,7 +420,7 @@ export default {
                     });
                     return;
                 }
-               
+                common.$emit('inforReleases', 1);
                 this.$router.push(router);
             },
             jumpRes(router, id) {
@@ -414,17 +443,17 @@ export default {
         },
         created() {
             let _self = this;
-            if(common.KEY)_self.getInfo();
-            common.$on('toMine',function(item){
-                if(common.KEY)_self.getInfo();            
+            if (common.KEY) _self.getInfo();
+            common.$on('toMine', function(item) {
+                if (common.KEY) _self.getInfo();
             })
-            common.$on('getInfo',function(item){
+            common.$on('getInfo', function(item) {
                 _self.resourceHttp();
             })
             this.resourceHttp();
             this.transaction();
             this.drugGuidePrice();
-            this.getImgArr(); 
+            this.getImgArr();
         },
         computed: {
             drugArray: function() {
@@ -443,6 +472,7 @@ export default {
             this.$nextTick(function() {
                 _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
             })
+
             function startmarquee(lh, speed, delay) {
                 var count = 1;
                 var t;
@@ -480,16 +510,23 @@ export default {
 }
 </script>
 <style scoped>
+.my_index {
+    float: left;
+    width: 100%;
+}
+
 .my_header {
     background-color: #FA6705;
     border: none;
     color: #fff;
-    height:60px;
+    height: 60px;
+    position: relative;
 }
 
 .my_whole {
     width: 100%;
     overflow: hidden;
+    float: left;
 }
 
 .search_div {
@@ -507,12 +544,33 @@ export default {
     text-align: left;
 }
 
-
 .my_header .logo {
     height: 30px;
-    float: left;
+    /*float: left;
     margin-top: 12px;
-    margin-left: 10px;
+    margin-left: 10px;*/
+    position: absolute;
+    top: 12px;
+    left: 10px;
+    z-index: 20;
+}
+
+.my_header .website {
+    position: absolute;
+    font-size: 22px;
+    line-height: 22px;
+    top: 19px;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+}
+
+.my_header .search {
+    position: absolute;
+    right: 15px;
+    height: 24px;
+    top: 18px;
+    z-index: 20;
 }
 
 .search_div img {
@@ -528,7 +586,7 @@ export default {
 
 .swipe_height img {
     width: 100%;
-    min-height: 16rem;
+    height: 16rem;
 }
 
 .entrance {

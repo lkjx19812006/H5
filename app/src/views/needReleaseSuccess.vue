@@ -43,7 +43,8 @@ export default {
     data() {
             return {
                 param: {
-                    name: '发布成功'
+                    name: '发布成功',
+                    goBack: true
                 },
                 wrapperHeight: '',
                 todos: {},
@@ -52,11 +53,12 @@ export default {
                     spec: "统货",
                     place: "东北",
                     price: "98.9",
-                    sendPlace: "上海",
+                    sendPlace: "",
                     number: "100",
                     unit: "kg",
                     name: "",
-                    phone: ""
+                    phone: "",
+                    show: true
                 },
                 obj: {
                     description: 'hahhahah'
@@ -96,10 +98,14 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            jump(){
-                let _self=this;
-                common.$emit("setParam", 'lowPrice', {keyWord:_self.information.name});
-                common.$emit('lowPriceRes', {keyWord:_self.information.name});
+            jump() {
+                let _self = this;
+                common.$emit("setParam", 'lowPrice', {
+                    keyWord: _self.information.name
+                });
+                common.$emit('lowPriceRes', {
+                    keyWord: _self.information.name
+                });
                 this.$router.push('/lowPriceRes');
             },
             back() {

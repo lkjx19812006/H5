@@ -7,43 +7,44 @@
             <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         </div>
         <div class="bg_white" style="margin-top:100px">
-               <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                <ul class="page-loadmore-list">
-                    <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
-                        <div class="center">
-                            <img :src="todo.cFlagsPath" class="flag">
-                            <div class="title">
-                                <div>
-                                    <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
-                                    <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
-                                    <span>{{todo.breedName}}</span>
+                    <ul class="page-loadmore-list">
+                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
+                            <div class="center">
+                                <img :src="todo.cFlagsPath" class="flag">
+                                <div class="title">
+                                    <div>
+                                        <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
+                                        <!-- <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0"> -->
+                                        <span>{{todo.breedName}}</span>
+                                    </div>
+                                    <p>上架时间：{{todo.shelveTime | timeFormat}}</p>
                                 </div>
-                                <p>上架时间：{{todo.shelveTime | timeFormat}}</p>
+                                <div class="detail">
+                                    <div>
+                                        <p>规格</p>
+                                        <p>产地</p>
+                                        <p>剩余</p>
+                                        <p>需求数量</p>
+                                    </div>
+                                    <div class="last">
+                                        <p>{{todo.spec}}</p>
+                                        <p>{{todo.location}}</p>
+                                        <p v-if="todo.especial == 1 && todo.type == 0">{{todo.duedate | timeDays}}<span></span></p>
+                                        <p v-if="todo.especial !== 1 && todo.type == 0">长期</p>
+                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="detail">
-                                <div>
-                                    <p>规格</p>
-                                    <p>产地</p>
-                                    <p>剩余</p>
-                                    <p>需求数量</p>
-                                </div>
-                                <div class="last">
-                                    <p>{{todo.spec}}</p>
-                                    <p>{{todo.location}}</p>
-                                    <p>{{todo.duedate | timeDays}}<span></span></p>
-                                    <p>{{todo.number}}<span>{{todo.unit}}</span></p>
-                                </div>
+                            <div class="bottom">
+                                <p>已报价<span>{{todo.offer}}</span>人</p>
+                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump()" v-show="todo.isMy == 0">我要报价</button>
+                                <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 1">查看详情</button>
                             </div>
-                        </div>
-                        <div class="bottom">
-                            <p>已报价<span>{{todo.offer}}</span>人</p>
-                            <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump()" v-show="todo.isMy == 0">我要报价</button>
-                            <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 1">查看详情</button>
-                        </div>
-                    </li>
-                </ul>
-              <div slot="top" class="mint-loadmore-top">
+                        </li>
+                    </ul>
+                    <div slot="top" class="mint-loadmore-top">
                         <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
                         <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
@@ -67,7 +68,7 @@ import filters from '../../filters/filters'
 export default {
     data() {
             return {
-                scrollTop:0,
+                scrollTop: 0,
                 err: {
                     err: "很抱歉，没有找到相关资源",
                     url: '/static/icons/maomao.png',
@@ -184,7 +185,7 @@ export default {
         methods: {
             getHttp(back) {
                 let _self = this;
-                if(_self.httpPraram.page==1)common.$emit('show-load');
+                if (_self.httpPraram.page == 1) common.$emit('show-load');
                 let url = common.urlCommon + common.apiUrl.most;
                 let body = {
                     biz_module: 'intentionService',
@@ -248,7 +249,7 @@ export default {
                 this.getHttp();
             },
             jumpSearch() {
-                common.searchType='keyword';
+                common.searchType = 'keyword';
                 common.$emit('setParam', 'router', 'need')
                 this.$router.push('search');
             },
@@ -280,7 +281,7 @@ export default {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
-                }, 1500);
+                }, 500);
             },
             handleTopChange(status) {
                 this.topStatus = status;
@@ -293,7 +294,7 @@ export default {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
 
-                }, 1500);
+                }, 500);
             },
             handleScroll() {
                 this.scrollTop = this.$refs.wrapper.scrollTop;
@@ -329,13 +330,13 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });
-            common.$on('getInfo',function(item){
-               _self.getHttp();
+            common.$on('getInfo', function(item) {
+                _self.getHttp();
             })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 165;
-             this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }
 </script>

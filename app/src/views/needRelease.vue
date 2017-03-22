@@ -1,38 +1,36 @@
 <template>
     <div class="need_release">
-        
-        <myHeader :param = "param"></myHeader>
+        <myHeader :param="param"></myHeader>
         <!-- <mt-loadmore> -->
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <druginformation :obj="obj"> </druginformation>
-                
-                    <div class="title_name">
-                       <p class="remarks_header">备注</p>
-                    </div> 
-                    <div class="remarks">
-                        <!-- <p class="remarks_header">备注</p> -->
-                        <div class="remarks_content">
-                            <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
-                        </div>
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <druginformation :obj="obj"> </druginformation>
+            <div class="title_name">
+                <p class="remarks_header">备注</p>
+            </div>
+            <div class="remarks">
+                <!-- <p class="remarks_header">备注</p> -->
+                <div class="remarks_content">
+                    <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
+                </div>
+            </div>
+            <div class="title_name">
+                <p class="contact_header">联系方式</p>
+            </div>
+            <div class="contact">
+                <div class="contact_name">
+                    <P>姓名：</P>
+                    <div>
+                        <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
                     </div>
-                     <div class="title_name">
-                       <p class="contact_header">联系方式</p>
+                </div>
+                <div class="contact_phone">
+                    <P>手机：</P>
+                    <div>
+                        <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
                     </div>
-                    <div class="contact">
-                        <div class="contact_name">
-                            <P>姓名：</P>
-                            <div>
-                                <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
-                            </div>
-                        </div>
-                        <div class="contact_phone">
-                            <P>手机：</P>
-                            <div>
-                                <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="confirm" @click="release()">确认发布</div>
+                </div>
+            </div>
+            <div class="confirm" @click="release()">确认发布</div>
         </div>
     </div>
 </template>
@@ -45,15 +43,15 @@ import druginformation from '../components/tools/purchaseGoodInformation'
 export default {
     data() {
             return {
-                param:{
-                    name:'求购发布',
-                    router:'home'
+                param: {
+                    name: '求购发布',
+                    router: 'home'
                 },
                 router: 'search',
                 selected: '1',
                 obj: {
-                    number_id:'',
-                    update:false,
+                    number_id: '',
+                    update: false,
                     drug_name: '',
                     spec: '',
                     place: '',
@@ -72,6 +70,31 @@ export default {
             myHeader
         },
         methods: {
+            getInfo() {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'queryUserInfo',
+                    biz_param: {},
+                };
+
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.queryUserInfo(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == "1c01") {
+                        _self.obj.name = suc.data.biz_result.fullname;
+                        _self.obj.phone = suc.data.biz_result.phone;
+                    } else {
+                        //console.log('cuowusasdada')
+                    }
+
+                }, function(err) {
+                    common.$emit('close-load');
+                })
+            },
             release() {
                 let _self = this;
                 console.log(_self.obj.number_id)
@@ -82,9 +105,9 @@ export default {
                 checkArr.push(checkBreedSpec);
                 let checkBreedPlace = validation.checkNull(_self.obj.place, '请输入产地！');
                 checkArr.push(checkBreedPlace);
-                let checkNumber = validation.checkNull(_self.obj.number, '请输入数量');
+                let checkNumber = validation.checkMaxNum(_self.obj.number, '数量');
                 checkArr.push(checkNumber);
-                let checkDuedate = validation.checkNull(_self.obj.duedate, '请输入求购有效期');
+                let checkDuedate = validation.checkMaxNum(_self.obj.duedate, '有效期');
                 checkArr.push(checkDuedate);
                 let checkLookDes = validation.checkLook(_self.obj.selling_point);
                 checkArr.push(checkLookDes);
@@ -92,7 +115,7 @@ export default {
                 checkArr.push(checkName);
                 let checkLookName = validation.checkLook(_self.obj.name);
                 checkArr.push(checkLookName);
-                let checkPhone = validation.checkPhone(_self.obj.phone,'请输入电话');
+                let checkPhone = validation.checkPhone(_self.obj.phone, '请输入电话');
                 checkArr.push(checkPhone);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
@@ -144,6 +167,13 @@ export default {
                 this.$router.push(router);
             }
         },
+        created() {
+            let _self = this;
+            _self.getInfo();
+            common.$on('inforReleases', function(item) {
+                _self.getInfo();
+            })
+        },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
@@ -155,13 +185,13 @@ export default {
     background: #F1EFEF;
 }
 
-.need_release {
+.need_release {}
 
-}
-.need_release .page-loadmore-wrapper{
+.need_release .page-loadmore-wrapper {
     margin-bottom: 0px;
     padding: 0px;
 }
+
 input[type="text"],
 input[type="submit"],
 input[type="reset"],
@@ -180,7 +210,6 @@ textarea {
 .need_release .good_information,
 .remarks,
 .contact {
-   
     /*margin-bottom: 0.8533rem;*/
     background: white;
 }
@@ -190,7 +219,6 @@ textarea {
 }
 
 .need_release .contact {
-   
     margin-bottom: 10px;
 }
 
@@ -208,19 +236,19 @@ textarea {
     padding-left: 1.536rem;
 }
 
-.need_release .title_name  .remarks_header{
+.need_release .title_name .remarks_header {
     background: url('../../static/images/remarks.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
-    line-height:3.75rem; 
-    height:3.58rem;
+    line-height: 3.75rem;
+    height: 3.58rem;
     margin-left: 1.28rem;
-
 }
-.need_release .title_name  .contact_header{
+
+.need_release .title_name .contact_header {
     background: url('../../static/images/contact.png') no-repeat 0 center;
     background-size: 1.11rem 1.11rem;
-    line-height:3.75rem; 
-    height:3.58rem;
+    line-height: 3.75rem;
+    height: 3.58rem;
     margin-left: 1.28rem;
 }
 
@@ -231,37 +259,39 @@ textarea {
 .contact_name,
 .contact_phone {
     height: 3.5rem;
-   
 }
+
 .need_release .contact_name,
-.need_release .contact_phone{
+.need_release .contact_phone {
     margin-top: 0px;
     border-bottom: 1px solid #D2D2D2;
     position: relative;
 }
+
 .need_release .contact_name div,
-.need_release .contact_phone div{
+.need_release .contact_phone div {
     position: absolute;
-    right:1.28rem;
-
-
+    right: 1.28rem;
 }
+
 .need_release .contact_name input,
-.need_release .contact_phone input{
+.need_release .contact_phone input {
     text-align: right;
-    border:none;
-    height:2rem;
+    border: none;
+    height: 2rem;
     margin-top: 0.75rem;
     line-height: 2rem;
     font-size: 1.19rem;
 }
+
 .need_release .contact_name p,
-.need_release .contact_phone p{
+.need_release .contact_phone p {
     position: absolute;
-    left:1.28rem;
+    left: 1.28rem;
     line-height: 3.5rem;
     font-size: 1.19rem;
 }
+
 .need_release .good_number div p img {
     width: 100%;
     height: 100%;
@@ -320,8 +350,13 @@ textarea {
 .need_release .good_name div .select,
 .good_spec div select,
 .good_place div select,
+
 /*.contact_name div input,*/
-/*.contact_phone div input */{
+
+
+/*.contact_phone div input */
+
+{
     font-size: 1.024rem;
     height: 3.3rem;
     width: 14.847rem;
@@ -375,9 +410,11 @@ textarea {
     width: 3.5rem;
     border-left: 1px solid #D2D2D2;
 }
-.need_release .remarks{
+
+.need_release .remarks {
     padding: 1.28rem;
-}   
+}
+
 .need_release .remarks_content textarea {
     height: 7.68rem;
     width: 100%;
@@ -394,6 +431,6 @@ textarea {
     color: white;
     line-height: 50px;
     margin-top: 50px;
-    float:left;
+    float: left;
 }
 </style>

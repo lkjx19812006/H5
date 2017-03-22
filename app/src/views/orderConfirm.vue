@@ -1,24 +1,22 @@
 <template>
     <div class="order_confirm">
-        <myHeader :param = "myhead"></myHeader>
-         <mt-loadmore>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-           
+        <myHeader :param="myhead"></myHeader>
+        <mt-loadmore>
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <div @click="jumpAddress">
                     <orderAddress :param="person"></orderAddress>
                 </div>
                 <div class="content">
-                    <orderItem :param="param" ></orderItem>
+                    <orderItem :param="param"></orderItem>
                     <div class="total">
                         <orderTotal :order="param"></orderTotal>
                     </div>
                 </div>
-         </mt-loadmore>   
-         <div class="fix_bottom" v-on:click="confirm">
-                    提交订单
-         </div>
-
-         </div>
+        </mt-loadmore>
+        <div class="fix_bottom" v-on:click="confirm">
+            提交订单
+        </div>
+        </div>
     </div>
 </template>
 <script>
@@ -34,20 +32,21 @@ export default {
     data() {
             return {
                 data: "",
-                isMy:'',
-                myhead:{
-                     name:'立即购买'        
+                isMy: '',
+                myhead: {
+                    name: '立即购买',
+                    topissue: true
                 },
                 param: {
-                  image:[],
-                  value:1
+                    image: [],
+                    value: 1
                 },
                 person: {
-                     
+
                 },
-                perfect:{
-                    name:'',
-                    bizMain:''
+                perfect: {
+                    name: '',
+                    bizMain: ''
                 }
             }
         },
@@ -57,22 +56,40 @@ export default {
             _self.getAddress();
             _self.refurbish(id);
             _self.gethttp(id);
-            
+
             common.$on('clearAddress', function(item) {
-                if(item.id==_self.person.id){
-                     _self.person={};
+                if (item.id == _self.person.id) {
+                    _self.person = {};
                 }
             });
-            common.$on('orderConfirm', function(item) {             
+            common.$on('orderConfirm', function(item) {
                 _self.getAddress();
-                _self.gethttp(item);
-                _self.refurbish(item);     
+                _self.gethttp(item.id);
+                /*_self.refurbish(item);*/
+                console.log(item.obj)
+                _self.isMy = item.obj.isMy;
+                if (item.obj.isMy == 1) {
+                    function loadApp() {
+                        window.history.go(-1)
+                    }
+                    common.$emit('judge', {
+                        message: '自己的资源不可购买',
+                        title: '提示',
+                        ensure: loadApp,
+                        unensure: loadApp
+                    });
+                    return;
+                }
             });
             common.$on('backAddress', function(todo) {
-                 _self.getAddress();
+                //_self.getAddress();
+                _self.person.id = todo.id;
+                _self.person.address = todo.address;
+                _self.person.contactPhone = todo.contactPhone;
+                _self.person.contactName = todo.contactName;
             })
-            if(common.KEY)_self.getInfo();
-            common.$on('getInfo',function(item){
+            if (common.KEY) _self.getInfo();
+            common.$on('getInfo', function(item) {
                 _self.getInfo();
             })
         },
@@ -92,20 +109,20 @@ export default {
                         id: id
                     }
                 }, function(suc) {
-                    
+
                     let result = suc.data.biz_result;
-                    result.value=1;
+                    result.value = 1;
                     //console.log(suc)
-                    if(!result.image.length){
-                      result.image.push('/static/images/default_image.png');
+                    if (!result.image.length) {
+                        result.image.push('/static/images/default_image.png');
                     }
-                    result.from="order";
-                    if(suc.data.code == '1c01'){
-                        _self.param = result;         
-                    }else{
+                    result.from = "order";
+                    if (suc.data.code == '1c01') {
+                        _self.param = result;
+                    } else {
                         common.$emit('message', suc.data.msg);
                     }
-                    
+
                 }, function(err) {
                     common.$emit('message', err.data.msg);
                 })
@@ -119,7 +136,7 @@ export default {
                     biz_method: 'queryUserInfo',
                     biz_param: {}
                 };
-                
+
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 console.log(common.difTime);
                 console.log(body.time);
@@ -127,15 +144,15 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
-                    if (suc.data.code == "1c01"){
+                    if (suc.data.code == "1c01") {
                         _self.perfect.name = suc.data.biz_result.fullname;
                         _self.perfect.bizMain = suc.data.biz_result.bizMain;
-                        
-                    }else{
+
+                    } else {
                         console.log('cuowusasdada')
                     }
-                    
-                    
+
+
                 }, function(err) {
                     common.$emit('close-load');
                 })
@@ -147,8 +164,7 @@ export default {
                 let otherbody = {
                     biz_module: 'userAddressService',
                     biz_method: 'queryDefaultAddress',
-                    biz_param: {
-                    }
+                    biz_param: {}
                 };
                 otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
                 otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
@@ -157,7 +173,7 @@ export default {
                     let result = suc.data.biz_result;
                     if (suc.data.code == "1c01") {
                         _self.id = result.id;
-                        _self.person = result;     
+                        _self.person = result;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -170,13 +186,13 @@ export default {
                 this.$router.go(-1);
             },
             jumpAddress() {
-                common.$emit('setParam','router','orderConfirm');
+                common.$emit('setParam', 'router', 'orderConfirm');
                 this.$router.push("/addressManage");
             },
             confirm() {
                 let _self = this;
                 var id = _self.$route.params.sourceId;
-                if(_self.perfect.name == '' || _self.perfect.bizMain == ''){
+                if (_self.perfect.name == '' || _self.perfect.bizMain == '') {
                     function perfect() {
                         _self.$router.push('/perfectInfo');
                     }
@@ -188,23 +204,20 @@ export default {
                     return;
                 }
                 let checkNum = validation.checkNumber(_self.param.value);
-                    if(!checkNum){
-                        common.$emit('message', '请输入购买数量');
-                        return
-                    }
+                if (!checkNum) {
+                    common.$emit('message', '请输入购买数量');
+                    return
+                }
 
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'intentionService',
                     biz_method: 'submitIntentionOrder',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         sourceId: id,
                         number: _self.param.value,
-                        sample: _self.param.sampling,
+                        sample: 0,
                         addressId: _self.person.id
                     }
                 };
@@ -246,7 +259,7 @@ export default {
                         /*let shareData = common.shareParam;*/
                         if (suc.data.code == '1c01') {
                             _self.isMy = result.isMy;
-                            if(result.isMy == 1){
+                            if (result.isMy == 1) {
                                 function loadApp() {
                                     window.history.go(-1)
                                 }
@@ -254,15 +267,15 @@ export default {
                                     message: '自己的资源不可购买',
                                     title: '提示',
                                     ensure: loadApp,
-                                    unensure:loadApp
+                                    unensure: loadApp
                                 });
-                                return;    
+                                return;
                             }
                         } else {
                             //common.$emit('message', suc.data.msg);
                             console.log('hahhahhah')
                         }
-                        
+
                     },
                     function(err) {
                         common.$emit('close-load');
@@ -270,7 +283,7 @@ export default {
                     })
             },
         },
-         mounted() {
+        mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }
@@ -280,23 +293,23 @@ export default {
     float: left;
     width: 100%;
     position: relative;
-
 }
-.order_confirm .page-loadmore-wrapper{
-   /* margin-top: 1px;
+
+.order_confirm .page-loadmore-wrapper {
+    /* margin-top: 1px;
     overflow: scroll;
     padding-bottom: 10px;
     width: 100%;
     border:1px solid red;*/
     margin-bottom: 0px;
 }
+
 .order_confirm .content {
     background: #fff;
     margin-top: 10px;
     float: left;
     width: 100%;
     padding: 10px;
-
 }
 
 .order_confirm .content .total {
@@ -316,14 +329,11 @@ export default {
     font-size: 1.7rem;
     background: #FA6705;
     line-height: 50px;
-   
 }
 
 .order_confirm .page-loadmore-wrapper {
     overflow: scroll;
-   /* padding-bottom: 10px;*/
+    /* padding-bottom: 10px;*/
     width: 100%;
-    
 }
-
 </style>

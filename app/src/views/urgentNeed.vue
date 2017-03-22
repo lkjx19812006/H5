@@ -12,7 +12,7 @@
                                 <div class="title">
                                     <div class="small_pic">
                                         <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0"> {{todo.breedName}}
+                                        <!-- <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0"> -->{{todo.breedName}}
                                     </div>
                                     <p>上架时间：{{todo.shelveTime | timeFormat}}</p>
                                 </div>
@@ -26,7 +26,8 @@
                                     <div class="last">
                                         <p>{{todo.spec}}</p>
                                         <p>{{todo.location}}</p>
-                                        <p>{{todo.duedate | timeDays}}<span></span></p>
+                                        <p v-if="todo.especial == 1 && todo.type == 0">{{todo.duedate | timeDays}}<span></span></p>
+                                        <p v-if="todo.especial !== 1 && todo.type == 0">长期</p>
                                         <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                     </div>
                                 </div>
@@ -136,13 +137,13 @@ export default {
                         name: '由长到短',
                         asc: 'top',
                         show: false,
-                        duedate: 0,
+                        duedate: 2,
                         key: 'duedate'
                     }, {
                         name: '全部',
                         asc: '',
                         show: false,
-                        duedate: '',
+                        duedate: 0,
                         key: 'duedate'
                     }]
                 }, {
@@ -329,11 +330,11 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });
-           /* common.$on('listOfUrgent',function(item){
+            /* common.$on('listOfUrgent',function(item){
+                 _self.getHttp();
+             })*/
+            common.$on('getInfo', function(item) {
                 _self.getHttp();
-            })*/
-            common.$on('getInfo',function(item){
-               _self.getHttp();
             })
         },
         mounted() {
@@ -505,6 +506,7 @@ export default {
     width: 16px;
     margin-right: 5px;
 }
+
 .urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail {
     width: 100%;
     display: flex;

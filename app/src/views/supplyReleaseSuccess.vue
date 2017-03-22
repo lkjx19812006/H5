@@ -55,7 +55,8 @@ export default {
                 todos: {},
                 wrapperHeight: '',
                 param: {
-                    name: '资源发布成功'
+                    name: '资源发布成功',
+                    goBack: true
                 },
                 information: {
                     name: "人参",
@@ -104,6 +105,7 @@ export default {
                         _self.information.place = result.location;
                         _self.information.number = result.number;
                         _self.information.unit = result.unit;
+                        _self.information.sendPlace = result.address;
                         _self.obj.description = result.description;
                         _self.imgArr = result.image;
                     } else {
@@ -114,10 +116,12 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            jump(){
-                let _self=this;
+            jump() {
+                let _self = this;
                 common.$emit("setParam", 'Urgentneed', _self.information.name);
-                common.$emit('Urgentneed', {keyWord:_self.information.name});
+                common.$emit('Urgentneed', {
+                    keyWord: _self.information.name
+                });
                 this.$router.push('/urgentNeed');
             },
             back() {
@@ -131,7 +135,7 @@ export default {
             myHeader
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top-50;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 50;
         },
         created() {
             var _self = this;
@@ -139,6 +143,7 @@ export default {
             _self.obj.id = id;
             _self.getHttp(id)
             common.$on('informSupplySuccess', function(item) {
+                console.log(item)
                 _self.getHttp(item);
             });
         }
@@ -157,7 +162,8 @@ export default {
     float: left;
     width: 100%;
 }
-.need_release_success .bg_white{
+
+.need_release_success .bg_white {
     background-color: #f0f0f0;
 }
 

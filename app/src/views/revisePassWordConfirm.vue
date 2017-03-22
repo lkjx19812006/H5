@@ -1,6 +1,5 @@
 <template>
     <div class="revise_password_confirm">
-
         <myHeader :param="my_header"></myHeader>
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
@@ -10,31 +9,30 @@
                             <p><img src="/static/icons/my-phone.png"></p>
                             <input type="text" class='top_text' v-model="param.phone" placeholder="请输入手机号码">
                         </li>
-                        
+                        <li>
+                            <p><img src="/static/icons/my-password.png"></p>
+                            <input type="password" class='top_text' v-model="param.passWord" placeholder="请输入旧密码">
+                        </li>
                         <li>
                             <p><img src="/static/icons/my-password.png"></p>
                             <input type="password" class='top_text' v-model="param.new_passWord" placeholder="请输入新密码">
                         </li>
-                         <li class="last_li">
+                        <li class="last_li">
                             <p><img src="/static/icons/my-password.png"></p>
                             <input type="password" class='top_text' v-model="param.again_new_passWord" placeholder="请确认新密码">
                         </li>
-                        <li >
+                        <!-- <li >
                             <p><img src="/static/icons/my-password.png"></p>
                             <input type="password" class='top_text' v-model="param.passWord" placeholder="请输入旧密码">
-                        </li>
-                        <li  v-on:click="confirm" class="confirm">
-                                确定
+                        </li> -->
+                        <li v-on:click="confirm" class="confirm">
+                            确定
                         </li>
                     </ul>
-                       <!-- <div class="next_step" v-on:click="confirm">下一步</div> -->
+                    <!-- <div class="next_step" v-on:click="confirm">下一步</div> -->
                 </mt-loadmore>
-               
-                 
-                
             </div>
         </div>
-
     </div>
 </template>
 <script>
@@ -53,7 +51,7 @@ export default {
                     phone: '',
                     new_passWord: '',
                     passWord: '',
-                    again_new_passWord:''
+                    again_new_passWord: ''
                 }
             }
         },
@@ -61,6 +59,32 @@ export default {
             myHeader
         },
         methods: {
+            getInfo() {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'queryUserInfo',
+                    biz_param: {},
+                };
+
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.queryUserInfo(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == "1c01") {
+                        _self.param.phone = suc.data.biz_result.phone;
+
+
+                    } else {
+                        //console.log('cuowusasdada')
+                    }
+
+                }, function(err) {
+                    common.$emit('close-load');
+                })
+            },
             confirm: function() {
                 let _self = this;
                 let checkArr = [];
@@ -72,9 +96,9 @@ export default {
                 checkArr.push(checkAgainPassWord);
                 let checkCommon = validation.checkCommon(_self.param.new_passWord, _self.param.again_new_passWord);
                 checkArr.push(checkCommon);
-                let checkPassword = validation.checkNull(_self.param.passWord, '请输入原密码！'); 
+                let checkPassword = validation.checkNull(_self.param.passWord, '请输入原密码！');
                 checkArr.push(checkPassword);
-                let checkDifferent = validation.checkDifferent(_self.param.new_passWord,_self.param.passWord);
+                let checkDifferent = validation.checkDifferent(_self.param.new_passWord, _self.param.passWord);
                 checkArr.push(checkDifferent);
                 let checkMinNumber = validation.checkMinNumber(_self.param.new_passWord);
                 checkArr.push(checkMinNumber);
@@ -106,9 +130,9 @@ export default {
                         window.localStorage.KEY = '';
                         window.localStorage.SID = '';
                         common.$emit('clear_Information');
-                        common.$emit('setParam','backRouter','mySet');
-                        common.$emit('informBackMyself','mySet');
-                        common.$emit('getInfo',1);
+                        common.$emit('setParam', 'backRouter', 'mySet');
+                        common.$emit('informBackMyself', 'mySet');
+                        common.$emit('getInfo', 1);
                         _self.$router.replace('/login');
                         common.$emit('message', suc.data.msg);
                     } else {
@@ -120,6 +144,13 @@ export default {
                 })
             }
         },
+        created() {
+            let _self = this;
+            _self.getInfo();
+            common.$on('reviseMyPass', function(item) {
+                _self.getInfo();
+            })
+        },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
@@ -127,47 +158,53 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.revise_password_confirm .bg_white{
+.revise_password_confirm .bg_white {
     background-color: #F0F0F0;
 }
-.revise_password_confirm .bg_white .fill_in{
+
+.revise_password_confirm .bg_white .fill_in {
     padding: 0 15px;
-    float:left;
-    width:100%;
+    float: left;
+    width: 100%;
 }
-.revise_password_confirm .bg_white .fill_in li{
-   background:white;
-   float:left;
-   width:100%;
-   margin-top:1.5rem;
-   border-radius: 4px;
+
+.revise_password_confirm .bg_white .fill_in li {
+    background: white;
+    float: left;
+    width: 100%;
+    margin-top: 1.5rem;
+    border-radius: 4px;
 }
-.revise_password_confirm .bg_white .fill_in li p{
-   float:left;
-   height:4rem;
-   
+
+.revise_password_confirm .bg_white .fill_in li p {
+    float: left;
+    height: 4rem;
 }
-.revise_password_confirm .bg_white .fill_in li p img{
-   height:2rem;
-   margin:1rem 0 0 0.8rem;
+
+.revise_password_confirm .bg_white .fill_in li p img {
+    height: 2rem;
+    margin: 1rem 0 0 0.8rem;
 }
-.revise_password_confirm .bg_white .fill_in li  input{
-   float:left;
-   margin-top: 1rem;
-   height:2rem;
-   line-height: 2rem;
-   border:none;
-   outline: none;
-   margin-left: 25px;
+
+.revise_password_confirm .bg_white .fill_in li input {
+    float: left;
+    margin-top: 1rem;
+    height: 2rem;
+    line-height: 2rem;
+    border: none;
+    outline: none;
+    margin-left: 25px;
 }
-.revise_password_confirm .bg_white .fill_in .confirm{
+
+.revise_password_confirm .bg_white .fill_in .confirm {
     background: #FA6705;
     color: white;
-    height:4rem;
+    height: 4rem;
     line-height: 4rem;
     text-align: center;
-
 }
+
+
 /*.revise_password_confirm .next_step {
     width: 78%;
     height: 3.5rem;
@@ -179,6 +216,8 @@ export default {
     border-radius: 1.75rem;
     margin: 7.5rem 11% 0 11%;
 }*/
+
+
 /*.revise_password_confirm .fill_in {
     background: white;
     padding: 2rem 0 5rem 4.7%;

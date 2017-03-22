@@ -4,12 +4,20 @@ html {
     -webkit-tap-highlight-color: transparent;
     height: 100%;
     font-size: 10px;
+    height: 100%;
+    overflow: auto;
+    margin: 0;
+    position: relative;
 }
 
 body {
     margin: 0;
     font-size: 14px;
     font-family: "Helvetica Neue", Helvetica, STHeiTi, Arial, sans-serif;
+}
+
+.cart .mint-cell-wrapper {
+    padding: 0px;
 }
 
 article,
@@ -28,7 +36,7 @@ summary {
     display: block;
 }
 
-audio:not([controls]) {
+audio:not([cont rols]) {
     display: none;
     height: 0;
 }
@@ -314,17 +322,17 @@ a {
 .whole {
     margin-top: 60px;
     width: 100%;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .page-loadmore-wrapper {
     margin-top: 0px;
     overflow: scroll;
-    /*padding-bottom: 10px;*/
     width: 100%;
     overflow-y: visible;
     overflow-x: hidden;
 }
+
 
 /* .page-loadmore-wrapper {
     overflow-y: scroll;
@@ -332,9 +340,10 @@ a {
     overflow-y: visible;
 } */
 
-.page-wrap{
+.page-wrap {
     padding-bottom: 55px;
 }
+
 
 /* .page-loadmore-wrapper {
     margin-top: -1px;
@@ -342,6 +351,3 @@ a {
     padding-bottom: 10px;
     width: 100%;
 } */
-
-
-

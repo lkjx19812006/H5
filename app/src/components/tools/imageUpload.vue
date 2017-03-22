@@ -1,11 +1,11 @@
 <template>
     <div class="img_upload">
         <form>
-             <input type="file" @change="previewImg" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
-             <img  v-bind:src="image" class="image_show" v-show="!param.url && !param.header_url">
-             <img v-bind:src="param.url" class="image_show" v-show="param.url && !param.header_url">
-             <img v-bind:src="param.header_url" class="" v-show="param.header_url" v-bind:class="{ active: param.tall, 'image_show': param.tall }">
-             <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
+            <input type="file" @change="previewImg" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
+            <img v-bind:src="image" class="image_show" v-show="!param.url && !param.header_url">
+            <img v-bind:src="param.url" v-show="param.url && !param.header_url" v-bind:class="{ active: param.tall, 'image_show': !param.tall }">
+            <img v-bind:src="param.header_url" v-show="param.header_url" v-bind:class="{ active: param.tall, 'image_show': !param.tall }">
+            <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
         </form>
     </div>
 </template>
@@ -19,8 +19,8 @@ export default {
                 close: false,
                 size: 0,
                 key: '',
-                domain:'',
-                url:'/static/images/my-header.png'
+                domain: '',
+                url: '/static/images/my-header.png'
             }
         },
         props: {
@@ -42,7 +42,7 @@ export default {
                             img.onload = function() {
                                 _self.image = _self.compress(img);
                                 _self.upload(_self.image);
-                                _self.param.url =_self.image;
+                                _self.param.url = _self.image;
                             }
                         } else {
                             _self.image = e.target.result;
@@ -78,6 +78,7 @@ export default {
                 if (ndata.length > 2500000) {
                     ndata = canvas.toDataURL(img.src.split(';')[0].split(':')[1], 2500000 / ndata.length);
                 }
+
                 function newBlob(data, datatype) {
                     var out
                     try {
@@ -169,7 +170,7 @@ export default {
                                     _self.close = true;
                                     _self.$emit("postUrl", {
                                         index: _self.param.index,
-                                        url:res.biz_result.url+'/'+_self.key
+                                        url: res.biz_result.url + '/' + _self.key
                                     });
                                 } else {
                                     common.$emit('message', '图片上传失败');
@@ -205,22 +206,23 @@ export default {
     opacity: 0;
     width: 100%;
     height: 100%;
-    position: absolute;   
+    position: absolute;
 }
 
 .img_upload .image_show {
     width: 100%;
     height: 100%;
 }
+
 .img_upload .active {
     width: 100%;
     height: 5.1198rem;
 }
+
 .img_upload .close_image {
     position: absolute;
     top: -5px;
     right: -5px;
-    max-width: 10px; 
+    max-width: 10px;
 }
 </style>
-

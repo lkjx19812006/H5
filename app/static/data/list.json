@@ -1,50 +1,25 @@
-{
-  "msg":"操作处理成功",
-  "code":"1c01",
-  "biz_result":{"list":[{
-  	"name":"人参",
-  	"spec":"统货",
-  	"place":"东北",
-  	"price":"98.9元/kg",
-    "up_price":"9元/kg",
-    "down_price":"9元/kg",
-  	"phone":"15301546832",
-  	"time":"12:26"
-  },{
-	"name":"人参叶2",
-  	"spec":"统货",
-  	"place":"东北常混",
-  	"price":"98.9元/kg",
-    "up_price":"8元/kg",
-    "down_price":"8元/kg",
-  	"phone":"15301546832",
-  	"time":"12:26"
-  },{
-  "name":"人参叶3",
-    "spec":"统货",
-    "place":"东北常混",
-    "price":"98.9元/kg",
-    "up_price":"8元/kg",
-    "down_price":"8元/kg",
-    "phone":"15301546832",
-    "time":"12:26"
-  },{
-  "name":"人参叶4",
-    "spec":"统货",
-    "place":"东北常混",
-    "price":"98.9元/kg",
-    "up_price":"8元/kg",
-    "down_price":"8元/kg",
-    "phone":"15301546832",
-    "time":"12:26"
-  },{
-  "name":"人参叶5",
-    "spec":"统货",
-    "place":"东北常混",
-    "price":"98.9元/kg",
-    "up_price":"8元/kg",
-    "down_price":"8元/kg",
-    "phone":"15301546832",
-    "time":"12:26"
-  }]}
-}
+[{
+    "breedname": "天南星",
+    "price": "22",
+    "unit": "公斤",
+    "number": "10",
+    "location": "吉林",
+    "value": "2",
+    "url": "/static/images/1.jpg"
+}, {
+    "breedname": "白芷",
+    "price": "32",
+    "unit": "斤",
+    "number": "50",
+    "value": "6",
+    "location": "河南",
+    "url": "/static/images/1.jpg"
+}, {
+    "breedname": "玫瑰",
+    "price": "13",
+    "unit": "两",
+    "number": "33",
+    "value": "3",
+    "location": "云南",
+    "url": "/static/images/1.jpg"
+}]

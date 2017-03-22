@@ -7,7 +7,7 @@
                     <ul>
                         <li>
                             <p>收货人</p>
-                            <input type="text" placeholder="请输入您的名字" v-model="obj.name">
+                            <input type="text" placeholder="请输入您的名字" v-model="obj.name" maxlength="10">
                         </li>
                         <li>
                             <p>联系电话</p>
@@ -48,6 +48,7 @@ export default {
             return {
                 my_header: {
                     name: '增加地址',
+                    topissue: true
                 },
                 show: false,
                 address: '请选择',
@@ -125,14 +126,24 @@ export default {
                             cityArr.push(areaJson.city[i].value);
                         }
                     }
-                } else if (this.obj.addressCity != values[1]) {
+                }
+                /*else if (this.obj.addressCity != values[1]) {
+                                   for (var i = 0; i < areaJson.city.length; i++) {
+                                       if (areaJson.city[i].value == values[1]) {
+                                           cityId = areaJson.city[i].id;
+                                       }
+                                   }
+
+                               }*/
+
+                if (this.obj.addressCity != values[1]) {
                     for (var i = 0; i < areaJson.city.length; i++) {
-                        if (areaJson.city[i].value == values[1]) {
+                        if (values[1] == areaJson.city[i].value) {
                             cityId = areaJson.city[i].id;
                         }
                     }
-
                 }
+
                 if (cityId) {
                     for (var i = 0; i < areaJson.county.length; i++) {
                         if (areaJson.county[i].parentId == cityId) {

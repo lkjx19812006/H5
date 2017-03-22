@@ -3,6 +3,20 @@ import Vue from 'vue'
 
 let httpService = new Vue({
     methods: {
+        cart(url, body, suc, err) {
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (response) => {
+                err(response);
+            });
+        },
+        addCart(url, body, suc, err) {
+            this.$http.post(url, body).then((response) => {
+                suc(response);
+            }, (response) => {
+                err(response);
+            });
+        },
         login(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);

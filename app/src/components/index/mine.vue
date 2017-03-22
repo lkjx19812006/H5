@@ -31,6 +31,7 @@ import httpService from '../../common/httpService.js'
 import imageUpload from '../../components/tools/imageUpload'
 import accountOverview from '../../components/tools/accountOverview'
 import myInformation from '../../components/tools/myInformation'
+
 export default {
     data() {
             return {
@@ -41,7 +42,7 @@ export default {
                 param: {
                     url: '',
                     company: '',
-                    normalMoney:0,
+                    normalMoney: 0,
                     score: 0,
                     name: ''
                 },
@@ -69,23 +70,23 @@ export default {
                     name: '我的资源',
                     router: 'myResource',
                     img_src: '/static/icons/My-resources.png'
-                },{
+                }, {
                     name: '我的采购',
                     router: 'myPurchase',
                     img_src: '/static/icons/My-purchase.png'
-                },{
+                }, {
                     name: '我的报价',
                     img_src: '/static/icons/My-offer.png',
                     router: 'app'
-                },{
+                }, {
                     name: '我的关注',
                     router: 'myAttention',
                     img_src: '/static/icons/My-concern.png'
-                },{ //         
+                }, { //         
                     name: '我的药款',
                     img_src: '/static/icons/I-Yaokuan.png',
                     router: 'app'
-                },{
+                }, {
                     name: '更多',
                     router: 'mySet',
                     img_src: '/static/icons/Set-up.png'
@@ -102,8 +103,8 @@ export default {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
-                        common.$emit('setParam','backRouter','/home');
-                        
+                        common.$emit('setParam', 'backRouter', '/home');
+
                         _self.$router.push('/login');
                     }
                     common.$emit('confirm', {
@@ -116,7 +117,7 @@ export default {
                 var index = index + 1;
                 common.$emit('setParam', 'orderStatus', index);
                 common.$emit('mineToOrder', index);
-                _self.$router.push('myOrder');
+                _self.$router.push('/allOrder');
             },
             salesmanData() {
                 let _self = this;
@@ -131,8 +132,7 @@ export default {
                 otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
                 httpService.queryEmployeeInfo(otherurl, otherbody, function(suc) {
                     common.$emit('close-load');
-                    if (suc.data.code = "1c01") {
-                    } else {
+                    if (suc.data.code = "1c01") {} else {
                         common.$emit('message', suc.data.msg);
                     }
                 }, function(err) {
@@ -147,9 +147,6 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'queryUserInfo',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {}
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -157,21 +154,28 @@ export default {
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code = "1c01") {
-                        _self.information=suc.data.biz_result;
-                        console.log(suc.data.biz_result);
-                        //console.log(11111111222)
-                        let normalMoney = 0;
+                        _self.information = suc.data.biz_result;
+                        //console.log(suc.data.biz_result);
+                        /*let normalMoney = 0;
                         let freezeMoney = 0;
-                        if(Number(suc.data.biz_result.normalMoney))normalMoney = Number(suc.data.biz_result.normalMoney);
-                        if(Number(suc.data.biz_result.freezeMoney))freezeMoney = Number(suc.data.biz_result.freezeMoney);
-                        let all_money = normalMoney + freezeMoney;
-                        _self.param.name = suc.data.biz_result.fullname;
+                        if (Number(suc.data.biz_result.normalMoney)) normalMoney = Number(suc.data.biz_result.normalMoney);
+                        if (Number(suc.data.biz_result.freezeMoney)) freezeMoney = Number(suc.data.biz_result.freezeMoney);
+                        let all_money = normalMoney + freezeMoney;*/
+                        /*_self.param.name = suc.data.biz_result.fullname;
                         _self.param.company = suc.data.biz_result.company;
                         _self.param.normalMoney = all_money.toFixed(2);
                         _self.param.score = suc.data.biz_result.score;
                         _self.param.url = suc.data.biz_result.avatar;
                         _self.url = suc.data.biz_result.avatar;
-                        _self.information.employee = suc.data.biz_result.employee;
+                        _self.information.employee = suc.data.biz_result.employee;*/
+                        //_self.param = suc.data.biz_result;
+                        /*_self.param.name = suc.data.biz_result.fullname;
+                        _self.param.company = suc.data.biz_result.company;
+                        _self.param.normalMoney = suc.data.biz_result.normalMoney;
+                        _self.param.freezeMoney = suc.data.biz_result.freezeMoney;*/
+                        _self.param = suc.data.biz_result;
+                        _self.url = suc.data.biz_result.avatar;
+                        _self.param.url = suc.data.biz_result.avatar;
                         common.customerId = suc.data.biz_result.customerId;
                         window.localStorage.ID = suc.data.biz_result.customerId;
 
@@ -183,6 +187,7 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
+
             loadApp() {
                 window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
             },
@@ -208,9 +213,9 @@ export default {
                             break;
                     }
                     let _self = this;
-                    if (!common.customerId) {/*&&router!='mySet'*/
+                    if (!common.customerId) { /*&&router!='mySet'*/
                         function loadApp() {
-                            common.$emit('setParam','backRouter','/home');
+                            common.$emit('setParam', 'backRouter', '/home');
 
                             _self.$router.push('/login');
                         }
@@ -220,18 +225,33 @@ export default {
                             ensure: loadApp
                         });
                         return;
-                    }else{
-                       this.$router.push(router); 
+                    } else {
+                        this.$router.push(router);
                     }
-                    
+
                 }
 
             }
         },
         created() {
-            
+
             let _self = this;
-            if (common.SID) _self.getHttp();
+            //if (common.SID) _self.getHttp();
+            /*if (common.SID) {
+                _self.information = common.myInfo;
+                _self.param = common.myInfo;
+                _self.url = common.myInfo.avatar;
+            }*/
+
+            common.$on('myInfo', function(myInfo) {
+                if (common.SID) {
+                    _self.information = myInfo;
+                    _self.param = myInfo;
+                    _self.url = myInfo.avatar;
+                    _self.param.url = myInfo.avatar;
+                    console.log(myInfo.avatar)
+                }
+            })
             if (common.SID) _self.salesmanData();
             common.$on("AccountToMine", function(obj) {
                 /*_self.getHttp();*/
@@ -240,7 +260,7 @@ export default {
                 _self.param.company = obj.company;
 
             });
-            common.$on("toMine",function(obj){
+            common.$on("toMine", function(obj) {
                 _self.getHttp();
             })
             common.$on("clear_Information", function() { //来自资源页面的提示刷新
@@ -252,10 +272,10 @@ export default {
                     score: 0,
                     name: ''
                 };
-                console.log( _self.param);
+                console.log(_self.param);
 
             });
-            
+
         }
 }
 </script>
@@ -267,6 +287,8 @@ export default {
 .mine {
     background: #F0F0F0;
 }
+
+
 /*.mine .pointOut{
     width:100%;
     height:15rem;
@@ -274,6 +296,7 @@ export default {
     position: absolute;
     bottom: -50px;
 }*/
+
 .mine .entrance {
     display: flex;
     flex-direction: row;

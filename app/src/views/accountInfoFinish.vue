@@ -9,7 +9,7 @@
                         <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
                     </div>
                 </div>
-                    <div class="basic_data">
+                <div class="basic_data">
                     <p class="basic_data_title">基础信息</p>
                     <ul>
                         <li>
@@ -129,14 +129,15 @@ export default {
                     router: "home",
                     t_show: true,
                     reviseRouter: 'accountInfoFinish',
-                    word: '完成'
+                    word: '完成',
+                    topissue: true
                 },
                 param: {
                     name: 'intention',
                     index: 0,
                     header_url: '',
-                    tall:true,
-                    url:'/static/images/my-header.png'
+                    tall: true,
+                    url: '/static/images/my-header.png'
                 },
                 birthday: '',
                 pickerValue: '',
@@ -200,16 +201,16 @@ export default {
         created() {
             let _self = this;
             _self.getHttp();
-            _self.start = new Date("1900-01-10");
-            _self.end = new Date("2017-01-10");
+            _self.start = new Date("1900-01-01");
+            _self.end = new Date("2017-03-08");
             let type = '';
             let ua = navigator.userAgent.toLowerCase();
             if (/iphone|ipad|ipod/.test(ua)) {
                 type = 'ios';
             }
             if (type == 'ios') {
-                _self.start = new Date("1900/01/10");
-                _self.end = new Date("2017/01/10");
+                _self.start = new Date("1900/01/01");
+                _self.end = new Date("2017/03/08");
             }
             common.$on("informAccountFinish", function(item) {
                 _self.getHttp();
@@ -311,7 +312,7 @@ export default {
                 checkArr.push(checkPhone);
                 let checkName = validation.checkNameTrue(_self.arr.name);
                 checkArr.push(checkName);
-                let checkBizMain = validation.checkNull(_self.arr.bizMain,'主营品类不能为空！');
+                let checkBizMain = validation.checkNull(_self.arr.bizMain, '主营品类不能为空！');
                 checkArr.push(checkBizMain);
                 let checkLookcompany = validation.checkLook(_self.arr.company);
                 checkArr.push(checkLookcompany);
@@ -319,11 +320,11 @@ export default {
                 checkArr.push(checkLookcompanyShort);
                 let checkLookbizMain = validation.checkLook(_self.arr.bizMain);
                 checkArr.push(checkLookbizMain);
-                for(let i = 0; i < checkArr.length; i++){
-                    if(checkArr[i]){
-                         common.$emit('message',checkArr[i]);
-                         return
-                    } 
+                for (let i = 0; i < checkArr.length; i++) {
+                    if (checkArr[i]) {
+                        common.$emit('message', checkArr[i]);
+                        return
+                    }
                 }
                 common.$emit("confirm", {
                     message: '确定修改账户信息',
@@ -333,8 +334,8 @@ export default {
             },
             confirmUpData() {
                 let _self = this;
-                let birthday = _self.getTimeStamp(_self.arr.birthday)/1000;
-                if(!_self.arr.url)_self.arr.url = _self.param.header_url;//解决换一台机器登陆丢失图片的问题
+                let birthday = _self.getTimeStamp(_self.arr.birthday) / 1000;
+                if (!_self.arr.url) _self.arr.url = _self.param.header_url; //解决换一台机器登陆丢失图片的问题
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -442,9 +443,11 @@ textarea {
     position: absolute;
     z-index: 20000000;
 }
-.account_overview_finish .header_photo_box .header_photo .img_upload .image_show[data-v-95a56d46]{
-    height:100%;
+
+.account_overview_finish .header_photo_box .header_photo .img_upload .image_show[data-v-95a56d46] {
+    height: 100%;
 }
+
 .account_overview_finish .basic_data,
 .company_data {
     width: 100%;

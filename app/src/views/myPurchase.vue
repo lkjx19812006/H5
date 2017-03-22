@@ -28,7 +28,9 @@
                                 <div class="last">
                                     <p>{{todo.spec}}</p>
                                     <p>{{todo.location}}</p>
-                                    <p>{{todo.duedate | timeDays}}<span v-if="disTime(todo.duedate)"></span></p>
+                                    <!-- <p>{{todo.duedate | timeDays}}</p> -->
+                                    <p v-if="todo.especial == 1 && todo.type == 0">{{todo.duedate | timeDays}}<span></span></p>
+                                    <p v-if="todo.especial !== 1 && todo.type == 0">长期</p>
                                     <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                 </div>
                             </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="transaction">
-        <myHeader :param = "param" ></myHeader>
+        <myHeader :param="param"></myHeader>
         <div class="bg_white">
             <div class="list_head">
                 <div class="list_font">品种</div>
@@ -9,9 +9,8 @@
                 <div class="list_font">产地</div>
                 <div class="list_font">成交时间</div>
             </div>
-           
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                     <ul class="page-loadmore-list">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item">
                             <div class="list_font">{{todo.breedName}}</div>
@@ -29,9 +28,8 @@
                         <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
-                </mt-loadmore> 
+                </mt-loadmore>
             </div>
-           
         </div>
     </div>
 </template>
@@ -43,8 +41,8 @@ import filters from '../filters/filters'
 export default {
     data() {
             return {
-                param:{
-                    name:'实时成交'
+                param: {
+                    name: '实时成交'
                 },
                 todos: [],
                 topStatus: '',
@@ -58,46 +56,46 @@ export default {
             }
         },
         methods: {
-            getHttp(back){
+            getHttp(back) {
                 let _self = this;
-                 if (this.httpPraram.page == 1) {
+                if (this.httpPraram.page == 1) {
                     this.allLoaded = false;
                 }
-                 if(_self.httpPraram.page==1)common.$emit('show-load');
-                 httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
-                        biz_module:'tradeNewService',
-                        biz_method:'currentTradeList',
-                            biz_param: {
-                                pn:_self.httpPraram.page,
-                                pSize:_self.httpPraram.pageSize
-                            }
-                        }, function(suc) {
-                            common.$emit('close-load');
-                            let result = suc.data.biz_result.list;
-                            if (_self.httpPraram.page == 1) {
-                                _self.todos.splice(0, _self.todos.length);
-                            }
-                            if(suc.data.code == '1c01'){
-                                
-                                for(var i = 0; i < result.length; i++){
-                                    _self.todos.push(result[i]);
-                                }
-                            }else{
-                                common.$emit('message', suc.data.msg);
-                            }
-                            if (result.length < _self.httpPraram.pageSize) {
-                                _self.allLoaded = true;
-                            }
-                            if(back){
-                                back();
-                            }
-                        }, function(err) {
-                            common.$emit('close-load');
-                            common.$emit('message', err.data.msg);
-                            if(back){
-                                back();
-                            }
-                        })
+                if (_self.httpPraram.page == 1) common.$emit('show-load');
+                httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'tradeNewService',
+                    biz_method: 'currentTradeList',
+                    biz_param: {
+                        pn: _self.httpPraram.page,
+                        pSize: _self.httpPraram.pageSize
+                    }
+                }, function(suc) {
+                    common.$emit('close-load');
+                    let result = suc.data.biz_result.list;
+                    if (_self.httpPraram.page == 1) {
+                        _self.todos.splice(0, _self.todos.length);
+                    }
+                    if (suc.data.code == '1c01') {
+
+                        for (var i = 0; i < result.length; i++) {
+                            _self.todos.push(result[i]);
+                        }
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                    if (result.length < _self.httpPraram.pageSize) {
+                        _self.allLoaded = true;
+                    }
+                    if (back) {
+                        back();
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                    if (back) {
+                        back();
+                    }
+                })
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -115,7 +113,7 @@ export default {
                     }
                 }, 1500);
             },
-            
+
             handleTopChange(status) {
                 this.topStatus = status;
             },
@@ -130,11 +128,11 @@ export default {
             }
         },
         components: {
-                myHeader
-            },
+            myHeader
+        },
         created() {
             let _self = this;
-            
+
             _self.getHttp();
 
         },
@@ -155,7 +153,6 @@ export default {
         border-top: solid 1px #eee;
     }
 }
-
 
 .mint-load {
     background: #fff;
@@ -202,27 +199,27 @@ export default {
     float: left;
 }
 
-.transaction .bg_white  .list_font {
+.transaction .bg_white .list_font {
     word-break: keep-all;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    flex:1;
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    -ms-flex:1;
+    flex: 1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
 }
 
-.transaction .bg_white  .list_content_item {
+.transaction .bg_white .list_content_item {
     font-size: 1.1rem;
     color: #666;
-    display:flex;
-    display:-webkit-box;
-    display:-webkit-flex;
-    display:-ms-flexbox;
-    flex-direction:row;
+    display: flex;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    flex-direction: row;
     -webkit-box-orient: horizontal;
-    -webkit-flex-direction:row;
+    -webkit-flex-direction: row;
     -ms-flex-direction: row;
 }
 </style>

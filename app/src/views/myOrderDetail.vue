@@ -13,7 +13,7 @@
             <p class="info_right" v-if="todo.type == 0">
                 {{todo.orderStatus | purchaseStatus}}
             </p>
-             <p class="info_right" v-if="todo.type == 1">
+            <p class="info_right" v-if="todo.type == 1">
                 {{todo.orderStatus | sellStatus}}
             </p>
         </div>
@@ -46,7 +46,8 @@
             </div>
         </div>
         <div class="footer">
-            <p @click="prompt('如需申请，')">申请售后</p>
+            <p @click="prompt('如需申请，')" v-if="todo.orderStatus >= 60 && todo.type == 0">申请售后</p>
+            <p @click="cancelOrder()" v-if="todo.orderStatus == 0 && todo.orderStatus == 10 && todo.type == 0">取消订单</p>
             <p @click="call()">联系我们</p>
             <p class="pay-money" v-if="todo.orderStatus == 20&&todo.type == 0" @click="prompt('支付')">立即付款</p>
         </div>
@@ -61,7 +62,7 @@ export default {
     data() {
             let _self = this;
             return {
-                show:true,
+                show: true,
                 todo: {
                     my_title: '采购订单'
                 },
@@ -85,20 +86,57 @@ export default {
         },
         methods: {
             prompt(text) {
-                function loadApp(){
+                function loadApp() {
                     window.location.href = common.appUrl;
                 }
-               common.$emit('confirm', {
-                    message:text+'请下载App',
-                    title:'提示',
-                    ensure:loadApp
+                common.$emit('confirm', {
+                    message: text + '请下载App',
+                    title: '提示',
+                    ensure: loadApp
                 });
             },
             back() {
-              window.history.go(-1);
+                window.history.go(-1);
             },
             call() {
                 window.location.href = "tel:" + this.phone;
+            },
+            cancelOrder(id, no) {
+                let _self = this;
+
+                function cancelOrder() {
+                    common.$emit('show-load');
+                    let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    let body = {
+                        biz_module: 'orderService',
+                        biz_method: 'cancelOrder',
+                        biz_param: {
+                            id: id,
+                            no: no
+                        }
+                    };
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                    httpService.myResource(url, body, function(suc) {
+                        common.$emit('close-load');
+                        if (suc.data.code == '1c01') {
+                            common.$emit('message', suc.data.msg);
+                            _self.todos.splice(0, _self.todos.length);
+                            _self.httpPraram.page = 1;
+                            _self.getHttp();
+                        } else {
+                            common.$emit('message', suc.data.msg);
+                        }
+                    }, function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+                }
+                common.$emit('confirm', {
+                    message: '确定取消订单？',
+                    title: '提示',
+                    ensure: cancelOrder
+                });
             },
             getCustomerPhone() {
                 let _self = this;
@@ -131,7 +169,7 @@ export default {
                         listObj.my_title = '采购订单';
                         _self.my_header.name = '采购订单';
                     } else if (listObj.type == 1) {
-                       listObj.my_title = '销售订单';
+                        listObj.my_title = '销售订单';
                         _self.my_header.name = '销售订单';
                     }
                     _self.todo = listObj;

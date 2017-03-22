@@ -1,10 +1,8 @@
-
 <template>
     <div class="sample_confirm">
         <myHeader :param="myhead"></myHeader>
         <mt-loadmore>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <div @click="jumpAddress">
                     <orderAddress :param="person"></orderAddress>
                 </div>
@@ -14,10 +12,10 @@
                         <orderTotal :order="param"></orderTotal>
                     </div>
                 </div>
-            </mt-loadmore>
-            <div class="fix_bottom" v-on:click="confirm">
-                提交订单
-            </div>
+        </mt-loadmore>
+        <div class="fix_bottom" v-on:click="confirm">
+            提交订单
+        </div>
         </div>
     </div>
 </template>
@@ -43,9 +41,9 @@ export default {
                     image: []
                 },
                 person: {},
-                perfect:{
-                    name:'',
-                    bizMain:''
+                perfect: {
+                    name: '',
+                    bizMain: ''
                 }
             }
         },
@@ -65,10 +63,14 @@ export default {
                 _self.gethttp(item);
             });
             common.$on('backAddress', function(todo) {
-                 _self.getAddress();
+                //_self.getAddress();
+                _self.person.id = todo.id;
+                _self.person.address = todo.address;
+                _self.person.contactPhone = todo.contactPhone;
+                _self.person.contactName = todo.contactName;
             })
-            if(common.KEY)_self.getInfo();
-            common.$on('getInfo',function(item){
+            if (common.KEY) _self.getInfo();
+            common.$on('getInfo', function(item) {
                 _self.getInfo();
             })
         },
@@ -126,7 +128,7 @@ export default {
                     sign: '',
                     biz_param: {}
                 };
-                
+
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 console.log(common.difTime);
                 console.log(body.time);
@@ -134,15 +136,15 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
-                    if (suc.data.code == "1c01"){
+                    if (suc.data.code == "1c01") {
                         _self.perfect.name = suc.data.biz_result.fullname;
                         _self.perfect.bizMain = suc.data.biz_result.bizMain;
-                        
-                    }else{
+
+                    } else {
                         console.log('cuowusasdada')
                     }
-                    
-                    
+
+
                 }, function(err) {
                     common.$emit('close-load');
                 })
@@ -163,7 +165,7 @@ export default {
                     if (!result.image.length) {
                         result.image.push('/static/images/default_image.png');
                     }
-                   
+
                     if (suc.data.code == '1c01') {
                         _self.param = result;
                         _self.param.price = _self.param.sampleAmount;
@@ -180,14 +182,14 @@ export default {
                 })
             },
             jumpAddress() {
-                common.$emit('setParam','router','orderConfirm');
+                common.$emit('setParam', 'router', 'orderConfirm');
                 this.$router.push("/addressManage");
             },
             confirm() {
                 let _self = this;
                 var id = _self.$route.params.sourceId;
-                
-                if(_self.perfect.name == '' || _self.perfect.bizMain == ''){
+
+                if (_self.perfect.name == '' || _self.perfect.bizMain == '') {
                     function perfect() {
                         _self.$router.push('/perfectInfo');
                     }
@@ -199,8 +201,8 @@ export default {
                     return;
                 }
 
-               let checkNum = validation.checkNumber(_self.param.value);
-                if(!checkNum){
+                let checkNum = validation.checkNumber(_self.param.value);
+                if (!checkNum) {
                     common.$emit('message', '请输入购买数量');
                     return
                 }
@@ -216,7 +218,7 @@ export default {
                     biz_param: {
                         sourceId: _self.$route.params.sourceId,
                         number: _self.param.value,
-                        sample: _self.param.sampling,
+                        sample: 1,
                         addressId: _self.person.id
                     }
                 };
@@ -258,7 +260,7 @@ export default {
                         let shareData = common.shareParam;
                         if (suc.data.code == '1c01') {
                             _self.isMy = result.isMy;
-                            if(result.isMy == 1){
+                            if (result.isMy == 1) {
                                 function loadApp() {
                                     window.history.go(-1)
                                 }
@@ -266,14 +268,14 @@ export default {
                                     message: '自己的资源不可购买',
                                     title: '提示',
                                     ensure: loadApp,
-                                    unensure:loadApp
+                                    unensure: loadApp
                                 });
-                                return;    
+                                return;
                             }
                         } else {
                             common.$emit('message', suc.data.msg);
                         }
-                        
+
                     },
                     function(err) {
                         common.$emit('close-load');

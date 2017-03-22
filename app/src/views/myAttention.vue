@@ -6,7 +6,6 @@
                 <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
             </div>
         </div>
-       
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -14,8 +13,7 @@
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" v-on:click="jump(todo.id)">
                             <img v-bind:src="todo.image[0]" class="list_images">
                             <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1" class="small_img">
-                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" 
-                            v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
+                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>
@@ -55,7 +53,9 @@
                                     <div class="last">
                                         <p>{{todo.spec}}</p>
                                         <p>{{todo.location}}</p>
-                                        <p>{{todo.duedate | timeDays(todo.pubdate)}}<span></span></p>
+                                        <!-- <p>{{todo.duedate | timeDays(todo.pubdate)}}<span></span></p> -->
+                                        <p v-if="todo.especial == 1 && todo.type == 0">{{todo.duedate | timeDays}}<span></span></p>
+                                        <p v-if="todo.especial !== 1 && todo.type == 0">长期</p>
                                         <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                     </div>
                                 </div>
@@ -241,7 +241,7 @@ export default {
             getScrollTop() {
                 this.$refs.wrapper.scrollTop = this.scrollTop;
             }
-        }, 
+        },
         watch: {
             '$route': 'getScrollTop'
         },
@@ -252,7 +252,7 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.resorceHttp();
             });
-            common.$on('attention', function(item) { 
+            common.$on('attention', function(item) {
                 _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;
                 _self.resorceHttp();
@@ -302,13 +302,14 @@ export default {
 .my_attention .bg_white {
     background: #F5F5F5;
     padding: 0 10px;
+}
 
-}
-.my_attention .fixed{  
+.my_attention .fixed {
     margin-top: 50px;
-    float:left;
-    width:100%;
+    float: left;
+    width: 100%;
 }
+
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list {
     margin-top: -10px;
 }
@@ -329,23 +330,27 @@ export default {
     margin: 10px 10px 10px 0;
     position: absolute;
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li{
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li {
     position: relative;
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img{
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img {
     width: 16px;
     position: absolute;
-    top:10px;
-    left:10px;
+    top: 10px;
+    left: 10px;
     z-index: 10;
 }
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img{
+
+.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img {
     width: 16px;
     position: absolute;
-    top:10px;
-    left:28px;
+    top: 10px;
+    left: 28px;
     z-index: 10;
 }
+
 .my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
     float: left;
     text-align: left;
@@ -353,6 +358,7 @@ export default {
     font-size: 1.3rem;
     margin-bottom: 8px;
 }
+
 
 /*.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;

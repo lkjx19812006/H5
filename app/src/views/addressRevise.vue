@@ -5,38 +5,38 @@
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
         </mt-header> -->
-         <myHeader :param = "my_header" ></myHeader>
-         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-        <ul>
-            <li>
-                <p>收货人</p>
-                <input type="text" :placeholder="obj.name" v-model="obj.name">
-            </li>
-            <li>
-                <p>联系电话</p>
-                <input type="text" :placeholder="obj.tel" v-model="obj.tel">
-            </li>
-            <li @click="selectPlace">
-                <p>省市区(县)</p>
-                <p class="selectPlace">
-                    {{ obj.addressProvince }},{{ obj.addressCity }},{{obj.addressDistrict}}
-                </p>
-                <img src="/static/images/right-arrow.png">
-            </li>
-            <li class="last">
-                <textarea :placeholder="obj.detailAddr" v-model="obj.detailAddr"></textarea>
-            </li>
-        </ul>
-        <!-- <mt-picker :slots="slots" @change="onValuesChange" v-show="active" class="place" textAlign="center"></mt-picker> -->
-        <!-- <mt-picker :slots="slots" @change="onValuesChange"></mt-picker> -->
-        <!-- <mt-picker :slots="slots" @change="onAddressChange" class="address_picker"></mt-picker> -->
-        <div class="address_box" v-show="show">
-            <mt-button type="primary" class="left-button" @click="cancel">取消</mt-button>
-            <mt-button type="primary" class="right-button" @click="confirmIt">确定</mt-button>
-            <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5" class="select-box"></mt-picker>
+        <myHeader :param="my_header"></myHeader>
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <ul>
+                <li>
+                    <p>收货人</p>
+                    <input type="text" :placeholder="obj.name" v-model="obj.name" maxlength="10">
+                </li>
+                <li>
+                    <p>联系电话</p>
+                    <input type="text" :placeholder="obj.tel" v-model="obj.tel">
+                </li>
+                <li @click="selectPlace">
+                    <p>省市区(县)</p>
+                    <p class="selectPlace">
+                        {{ obj.addressProvince }},{{ obj.addressCity }},{{obj.addressDistrict}}
+                    </p>
+                    <img src="/static/images/right-arrow.png">
+                </li>
+                <li class="last">
+                    <textarea :placeholder="obj.detailAddr" v-model="obj.detailAddr"></textarea>
+                </li>
+            </ul>
+            <!-- <mt-picker :slots="slots" @change="onValuesChange" v-show="active" class="place" textAlign="center"></mt-picker> -->
+            <!-- <mt-picker :slots="slots" @change="onValuesChange"></mt-picker> -->
+            <!-- <mt-picker :slots="slots" @change="onAddressChange" class="address_picker"></mt-picker> -->
+            <div class="address_box" v-show="show">
+                <mt-button type="primary" class="left-button" @click="cancel">取消</mt-button>
+                <mt-button type="primary" class="right-button" @click="confirmIt">确定</mt-button>
+                <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5" class="select-box"></mt-picker>
+            </div>
+            <div class="confirm" v-on:click="confirm">保存</div>
         </div>
-        <div class="confirm" v-on:click="confirm">保存</div>
-         </div>
     </div>
 </template>
 <script>
@@ -52,8 +52,9 @@ const addressArr = ['北京市', '天津市', '河北省', '山西省', '内蒙�
 export default {
     data() {
             return {
-                my_header:{
-                    name:'修改地址',
+                my_header: {
+                    name: '修改地址',
+                    topissue: true
                 },
                 show: false,
                 obj: {
@@ -96,7 +97,7 @@ export default {
 
             }
         },
-        components: {           
+        components: {
             myHeader
         },
         methods: {
@@ -149,13 +150,21 @@ export default {
                             cityArr.push(areaJson.city[i].value);
                         }
                     }
-                } else if (this.obj.addressCity != values[1]) {
+                }
+                /*else if (this.obj.addressCity != values[1]) {
+                                   for (var i = 0; i < areaJson.city.length; i++) {
+                                       if (areaJson.city[i].value == values[1]) {
+                                           cityId = areaJson.city[i].id;
+                                       }
+                                   }
+
+                               }*/
+                if (this.obj.addressCity != values[1]) {
                     for (var i = 0; i < areaJson.city.length; i++) {
-                        if (areaJson.city[i].value == values[1]) {
+                        if (values[1] == areaJson.city[i].value) {
                             cityId = areaJson.city[i].id;
                         }
                     }
-
                 }
                 if (cityId) {
                     for (var i = 0; i < areaJson.county.length; i++) {
@@ -187,22 +196,22 @@ export default {
                 let _self = this;
 
                 var checkArr = [];
-                  let checkName = validation.checkNull(_self.obj.name, '请输入姓名！');
-                  checkArr.push(checkName);
-                  let checkLookName = validation.checkLook(_self.obj.name);
-                  checkArr.push(checkLookName);
-                  let checkPhone = validation.checkPhone(_self.obj.tel);
-                  checkArr.push(checkPhone);
-                  let checkdetailAddr = validation.checkNull(_self.obj.detailAddr, '请输入详细信息！');
-                  checkArr.push(checkdetailAddr);
-                  let checkLookDes = validation.checkLook(_self.obj.detailAddr);
-                  checkArr.push(checkLookDes);
-                  for (var i = 0; i < checkArr.length; i++) {
-                            if (checkArr[i]) {
-                                common.$emit('message', checkArr[i]);
-                                return;
-                            }
-                         } 
+                let checkName = validation.checkNull(_self.obj.name, '请输入姓名！');
+                checkArr.push(checkName);
+                let checkLookName = validation.checkLook(_self.obj.name);
+                checkArr.push(checkLookName);
+                let checkPhone = validation.checkPhone(_self.obj.tel);
+                checkArr.push(checkPhone);
+                let checkdetailAddr = validation.checkNull(_self.obj.detailAddr, '请输入详细信息！');
+                checkArr.push(checkdetailAddr);
+                let checkLookDes = validation.checkLook(_self.obj.detailAddr);
+                checkArr.push(checkLookDes);
+                for (var i = 0; i < checkArr.length; i++) {
+                    if (checkArr[i]) {
+                        common.$emit('message', checkArr[i]);
+                        return;
+                    }
+                }
 
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -231,10 +240,10 @@ export default {
                     if (suc.data.code == '1c01') {
                         common.$emit('informAddress', 'refurbish');
                         common.$emit('edit-Address', {
-                            id:_self.$route.params.addreId,
-                            contactName:_self.obj.name,
-                            contactPhone:_self.obj.tel,
-                            address:_self.obj.addressProvince + _self.obj.addressCity + _self.obj.addressDistrict + _self.obj.detailAddr
+                            id: _self.$route.params.addreId,
+                            contactName: _self.obj.name,
+                            contactPhone: _self.obj.tel,
+                            address: _self.obj.addressProvince + _self.obj.addressCity + _self.obj.addressDistrict + _self.obj.detailAddr
                         });
                         window.history.go(-1);
                     } else {
@@ -265,9 +274,10 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.address_revise .page-loadmore-wrapper{
-  margin-bottom: 0px;
+.address_revise .page-loadmore-wrapper {
+    margin-bottom: 0px;
 }
+
 .address_revise ul {
     padding: 0 1.5rem;
     background: white;

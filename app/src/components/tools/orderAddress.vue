@@ -21,7 +21,7 @@ import httpService from '../../common/httpService.js'
 export default {
     props: {
         param: {
-             
+
         }
     },
     created() {

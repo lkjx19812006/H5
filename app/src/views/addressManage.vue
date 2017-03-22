@@ -41,9 +41,8 @@
                     </ul>
                 </mt-loadmore>
             </div>
-
         </div>
-         <div class="add_address" v-on:click="addAddress">添加新地址</div>
+        <div class="add_address" v-on:click="addAddress">添加新地址</div>
         <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
 </template>
@@ -63,7 +62,9 @@ export default {
                 wrapperHeight: '',
                 my_header: {
                     name: '地址管理',
-                    go_where:true
+                    go_where: true,
+                    topissue: true
+
                 },
                 id: '',
                 index: '',
@@ -89,12 +90,15 @@ export default {
             },
             jumpBack(todo) {
                 let _self = this;
-                
-                if(common.pageParam.router == 'orderConfirm'){
-                    common.$emit('backAddress', 1);
+
+                if (common.pageParam.router == 'orderConfirm') {
+                    common.$emit('backAddress', todo);
+                    window.history.go(-1);
+                } else if (common.pageParam.router == 'multipleOrders') {
+                    common.$emit('backAddress', todo);
                     window.history.go(-1);
                 }
-                
+
             },
             listHttp() {
                 //本页面列表刷新接口
@@ -126,7 +130,7 @@ export default {
                                 listArr[item].first_img = '/static/images/default.png';
                             }
                         }
-                         if(listArr.length == 1)listArr[0].first_img = '/static/images/default.png';
+                        if (listArr.length == 1) listArr[0].first_img = '/static/images/default.png';
                         _self.todos = listArr;
                     } else {
                         if (suc.data.msg) {
@@ -145,42 +149,42 @@ export default {
                     title:'提示',
                     ensure:_self.beforeDelet(index)
                 })*/
-                  function beforeDelet(){
-                        let todo = _self.todos[index];
-                        common.$emit('show-load');
-                        let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                        let body = {
-                            biz_module: 'userAddressService',
-                            biz_method: 'deleteUserAddress',
-                            version: 1,
-                            time: 0,
-                            sign: '',
-                            biz_param: {
-                                id: todo.id
-                            }
-                        };
-                        body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                        body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                        httpService.addressManage(url, body, function(suc) {
-                            common.$emit('close-load');
-                            if (suc.data.code == '1c01') {
-                                _self.todos.splice(index, 1);
-                                common.$emit('clearAddress', todo);
-                                
-                            } else {
-                                common.$emit('message', suc.data.msg);
-                            }
-                        }, function(err) {
-                            common.$emit('close-load');
-                            common.$emit('message', err.data.msg);
-                        })
-                    }
+                function beforeDelet() {
+                    let todo = _self.todos[index];
+                    common.$emit('show-load');
+                    let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    let body = {
+                        biz_module: 'userAddressService',
+                        biz_method: 'deleteUserAddress',
+                        version: 1,
+                        time: 0,
+                        sign: '',
+                        biz_param: {
+                            id: todo.id
+                        }
+                    };
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                    httpService.addressManage(url, body, function(suc) {
+                        common.$emit('close-load');
+                        if (suc.data.code == '1c01') {
+                            _self.todos.splice(index, 1);
+                            common.$emit('clearAddress', todo);
 
-                       common.$emit("confirm", {
-                            message: '确认删除？',
-                            title: '提示',
-                            ensure: beforeDelet
-                       });
+                        } else {
+                            common.$emit('message', suc.data.msg);
+                        }
+                    }, function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+                }
+
+                common.$emit("confirm", {
+                    message: '确认删除？',
+                    title: '提示',
+                    ensure: beforeDelet
+                });
 
             },
             changeColor: function(todos, todo, index) {
@@ -190,9 +194,6 @@ export default {
                 let body = {
                     biz_module: 'userAddressService',
                     biz_method: 'setDefaultAddress',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         id: todo.id
                     }

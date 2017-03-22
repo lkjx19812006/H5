@@ -17,7 +17,7 @@
                             <p class="name  name_smart_size" v-if="index <= 2">{{item.name}}</p>
                             <p class="name_content" v-if="index !== 2">{{item.content}}</p>
                             <p class="name_content" v-if="index == 2 && item.content == '女'"><img src="/static/images/woman.png"></p>
-                        <p class="name_content" v-if="index == 2 && item.content == '男'"><img src="/static/images/man.png"></p>
+                            <p class="name_content" v-if="index == 2 && item.content == '男'"><img src="/static/images/man.png"></p>
                         </li>
                         <li v-for="(item,index) in personalDataArr" v-if="index == 4" id="personal_authentication" @click="jumpPersonal">
                             <p class="name  name_big_size">{{item.name}}</p>
@@ -64,7 +64,8 @@ export default {
                     show: true,
                     tt: true,
                     reviseRouter: 'accountInfoFinish',
-                    word: '编辑'
+                    word: '编辑',
+                    topissue: true
                 },
                 param: {
                     url: '',
@@ -179,9 +180,9 @@ export default {
                     let name = suc.data.biz_result.fullname;
                     let company = suc.data.biz_result.company;
                     common.$emit("AccountToMine", {
-                         url:url,
-                         name:name,
-                         company:company
+                        url: url,
+                        name: name,
+                        company: company
                     });
                 }, function(err) {
                     common.$emit('close-load');
@@ -194,14 +195,14 @@ export default {
         mounted() {
 
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 
 
 }
 </script>
-
 <style scoped>
-
 .account_overview .header {
     color: #313232;
 }
@@ -228,8 +229,6 @@ export default {
     color: #999999;
 }
 
-
-
 .account_overview .photo-div {
     overflow: hidden;
     background: #fff;
@@ -240,10 +239,12 @@ export default {
     height: 5.1198rem;
     border-radius: 50%;
 }
-.header-photo img{
+
+.header-photo img {
     width: 5.1198rem;
     height: 5.1198rem;
 }
+
 .account_overview .basic_data,
 .company_data {
     width: 100%;

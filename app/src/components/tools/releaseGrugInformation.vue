@@ -59,7 +59,7 @@
                 <p>销售价格：</p>
                 <div class="content_div">
                     <input type="number" placeholder="请输入" v-model="obj.sales_price" class="last_input" />
-                    <p>元/份</p>
+                    <p>元/{{obj.number_unit}}</p>
                 </div>
             </div>
             <div class="good_number">
@@ -103,7 +103,7 @@
                 <p>样品价格：</p>
                 <div class="content_div">
                     <input type="number" placeholder="请输入" v-model="obj.price" class="last_input" />
-                    <p>元</p>
+                    <p>元/份</p>
                 </div>
             </div>
         </div>
@@ -206,7 +206,9 @@ export default {
                             cityArr.push(areaJson.city[i].value);
                         }
                     }
-                } else if (this.obj.addressCity != values[1]) {
+                }
+
+                if (this.obj.addressCity != values[1]) {
                     for (var i = 0; i < areaJson.city.length; i++) {
                         if (areaJson.city[i].value == values[1]) {
                             cityId = areaJson.city[i].id;
@@ -285,30 +287,30 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         _self.unit = suc.data.biz_result.list;
-                        if (!_self.obj.number_unit){
-                            _self.obj.number_unit = _self.unit[0].name; 
-                            _self.obj.number_id = _self.unit[0].id;   
-                        }else{
-                            for(var i = 0; i < _self.unit.length; i++){
-                                if(_self.obj.number_unit == _self.unit[i].name){
-                                    _self.obj.number_id =  _self.unit[i].id;
+                        if (!_self.obj.number_unit) {
+                            _self.obj.number_unit = _self.unit[0].name;
+                            _self.obj.number_id = _self.unit[0].id;
+                        } else {
+                            for (var i = 0; i < _self.unit.length; i++) {
+                                if (_self.obj.number_unit == _self.unit[i].name) {
+                                    _self.obj.number_id = _self.unit[i].id;
                                 }
                             }
                         }
-                        if (!_self.obj.sample_unit){
+                        if (!_self.obj.sample_unit) {
                             _self.obj.sample_unit = _self.unit[0].name;
                             _self.obj.sample_id = _self.unit[0].id;
-                        }else{
-                            for(var i = 0; i < _self.unit.length; i++){
-                                if(_self.obj.sample_unit == _self.unit[i].name){
-                                    _self.obj.sample_id =  _self.unit[i].id;
+                        } else {
+                            for (var i = 0; i < _self.unit.length; i++) {
+                                if (_self.obj.sample_unit == _self.unit[i].name) {
+                                    _self.obj.sample_id = _self.unit[i].id;
                                 }
                             }
                         }
-                            
+
                         /*if (!_self.obj.number_id)_self.obj.number_id = _self.unit[0].id;
                         if (!_self.obj.sample_id)_self.obj.sample_id = _self.unit[0].id;*/
-                        
+
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -321,7 +323,7 @@ export default {
                 console.log(id)
                 this.obj[key] = value;
                 this.obj[id_key] = id;
-                
+
                 this.sheetVisible = false;
             },
             showAction(param) {
@@ -338,10 +340,10 @@ export default {
                 } else if (param == "sample_unit") {
                     for (var i = 0; i < _self.unit.length; i++) {
                         _self.actions.push({
-                            name: _self.unit[i].name,    
+                            name: _self.unit[i].name,
                             key: 'sample_unit',
-                            id:_self.unit[i].id,
-                            id_key:'sample_id'
+                            id: _self.unit[i].id,
+                            id_key: 'sample_id'
                         });
                     }
                 } else if (param == "unit") {
@@ -350,8 +352,8 @@ export default {
                         _self.actions.push({
                             name: _self.unit[i].name,
                             key: 'number_unit',
-                            id:_self.unit[i].id,
-                            id_key:'number_id'
+                            id: _self.unit[i].id,
+                            id_key: 'number_id'
                         });
                     }
                 } else {
@@ -373,7 +375,8 @@ export default {
                     _self.getBreedInformation(item.breedName);
                     _self.obj.drug_name = item.breedName;
                     _self.obj.breedId = item.breedId;
-                }else{
+                    console.log(item.breedId)
+                } else {
                     _self.getBreedInformation(item.keyWord);
                     _self.obj.drug_name = item.keyWord;
                     _self.obj.breedId = item.id;
@@ -535,6 +538,10 @@ textarea {
 .release_good_information .good_number .content_div {
     height: 3.5rem;
     width: 14.847rem;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .release_good_information .good_number div input {

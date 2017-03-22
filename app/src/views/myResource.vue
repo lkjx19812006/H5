@@ -1,10 +1,9 @@
 <template>
     <div class="my_resource">
         <div>
-             <myHeader :param="param"></myHeader>
-             <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
+            <myHeader :param="param"></myHeader>
+            <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
         </div>
-       
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -20,11 +19,9 @@
                                 v-bind:class="{small_img:!todo.especial == 1 && !todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}"> -->
                             </div>
                             <img v-bind:src="todo.image[0]" class="list_images">
-                            
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>
-                                        
                                         <!-- <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
                                         <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">  -->{{todo.breedName}}
                                     </div>
@@ -38,7 +35,6 @@
                                         <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jump(todo.id,index)">编辑</button>
                                         <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="delet(todo.id)">删除</button>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </li>
@@ -143,7 +139,7 @@ export default {
                         sample: 1,
                         key: 'sample'
                     }, {
-                        name: '不可供样',
+                        name: '不供样',
                         asc: 'top',
                         show: false,
                         sample: 0,
@@ -289,29 +285,29 @@ export default {
                 common.$emit('setParam', 'resourceId', id);
                 this.$router.push('reviseResource/' + id);
             },
-            delet(id){
+            delet(id) {
                 let _self = this;
 
-                function beforeDelet(){
+                function beforeDelet() {
                     common.$emit('show-load');
                     let url = common.addSID(common.urlCommon + common.apiUrl.most);
                     let body = {
                         biz_module: 'intentionService',
                         biz_method: 'deleteIntentionInfo',
                         biz_param: {
-                            id:id
+                            id: id
                         }
                     };
                     body.time = Date.parse(new Date()) + parseInt(common.difTime);
                     body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                     httpService.myResource(url, body, function(suc) {
                         common.$emit('close-load');
-                        if(suc.data.code == '1c01'){
+                        if (suc.data.code == '1c01') {
                             _self.getHttp();
-                        }else{
+                        } else {
                             common.$emit('message', suc.data.msg);
                         }
-                        
+
                     }, function(err) {
                         common.$emit('close-load');
                         common.$emit('message', err.data.msg);
@@ -319,9 +315,9 @@ export default {
                 }
 
                 common.$emit("confirm", {
-                            message: '确认删除？',
-                            title: '提示',
-                            ensure: beforeDelet
+                    message: '确认删除？',
+                    title: '提示',
+                    ensure: beforeDelet
                 });
             },
             jumpBack(router) {
@@ -412,9 +408,11 @@ export default {
 .my_resource .title {
     font-size: 1.7rem;
 }
-.my_resource .bg_white{
+
+.my_resource .bg_white {
     background: #F5F5F5;
 }
+
 .my_resource .bg_white .page-loadmore-wrapper .mint-loadmore {
     background: #F5F5F5;
 }
@@ -430,7 +428,10 @@ export default {
     margin: 1rem 1rem 0 1rem;
     border-radius: 4px;
 }
+
+
 /*19.375%*/
+
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
     height: 8.5rem;
     width: 25%;
@@ -471,23 +472,25 @@ export default {
     line-height: 20px;
     font-size: 1.3rem;
 }
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content_center{
-    
-}
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img{
+
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content_center {}
+
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img {
     height: 22px;
     position: absolute;
-    bottom:-31px;
-    left:8px;
+    bottom: -31px;
+    left: 8px;
     z-index: 10;
 }
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img{
+
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img {
     height: 22px;
     position: absolute;
-    bottom:-31px;
-    left:27px;
+    bottom: -31px;
+    left: 27px;
     z-index: 10;
 }
+
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
     /*max-height: 1.6rem;*/
@@ -541,12 +544,13 @@ export default {
     bottom: 0px;
     font-size: 10px;
     min-width: 150px;
-    right: 0px;   
+    right: 0px;
     z-index: 100000;
     font-size: 1.1rem;
 }
-.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right .button_box button{
-    float:right;
+
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right .button_box button {
+    float: right;
     margin-left: 5px;
     max-height: 3rem;
     padding: 0 5px;
@@ -555,6 +559,7 @@ export default {
     border-radius: 5px;
     background: white;
 }
+
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {
     font-size: 1.1rem;
     color: #999;

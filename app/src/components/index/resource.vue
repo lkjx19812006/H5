@@ -13,12 +13,11 @@
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
                             <img :src="todo.image[0]" class="list_images">
                             <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1" class="small_img">
-                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" 
-                            v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
+                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>
-                                     {{todo.breedName}}
+                                        {{todo.breedName}}
                                     </div>
                                     <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
                                     <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
@@ -64,7 +63,8 @@ export default {
                     router: '/supplyRelease'
                 },
                 myShow: {
-                    myShow: false
+                    myShow: false,
+                    mycart: true
                 },
                 sortRouter: 'resource',
                 sortArr: [{
@@ -118,19 +118,19 @@ export default {
                         key: 'price'
                     }]
                 }, {
-                    name: '可否样品',
+                    name: '是否样品',
                     asc: 'top',
                     url: '/static/icons/drop_down.png',
                     saveName: '可否样品',
                     class: 'sort_content_detail',
                     sortArr: [{
-                        name: '可提供',
+                        name: '可供样',
                         asc: 'low',
                         show: false,
                         sample: 1,
                         key: 'sample'
                     }, {
-                        name: '不可提供',
+                        name: '不供样',
                         asc: 'top',
                         show: false,
                         sample: 0,
@@ -257,7 +257,7 @@ export default {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
-                }, 1500);
+                }, 500);
             },
             handleTopChange(status) {
                 this.topStatus = status;
@@ -276,7 +276,7 @@ export default {
                 this.scrollTop = this.$refs.wrapper.scrollTop;
             },
             getScrollTop() {
-               
+
                 this.$refs.wrapper.scrollTop = this.scrollTop;
             }
         },
@@ -306,7 +306,7 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });
-            common.$on('getInfo',function(item){
+            common.$on('getInfo', function(item) {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             })
@@ -375,7 +375,7 @@ export default {
 
 .resource .fixed {
     /*position: fixed;*/
-    top:0;
+    top: 0;
     width: 100%;
     z-index: 2;
     background: #fff;
@@ -406,23 +406,27 @@ export default {
     margin: 10px 10px 10px 0;
     position: absolute;
 }
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li{
+
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li {
     position: relative;
 }
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img{
+
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img {
     width: 16px;
     position: absolute;
-    top:10px;
-    left:10px;
+    top: 10px;
+    left: 10px;
     z-index: 10;
 }
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img{
+
+.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img {
     width: 16px;
     position: absolute;
-    top:10px;
-    left:28px;
+    top: 10px;
+    left: 28px;
     z-index: 10;
 }
+
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
     float: left;
     text-align: left;
@@ -430,6 +434,7 @@ export default {
     font-size: 1.3rem;
     margin-bottom: 8px;
 }
+
 
 /*.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
@@ -476,7 +481,7 @@ export default {
 
 .resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
-    max-width: 125px;
+    max-width: 140px;
     height: 8.1rem;
     margin: 0;
     right: 10px;

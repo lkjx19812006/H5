@@ -38,7 +38,7 @@
                 <button class="mint-button mint-button--primary mint-button--normal orange_button" @click="loadApp()">立即报价</button>
             </div>
             <div class="fix_bottom" v-show="obj.isMy == 1">
-                <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()"> 
+                <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()">
                     <img src="/static/icons/tel.png">
                     <p>电话</p>
                 </button>
@@ -56,7 +56,7 @@ import popUpBigImg from '../components/tools/popUpBigImg'
 export default {
     data() {
             return {
-                phone:common.servicePhone,
+                phone: common.servicePhone,
                 my_param: {
                     url: '',
                 },
@@ -64,7 +64,8 @@ export default {
                 id: '',
                 obj: {},
                 param: {
-                    name: '需求详情'
+                    name: '需求详情',
+                    topissue: true
                 },
             }
         },
@@ -122,16 +123,16 @@ export default {
             back() {
                 this.$router.go(-1);
             },
-            call(){
-             window.location.href = "tel:"+this.phone;
+            call() {
+                window.location.href = "tel:" + this.phone;
             },
             getCustomerPhone() {
                 let _self = this;
                 this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
                     if (response.data.code == '1c01') {
                         console.log(response.data);
-                        common.servicePhone=response.data.biz_result.serviceMobile;
-                        _self.phone=response.data.biz_result.serviceMobile;
+                        common.servicePhone = response.data.biz_result.serviceMobile;
+                        _self.phone = response.data.biz_result.serviceMobile;
                     }
                 }, (err) => {
                     common.$emit('message', err.data.msg);
@@ -143,15 +144,15 @@ export default {
         },
         created() {
             let _self = this;
-            if(!common.servicePhone)this.getCustomerPhone();
+            if (!common.servicePhone) this.getCustomerPhone();
             let id = _self.$route.params.needId;
             _self.id = id;
             _self.getHttp(id);
             common.$on("needToDetail", function(item) {
                 _self.getHttp(item);
             });
-            common.$on('getInfo',function(item){        
-                _self.getHttp(id);       
+            common.$on('getInfo', function(item) {
+                _self.getHttp(id);
             })
         }
 
@@ -232,6 +233,7 @@ export default {
 .need_detail .detail p .orange_font {
     color: #EC6817;
 }
+
 .need_detail .tel {
     width: 100%;
     float: left;

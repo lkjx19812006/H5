@@ -1,45 +1,44 @@
 <template>
     <div class="perfect_info">
-        <myHeader :param="my_header" v-on:myUpData = "jump"></myHeader>
+        <myHeader :param="my_header" v-on:myUpData="jump"></myHeader>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-           <mt-loadmore>
-                  <div  class="head">
-                       <p>头像(点击设置头像)</p>
-                       <div  class="head_img">
-                           <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
-                       </div>
-                  </div>
-                  <ul>
-                     <li>
+            <mt-loadmore>
+                <div class="head">
+                    <p>头像(点击设置头像)</p>
+                    <div class="head_img">
+                        <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
+                    </div>
+                </div>
+                <ul>
+                    <li>
                         <p>姓名</p>
                         <img src="/static/icons/xinghao.png" class="stamp">
                         <input type="text" placeholder="请输入姓名" v-model="obj.name" maxlength="6">
-                     </li>
-                     <li  @click="open('picker')">
-                        <p>生日</p>  
-                        <img src="/static/images/right-arrow.png" class="right_arrow">         
-                        <p class="birthday">{{obj.birthday}}</p>           
-                     </li>
-                     <li>
-                         <p>性别</p>
-                         <select v-model="obj.sex">
-                             <option>男</option>
-                             <option>女</option>
-                         </select>  
-                     </li>
-                     <li>
-                        <p>公司名称</p>     
+                    </li>
+                    <li @click="open('picker')">
+                        <p>生日</p>
+                        <img src="/static/images/right-arrow.png" class="right_arrow">
+                        <p class="birthday">{{obj.birthday}}</p>
+                    </li>
+                    <li>
+                        <p>性别</p>
+                        <select v-model="obj.sex">
+                            <option>男</option>
+                            <option>女</option>
+                        </select>
+                    </li>
+                    <li>
+                        <p>公司名称</p>
                         <input type="text" placeholder="请输入公司名称" v-model="obj.company" maxlength="16">
-                     </li>
-                     <li>
+                    </li>
+                    <li>
                         <p>主营品类</p>
                         <img src="/static/icons/xinghao.png" class="stamp">
                         <input type="text" placeholder="请输入主营品类" v-model="obj.bizMain" maxlength="16">
-                     </li>
-                  </ul>
-           </mt-loadmore>
+                    </li>
+                </ul>
+            </mt-loadmore>
         </div>
-
         <mt-datetime-picker ref="picker" type="date" v-model="pickerValue" :startDate="start " :endDate="end" @confirm="handleConfirm">
         </mt-datetime-picker>
     </div>
@@ -53,32 +52,32 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                id:'',
+                id: '',
                 param: {
                     name: 'intention',
                     index: 0,
-                    url:'/static/icons/big_head.png',
+                    url: '/static/icons/big_head.png',
 
                 },
-                obj:{
-                    name:'',
-                    birthday:'请选择',
-                    sex:'男',
-                    company:'',
-                    bizMain:'',
-                    url:''
+                obj: {
+                    name: '',
+                    birthday: '请选择',
+                    sex: '男',
+                    company: '',
+                    bizMain: '',
+                    url: ''
                 },
-                router:'',
-                phone:'',
-                password:'',
-                wrapperHeight:'',
+                router: '',
+                phone: '',
+                password: '',
+                wrapperHeight: '',
                 pickerValue: '',
-                show:true,
+                show: true,
                 my_header: {
                     name: '完善信息',
-                    t_show:true,
-                    goSecond:true
-                    
+                    t_show: true,
+                    goSecond: true
+
                 }
             }
         },
@@ -87,11 +86,11 @@ export default {
             imageUpload
         },
         methods: {
-            jump(){
+            jump() {
                 let _self = this;
-                _self.confirmUpData();       
+                _self.confirmUpData();
             },
-             getTimeStamp(str) {
+            getTimeStamp(str) {
                 str = str.replace(/-/g, '/');
                 var date = new Date(str);
                 return date.getTime();
@@ -101,15 +100,15 @@ export default {
                 let checkArr = [];
                 let checkName = validation.checkNameTrue(_self.obj.name);
                 checkArr.push(checkName);
-                let checkBizMain = validation.checkNull(_self.obj.bizMain,'主营品类不能为空！');
+                let checkBizMain = validation.checkNull(_self.obj.bizMain, '主营品类不能为空！');
                 checkArr.push(checkBizMain);
-                for(let i = 0; i < checkArr.length; i++){
-                     if(checkArr[i]){
-                        common.$emit('message',checkArr[i]);
+                for (let i = 0; i < checkArr.length; i++) {
+                    if (checkArr[i]) {
+                        common.$emit('message', checkArr[i]);
                         return;
-                     }
+                    }
                 }
-                let birthday = _self.getTimeStamp(_self.obj.birthday)/1000;
+                let birthday = _self.getTimeStamp(_self.obj.birthday) / 1000;
                 //console.log(_self.obj.name,_self.obj.bizMain)
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -119,9 +118,9 @@ export default {
                     biz_param: {
                         fullname: _self.obj.name,
                         birthday: birthday,
-                        company: _self.obj.company,      
+                        company: _self.obj.company,
                         bizMain: _self.obj.bizMain,
-                        avatar: _self.obj.url   
+                        avatar: _self.obj.url
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -130,35 +129,19 @@ export default {
                     common.$emit('close-load');
                     console.log(suc)
                     if (suc.data.code == "1c01") {
-                        common.$emit("toMine", _self.obj);                           
-                            common.$emit('getInfo',1);
-                            /*_self.$router.push('/home');   */   
-                            if(common.pageParam.backRouter.split('/')[0] == 'resourceDetail'){         
-                                    if(_self.id){
-                                       common.$emit('resourceDetail',_self.id);
-                                       common.$emit('orderConfirm',_self.id);
-                                       common.$emit('setParam','skipLogin',true);
-                                       _self.$router.replace('orderConfirm/'+ _self.id);  
-                                    }else{
-                                       common.$emit('resourceDetail',common.pageParam.backRouter.split('/')[1]);
-                                       common.$emit('orderConfirm',common.pageParam.backRouter.split('/')[1]);
-                                       common.$emit('setParam','skipLogin',true);
-                                       _self.$router.replace('orderConfirm/'+ common.pageParam.backRouter.split('/')[1]);  
-                                    }
-                           }else{
-                                common.$emit('go_home',1);
-                                _self.$router.replace('home');
-                           } 
+                        common.$emit("toMine", _self.obj);
+                        common.$emit('getInfo', 1);
+                        if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') { if (_self.id) { common.$emit('resourceDetail', _self.id); common.$emit('setParam', 'skipPer', true); _self.$router.replace('resourceDetail/' + _self.id); } else { common.$emit('resourceDetail', common.pageParam.backRouter.split('/')[1]); common.$emit('setParam', 'skipPer', true); _self.$router.replace('resourceDetail/' + common.pageParam.backRouter.split('/')[1]); } } else if (common.pageParam.backRouter == 'lowPriceRes') { common.$emit('setParam', 'skipPer', true); _self.$router.replace('cart'); } else { common.$emit('go_home', 1); _self.$router.replace('home'); }
+
                     } else {
-                        //common.$emit('message', suc.data.msg);
+                    
                     }
                 }, function(err) {
                     common.$emit('close-load');
-                    //common.$emit('message', err.data.msg);
                 })
             },
             getUrl(param) {
-                this.obj.url = param.url; 
+                this.obj.url = param.url;
             },
             open(picker) {
                 this.$refs[picker].open();
@@ -197,19 +180,28 @@ export default {
         },
         created() {
             let _self = this;
-            common.$on('back_login',function(item){
-                _self.id = item.id;    
+            common.$on('back_login', function(item) {
+                _self.id = item.id;
             })
-           _self.start = new Date("1900-01-10");
-           _self.end = new Date("2017-01-10");
-           
-           common.$on('nextRegister',function(item){
-                    _self.obj.url = '';
-                    _self.obj.company = '';
-                    _self.obj.name = '';
-                    _self.param.url = '/static/icons/big_head.png';
-                    _self.obj.bizMain = '';
-                   })
+            _self.start = new Date("1900-01-01");
+            _self.end = new Date("2017-03-08");
+            let type = '';
+            let ua = navigator.userAgent.toLowerCase();
+            if (/iphone|ipad|ipod/.test(ua)) {
+                type = 'ios';
+            }
+            if (type == 'ios') {
+                _self.start = new Date("1900/01/01");
+                _self.end = new Date("2017/03/08");
+            }
+
+            common.$on('nextRegister', function(item) {
+                _self.obj.url = '';
+                _self.obj.company = '';
+                _self.obj.name = '';
+                _self.param.url = '/static/icons/big_head.png';
+                _self.obj.bizMain = '';
+            })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -226,74 +218,83 @@ textarea {
     border-radius: 0;
 }
 
-.perfect_info .head{
-     width: 100%;
-     padding:0 15px;
-     background-color: white; 
-     float:left;
-     padding: 1.5rem;
-     margin-top: 1rem;
+.perfect_info .head {
+    width: 100%;
+    padding: 0 15px;
+    background-color: white;
+    float: left;
+    padding: 1.5rem;
+    margin-top: 1rem;
 }
-.perfect_info .head .head_img{
-     float:right;
-     width:6rem;
-     height:6rem;
-     border-radius: 50%;
-     overflow: hidden;
+
+.perfect_info .head .head_img {
+    float: right;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    overflow: hidden;
 }
-.perfect_info .head p{
-    float:left;
-    margin-top:2rem;
+
+.perfect_info .head p {
+    float: left;
+    margin-top: 2rem;
     font-size: 1.2rem;
     line-height: 2rem;
 }
-.perfect_info  ul li{
+
+.perfect_info ul li {
     background-color: white;
     border-top: 1px solid #E5E5E5;
-    float:left;
-    width:100%;
-    padding:1rem 15px;
+    float: left;
+    width: 100%;
+    padding: 1rem 15px;
 }
-.perfect_info  ul li p{
-    float:left;
+
+.perfect_info ul li p {
+    float: left;
     font-size: 1.2rem;
     line-height: 2rem;
 }
-.perfect_info  ul li .stamp{
-    float:left;
-    width:0.5rem;
+
+.perfect_info ul li .stamp {
+    float: left;
+    width: 0.5rem;
     margin-top: 0.55rem;
     margin-left: 5px;
 }
-.perfect_info  ul li input{
-    float:right;
-    border:none;
-    height:2rem;
+
+.perfect_info ul li input {
+    float: right;
+    border: none;
+    height: 2rem;
     line-height: 2rem;
     text-align: right;
     font-size: 1.2rem;
 }
-.perfect_info  ul li select{
-    float:right;
-    border:none;
-    height:2rem;
+
+.perfect_info ul li select {
+    float: right;
+    border: none;
+    height: 2rem;
     line-height: 2rem;
     text-align: right;
-    padding-right:2rem;
+    padding-right: 2rem;
     background: url(/static/images/right-arrow.png) no-repeat right center;
     background-size: 0.7rem 1.2rem;
     font-size: 1.2rem;
     margin-top: 0.3rem;
 }
-.perfect_info  ul li .birthday{
-    float:right;
+
+.perfect_info ul li .birthday {
+    float: right;
     font-size: 1.2rem;
     line-height: 2rem;
 }
-.perfect_info  ul li .right_arrow{
-    float:right;
+
+.perfect_info ul li .right_arrow {
+    float: right;
     margin-left: 1rem;
-    height:1.2rem;
+    height: 1.2rem;
     margin-top: 0.3rem;
 }
 </style>

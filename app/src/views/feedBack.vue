@@ -19,14 +19,9 @@
                         </div>
                     </div>
                 </mt-loadmore>
-
-                 <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div> 
-               
+                <div class="confirm_submit" v-on:click="confirmSubmit">确认提交</div>
             </div>
-
-            
         </div>
-        
     </div>
 </template>
 <script>
@@ -37,7 +32,7 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
-                wrapperHeight:'',
+                wrapperHeight: '',
                 my_header: {
                     name: '意见反馈'
 
@@ -105,7 +100,7 @@ export default {
                     biz_method: 'queryUserInfo',
                     biz_param: {}
                 };
-                
+
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 console.log(common.difTime);
                 console.log(body.time);
@@ -113,26 +108,26 @@ export default {
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
-                    if (suc.data.code == "1c01"){
+                    if (suc.data.code == "1c01") {
                         _self.param.name = suc.data.biz_result.fullname;
                         _self.param.phone = suc.data.biz_result.phone;
-                        
-                    }else{
+
+                    } else {
                         console.log('cuowusasdada')
                     }
-                    
-                    
+
+
                 }, function(err) {
                     common.$emit('close-load');
                 })
             }
         },
-        created(){
-              let _self = this;
-              if(common.KEY)_self.getInfo();
-              common.$emit('informFeedBack',function(item) {
-                 if(common.KEY)_self.getInfo();
-              })
+        created() {
+            let _self = this;
+            if (common.KEY) _self.getInfo();
+            common.$emit('informFeedBack', function(item) {
+                if (common.KEY) _self.getInfo();
+            })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -143,10 +138,7 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-.feed_back{
-
-}
+.feed_back {}
 
 .feed_back .bg_white {
     background: #f0f0f0;
@@ -214,5 +206,4 @@ export default {
     bottom: 0;
     z-index: 99;
 }
-
 </style>

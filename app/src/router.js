@@ -49,24 +49,28 @@ import perfectInfo from './views/perfectInfo'
 import requestCode from './views/requestCode'
 import releaseSearch from './views/releaseSearch'
 import news from './views/news'
+import cart from './views/cart'
+import multipleOrders from './views/multipleOrders'
+import allOrder from './views/allOrder'
+import allOrderDetail from './views/allOrderDetail'
 
 const scrollBehavior = (to, from, savedPosition) => {
-     console.log(savedPosition);
-  if (savedPosition) {
-    // savedPosition is only available for popstate navigations.
-    return savedPosition
-  } else {
-    // new navigation.
-    // scroll to anchor
-    if (to.hash) {
-      return { anchor: true }
+    console.log(savedPosition);
+    if (savedPosition) {
+        // savedPosition is only available for popstate navigations.
+        return savedPosition
+    } else {
+        // new navigation.
+        // scroll to anchor
+        if (to.hash) {
+            return { anchor: true }
+        }
+        // explicitly control scroll position
+        // check if any matched route config has meta that requires scrolling to top
+        if (to.matched.some(m => m.meta.scrollToTop)) {
+            return { x: 0, y: 0 }
+        }
     }
-    // explicitly control scroll position
-    // check if any matched route config has meta that requires scrolling to top
-    if (to.matched.some(m => m.meta.scrollToTop)) {
-      return { x: 0, y: 0 }
-    }
-  }
 }
 
 module.exports = {
@@ -79,8 +83,8 @@ module.exports = {
             path: '/main',
             component: main
         },
-        { name: 'news', path: '/news', component: news},
-        { name: 'home', path: '/home', component: home},
+        { name: 'news', path: '/news', component: news },
+        { name: 'home', path: '/home', component: home },
         { name: 'drugResTable', path: '/drugResTable/:from', component: drugResTable },
         { name: 'marketQuotation', path: '/marketQuotation', component: marketQuotation },
         { name: 'supplyRelease', path: '/supplyRelease', component: supplyRelease },
@@ -126,6 +130,10 @@ module.exports = {
         { name: 'perfectInfo', path: '/perfectInfo', component: perfectInfo },
         { name: 'requestCode', path: '/requestCode', component: requestCode },
         { name: 'releaseSearch', path: '/releaseSearch', component: releaseSearch },
+        { name: 'cart', path: '/cart', component: cart },
+        { name: 'multipleOrders', path: '/multipleOrders', component: multipleOrders },
+        { name: 'allOrder', path: '/allOrder', component: allOrder },
+        { name: 'allOrderDetail', path: '/allOrderDetail/:allOrderId', component: allOrderDetail },
         { path: '*', redirect: '/home' }
     ]
 }

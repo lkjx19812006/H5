@@ -14,7 +14,7 @@
             </div>
             <div class="more_content last_content" v-if="information.sendPlace">
                 <p>发货地：{{information.sendPlace}}</p>
-                <p class="right_p">销售价格：{{information.price}}元/kg</p>
+                <p class="right_p" v-if="!information.show">销售价格：{{information.price}}元/kg</p>
             </div>
         </div>
     </div>
@@ -40,10 +40,11 @@ export default {
     width: 100%;
 }
 
-.resource_information .bg_white{
+.resource_information .bg_white {
     padding: 0.8rem 0;
 }
-.resource_information .bg_white .title{
+
+.resource_information .bg_white .title {
     float: left;
     width: 100%;
 }
@@ -63,18 +64,32 @@ export default {
     font-size: 1.1rem;
     float: left;
     width: 100%;
-    padding:0 0.8rem ; 
+    padding: 0 0.8rem;
 }
-.resource_information .bg_white .last_content{
+
+.resource_information .bg_white .last_content {
     padding-bottom: 1rem;
 }
+
 .resource_information .bg_white .more_content p {
     float: left;
     margin-top: 1.1rem;
     color: #333;
+    width: 50%;
+    text-align: left;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .resource_information .bg_white .more_content .right_p {
     float: right;
+    text-align: left;
+    width: 50%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>

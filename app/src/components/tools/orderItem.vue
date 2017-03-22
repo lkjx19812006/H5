@@ -20,7 +20,7 @@
             <div class="number">购买数量：</div>
             <div class="operate">
                 <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:subtraction}">—</button>
-                <input type="text"  v-model="param.value">
+                <input type="text" v-model="param.value">
                 <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:addition}">+</button>
             </div>
         </div>
@@ -41,7 +41,7 @@ export default {
 
     },
     methods: {
-        subtraction() {  
+        subtraction() {
             let _self = this;
             if (_self.param.value > 1) {
                 _self.param.value = Number(_self.param.value - 1);
@@ -53,37 +53,37 @@ export default {
                 if (_self.param.value < _self.param.number) {
                     _self.param.value = Number(_self.param.value + 1);
                 }
-            }else{
-                 if (_self.param.value < _self.param.sampleNumber) {
+            } else {
+                if (_self.param.value < _self.param.sampleNumber) {
                     _self.param.value = Number(_self.param.value + 1);
                 }
             }
-            
+
         }
-        
+
 
     },
     watch: {
-        param:{        
-            handler:function(newVal,oldVal){
+        param: {
+            handler: function(newVal, oldVal) {
                 let _self = this;
-                console.log(newVal.value,oldVal.value);
+                console.log(newVal.value, oldVal.value);
                 console.log(typeof(newVal.value))
-                   
-                        if(parseInt(newVal.value)){
-                           newVal.value = parseInt(newVal.value);
-                           if(newVal.value > _self.param.number){
-                              newVal.value = _self.param.number;
-                           }else if(newVal.value < 1){
-                              newVal.value = 1;
-                           }
 
-                           }else{
-                              newVal.value = '';
-                           }      
-                    
+                if (parseInt(newVal.value)) {
+                    newVal.value = parseInt(newVal.value);
+                    if (newVal.value > _self.param.number) {
+                        newVal.value = _self.param.number;
+                    } else if (newVal.value < 1) {
+                        newVal.value = 1;
+                    }
+
+                } else {
+                    newVal.value = '';
+                }
+
             },
-            deep:true
+            deep: true
         }
     },
     mounted() {
@@ -103,7 +103,7 @@ export default {
     height: 8.5rem;
     position: absolute;
     left: 0px;
-    top:8px;
+    top: 8px;
 }
 
 .order_item .item_right {
@@ -179,9 +179,11 @@ export default {
     border-bottom: 1px solid #ddd;
     color: #333;
 }
-.order_item .count .operate button{
+
+.order_item .count .operate button {
     cursor: pointer;
 }
+
 .order_item .count .operate input {
     height: 3.5rem;
     width: 3.5rem;
@@ -203,5 +205,4 @@ export default {
     color: #000;
     font-weight: bold;
 }
-
 </style>

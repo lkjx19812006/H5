@@ -1,14 +1,14 @@
 <template>
     <div class="account_overview">
         <div class="header">
-            
-               <img :src="param.url" v-show="param.url">
-               <img src="/static/images/my-header.png" v-show="!param.url">
+            <img :src="param.url" v-show="param.url">
+            <img src="/static/images/my-header.png" v-show="!param.url">
             <div class="login" v-show='login_show' @click="jump">登录/注册</div>
-            <p>{{param.name}}</p>
+            <p>{{param.fullname}}</p>
             <p class="company-name">{{param.company}}</p>
             <div class="footer">
-                <p class="left">我的储值 <span>{{param.normalMoney}}</span></p>
+                <p class="left">我的储值 <span>{{param.normalMoney | normalMoney(param.freezeMoney)}}</span></p>
+                <!--   -->
                 <p class="right">我的积分 <span>{{param.score}}</span></p>
             </div>
         </div>
@@ -16,13 +16,14 @@
 </template>
 <script>
 import common from '../../common/common.js'
+import filters from '../../filters/filters'
 export default {
     data() {
             return {
-                login_show:'',
-                perfect:{
-                    name:'',
-                    bizMain:''
+                login_show: '',
+                perfect: {
+                    name: '',
+                    bizMain: ''
                 }
             }
         },
@@ -31,29 +32,30 @@ export default {
                 url: '',
                 company: '',
                 normalMoney: '',
+                freezeMoney: '',
                 score: '',
-                name: ''  
+                name: ''
             }
         },
-        methods:{
-            jump(){
+        methods: {
+            jump() {
                 this.$router.push('/login');
             }
         },
         created() {
             let _self = this;
-            
-            if(!common.KEY){
+
+            if (!common.KEY) {
                 _self.login_show = true;
-            }else{
+            } else {
                 _self.login_show = false;
             }
-            common.$on('getInfo',function(item){
-                 if(!common.KEY){
+            common.$on('getInfo', function(item) {
+                if (!common.KEY) {
                     _self.login_show = true;
-                 }else{
+                } else {
                     _self.login_show = false;
-                 }
+                }
             })
 
         }
@@ -84,15 +86,17 @@ export default {
     line-height: 1.279rem;
     color: #333333;
 }
-.account_overview  .login{
+
+.account_overview .login {
     font-size: 14px;
-    width:80px;
+    width: 80px;
     padding: 5px;
-    background:#FA6705;
+    background: #FA6705;
     border-radius: 3px;
-    color:white;
-    margin:auto;
+    color: white;
+    margin: auto;
 }
+
 .account_overview .header .company-name {
     font-size: 1.023rem;
     line-height: 1.023rem;
@@ -115,11 +119,10 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
 }
 
 .account_overview .header .footer .right {
-    width:50%;
+    width: 50%;
     float: right;
     word-break: keep-all;
     white-space: nowrap;

@@ -1,17 +1,18 @@
 <template>
     <div class="content long_search">
-        <div class="search_div"  v-show="!param.myShow">
-            <div class="search_content" v-bind:class="{ search_active: keyword }" >               
+        <div class="search_div" v-show="!param.myShow">
+            <div class="search_content" v-bind:class="{ search_active: keyword }">
                 <img src="/static/images/search.png" class="search_image" v-show="!keyword">
-                <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image"  >       
+                <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image">
                 </div>
                 <input type="text" v-bind:class="{ search_active: keyword }" placeholder="请输入您想要的货物资源" disabled="true" v-model="keyword">
             </div>
+            <img src="/static/icons/cart.png" v-show="param.mycart" class="mycart" @click.stop.prevent="jump()">
         </div>
-         <div class="search-div"  v-show="param.myShow">
-            <div class="search_content" v-bind:class="{ search_active: keyword }" >               
+        <div class="search-div" v-show="param.myShow">
+            <div class="search_content" v-bind:class="{ search_active: keyword }">
                 <img src="/static/images/search.png" class="search_image" v-show="!keyword">
-                <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image"  >       
+                <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image">
                 </div>
                 <input type="text" v-bind:class="{ search_active: keyword }" placeholder="请输入您想要的货物资源" disabled="true" v-model="keyword">
             </div>
@@ -32,13 +33,34 @@ export default {
                 /*type: String,
                 default: ''*/
             },
-            param:{
+            param: {
 
             }
         },
-        methods:{
-            clearWord(){
-                 this.$emit("clearSearch");
+        methods: {
+            clearWord() {
+                this.$emit("clearSearch");
+            },
+            jump() {
+                if (!common.customerId) {
+                    let _self = this;
+
+                    function loadApp() {
+                        /*common.$emit('back_login', {
+                            id: id,
+                            isMy: _self.obj.isMy
+                        });*/
+                        common.$emit('setParam', 'backRouter', 'lowPriceRes');
+                        _self.$router.push('/login');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                }
+                this.$router.push('/cart')
             }
         }
 }
@@ -47,6 +69,7 @@ export default {
 .long_search {
     float: left;
     width: 100%;
+    position: relative;
 }
 
 .long_search .search_div {
@@ -54,49 +77,66 @@ export default {
     width: 100%;
     float: left;
 }
+
 .long_search .search-div {
     height: 50px;
     width: 100%;
-    float: left;   
+    float: left;
 }
+
 .long_search .search_div .search_active,
-.search-div .search_active{
-    background-color: #fff !important; 
+.search-div .search_active {
+    background-color: #fff !important;
 }
 
 .long_search .search_div .search_content,
-.search-div .search_content{
+.search-div .search_content {
     height: 30px;
-    margin: 10px 30px;
+    margin: 10px 55px 10px 30px;
     border-radius: 10px;
 }
-.long_search .search_div .search_content{
+
+.long_search .search_div .search_content {
     background: #fff;
 }
-.long_search .search-div .search_content{
+
+.long_search .search_div .mycart {
+    height: 24px;
+    position: absolute;
+    right: 13px;
+    top: 13px;
+    z-index: 20;
+}
+
+.long_search .search-div .search_content {
     background: white;
 }
+
 .long_search .search_div .search_content .clear,
-.search-div .search_content .clear{
+.search-div .search_content .clear {
     float: right;
     padding: 0 0 10px 10px;
     margin-right: 10px;
 }
+
 .long_search .search_div .search_content input,
-.search-div  .search_content input {  
+.search-div .search_content input {
     height: 30px;
-    float:left;
+    float: left;
     border: none;
     margin-left: 10px;
 }
-.long_search .search_div .search_content input{
+
+.long_search .search_div .search_content input {
     background-color: #fff;
 }
-.long_search .search-div  .search_content input{
+
+.long_search .search-div .search_content input {
     background-color: #fff;
 }
+
 .long_search .search_div .search_content img,
-.search-div .search_content img{
+.search-div .search_content img {
     float: left;
     max-height: 20px;
     margin: 5px 5px 0 18%;

@@ -9,13 +9,12 @@
                         <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
                             <img v-bind:src="todo.image[0]" class="list_images">
                             <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1" class="small_img">
-                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" 
-                            v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
+                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>
                                         <!-- <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1"> --> {{todo.breedName}}
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1"> -->{{todo.breedName}}
                                     </div>
                                     <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
                                     <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
@@ -113,19 +112,19 @@ export default {
                         key: 'price'
                     }]
                 }, {
-                    name: '可否样品',
+                    name: '是否样品',
                     asc: 'top',
                     url: '/static/icons/drop_down.png',
                     saveName: '可否样品',
                     class: 'sort_content_detail',
                     sortArr: [{
-                        name: '可提供',
+                        name: '可供样',
                         asc: 'low',
                         show: false,
                         sample: 1,
                         key: 'sample'
                     }, {
-                        name: '不可提供',
+                        name: '不供样',
                         asc: 'top',
                         show: false,
                         sample: 0,
@@ -201,7 +200,7 @@ export default {
                     body.version = 1;
                     body.time = Date.parse(new Date()) + parseInt(common.difTime);
                     body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                } 
+                }
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     if (_self.httpPraram.page == 1) {
@@ -242,13 +241,13 @@ export default {
             },
             jumpDetail(id) {
                 let _self = this;
-                if(!_self.pull){
+                if (!_self.pull) {
                     common.$emit('resourceDetail', id);
                     _self.$router.push('resourceDetail/' + id);
-                }else{
+                } else {
                     console.log('在加载...')
                 }
-                
+
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -264,8 +263,8 @@ export default {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
-                }, 1500);
-                
+                }, 500);
+
             },
             handleTopChange(status) {
                 this.topStatus = status;
@@ -277,8 +276,8 @@ export default {
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
-                }, 1500);
-                 
+                }, 500);
+
             },
             jump(router) {
                 this.$router.push(router);
@@ -323,11 +322,11 @@ export default {
             /*common.$on('listOflowPrice',function(item){
                 _self.getHttp();
             })*/
-            common.$on('getInfo',function(item){        
-                _self.getHttp();       
+            common.$on('getInfo', function(item) {
+                _self.getHttp();
             })
 
-            
+
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
@@ -363,9 +362,11 @@ export default {
     transition: .2s linear;
     vertical-align: middle;
 }
-.low_price{
+
+.low_price {
     overflow: hidden;
 }
+
 .low_price .title-name {
     position: absolute;
     left: 15%;
@@ -409,30 +410,34 @@ export default {
     background: white;
     border-radius: 3px;
 }
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li{
+
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li {
     position: relative;
 }
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img{
+
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img {
     width: 16px;
     position: absolute;
-    top:10px;
-    left:10px;
+    top: 10px;
+    left: 10px;
     z-index: 10;
 }
-.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img{
+
+.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img {
     width: 16px;
     position: absolute;
-    top:10px;
-    left:28px;
+    top: 10px;
+    left: 28px;
     z-index: 10;
 }
+
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
     height: 8.1rem;
     width: 25%;
     left: 10px;
     margin: 10px 10px 10px 0;
     position: absolute;
-    z-index:0;
+    z-index: 0;
 }
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
@@ -442,6 +447,7 @@ export default {
     font-size: 1.3rem;
     margin-bottom: 8px;
 }
+
 
 /*.low_price .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
@@ -488,7 +494,7 @@ export default {
 
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
     position: absolute;
-    width: 125px;
+    max-width: 140px;
     height: 8.1rem;
     margin: 0;
     right: 10px;

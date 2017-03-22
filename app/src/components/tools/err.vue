@@ -1,11 +1,10 @@
 <template>
-    <div class="err"  :style="{ height: wholeHeight + 'px' }">
+    <div class="err" :style="{ height: wholeHeight + 'px' }">
         <div class="img">
-              <img :src="param.url">
-              <p>{{param.err}}</p>
-              <div @click="jump" v-show="param.router">{{param.next_step}}</div>
+            <img :src="param.url">
+            <p>{{param.err}}</p>
+            <div @click="jump" v-show="param.router">{{param.next_step}}</div>
         </div>
-        
     </div>
 </template>
 <script>
@@ -18,53 +17,62 @@ export default {
             }
         },
         props: {
-            param:{
+            param: {
 
             }
         },
-        methods:{
-            jump(){
+        methods: {
+            jump() {
                 let _self = this;
-                if(_self.param.router)this.$router.push(_self.param.router);
-                
+                if (_self.param.router) {
+                    if (_self.param.router == 'resource') {
+                        common.$emit('selectRes', 'resource');
+                        _self.$router.push('home');
+                    } else {
+                        _self.$router.push(_self.param.router)
+                    }
+                }
+
             }
         }
 
 }
 </script>
 <style scoped>
-.err{
-   width:100%;
-   height:100%;
-
+.err {
+    width: 100%;
+    height: 100%;
 }
-.err .img{
-    width:200px;
-    height:120px;
+
+.err .img {
+    width: 200px;
+    height: 120px;
     margin-left: -100px;
     margin-top: -60px;
     position: absolute;
-    left:50%;
-    top:50%;
-    
+    left: 50%;
+    top: 45%;
 }
-.err img{
-    width:80px;
-    height:80px;
+
+.err img {
+    width: 80px;
+    height: 80px;
     margin-bottom: 10px;
 }
-.err .img p{
+
+.err .img p {
     font-size: 1.1rem;
     line-height: 1.5rem;
 }
-.err .img div{
+
+.err .img div {
     padding: 5px;
-    width:80px;
+    width: 80px;
     font-size: 12px;
-    color:white;
+    color: white;
     background: #FA6705;
     border-radius: 4px;
     margin-left: 60px;
-    margin-top:10px;
+    margin-top: 10px;
 }
 </style>

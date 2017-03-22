@@ -32,12 +32,11 @@
                         </router-link>
                         <!-- <router-link to="register"> -->
                         <div @click="jump('register')">
-                           <p class="right">立即注册</p>
+                            <p class="right">立即注册</p>
                         </div>
-                            
                         <!-- </router-link> -->
                     </div>
-                    <div class="confirm" @click="login()">登陆</div>
+                    <div class="confirm" @click="login()">登录</div>
                 </mt-loadmore>
             </div>
         </div>
@@ -52,17 +51,17 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
-                id:'',
-                isMy:'',
+                id: '',
+                isMy: '',
                 wrapperHeight: '',
                 my_header: {
-                    name: '登陆',
-                    router:''
+                    name: '登录',
+                    router: ''
                 },
                 myShow: {
                     show: true,
-                    left_name: '密码登陆',
-                    right_name: '短信登陆'
+                    left_name: '密码登录',
+                    right_name: '短信登录'
                 },
                 selected: 'identiCode',
                 identify_code: '',
@@ -78,8 +77,8 @@ export default {
         },
         created() {
             let _self = this;
-            common.$on('back_login',function(item){
-                _self.id = item.id;    
+            common.$on('back_login', function(item) {
+                _self.id = item.id;
             })
             this.getCode();
         },
@@ -88,9 +87,9 @@ export default {
             myHeader
         },
         methods: {
-            jump(router){
-                   /*common.$emit('inforRegister',1)*/
-                   this.$router.push(router);
+            jump(router) {
+                /*common.$emit('inforRegister',1)*/
+                this.$router.push(router);
             },
             passWordLogin() {
                 let _self = this;
@@ -103,29 +102,32 @@ export default {
                 }, function(response) {
                     common.$emit('close-load');
 
-                    if (response.data.code == '1c01') {  
+                    if (response.data.code == '1c01') {
 
                         window.localStorage.KEY = response.data.biz_result.KEY;
                         window.localStorage.SID = response.data.biz_result.SID;
                         common.KEY = window.localStorage.KEY;
                         common.SID = window.localStorage.SID;
                         common.getDate();
-                        //console.log(window.localStorage.difTime)
-                        common.$emit('getInfo',1); 
-                        if(common.pageParam.backRouter.split('/')[0] == 'resourceDetail'){         
-                                    if(_self.id){
-                                       common.$emit('resourceDetail',_self.id);
-                                       common.$emit('orderConfirm',_self.id);
-                                       _self.$router.replace('orderConfirm/'+ _self.id);  
-                                    }else{
-                                       common.$emit('resourceDetail',common.pageParam.backRouter.split('/')[1]);
-                                       common.$emit('orderConfirm',common.pageParam.backRouter.split('/')[1]);
-                                       _self.$router.replace('orderConfirm/'+ common.pageParam.backRouter.split('/')[1]);  
-                                    }
-                           }else{
-                                common.$emit('go_home',1);
-                                _self.$router.replace('home');
-                           } 
+                        common.$emit('getInfo', 1);
+                        if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {
+                            if (_self.id) {
+                                common.$emit('resourceDetail', _self.id); //点击购买时未登录，登陆成功之后提醒商品那个详情页面刷新
+                                common.$emit('setParam', 'skipLogin', true);
+                                common.$emit('inforCartPop', 1); //通知购物车弹出
+                                _self.$router.replace('resourceDetail/' + _self.id);
+                            } else {
+                                common.$emit('resourceDetail', common.pageParam.backRouter.split('/')[1]); //没有_self.id的时候
+                                common.$emit('setParam', 'skipLogin', true);
+                                common.$emit('inforCartPop', 1);
+                                _self.$router.replace('resourceDetail/' + common.pageParam.backRouter.split('/')[1]);
+                            }
+                        } else if (common.pageParam.backRouter == 'lowPriceRes') {
+                            _self.$router.replace('cart')
+                        } else {
+                            common.$emit('go_home', 1);
+                            _self.$router.replace('home');
+                        }
 
                     } else {
                         common.$emit('message', response.data.msg);
@@ -152,23 +154,25 @@ export default {
                         common.SID = window.localStorage.SID;
                         common.getDate();
                         /*_self.$router.push('/home');*/
-                       // _self.$router.replace(common.pageParam.backRouter);
-                       
-                       common.$emit('getInfo',1);
-                       if(common.pageParam.backRouter.split('/')[0] == 'resourceDetail'){               
-                             if(_self.id){
-                                       common.$emit('resourceDetail',_self.id);
-                                       common.$emit('orderConfirm',_self.id);
-                                       _self.$router.replace('orderConfirm/'+ _self.id);  
-                             }else{
-                               common.$emit('resourceDetail',common.pageParam.backRouter.split('/')[1]);
-                               common.$emit('orderConfirm',common.pageParam.backRouter.split('/')[1]);
-                               _self.$router.replace('orderConfirm/'+ common.pageParam.backRouter.split('/')[1]);  
-                             }
-                       }else{
-                            common.$emit('go_home',1);
+                        // _self.$router.replace(common.pageParam.backRouter);
+
+                        common.$emit('getInfo', 1);
+                        if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {
+                            if (_self.id) {
+                                common.$emit('resourceDetail', _self.id); //点击购买时未登录，登陆成功之后提醒商品那个详情页面刷新
+                                common.$emit('setParam', 'skipLogin', true);
+                                _self.$router.replace('resourceDetail/' + _self.id);
+                            } else {
+                                common.$emit('resourceDetail', common.pageParam.backRouter.split('/')[1]); //没有_self.id的时候
+                                common.$emit('setParam', 'skipLogin', true);
+                                _self.$router.replace('resourceDetail/' + common.pageParam.backRouter.split('/')[1]);
+                            }
+                        } else if (common.pageParam.backRouter == 'lowPriceRes') {
+                            _self.$router.replace('cart')
+                        } else {
+                            common.$emit('go_home', 1);
                             _self.$router.replace('home');
-                       }        
+                        }
                     } else {
                         common.$emit('message', response.data.msg);
                     }
@@ -221,7 +225,7 @@ export default {
             login() {
                 var checkArr = [];
                 let _self = this;
-                
+
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
                 if (_self.myShow.show == true) {
@@ -240,7 +244,7 @@ export default {
                     _self.passWordLogin();
                 }
             }
-            
+
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
