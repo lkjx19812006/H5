@@ -277,7 +277,7 @@ export default {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
-                }, 1500);
+                }, 500);
             },
             handleTopChange(status) {
                 this.topStatus = status;
@@ -290,7 +290,7 @@ export default {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
 
-                }, 1500);
+                }, 500);
             },
             jump(router) {
                 this.$router.push(router);

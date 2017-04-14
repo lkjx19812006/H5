@@ -18,7 +18,10 @@
                                     </div>
                                     <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
                                     <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
-                                    <p class="time_font">上架时间:<span>{{todo.shelveTime | timeFormat}}</span></p>
+                                    <p class="time_font">上架时间:
+                                        <span v-if="todo.shelveTime">{{todo.shelveTime | timeFormat}}</span>
+                                        <span v-if="!todo.shelveTime">近期上架</span>
+                                    </p>
                                 </div>
                                 <div class="res_content_right">
                                     <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>

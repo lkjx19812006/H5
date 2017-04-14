@@ -12,15 +12,6 @@ validation.checkPhone = (phone) => {
 
 }
 validation.checkMaxNum = (val, name) => {
-    /*if (parseInt(val)) {
-        if (val >= 1 && val <= 99999999) {
-            return true
-        } else {
-            name + '不能大于8位'
-        }
-    } else {
-        name + '必须为整数'
-    }*/
     let pattern = /^[1-9]\d{0,7}$/;
     if (!val) {
         return '请输入' + name + '数量'
@@ -28,6 +19,16 @@ validation.checkMaxNum = (val, name) => {
         return name + '需为8位以内正整数'
     } else {
         return false;
+    }
+}
+validation.checkPrice = (val, name) => {
+    let pattern = /^[1-9]\d{0,6}([.][0-9]{1}){0,1}$/;
+    if (!val) {
+        return '请输入' + name
+    } else if (!pattern.test(val)) {
+        return name + '格式不对'
+    } else {
+        return false
     }
 }
 validation.checkLook = (look) => {
@@ -105,4 +106,5 @@ validation.checkDifferent = (newName, oldName) => {
         return false;
     }
 }
+
 module.exports = validation;

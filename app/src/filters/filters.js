@@ -186,3 +186,22 @@ Vue.filter('normalMoney', function(normal, freeze) {
     all_money = all_money.toFixed(2);
     return all_money
 })
+Vue.filter('money', function(money) {
+    let val = 0;
+
+    if (Number(money)) val = Number(money);
+
+    val = val.toFixed(2);
+    return val
+})
+Vue.filter('sex', function(val) {
+    switch (val) {
+        case 1:
+            val = '男';
+            break;
+        case 2:
+            val = '女';
+            break;
+    }
+    return val;
+})

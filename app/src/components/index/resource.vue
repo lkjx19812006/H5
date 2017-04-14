@@ -270,7 +270,7 @@ export default {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
 
-                }, 1500);
+                }, 500);
             },
             handleScroll() {
                 this.scrollTop = this.$refs.wrapper.scrollTop;

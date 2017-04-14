@@ -32,6 +32,7 @@ export default {
         methods: {
             jumpBack() {
                 let _self = this;
+                common.$emit('infor_choose', 1)
                 if (this.param.goBack) {
                     _self.$router.push('/home');
                 } else {

@@ -29,7 +29,7 @@ export default {
                 var allPrice = localStorage.getItem('allPrice');
                 //console.log(_self.cart)
                 _self.allPrice = JSON.parse(allPrice);
-                console.log(_self.allPrice)
+                //console.log(_self.allPrice)
 
                 /*localStorage.removeItem('cartContent');*/
             },
@@ -51,7 +51,7 @@ export default {
     background: white;
     float: left;
     width: 100%;
-    padding-left: 15px;
+    padding-left: 10px;
 }
 
 .place_order .title {
@@ -70,5 +70,17 @@ export default {
 .place_order .price {
     float: right;
     margin-top: 10px;
+}
+
+@media screen and (max-width: 320px) {
+    .place_order .price {
+        float: right;
+        margin-top: 10px;
+        width: 105px;
+        word-break: keep-all;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 </style>

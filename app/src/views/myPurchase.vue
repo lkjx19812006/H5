@@ -4,7 +4,6 @@
             <myHeader :param="param"></myHeader>
             <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
         </div>
-        
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -46,7 +45,7 @@
                         <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
                     <div slot="bottom" class="mint-loadmore-bottom">
-                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }"></span>
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
                 </mt-loadmore>
@@ -270,9 +269,10 @@ export default {
                     }
                 })
             },
-            delet(id){
+            delet(id) {
                 let _self = this;
-                function beforeDelet(){
+
+                function beforeDelet() {
                     common.$emit('show-load');
                     let url = common.addSID(common.urlCommon + common.apiUrl.most);
                     let body = {
@@ -282,28 +282,28 @@ export default {
                         time: 0,
                         sign: '',
                         biz_param: {
-                            id:id
+                            id: id
                         }
                     };
                     body.time = Date.parse(new Date()) + parseInt(common.difTime);
                     body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                     httpService.myResource(url, body, function(suc) {
                         common.$emit('close-load');
-                        if(suc.data.code == '1c01'){
+                        if (suc.data.code == '1c01') {
                             _self.getHttp();
-                        }else{
+                        } else {
                             common.$emit('message', suc.data.msg);
                         }
-                        
+
                     }, function(err) {
                         common.$emit('close-load');
                         common.$emit('message', err.data.msg);
                     })
                 }
                 common.$emit("confirm", {
-                            message: '确认删除？',
-                            title: '提示',
-                            ensure: beforeDelet
+                    message: '确认删除？',
+                    title: '提示',
+                    ensure: beforeDelet
                 });
             },
             getId(param) {
@@ -312,8 +312,8 @@ export default {
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp()
             },
-            jump: function(router,id,duedate) {
-                
+            jump: function(router, id, duedate) {
+
                 common.$emit("purchase-id", id);
                 common.$emit("myPurToPurDetail", id);
                 this.$router.push(router + '/' + id);
@@ -342,21 +342,21 @@ export default {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
-                }, 1500);
+                }, 500);
             },
-            disTime:function(duedate){
-        		var now=new Date().getTime();
-        		console.log(now);
-        		var endDate=new Date(duedate).getTime();
-        		console.log(endDate);
-        		var dis=now-endDate;
-        		console.log(dis);
-        		if(dis<0){
-        			return true;
-        		}else{
-        			return false;
-        		}
-        	},
+            disTime: function(duedate) {
+                var now = new Date().getTime();
+                console.log(now);
+                var endDate = new Date(duedate).getTime();
+                console.log(endDate);
+                var dis = now - endDate;
+                console.log(dis);
+                if (dis < 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
             handleTopChange(status) {
                 this.topStatus = status;
             },
@@ -368,7 +368,7 @@ export default {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
 
-                }, 1500);
+                }, 500);
             },
             handleScroll() {
                 this.scrollTop = this.$refs.wrapper.scrollTop;
@@ -409,6 +409,10 @@ export default {
     &:first-child {
         border-top: solid 1px #eee;
     }
+}
+
+.mint-loadmore {
+    overflow: visible;
 }
 
 .page-loadmore-wrapper {

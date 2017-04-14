@@ -22,6 +22,9 @@
 <script>
 import httpService from '../../common/httpService.js'
 import common from '../../common/common.js'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
             return {
@@ -60,6 +63,7 @@ export default {
                     });
                     return;
                 }
+                this.$store.dispatch('getHttp');
                 this.$router.push('/cart')
             }
         }
@@ -94,6 +98,7 @@ export default {
     height: 30px;
     margin: 10px 55px 10px 30px;
     border-radius: 10px;
+    position: relative;
 }
 
 .long_search .search_div .search_content {
@@ -137,7 +142,9 @@ export default {
 
 .long_search .search_div .search_content img,
 .search-div .search_content img {
-    float: left;
+    float: right;
+    position: absolute;
+    right: 5px;
     max-height: 20px;
     margin: 5px 5px 0 18%;
 }

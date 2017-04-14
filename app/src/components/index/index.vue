@@ -1,6 +1,7 @@
 <template>
     <div class="my_index">
         <div class="my_header">
+            <!-- v-bind:class="{my_header_top:hide_head,'my_header_top_nor':!hide_head}" -->
             <img src="/static/images/my-logo.png" class="logo">
             <p class="website">药材买卖网</p>
             <img src="/static/icons/clarity-search.png" class="search" v-on:click="fromIndex">
@@ -8,7 +9,6 @@
         <div class="my_whole">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
-                    <!--   <div class="content" > -->
                     <div class="swipe_height">
                         <mt-swipe :auto="4000" :prevent="false">
                             <mt-swipe-item v-for="item in imgArray">
@@ -115,7 +115,6 @@
                                         <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0">
                                     </div>
                                     <div class="list_myimage">{{todo.breedName}}</div>
-                                    <!-- <div class="list_font">{{todo.spec}}</div> -->
                                     <div class="list_font">{{todo.location}}</div>
                                     <div class="list_font">剩余{{todo.duedate | timeDays(todo.pubdate)}}</div>
                                     <div class="list_button">
@@ -145,7 +144,6 @@
                                         <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
                                     </div>
                                     <div class="list_myimage">{{todo.breedName}}</div>
-                                    <!-- <div class="list_font">{{todo.spec}}</div> -->
                                     <div class="list_font">{{todo.location}}</div>
                                     <div class="list_font">{{todo.price}}元/{{todo.unit}}</div>
                                     <div class="list_button">
@@ -173,6 +171,7 @@ import filters from '../../filters/filters'
 export default {
     data() {
             return {
+                hide_head: false,
                 scrollTop: 0,
                 topStatus: '',
                 wrapperHeight: 0,
@@ -285,11 +284,11 @@ export default {
             loadTop(id) {
                 let _self = this;
                 setTimeout(() => {
-                    console.log(222222);
+                    //console.log(222222);
                     _self.resourceHttp();
                     _self.getImgArr();
                     _self.$refs.loadmore.onTopLoaded(id);
-                }, 1500);
+                }, 500);
 
             },
             getImgArr() {
@@ -439,7 +438,17 @@ export default {
             }
         },
         watch: {
-            '$route': 'getScrollTop'
+            '$route': 'getScrollTop',
+            /*scrollTop: function(newValue, oldValue) {
+                let _self = this;
+                console.log(newValue);
+                if (newValue >= 100) {
+                    _self.hide_head = true;
+                }
+                if (newValue < 100) {
+                    _self.hide_head = false;
+                }
+            }*/
         },
         created() {
             let _self = this;
@@ -511,8 +520,8 @@ export default {
 </script>
 <style scoped>
 .my_index {
-    float: left;
     width: 100%;
+    position: relative;
 }
 
 .my_header {
@@ -522,6 +531,33 @@ export default {
     height: 60px;
     position: relative;
 }
+
+
+/*@keyframes scrollToTop {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes scrollToTopNor {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.my_header_top {
+    animation: scrollToTop 0.5s linear forwards;
+}
+
+.my_header_top_nor {
+    animation: scrollToTopNor 0.5s linear forwards;
+}*/
 
 .my_whole {
     width: 100%;
@@ -701,6 +737,10 @@ export default {
 
 .real_news .news_content ul li p {
     margin-left: 0.2rem;
+}
+
+.bg_white {
+    float: left;
 }
 
 .bg_white .index_title {

@@ -59,89 +59,46 @@
             </ul>
             <div class="all_price">
                 <div class="transport_price">
+                    <p class="transport_price_left">杂费价格:</p>
+                    <p class="transport_price_right" v-if="todo.orderStatus==0 || todo.orderStatus==10">杂费待确认</p>
+                    <p class="transport_price_right" v-if="todo.orderStatus!==0 && todo.orderStatus!==10">￥{{todo.incidentals}}</p>
+                </div>
+                <div class="transport_price">
                     <p class="transport_price_left">运费价格:</p>
-                    <p class="transport_price_right">运费价格待确认</p>
+                    <p class="transport_price_right" v-if="todo.orderStatus==0 || todo.orderStatus==10">运费待确认</p>
+                    <p class="transport_price_right" v-if="todo.orderStatus!==0 && todo.orderStatus!==10">￥{{todo.freight}}</p>
                 </div>
                 <div class="order_price">
                     <p class="order_price_left">订单总价:</p>
                     <p class="order_price_right">￥<span>{{todo.total}}</span>元</p>
                 </div>
             </div>
-            <div class="logistics" v-if="todo.orderStatus == 50">
+            <div class="logistics" v-if="todo.orderStatus == 50 && logistics != ''">
                 <div>
                     <img src="/static/icons/wuliu.png" class="logis_img">
                     <p>物流信息</p>
                 </div>
                 <ul>
-                    <li>
+                    <li v-for="(item,index) in logistics" v-if="index == 0" class="now">
                         <img src="/static/icons/oranges.png">
-                        <div class="context">北京中关纯北京中关纯北京中关纯北京中关纯北京中关纯北京中关纯</div>
-                        <div class="time">2014-04-15</div>
+                        <div class="context">{{item.context}}</div>
+                        <div class="time">{{item.time}}</div>
                     </li>
-                    <li>
+                    <li v-for="(item,index) in logistics" v-if="index > 0">
                         <img src="/static/icons/unoranges.png">
-                        <div class="context">啊睡觉的咯系啊老大垃圾啊辣椒的</div>
-                        <div class="time">2014-04-16</div>
+                        <div class="context">{{item.context}}</div>
+                        <div class="time">{{item.time}}</div>
                     </li>
                 </ul>
             </div>
             <div class="footer">
-                <p @click="prompt('如需申请，')" v-if="todo.orderStatus >= 60 && todo.type == 0">申请售后</p>
-                <p @click="cancelOrder()" v-if="todo.orderStatus == 0 || todo.orderStatus == 10 && todo.type == 0">取消订单</p>
-                <p @click="call()">联系我们</p>
+                <p @click="call()" v-if="todo.orderStatus !== 20">联系我们</p>
                 <p class="pay-money" v-if="todo.orderStatus == 20 && todo.type == 0" @click="prompt('支付')">立即付款</p>
+                <p @click="prompt('如需申请，')" v-if="todo.orderStatus >= 60 && todo.type == 0">申请售后</p>
+                <p @click="cancelOrder(todo.id,todo.no,todo.type)" v-if="todo.orderStatus == 0 || todo.orderStatus == 10 && todo.type == 0">取消订单</p>
+                <p @click="cancelOrder(todo.id,todo.no,todo.type)" v-if="todo.orderStatus == 20 && todo.type == 1">取消订单</p>
             </div>
         </div>
-        <!-- <div class="buy-img" v-if="todo.type == 0"></div>
-        <div class="sale-img" v-if="todo.type == 1"></div>
-        <div class="word_info">
-            <div class="info_left">
-                <p>下单时间：<span>{{todo.ctime}}</span></p>
-                <p>订单号：<span>{{todo.no}}</span></p>
-                <p>收件人：<span>{{todo.consignee}}</span>&nbsp;|&nbsp;<span>{{todo.consigneePhone}}</span></p>
-                <p class="last_p">收货地址：<span>{{todo.consigneeAddr}}</span></p>
-            </div>
-            <p class="info_right" v-if="todo.type == 0">
-                {{todo.orderStatus | purchaseStatus}}
-            </p>
-            <p class="info_right" v-if="todo.type == 1">
-                {{todo.orderStatus | sellStatus}}
-            </p>
-        </div>
-        <div class="drug_info">
-            <div class="drug_info_top">
-                <img :src="todo.image">
-                <div class="info_top_center">
-                    <p class="drug_name">{{todo.breedName}}</p>
-                    <p class="drug_spec">规格：{{todo.spec}}</p>
-                    <p>产地：{{todo.location}}</p>
-                </div>
-                <div class="info_top_bottom">
-                    <p class="drug_money">{{todo.price}}<span>元/kg</span></p>
-                    <p>数量：<span>{{todo.number}}</span></p>
-                </div>
-            </div>
-            <div class="drug_info_bottom">
-                <div class="good_sum_price">
-                    <p>商品总价</p>
-                    <p class="price">￥{{todo.amount}}</p>
-                </div>
-                <div class="transport_price">
-                    <p>运输价格</p>
-                    <p class="price">￥{{todo.incidentals}}</p>
-                </div>
-                <div class="sum_price">
-                    <p>合计</p>
-                    <p class="price">￥{{Number(todo.amount) + Number(todo.incidentals)}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="footer">
-            <p @click="prompt('如需申请，')" v-if="todo.orderStatus >= 60 && todo.type == 0">申请售后</p>
-            <p @click="cancelOrder()" v-if="todo.orderStatus == 0 && todo.orderStatus == 10 && todo.type == 0">取消订单</p>
-            <p @click="call()">联系我们</p>
-            <p class="pay-money" v-if="todo.orderStatus == 20&&todo.type == 0" @click="prompt('支付')">立即付款</p>
-        </div> -->
     </div>
 </template>
 <script>
@@ -213,9 +170,10 @@ export default {
                         common.$emit('close-load');
                         if (suc.data.code == '1c01') {
                             common.$emit('message', suc.data.msg);
-                            _self.todos.splice(0, _self.todos.length);
-                            _self.httpPraram.page = 1;
-                            _self.getHttp();
+
+                            _self.getHttp(id);
+                            common.$emit('mineToOrder', 0)
+                            _self.$router.push('/allOrder')
                         } else {
                             common.$emit('message', suc.data.msg);
                         }
@@ -291,7 +249,9 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         console.log(suc)
-                            //_self.logistics = suc.data.biz_result.data;
+                        if (suc.data.biz_result.data) _self.logistics = suc.data.biz_result.data;
+                        //if (suc.data.biz_result.data) _self.logistics = _self.logistics.reverse();
+                        //console.log(_self.logistics)
                     }
                 }, function(err) {
                     common.$emit('close-load');
@@ -325,6 +285,7 @@ export default {
     padding: 10px 0 0 0;
     color: #050607;
     margin-bottom: 15px;
+    width: 100%;
 }
 
 .all_order_detail .logistics>div img {
@@ -339,7 +300,7 @@ export default {
 .all_order_detail .logistics li {
     float: left;
     width: 100%;
-    height: 85px;
+    height: 90px;
     position: relative;
 }
 
@@ -351,6 +312,10 @@ export default {
 .all_order_detail .logistics li img {
     height: 100%;
     float: left;
+}
+
+.all_order_detail .logistics ul li.now {
+    color: #FA6705;
 }
 
 .all_order_detail .logistics li .context {
@@ -484,7 +449,7 @@ export default {
 
 .all_order_detail .box .son_order li .res_content .res_content_left {
     float: left;
-    width: 100px;
+    width: 50%;
 }
 
 .all_order_detail .box .son_order li .res_content .res_content_left .sample_img {
@@ -519,6 +484,7 @@ export default {
     float: right;
     font-size: 16px;
     line-height: 16px;
+    width: 50%;
 }
 
 .all_order_detail .box .son_order li .res_content .num {
@@ -598,32 +564,68 @@ export default {
     border: 1px solid #FA6705;
 }
 
-@media screen and (max-height: 736px) {
-    .all_order_detail .box .son_order li .res_content .res_content_left>div,
-    .location,
-    .spec {
-        float: left;
-        font-size: 16px;
-        line-height: 16px;
-        margin-bottom: 22px;
-        word-break: keep-all;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .all_order_detail .box .son_order li .res_content .res_content_right {
-        float: right;
-        font-size: 16px;
-        line-height: 16px;
-        text-align: right;
-        word-break: keep-all;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.all_order_detail .box .son_order li .res_content .res_content_right {
+    float: right;
+    font-size: 16px;
+    line-height: 16px;
+    text-align: right;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-@media screen and (min-height: 663px) and (max-height: 735px) {
+.all_order_detail .box .son_order li .res_content .res_content_left>div {
+    margin-bottom: 22px;
+    font-size: 16px;
+    line-height: 16px;
+    float: left;
+}
+
+.all_order_detail .box .son_order li .res_content .res_content_left .location {
+    font-size: 14px;
+    line-height: 14px;
+    width: 100%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.all_order_detail .box .son_order li .res_content .res_content_left .spec {
+    font-size: 14px;
+    line-height: 14px;
+    width: 100%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.all_order_detail .box .son_order li .res_content .res_content_left .sample_img {
+    height: 1.7rem;
+    float: left;
+    margin-left: 3px;
+}
+
+.all_order_detail .box .son_order li .res_content .res_content_right {
+    float: right;
+    font-size: 16px;
+    line-height: 16px;
+    text-align: right;
+    width: 50%;
+}
+
+.all_order_detail .box .son_order li .res_content .res_content_right>p {
+    width: 100%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/*@media screen and (min-height: 663px) and (max-height: 735px) {
     .all_order_detail .box .son_order li .res_content .res_content_left>div,
     .location,
     .spec {
@@ -631,6 +633,7 @@ export default {
         font-size: 16px;
         line-height: 16px;
         margin-bottom: 22px;
+        width: 100px;
         word-break: keep-all;
         white-space: nowrap;
         overflow: hidden;
@@ -696,5 +699,5 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
     }
-}
+}*/
 </style>

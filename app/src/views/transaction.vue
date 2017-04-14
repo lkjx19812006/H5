@@ -111,7 +111,7 @@ export default {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
-                }, 1500);
+                }, 500);
             },
 
             handleTopChange(status) {
@@ -124,7 +124,7 @@ export default {
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
-                }, 1500);
+                }, 500);
             }
         },
         components: {

@@ -5,7 +5,7 @@
             <orderAddress :param="person"></orderAddress>
         </div>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+            <mt-loadmore>
                 <ul id="list">
                     <li v-for="todo in cart">
                         <!-- <cartList :param="cart_data"></cartList> -->
@@ -14,10 +14,11 @@
                                 <img :src="todo.image[0]" class="drug">
                                 <div class="content">
                                     <p class="breedname">{{todo.breedName}}</p>
+                                    <img src="/static/icons/sample.png" v-if="todo.cartSample == 1">
                                     <p class="stock">规格:<span>统货</span></p>
                                     <p class="location">产地:<span>{{todo.location}}</span></p>
                                     <p class="unit_price" v-if="todo.cartSample == 0">{{todo.price}}元/{{todo.unit}}</p>
-                                    <p class="unit_price" v-if="todo.cartSample == 1">{{todo.sampleAmount}}元/{{todo.sampleUnit}}</p>
+                                    <p class="unit_price" v-if="todo.cartSample == 1">{{todo.sampleAmount}}元/份</p>
                                     <div class="num">x{{todo.cartNumber}}</div>
                                 </div>
                             </div>
@@ -141,7 +142,7 @@ export default {
                         this.allLoaded = true;
                     }
                     this.$refs.loadmore.onBottomLoaded(id);
-                }, 1500);
+                }, 500);
             },
             handleTopChange(status) {
                 this.topStatus = status;
@@ -153,7 +154,7 @@ export default {
                         this.list.unshift(firstValue - i);
                     }
                     this.$refs.loadmore.onTopLoaded(id);
-                }, 1500);
+                }, 500);
             },
             getAddress() {
                 let _self = this;
@@ -247,7 +248,9 @@ export default {
                         if (res.data.code == '1c01') {
                             common.$emit("mineToOrder", 0);
                             _self.$router.replace('/allOrder');
-                            common.$emit('setParam', 'router', 'orderSuccess');
+                            if (!common.pageParam.clickEvent) {
+                                common.$emit('setParam', 'router', 'orderSuccess');
+                            }
                             _self.$store.dispatch('getHttp');
                             _self.$store.dispatch('')
                             _self.$store.dispatch('hideAllShow')
@@ -359,6 +362,7 @@ export default {
 }
 
 .multiple ul {
+    width: 100%;
     float: left;
     padding-top: 10px;
     background: #F2F2F2;
@@ -366,6 +370,7 @@ export default {
 }
 
 .multiple ul li {
+    width: 100%;
     float: left;
     margin-bottom: 10px;
 }
@@ -423,10 +428,18 @@ export default {
     position: relative;
 }
 
+.multiple ul li .content img {
+    width: 15px;
+    height: 1.7rem;
+    float: left;
+}
+
 .multiple ul li .content .breedname {
     font-size: 15px;
     line-height: 15px;
     margin-bottom: 13px;
+    float: left;
+    margin-right: 3px;
 }
 
 .multiple ul li .content .num {
@@ -441,18 +454,24 @@ export default {
     line-height: 15px;
     text-align: left;
     margin-left: -2px;
+    width: 100%;
+    float: left;
 }
 
 .multiple ul li .content .stock {
     font-size: 13px;
     line-height: 13px;
     margin-bottom: 8px;
+    float: left;
+    width: 100%;
 }
 
 .multiple ul li .content .location {
     font-size: 13px;
     line-height: 13px;
     margin-bottom: 12px;
+    float: left;
+    width: 100%;
 }
 
 .multiple ul li .content .operate {

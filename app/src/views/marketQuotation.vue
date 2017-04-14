@@ -12,8 +12,8 @@
                     <p>产地</p>
                     <p>价格</p>
                     <!-- <p>跌涨(元)</p> -->
-                    <input type="button" value="跌涨(元)" v-show = "!percent" @click="change">
-                    <input type="button" value="幅度(%)" v-show = "percent" @click="change">
+                    <input type="button" value="跌涨(元)" v-show="!percent" @click="change">
+                    <input type="button" value="幅度(%)" v-show="percent" @click="change">
                 </div>
             </div>
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
@@ -26,10 +26,10 @@
                                 <p>{{todo.area}}</p>
                                 <p>{{todo.unitprice}}元</p>
                                 <p class="last_one">
-                                    <span v-show = "!percent">{{todo.dayMoney | floatType}}</span>
-                                    <span v-show = "percent">{{todo.dayDowns | percentType}}</span>&nbsp;
+                                    <span v-show="!percent">{{todo.dayMoney | floatType}}</span>
+                                    <span v-show="percent">{{todo.dayDowns | percentType}}</span>&nbsp;
                                     <img src="/static/images/up.png" v-show="todo.dayMoney > 0">
-                                    <img src="/static/images/down.png" v-show="todo.dayMoney < 0"> 
+                                    <img src="/static/images/down.png" v-show="todo.dayMoney < 0">
                                 </p>
                                 <img src="/static/icons/to-down.png" class="to_down" v-show="todo.list.length != 0">
                             </div>
@@ -40,8 +40,8 @@
                                     <p>{{item.area}}</p>
                                     <p>{{item.unitprice}}元</p>
                                     <p class="last_one">
-                                       <span v-show = "!percent">{{item.dayMoney | floatType}}</span>
-                                       <span v-show = "percent">{{item.dayDowns | percentType}}</span>&nbsp;
+                                        <span v-show="!percent">{{item.dayMoney | floatType}}</span>
+                                        <span v-show="percent">{{item.dayDowns | percentType}}</span>&nbsp;
                                         <img src="/static/images/up.png" v-show="item.dayMoney > 0">
                                         <img src="/static/images/down.png" v-show="item.dayMoney < 0">
                                     </p>
@@ -52,8 +52,8 @@
                                     <p>{{item.area}}</p>
                                     <p>{{item.unitprice}}元</p>
                                     <p class="last_one">
-                                       <span v-show = "!percent">{{item.dayMoney | floatType}}</span>
-                                       <span v-show = "percent">{{item.dayDowns | percentType}}</span>&nbsp;
+                                        <span v-show="!percent">{{item.dayMoney | floatType}}</span>
+                                        <span v-show="percent">{{item.dayDowns | percentType}}</span>&nbsp;
                                         <img src="/static/images/up.png" v-show="item.dayMoney > 0">
                                         <img src="/static/images/down.png" v-show="item.dayMoney < 0">
                                     </p>
@@ -69,12 +69,11 @@
                     <div slot="bottom" class="mint-loadmore-bottom">
                         <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                    </div>    
+                    </div>
                 </mt-loadmore>
             </div>
         </div>
         <errPage :param="err" v-show="todos.length==0"></errPage>
-
     </div>
 </template>
 <script>
@@ -87,7 +86,7 @@ import filters from '../filters/filters'
 export default {
     data() {
             return {
-                percent:true,
+                percent: true,
                 err: {
                     err: "很抱歉，没有找到相关资源",
                     url: '/static/icons/maomao.png'
@@ -123,7 +122,7 @@ export default {
         methods: {
             getHttp(back) {
                 let _self = this;
-                if (_self.httpPraram.page == 1)common.$emit('show-load');
+                if (_self.httpPraram.page == 1) common.$emit('show-load');
                 httpService.marketQuotation(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'breedService',
                     biz_method: 'queryBreedPrice',
@@ -139,17 +138,17 @@ export default {
                     }
                     let data = suc.data.biz_result.list;
                     console.log(data);
-                    if(suc.data.code == '1c01'){
+                    if (suc.data.code == '1c01') {
                         for (var i = 0; i < data.length; i++) {
                             let item = data[i];
                             item.show = false;
                             item.percent = Number(item.weekdowns / item.unitprice);
-                            for (var j = 0; j < item.list.length; j++){
+                            for (var j = 0; j < item.list.length; j++) {
                                 item.list[j].percent = Number(item.list[j].weekdowns / item.list[j].unitprice);
                             }
                             _self.todos.push(item);
                         }
-                    }else{
+                    } else {
 
                     }
                     if (data.length < _self.httpPraram.pageSize) {
@@ -167,13 +166,13 @@ export default {
                     }
                 })
             },
-            change(){
-                   this.percent = !this.percent;
+            change() {
+                this.percent = !this.percent;
             },
             firstLevel(index, todos) {
-                if(this.todos[index].list.length != 0)this.todos[index].show = !this.todos[index].show;        
+                if (this.todos[index].list.length != 0) this.todos[index].show = !this.todos[index].show;
             },
-            close(todo){
+            close(todo) {
                 todo.show = !todo.show;
             },
             clearKeyword() {
@@ -203,7 +202,7 @@ export default {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
-                }, 1500);
+                }, 500);
             },
             handleTopChange(status) {
                 this.topStatus = status;
@@ -212,11 +211,11 @@ export default {
                 let _self = this;
                 setTimeout(() => {
                     _self.httpPraram.page = 1;
-                   // _self.todos.splice(0, _self.todos.length);
+                    // _self.todos.splice(0, _self.todos.length);
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
-                }, 1500);
+                }, 500);
             }
         },
         created() {
@@ -258,12 +257,11 @@ export default {
 }
 
 .market_quotation .first_li .to_down {
-    width:1.5rem;
+    width: 1.5rem;
     position: absolute;
     margin-left: -0.75rem;
     left: 50%;
     bottom: 5px;
-
 }
 
 .market_quotation .first_li .to_up {
@@ -367,7 +365,7 @@ export default {
     color: white;
     border-radius: 4px;
     margin-top: 10px;
-    flex:0.7;
+    flex: 0.7;
     -webkit-box-flex: 0.7;
     -webkit-flex: 0.7;
     -ms-flex: 0.7;
@@ -402,14 +400,15 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
 }
-.market_quotation .second_level .last_one{
+
+.market_quotation .second_level .last_one {
     flex: 1;
     -webkit-box-flex: 1;
     -webkit-flex: 1;
     -ms-flex: 1;
 }
+
 .market_quotation .second_level_content {
     border-top: 1px solid #DFDFDF;
     background: #fff;
@@ -444,19 +443,19 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.market_quotation .second_level_content li .last_one{
+
+.market_quotation .second_level_content li .last_one {
     flex: 1;
     -webkit-box-flex: 1;
     -webkit-flex: 1;
     -ms-flex: 1;
 }
+
 .market_quotation .second_level_content li p img {
     height: 1.024rem;
-
 }
 
-.market_quotation .second_level p img{
+.market_quotation .second_level p img {
     height: 1.024rem;
-
 }
 </style>

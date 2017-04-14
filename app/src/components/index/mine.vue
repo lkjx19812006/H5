@@ -1,5 +1,5 @@
 <template>
-    <div class="mine">
+    <div class="mine" id="mine" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
         <accountOverview :param="param"></accountOverview>
         <myInformation :param="information"></myInformation>
         <div class="all_order">
@@ -50,7 +50,7 @@ export default {
 
                 },
                 entrance: [{
-                    name: '待确认',
+                    name: '待审核',
                     router: 'myOrder',
                     img_src: '/static/images/All-orders.png'
                 }, {
@@ -71,7 +71,7 @@ export default {
                     router: 'myResource',
                     img_src: '/static/icons/My-resources.png'
                 }, {
-                    name: '我的采购',
+                    name: '我的求购',
                     router: 'myPurchase',
                     img_src: '/static/icons/My-purchase.png'
                 }, {
@@ -87,7 +87,7 @@ export default {
                     img_src: '/static/icons/I-Yaokuan.png',
                     router: 'app'
                 }, {
-                    name: '更多',
+                    name: '设置',
                     router: 'mySet',
                     img_src: '/static/icons/Set-up.png'
                 }]
@@ -231,7 +231,32 @@ export default {
 
                 }
 
+            },
+            handleScroll() {
+                let _self = this;
+                _self.scrollTop = this.$refs.wrapper.scrollTop;
+
             }
+        },
+        watch: {
+            /* scrollTop: function(newValue, oldValue) {
+                 let _self = this;
+                 console.log(newValue);
+                 if (newValue >= 0) {
+                     _self.hide_head = true;
+                 }
+                 if (newValue < 20) {
+                     _self.hide_head = false;
+                 }
+             }*/
+        },
+        mounted() {
+            /*this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
+            let _self = this;
+            this.$nextTick(function() {
+                _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top;
+            })*/
+
         },
         created() {
 
@@ -286,6 +311,51 @@ export default {
 
 .mine {
     background: #F0F0F0;
+    position: relative;
+    float: left;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.mine #box {
+    overflow-y: scroll;
+    width: 100%;
+    float: left;
+}
+
+.mine .head {
+    width: 100%;
+    height: 50px;
+    background: #FA6705;
+    position: fixed;
+    top: 0;
+}
+
+
+/*@keyframes scrollToTop {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes scrollToTopNor {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}*/
+
+.mine .my_header_top {
+    animation: scrollToTop 0.5s linear forwards;
+}
+
+.mine .my_header_top_nor {
+    animation: scrollToTopNor 0.5s linear forwards;
 }
 
 

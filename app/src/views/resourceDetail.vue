@@ -1,5 +1,5 @@
 <template>
-    <div class="resource_detail">
+    <div class="resource_detail" v-bind:class="{need_float:!my_param.show}">
         <div class="shade" v-if="choose.push_num"></div>
         <myHeader :param="param" v-show="!my_param.show"></myHeader>
         <div v-show="!my_param.show" class="box">
@@ -24,9 +24,9 @@
                         </div>
                     </div>
                     <div class="center_box">
-                        <div class="center">
-                            <div class="choose_type" v-if="obj.sampling == 1 && obj.type == 1">
-                                <div class="large_cargo" :class="{ active: choose.isRed,'default':!choose.isRed }" @click="chooseType()">大货</div>
+                        <div class="center" v-if="obj.sampling == 1 && obj.type == 1">
+                            <div class="choose_type">
+                                <div class="large_cargo" :class="{ active: choose.isRed,'default':!choose.isRed }" @click="unchooseType()">大货</div>
                                 <div class="sample_cargo" :class="{ active: !choose.isRed,'default':choose.isRed }" @click="chooseType()">样品</div>
                             </div>
                         </div>
@@ -40,7 +40,17 @@
                                 <p class="right">起订量：<span>{{obj.moq}}{{obj.unit}}</span></p>
                             </div>
                             <div class="detail">
-                                <p>卖点：<span>{{obj.description}}</span></p>
+                                <p v-if="obj.sampling == 1">样品：<span>提供</span></p>
+                                <p v-if="obj.sampling == 0">样品：<span>不提供</span></p>
+                                <p class="right">上架时间：<span>{{obj.shelveTime | timeFormat}}</span></p>
+                            </div>
+                            <div class="detail">
+                                <div class="sell_point">卖点：</div>
+                                <div class="point_right">
+                                    <span class="point_content">
+                                        {{obj.description}}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="center_content" v-if="!choose.isRed">
@@ -49,11 +59,19 @@
                                 <p class="right">规格：<span>{{obj.spec}}</span></p>
                             </div>
                             <div class="detail">
-                                <p>库存：<span>{{obj.sampleNumber}}{{obj.sampleUnit}}</span></p>
-                                <p class="right">起订量：<span>{{obj.moq}}{{obj.sampleUnit}}</span></p>
+                                <p>库存：<span>{{obj.sampleNumber}}份</span></p>
+                                <p class="right">起订量：<span>{{obj.moq}}份</span></p>
                             </div>
                             <div class="detail">
-                                <p>卖点：<span>{{obj.description}}</span></p>
+                                <p>样品：<span>提供</span></p>
+                                <p class="right">上架时间：
+                                    <span v-if="obj.shelveTime">{{obj.shelveTime | timeFormat}}</span>
+                                    <span v-if="!obj.shelveTime">近期上架</span>
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <div class="sell_point">卖点：</div>
+                                <span>{{obj.description}}</span>
                             </div>
                         </div>
                     </div>
@@ -74,7 +92,7 @@
             </button>
         </div>
         <div class="choose" v-show="choose.push_num" v-bind:class="{swipe_active:choose.push_num,'swipe_default':!choose.push_num  }">
-            <chooseNum :param="choose" v-on:addCart="addBuy"></chooseNum>
+            <chooseNum :param="choose" v-on:addCart="addBuy(obj.id)"></chooseNum>
         </div>
         <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>
     </div>
@@ -144,25 +162,35 @@ export default {
         },
         methods: {
             popUp(index, imgArr) {
+
                 this.my_param.url = imgArr;
                 this.my_param.show = !this.my_param.show;
                 this.my_param.whole_height = document.documentElement.clientHeight;
+
             },
             chooseType() {
                 let _self = this;
                 if (!_self.choose.push_num) {
-                    _self.choose.isRed = !_self.choose.isRed;
+                    _self.choose.isRed = false;
                 }
 
             },
-            addBuy() {
+            unchooseType() {
+                let _self = this;
+                if (!_self.choose.push_num) {
+                    _self.choose.isRed = true;
+                }
+
+            },
+            addBuy(id) {
                 let _self = this;
                 if (common.pageParam.router == 'addCart') {
                     _self.addCart();
                 }
                 if (common.pageParam.router == 'atOnceBuy') {
-                    _self.atOnceBuy();
+                    _self.atOnceBuy(id);
                 }
+                _self.choose.push_num = false;
             },
             addCart() {
                 let _self = this;
@@ -192,11 +220,16 @@ export default {
                         common.$emit('message', err.data.msg);
                     })
             },
-            atOnceBuy() {
+            atOnceBuy(id) {
                 let _self = this;
                 let arr = [];
                 let allPrice = '';
+                if (!_self.choose.value) {
+                    common.$emit('message', '数量不能为空')
+                    return
+                }
                 _self.obj.cartNumber = _self.choose.value;
+
                 if (_self.choose.isRed) {
                     _self.obj.cartSample = 0;
                     allPrice = Number(_self.obj.price) * Number(_self.obj.cartNumber);
@@ -211,6 +244,7 @@ export default {
                 common.$emit('cartContent', arr);
                 common.$emit('cartPrice', allPrice);
                 _self.choose.push_num = false;
+                common.$emit('setParam', 'clickEvent', id);
                 _self.$router.push('/multipleOrders');
             },
             refurbish(id) {
@@ -383,6 +417,9 @@ export default {
             common.$on('getInfo', function(item) {
                 _self.refurbish(id);
             })
+            common.$on('infor_choose', function(item) {
+                _self.choose.isRed = true;
+            })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 41;
@@ -392,7 +429,11 @@ export default {
 </script>
 <style scoped>
 .resource_detail {
+    width: 100%;
     position: relative;
+}
+
+.need_float {
     float: left;
 }
 
@@ -558,6 +599,8 @@ export default {
 
 /*购物车修改*/
 
+.resource_detail .center_box {}
+
 .resource_detail .center {
     padding: 20px;
     position: relative;
@@ -647,6 +690,7 @@ export default {
     width: 100%;
     margin-bottom: 15px;
     text-align: left;
+    overflow: hidden;
 }
 
 .resource_detail .detail p {
@@ -656,6 +700,24 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.resource_detail .detail .sell_point {
+    float: left;
+}
+
+.resource_detail .detail .point_content {
+    /*display: inline-block;*/
+    word-break: break-all;
+}
+
+.resource_detail .detail .point_right {
+    /*float: right;*/
+}
+
+.resource_detail .detail span {
+    color: #666;
+    font-size: 1.1rem;
 }
 
 .resource_detail .detail p span {

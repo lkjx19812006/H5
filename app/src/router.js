@@ -53,6 +53,8 @@ import cart from './views/cart'
 import multipleOrders from './views/multipleOrders'
 import allOrder from './views/allOrder'
 import allOrderDetail from './views/allOrderDetail'
+import drugThat from './views/drugThat'
+import test from './views/test'
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -134,6 +136,8 @@ module.exports = {
         { name: 'multipleOrders', path: '/multipleOrders', component: multipleOrders },
         { name: 'allOrder', path: '/allOrder', component: allOrder },
         { name: 'allOrderDetail', path: '/allOrderDetail/:allOrderId', component: allOrderDetail },
+        { name: 'drugThat', path: '/drugThat/:from', component: drugThat },
+        { name: 'test', path: '/test', component: test },
         { path: '*', redirect: '/home' }
     ]
 }

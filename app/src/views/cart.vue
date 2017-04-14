@@ -4,50 +4,50 @@
             <cartHead></cartHead>
         </div>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                <ul id="list" v-if="cart.length !== 0">
-                    <li v-for="(todo,index) in cart">
-                        <!--  <mt-cell-swipe :right="rightButtons"> -->
-                        <!-- <cartList></cartList> -->
-                        <!-- :param="cart_data" -->
-                        <div v-bind:class="test">
-                            <div class="top">
-                                <img src="/static/icons/quan.png" class="fit" @click.prevent="confirm(index)" v-show='!cart[index].show'>
-                                <img src="/static/icons/buy_quan.png" class="fit" @click.prevent="cancel(index)" v-show='cart[index].show'>
-                                <!-- v-show="cart[index].show" -->
-                                <p class="name">{{todo.breedName}}</p>
-                                <img src="/static/icons/sample.png" v-if="todo.cartSample == 1" class="cart_sample">
-                                <div v-show="headParam.show">
-                                    <p class="price" v-if="!todo.cartSample">{{todo.price}}元/{{todo.unit}}</p>
-                                    <p class="price" v-if="todo.cartSample">{{todo.sampleAmount }}元/{{todo.sampleUnit}}</p>
-                                </div>
-                                <div class="price" @click="dete(todo.cartId,index,todo)" v-show="!headParam.show">
-                                    删除
-                                </div>
+            <!-- <mt-loadmore> -->
+            <ul id="list" v-if="cart.length !== 0">
+                <li v-for="(todo,index) in cart">
+                    <!--  <mt-cell-swipe :right="rightButtons"> -->
+                    <!-- <cartList></cartList> -->
+                    <!-- :param="cart_data" -->
+                    <div v-bind:class="test">
+                        <div class="top">
+                            <img src="/static/icons/quan.png" class="fit" @click.prevent="confirm(index)" v-show='!cart[index].show'>
+                            <img src="/static/icons/buy_quan.png" class="fit" @click.prevent="cancel(index)" v-show='cart[index].show'>
+                            <!-- v-show="cart[index].show" -->
+                            <p class="name">{{todo.breedName}}</p>
+                            <img src="/static/icons/sample.png" v-if="todo.cartSample == 1" class="cart_sample">
+                            <div v-show="headParam.show">
+                                <p class="price" v-if="!todo.cartSample">{{todo.price}}元/{{todo.unit}}</p>
+                                <p class="price" v-if="todo.cartSample">{{todo.sampleAmount }}元/份</p>
                             </div>
-                            <div class="bottom">
-                                <img :src="todo.image[0]" class="drug">
-                                <div class="content">
-                                    <p class="stock" v-if="!todo.cartSample">库存:<span>{{todo.number}}{{todo.unit}}</span></p>
-                                    <p class="stock" v-if="todo.cartSample">库存:<span>{{todo.sampleNumber}}{{todo.sampleUnit}}</span></p>
-                                    <p class="location">产地:<span>{{todo.location}}</span></p>
-                                    <div class="operate">
-                                        <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:subtraction,index:index}">—</button>
-                                        <!--  -->
-                                        <p class="box" @click.prevent="changeValue(index)">
-                                            <input type="number" v-model="todo.cartNumber" disabled=disabled>
-                                        </p>
-                                        <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:addition,index:index}">+</button>
-                                        <!--  -->
-                                    </div>
+                            <div class="price" @click="dete(todo.cartId,index,todo)" v-show="!headParam.show">
+                                删除
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <img :src="todo.image[0]" class="drug">
+                            <div class="content">
+                                <p class="stock" v-if="!todo.cartSample">库存:<span>{{todo.number}}{{todo.unit}}</span></p>
+                                <p class="stock" v-if="todo.cartSample">库存:<span>{{todo.sampleNumber}}份</span></p>
+                                <p class="location">产地:<span>{{todo.location}}</span></p>
+                                <div class="operate">
+                                    <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:subtraction,index:index}">—</button>
+                                    <!--  -->
+                                    <p class="box" @click.prevent="changeValue(index)">
+                                        <input type="number" v-model="todo.cartNumber" disabled=disabled>
+                                    </p>
+                                    <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:addition,index:index}">+</button>
+                                    <!--  -->
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="dete" v-show="param.t_show">删除</div> -->
-                        <!-- </mt-cell-swipe> -->
-                    </li>
-                </ul>
-            </mt-loadmore>
+                    </div>
+                    <!-- <div class="dete" v-show="param.t_show">删除</div> -->
+                    <!-- </mt-cell-swipe> -->
+                </li>
+            </ul>
+            <!-- </mt-loadmore> -->
             <settleAccounts class="account" v-if="cart.length !== 0"></settleAccounts>
             <!-- <div class="pop_up">
                 <div class="pop_box">
@@ -502,41 +502,4 @@ input {
     position: fixed;
     bottom: 0px;
 }
-
-
-/*.cart .total {
-    width: 100%;
-    z-index: 20000;
-    border: 1px solid red;
-    padding: 10px;
-    background: white;
-    float: left;
-}
-
-.cart .total .fit_all {
-    width: 24px;
-    float: left;
-    margin-left: 5px;
-    margin-top: 7px;
-}
-
-.cart .total .fit_word {
-    float: left;
-    font-size: 16px;
-    margin-top: 8px;
-    margin-left: 14px;
-}
-
-.cart .total .account {
-    float: right;
-    padding: 10px 20px;
-    background: #fa6705;
-    border-radius: 4px;
-    margin-left: 5px;
-}
-
-.cart .total .total_center {
-    float: right;
-    text-align: right;
-}*/
 </style>

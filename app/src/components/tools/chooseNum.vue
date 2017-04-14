@@ -2,13 +2,13 @@
     <div class="choose_num">
         <div class="top">
             <div class="drug_img">
-                <img src="/static/icons/bao.png" class="bao">
+                <img src="/static/images/bao.png" class="bao">
                 <img :src="param.image" class="drug">
             </div>
             <div class="top_center" v-if="param.isRed">
                 <div class="title">
                     <p class="title_name">{{param.breedName}}</p>
-                    <p class="img"><img src="/static/icons/sample.png"></p>
+                    <p class="img"><img src="/static/icons/sample.png" v-if="!param.isRed"></p>
                     <p class="price">{{param.price}}<span>元/{{param.unit}}</span></p>
                 </div>
                 <!-- <div class="price">22.00<span>元/公斤</span></div> -->
@@ -21,12 +21,12 @@
                 <div class="title">
                     <p class="title_name">{{param.breedName}}</p>
                     <p class="img"><img src="/static/icons/sample.png"></p>
-                    <p class="price">{{param.sampleAmount}}<span>元/{{param.sampleUnit}}</span></p>
+                    <p class="price">{{param.sampleAmount}}<span>元/份</span></p>
                 </div>
                 <!-- <div class="price">22.00<span>元/公斤</span></div> -->
-                <div class="stock">库存:<span>{{param.sampleNumber}}{{param.sampleUnit}}</span></div>
+                <div class="stock">库存:<span>{{param.sampleNumber}}份</span></div>
                 <div class="location">产地:{{param.location}}</div>
-                <div class="moq">起订量:{{param.moq}}{{param.sampleUnit}}</div>
+                <div class="moq">起订量:{{param.moq}}份</div>
                 <img src="/static/icons/cancel.png" class="cancel" @click="cancelNum()">
             </div>
         </div>
@@ -100,11 +100,20 @@ export default {
 
                     if (parseInt(newVal.value)) {
                         newVal.value = parseInt(newVal.value);
-                        if (newVal.value > _self.param.number) {
-                            newVal.value = _self.param.number;
-                        } else if (newVal.value < 1) {
-                            newVal.value = 1;
+                        if (_self.param.isRed) {
+                            if (newVal.value > _self.param.number) {
+                                newVal.value = _self.param.number;
+                            } else if (newVal.value < 1) {
+                                newVal.value = 1;
+                            }
+                        } else {
+                            if (newVal.value > _self.param.sampleNumber) {
+                                newVal.value = _self.param.sampleNumber;
+                            } else if (newVal.value < 1) {
+                                newVal.value = 1;
+                            }
                         }
+
                     } else {
                         newVal.value = '';
                     }

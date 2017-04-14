@@ -163,22 +163,14 @@ export default {
                 checkArr.push(checkBreedSpec);
                 let checkBreedPlace = validation.checkNull(_self.obj.place, '请输入产地');
                 checkArr.push(checkBreedPlace);
-                /*let checkNumber = validation.checkNull(_self.obj.number, '请输入数量');
-                checkArr.push(checkNumber);
-                let checkPrice = validation.checkNull(_self.obj.sales_price, '请输入价格');*/
                 let checkNum = validation.checkMaxNum(_self.obj.number, '数量');
                 checkArr.push(checkNum);
-                let checkPri = validation.checkMaxNum(_self.obj.sales_price, '价格');
+                let checkPri = validation.checkPrice(_self.obj.sales_price, '价格');
                 checkArr.push(checkPri);
-                //checkArr.push(checkPrice);
                 if (_self.obj.sampling) {
-                    /*let checkWeight = validation.checkNull(_self.obj.weight, '请输入样品数量');
-                    checkArr.push(checkWeight);
-                    let checkSamplePrice = validation.checkNull(_self.obj.price, '请输入样品价格');
-                    checkArr.push(checkSamplePrice);*/
                     let checkSampleNum = validation.checkMaxNum(_self.obj.weight, '样品数量');
                     checkArr.push(checkSampleNum);
-                    let checkSamplePri = validation.checkMaxNum(_self.obj.price, '样品价格');
+                    let checkSamplePri = validation.checkPrice(_self.obj.price, '样品价格');
                     checkArr.push(checkSamplePri);
                 }
                 let count = '请上传图片';
@@ -200,21 +192,12 @@ export default {
                 checkArr.push(checkLookName);
                 let checkPhone = validation.checkPhone(_self.obj.phone);
                 checkArr.push(checkPhone);
-                /* let checkNum = validation.checkMaxNum(_self.obj.number, '数量');
-                 checkArr.push(checkNum);
-                 let checkPri = validation.checkMaxNum(_self.obj.sales_price, '价格');
-                 checkArr.push(checkPri);
-                 let checkSampleNum = validation.checkMaxNum(_self.obj.weight, '样品数量');
-                 checkArr.push(checkSampleNum);
-                 let checkSamplePri = validation.checkMaxNum(_self.obj.price, '样品价格');
-                 checkArr.push(checkSamplePri);*/
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);
                         return;
                     }
                 }
-
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -241,7 +224,7 @@ export default {
                         duedate: _self.obj.duedate,
                         breedId: _self.obj.breedId,
                         unit: _self.obj.number_id,
-                        //sampleUnit:_self.obj.sample_id
+                        sampleUnit: '份'
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);

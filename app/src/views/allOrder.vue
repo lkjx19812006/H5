@@ -42,7 +42,8 @@
                             </ul>
                             <div class="sum">
                                 <div class="sum_right">
-                                    <p class="total_price">订单总价:￥<span>{{todo.total}}</span>(运费价格待确认)</p>
+                                    <p class="total_price" v-if="todo.orderStatus==0 || todo.orderStatus==10">订单总价:￥<span>{{todo.amount}}</span>(运费杂费待确认)</p>
+                                    <p class="total_price" v-if="todo.orderStatus!==0 && todo.orderStatus!==10">订单总价:￥<span>{{todo.total}}</span>(含运费杂费)</p>
                                     <!-- <p class="transport"></p> -->
                                 </div>
                                 <p class="sum_left">
@@ -58,6 +59,15 @@
                             </div>
                         </li>
                     </ul>
+                    <div slot="top" class="mint-loadmore-top">
+                        <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+                        <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                    </div>
+                    <div slot="bottom" class="mint-loadmore-bottom">
+                        <span v-show="bottomStatus !== 'loading' && todos.length >= 10" :class="{ 'is-rotate': bottomStatus === 'drop' }"></span>
+                        <!-- ↑ -->
+                        <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                    </div>
                 </mt-loadmore>
             </div>
         </div>
@@ -349,7 +359,7 @@ export default {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
-                }, 1500);
+                }, 500);
             },
             handleTopChange(status) {
                 this.topStatus = status;
@@ -362,7 +372,7 @@ export default {
                     _self.getHttp(function() {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
-                }, 1500);
+                }, 500);
             },
             prompt(text) {
                 function loadApp() {
@@ -431,6 +441,11 @@ export default {
         border-top: solid 1px #eee;
     }
 }*/
+
+.mint-loadmore {
+    float: left;
+    overflow: visible;
+}
 
 .mint-loadmore-content {
     margin-top: 10px;
@@ -562,16 +577,15 @@ export default {
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left {
     float: left;
-    width: 100px;
+    width: 50%;
     position: relative;
 }
 
-
-/*.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left .sample_img {
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left .sample_img {
     height: 1.7rem;
     float: left;
-    margin-left: 3px;
-}*/
+    margin-right: 3px;
+}
 
 
 /*.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left>div {
@@ -647,16 +661,61 @@ export default {
     text-overflow: ellipsis;
 }
 
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left>div {
+    margin-bottom: 22px;
+    font-size: 16px;
+    line-height: 16px;
+    float: left;
+    max-width: 80%;
+}
 
-/*.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left>div {
-    margin-left: 20px;
-}*/
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left .location {
+    font-size: 14px;
+    line-height: 14px;
+    width: 100%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-@media screen and (max-height: 736px) {
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left .spec {
+    font-size: 14px;
+    line-height: 14px;
+    width: 100%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left .sample_img {
+    height: 1.7rem;
+    float: left;
+    margin-left: 3px;
+}
+
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_right {
+    float: right;
+    font-size: 16px;
+    line-height: 16px;
+    text-align: right;
+    width: 50%;
+}
+
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_right>p {
+    width: 100%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/*@media screen and (max-height: 736px) {
     .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left>div,
     .location,
     .spec {
-        float: left;
         font-size: 16px;
         line-height: 16px;
         margin-bottom: 22px;
@@ -699,7 +758,6 @@ export default {
     .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left .sample_img {
         width: 15px;
         float: left;
-        left: -2px;
     }
     .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_right {
         float: right;
@@ -726,11 +784,6 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left .sample_img {
-        height: 1.7rem;
-        left: 90px;
-        margin-left: 3px;
-    }
     .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_right {
         float: right;
         font-size: 16px;
@@ -756,11 +809,6 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_left .sample_img {
-        height: 1.7rem;
-        left: 90px;
-        margin-left: 3px;
-    }
     .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .son_order li .res_content .res_content_right {
         float: right;
         font-size: 16px;
@@ -771,5 +819,5 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
     }
-}
+}*/
 </style>

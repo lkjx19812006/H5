@@ -44,7 +44,8 @@
                         <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
                     <div slot="bottom" class="mint-loadmore-bottom">
-                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop'}"></span>
+                        <!--  -->
                         <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
                     </div>
                 </mt-loadmore>
@@ -337,7 +338,7 @@ export default {
                             _self.$refs.loadmore.onBottomLoaded(id);
                         });
                     }
-                }, 1500);
+                }, 500);
             },
             handleTopChange(status) {
                 this.topStatus = status;
@@ -350,7 +351,7 @@ export default {
                         _self.$refs.loadmore.onTopLoaded(id);
                     });
 
-                }, 1500);
+                }, 500);
             },
             handleScroll() {
                 this.scrollTop = this.$refs.wrapper.scrollTop;
@@ -386,6 +387,11 @@ export default {
     background: #fff;
 }
 
+.mint-loadmore {
+    float: left;
+    overflow: visible;
+}
+
 .mint-spinner {
     display: inline-block;
     vertical-align: middle;
@@ -415,6 +421,10 @@ export default {
 
 .my_resource .bg_white .page-loadmore-wrapper .mint-loadmore {
     background: #F5F5F5;
+}
+
+.my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list {
+    float: left;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {

@@ -383,7 +383,8 @@ export default {
     background: #EC6817;
 }
 
-.need .bg_white {
+.need
+ .bg_white {
     background: #fff;
 }
 

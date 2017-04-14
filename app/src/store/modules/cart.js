@@ -315,7 +315,8 @@ const mutations = {
     },
     HIDE_ORDER(state, index) {
         state.cartList[index].show = false;
-        let j = 0
+        state.all_show = false;
+        /*let j = 0
         for (var i = 0; i < state.cartList.length; i++) {
             if (!state.cartList[i].show) {
                 j += 1;
@@ -323,7 +324,8 @@ const mutations = {
                     state.all_show = false;
                 }
             }
-        }
+        }*/
+
     },
     ADD_NUM(state, params) {
         /* if (!state.cartList[index].cartSample) {
@@ -386,14 +388,18 @@ const mutations = {
     ALL_PRICE(state) {
         state.all_price = 0;
         state.order_num = 0;
+        let sample_price = 0;
+        let big_price = 0;
         for (var i = 0; i < state.cartList.length; i++) {
             console.log(state.cartList[i].show)
             if (state.cartList[i].show) {
                 state.order_num += 1;
-                state.all_price += Number(state.cartList[i].cartNumber) * Number(state.cartList[i].price);
+                if (state.cartList[i].cartSample == 0) big_price += Number(state.cartList[i].cartNumber) * Number(state.cartList[i].price);
+                if (state.cartList[i].cartSample == 1) sample_price += Number(state.cartList[i].cartNumber) * Number(state.cartList[i].sampleAmount);
                 //console.log(state.all_price)
             }
         }
+        state.all_price = big_price + sample_price;
     },
     ALL_ORDER_SHOW(state) {
         state.all_show = true;

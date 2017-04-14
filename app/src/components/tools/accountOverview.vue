@@ -4,12 +4,34 @@
             <img :src="param.url" v-show="param.url">
             <img src="/static/images/my-header.png" v-show="!param.url">
             <div class="login" v-show='login_show' @click="jump">登录/注册</div>
-            <p>{{param.fullname}}</p>
-            <p class="company-name">{{param.company}}</p>
+            <div class="cerifi">
+                <img src="/static/images/personnal-cer.png" class="left_img" v-show="param.utype !== 2">
+                <img src="/static/images/personnals-Cer.png" class="left_img" v-show="param.utype == 2">
+                <img src="/static/images/company-cer.png" v-show="param.ctype !== 2">
+                <img src="/static/images/companys-Cer.png" v-show="param.ctype == 2">
+            </div>
+            <p class="company-name">{{param.name}}<span v-show="param.fullname">(</span>{{param.fullname}}<span v-show="param.fullname">)</span></p>
+            <!-- <p class="company-name">{{param.company}}</p> -->
             <div class="footer">
-                <p class="left">我的储值 <span>{{param.normalMoney | normalMoney(param.freezeMoney)}}</span></p>
-                <!--   -->
-                <p class="right">我的积分 <span>{{param.score}}</span></p>
+                <div class="drug_money">
+                    <span v-show="show">{{param.normalMoney | normalMoney(param.freezeMoney)}}</span>
+                    <span v-show="!show">****</span>
+                    <img src="/static/images/open-eyes.png" class="eyes" v-if="show" @click="open">
+                    <img src="/static/images/close-eyes.png" class="eyes" v-if="!show" @click="close">
+                </div>
+                <div class="drug_money">我的药款</div>
+            </div>
+            <div class="quota">
+                <div class="left item">
+                    <p v-show="show">{{param.normalMoney | money}}</p>
+                    <p v-show="!show">****</p>
+                    <p>可用额度</p>
+                </div>
+                <div class="item">
+                    <p v-show="show">{{param.freezeMoney | money}}</p>
+                    <p v-show="!show">****</p>
+                    <p>冻结额度</p>
+                </div>
             </div>
         </div>
     </div>
@@ -24,7 +46,8 @@ export default {
                 perfect: {
                     name: '',
                     bizMain: ''
-                }
+                },
+                show: true
             }
         },
         props: {
@@ -40,6 +63,12 @@ export default {
         methods: {
             jump() {
                 this.$router.push('/login');
+            },
+            open() {
+                this.show = false;
+            },
+            close() {
+                this.show = true;
             }
         },
         created() {
@@ -64,21 +93,42 @@ export default {
 </script>
 <style scoped>
 .account_overview .header {
-    height: 16.6rem;
+    height: 24rem;
     width: 100%;
     background: url(/static/images/bg.png) no-repeat;
     background-size: 100% 100%;
     margin: 0;
     padding: 0;
+    position: relative;
 }
 
-.account_overview .header img {
+.account_overview .header>img {
     margin-top: 2.815rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 10px;
     width: 5.119rem;
     height: 5.119rem;
     border-radius: 50%;
     overflow: hidden;
+}
+
+.account_overview .header .cerifi {
+    padding: 0;
+    width: 150px;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    margin: auto;
+    margin-bottom: 5px;
+}
+
+.account_overview .header .cerifi>img {
+    flex: 1;
+    width: 70px;
+}
+
+.account_overview .header .cerifi>.left_img {
+    margin-right: 15px;
 }
 
 .account_overview .header>p {
@@ -90,7 +140,7 @@ export default {
 .account_overview .login {
     font-size: 14px;
     width: 80px;
-    padding: 5px;
+    padding: 3px;
     background: #FA6705;
     border-radius: 3px;
     color: white;
@@ -98,41 +148,62 @@ export default {
 }
 
 .account_overview .header .company-name {
-    font-size: 1.023rem;
-    line-height: 1.023rem;
-    margin-top: 0.8rem;
+    font-size: 14px;
+    line-height: 14px;
+    color: white;
+    margin-top: 10px;
 }
 
 .account_overview .header .footer {
-    margin-top: 1.5rem;
+    margin-top: 20px;
     font-size: 1.023rem;
-    height: 1.2rem;
     padding: 0 15%;
 }
 
-.account_overview .header .footer .left {
-    float: left;
-    width: 50%;
-    border-right: 1px solid white;
-    text-align: left;
-    word-break: keep-all;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.account_overview .header .footer .eyes {
+    position: absolute;
+    right: 3px;
+    height: 20px;
+    width: 20px;
+    top: 0px;
 }
 
-.account_overview .header .footer .right {
-    width: 50%;
-    float: right;
-    word-break: keep-all;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: right;
+.account_overview .header .drug_money {
+    position: relative;
+    padding: 0;
+    color: #fff;
+    font-size: 14px;
 }
 
-.account_overview .header .footer .left span,
-.account_overview .header .footer .right span {
-    color: #FA6705;
+.account_overview .header .quota {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    bottom: 0px;
+    flex-direction: row;
+    box-sizing: border-box;
+    height: 50px;
+}
+
+.account_overview .header .quota .item {
+    flex: 1;
+    background: rgba(255, 255, 255, .3);
+    zoom: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    font-size: 14px;
+    line-height: 14px;
+}
+
+.account_overview .header .quota .item>p {
+    flex: 1;
+    color: #fff;
+}
+
+.account_overview .header .quota .left {
+    margin-right: 2px;
 }
 </style>

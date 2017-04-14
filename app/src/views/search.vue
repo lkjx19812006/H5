@@ -7,7 +7,7 @@
             </div>
             <span @click="back()">取消</span>
         </div>
-        <div v-show="!keyword"  class='hot_box'>
+        <div v-show="!keyword" class='hot_box'>
             <div class="history_search_content hot_div">
                 <div class="history_search_content_result">
                     <div class="history_search_content_result_title">
@@ -36,10 +36,10 @@
             </div>
         </div>
         <div v-show="keyword">
-            <div  v-bind:class="[mytype=='ios' ?  'ios_result' : 'search_result']">
+            <div v-bind:class="[mytype=='ios' ?  'ios_result' : 'search_result']">
                 <ul class="page-loadmore-list">
                     <li v-for="todo in datas" class="page-loadmore-listitem list_content_item" @click="jumpRes(todo)">
-                        <div >
+                        <div>
                             <img src="/static/icons/search.png">
                             <p>{{todo.keyWord}}<span v-if="searchType!='keyword'">({{todo.breedName}})</span></p>
                         </div>
@@ -56,14 +56,14 @@ import httpService from '../common/httpService.js'
 export default {
     data() {
             return {
-                mytype:'',
+                mytype: '',
                 str: '',
                 keyword: '',
                 historyArr: [],
                 todos: [],
                 datas: [],
                 customerId: '',
-                searchType:common.searchType,
+                searchType: common.searchType,
                 searchArr: [{
                     "name": "人参",
                     "spec": "统货",
@@ -137,17 +137,17 @@ export default {
                     }
                 }
                 if (count) _self.historyArr.unshift(item);
-                let arr = []; 
-                for(let i=0;i<_self.historyArr.length;i++){
-                    arr[i]=JSON.stringify(_self.historyArr[i]);
+                let arr = [];
+                for (let i = 0; i < _self.historyArr.length; i++) {
+                    arr[i] = JSON.stringify(_self.historyArr[i]);
                 }
                 window.localStorage.historyArr = arr.join('},');
                 if (common.pageParam.router == 'index') {
                     common.$emit("setParam", 'lowPrice', item);
                     _self.$router.push('lowPriceRes');
-                }else if(common.pageParam.router == 'drugResTable'){
-                         common.$emit("informdrugDetail", item.keyWord);
-                         _self.$router.push('/drugResTableDetail/' + common.pageParam.myType + '/' + item.keyWord);  
+                } else if (common.pageParam.router == 'drugResTable') {
+                    common.$emit("informdrugDetail", item.keyWord);
+                    _self.$router.push('/drugResTableDetail/' + common.pageParam.myType + '/' + item.keyWord);
                 } else {
                     window.history.go(-1);
                 }
@@ -157,11 +157,11 @@ export default {
             keyword: function(newValue, oldValue) {
                 //console.log(newValue, oldValue);
                 let _self = this;
-                this.searchType=common.searchType;
+                this.searchType = common.searchType;
                 window.clearTimeout(this.time);
                 this.time = setTimeout(() => {
                     common.$emit('show-load');
-                    let body={
+                    let body = {
                         biz_module: 'searchKeywordService',
                         biz_method: 'querySearchKeywordBreed',
                         biz_param: {
@@ -170,19 +170,19 @@ export default {
                             pSize: 20
                         }
                     }
-                    if(common.searchType=='keyword'){
-                        body.biz_module='searchKeywordService';
-                        body.biz_method='querySearchKeyword';
-                    }else{
-                        body.biz_module='searchKeywordService';
-                        body.biz_method='querySearchKeywordBreed';
+                    if (common.searchType == 'keyword') {
+                        body.biz_module = 'searchKeywordService';
+                        body.biz_method = 'querySearchKeyword';
+                    } else {
+                        body.biz_module = 'searchKeywordService';
+                        body.biz_method = 'querySearchKeywordBreed';
                     }
                     httpService.searchWord(common.urlCommon + common.apiUrl.most, body, function(suc) {
                         common.$emit('close-load');
                         let result = suc.data.biz_result.list;
-                        if(suc.data.code == '1c01'){
+                        if (suc.data.code == '1c01') {
                             _self.datas = result;
-                        }else{
+                        } else {
                             common.$emit('message', suc.data.msg);
                         }
                     }, function(err) {
@@ -195,14 +195,14 @@ export default {
 
         created() {
             let _self = this;
-            common.$on('informIosType',function(item){
-                  console.log(item)
-                  _self.mytype = item;
+            common.$on('informIosType', function(item) {
+                console.log(item)
+                _self.mytype = item;
             })
             _self.mytype = common.pageParam.myType;
-            if(window.localStorage.historyArr)_self.historyArr = window.localStorage.historyArr.split('},');
-            for(let i = 0;i<_self.historyArr.length;i++){
-                _self.historyArr[i]=JSON.parse(_self.historyArr[i]);
+            if (window.localStorage.historyArr) _self.historyArr = window.localStorage.historyArr.split('},');
+            for (let i = 0; i < _self.historyArr.length; i++) {
+                _self.historyArr[i] = JSON.parse(_self.historyArr[i]);
             }
             common.$emit('show-load');
             httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
@@ -215,11 +215,11 @@ export default {
             }, function(suc) {
                 common.$emit('close-load');
                 let result = suc.data.biz_result.list;
-                if(suc.data.code == '1c01'){
+                if (suc.data.code == '1c01') {
                     _self.todos = result;
-                }else{
+                } else {
                     common.$emit('message', suc.data.msg);
-                }     
+                }
             }, function(err) {
                 common.$emit('close-load');
                 common.$emit('message', err.data.msg);
@@ -240,22 +240,23 @@ export default {
     border-bottom: 1px solid #ccc;
     top: 0;
     width: 100%;
-    z-index: 2; 
+    z-index: 2;
     background: #FA6705;
-    
 }
-.search .ios_header{
+
+.search .ios_header {
     height: 65px;
     position: fixed;
     background: #fff;
     border-bottom: 1px solid #ccc;
     top: 0;
     width: 100%;
-    z-index: 2; 
+    z-index: 2;
     padding: 20px 0 5px 0;
     background: #FA6705;
 }
-.search .hot_box{
+
+.search .hot_box {
     margin-top: 10px;
 }
 
@@ -263,20 +264,24 @@ export default {
     margin-top: 50px;
     background-color: #fff;
 }
-.search .ios_result{
+
+.search .ios_result {
     margin-top: 65px;
     background-color: #fff;
 }
+
 .search .search_result ul li {
     min-height: 40px;
     border-bottom: 1px solid #ccc;
     margin: 0 15px;
 }
+
 .search .ios_result ul li {
     min-height: 40px;
     border-bottom: 1px solid #ccc;
     margin: 0 15px;
 }
+
 .search .search_result ul li div {
     font-size: 1.3rem;
     line-height: 40px;
@@ -284,6 +289,7 @@ export default {
     float: left;
     color: #666;
 }
+
 .search .ios_result ul li div {
     font-size: 1.3rem;
     line-height: 40px;
@@ -291,36 +297,43 @@ export default {
     float: left;
     color: #666;
 }
+
 .search .search_result ul li div img {
     max-height: 20px;
     margin-top: 10px;
     float: left;
 }
-.search .ios_result ul li div img{
+
+.search .ios_result ul li div img {
     max-height: 20px;
     margin-top: 10px;
     float: left;
 }
+
 .search .search_result ul li div p {
     float: left;
     margin-left: 15px;
 }
-.search .ios_result ul li div p{
+
+.search .ios_result ul li div p {
     float: left;
     margin-left: 15px;
 }
+
 .search .search_div .search_content {
     background: #F1EFEF;
     height: 30px;
-    margin: 10px 65px 5px 15px;
+    margin: 10px 75px 5px 15px;
     border-radius: 10px;
 }
-.search .ios_header .search_content{
+
+.search .ios_header .search_content {
     background: #F1EFEF;
     height: 30px;
-    margin: 5px 65px 5px 15px;
+    margin: 5px 75px 5px 15px;
     border-radius: 10px;
 }
+
 .search .search_div .search_content input {
     background-color: #F1EFEF;
     height: 30px;
@@ -328,6 +341,7 @@ export default {
     left: 32px;
     border: none;
 }
+
 .search .ios_header .search_content input {
     background-color: #F1EFEF;
     height: 30px;
@@ -335,18 +349,20 @@ export default {
     left: 32px;
     border: none;
 }
+
 .search .search_div span {
     position: absolute;
     height: 30px;
     bottom: 8px;
     right: 15px;
-    width: 40px;
+    width: 55px;
     line-height: 30px;
     color: #333;
     font-size: 14px;
     font-weight: 400;
 }
-.search .ios_header span{
+
+.search .ios_header span {
     position: absolute;
     height: 30px;
     bottom: 8px;
@@ -357,16 +373,19 @@ export default {
     font-size: 14px;
     font-weight: 400;
 }
+
 .search .search_div .search_content img {
     float: right;
     max-height: 20px;
     margin: 5px 10px 0 0;
 }
+
 .search .ios_header .search_content img {
     float: right;
     max-height: 20px;
     margin: 5px 10px 0 0;
 }
+
 .search .history_search_content {
     margin-top: 20px;
     float: left;

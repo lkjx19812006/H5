@@ -64,8 +64,8 @@ export default {
                     }
                     if (cart[i].show) n += 1;
                 }
-
-                if (n == cart.length && n !== 0) {
+                console.log(n)
+                if (n > 0) {
                     console.log(n)
                     localStorage.setItem('cartContent', JSON.stringify(arr));
                     localStorage.setItem('allPrice', JSON.stringify(allPrice));
