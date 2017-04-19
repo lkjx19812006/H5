@@ -157,6 +157,7 @@ export default {
                         // _self.$router.replace(common.pageParam.backRouter);
 
                         common.$emit('getInfo', 1);
+
                         if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {
                             if (_self.id) {
                                 common.$emit('resourceDetail', _self.id); //点击购买时未登录，登陆成功之后提醒商品那个详情页面刷新

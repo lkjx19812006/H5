@@ -8,8 +8,6 @@ import marketQuotation from './views/marketQuotation'
 import supplyRelease from './views/supplyRelease'
 import needRelease from './views/needRelease'
 import provenanceSelection from './views/provenanceSelection'
-import accountInfo from './views/accountInfo'
-import accountInfoFinish from './views/accountInfoFinish'
 import drugResTableDetail from './views/drugResTableDetail'
 import transaction from './views/transaction'
 import search from './views/search'
@@ -25,15 +23,11 @@ import revisePassWordConfirm from './views/revisePassWordConfirm'
 import addressManage from './views/addressManage'
 import addressRevise from './views/addressRevise'
 import feedBack from './views/feedBack'
-import myOrder from './views/myOrder'
 import needDetail from './views/needDetail'
 import resourceDetail from './views/resourceDetail'
 import needReleaseSuccess from './views/needReleaseSuccess'
 import supplyReleaseSuccess from './views/supplyReleaseSuccess'
-import orderConfirm from './views/orderConfirm'
-import sampleConfirm from './views/sampleConfirm'
 import detailsPage from './views/detailsPage'
-import myOrderDetail from './views/myOrderDetail'
 import goodDetail from './views/goodDetail'
 import addAddress from './views/addAddress'
 import myPurchase from './views/myPurchase'
@@ -54,7 +48,12 @@ import multipleOrders from './views/multipleOrders'
 import allOrder from './views/allOrder'
 import allOrderDetail from './views/allOrderDetail'
 import drugThat from './views/drugThat'
-import test from './views/test'
+import account from './views/account'
+import accountRevise from './views/accountRevise'
+import subCompany from './views/subCompany'
+import oneStopService from './views/oneStopService'
+import fourAdvantages from './views/fourAdvantages'
+
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -92,8 +91,6 @@ module.exports = {
         { name: 'supplyRelease', path: '/supplyRelease', component: supplyRelease },
         { name: 'needRelease', path: '/needRelease', component: needRelease },
         { name: 'provenanceSelection', path: '/provenanceSelection/:from', component: provenanceSelection },
-        { name: 'accountInfo', path: '/accountInfo', component: accountInfo },
-        { name: 'accountInfoFinish', path: '/accountInfoFinish', component: accountInfoFinish },
         { name: 'drugResTableDetail', path: '/drugResTableDetail/:from/:drugId', component: drugResTableDetail },
         { name: 'transaction', path: '/transaction', component: transaction },
         { name: 'search', path: '/search', component: search },
@@ -104,7 +101,6 @@ module.exports = {
         { name: 'register', path: '/register', component: register },
         { name: 'findPassWord', path: '/findPassWord', component: findPassWord },
         { name: 'mySet', path: '/mySet', component: mySet },
-        { name: 'myOrderDetail', path: '/myOrderDetail/:OrdeId', component: myOrderDetail },
         { name: 'detailsPage', path: '/detailsPage', component: detailsPage },
         { name: 'revisePassWord', path: '/revisePassWord', component: revisePassWord },
         { name: 'revisePassWordConfirm', path: '/revisePassWordConfirm', component: revisePassWordConfirm },
@@ -113,7 +109,6 @@ module.exports = {
         { name: 'feedBack', path: '/feedBack', component: feedBack },
         { name: 'goodDetail', path: '/goodDetail/:odId', component: goodDetail },
         { name: 'addAddress', path: '/addAddress', component: addAddress },
-        { name: 'myOrder', path: '/myOrder', component: myOrder },
         { name: 'cityName', path: '/cityName', component: cityName },
         { name: 'areaName', path: '/areaName', component: areaName },
         { name: 'revisePurchase', path: '/revisePurchase/:visePurId', component: revisePurchase },
@@ -124,8 +119,6 @@ module.exports = {
         { name: 'purchaseDetail', path: '/purchaseDetail/:rchaseId', component: purchaseDetail },
         { name: 'needReleaseSuccess', path: '/needReleaseSuccess/:needSucId', component: needReleaseSuccess },
         { name: 'supplyReleaseSuccess', path: '/supplyReleaseSuccess/:suppSucId', component: supplyReleaseSuccess },
-        { name: 'orderConfirm', path: '/orderConfirm/:sourceId', component: orderConfirm },
-        { name: 'sampleConfirm', path: '/sampleConfirm/:sourceId', component: sampleConfirm },
         { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
         { name: 'aboutus', path: '/aboutus/:from', component: aboutus },
@@ -137,7 +130,11 @@ module.exports = {
         { name: 'allOrder', path: '/allOrder', component: allOrder },
         { name: 'allOrderDetail', path: '/allOrderDetail/:allOrderId', component: allOrderDetail },
         { name: 'drugThat', path: '/drugThat/:from', component: drugThat },
-        { name: 'test', path: '/test', component: test },
+        { name: 'account', path: '/account', component: account },
+        { name: 'accountRevise', path: '/accountRevise/:id', component: accountRevise },
+        { name: 'subCompany', path: '/subCompany', component: subCompany },
+        { name: 'oneStopService', path: '/oneStopService', component: oneStopService },
+        { name: 'fourAdvantages', path: '/fourAdvantages', component: fourAdvantages },
         { path: '*', redirect: '/home' }
     ]
 }

@@ -50,7 +50,7 @@
                                     <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click.stop="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
                                     <button v-if="'success' ==judgeOrderStatus(todo.orderStatus)" @click.stop="jump(todo.id)">查看订单</button>
                                     <!-- <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="jump(todo.id)">查看订单</button> -->
-                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('确认收货')">确认收货</button>
+                                    <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" class="special" @click.stop="prompt('确认收货')">确认收货</button>
                                     <button v-if="'waitsend' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('催促发货')">催促发货</button>
                                     <button v-if="'pay' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="prompt('支付')">立即支付</button>
                                     <button v-if="'collectmoney' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==1" @click.stop="collectMoney(todo.id,todo.no)">确认收款</button>
@@ -646,6 +646,14 @@ export default {
     font-size: 14px;
     color: #333;
     margin-top: 11px;
+}
+
+.my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .sum .sum_left .special {
+    border: 1px solid #FA6705;
+    color: #FA6705;
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 3px;
 }
 
 .my_order .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .sum .sum_right .total_price {

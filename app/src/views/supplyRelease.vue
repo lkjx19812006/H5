@@ -260,7 +260,20 @@ export default {
             let _self = this;
             _self.getInfo();
             common.$on('inforReleases', function(item) {
+                _self.obj.drug_name = '';
+                _self.obj.spec = '';
+                _self.obj.place = '';
+                _self.obj.number = '';
+                _self.obj.sales_price = '';
+                _self.obj.weight = '';
+                _self.obj.price = '';
+                _self.obj.selling_point = '';
+                _self.obj.number_unit = '斤';
+                for (var i = 0; i < _self.imageArr.length; i++) {
+                    _self.imageArr[i].url = '/static/images/upload-image.png';
+                }
                 _self.getInfo();
+
             })
         },
         mounted() {

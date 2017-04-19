@@ -56,7 +56,8 @@ let common = new Vue({
             myType: '',
             skipLogin: '',
             myInfo: '',
-            clickEvent: ''
+            clickEvent: '',
+            postUsers: ''
         },
         shareParam: {
             imgUrl: 'http://apps.yaocaimaimai.com/htm5/static/icons/err.png',

@@ -26,9 +26,9 @@ export default {
                 }, {
                     url: '/static/images/my-account.png',
                     name: '我的账户',
-                    router: 'accountInfo'
+                    router: 'account'
                 }, ],
-                phone:common.servicePhone
+                phone: common.servicePhone
 
             }
         },
@@ -38,46 +38,46 @@ export default {
             }
         },
         created() {
-           // console.log(this.param);
-            if(!common.servicePhone)this.getCustomerPhone();
+            // console.log(this.param);
+            if (!common.servicePhone) this.getCustomerPhone();
         },
         methods: {
-             getCustomerPhone() {
+            getCustomerPhone() {
                 let _self = this;
                 console.log(common.urlCommon + common.apiUrl.getDate);
                 this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
                     if (response.data.code == '1c01') {
                         console.log(response.data);
-                        common.servicePhone=response.data.biz_result.serviceMobile;
-                        _self.phone=response.data.biz_result.serviceMobile;
+                        common.servicePhone = response.data.biz_result.serviceMobile;
+                        _self.phone = response.data.biz_result.serviceMobile;
                     }
                 }, (err) => {
                     common.$emit('message', err.data.msg);
                 });
             },
-            call(){
-                window.location.href = "tel:"+this.phone;
+            call() {
+                window.location.href = "tel:" + this.phone;
             },
             jump(router) {
                 let _self = this;
                 if (router == 'detailsPage') {
-                        if(_self.param.employee <= 100000){
-                            common.$emit("confirm", {
+                    if (_self.param.employee <= 100000) {
+                        common.$emit("confirm", {
                             message: '未设置专属客户，去设置？',
                             title: '提示',
                             ensure: _self.call
                         });
-                    }else if(_self.param.employee > 100000){
-                            _self.$router.push('/detailsPage');
-                    }else{
-                            common.$emit("confirm", {
+                    } else if (_self.param.employee > 100000) {
+                        _self.$router.push('/detailsPage');
+                    } else {
+                        common.$emit("confirm", {
                             message: '未设置专属客户，拨号去设置？',
                             title: '提示',
                             ensure: _self.call
                         });
 
                     }
-                    
+
                 } else {
                     switch (router) {
                         case 'addressManage':
@@ -92,8 +92,8 @@ export default {
                     }
                     if (!common.customerId) {
                         function loadApp() {
-                            common.$emit('setParam','backRouter','/home');
-                            
+                            common.$emit('setParam', 'backRouter', '/home');
+
                             _self.$router.push('/login');
                         }
                         common.$emit('confirm', {

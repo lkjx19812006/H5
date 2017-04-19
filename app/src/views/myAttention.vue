@@ -9,24 +9,24 @@
         <div class="bg_white">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                    <ul class="page-loadmore-list" v-show="param.show">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" v-on:click="jump(todo.id)">
-                            <img v-bind:src="todo.image[0]" class="list_images">
-                            <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1" class="small_img">
-                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
-                            <div class="res_content">
-                                <div class="res_content_center">
-                                    <div>
-                                        <!-- <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">  -->{{todo.breedName}}
-                                    </div>
-                                    <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
-                                    <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
-                                    <p class="time_font">上架时间：<span>{{todo.shelveTime | timeFormat}}</span></p>
+                    <ul class="bbox" v-show="param.show">
+                        <li v-for="todo in todos" @click="jump(todo.id)">
+                            <div class="images">
+                                <img :src="todo.image[0]" class="my_images">
+                            </div>
+                            <div class="main">
+                                <div class="names">{{todo.breedName}}</div>
+                                <div class="specs">规格：<span>{{todo.spec}}</span></div>
+                                <div class="places">产地：<span>{{todo.location}}</div>
+                                <div class="times">上架时间：<span>{{todo.shelveTime | timeFormat}}</div>
+                            </div>
+                            <div class="rights">
+                                <div class="top">
+                                {{todo.price}}元/<span>{{todo.unit}}</span>
                                 </div>
-                                <div class="res_content_right">
-                                    <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>
-                                    <button class="mint-button mint-button--primary mint-button--small">立即购买</button>
+                                <div class="emtry"></div>
+                                <div class="bottom">
+                                    立即购买
                                 </div>
                             </div>
                         </li>
@@ -310,127 +310,114 @@ export default {
     width: 100%;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list {
-    margin-top: -10px;
+.my_attention .bg_white .bbox {
+    padding: 0px;
+    box-sizing: border-box;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
-    float: left;
+.my_attention .bg_white .bbox li {
+    display: flex;
+    flex-direction: row;
     width: 100%;
-    height: 9.55rem;
-    margin-top: 10px;
-    background: white;
-    border-radius: 3px;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    height: 8.1rem;
-    width: 25%;
-    left: 10px;
-    margin: 10px 10px 10px 0;
-    position: absolute;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li {
+    height: 110px;
+    background-color: #fff;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 4px;
     position: relative;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img {
-    width: 16px;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 10;
+.my_attention .bg_white .bbox li .images {
+    width: 1;
+    height: 100%;
+    box-sizing: border-box;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img {
-    width: 16px;
-    position: absolute;
-    top: 10px;
-    left: 28px;
-    z-index: 10;
+.my_attention .bg_white .bbox li .images .my_images {
+    width: 80px;
+    height: 100%;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
-    float: left;
+.my_attention .bg_white .bbox li .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    position: relative;
+}
+
+.my_attention .bg_white .bbox li .main>div {
     text-align: left;
-    line-height: 20px;
-    font-size: 1.3rem;
-    margin-bottom: 8px;
-}
-
-
-/*.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
-    float: left;
-    width: 1.2rem;
-    margin-right: 4px;
-}*/
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center>div {
-    word-break: keep-all;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 40%;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .over_lenght {
-    word-break: keep-all;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 250px;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
-    float: left;
     width: 100%;
-    padding-right: 90px;
-    line-height: 18px;
-    text-align: left;
-    font-size: 1.2rem;
+}
+
+.my_attention .bg_white .bbox li .main .name {
+    font-size: 14px;
+    line-height: 15px;
+    color: #333;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.my_attention .bg_white .bbox li .main .specs {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.my_attention .bg_white .bbox li .main .specs,
+.places {
+    font-size: 12px;
+    line-height: 12px;
     color: #666;
-    margin-top: 0.5rem;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec {
-    margin-top: 0.3rem;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
-    width: 100%;
-    padding-left: 30%;
-    padding-top: 10px;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
-    position: absolute;
-    max-width: 100px;
-    height: 95px;
-    margin: 0;
-    right: 10px;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
-    font-size: 1.25rem;
-    margin-top: 0px;
-    color: #EC6817;
-}
-
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
+.my_attention .bg_white .bbox li .main .times {
+    font-size: 12px;
+    line-height: 12px;
+    margin-top: 10px;
+    color: #999;
     position: absolute;
     bottom: 0px;
-    background: #EC6817;
-    font-size: 1.109rem;
-    width: 5.97rem;
-    right: 0px;
-    height: 2.38rem;
-    padding: 0 5px;
+    z-index: 20;
+    white-space: nowrap;
 }
 
-.my_attention .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {
-    font-size: 1rem;
-    color: #999;
+.my_attention .bg_white .bbox li .rights {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.my_attention .bg_white .bbox li .rights .top {
+    font-size: 12px;
+    width: 100%;
+    line-height: 19px;
+    color: #FA6705;
+    text-align: right;
+}
+
+.my_attention .bg_white .bbox li .rights .emtry {
+    flex: 1;
+}
+
+.my_attention .bg_white .bbox li .rights .bottom {
+    font-size: 12px;
+    padding: 3px 5px;
+    color: #fff;
+    width: 60px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    background-color: #FA6705;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
 .urgent_need {}

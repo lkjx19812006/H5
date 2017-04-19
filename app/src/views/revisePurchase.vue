@@ -95,14 +95,18 @@ export default {
                             result.pubdate =result.pubdate.replace(/-/g, "/");
                             
                         }*/
-                        let due=result.duedate.split('.')[0];
-                        if(due)var arr = due.split(/[- : \/]/);
-                        var duedateDate = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);/*new Date(result.duedate.split(' ')[0]);*/
-                        var pubdateDate = new Date();
+                        let due = result.duedate.split('.')[0];
+                        if (due) var arr = due.split(/[- : \/]/);
+                        var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]); /*new Date(result.duedate.split(' ')[0]);*/
+                        let pub = result.pubdate.split('.')[0];
+                        if (pub) var arrs = pub.split(/[- : \/]/);
+                        var pubdateDate = new Date(arrs[0], arrs[1] - 1, arrs[2], arrs[3], arrs[4], arrs[5]);
+
+
+
                         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
                         var days = Math.floor(dateValue / (24 * 3600 * 1000));
-                        if(days == 0)days = 1;
-                       
+
                         _self.obj.drug_name = result.breedName;
                         _self.obj.spec = result.spec;
                         _self.obj.place = result.location;

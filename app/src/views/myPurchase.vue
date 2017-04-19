@@ -36,7 +36,7 @@
                             <div class="button">
                                 <p class="first_button" v-on:click.stop="delet(todo.id)">删除</p>
                                 <p class="first_button" v-on:click.stop="jump(other_router,todo.id,todo.duedate)">编辑</p>
-                                <p class="second_button" v-on:click.stop="jumpApp()">查看报价</p>
+                                <!-- <p class="second_button" v-on:click.stop="jumpApp()">查看报价</p> -->
                             </div>
                         </li>
                     </ul>

@@ -82,6 +82,7 @@ export default {
                 }, function(response) {
                     common.$emit('close-load');
                     if (response.data.code == '1c01') {
+                        window.history.go(-1);
                         common.$emit('message', response.data.msg);
                     } else {
                         common.$emit('message', response.data.msg);
@@ -132,8 +133,6 @@ export default {
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
-
-
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

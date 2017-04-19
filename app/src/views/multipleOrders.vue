@@ -265,6 +265,7 @@ export default {
             },
             jumpAddress() {
                 common.$emit('setParam', 'router', 'multipleOrders');
+                common.$emit("informAddress", 1);
                 this.$router.push("/addressManage");
             }
         },

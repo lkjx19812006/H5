@@ -1,16 +1,16 @@
 <template>
     <div class="account_overview">
         <div class="header">
-            <img :src="param.url" v-show="param.url">
-            <img src="/static/images/my-header.png" v-show="!param.url">
+            <img :src="param.avatar" v-show="param.avatar">
+            <img src="/static/images/my-header.png" v-show="!param.avatar">
             <div class="login" v-show='login_show' @click="jump">登录/注册</div>
-            <div class="cerifi">
+            <div class="cerifi" v-show='!login_show'>
                 <img src="/static/images/personnal-cer.png" class="left_img" v-show="param.utype !== 2">
                 <img src="/static/images/personnals-Cer.png" class="left_img" v-show="param.utype == 2">
                 <img src="/static/images/company-cer.png" v-show="param.ctype !== 2">
                 <img src="/static/images/companys-Cer.png" v-show="param.ctype == 2">
             </div>
-            <p class="company-name">{{param.name}}<span v-show="param.fullname">(</span>{{param.fullname}}<span v-show="param.fullname">)</span></p>
+            <p class="company-name">{{param.company}}<span v-show="param.fullname">(</span>{{param.fullname}}<span v-show="param.fullname">)</span></p>
             <!-- <p class="company-name">{{param.company}}</p> -->
             <div class="footer">
                 <div class="drug_money">
@@ -39,6 +39,9 @@
 <script>
 import common from '../../common/common.js'
 import filters from '../../filters/filters'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
             return {
@@ -51,13 +54,11 @@ export default {
             }
         },
         props: {
-            param: {
-                url: '',
-                company: '',
-                normalMoney: '',
-                freezeMoney: '',
-                score: '',
-                name: ''
+
+        },
+        computed: {
+            param() {
+                return this.$store.state.user.userInfor;
             }
         },
         methods: {
@@ -73,17 +74,21 @@ export default {
         },
         created() {
             let _self = this;
+            //if (common.KEY) _self.$store.dispatch('getUserInfor');
 
             if (!common.KEY) {
                 _self.login_show = true;
+                _self.$store.dispatch('clearUserInfor');
             } else {
                 _self.login_show = false;
             }
             common.$on('getInfo', function(item) {
                 if (!common.KEY) {
                     _self.login_show = true;
+                    _self.$store.dispatch('clearUserInfor');
                 } else {
                     _self.login_show = false;
+
                 }
             })
 
@@ -93,7 +98,7 @@ export default {
 </script>
 <style scoped>
 .account_overview .header {
-    height: 24rem;
+    height: 280px;
     width: 100%;
     background: url(/static/images/bg.png) no-repeat;
     background-size: 100% 100%;

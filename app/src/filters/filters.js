@@ -19,11 +19,13 @@ Vue.filter('timeDays', function(due) {
             days = Math.floor(dateValue / (24 * 3600 * 1000));
 
             if (days == 0) {
-                days = 1;
+                days = 1 + '天';
+            } else if (days > 0) {
+                days = days + '天'
             } else if (days < 0) {
                 days = "已过期";
             }
-            days = days + "天";
+
         } else {
             days = "7" + '天';
         }
@@ -77,6 +79,19 @@ Vue.filter('successTimeFormat', function(val) {
     }
     return val;
 });
+Vue.filter('birthdayTime', function(val) {
+    if (val) {
+        var date = new Date(val * 1000);
+        let Y = date.getFullYear() + '-';
+        let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+        let D = date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate();
+        /*let h = date.getHours() + ':';
+        let m = date.getMinutes() + ':';
+        let s = date.getSeconds(); */
+        val = Y + M + D;
+    }
+    return val;
+});
 Vue.filter('successTime', function(val) {
     if (val) {
         var date = new Date(val);
@@ -93,6 +108,9 @@ Vue.filter('successTime', function(val) {
 
 Vue.filter('shellStatus', function(val) {
     switch (val) {
+        case 0:
+            val = '待审核';
+            break;
         case 1:
             val = '待审核';
             break;

@@ -8,7 +8,6 @@
                 <p class="remarks_header">备注</p>
             </div>
             <div class="remarks">
-                <!-- <p class="remarks_header">备注</p> -->
                 <div class="remarks_content">
                     <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
                 </div>
@@ -171,6 +170,13 @@ export default {
             let _self = this;
             _self.getInfo();
             common.$on('inforReleases', function(item) {
+                _self.obj.drug_name = '';
+                _self.obj.spec = '';
+                _self.obj.place = '';
+                _self.obj.number = '';
+                _self.obj.number_unit = '斤';
+                _self.obj.duedate = '';
+                _self.obj.selling_point = '';
                 _self.getInfo();
             })
         },

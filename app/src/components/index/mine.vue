@@ -83,7 +83,7 @@ export default {
                     router: 'myAttention',
                     img_src: '/static/icons/My-concern.png'
                 }, { //         
-                    name: '我的药款',
+                    name: '药款账单',
                     img_src: '/static/icons/I-Yaokuan.png',
                     router: 'app'
                 }, {
@@ -155,24 +155,6 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code = "1c01") {
                         _self.information = suc.data.biz_result;
-                        //console.log(suc.data.biz_result);
-                        /*let normalMoney = 0;
-                        let freezeMoney = 0;
-                        if (Number(suc.data.biz_result.normalMoney)) normalMoney = Number(suc.data.biz_result.normalMoney);
-                        if (Number(suc.data.biz_result.freezeMoney)) freezeMoney = Number(suc.data.biz_result.freezeMoney);
-                        let all_money = normalMoney + freezeMoney;*/
-                        /*_self.param.name = suc.data.biz_result.fullname;
-                        _self.param.company = suc.data.biz_result.company;
-                        _self.param.normalMoney = all_money.toFixed(2);
-                        _self.param.score = suc.data.biz_result.score;
-                        _self.param.url = suc.data.biz_result.avatar;
-                        _self.url = suc.data.biz_result.avatar;
-                        _self.information.employee = suc.data.biz_result.employee;*/
-                        //_self.param = suc.data.biz_result;
-                        /*_self.param.name = suc.data.biz_result.fullname;
-                        _self.param.company = suc.data.biz_result.company;
-                        _self.param.normalMoney = suc.data.biz_result.normalMoney;
-                        _self.param.freezeMoney = suc.data.biz_result.freezeMoney;*/
                         _self.param = suc.data.biz_result;
                         _self.url = suc.data.biz_result.avatar;
                         _self.param.url = suc.data.biz_result.avatar;
@@ -239,57 +221,29 @@ export default {
             }
         },
         watch: {
-            /* scrollTop: function(newValue, oldValue) {
-                 let _self = this;
-                 console.log(newValue);
-                 if (newValue >= 0) {
-                     _self.hide_head = true;
-                 }
-                 if (newValue < 20) {
-                     _self.hide_head = false;
-                 }
-             }*/
+
         },
         mounted() {
-            /*this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
-            let _self = this;
-            this.$nextTick(function() {
-                _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top;
-            })*/
 
         },
         created() {
-
             let _self = this;
-            //if (common.SID) _self.getHttp();
-            /*if (common.SID) {
-                _self.information = common.myInfo;
-                _self.param = common.myInfo;
-                _self.url = common.myInfo.avatar;
-            }*/
-
             common.$on('myInfo', function(myInfo) {
                 if (common.SID) {
                     _self.information = myInfo;
                     _self.param = myInfo;
                     _self.url = myInfo.avatar;
                     _self.param.url = myInfo.avatar;
-                    console.log(myInfo.avatar)
+                    _self.$store.dispatch('getUserInfor')
                 }
             })
             if (common.SID) _self.salesmanData();
-            common.$on("AccountToMine", function(obj) {
-                /*_self.getHttp();*/
-                _self.param.url = obj.url;
-                _self.param.name = obj.name;
-                _self.param.company = obj.company;
 
-            });
             common.$on("toMine", function(obj) {
                 _self.getHttp();
+                //_self.$store.dispatch('getUserInfor')
             })
             common.$on("clear_Information", function() { //来自资源页面的提示刷新
-                console.log('dfdfdfdfdfdf');
                 _self.param = {
                     url: '',
                     company: '',

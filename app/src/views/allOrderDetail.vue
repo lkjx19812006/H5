@@ -97,6 +97,7 @@
                 <p @click="prompt('如需申请，')" v-if="todo.orderStatus >= 60 && todo.type == 0">申请售后</p>
                 <p @click="cancelOrder(todo.id,todo.no,todo.type)" v-if="todo.orderStatus == 0 || todo.orderStatus == 10 && todo.type == 0">取消订单</p>
                 <p @click="cancelOrder(todo.id,todo.no,todo.type)" v-if="todo.orderStatus == 20 && todo.type == 1">取消订单</p>
+                <p @click="prompt('如需确认收货，')" v-if="todo.orderStatus == 50 && todo.type == 0" class="special">确认收货</p>
             </div>
         </div>
     </div>
@@ -557,6 +558,12 @@ export default {
     padding: 3px 10px;
     color: #333333;
     border-radius: 1px;
+}
+
+.all_order_detail .footer .special {
+    border: 1px solid #FA6705;
+    color: #FA6705;
+    border-radius: 3px;
 }
 
 .all_order_detail .footer .pay-money {

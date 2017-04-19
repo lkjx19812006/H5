@@ -78,7 +78,7 @@ export default {
                 common.$emit('clear_Information');
                 common.$emit('setParam', 'backRouter', 'mySet');
                 common.$emit('informBackMyself', 'mySet');
-                common.$emit('getInfo', 1);
+                common.$emit('getInfo', 2);
                 this.$router.replace('/login');
             },
             getCustomerPhone() {
