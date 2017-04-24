@@ -1,7 +1,6 @@
 <template>
     <div class="my_index">
         <div class="my_header">
-            <!-- v-bind:class="{my_header_top:hide_head,'my_header_top_nor':!hide_head}" -->
             <img src="/static/images/my-logo.png" class="logo">
             <p class="website">药材买卖网</p>
             <img src="/static/icons/clarity-search.png" class="search" v-on:click="fromIndex">
@@ -160,6 +159,7 @@
                 </mt-loadmore>
             </div>
         </div>
+        <!--  <openApp></openApp> -->
     </div>
 </template>
 <script>
@@ -167,7 +167,7 @@ import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import longSearch from '../../components/tools/longSearch'
 import filters from '../../filters/filters'
-
+/*import openApp from '../../components/tools/openApp'*/
 export default {
     data() {
             return {
@@ -229,6 +229,9 @@ export default {
                     bizMain: ''
                 }
             }
+        },
+        components: {
+            /*openApp*/
         },
         methods: {
             getInfo() {
@@ -452,6 +455,7 @@ export default {
         },
         created() {
             let _self = this;
+
             if (common.KEY) _self.getInfo();
             common.$on('toMine', function(item) {
                 if (common.KEY) _self.getInfo();
@@ -531,33 +535,6 @@ export default {
     height: 60px;
     position: relative;
 }
-
-
-/*@keyframes scrollToTop {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0.5;
-    }
-}
-
-@keyframes scrollToTopNor {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-.my_header_top {
-    animation: scrollToTop 0.5s linear forwards;
-}
-
-.my_header_top_nor {
-    animation: scrollToTopNor 0.5s linear forwards;
-}*/
 
 .my_whole {
     width: 100%;

@@ -58,7 +58,10 @@
                     {{head.name}}
                 </div>
                 <div class="content">
-                    <input type="text" v-model="head.val">
+                    <select v-model="head.val">
+                        <option>增值税发票</option>
+                        <option>普通发票</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -184,9 +187,11 @@ textarea {
     flex-direction: row;
     background-color: #fff;
     height: 50px;
-    line-height: 50px;
+    line-height: 20px;
+    padding-top: 15px;
     font-size: #000;
     font-size: 14px;
+    box-sizing: border-box;
 }
 
 .account_revise .single .content {
@@ -200,7 +205,7 @@ select {
     outline: none;
     border: 0;
     background-color: #fff;
-    line-height: 50px;
+    line-height: 20px;
     font-size: 14px;
 }
 

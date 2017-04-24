@@ -313,7 +313,10 @@ export default {
                 _self.person.address = todo.address;
                 _self.person.contactPhone = todo.contactPhone;
                 _self.person.contactName = todo.contactName;
-                //_self.addressId = todo.addressId;
+                if (todo == 1) {
+                    _self.getAddress();
+                }
+
             })
         }
 

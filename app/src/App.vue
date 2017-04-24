@@ -1,5 +1,5 @@
 <template>
-    <div id="app" >
+    <div id="app">
         <keep-alive>
             <router-view></router-view>
         </keep-alive>
@@ -9,8 +9,11 @@
 export default {
     data() {
             return {
-               
+                show: true
             }
+        },
+        methods: {
+
         }
 
 }

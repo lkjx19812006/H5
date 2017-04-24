@@ -164,10 +164,11 @@ export default {
         },
         computed: {
             userInfor() {
-                /*if (this.$store.state.user.userInfor.avatar) {
+                if (this.$store.state.user.userInfor.avatar) {
                     this.param.url = this.$store.state.user.userInfor.avatar;
+                } else {
+                    this.param.url = '/static/images/my-header.png'
                 }
-*/
                 return this.$store.state.user.userInfor;
             }
         },
@@ -181,7 +182,6 @@ export default {
                         _self.upDataInfor[key] = _self.userInfor[key]
                     }
                 }
-
                 this.$store.dispatch('upDataInfor', this.upDataInfor);
             },
             jumpPerson() {
@@ -191,7 +191,7 @@ export default {
             },
             jumpCompany() {
                 let _self = this;
-                common.$emit("companyAuthentication", 1)
+                common.$emit("companyAuthentication", 1);
                 _self.$router.push('/companyAuthentication');
             },
             getTimeStamp(str) {
@@ -200,6 +200,7 @@ export default {
                 return date.getTime();
             },
             handleConfirm(value) {
+
                 let _self = this;
                 _self.upDataInfor.birthday = value.getTime() / 1000;
                 console.log(_self.upDataInfor.birthday)
@@ -279,7 +280,7 @@ export default {
                 if (common.KEY) _self.$store.dispatch('getUserInfor');
             })*/
             _self.start = new Date("1900-01-01");
-            _self.end = new Date("2017-03-08");
+            _self.end = new Date("2017-04-20");
             let type = '';
             let ua = navigator.userAgent.toLowerCase();
             if (/iphone|ipad|ipod/.test(ua)) {
@@ -287,7 +288,7 @@ export default {
             }
             if (type == 'ios') {
                 _self.start = new Date("1900/01/01");
-                _self.end = new Date("2017/03/08");
+                _self.end = new Date("2017/04/20");
             }
         },
         mounted() {
@@ -309,6 +310,7 @@ textarea {
     width: 100%;
     float: left;
     font-size: 12px;
+    position: relative;
 }
 
 .account .bbox {

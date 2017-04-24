@@ -1,6 +1,5 @@
 <template>
     <div class="sub_company">
-        <myHeader :param="my_header" v-if="show"></myHeader>
         <div class="box">
             <myBanner :param="param"></myBanner>
             <div class="chinese_map">
@@ -30,7 +29,6 @@
 </template>
 <script>
 import common from '../common/common.js'
-import myHeader from '../components/tools/myHeader'
 import myBanner from '../components/tools/myBanner'
 export default {
     data() {
@@ -69,7 +67,6 @@ export default {
             }
         },
         components: {
-            myHeader,
             myBanner
         },
         methods: {

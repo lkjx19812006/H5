@@ -22,8 +22,8 @@
                             <div class="res_content">
                                 <div class="res_content_center">
                                     <div>
-                                        <!-- <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">  -->{{todo.breedName}}
+                                        <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
+                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">{{todo.breedName}}
                                     </div>
                                     <p>规格：<span>{{todo.spec}}</span></p>
                                     <p>产地：<span>{{todo.location}}</span></p>
@@ -504,8 +504,8 @@ export default {
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
     float: left;
     /*max-height: 1.6rem;*/
-    width: 1.5rem;
-    margin-right: 0.5rem;
+    width: 15px;
+    margin-right: 2px;
 }
 
 .my_resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center div {

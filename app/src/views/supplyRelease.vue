@@ -49,7 +49,7 @@
 import common from '../common/common.js'
 import validation from '../validation/validation.js'
 import myHeader from '../components/tools/myHeader'
-import imageUpload from '../components/tools/imageUpload'
+import imageUpload from '../components/tools/upDownImg' /**/
 import releaseGrugInformation from '../components/tools/releaseGrugInformation'
 import httpService from '../common/httpService.js'
 
@@ -64,7 +64,7 @@ export default {
                 drug: '请输入你的药材',
                 obj: {
                     sample_id: '',
-                    number_id: '',
+                    number_id: 1,
                     sampling: 1,
                     update: false,
                     drug_name: '',
@@ -156,6 +156,7 @@ export default {
             release() {
 
                 let _self = this;
+                console.log(_self.obj.number_id)
                 var checkArr = [];
                 let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种');
                 checkArr.push(checkBreedId);
@@ -168,7 +169,7 @@ export default {
                 let checkPri = validation.checkPrice(_self.obj.sales_price, '价格');
                 checkArr.push(checkPri);
                 if (_self.obj.sampling) {
-                    let checkSampleNum = validation.checkMaxNum(_self.obj.weight, '样品数量');
+                    let checkSampleNum = validation.checkMaxNum(_self.obj.weight, '样品');
                     checkArr.push(checkSampleNum);
                     let checkSamplePri = validation.checkPrice(_self.obj.price, '样品价格');
                     checkArr.push(checkSamplePri);
@@ -247,6 +248,7 @@ export default {
                 })
             },
             getUrl(param) {
+                console.log(param)
                 this.imgArr[param.index] = param.url;
             }
 
@@ -269,6 +271,7 @@ export default {
                 _self.obj.price = '';
                 _self.obj.selling_point = '';
                 _self.obj.number_unit = '斤';
+                _self.obj.number_id = 1;
                 for (var i = 0; i < _self.imageArr.length; i++) {
                     _self.imageArr[i].url = '/static/images/upload-image.png';
                 }

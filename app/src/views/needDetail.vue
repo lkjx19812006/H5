@@ -44,12 +44,14 @@
                 </button>
             </div>
         </div>
+        <!-- <openApp :id='id'></openApp> -->
     </div>
 </template>
 <script>
 import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 import myHeader from '../components/tools/myHeader'
+/*import openApp from '../components/tools/openApp'*/
 import filters from '../filters/filters'
 import telAndAttention from '../components/tools/telAndAttention'
 import popUpBigImg from '../components/tools/popUpBigImg'
@@ -72,7 +74,8 @@ export default {
         components: {
             telAndAttention,
             myHeader,
-            popUpBigImg
+            popUpBigImg,
+            /*openApp*/
         },
         methods: {
             loadApp() {
@@ -138,8 +141,15 @@ export default {
                     common.$emit('message', err.data.msg);
                 });
             }
+
         },
         mounted() {
+            var u = navigator.userAgent;
+            var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
+            var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+            if (isiOS) window.location = 'YCMM://push/YCMMDemandDetailViewController?intentionID=' + this.id;
+            if (isAndroid) window.location = 'mianguan://ycmm.ycmm/purchase?id=' + this.id;
+
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         },
         created() {
@@ -149,11 +159,13 @@ export default {
             _self.id = id;
             _self.getHttp(id);
             common.$on("needToDetail", function(item) {
+                _self.id = item;
                 _self.getHttp(item);
             });
             common.$on('getInfo', function(item) {
                 _self.getHttp(id);
             })
+
         }
 
 

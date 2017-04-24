@@ -89,6 +89,8 @@ Vue.filter('birthdayTime', function(val) {
         let m = date.getMinutes() + ':';
         let s = date.getSeconds(); */
         val = Y + M + D;
+    } else {
+        val = "请选择"
     }
     return val;
 });

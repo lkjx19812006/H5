@@ -13,6 +13,10 @@
                         <li v-for="todo in todos" @click="jump(todo.id)">
                             <div class="images">
                                 <img :src="todo.image[0]" class="my_images">
+                                <div class="sampling">
+                                    <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
+                                    <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
+                                </div>
                             </div>
                             <div class="main">
                                 <div class="names">{{todo.breedName}}</div>
@@ -332,11 +336,24 @@ export default {
     width: 1;
     height: 100%;
     box-sizing: border-box;
+    position: relative;
 }
 
 .my_attention .bg_white .bbox li .images .my_images {
     width: 80px;
     height: 100%;
+}
+
+.my_attention .bg_white .bbox li .images .sampling {
+    position: absolute;
+    z-index: 200;
+    left: 0;
+    top: 0;
+}
+
+.my_attention .bg_white .bbox li .images .sampling img {
+    width: 15px;
+    margin-right: 1px;
 }
 
 .my_attention .bg_white .bbox li .main {

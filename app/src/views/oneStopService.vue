@@ -1,6 +1,5 @@
 <template>
     <div class="one_stop">
-        <myHeader :param="my_header"></myHeader>
         <div class="box">
             <myBanner :param="param"></myBanner>
             <div class="images" v-for="todo in arr">
@@ -11,7 +10,6 @@
 </template>
 <script>
 import common from '../common/common.js'
-import myHeader from '../components/tools/myHeader'
 import myBanner from '../components/tools/myBanner'
 export default {
     data() {
@@ -45,7 +43,6 @@ export default {
             }
         },
         components: {
-            myHeader,
             myBanner
         },
         methods: {

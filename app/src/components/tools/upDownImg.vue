@@ -6,6 +6,7 @@
             <img v-bind:src="param.url" v-show="param.url && !param.header_url" v-bind:class="{ active: param.tall, 'image_show': !param.tall }">
             <img v-bind:src="param.header_url" v-show="param.header_url" v-bind:class="{ active: param.tall, 'image_show': !param.tall }">
             <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
+            <canvas id="canvas"></canvas>
         </form>
     </div>
 </template>
@@ -45,15 +46,19 @@ export default {
                                 _self.param.url = _self.image;
                             }
                         } else {
-                            _self.image = e.target.result;
-                            _self.param.url = _self.image;
-                            _self.upload(_self.image);
+                            img.src = e.target.result;
+                            img.onload = function() {
+                                _self.image = _self.compress(img);
+                                _self.upload(_self.image);
+                                _self.param.url = _self.image;
+                            }
                         }
                     }
                     reader.readAsDataURL(input.files[0]);
                     return 1;
                 }
             },
+
             compress: function(img) {
                 let _self = this;
                 let initSize = img.src.length;
@@ -74,11 +79,9 @@ export default {
                 ctx.fillStyle = "#fff";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 0, 0, width, height);
-
-
-                //ctx.font = "20px microsoft yahei";
-                //ctx.fillStyle = "rgba(255,255,255,0.5)";
-                //ctx.fillText("药材买卖网", 10, 10);
+                ctx.font = "20px microsoft yahei";
+                ctx.fillStyle = "rgba(255,255,255,0.5)";
+                ctx.fillText("药材买卖网", 10, 30);
                 let ndata = canvas.toDataURL(img.src.split(';')[0].split(':')[1], 1);
                 if (ndata.length > 2500000) {
                     ndata = canvas.toDataURL(img.src.split(';')[0].split(':')[1], 2500000 / ndata.length);
@@ -129,8 +132,8 @@ export default {
                     for (i = 0; i < byteStr.length; i++) {
                         intArray[i] = byteStr.charCodeAt(i)
                     }
-                    mimetype = parts[0].split(':')[1].split(';')[0]
-                    return new newBlob(ab, mimetype)
+                    mimetype = parts[0].split(':')[1].split(';')[0];
+                    return new newBlob(ab, mimetype);
                 }
                 var compressedImageBlob = dataURL2Blob(ndata)
                 _self.size = compressedImageBlob.size; // 压缩图像文件的大小  

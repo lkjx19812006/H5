@@ -199,6 +199,7 @@ let common = new Vue({
             return signStr;
         }
 
+
     }
 })
 

@@ -1,6 +1,6 @@
 <template>
     <div class="purchase_detail">
-        <myHeader :param = "param"></myHeader>
+        <myHeader :param="param"></myHeader>
         <div class="center">
             <div class="title">
                 <p>{{obj.drug_name}}</p>
@@ -11,7 +11,12 @@
             </div>
             <div class="detail">
                 <p>产地：<span>{{obj.place}}</span></p>
-                <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}</span></p>
+                <p class="right" v-if="obj.especial == 1">剩余：
+                    <span>{{obj.duedate | timeDays(obj.pubdate)}}</span>
+                </p>
+                <p class="right" v-if="obj.especial !== 1">剩余：
+                    <span>长期</span>
+                </p>
             </div class="detail">
             <div class="detail">
                 <p>需求数量：<span>{{obj.number}}{{obj.number_unit}}</span></p>
@@ -41,9 +46,9 @@ import filters from '../filters/filters'
 export default {
     data() {
             return {
-                param:{
-                    name:'求购详情'
-                    
+                param: {
+                    name: '求购详情'
+
                 },
                 obj: {
                     drug_name: '白术',
@@ -57,7 +62,8 @@ export default {
                     pubdate: '',
                     offerVprice: '',
                     id: '',
-                    onSell:''
+                    onSell: '',
+                    especial: ''
                 },
                 todos: [{
                     "name": "人参",
@@ -75,38 +81,39 @@ export default {
             myHeader
         },
         methods: {
-            getHttp(id){
-                  let _self = this;
-                  httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
-                        biz_module: 'intentionService',
-                        biz_method: 'queryIntentionInfo',
-                        biz_param: {
-                            id: id
-                        }
-                    }, function(suc) {
-                        let result = suc.data.biz_result;
-                        console.log(result);
-                        /*var duedateDate = new Date(result.duedate);
-                        var pubdateDate = new Date(result.pubdate);
-                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
-                        var pubdate = result.pubdate.substring(0, 10);*/
-                        _self.obj.drug_name = result.breedName;
-                        _self.obj.spec = result.spec;
-                        _self.obj.place = result.location;
-                        _self.obj.number = result.number;
-                        _self.obj.number_unit = result.unit;
-                        _self.obj.selling_point = result.description;
-                        _self.obj.onSell = result.onSell;
-                        _self.obj.name = result.customerName;
-                        _self.obj.phone = result.customerPhone;
-                        _self.obj.offer = result.offer;
-                        _self.obj.offerVprice = result.offerVprice;
-                        _self.obj.pubdate = result.pubdate;
-                        _self.obj.duedate = result.duedate;
-                    }, function(err) {
-                        common.$emit('message', err.data.msg);
-                    })
+            getHttp(id) {
+                let _self = this;
+                httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+                    biz_param: {
+                        id: id
+                    }
+                }, function(suc) {
+                    let result = suc.data.biz_result;
+                    console.log(result);
+                    /*var duedateDate = new Date(result.duedate);
+                    var pubdateDate = new Date(result.pubdate);
+                    var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                    var days = Math.floor(dateValue / (24 * 3600 * 1000));
+                    var pubdate = result.pubdate.substring(0, 10);*/
+                    _self.obj.drug_name = result.breedName;
+                    _self.obj.spec = result.spec;
+                    _self.obj.place = result.location;
+                    _self.obj.number = result.number;
+                    _self.obj.number_unit = result.unit;
+                    _self.obj.selling_point = result.description;
+                    _self.obj.onSell = result.onSell;
+                    _self.obj.name = result.customerName;
+                    _self.obj.phone = result.customerPhone;
+                    _self.obj.offer = result.offer;
+                    _self.obj.offerVprice = result.offerVprice;
+                    _self.obj.pubdate = result.pubdate;
+                    _self.obj.duedate = result.duedate;
+                    _self.obj.especial = result.especial;
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
             },
             back() {
                 this.$router.go(-1);
@@ -118,10 +125,10 @@ export default {
             _self.obj.id = id;
 
             _self.getHttp(id);
-            common.$on("myPurToPurDetail",function (item){
-                  _self.getHttp(item);
+            common.$on("myPurToPurDetail", function(item) {
+                _self.getHttp(item);
             });
-            
+
         }
 
 }
