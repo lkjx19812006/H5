@@ -64,7 +64,7 @@
             </div>
             <div class="good_number">
                 <p>交货地：</p>
-                <div @click="show=true" class="select-address content_div">
+                <div @click="obj.show=true" class="select-address content_div">
                     {{ obj.address }}
                 </div>
             </div>
@@ -107,14 +107,14 @@
                 </div>
             </div>
         </div>
-        <mt-popup v-model="sheetVisible" position="center" class="mint-popup-1" style="width:60%">
+        <mt-popup v-model="obj.sheetVisible" position="center" class="mint-popup-1 popup_unit" style="width:60%">
             <div v-for="item in actions">
                 <div style="color: #656b79;background-color: #f6f8fa;box-shadow: 0 0 1px #b8bbbf;padding:10px 0" @click="setObj(item.key,item.name,item.id_key,item.id)">{{item.name}}</div>
             </div>
         </mt-popup>
         <div class="address_outbox">
-            <div class="address_box" v-show="show">
-                <mt-button type="primary" class="left-button" @click="show=false">取消</mt-button>
+            <div class="address_box" v-show="obj.show">
+                <mt-button type="primary" class="left-button" @click="obj.show=false">取消</mt-button>
                 <mt-button type="primary" class="right-button" @click="confirmIt">确定</mt-button>
                 <mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5" class="select-box"></mt-picker>
             </div>
@@ -175,7 +175,10 @@ export default {
             }
         },
         props: {
-            obj: {}
+            obj: {
+                sheetVisible: false,
+                show: false
+            }
         },
         methods: {
             judgeValue(param) {
@@ -187,7 +190,7 @@ export default {
                 this.obj.addressCity = this.areaParam.addressCity;
                 this.obj.addressDistrict = this.areaParam.addressDistrict;
                 this.obj.address = this.obj.addressProvince + '' + this.obj.addressCity + '' + this.obj.addressDistrict;
-                this.show = false;
+                this.obj.show = false;
             },
             onAddressChange(picker, values) {
                 let cityArr = [];
@@ -324,10 +327,10 @@ export default {
                 this.obj[key] = value;
                 this.obj[id_key] = id;
 
-                this.sheetVisible = false;
+                this.obj.sheetVisible = false;
             },
             showAction(param) {
-                this.sheetVisible = true;
+                this.obj.sheetVisible = true;
                 this.actions = [];
                 let _self = this;
                 if (param == "spec") {
@@ -396,6 +399,11 @@ textarea {
 }
 
 .release_good_information {}
+
+.release_good_information .popup_unit {
+    height: 400px;
+    overflow: scroll;
+}
 
 .release_good_information .good_information {
     /*padding: 1.28rem;*/

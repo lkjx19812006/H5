@@ -6,7 +6,7 @@
             </router-link>
         </mt-header> -->
         <myHeader :param="my_header"></myHeader>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <div class="page-loadmore-wrapper" v-bind:class="{active:show}" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
             <ul>
                 <li>
                     <p>收货人</p>
@@ -283,6 +283,11 @@ export default {
     background: white;
     width: 100%;
     color: #333333;
+}
+
+.address_revise .active {
+    height: 100%;
+    overflow: hidden;
 }
 
 .address_revise ul li {

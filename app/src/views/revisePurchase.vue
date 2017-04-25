@@ -1,38 +1,34 @@
 <template>
-    <div class="revise_purchase">
+    <div class="revise_purchase" v-bind:class="{killScroll:obj.sheetVisible}">
         <myHeader :param="param"></myHeader>
-        <div class="bg_white">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore>
-                    <druginformation :obj="obj"></druginformation>
-                    <div class="title_name">
-                        <p class="remarks_header">备注</p>
-                    </div>
-                    <div class="remarks">
-                        <div class="remarks_content">
-                            <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
-                        </div>
-                    </div>
-                    <div class="title_name">
-                        <p class="contact_header">联系方式</p>
-                    </div>
-                    <div class="contact">
-                        <div class="contact_name">
-                            <P>姓名：</P>
-                            <div>
-                                <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
-                            </div>
-                        </div>
-                        <div class="contact_phone">
-                            <P>手机：</P>
-                            <div>
-                                <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="confirm" @click="release()">确认修改</div>
-                </mt-loadmore>
+        <div class="page-loadmore-wrapper" v-bind:class="{killScroll:obj.sheetVisible}" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <druginformation :obj="obj"></druginformation>
+            <div class="title_name">
+                <p class="remarks_header">备注</p>
             </div>
+            <div class="remarks">
+                <div class="remarks_content">
+                    <textarea placeholder="请填写备注信息" v-model="obj.selling_point"></textarea>
+                </div>
+            </div>
+            <div class="title_name">
+                <p class="contact_header">联系方式</p>
+            </div>
+            <div class="contact">
+                <div class="contact_name">
+                    <P>姓名：</P>
+                    <div>
+                        <input type="text" placeholder="请输入您的姓名" v-model="obj.name">
+                    </div>
+                </div>
+                <div class="contact_phone">
+                    <P>手机：</P>
+                    <div>
+                        <input type="text" placeholder="请输入您的手机号" v-model="obj.phone">
+                    </div>
+                </div>
+            </div>
+            <div class="confirm" @click="release()">确认修改</div>
         </div>
     </div>
 </template>
@@ -63,7 +59,8 @@ export default {
                     phone: '',
                     duedate: '',
                     id: '',
-                    breedId: ''
+                    breedId: '',
+                    sheetVisible: false
                 },
             }
         },
@@ -233,6 +230,11 @@ textarea {
 .revise_purchase .remarks .title_name {
     background: #F1F0F0;
     width: 100%;
+}
+
+.killScroll {
+    overflow: hidden;
+    height: 100%;
 }
 
 .revise_purchase .page-loadmore-wrapper {

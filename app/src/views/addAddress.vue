@@ -2,7 +2,7 @@
     <div class="add_address">
         <myHeader :param="my_header"></myHeader>
         <div class="bg_white">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <div class="page-loadmore-wrapper" v-bind:class="{active:show}" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
                     <ul>
                         <li>
@@ -242,6 +242,11 @@ export default {
 <style scoped>
 .add_address .bg_white {
     background-color: #F0F0F0;
+}
+
+.add_address .active {
+    height: 100%;
+    overflow: hidden;
 }
 
 .add_address .page-loadmore-wrapper {

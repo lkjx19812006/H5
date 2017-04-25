@@ -1,7 +1,7 @@
 <template>
-    <div class="supply_release">
+    <div class="supply_release" v-bind:class="{preventScroll:obj.sheetVisible || obj.show}">
         <myHeader :param="param"></myHeader>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <div class="page-loadmore-wrapper" v-bind:class="{preventScroll:obj.sheetVisible  || obj.show}" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
             <!-- <mt-loadmore> -->
             <releaseGrugInformation :obj="obj"></releaseGrugInformation>
             <div class="title_name">
@@ -43,6 +43,7 @@
             <div class="confirm" @click="release()">确认发布</div>
             <!-- </mt-loadmore> -->
         </div>
+        <!-- <div class="black" v-show="obj.sheetVisible"></div> -->
     </div>
 </template>
 <script>
@@ -84,7 +85,9 @@ export default {
                     addressCity: '北京市',
                     addressDistrict: '东城区',
                     breedId: '',
-                    address: '北京市 北京市 东城区'
+                    address: '北京市 北京市 东城区',
+                    sheetVisible: false,
+                    show: false
                 },
                 imgArr: ['', '', '', '', '', '', ''],
                 selected: '1',
@@ -285,7 +288,9 @@ export default {
 }
 </script>
 <style scoped>
-.supply_release {}
+.supply_release {
+    position: relative;
+}
 
 input[type="text"],
 input[type="submit"],
@@ -294,6 +299,23 @@ select,
 textarea {
     -webkit-appearance: none;
     border-radius: 0;
+}
+
+
+/* .supply_release .black {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.6;
+    position: absolute;
+    z-index: 200;
+    top: 0;
+    left: 0;
+} */
+
+.preventScroll {
+    height: 100%;
+    overflow: hidden;
 }
 
 .supply_release .page-loadmore-wrapper {
@@ -502,7 +524,7 @@ textarea {
 
 .supply_release .good_information .upload_image>div {
     height: 5rem;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .supply_release .good_information .upload_image .img-name {

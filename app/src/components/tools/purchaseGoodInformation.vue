@@ -62,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <mt-popup v-model="sheetVisible" position="center" class="mint-popup-1" style="width:60%">
+        <mt-popup v-model="obj.sheetVisible" position="center" class="mint-popup-1 popup_unit" style="width:60%">
             <div v-for="item in actions">
                 <div style="color: #656b79;background-color: #f6f8fa;box-shadow: 0 0 1px #b8bbbf;padding:10px 0" @click="setObj(item.key,item.name,item.id_key,item.id)">{{item.name}}</div>
             </div>
@@ -90,7 +90,9 @@ export default {
             }
         },
         props: {
-            obj: {}
+            obj: {
+                sheetVisible: false
+            }
         },
         methods: {
             jumpSearch(router) {
@@ -154,14 +156,14 @@ export default {
                         if (!_self.obj.number_unit) {
                             _self.obj.number_unit = _self.unit[0].name;
                             _self.obj.number_id = _self.unit[0].id;
-                        }else{
-                            for(var i = 0; i < _self.unit.length; i++){
-                                if(_self.obj.number_unit == _self.unit[i].name){
-                                    _self.obj.number_id =  _self.unit[i].id;
+                        } else {
+                            for (var i = 0; i < _self.unit.length; i++) {
+                                if (_self.obj.number_unit == _self.unit[i].name) {
+                                    _self.obj.number_id = _self.unit[i].id;
                                 }
                             }
                         }
-                        
+
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -174,10 +176,10 @@ export default {
                 this.obj[key] = value;
                 this.obj[id_key] = id;
                 console.log(id)
-                this.sheetVisible = false;
+                this.obj.sheetVisible = false;
             },
             showAction(param) {
-                this.sheetVisible = true;
+                this.obj.sheetVisible = true;
                 this.actions = [];
                 let _self = this;
                 if (param == "spec") {
@@ -193,8 +195,8 @@ export default {
                         _self.actions.push({
                             name: _self.unit[i].name,
                             key: 'number_unit',
-                            id:_self.unit[i].id,
-                            id_key:'number_id'
+                            id: _self.unit[i].id,
+                            id_key: 'number_id'
                         });
                     }
                 } else {
@@ -247,6 +249,11 @@ textarea {
 .purchase_good_information .contact {
     height: 12.8rem;
     margin-bottom: 10px;
+}
+
+.purchase_good_information .popup_unit {
+    height: 400px;
+    overflow: scroll;
 }
 
 .purchase_good_information .title_name {

@@ -2,17 +2,16 @@
     <div class="img_upload">
         <form>
             <input type="file" @change="previewImg" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
-            <img v-bind:src="image" class="image_show" v-show="!param.url && !param.header_url">
-            <img v-bind:src="param.url" v-show="param.url && !param.header_url" v-bind:class="{ active: param.tall, 'image_show': !param.tall }">
-            <img v-bind:src="param.header_url" v-show="param.header_url" v-bind:class="{ active: param.tall, 'image_show': !param.tall }">
-            <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image">
-            <canvas id="canvas"></canvas>
+            <img v-bind:src="image" class="image_show" v-show="!param.url">
+            <img v-bind:src="param.url" v-show="param.url" v-bind:class="{ active: param.tall, 'image_show': !param.tall }">
+            <!-- <img src="/static/icons/close_selected.png" v-show="close" @click="delImage" class="close_image"> -->
         </form>
     </div>
 </template>
 <script>
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
+import imgl from '../../../static/images/watermark.png'
 export default {
     data() {
             return {
@@ -20,8 +19,7 @@ export default {
                 close: false,
                 size: 0,
                 key: '',
-                domain: '',
-                url: '/static/images/my-header.png'
+                domain: ''
             }
         },
         props: {
@@ -37,20 +35,27 @@ export default {
                     let reader = new FileReader();
                     _self.size = input.files[0].size;
                     let img = new Image();
+                    let imgl = new Image();
                     reader.onload = function(e) {
                         if (input.files[0].size > 204800) { //图片大于200kb则压缩
                             img.src = e.target.result;
                             img.onload = function() {
-                                _self.image = _self.compress(img);
-                                _self.upload(_self.image);
-                                _self.param.url = _self.image;
+                                imgl.src = '../../../static/images/watermark.png';
+                                imgl.onload = function() {
+                                    _self.image = _self.compress(img, imgl);
+                                    _self.upload(_self.image);
+                                    _self.param.url = _self.image;
+                                }
                             }
                         } else {
                             img.src = e.target.result;
                             img.onload = function() {
-                                _self.image = _self.compress(img);
-                                _self.upload(_self.image);
-                                _self.param.url = _self.image;
+                                imgl.src = '../../../static/images/watermark.png';
+                                imgl.onload = function() {
+                                    _self.image = _self.compress(img, imgl);
+                                    _self.upload(_self.image);
+                                    _self.param.url = _self.image;
+                                }
                             }
                         }
                     }
@@ -58,12 +63,13 @@ export default {
                     return 1;
                 }
             },
-
-            compress: function(img) {
+            compress: function(img, imgl) {
                 let _self = this;
                 let initSize = img.src.length;
                 let width = img.width;
                 let height = img.height;
+                let w = width / 3;
+                let h = w / 3;
                 let canvas = document.createElement("canvas");
                 let ctx = canvas.getContext('2d');
                 let ratio;
@@ -76,12 +82,13 @@ export default {
                 }
                 canvas.width = width;
                 canvas.height = height;
+                let ww = (width - w) / 2;
+                let wh = (height - h) / 2;
+
                 ctx.fillStyle = "#fff";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 0, 0, width, height);
-                ctx.font = "20px microsoft yahei";
-                ctx.fillStyle = "rgba(255,255,255,0.5)";
-                ctx.fillText("药材买卖网", 10, 30);
+                ctx.drawImage(imgl, ww, wh, w, h);
                 let ndata = canvas.toDataURL(img.src.split(';')[0].split(':')[1], 1);
                 if (ndata.length > 2500000) {
                     ndata = canvas.toDataURL(img.src.split(';')[0].split(':')[1], 2500000 / ndata.length);
@@ -143,7 +150,8 @@ export default {
             delImage: function(e) {
                 e.target.parentElement.reset();
                 this.close = false;
-                this.image = "/static/images/default_image.png";
+                this.image = "/static/images/upload-image.png";
+                this.param.url = '';
             },
             upload: function(file) {
                 common.$emit('show-load');
@@ -227,8 +235,8 @@ export default {
 
 .img_upload .close_image {
     position: absolute;
-    top: -5px;
-    right: -5px;
+    top: 0px;
+    right: 0px;
     max-width: 10px;
 }
 </style>

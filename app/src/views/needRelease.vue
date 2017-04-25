@@ -1,8 +1,8 @@
 <template>
-    <div class="need_release">
+    <div class="need_release" v-bind:class="{killScroll:obj.sheetVisible}">
         <myHeader :param="param"></myHeader>
         <!-- <mt-loadmore> -->
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <div class="page-loadmore-wrapper" v-bind:class="{killScroll:obj.sheetVisible}" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
             <druginformation :obj="obj"> </druginformation>
             <div class="title_name">
                 <p class="remarks_header">备注</p>
@@ -60,7 +60,8 @@ export default {
                     name: '',
                     phone: '',
                     duedate: '',
-                    breedId: ''
+                    breedId: '',
+                    sheetVisible: false
                 }
             }
         },
@@ -189,6 +190,11 @@ export default {
 .whole {
     position: relative;
     background: #F1EFEF;
+}
+
+.killScroll {
+    overflow: hidden;
+    height: 100%;
 }
 
 .need_release {}

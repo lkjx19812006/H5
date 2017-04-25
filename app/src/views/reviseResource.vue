@@ -1,48 +1,44 @@
 <template>
-    <div class="revise_resource">
+    <div class="revise_resource" v-bind:class="{preventScroll:obj.sheetVisible || obj.show}">
         <myHeader :param="param"></myHeader>
-        <div class="">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore>
-                    <releaseGrugInformation :obj="obj"></releaseGrugInformation>
-                    <div class="title_name">
-                        <p class="good_photo_header">上传货物图片</p>
-                    </div>
-                    <div class="good_information">
-                        <div class="upload_image" v-for="item in imgageArr">
-                            <div>
-                                <imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="remarks">
-                        <div class="title_name">
-                            <p class="remarks_header">备注</p>
-                        </div>
-                        <div class="remarks_content">
-                            <textarea :placeholder="obj.selling_point" v-model="obj.selling_point"></textarea>
-                        </div>
-                    </div>
-                    <div class="contact">
-                        <div class="title_name">
-                            <p class="contact_header">联系方式</p>
-                        </div>
-                        <div class="contact_name">
-                            <P>姓名：</P>
-                            <div>
-                                <input type="text" :placeholder="obj.name" v-model="obj.name">
-                            </div>
-                        </div>
-                        <div class="contact_phone">
-                            <P>手机：</P>
-                            <div>
-                                <input type="text" :placeholder="obj.phone" v-model="obj.phone">
-                            </div>
-                        </div>
-                    </div>
-                </mt-loadmore>
-                <div class="confirm" @click="release()">确认修改</div>
+        <div class="page-loadmore-wrapper" v-bind:class="{preventScroll:obj.sheetVisible || obj.show}" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <releaseGrugInformation :obj="obj"></releaseGrugInformation>
+            <div class="title_name">
+                <p class="good_photo_header">上传货物图片</p>
             </div>
+            <div class="good_information">
+                <div class="upload_image" v-for="item in imgageArr">
+                    <div>
+                        <imageUpload :param="item" v-on:postUrl="getUrl"></imageUpload>
+                    </div>
+                </div>
+            </div>
+            <div class="remarks">
+                <div class="title_name">
+                    <p class="remarks_header">备注</p>
+                </div>
+                <div class="remarks_content">
+                    <textarea :placeholder="obj.selling_point" v-model="obj.selling_point"></textarea>
+                </div>
+            </div>
+            <div class="contact">
+                <div class="title_name">
+                    <p class="contact_header">联系方式</p>
+                </div>
+                <div class="contact_name">
+                    <P>姓名：</P>
+                    <div>
+                        <input type="text" :placeholder="obj.name" v-model="obj.name">
+                    </div>
+                </div>
+                <div class="contact_phone">
+                    <P>手机：</P>
+                    <div>
+                        <input type="text" :placeholder="obj.phone" v-model="obj.phone">
+                    </div>
+                </div>
+            </div>
+            <div class="confirm" @click="release()">确认修改</div>
         </div>
     </div>
 </template>
@@ -82,7 +78,9 @@ export default {
                     imgArr: ['', '', '', ''],
                     id: '',
                     address: '',
-                    sampling: 1
+                    sampling: 1,
+                    sheetVisible: false,
+                    show: false
                 },
                 imgArr: ['', '', '', '', '', '', ''],
                 imgageArr: [{
@@ -326,7 +324,9 @@ export default {
 }
 </script>
 <style scoped>
-.supply_release {}
+.supply_release {
+    position: relative;
+}
 
 input[type="text"],
 input[type="submit"],
@@ -351,6 +351,11 @@ textarea {
     /*padding: 1.28rem;*/
     /*margin-bottom: 0.8533rem;*/
     background: white;
+}
+
+.preventScroll {
+    height: 100%;
+    overflow: hidden;
 }
 
 .revise_resource .remarks,
