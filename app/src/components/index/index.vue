@@ -5,13 +5,13 @@
             <p class="website">药材买卖网</p>
             <img src="/static/icons/clarity-search.png" class="search" v-on:click="fromIndex">
         </div>
-        <div class="my_whole">
+        <div class="my_whole" id="login_container">
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
                     <div class="swipe_height">
                         <mt-swipe :auto="4000" :prevent="false">
                             <mt-swipe-item v-for="item in imgArray">
-                                <img v-bind:src="item.activityImg" @click="jumpLink(item.activityUrl)">
+                                <img v-bind:src="item.htmlImg" @click="jumpLink(item.htmlUrl)">
                             </mt-swipe-item>
                         </mt-swipe>
                     </div>
@@ -168,6 +168,7 @@ import httpService from '../../common/httpService.js'
 import longSearch from '../../components/tools/longSearch'
 import filters from '../../filters/filters'
 /*import openApp from '../../components/tools/openApp'*/
+
 export default {
     data() {
             return {
@@ -269,6 +270,7 @@ export default {
             },
             jumpLink(url) {
                 let _self = this;
+                console.log(1, url);
                 if (url) window.location.href = url;
             },
             /*handleBottomChange(status) {
@@ -299,10 +301,12 @@ export default {
                 httpService.commonPost(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'activityService',
                     biz_method: 'queryActivityList',
-                    biz_param: {}
+                    biz_param: {
+                        type: 4
+                    }
                 }, function(suc) {
                     let result = suc.data.biz_result.list;
-                    console.log(result);
+                    console.log(1, result);
                     _self.imgArray = result;
                 }, function(err) {
                     common.$emit('message', err.data.msg);
@@ -402,7 +406,11 @@ export default {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
-                        _self.$router.push('/login');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -442,20 +450,9 @@ export default {
         },
         watch: {
             '$route': 'getScrollTop',
-            /*scrollTop: function(newValue, oldValue) {
-                let _self = this;
-                console.log(newValue);
-                if (newValue >= 100) {
-                    _self.hide_head = true;
-                }
-                if (newValue < 100) {
-                    _self.hide_head = false;
-                }
-            }*/
         },
         created() {
             let _self = this;
-
             if (common.KEY) _self.getInfo();
             common.$on('toMine', function(item) {
                 if (common.KEY) _self.getInfo();
@@ -467,6 +464,7 @@ export default {
             this.transaction();
             this.drugGuidePrice();
             this.getImgArr();
+
         },
         computed: {
             drugArray: function() {
@@ -483,8 +481,25 @@ export default {
             this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
             let _self = this;
             this.$nextTick(function() {
-                _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
-            })
+                    _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
+                })
+                // var speed = 50
+                // demo2.innerHTML = demo1.innerHTML
+
+            // function Marquee() {
+            //     if (demo2.offsetTop - demo.scrollTop <= 0)
+            //         demo.scrollTop -= demo1.offsetHeight
+            //     else {
+            //         demo.scrollTop++
+            //     }
+            // }
+            // var MyMar = setInterval(Marquee, speed)
+            // demo.onmouseover = function() {
+            //     clearInterval(MyMar)
+            // }
+            // demo.onmouseout = function() {
+            //         MyMar = setInterval(Marquee, speed)
+            // }
 
             function startmarquee(lh, speed, delay) {
                 var count = 1;

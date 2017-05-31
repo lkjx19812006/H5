@@ -1,45 +1,38 @@
 <template>
-    <div class="login">
-        <myHeader :param="my_header"></myHeader>
-        <div id='login_container'></div>
-        <div class="bg_white">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore>
-                    <img src="/static/images/logo-login.png" class="my-logo">
-                    <myTab :param="myShow"></myTab>
-                    <div class="password" v-show="myShow.show">
-                        <div class="account-number">
-                            <input type="text" placeholder="请输入用户名/手机号/邮箱" v-model="param.phone">
-                        </div>
-                        <div class="pass-word">
-                            <input type="password" placeholder="请输入密码" v-model="param.password">
-                        </div>
-                    </div>
-                    <div class="password" v-show="!myShow.show">
-                        <div class="phone">
-                            <p class="tel">+86</p>
-                            <input type="text" placeholder="请输入手机号" v-model="param.phone">
-                        </div>
-                        <div class="pass-name">
-                            <input type="text" placeholder="请输入验证码" v-model="param.code">
-                            <p v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
-                                <input v-on:click="confirmLogin()" :value='code' type="button" :disabled="buttonDisabled" class="pass_code">
-                            </p>
-                        </div>
-                    </div>
-                    <div class="prompt" id="prompt">
+    <div class="login" v-show="wxShow">
+        <!-- <myHeader :param="my_header"></myHeader> -->
+        <!-- <div id='login_container'></div> -->
+        <!-- <div class="bg_white"> -->
+        <div class="box">
+            <!-- <mt-loadmore> -->
+            <img src="/static/images/logo-login.png" class="my-logo">
+            <!-- <myTab :param="myShow"></myTab> -->
+            
+            <div class="password" >
+                <div class="phone">
+                    <p class="tel">+86</p>
+                    <input type="text" placeholder="请输入手机号" v-model="param.phone">
+                </div>
+                <div class="pass-name">
+                    <input type="text" placeholder="请输入验证码" v-model="param.codes">
+                    <p v-bind:class="{ my_code: !buttonDisabled, 'my_code_nor': buttonDisabled }">
+                        <input v-on:click="confirmLogin()" :value='codes' type="button" :disabled="buttonDisabled" class="pass_code">
+                    </p>
+                </div>
+            </div>
+            <!-- <div class="prompt" id="prompt">
                         <router-link to="findPassWord">
                             <p class="left">忘记密码</p>
                         </router-link>
-                        <!-- <router-link to="register"> -->
+                        
                         <div @click="jump('register')">
                             <p class="right">立即注册</p>
                         </div>
-                        <!-- </router-link> -->
-                    </div>
-                    <div class="confirm" @click="login()">登录</div>
-                </mt-loadmore>
-            </div>
+                       
+                    </div> -->
+            <div class="confirm" @click="accredit()">登录</div>
+            <!-- </mt-loadmore> -->
+            <!--  </div> -->
         </div>
     </div>
 </template>
@@ -67,23 +60,27 @@ export default {
                 },
                 selected: 'identiCode',
                 identify_code: '',
-                code: '获取验证码',
+                codes: '获取验证码',
                 buttonDisabled: false,
                 param: {
                     phone: '',
-                    code: '',
+                    codes: '',
                     imageCode: '',
                     password: ''
-                }
+                },
+                code: '',
+                openId: '',
+                wxShow: false
             }
         },
         created() {
             let _self = this;
+            let url = window.location.href;
+            let behind = url.split('?code=')[1];
+            let state = behind.split('&state=')[1];
+            this.code = behind.split('&')[0];
+            this.getOpenId();
 
-            common.$on('back_login', function(item) {
-                _self.id = item.id;
-            })
-            this.getCode();
         },
         components: {
             myTab,
@@ -95,36 +92,129 @@ export default {
                 this.$router.push(router);
             },
             getOpenId() {
-                // !function(a, b, c) {
-                //     function d(a) {
-                //         var c = "default";
-                //         a.self_redirect === !0 ? c = "true" : a.self_redirect === !1 && (c = "false");
-                //         var d = b.createElement("iframe"),
-                //             e = "https://open.weixin.qq.com/connect/qrconnect?appid=" + a.appid + "&scope=" + a.scope + "&redirect_uri=" + a.redirect_uri + "&state=" + a.state + "&login_type=jssdk&self_redirect=" + c;
-                //         e += a.style ? "&style=" + a.style : "", e += a.href ? "&href=" + a.href : "", d.src = e, d.frameBorder = "0", d.allowTransparency = "true", d.scrolling = "no", d.width = "300px", d.height = "400px";
-                //         var f = b.getElementById(a.id);
-                //         f.innerHTML = "", f.appendChild(d)
-                //     }
-                //     a.WxLogin = d
-                // }(window, document);
-                var obj = new window.WxLogin({
-                    id: "login_container",
-                    appid: "wx34acea56da2ccf8f",
-                    scope: "snsapi_login",
-                    redirect_uri: "/home",
-                    state: "",
-                    style: "",
-                    href: ""
-                });
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
+                    biz_module: 'weiXinService',
+                    biz_method: 'getWeiXinOpenId',
+                    biz_param: {
+                        code: _self.code,
+                        appSecret: '',
+                        appId: ''
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addressManage(url, body, function(suc) {
+                    common.$emit('close-load');
+
+                    if (suc.data.code == '1c01') {
+                        if (suc.data.biz_result.openid) {
+                            _self.openId = suc.data.biz_result.openid;
+                            _self.wxLogin();
+                        } else {
+                            _self.$router.push('/login')
+                        }
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+
+                })
+            },
+            accredit() {
+                let _self = this;
+                let checkArr = [];
+                let checkPhone = validation.checkPhone(_self.param.phone);
+                checkArr.push(checkPhone);
+                for (var i = 0; i < checkArr.length; i++) {
+                    if (checkArr[i]) {
+                        common.$emit('message', checkArr[i]);
+                        return;
+                    }
+                }
+                common.$emit('show-load');
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
+                    biz_module: 'userSmsService',
+                    biz_method: 'openIdBinding',
+                    biz_param: {
+                        mobile: _self.param.phone,
+                        code: _self.param.codes,
+                        openId: _self.openId
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addressManage(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        _self.passWordLogin();
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+
+                })
+            },
+            wxLogin() {
+                let _self = this;
+
+                common.$emit('show-load');
+                httpService.login(common.urlCommon + '/account/openLogin.do', {
+                    biz_param: {
+                        openId: _self.openId
+                    }
+                }, function(response) {
+                    common.$emit('close-load');
+
+                    if (response.data.code == '1c01') {
+
+                        window.localStorage.KEY = response.data.biz_result.KEY;
+                        window.localStorage.SID = response.data.biz_result.SID;
+                        common.KEY = window.localStorage.KEY;
+                        common.SID = window.localStorage.SID;
+                        common.getDate();
+                        common.$emit('getInfo', 1);
+                        if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {
+                            if (_self.id) {
+                                common.$emit('resourceDetail', _self.id); //点击购买时未登录，登陆成功之后提醒商品那个详情页面刷新
+                                common.$emit('setParam', 'skipLogin', true);
+                                common.$emit('inforCartPop', 1); //通知购物车弹出
+                                _self.$router.replace('resourceDetail/' + _self.id);
+                            } else {
+                                common.$emit('resourceDetail', common.pageParam.backRouter.split('/')[1]); //没有_self.id的时候
+                                common.$emit('setParam', 'skipLogin', true);
+                                common.$emit('inforCartPop', 1);
+                                _self.$router.replace('resourceDetail/' + common.pageParam.backRouter.split('/')[1]);
+                            }
+                        } else if (common.pageParam.backRouter == 'lowPriceRes') {
+                            _self.$router.replace('cart')
+                        } else {
+                            common.$emit('go_home', 1);
+                            _self.$router.replace('home');
+                        }
+
+                    } else if (response.data.code == '0e99') {
+                        _self.wxShow = true;
+
+                    } else {
+                        common.$emit('message', response.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
             },
             passWordLogin() {
                 let _self = this;
-                
                 common.$emit('show-load');
-                httpService.login(common.urlCommon + common.apiUrl.login, {
+                httpService.login(common.urlCommon + '/account/openLogin.do', {
                     biz_param: {
-                        phone: _self.param.phone,
-                        password: _self.param.password
+                        openId: _self.openId
                     }
                 }, function(response) {
                     common.$emit('close-load');
@@ -164,60 +254,6 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            codeLogin() {
-                let _self = this;
-                common.$emit('show-load');
-                httpService.login(common.urlCommon + common.apiUrl.code_login, {
-                    biz_param: {
-                        phone: _self.param.phone,
-                        code: _self.param.code
-                    }
-                }, function(response) {
-                    common.$emit('close-load');
-                    if (response.data.code == '1c01') {
-                        window.localStorage.KEY = response.data.biz_result.KEY;
-                        window.localStorage.SID = response.data.biz_result.SID;
-                        common.KEY = window.localStorage.KEY;
-                        common.SID = window.localStorage.SID;
-                        common.getDate();
-                        /*_self.$router.push('/home');*/
-                        // _self.$router.replace(common.pageParam.backRouter);
-
-                        common.$emit('getInfo', 1);
-
-                        if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {
-                            if (_self.id) {
-                                common.$emit('resourceDetail', _self.id); //点击购买时未登录，登陆成功之后提醒商品那个详情页面刷新
-                                common.$emit('setParam', 'skipLogin', true);
-                                _self.$router.replace('resourceDetail/' + _self.id);
-                            } else {
-                                common.$emit('resourceDetail', common.pageParam.backRouter.split('/')[1]); //没有_self.id的时候
-                                common.$emit('setParam', 'skipLogin', true);
-                                _self.$router.replace('resourceDetail/' + common.pageParam.backRouter.split('/')[1]);
-                            }
-                        } else if (common.pageParam.backRouter == 'lowPriceRes') {
-                            _self.$router.replace('cart')
-                        } else {
-                            common.$emit('go_home', 1);
-                            _self.$router.replace('home');
-                        }
-                    } else {
-                        common.$emit('message', response.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-            },
-            getCode: function() {
-                let str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLNOPQRSTUVWXYZ0123456789';
-                let res = '';
-                for (var i = 0; i < 4; i++) {
-                    var index = parseInt(Math.random() * 61);
-                    res += str[index];
-                }
-                this.identify_code = res;
-            },
             confirmLogin: function() {
                 let _self = this;
                 let checkPhone = validation.checkPhone(_self.param.phone);
@@ -228,17 +264,17 @@ export default {
                     var wait = 60;
                     var time = setInterval(function() {
                         wait--;
-                        _self.code = wait;
+                        _self.codes = wait;
                         if (wait == 0) {
                             clearInterval(time);
-                            _self.code = '获取验证码';
+                            _self.codes = '获取验证码';
                             _self.buttonDisabled = false;
                         }
                     }, 1000);
 
                     httpService.register(common.urlCommon + common.apiUrl.most, {
                         biz_module: 'userSmsService',
-                        biz_method: 'getLoginCode',
+                        biz_method: 'getBindingCode',
                         biz_param: {
                             mobile: _self.param.phone
                         }
@@ -249,34 +285,11 @@ export default {
                     })
                 }
 
-            },
-            login() {
-                var checkArr = [];
-                let _self = this;
-                
-                let checkPhone = validation.checkPhone(_self.param.phone);
-                checkArr.push(checkPhone);
-                if (_self.myShow.show == true) {
-                    let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
-                    checkArr.push(checkPassword);
-                }
-                for (var i = 0; i < checkArr.length; i++) {
-                    if (checkArr[i]) {
-                        common.$emit('message', checkArr[i]);
-                        return;
-                    }
-                }
-                if (_self.myShow.show == false) {
-                    _self.codeLogin();
-                } else if (_self.myShow.show == true) {
-                    _self.passWordLogin();
-                }
             }
 
         },
         mounted() {
-            //this.getOpenId();
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+
         }
 }
 </script>
@@ -293,15 +306,21 @@ export default {
 .page-loadmore-wrapper {
     overflow-x: hidden;
 }
-.login #login_container{
-  position: absolute;
-  z-index: 10000;
-  background: #fff;
-  margin-left:-150px;
-  margin-top: -200px;
-  left:50%;
-  top:50%;
+
+.login #login_container {
+    position: absolute;
+    z-index: 10000;
+    background: #fff;
+    margin-left: -150px;
+    margin-top: -200px;
+    left: 50%;
+    top: 50%;
 }
+
+.login .box {
+    height: 100vh;
+}
+
 .login .my-logo {
     width: 66.5%;
     margin-top: 10.6%;
@@ -396,5 +415,6 @@ export default {
     color: white;
     border-radius: 3px;
     margin-left: 7%;
+    margin-top: 40px;
 }
 </style>

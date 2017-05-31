@@ -99,13 +99,24 @@ export default {
             myInformation
         },
         methods: {
+            // isWeiXin() {
+            //     var ua = window.navigator.userAgent.toLowerCase();
+            //     if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+            //         this.show = true;
+            //     } else {
+            //         this.show = false;
+            //     }
+            // },
             jumpOrder(index) {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
                         common.$emit('setParam', 'backRouter', '/home');
-
-                        _self.$router.push('/login');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -198,8 +209,11 @@ export default {
                     if (!common.customerId) { /*&&router!='mySet'*/
                         function loadApp() {
                             common.$emit('setParam', 'backRouter', '/home');
-
-                            _self.$router.push('/login');
+                            if (common.wxshow) {
+                                common.getWxUrl();
+                            } else {
+                                _self.$router.push('/login');
+                            }
                         }
                         common.$emit('confirm', {
                             message: '请先登录',

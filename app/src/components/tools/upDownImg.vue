@@ -88,7 +88,12 @@ export default {
                 ctx.fillStyle = "#fff";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 0, 0, width, height);
+
+                ctx.globalAlpha = 0.5;
+                ctx.beginPath();
                 ctx.drawImage(imgl, ww, wh, w, h);
+                ctx.closePath();
+                ctx.save();
                 let ndata = canvas.toDataURL(img.src.split(';')[0].split(':')[1], 1);
                 if (ndata.length > 2500000) {
                     ndata = canvas.toDataURL(img.src.split(';')[0].split(':')[1], 2500000 / ndata.length);

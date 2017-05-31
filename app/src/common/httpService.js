@@ -24,7 +24,6 @@ let httpService = new Vue({
                 err(response);
             });
         },
-
         register(url, body, suc, err) {
             this.$http.post(url, body).then((response) => {
                 suc(response);

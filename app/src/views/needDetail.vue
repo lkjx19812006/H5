@@ -14,7 +14,9 @@
                         </div>
                         <div class="detail">
                             <p>产地：<span>{{obj.location}}</span></p>
-                            <p class="right">剩余：<span>{{obj.duedate | timeDays(obj.pubdate)}}</span></p>
+                            <p class="right" v-if="obj.especial == 1 && obj.type == 0">剩余：<span>{{obj.duedate | timeDays}}</span></p>
+                            <!-- (obj.pubdate) -->
+                            <p class="right" v-if="obj.especial !== 1 && obj.type == 0">剩余：长期</p>
                         </div class="detail">
                         <div class="detail">
                             <p>需求数量：<span>{{obj.number}}{{obj.unit}}</span></p>
@@ -145,10 +147,16 @@ export default {
         },
         mounted() {
             var u = navigator.userAgent;
-            var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
-            var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-            if (isiOS) window.location = 'YCMM://push/YCMMDemandDetailViewController?intentionID=' + this.id;
-            if (isAndroid) window.location = 'mianguan://ycmm.ycmm/purchase?id=' + this.id;
+            var ua = window.navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+
+            } else {
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+                if (isiOS) window.location = 'YCMM://push/YCMMDemandDetailViewController?intentionID=' + this.id;
+                if (isAndroid) window.location = 'mianguan://ycmm.ycmm/purchase?id=' + this.id;
+            }
+
 
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         },

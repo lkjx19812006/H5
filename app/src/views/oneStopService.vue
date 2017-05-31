@@ -72,6 +72,6 @@ export default {
 }
 
 .one_stop .box .images img {
-    width: 100%;
+    width:100%;
 }
 </style>

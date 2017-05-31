@@ -53,7 +53,9 @@ import accountRevise from './views/accountRevise'
 import subCompany from './views/subCompany'
 import oneStopService from './views/oneStopService'
 import fourAdvantages from './views/fourAdvantages'
-
+import protocol from './staticsView/protocol'
+import tests from './staticsView/tests'
+import wchatLogin from './staticsView/wchatLogin'
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -135,6 +137,9 @@ module.exports = {
         { name: 'subCompany', path: '/subCompany', component: subCompany },
         { name: 'oneStopService', path: '/oneStopService', component: oneStopService },
         { name: 'fourAdvantages', path: '/fourAdvantages', component: fourAdvantages },
+        { name: 'protocol', path: '/protocol', component: protocol },
+        { name: 'tests', path: '/tests', component: tests },
+        { name: 'wchatLogin', path: '/wchatLogin', component: wchatLogin },
         { path: '*', redirect: '/home' }
     ]
 }

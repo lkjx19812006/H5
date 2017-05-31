@@ -36,6 +36,18 @@ function isWeiXin() {
 
 if (isWeiXin()) common.getWeixinSign(common.shareUrl);
 
+function stopPropagation(e) {  
+    e = e || window.event;  
+    if(e.stopPropagation) { //W3C阻止冒泡方法  
+        e.stopPropagation();  
+    } else {  
+        e.cancelBubble = true; //IE阻止冒泡方法  
+    }  
+}  
+document.getElementsByTagName('div').touch = function(e) {  
+    stopPropagation(e);  
+}  
+
 document.getElementsByTagName("html")[0].style.fontSize = Math.floor(document.documentElement.clientWidth * 100000 / 32) / 100000 + "px";
 const router = new VueRouter(
     configRouter // （缩写）相当于 routes: routes
@@ -112,7 +124,6 @@ Vue.http.interceptors.push((request, next) => {
         if (response.status == 403) {
             return router.push('/login');
         }
-
         return response
     })
 })

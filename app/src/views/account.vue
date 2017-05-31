@@ -1,119 +1,117 @@
 <template>
     <div class="account">
         <myHeader :param="head"></myHeader>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <mt-loadmore>
-                <div class="bbox">
-                    <div class="image_box">
-                        <div class="left">头像<span>(点击更改)</span></div>
+        <div class="page-loadmore-wrapper" ref="wrapper" v-bind:class="{killAccScroll:visible}" :style="{ height: wrapperHeight + 'px' }">
+            <div class="bbox">
+                <div class="image_box">
+                    <div class="left">头像<span>(点击更改)</span></div>
+                    <div class="empty"></div>
+                    <div class="right">
+                        <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
+                    </div>
+                </div>
+                <div class="basis">
+                    <div class="title">基础信息</div>
+                    <div class="box" @click="change(userInfor.fullname,1)">
+                        <div class="left">姓名</div>
                         <div class="empty"></div>
                         <div class="right">
-                            <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
+                            <div>{{userInfor.fullname}}</div>
+                            <img src="/static/images/jiantou.png">
                         </div>
                     </div>
-                    <div class="basis">
-                        <div class="title">基础信息</div>
-                        <div class="box" @click="change(userInfor.fullname,1)">
-                            <div class="left">姓名</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div>{{userInfor.fullname}}</div>
-                                <img src="/static/images/jiantou.png">
-                            </div>
-                        </div>
-                        <div class="box" @click="open('picker')">
-                            <div class="left">生日</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div>{{userInfor.birthday | birthdayTime}}</div>
-                                <img src="/static/images/jiantou.png">
-                            </div>
-                        </div>
-                        <div class="box" @click="change(userInfor.gender,2)">
-                            <div class="left">性别</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div>{{userInfor.gender}}</div>
-                                <img src="/static/images/jiantou.png">
-                            </div>
-                        </div>
-                        <div class="box">
-                            <div class="left">电话</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div class="special">{{userInfor.phone}}</div>
-                            </div>
-                        </div>
-                        <div class="box" @click="jumpPerson()">
-                            <div class="left">个人认证</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div class="utype" v-if="userInfor.ctype == 0">未认证</div>
-                                <div class="utype" v-if="userInfor.ctype == 1">待审核</div>
-                                <div class="utype" v-if="userInfor.ctype == 2">已认证</div>
-                                <div class="utype" v-if="userInfor.ctype == 3">未通过</div>
-                                <img src="/static/images/jiantou.png">
-                            </div>
+                    <div class="box" @click="open('picker')">
+                        <div class="left">生日</div>
+                        <div class="empty"></div>
+                        <div class="right">
+                            <div>{{userInfor.birthday | birthdayTime}}</div>
+                            <img src="/static/images/jiantou.png">
                         </div>
                     </div>
-                    <div class="basis company">
-                        <div class="title">企业信息</div>
-                        <div class="box" @click="change(userInfor.company,3)">
-                            <div class="left">公司</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div>{{userInfor.company}}</div>
-                                <img src="/static/images/jiantou.png">
-                            </div>
+                    <div class="box" @click="change(userInfor.gender,2)">
+                        <div class="left">性别</div>
+                        <div class="empty"></div>
+                        <div class="right">
+                            <div>{{userInfor.gender}}</div>
+                            <img src="/static/images/jiantou.png">
                         </div>
-                        <div class="box" @click="change(userInfor.companyShort,4)">
-                            <div class="left">简称</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div>{{userInfor.companyShort}}</div>
-                                <img src="/static/images/jiantou.png">
-                            </div>
+                    </div>
+                    <div class="box">
+                        <div class="left">电话</div>
+                        <div class="empty"></div>
+                        <div class="right">
+                            <div class="special">{{userInfor.phone}}</div>
                         </div>
-                        <div class="box" @click="change(userInfor.companyJob,5)">
-                            <div class="left">职位</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div>{{userInfor.companyJob}}</div>
-                                <img src="/static/images/jiantou.png">
-                            </div>
-                        </div>
-                        <div class="box" @click="change(userInfor.bizMain,6)">
-                            <div class="left">主营品类</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div>{{userInfor.bizMain}}</div>
-                                <img src="/static/images/jiantou.png">
-                            </div>
-                        </div>
-                        <div class="box" @click="change(userInfor.invoice,7)">
-                            <div class="left">开票信息</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div>{{userInfor.invoice}}</div>
-                                <img src="/static/images/jiantou.png">
-                            </div>
-                        </div>
-                        <div class="box" @click="jumpCompany()">
-                            <div class="left">企业认证</div>
-                            <div class="empty"></div>
-                            <div class="right">
-                                <div class="utype" v-if="userInfor.utype == 0">未认证</div>
-                                <div class="utype" v-if="userInfor.utype == 1">待审核</div>
-                                <div class="utype" v-if="userInfor.utype == 2">已认证</div>
-                                <div class="utype" v-if="userInfor.utype == 3">未通过</div>
-                                <img src="/static/images/jiantou.png">
-                            </div>
+                    </div>
+                    <div class="box" @click="jumpPerson()">
+                        <div class="left">个人认证</div>
+                        <div class="empty"></div>
+                        <div class="right">
+                            <div class="utype" v-if="userInfor.ctype == 0">未认证</div>
+                            <div class="utype" v-if="userInfor.ctype == 1">待审核</div>
+                            <div class="utype" v-if="userInfor.ctype == 2">已认证</div>
+                            <div class="utype" v-if="userInfor.ctype == 3">未通过</div>
+                            <img src="/static/images/jiantou.png">
                         </div>
                     </div>
                 </div>
-            </mt-loadmore>
+                <div class="basis company">
+                    <div class="title">企业信息</div>
+                    <div class="box" @click="change(userInfor.company,3)">
+                        <div class="left">公司</div>
+                        <div class="empty"></div>
+                        <div class="right">
+                            <div>{{userInfor.company}}</div>
+                            <img src="/static/images/jiantou.png">
+                        </div>
+                    </div>
+                    <div class="box" @click="change(userInfor.companyShort,4)">
+                        <div class="left">简称</div>
+                        <div class="empty"></div>
+                        <div class="right">
+                            <div>{{userInfor.companyShort}}</div>
+                            <img src="/static/images/jiantou.png">
+                        </div>
+                    </div>
+                    <div class="box" @click="change(userInfor.companyJob,5)">
+                        <div class="left">职位</div>
+                        <div class="empty"></div>
+                        <div class="right">
+                            <div>{{userInfor.companyJob}}</div>
+                            <img src="/static/images/jiantou.png">
+                        </div>
+                    </div>
+                    <div class="box" @click="change(userInfor.bizMain,6)">
+                        <div class="left">主营品类</div>
+                        <div class="empty"></div>
+                        <div class="right">
+                            <div>{{userInfor.bizMain}}</div>
+                            <img src="/static/images/jiantou.png">
+                        </div>
+                    </div>
+                    <div class="box" @click="change(userInfor.invoice,7)">
+                        <div class="left">开票信息</div>
+                        <div class="empty"></div>
+                        <div class="right">
+                            <div>{{userInfor.invoice}}</div>
+                            <img src="/static/images/jiantou.png">
+                        </div>
+                    </div>
+                    <div class="box" @click="jumpCompany()">
+                        <div class="left">企业认证</div>
+                        <div class="empty"></div>
+                        <div class="right">
+                            <div class="utype" v-if="userInfor.utype == 0">未认证</div>
+                            <div class="utype" v-if="userInfor.utype == 1">待审核</div>
+                            <div class="utype" v-if="userInfor.utype == 2">已认证</div>
+                            <div class="utype" v-if="userInfor.utype == 3">未通过</div>
+                            <img src="/static/images/jiantou.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <mt-datetime-picker ref="picker" type="date" v-model="pickerValue" :startDate="start " :endDate="end" @confirm="handleConfirm">
+        <mt-datetime-picker ref="picker" type="date" v-model="pickerValue" :startDate="start" :endDate="end" @confirm="handleConfirm">
         </mt-datetime-picker>
     </div>
 </template>
@@ -155,7 +153,9 @@ export default {
                     companyJob: '',
                     invoice: '',
                 },
-                item: ''
+                item: '',
+                show: false
+
             }
         },
         components: {
@@ -200,10 +200,9 @@ export default {
                 return date.getTime();
             },
             handleConfirm(value) {
-
                 let _self = this;
                 _self.upDataInfor.birthday = value.getTime() / 1000;
-                console.log(_self.upDataInfor.birthday)
+                //console.log(_self.upDataInfor.birthday)
                 for (var key in _self.upDataInfor) {
                     if (key !== 'birthday') {
                         _self.upDataInfor[key] = _self.userInfor[key]
@@ -311,6 +310,11 @@ textarea {
     float: left;
     font-size: 12px;
     position: relative;
+}
+
+.killAccScroll {
+    height: 100%;
+    overflow: hidden;
 }
 
 .account .bbox {

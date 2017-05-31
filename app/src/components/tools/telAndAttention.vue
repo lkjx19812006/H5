@@ -46,7 +46,11 @@ export default {
             if (!common.customerId) {
                  let _self=this;
                     function loadApp() {
-                        _self.$router.push('/login');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
                     }
                     common.$emit('confirm', {
                         message: '请先登录',

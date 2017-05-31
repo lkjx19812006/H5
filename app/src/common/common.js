@@ -17,6 +17,8 @@ var _hmt = _hmt || [];
 
 let common = new Vue({
     data: {
+        wxrun: true,
+        wxshow: true,
         shareUrl: shareUrl,
         customerId: window.localStorage.ID,
         show: true,
@@ -197,12 +199,42 @@ let common = new Vue({
             let signStr = CryptoJS.HmacSHA1(str, _self.KEY).toString(CryptoJS.enc.Base64);
             console.log(signStr);
             return signStr;
+        },
+        getWxUrl() {
+            let _self = this;
+            _self.$http.post(_self.urlCommon + _self.apiUrl.most, {
+                biz_module: 'weiXinService',
+                biz_method: 'getWeiXinCodeUrl',
+                biz_param: {
+                    url: 'http://apps.yaocaimaimai.com/htm5/#/wchatLogin',
+                    state: 'wchat_login'
+                }
+            }).then((res) => {
+                if (res.data.biz_result.wxUrl) window.location.href = res.data.biz_result.wxUrl;
+            }, (err) => {
+                console.log(err);
+            });
+        },
+        isWeiXin() {
+            let _self = this;
+            if (this.wxrun) {
+                var ua = window.navigator.userAgent.toLowerCase();
+                if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+                    _self.wxshow = true;
+
+                } else {
+                    _self.wxshow = false;
+                }
+                this.wxrun = false;
+            }
+
+
         }
 
 
     }
 })
-
+common.isWeiXin();
 common.$on('show-load', () => {
     Indicator.open('Loading...');
 

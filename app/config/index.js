@@ -31,6 +31,16 @@ module.exports = {
                 /*target: 'http://192.168.1.133:8081',*/
                 /*target: 'http://192.168.1.188:8080',*/
                 changeOrigin: true
+            },
+            '/cgi-bin/**': {
+                // target: 'http://192.168.1.108:8080',
+                target: 'https://api.weixin.qq.com',
+                /*target: 'http://192.168.1.250'*/
+                // target: 'http://192.168.1.115',
+
+                /*target: 'http://192.168.1.133:8081',*/
+                /*target: 'http://192.168.1.188:8080',*/
+                changeOrigin: true
             }
         },
         // CSS Sourcemaps off by default because relative paths are "buggy"

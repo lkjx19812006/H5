@@ -38,7 +38,7 @@
                     <ul class="page-loadmore-list_second" v-show="!param.show">
                         <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" v-on:click="jumpNeed(todo.id)">
                             <div class="center">
-                                <img :src="todo.cFlagsPath" class="flag">
+                                <img src="https://ojic8qd7z.qnssl.com/contry_icon/zhongguo.png" class="flag">
                                 <div class="title">
                                     <div>
                                         <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">

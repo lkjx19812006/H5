@@ -189,7 +189,7 @@ export default {
                 this.obj.addressProvince = this.areaParam.addressProvince;
                 this.obj.addressCity = this.areaParam.addressCity;
                 this.obj.addressDistrict = this.areaParam.addressDistrict;
-                this.obj.address = this.obj.addressProvince + '' + this.obj.addressCity + '' + this.obj.addressDistrict;
+                this.obj.address = this.obj.addressProvince + ' ' + this.obj.addressCity + ' ' + this.obj.addressDistrict;
                 this.obj.show = false;
             },
             onAddressChange(picker, values) {
@@ -438,6 +438,8 @@ textarea {
     color: #666666;
     line-height: 3.5rem;
     overflow: hidden;
+    text-align: right;
+    padding-right:10px;
 }
 
 .release_good_information .good_name,

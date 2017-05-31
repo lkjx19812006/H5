@@ -106,5 +106,10 @@ validation.checkDifferent = (newName, oldName) => {
         return false;
     }
 }
+validation.checkAddress = (val) => {
+    if (val == '请选择地址') {
+        return '请选择交货地址'
+    }
+}
 
 module.exports = validation;

@@ -8,30 +8,25 @@ Vue.filter('timeFormat', function(val) {
 });
 
 Vue.filter('timeDays', function(due) {
-    let days = 7;
+    let days;
     if (due) {
         due = due.split('.')[0];
-        if (due) var arr = due.split(/[- : \/]/);
-        if (due != '') {
-            var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
-            var pubdateDate = new Date();
-            var dateValue = duedateDate.getTime() - pubdateDate.getTime();
-            days = Math.floor(dateValue / (24 * 3600 * 1000));
+        var arr = due.split(/[- : \/]/);
+        var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
+        var pubdateDate = new Date();
+        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+        days = Math.floor(dateValue / (24 * 3600 * 1000));
 
-            if (days == 0) {
-                days = 1 + '天';
-            } else if (days > 0) {
-                days = days + '天'
-            } else if (days < 0) {
-                days = "已过期";
-            }
-
-        } else {
-            days = "7" + '天';
+        if (days == 0) {
+            days = 1 + '天';
+        } else if (days > 0) {
+            days = days + '天'
+        } else if (days < 0) {
+            days = "已过期";
         }
-
+    } else {
+        days = "已过期";
     }
-
     return days;
 });
 
@@ -214,6 +209,7 @@ Vue.filter('money', function(money) {
     val = val.toFixed(2);
     return val
 })
+
 Vue.filter('sex', function(val) {
     switch (val) {
         case 1:

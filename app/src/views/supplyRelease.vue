@@ -85,7 +85,7 @@ export default {
                     addressCity: '北京市',
                     addressDistrict: '东城区',
                     breedId: '',
-                    address: '北京市 北京市 东城区',
+                    address: '请选择地址',
                     sheetVisible: false,
                     show: false
                 },
@@ -159,7 +159,7 @@ export default {
             release() {
 
                 let _self = this;
-                console.log(_self.obj.number_id)
+                console.log(_self.obj.number_id);
                 var checkArr = [];
                 let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种');
                 checkArr.push(checkBreedId);
@@ -171,6 +171,8 @@ export default {
                 checkArr.push(checkNum);
                 let checkPri = validation.checkPrice(_self.obj.sales_price, '价格');
                 checkArr.push(checkPri);
+                let checkAddress = validation.checkAddress(_self.obj.address);
+                checkArr.push(checkAddress);
                 if (_self.obj.sampling) {
                     let checkSampleNum = validation.checkMaxNum(_self.obj.weight, '样品');
                     checkArr.push(checkSampleNum);
@@ -240,6 +242,7 @@ export default {
                         common.$emit('message', suc.data.msg);
                         common.$emit('informMyRes', 'refurbish');
                         let id = suc.data.biz_result.intentionId;
+                        _self.obj.address = '请选择地址'
                         common.$emit('informSupplySuccess', suc.data.biz_result.intentionId);
                         _self.$router.push("supplyReleaseSuccess" + '/' + id);
                     } else {

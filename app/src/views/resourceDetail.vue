@@ -314,7 +314,11 @@ export default {
                             isMy: _self.obj.isMy
                         });
                         common.$emit('setParam', 'backRouter', 'resourceDetail/' + id);
-                        _self.$router.push('/login');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -340,7 +344,11 @@ export default {
                             isMy: _self.obj.isMy
                         });
                         common.$emit('setParam', 'backRouter', 'resourceDetails/' + id);
-                        _self.$router.push('/login');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -363,7 +371,11 @@ export default {
                             isMy: _self.obj.isMy
                         });
                         common.$emit('setParam', 'backRouter', 'resourceDetail/' + id);
-                        _self.$router.push('/login');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
                     }
                     common.$emit('confirm', {
                         message: '请先登录',

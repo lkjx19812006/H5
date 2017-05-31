@@ -14,7 +14,7 @@
                     </ul>
                 </mt-loadmore>
             </div>
-            <div class="quit" @click="quit">退出当前账号</div>
+            <div class="quit" @click="quit" v-show="wxshow">退出当前账号</div>
         </div>
     </div>
 </template>
@@ -24,6 +24,7 @@ import myHeader from '../components/tools/myHeader'
 export default {
     data() {
             return {
+                wxshow:true,
                 wrapperHeight: '',
                 my_header: {
                     name: '我的设置',
@@ -56,10 +57,6 @@ export default {
                     func: function() {
                         window.location.href = "tel:" + common.servicePhone;
                     }
-                }, {
-                    first_img: '/static/images/current-version.png',
-                    left_word: '当前版本',
-                    right_word: 'V 1.0'
                 }]
 
             }
@@ -110,6 +107,8 @@ export default {
             }
         },
         created() {
+            //console.log(common.wxshow);
+            if(common.wxshow)this.wxshow = false;
             if (!common.servicePhone) this.getCustomerPhone();
         },
         mounted() {
