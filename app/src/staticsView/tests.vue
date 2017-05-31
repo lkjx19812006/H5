@@ -47,30 +47,32 @@ export default {
         },
         created() {
 
-            this.isWeiXin();
-            if (this.show) {
-                let url = window.location.href;
-                let behind = url.split('?code=')[1];
-                let state = behind.split('&state=')[1];
-                let code = behind.split('&')[0];
-            }
-            let _self = this;
-            this.isWeiXin();
-            if(this.show){
-                _self.getUrl();
+            // this.isWeiXin();
+            // if (this.show) {
+            //     let url = window.location.href;
+            //     let behind = url.split('?code=')[1];
+            //     let state = behind.split('&state=')[1];
+            //     let code = behind.split('&')[0];
+            // }
+            // let _self = this;
+            // this.isWeiXin();
+            // if(this.show){
+            //     _self.getUrl();
                 
-            }
+            // }
             
-            // let a = [];
-            // let b = [1,2,3,4];
-            // a.push.apply(a,b);
-            // console.log(a);
-            // //1234
-            // b.forEach(function(value,index,array){
-            //     array[index] = value + 1;
-            // })
-            // console.log(1,b)
-            // //2345
+            let a = [];
+            let b = [1,2,3,4];
+            a.push.apply(a,b);
+            console.log(a);
+            //1234
+            b.forEach(function(value,index,array){
+                array[index] = value + 1;
+            })
+            console.log(1,b)
+            //2345
+
+            
         }
 }
 </script>

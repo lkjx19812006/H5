@@ -9,6 +9,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "less": "^2.7.2",
+    "less-loader": "^4.0.4",
     "mint-ui": "^2.0.5",
     "v-tap": "^2.1.2",
     "vue": "^2.0.1",

@@ -56,6 +56,7 @@ import fourAdvantages from './views/fourAdvantages'
 import protocol from './staticsView/protocol'
 import tests from './staticsView/tests'
 import wchatLogin from './staticsView/wchatLogin'
+import releaseNeed from './myRelease/releaseNeed'
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -140,6 +141,7 @@ module.exports = {
         { name: 'protocol', path: '/protocol', component: protocol },
         { name: 'tests', path: '/tests', component: tests },
         { name: 'wchatLogin', path: '/wchatLogin', component: wchatLogin },
+        { name: 'releaseNeed', path: '/releaseNeed', component: releaseNeed },
         { path: '*', redirect: '/home' }
     ]
 }

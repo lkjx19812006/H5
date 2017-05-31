@@ -107,9 +107,6 @@ export default {
                 let body = {
                     biz_module: 'breedService',
                     biz_method: 'queryLocalSpecList',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         name: name
                     }
@@ -140,9 +137,6 @@ export default {
                 let body = {
                     biz_module: 'enumService',
                     biz_method: 'queryEnumList',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         type: 'MU'
                     }
