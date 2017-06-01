@@ -15,7 +15,7 @@ import imgl from '../../../static/images/watermark.png'
 export default {
     data() {
             return {
-                image: "/static/images/upload-image.png",
+                image: "/static/icons/add-imgs.png",
                 close: false,
                 size: 0,
                 key: '',

@@ -82,16 +82,6 @@ export default {
 
                     if (suc.data.code == '1c01') {
                         let result = suc.data.biz_result;
-                        /*let type = '';
-                        let ua = navigator.userAgent.toLowerCase();
-                        if (/iphone|ipad|ipod/.test(ua)) {
-                            type = 'ios';
-                        }
-                        if (type == 'ios') {
-                            result.duedate =result.duedate.replace(/-/g, "/");
-                            result.pubdate =result.pubdate.replace(/-/g, "/");
-                            
-                        }*/
                         let due = result.duedate.split('.')[0];
                         if (due) var arr = due.split(/[- : \/]/);
                         var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]); /*new Date(result.duedate.split(' ')[0]);*/

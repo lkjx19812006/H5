@@ -88,7 +88,7 @@ export default {
                         _self.obj.name = suc.data.biz_result.fullname;
                         _self.obj.phone = suc.data.biz_result.phone;
                     } else {
-                        //console.log('cuowusasdada')
+            
                     }
 
                 }, function(err) {

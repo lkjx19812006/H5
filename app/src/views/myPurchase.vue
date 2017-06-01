@@ -189,7 +189,8 @@ export default {
                     }]
                 }],
                 router: "purchaseDetail",
-                other_router: "revisePurchase",
+                // other_router: "revisePurchase",
+                other_router: "releaseNeed",
                 todos: [],
                 topStatus: '',
                 wrapperHeight: 0,
@@ -278,9 +279,6 @@ export default {
                     let body = {
                         biz_module: 'intentionService',
                         biz_method: 'deleteIntentionInfo',
-                        version: 1,
-                        time: 0,
-                        sign: '',
                         biz_param: {
                             id: id
                         }
@@ -313,7 +311,6 @@ export default {
                 _self.getHttp()
             },
             jump: function(router, id, duedate) {
-
                 common.$emit("purchase-id", id);
                 common.$emit("myPurToPurDetail", id);
                 this.$router.push(router + '/' + id);

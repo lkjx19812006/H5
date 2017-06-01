@@ -222,7 +222,7 @@ export default {
                     image: '/static/images/my-supply.png'
                 }, {
                     name: '我要采购',
-                    router: 'needRelease',
+                    router: '/releaseNeed/1',
                     image: '/static/images/my-purchase.png'
                 }],
                 perfect: {

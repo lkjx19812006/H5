@@ -130,7 +130,7 @@ export default {
                     common.$emit('close-load');
 
                     if (response.data.code == '1c01') {
-
+                        
                         window.localStorage.KEY = response.data.biz_result.KEY;
                         window.localStorage.SID = response.data.biz_result.SID;
                         common.KEY = window.localStorage.KEY;
@@ -155,7 +155,7 @@ export default {
                             common.$emit('go_home', 1);
                             _self.$router.replace('home');
                         }
-
+                        
                     } else {
                         common.$emit('message', response.data.msg);
                     }
@@ -201,9 +201,11 @@ export default {
                             common.$emit('go_home', 1);
                             _self.$router.replace('home');
                         }
+                        
                     } else {
                         common.$emit('message', response.data.msg);
                     }
+
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);

@@ -158,29 +158,6 @@ input {
                 </div>
             </div>
         </div>
-        <div class="number" v-show="!obj.resource">
-            <div class="box">
-                <div class="number_left">求购的数量</div>
-                <div class="number_center">
-                    <input type="number" v-model="obj.number" placeholder="请输入">
-                </div>
-                <div class="number_right" @click="showAction('unit')">
-                    <div class="word">{{obj.number_unit}}</div>
-                    <div><img src="/static/icons/green-jian.png" class="select"></div>
-                </div>
-            </div>
-            <div class="box">
-                <div class="number_left">求购有效期</div>
-                <div class="number_center">
-                    <input type="number" v-model="obj.duedate" placeholder="请输入">
-                </div>
-                <div class="number_right">
-                    <div class="day">
-                        <div class="today">天</div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <mt-popup v-model="obj.sheetVisible" position="center" class="mint-popup-1 popup_unit" style="width:60%">
             <div v-for="item in actions">
                 <div style="color: #656b79;background-color: #f6f8fa;box-shadow: 0 0 1px #b8bbbf;padding:10px 0" @click="setObj(item.key,item.name,item.id_key,item.id)">{{item.name}}</div>
@@ -215,13 +192,13 @@ export default {
         methods: {
             jumpSearch(router) {
                 common.searchType = 'breed';
-                common.$emit("setParam", "router", "needRelease");
+                common.$emit("setParam", "router", "supplyRelease");
                 this.$router.push(router);
             },
             setObj(key, value, id_key, id) {
                 this.obj[key] = value;
                 this.obj[id_key] = id;
-                console.log(id)
+                //console.log(id)
                 this.obj.sheetVisible = false;
             },
             showAction(param) {
@@ -330,7 +307,7 @@ export default {
         created() {
             let _self = this;
             this.getUnit();
-            common.$on("Needrelease", function(item) {
+            common.$on("supplyRelease", function(item) {
                 console.log(11,item)
                 if (item.breedName) {
                     _self.getBreedInformation(item.breedName);

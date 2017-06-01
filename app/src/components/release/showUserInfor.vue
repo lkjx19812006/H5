@@ -20,7 +20,7 @@ input {
             display: flex;
             flex-direction: row;
             align-items: center;
-            font-size: 15px;
+            font-size: 14px;
             color: #000;
             height: 50px;
             border-bottom: 1px solid #E6E6E6;
@@ -40,13 +40,13 @@ input {
             <div class="name">
                 <div class="left">姓名</div>
                 <div class="right">
-                    <input type="text" v-model="obj.name">
+                    <input type="text" v-model="infor.customerName">
                 </div>
             </div>
             <div class="name">
                 <div class="left">联系方式</div>
                 <div class="right">
-                    <input type="text" v-model="obj.phone">
+                    <input type="text" v-model="infor.customerPhone">
                 </div>
             </div>
         </div>
@@ -66,10 +66,10 @@ export default {
 
 
         },
-        props:{
-             obj:{
-
-             }
+        computed: {
+            infor(){
+                return this.$store.state.release.needRelease
+            }
         },
         components: {
 
