@@ -186,7 +186,7 @@ export default {
             /*var str = _self.$route.fullPath;
             var id = str.substring(12,str.length);*/
             var id = _self.$route.params.odId;
-            _self.param.reviseRouter = '/reviseResource/' + id;
+            _self.param.reviseRouter = '/releaseResource/' + id;
             _self.param.item = id;
             //console.log('/reviseRevise/' + id)
             _self.obj.id = id;
@@ -195,7 +195,7 @@ export default {
 
             common.$on("inform-goodDetail", function(item) {
                 _self.getHttp(item);
-                _self.param.reviseRouter = '/reviseResource/' + item;
+                _self.param.reviseRouter = '/releaseResource/' + item;
                 _self.param.item = item;
                 _self.my_param.show = false;
             });

@@ -126,6 +126,7 @@ export default {
 
         methods: {
             selectPlace: function(item) {
+                console.log(1,item)
                 let count = 1;
                 for (let i = 0; i < this.selectArr.length; i++) {
                     if (this.selectArr[i].name == item.name) {
@@ -142,23 +143,36 @@ export default {
             },
             save: function() {
                 let areaArr=[];
-
+                let idArr=[];
                 for(var i=0;i<this.selectArr.length;i++){
                         areaArr.push(this.selectArr[i].name);
+                        idArr.push(this.selectArr[i].locationId);
                 }
 
                 switch (this.$route.params.from) {
                     case 'need':
-                        common.$emit('need-sort',areaArr);
+                        common.$emit('need-sort',{
+                            areaArr:areaArr,
+                            idArr:idArr
+                        });
                         break;
                     case 'resource':
-                        common.$emit('resource-sort',areaArr);
+                        common.$emit('resource-sort',{
+                            areaArr:areaArr,
+                            idArr:idArr
+                        });
                         break;
                     case 'lowRes':
-                        common.$emit('lowRes-sort',areaArr);
+                        common.$emit('lowRes-sort',{
+                            areaArr:areaArr,
+                            idArr:idArr
+                        });
                         break;
                     case 'urgentNeed':
-                        common.$emit('urgentNeed-sort',areaArr);
+                        common.$emit('urgentNeed-sort',{
+                            areaArr:areaArr,
+                            idArr:idArr
+                        });
                         break;
                     default:
                         break;

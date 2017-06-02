@@ -316,8 +316,8 @@ export default {
                 _self.getHttp();
             });
             common.$on('need-sort', function(item) {
-                _self.httpPraram.location = item;
-                _self.sortArr[3].name = item[0];
+                _self.httpPraram.location = item.idArr;
+                _self.sortArr[3].name = item.areaArr[0];
                 _self.sortArr[3].class = "sort_content_detail_select";
                 _self.sortArr[3].url = "/static/icons/screen_selected.png";
                 if (item.length > 1) {
