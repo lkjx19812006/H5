@@ -20,7 +20,7 @@ input {
 .release_need {
     background-color: #F5F5F5;
     .sell_point {
-        margin: 15px 0;
+        margin: 15px 0 0 0;
         padding: 0 15px;
         background-color: #fff;
         textarea {
@@ -41,6 +41,11 @@ input {
         position: fixed;
         bottom: 0;
     }
+    .title {
+        font-size: 15px;
+        padding: 12px 0 12px 15px;
+        text-align: left;
+    }
     .name {
         padding-bottom: 65px;
     }
@@ -56,6 +61,7 @@ input {
             <div class="sell_point">
                 <textarea placeholder="请根据实际情况描述一下您的产品卖点" v-model="obj.selling_point"></textarea>
             </div>
+            <div class="title">联系方式可根据实际情况修改</div>
             <div class="name">
                 <userInfor :obj="obj"></userInfor>
             </div>
@@ -85,7 +91,7 @@ export default {
                     drug_name: '',
                     spec: '',
                     place: '',
-                    place_id:'',
+                    place_id: '',
                     number: '',
                     number_unit: '',
                     selling_point: '',
@@ -187,7 +193,11 @@ export default {
                         common.$emit('message', suc.data.msg);
                         common.$emit('informMyPurchase', 'refurbish');
                         let id = suc.data.biz_result.intentionId;
-                        common.$emit('informNeedSuccess', id);
+                        common.$emit('informNeedSuccess',id);
+                        _self.$store.dispatch('getCustomer',{
+                            name:_self.obj.name,
+                            phone:_self.obj.phone
+                        })
                         _self.$router.push("/releaseNeedSuccess" + '/' + id);
                     } else {
                         common.$emit('message', suc.data.msg);

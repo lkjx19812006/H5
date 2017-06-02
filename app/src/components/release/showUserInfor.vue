@@ -40,13 +40,13 @@ input {
             <div class="name">
                 <div class="left">姓名</div>
                 <div class="right">
-                    <input type="text" v-model="infor.customerName">
+                    <input type="text" v-model="infor.name">
                 </div>
             </div>
             <div class="name">
                 <div class="left">联系方式</div>
                 <div class="right">
-                    <input type="text" v-model="infor.customerPhone">
+                    <input type="text" v-model="infor.phone">
                 </div>
             </div>
         </div>
@@ -66,9 +66,12 @@ export default {
 
 
         },
+        props:{
+
+        },
         computed: {
             infor(){
-                return this.$store.state.release.needRelease
+                return this.$store.state.release.customerInfor
             }
         },
         components: {

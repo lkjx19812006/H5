@@ -3,12 +3,17 @@ import common from '../../common/common.js'
 
 
 const state = {
-    needRelease: ''
+    needRelease: '',
+    customerInfor: {
+        name: '',
+        phone: ''
+    }
 }
 
 // getters
 const getters = {
     needRelease: state => state.needRelease,
+    customerInfor: state => state.customerInfor,
 }
 
 // actions
@@ -38,16 +43,21 @@ const actions = {
                 })
         })
     },
+    getCustomer({ commit, state }, param) {
+        commit('getCustomer', param);
+    }
 
 }
 
 // mutations
 const mutations = {
     getReleaseInfor(state, res) {
-         state.needRelease = res.data.biz_result;
-         console.log(1,res.data.biz_result)
+        state.needRelease = res.data.biz_result;
     },
-
+    getCustomer(state, param) {
+        state.customerInfor.name = param.name;
+        state.customerInfor.phone = param.phone;
+    }
 
 }
 

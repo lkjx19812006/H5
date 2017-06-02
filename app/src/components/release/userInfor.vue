@@ -68,7 +68,7 @@ export default {
         },
         props:{
              obj:{
-
+                  
              }
         },
         components: {

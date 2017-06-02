@@ -158,7 +158,7 @@ input {
                 </div>
             </div>
         </div>
-        <mt-popup v-model="obj.sheetVisible" position="center" class="mint-popup-1 popup_unit" style="width:60%">
+        <mt-popup v-model="obj.sheetVisibles" position="center" class="mint-popup-1 popup_unit" style="width:60%">
             <div v-for="item in actions">
                 <div style="color: #656b79;background-color: #f6f8fa;box-shadow: 0 0 1px #b8bbbf;padding:10px 0" @click="setObj(item.key,item.name,item.id_key,item.id)">{{item.name}}</div>
             </div>
@@ -173,7 +173,7 @@ export default {
             return {
                 breedLocation: [],
                 breedSpec: [],
-                sheetVisible: false,
+                sheetVisibles: false,
                 actions: [],
                 unit: [{
                     id: 1,
@@ -186,7 +186,7 @@ export default {
         },
         props: {
             obj: {
-                sheetVisible: false
+                sheetVisibles: false
             }
         },
         methods: {
@@ -196,13 +196,14 @@ export default {
                 this.$router.push(router);
             },
             setObj(key, value, id_key, id) {
+                this.obj.sheetVisibles = false;
                 this.obj[key] = value;
                 this.obj[id_key] = id;
                 //console.log(id)
-                this.obj.sheetVisible = false;
+                
             },
             showAction(param) {
-                this.obj.sheetVisible = true;
+                this.obj.sheetVisibles = true;
                 this.actions = [];
                 let _self = this;
                 if (param == "spec") {
@@ -232,6 +233,7 @@ export default {
                         });
                     }
                 }
+                console.log(22,this.actions)
             },
             getBreedInformation(name) {
                 let _self = this;

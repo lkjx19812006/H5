@@ -227,9 +227,6 @@ export default {
                 let body = {
                     biz_module: 'intentionService',
                     biz_method: 'mySupplyIntentionList',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         sort: {
                             "pubdate": _self.httpPraram.pubdate,
@@ -284,7 +281,7 @@ export default {
                 this.index = index;
                 common.$emit("res-id", id);
                 common.$emit('setParam', 'resourceId', id);
-                this.$router.push('reviseResource/' + id);
+                this.$router.push('releaseResource/' + id);
             },
             delet(id) {
                 let _self = this;

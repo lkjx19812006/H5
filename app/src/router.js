@@ -5,8 +5,8 @@ import menu from './components/menu'
 import home from './views/home'
 import drugResTable from './views/drugResTable'
 import marketQuotation from './views/marketQuotation'
-import supplyRelease from './views/supplyRelease'
-import needRelease from './views/needRelease'
+// import supplyRelease from './views/supplyRelease'
+// import needRelease from './views/needRelease'
 import provenanceSelection from './views/provenanceSelection'
 import drugResTableDetail from './views/drugResTableDetail'
 import transaction from './views/transaction'
@@ -25,8 +25,8 @@ import addressRevise from './views/addressRevise'
 import feedBack from './views/feedBack'
 import needDetail from './views/needDetail'
 import resourceDetail from './views/resourceDetail'
-import needReleaseSuccess from './views/needReleaseSuccess'
-import supplyReleaseSuccess from './views/supplyReleaseSuccess'
+// import needReleaseSuccess from './views/needReleaseSuccess'
+// import supplyReleaseSuccess from './views/supplyReleaseSuccess'
 import detailsPage from './views/detailsPage'
 import goodDetail from './views/goodDetail'
 import addAddress from './views/addAddress'
@@ -34,8 +34,8 @@ import myPurchase from './views/myPurchase'
 import purchaseDetail from './views/purchaseDetail'
 import companyAuthentication from './views/companyAuthentication'
 import certification from './views/certification'
-import reviseResource from './views/reviseResource'
-import revisePurchase from './views/revisePurchase'
+// import reviseResource from './views/reviseResource'
+// import revisePurchase from './views/revisePurchase'
 import cityName from './views/cityName'
 import areaName from './views/areaName'
 import aboutus from './views/aboutus'
@@ -59,6 +59,8 @@ import wchatLogin from './staticsView/wchatLogin'
 import releaseNeed from './myRelease/releaseNeed'
 import releaseNeedSuccess from './myRelease/releaseNeedSuccess'
 import releaseResource from './myRelease/releaseResource'
+import releaseResourceSuccess from './myRelease/releaseResourceSuccess'
+
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -93,8 +95,8 @@ module.exports = {
         { name: 'home', path: '/home', component: home },
         { name: 'drugResTable', path: '/drugResTable/:from', component: drugResTable },
         { name: 'marketQuotation', path: '/marketQuotation', component: marketQuotation },
-        { name: 'supplyRelease', path: '/supplyRelease', component: supplyRelease },
-        { name: 'needRelease', path: '/needRelease', component: needRelease },
+        // { name: 'supplyRelease', path: '/supplyRelease', component: supplyRelease },
+        // { name: 'needRelease', path: '/needRelease', component: needRelease },
         { name: 'provenanceSelection', path: '/provenanceSelection/:from', component: provenanceSelection },
         { name: 'drugResTableDetail', path: '/drugResTableDetail/:from/:drugId', component: drugResTableDetail },
         { name: 'transaction', path: '/transaction', component: transaction },
@@ -116,14 +118,14 @@ module.exports = {
         { name: 'addAddress', path: '/addAddress', component: addAddress },
         { name: 'cityName', path: '/cityName', component: cityName },
         { name: 'areaName', path: '/areaName', component: areaName },
-        { name: 'revisePurchase', path: '/revisePurchase/:visePurId', component: revisePurchase },
-        { name: 'reviseResource', path: '/reviseResource/:revId', component: reviseResource },
+        // { name: 'revisePurchase', path: '/revisePurchase/:visePurId', component: revisePurchase },
+        // { name: 'reviseResource', path: '/reviseResource/:revId', component: reviseResource },
         { name: 'companyAuthentication', path: '/companyAuthentication', component: companyAuthentication },
         { name: 'certification', path: '/certification', component: certification },
         { name: 'myPurchase', path: '/myPurchase', component: myPurchase },
         { name: 'purchaseDetail', path: '/purchaseDetail/:rchaseId', component: purchaseDetail },
-        { name: 'needReleaseSuccess', path: '/needReleaseSuccess/:needSucId', component: needReleaseSuccess },
-        { name: 'supplyReleaseSuccess', path: '/supplyReleaseSuccess/:suppSucId', component: supplyReleaseSuccess },
+        // { name: 'needReleaseSuccess', path: '/needReleaseSuccess/:needSucId', component: needReleaseSuccess },
+        // { name: 'supplyReleaseSuccess', path: '/supplyReleaseSuccess/:suppSucId', component: supplyReleaseSuccess },
         { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
         { name: 'aboutus', path: '/aboutus/:from', component: aboutus },
@@ -146,6 +148,7 @@ module.exports = {
         { name: 'releaseNeed', path: '/releaseNeed/:id', component: releaseNeed },
         { name: 'releaseNeedSuccess', path: '/releaseNeedSuccess/:id', component: releaseNeedSuccess },
         { name: 'releaseResource', path: '/releaseResource/:id', component: releaseResource },
+        { name: 'releaseResourceSuccess', path: '/releaseResourceSuccess/:id', component: releaseResourceSuccess },
         { path: '*', redirect: '/home' }
     ]
 }

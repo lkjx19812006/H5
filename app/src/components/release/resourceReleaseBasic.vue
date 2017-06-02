@@ -168,7 +168,7 @@ input {
                 </div>
             </div>
         </div>
-        <mt-popup v-model="obj.sheetVisible" position="center" class="mint-popup-1 popup_unit" style="width:60%">
+        <mt-popup v-model="obj.show" position="center" class="mint-popup-1 popup_unit" style="width:60%">
             <div v-for="item in actions">
                 <div style="color: #656b79;background-color: #f6f8fa;box-shadow: 0 0 1px #b8bbbf;padding:10px 0" @click="setObj(item.key,item.name,item.id_key,item.id)">{{item.name}}</div>
             </div>
@@ -186,7 +186,7 @@ export default {
         },
         props: {
             obj: {
-
+                
             }
         },
         methods: {
@@ -194,7 +194,6 @@ export default {
                 this.obj.sampling = param;
             },
             showAction(param) {
-                this.obj.sheetVisible = true;
                 this.actions = [];
                 let _self = this;
                 if (param == "unit") {
@@ -207,6 +206,7 @@ export default {
                         });
                     }
                 }
+                this.obj.show = true;
 
             },
             getUnit() {
@@ -258,7 +258,7 @@ export default {
                 console.log(id)
                 this.obj[key] = value;
                 this.obj[id_key] = id;
-                this.obj.sheetVisible = false;
+                this.obj.show = false;
             },
 
         },

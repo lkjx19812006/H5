@@ -218,7 +218,7 @@ export default {
                 }],
                 supplyDemandArray: [{
                     name: '我要供应',
-                    router: 'supplyRelease',
+                    router: '/releaseResource/1',
                     image: '/static/images/my-supply.png'
                 }, {
                     name: '我要采购',

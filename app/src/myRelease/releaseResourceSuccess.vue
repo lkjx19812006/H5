@@ -1,11 +1,11 @@
 <style lang="less" scoped>
 .release_need_success {
-    background-color:#F5F5F5;
-    .top{
-        margin-bottom:15px;
+    background-color: #F5F5F5;
+    .top {
+        margin-bottom: 15px;
     }
-    .footer{
-        margin-top:15px;
+    .footer {
+        margin-top: 15px;
     }
     .bottom {
         position: absolute;
@@ -30,8 +30,6 @@
         }
     }
 }
-
-
 </style>
 <template>
     <div class="release_need_success">
@@ -69,32 +67,26 @@ export default {
                     goBack: true
                 },
                 wrapperHeight: '',
-                words: '求购',
-                infor:{
-                    name:'',
-                    phone:''
-                }
+                words: '资源',
             }
         },
         computed: {
-            infor(){
+            infor() {
                 return this.$store.state.release.needRelease
             }
         },
         methods: {
             jump() {
                 let _self = this;
-                common.$emit("setParam", 'lowPrice', {
+                common.$emit("setParam", 'Urgentneed', _self.infor.breedName);
+                common.$emit('Urgentneed', {
                     keyWord: _self.infor.breedName
                 });
-                common.$emit('lowPriceRes', {
-                    keyWord: _self.infor.breedName
-                });
-                this.$router.push('/lowPriceRes');
+                this.$router.push('/urgentNeed');
             },
             back() {
                 window.history.go(-1);
-            },
+            }
         },
         components: {
             releaseSuccessTop,
@@ -105,10 +97,9 @@ export default {
         created() {
             var _self = this;
             var id = _self.$route.params.id;
-            _self.$store.dispatch('getReleaseInfor',id);
-
-            common.$on('informNeedSuccess', function(item) {
-                _self.$store.dispatch('getReleaseInfor',item);
+            _self.$store.dispatch('getReleaseInfor', id);
+            common.$on('informSupplySuccess', function(item) {
+                _self.$store.dispatch('getReleaseInfor', item);
             });
         },
         mounted() {

@@ -1,4 +1,9 @@
 <style lang="less" scoped>
+.preventScroll {
+    height: 100%;
+    overflow: hidden;
+}
+
 .release_resource {
     background-color: #F5F5F5;
     .img {
@@ -97,7 +102,7 @@ import common from '../common/common.js'
 import validation from '../validation/validation.js'
 import myHeader from '../components/tools/myHeader'
 import imageUpload from '../components/release/upLoadImgs' /**/
-import needBasic from '../components/release/resourceReleaseTop'
+import needBasic from '../components/release/needReleaseBasic' //resourceReleaseTop
 import releaseBasic from '../components/release/resourceReleaseBasic'
 import userInfor from '../components/release/userInfor'
 import httpService from '../common/httpService.js'
@@ -121,6 +126,7 @@ export default {
                     drug_name: '',
                     spec: '',
                     place: '',
+                    place_id: '',
                     number: '',
                     number_unit: '',
                     sample_unit: '',
@@ -229,7 +235,7 @@ export default {
                         customerId: common.customerId,
                         breedName: _self.obj.drug_name,
                         spec: _self.obj.spec,
-                        location: _self.obj.place,
+                        location: _self.obj.place_id,
                         number: _self.obj.number,
                         price: _self.obj.sales_price,
                         sampling: _self.obj.sampling,
@@ -254,13 +260,60 @@ export default {
                         common.$emit('message', suc.data.msg);
                         common.$emit('informMyRes', 'refurbish');
                         let id = suc.data.biz_result.intentionId;
+                        _self.$store.dispatch('getCustomer',{
+                            name:_self.obj.name,
+                            phone:_self.obj.phone
+                        })
                         common.$emit('informSupplySuccess', suc.data.biz_result.intentionId);
-                        _self.$router.push("supplyReleaseSuccess" + '/' + id);
+                        _self.$router.push("/releaseResourceSuccess" + '/' + id);
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
                 }, function(err) {
                     common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
+            getResourceDetail(id) {
+                let _self = this;
+                httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+                    biz_param: {
+                        id: id
+                    }
+                }, function(suc) {
+                    if (suc.data.code == '1c01') {
+                        let result = suc.data.biz_result;
+                        let due = result.duedate.split('.')[0];
+                        if (due) var arr = due.split(/[- : \/]/);
+                        var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]); /*new Date(result.duedate.split(' ')[0]);*/
+                        let pub = result.pubdate.split('.')[0];
+                        if (pub) var arrs = pub.split(/[- : \/]/);
+                        var pubdateDate = new Date(arrs[0], arrs[1] - 1, arrs[2], arrs[3], arrs[4], arrs[5]);
+                        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+                        var days = Math.floor(dateValue / (24 * 3600 * 1000));
+
+                        _self.obj.drug_name = result.breedName;
+                        _self.obj.spec = result.spec;
+                        _self.obj.place = result.location;
+                        _self.obj.number = result.number;
+                        _self.obj.number_unit = result.unit;
+                        _self.obj.sales_price = result.price;
+                        _self.obj.weight = result.sampleNumber;
+                        _self.obj.price = result.sampleAmount;
+                        _self.obj.sampling = result.sampling;
+                        _self.obj.selling_point = result.description;
+                        _self.obj.name = result.customerName;
+                        _self.obj.phone = result.customerPhone;
+                        _self.obj.duedate = days;
+                        _self.obj.id = result.id;
+                        _self.obj.breedId = result.breedId;
+                        _self.imgArr = result.image;
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
                     common.$emit('message', err.data.msg);
                 })
             },
@@ -283,6 +336,14 @@ export default {
             },
             judgeValue(param) {
                 this.obj.sampling = param;
+            },
+            selectType(id) {
+                let _self = this;
+                if (id == '1') {
+
+                } else {
+                    _self.getResourceDetail(id);
+                }
             }
 
         },
@@ -295,6 +356,7 @@ export default {
         },
         created() {
             let _self = this;
+            this.selectType(_self.$route.params.id);
             _self.getInfo();
             common.$on('inforReleases', function(item) {
                 _self.obj.drug_name = '';
@@ -307,7 +369,11 @@ export default {
                 _self.obj.selling_point = '';
                 _self.obj.number_unit = '斤';
                 _self.obj.number_id = 1;
+                _self.imgArr = [];
                 _self.getInfo();
+            })
+            common.$on("res-id", function(item) {
+                _self.getResourceDetail(item); //来自我的资源
             })
         },
         mounted() {
