@@ -28,7 +28,7 @@
                             <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
                         </div> -->
                         <div class="detail">
-                            <p>备注：<span>{{obj.description}}</span></p>
+                            <p>备注：<span>{{obj.quality}}</span></p>
                         </div>
                     </div>
                 </mt-loadmore>
@@ -114,7 +114,7 @@ export default {
                     if (suc.data.code == '1c01') {
                         _self.obj = result;
                         shareData.title = "【紧急求购】" + result.breedName + "-上【药材买卖网】你报价我就要了！";
-                        shareData.desc = result.breedName + ',规格:' + result.spec + ',需要' + result.number + result.unit + '要求：' + result.description + '。--买卖药材就上药材买卖网！';
+                        shareData.desc = result.breedName + ',规格:' + result.spec + ',需要' + result.number + result.unit + '要求：' + result.quality + '。--买卖药材就上药材买卖网！';
                         shareData.link = window.location.href;
                         common.share(shareData);
                     } else {

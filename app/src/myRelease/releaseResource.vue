@@ -239,7 +239,7 @@ export default {
                         number: _self.obj.number,
                         price: _self.obj.sales_price,
                         sampling: _self.obj.sampling,
-                        description: _self.obj.selling_point,
+                        quality: _self.obj.selling_point,
                         customerName: _self.obj.name,
                         customerPhone: _self.obj.phone,
                         editImage: _self.imgArr,
@@ -303,7 +303,7 @@ export default {
                         _self.obj.weight = result.sampleNumber;
                         _self.obj.price = result.sampleAmount;
                         _self.obj.sampling = result.sampling;
-                        _self.obj.selling_point = result.description;
+                        _self.obj.selling_point = result.quality;
                         _self.obj.name = result.customerName;
                         _self.obj.phone = result.customerPhone;
                         _self.obj.duedate = days;

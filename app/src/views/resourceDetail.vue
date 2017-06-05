@@ -48,7 +48,7 @@
                                 <div class="sell_point">卖点：</div>
                                 <div class="point_right">
                                     <span class="point_content">
-                                        {{obj.description}}
+                                        {{obj.quality}}
                                     </span>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="detail">
                                 <div class="sell_point">卖点：</div>
-                                <span>{{obj.description}}</span>
+                                <span>{{obj.quality}}</span>
                             </div>
                         </div>
                     </div>
@@ -286,7 +286,7 @@ export default {
                                 shareData.imgUrl = result.image[0];
                             }
                             shareData.title = "【低价资源】" + result.breedName + "-上【药材买卖网】买我你就赚了！";
-                            shareData.desc = result.breedName + ',规格:' + result.spec + ',剩余' + result.number + result.unit + '卖点：' + result.description + '。--买卖药材就上药材买卖网！';
+                            shareData.desc = result.breedName + ',规格:' + result.spec + ',剩余' + result.number + result.unit + '卖点：' + result.quality + '。--买卖药材就上药材买卖网！';
                             shareData.link = window.location.href;
                             common.share(shareData);
                         } else {

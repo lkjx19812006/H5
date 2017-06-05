@@ -18,20 +18,20 @@
         </div>
         <mt-tabbar v-model="selected">
             <mt-tab-item id="index">
-                <img slot="icon" src="/static/icons/index_selected.png" v-if="selected=='index'">
-                <img slot="icon" src="/static/icons/index.png" v-else> 首页
+                <img slot="icon" src="/static/icon/index_selected.png" v-if="selected=='index'">
+                <img slot="icon" src="/static/icon/index.png" v-else> 首页
             </mt-tab-item>
             <mt-tab-item id="resource">
-                <img slot="icon" src="/static/icons/resource_selected.png" v-if="selected=='resource'">
-                <img slot="icon" src="/static/icons/resource.png" v-else> 资源
+                <img slot="icon" src="/static/icon/resource_selected.png" v-if="selected=='resource'">
+                <img slot="icon" src="/static/icon/resource.png" v-else> 资源
             </mt-tab-item>
             <mt-tab-item id="purchase">
-                <img slot="icon" src="/static/icons/buy_selected.png" v-if="selected=='purchase'">
-                <img slot="icon" src="/static/icons/buy.png" v-else> 求购
+                <img slot="icon" src="/static/icon/buys_selected.png" v-if="selected=='purchase'">
+                <img slot="icon" src="/static/icon/buys.png" v-else> 求购
             </mt-tab-item>
             <mt-tab-item id="mine">
-                <img slot="icon" src="/static/icons/mine_selected.png" v-if="selected=='mine'">
-                <img slot="icon" src="/static/icons/mine.png" v-else> 我的
+                <img slot="icon" src="/static/icon/mine_selected.png" v-if="selected=='mine'">
+                <img slot="icon" src="/static/icon/mine.png" v-else> 我的
             </mt-tab-item>
         </mt-tabbar>
     </div>

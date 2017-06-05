@@ -29,6 +29,43 @@ Vue.filter('timeDays', function(due) {
     }
     return days;
 });
+Vue.filter('theUnit', function(due) {
+    let days;
+    if (due) {
+        due = due.split('.')[0];
+        var arr = due.split(/[- : \/]/);
+        var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
+        var pubdateDate = new Date();
+        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+        days = Math.floor(dateValue / (24 * 3600 * 1000));
+        if(days < 10){
+            days = days
+        }else{
+            days = days.toString();
+            days = days.split('')[1];
+        }
+    } 
+    return days;
+});
+
+Vue.filter('decade', function(due) {
+    let days;
+    if (due) {
+        due = due.split('.')[0];
+        var arr = due.split(/[- : \/]/);
+        var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
+        var pubdateDate = new Date();
+        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+        days = Math.floor(dateValue / (24 * 3600 * 1000));
+        if(days < 10){
+            days = 0;
+        }else{
+            days = days.toString();
+            days = days.split('')[0];
+        }
+    } 
+    return days;
+});
 
 Vue.filter('floatType', function(val) {
     if (val) {
@@ -37,7 +74,6 @@ Vue.filter('floatType', function(val) {
     } else if (parseInt(val) == 0) {
         val = '--';
     }
-
     return val;
 })
 Vue.filter('indexFloatType', function(val) {
@@ -220,4 +256,13 @@ Vue.filter('sex', function(val) {
             break;
     }
     return val;
+})
+
+//过滤文字长度
+Vue.filter('filterTxt',function(txt, num){
+    if (txt && txt.length > num && num && num != 0) {
+        return txt.substring(0, num) + '...';
+    } else {
+        return txt
+    }
 })

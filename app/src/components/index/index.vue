@@ -1,13 +1,16 @@
 <style lang="less" scoped>
 .home {
+    overflow-y: scroll;
+    padding-bottom: 30px;
     position: relative;
+    background-color: #F6F6F6;
     .search {
         position: fixed;
         z-index: 10000;
         top: 0px;
         width: 100%;
         height: 48px;
-        background-color: rgba(255, 117, 0, 0.3);
+        background-color: rgba(255, 117, 0, 1);
         display: flex;
         flex-direction: row;
         .left {
@@ -55,6 +58,9 @@
             }
         }
     }
+    .searchs {
+        background-color: rgba(255, 117, 0, 0);
+    }
     .swiper {
         height: 206px;
         img {
@@ -100,11 +106,11 @@
                         }
                     }
                 }
-                .green{
-                    color:#A4C88F;
+                .green {
+                    color: #A4C88F;
                 }
-                .orgrance{
-                    color:#FF8862;
+                .orgrance {
+                    color: #FF8862;
                 }
             }
             .buy {
@@ -128,21 +134,320 @@
             flex: 1;
             background-color: #fff;
             border-right: 1px solid #D8D8D8;
-            img{
-                height:25px;
-                font-size:13px;
-                margin:14px 0 3px 0;
+            img {
+                height: 25px;
+                font-size: 13px;
+                margin: 14px 0 3px 0;
             }
         }
         .tbox {
             border-right: none;
         }
     }
+    .pre_sell {
+        margin: 10px 0;
+        img {
+            width: 100%;
+        }
+    }
+    .guide_price,
+    .recommend {
+        width: 100%;
+        margin-bottom: 10px;
+        background-color: #fff;
+        .top {
+            padding: 0 15px;
+            height: 44px;
+            font-size: 15px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .center {
+                flex: 1;
+            }
+            img {
+                height: 14px;
+            }
+        }
+        .content {
+            border-top: 1px solid #D8D8D8;
+            padding-left: 15px;
+            .item {
+                padding: 20px 0;
+                .left {
+                    .image {
+                        width: 82px;
+                        height: 68px;
+                        overflow: hidden;
+                        img {
+                            width: 100%;
+                            min-height: 68px;
+                        }
+                    }
+                }
+            }
+            .items {
+                padding: 10px 0;
+            }
+            .first {
+                border-bottom: 1px solid #D8D8D8;
+                padding: 20px 0;
+            }
+            .firsts {
+                border-bottom: 1px solid #D8D8D8;
+                padding: 10px 0;
+            }
+        }
+    }
+    .urgent {
+        width: 100%;
+        margin-bottom: 10px;
+        background-color: #fff;
+        .top {
+            padding: 0 15px;
+            height: 44px;
+            font-size: 15px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .center {
+                flex: 1;
+            }
+            img {
+                height: 14px;
+            }
+        }
+        .content {
+            border-top: 1px solid #D8D8D8;
+            padding-left: 15px;
+            .item {
+                min-height: 117px;
+                display: flex;
+                flex-direction: row;
+                padding-left: 4px;
+            }
+            .first {
+                border-bottom: 1px solid #D8D8D8;
+            }
+            .left {
+                flex: 1;
+                text-align: left;
+                position: relative;
+                .top {
+                    position: absolute;
+                    width: 94px;
+                    height: 34px;
+                    font-size: 12px;
+                    top: 0;
+                    left: 0;
+                    background: #fff url('/static/icon/loaback.png') no-repeat;
+                    background-size: 94px 34px;
+                    color: #fff;
+                    .word {
+                        margin: auto;
+                    }
+                }
+                .center {
+                    margin-top: 45px;
+                    .breed_name {
+                        font-size: 15px;
+                        color: #000;
+                        margin-bottom: 3px;
+                    }
+                    .box {
+                        @media screen {
+                            span {
+                                font-size: 12px;
+                                color: #A9A9A9;
+                            }
+                            @media (max-width: 320px) {
+                                span {
+                                    font-size: 10px;
+                                    color: #A9A9A9;
+                                }
+                            }
+                        }
+                    }
+                }
+                .footer {
+                    margin-top: 8px;
+                    display: flex;
+                    flex-direction: row;
+                    .word {
+                        line-height: 40px;
+                        margin-right: 4px;
+                        font-size: 12px;
+                    }
+                    .date {
+                        position: relative;
+                        width: 20px;
+                        margin-right: 4px;
+                        img {
+                            width: 100%;
+                        }
+                        .num {
+                            width: 20px;
+                            position: absolute;
+                            font-size: 18px;
+                            line-height: 28px;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+            .right {
+                width: 130px;
+                .report_pri {
+                    margin: 60px auto 0 auto;
+                    width: 100px;
+                    height: 32px;
+                    background-color: #7BB157;
+                    font-size: 16px;
+                    color: #fff;
+                    border-radius: 16px;
+                    line-height: 32px;
+                }
+                .reported {
+                    font-size: 12px;
+                    margin-top: 5px;
+                    span {
+                        color: #7BB157;
+                    }
+                }
+            }
+        }
+    }
+    .recommend {
+        width: 100%;
+        background-color: #fff;
+        .items {
+            display: flex;
+            flex-direction: row;
+            position: relative;
+            .left {
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                .image {
+                    width: 82px;
+                    height: 68px;
+                    overflow: hidden;
+                    img {
+                        width: 100%;
+                        min-height: 68px;
+                    }
+                }
+                .center {
+                    text-align: left;
+                    margin-left: 10px;
+                    .center_top {
+                        font-size: 15px;
+                        line-height: 22px;
+                    }
+                    .center_box {
+                        @media screen {
+                            span {
+                                font-size: 12px;
+                                color: #A9A9A9;
+                            }
+                            @media (max-width: 320px) {
+                                span {
+                                    font-size: 10px;
+                                    color: #A9A9A9;
+                                }
+                            }
+                        }
+                    }
+                    .center_bottom {
+                        font-size: 16px;
+                        line-height: 16px;
+                        color: #FB3F24;
+                        margin-top: 10px;
+                    }
+                }
+            }
+            .right {
+                width: 130px;
+                img {
+                    position: absolute;
+                    top: -1px;
+                    width: 38px;
+                    right: 0px;
+                }
+                .report_pri {
+                    margin: 10px auto 0 auto;
+                    width: 100px;
+                    height: 32px;
+                    background-color: #FF7500;
+                    font-size: 16px;
+                    color: #fff;
+                    border-radius: 16px;
+                    line-height: 32px;
+                }
+                .reported {
+                    font-size: 12px;
+                    margin-top: 5px;
+                    span {
+                        color: #FF670C;
+                    }
+                }
+            }
+        }
+    }
+    .guide_price {
+        .content {
+            .item {
+                display: flex;
+                flex-direction: row;
+                .left {
+                    display: flex;
+                    flex: 1;
+                    flex-direction: row;
+                    .center {
+                        font-size: 14px;
+                        line-height: 14px;
+                        text-align: left;
+                        margin-left: 10px;
+                        .center_top {
+                            color: #000;
+                            line-height: 20px;
+                            margin-bottom: 10px;
+                        }
+                        .spec {
+                            color: #747474;
+                            margin-bottom: 10px;
+                        }
+                        .location {
+                            margin-bottom: 0px;
+                        }
+                    }
+                }
+                .right {
+                    width: 135px;
+                    padding-right: 20px;
+                    .red {
+                        text-align: right;
+                        line-height: 20px;
+                        margin-bottom: 10px;
+                    }
+                    .spec {
+                        text-align: left;
+                        color: #747474;
+                        line-height: 14px;
+                        margin-bottom: 10px;
+                    }
+                    .location {
+                        margin-bottom: 0px;
+                    }
+                }
+            }
+        }
+    }
 }
 </style>
 <template>
-    <div class="home">
-        <div class="search">
+    <div class="home" id="home" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <div class="search" v-bind:class="{searchs:show}">
             <div class="left" @click="jump('/cart')">
                 <img src="/static/icon/shopping.png">
                 <div class="left_word">购物车</div>
@@ -184,9 +489,108 @@
             </div>
         </div>
         <div class="entrance">
-            <div class="box" v-for="(todo,index) in entrance" v-bind:class="{tbox:index == 3}">
+            <div class="box" v-for="(todo,index) in entrance" v-bind:class="{tbox:index == 3}" @click="jumpEntrance(todo.router)">
                 <img :src="todo.url">
                 <div>{{todo.text}}</div>
+            </div>
+        </div>
+        <div class="pre_sell" @click="jumpEntrance('')">
+            <img src="/static/icon/presell.png">
+        </div>
+        <div class="guide_price">
+            <div class="top" @click="jumpEntrance('/transaction')">
+                <div class='left'>药材指导价</div>
+                <div class="center"></div>
+                <img src="/static/icon/right-arrow.png">
+            </div>
+            <div class="content">
+                <div v-for="(todo,index) in drugGuidePrice" class="item" v-bind:class="{first:index !== 1}">
+                    <div class="left">
+                        <div class="image">
+                            <img :src="todo.image">
+                        </div>
+                        <div class="center">
+                            <div class="center_top">{{todo.name}}</div>
+                            <div class="spec">规格:{{todo.spec,2 | filterTxt}}</div>
+                            <div class="spec location">产地:{{todo.location,2 | filterTxt}}</div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class='red'>{{todo.unitprice}}元</div>
+                        <div class="spec">跌涨价格:{{todo.dayMoney,5 | filterTxt}}</div>
+                        <div class="spec location">跌涨幅度:{{todo.dayDowns | indexFloatType}}%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="urgent">
+            <div class="top" @click="jumpEntrance('/urgentNeed')">
+                <div class='left'>紧急求购</div>
+                <div class="center"></div>
+                <img src="/static/icon/right-arrow.png">
+            </div>
+            <div class="content">
+                <div class="item" v-for="(todo,index) in urgentArr" v-bind:class="{first: index !== 2}" @click="jumpNeed('needDetail/',todo.id)">
+                    <div class="left">
+                        <div class="top">
+                            <div class="word">{{todo.location,4 | filterTxt}}</div>
+                        </div>
+                        <div class="center">
+                            <div class="breed_name">{{todo.breedName}}</div>
+                            <div class="box">
+                                <span>规格:{{todo.spec,2 | filterTxt}}</span>&nbsp;&nbsp;
+                                <span>发布时间:{{todo.pubdate | timeFormat}}</span>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="word">剩余</div>
+                            <div class="date">
+                                <div class="num">{{todo.duedate | decade}}</div>
+                                <img src="/static/icon/date.png">
+                            </div>
+                            <div class="date">
+                                <div class="num">{{todo.duedate | theUnit}}</div>
+                                <img src="/static/icon/date.png">
+                            </div>
+                            <div class="word">天</div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="report_pri">我要报价</div>
+                        <div class="reported">已报价<span>{{todo.offer}}</span>人</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="recommend">
+            <div class="top" @click="jumpEntrance('/lowPriceRes')">
+                <div class='left'>推荐资源</div>
+                <div class="center"></div>
+                <img src="/static/icon/right-arrow.png">
+            </div>
+            <div class="content">
+                <div class="items" v-for="(todo,index) in resourceArr" v-bind:class="{firsts: index !== 2}" @click="jumpRes('resourceDetail/',todo.id)">
+                    <div class="left">
+                        <div class="image">
+                            <img :src="todo.image[0]">
+                        </div>
+                        <div class="center">
+                            <div class="center_top">{{todo.breedName}}</div>
+                            <div class="center_box">
+                                <span>规格:{{todo.spec,2 | filterTxt}}</span>&nbsp;&nbsp;
+                                <span>场地:{{todo.location,3 | filterTxt}}</span>
+                            </div>
+                            <div class="center_bottom">
+                                ￥{{todo.price}}/{{todo.unit}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <img src="/static/icon/homesample.png" v-show="todo.sampling == 1">
+                        <div class="report_pri">我要购买</div>
+                        <div class="reported">已报价<span>{{todo.offer}}</span>人</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -196,8 +600,6 @@ import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import longSearch from '../../components/tools/longSearch'
 import filters from '../../filters/filters'
-/*import openApp from '../../components/tools/openApp'*/
-
 export default {
     data() {
             return {
@@ -207,17 +609,28 @@ export default {
                     name: '',
                     bizMain: ''
                 },
+                scrollTop: 0,
+                show: true,
+                drugGuidePrice: [],
+                urgentArr: [],
+                resourceArr: [],
+                loca: '黑龙江黑龙江',
+                time: '11111.00',
                 entrance: [{
                     url: '/static/icon/pre-sell.png',
+                    router: '',
                     text: '预售专区'
                 }, {
                     url: '/static/icon/real-time.png',
+                    router: '/transaction',
                     text: '实时成交'
                 }, {
                     url: '/static/icon/market.png',
+                    router: '/marketQuotation',
                     text: '市场行情'
                 }, {
                     url: '/static/icon/encyclopedia.png',
+                    router: '/drugResTable/my',
                     text: '药材百科'
                 }]
             }
@@ -255,6 +668,54 @@ export default {
                     common.$emit('close-load');
                 })
             },
+            drugGuidePrice() {
+                let _self = this;
+                httpService.realTimeTurnover(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'breedService',
+                    biz_method: 'breedPriceGuide',
+                    biz_param: {
+                        pn: 1,
+                        pSize: 2
+                    }
+                }, function(suc) {
+                    let result = suc.data.biz_result.list;
+                    _self.drugGuidePrice = result;
+                    console.log(1, result)
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
+
+            },
+            resourceHttp() {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'reconnendList',
+                    biz_param: {
+                        pn: 1,
+                        pSize: 3
+                    }
+                };
+                if (common.KEY) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                }
+                httpService.begBuyList(url, body, function(suc) {
+                    common.$emit('close-load');
+                    let result = suc.data.biz_result;
+                    let begBuyList = result.begBuyList;
+                    let supplyList = result.supplyList;
+                    _self.urgentArr = begBuyList;
+                    _self.resourceArr = supplyList;
+                    //console.log(2, supplyList)
+                    common.$emit('post-revise-address', _self.obj);
+                }, function(err) {
+                    common.$emit('close-load');
+                })
+            },
             fromIndex() {
                 common.searchType = 'keyword';
                 common.$emit('setParam', 'router', 'index');
@@ -278,6 +739,27 @@ export default {
                     return;
                 }
                 this.$router.push(path);
+            },
+            loadApp() {
+                window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
+            },
+            jumpEntrance(path) {
+                if (!path) {
+                    common.$emit("confirm", {
+                        message: '请下载App后，在App内查看',
+                        title: '提示',
+                        ensure: this.loadApp
+                    });
+                }
+                if (path) this.$router.push(path);
+            },
+            jumpNeed(router, id) {
+                common.$emit('needToDetail', id);
+                this.$router.push(router + id);
+            },
+            jumpRes(router, id) {
+                common.$emit('resourceDetail', id);
+                this.$router.push(router + id);
             },
             getCustomerPhone() {
                 let _self = this;
@@ -342,21 +824,45 @@ export default {
                 common.$emit('inforReleases', 1);
                 this.$router.push(router);
             },
+            handleScroll() {
+                this.scrollTop = this.$refs.wrapper.scrollTop;
+            },
+            getScrollTop() {
+                this.$refs.wrapper.scrollTop = this.scrollTop;
+            }
+
+        },
+        watch: {
+            '$route': 'getScrollTop',
+            scrollTop: function(newValue, oldValue) {
+                if (newValue > 200) {
+                    this.show = false;
+                }
+                if (newValue < 200) {
+                    this.show = true;
+                }
+            }
         },
         created() {
             let _self = this;
             if (!common.servicePhone) this.getCustomerPhone();
             if (common.KEY) _self.getInfo();
             common.$on('toMine', function(item) {
-                    if (common.KEY) _self.getInfo();
-                })
-                // common.$on('getInfo', function(item) {
-                //     _self.resourceHttp();
-                // })
-                // this.resourceHttp();
-                // this.transaction();
-                // this.drugGuidePrice();
+                if (common.KEY) _self.getInfo();
+            })
+            common.$on('getInfo', function(item) {
+                _self.resourceHttp();
+            })
+            this.resourceHttp();
+            this.drugGuidePrice();
             this.getImgArr();
+        },
+        mounted() {
+            let _self = this;
+            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
+            this.$nextTick(function() {
+                _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
+            })
         }
 }
 </script>

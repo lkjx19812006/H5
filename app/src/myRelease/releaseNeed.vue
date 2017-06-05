@@ -177,7 +177,7 @@ export default {
                         spec: _self.obj.spec,
                         location: _self.obj.place_id,
                         number: _self.obj.number,
-                        description: _self.obj.selling_point,
+                        quality: _self.obj.selling_point,
                         customerName: _self.obj.name,
                         customerPhone: _self.obj.phone,
                         duedate: _self.obj.duedate,
@@ -232,7 +232,7 @@ export default {
                         _self.obj.place = result.location;
                         _self.obj.number = result.number;
                         _self.obj.number_unit = result.unit;
-                        _self.obj.selling_point = result.description;
+                        _self.obj.selling_point = result.quality;
                         _self.obj.name = result.customerName;
                         _self.obj.phone = result.customerPhone;
                         _self.obj.duedate = days;

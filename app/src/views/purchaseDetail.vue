@@ -102,7 +102,7 @@ export default {
                     _self.obj.place = result.location;
                     _self.obj.number = result.number;
                     _self.obj.number_unit = result.unit;
-                    _self.obj.selling_point = result.description;
+                    _self.obj.selling_point = result.quality;
                     _self.obj.onSell = result.onSell;
                     _self.obj.name = result.customerName;
                     _self.obj.phone = result.customerPhone;

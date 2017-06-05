@@ -58,7 +58,7 @@
             </div>
             <div class="inbox">
                 <div class="left">产品的要求：</div>
-                <div class="right">{{infor.description}}</div>
+                <div class="right">{{infor.quality}}</div>
             </div>
         </div>
         <div class="drug_infor" v-show="words == '资源'">
@@ -81,7 +81,7 @@
             </div>
             <div class="inbox">
                 <div class="left">资源的卖点：</div>
-                <div class="right">{{infor.description}}</div>
+                <div class="right">{{infor.quality}}</div>
             </div>
         </div>
         <div class="drug_infor other_drug_infor" v-show="words == '资源'">

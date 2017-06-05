@@ -1,6 +1,5 @@
 import login from './views/login'
 import hello from './components/Hello'
-import main from './views/main'
 import menu from './components/menu'
 import home from './views/home'
 import drugResTable from './views/drugResTable'
@@ -36,7 +35,6 @@ import companyAuthentication from './views/companyAuthentication'
 import certification from './views/certification'
 // import reviseResource from './views/reviseResource'
 // import revisePurchase from './views/revisePurchase'
-import cityName from './views/cityName'
 import areaName from './views/areaName'
 import aboutus from './views/aboutus'
 import perfectInfo from './views/perfectInfo'
@@ -86,11 +84,7 @@ module.exports = {
     base: __dirname,
     // scrollBehavior,
     routes: [
-        { name: 'login', path: '/login', component: login }, {
-            name: 'main',
-            path: '/main',
-            component: main
-        },
+        { name: 'login', path: '/login', component: login },
         { name: 'news', path: '/news', component: news },
         { name: 'home', path: '/home', component: home },
         { name: 'drugResTable', path: '/drugResTable/:from', component: drugResTable },
@@ -116,7 +110,6 @@ module.exports = {
         { name: 'feedBack', path: '/feedBack', component: feedBack },
         { name: 'goodDetail', path: '/goodDetail/:odId', component: goodDetail },
         { name: 'addAddress', path: '/addAddress', component: addAddress },
-        { name: 'cityName', path: '/cityName', component: cityName },
         { name: 'areaName', path: '/areaName', component: areaName },
         // { name: 'revisePurchase', path: '/revisePurchase/:visePurId', component: revisePurchase },
         // { name: 'reviseResource', path: '/reviseResource/:revId', component: reviseResource },

@@ -154,7 +154,7 @@ export default {
                     _self.obj.place = result.location;
                     _self.obj.number = result.number;
                     _self.obj.number_unit = result.unit;
-                    _self.obj.selling_point = result.description;
+                    _self.obj.selling_point = result.quality;
                     _self.obj.sampling = result.sampling;
                     _self.obj.offer = result.offer;
                     _self.obj.pubdate = result.pubdate;
