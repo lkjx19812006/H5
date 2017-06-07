@@ -4,8 +4,8 @@
     </div>
 </template>
 <script>
-import common from '../common/common.js'
-import httpService from '../common/httpService.js'
+import common from '../../common/common.js'
+import httpService from '../../common/httpService.js'
 export default {
     data() {
             return {

@@ -51,14 +51,16 @@ import accountRevise from './views/accountRevise'
 import subCompany from './views/subCompany'
 import oneStopService from './views/oneStopService'
 import fourAdvantages from './views/fourAdvantages'
-import protocol from './staticsView/protocol'
-import tests from './staticsView/tests'
-import wchatLogin from './staticsView/wchatLogin'
-import releaseNeed from './myRelease/releaseNeed'
-import releaseNeedSuccess from './myRelease/releaseNeedSuccess'
-import releaseResource from './myRelease/releaseResource'
-import releaseResourceSuccess from './myRelease/releaseResourceSuccess'
-
+import protocol from './views/staticsView/protocol'
+import tests from './views/staticsView/tests'
+import wchatLogin from './views/staticsView/wchatLogin'
+import releaseNeed from './views/myRelease/releaseNeed'
+import releaseNeeds from './views/myRelease/releaseNeeds'
+import releaseNeedSuccess from './views/myRelease/releaseNeedSuccess'
+import releaseResource from './views/myRelease/releaseResource'
+import releaseResourceSuccess from './views/myRelease/releaseResourceSuccess'
+import offerDetail from './views/myOffer/offerDetail'
+import needDetails from './views/myNeed/needDetails'
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -139,9 +141,12 @@ module.exports = {
         { name: 'tests', path: '/tests', component: tests },
         { name: 'wchatLogin', path: '/wchatLogin', component: wchatLogin },
         { name: 'releaseNeed', path: '/releaseNeed/:id', component: releaseNeed },
+        { name: 'releaseNeeds', path: '/releaseNeeds/:id', component: releaseNeeds },
         { name: 'releaseNeedSuccess', path: '/releaseNeedSuccess/:id', component: releaseNeedSuccess },
         { name: 'releaseResource', path: '/releaseResource/:id', component: releaseResource },
         { name: 'releaseResourceSuccess', path: '/releaseResourceSuccess/:id', component: releaseResourceSuccess },
+        { name: 'offerDetail', path: '/offerDetail/:id', component: offerDetail },
+        { name: 'needDetails', path: '/needDetails/:id', component: needDetails },
         { path: '*', redirect: '/home' }
     ]
 }

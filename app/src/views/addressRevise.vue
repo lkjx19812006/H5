@@ -151,14 +151,6 @@ export default {
                         }
                     }
                 }
-                /*else if (this.obj.addressCity != values[1]) {
-                                   for (var i = 0; i < areaJson.city.length; i++) {
-                                       if (areaJson.city[i].value == values[1]) {
-                                           cityId = areaJson.city[i].id;
-                                       }
-                                   }
-
-                               }*/
                 if (this.obj.addressCity != values[1]) {
                     for (var i = 0; i < areaJson.city.length; i++) {
                         if (values[1] == areaJson.city[i].value) {

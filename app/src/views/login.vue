@@ -151,9 +151,13 @@ export default {
                             }
                         } else if (common.pageParam.backRouter == 'lowPriceRes') {
                             _self.$router.replace('cart')
-                        } else {
+                        }else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
+                            _self.$router.replace(common.pageParam.backRouter);
+                            common.$emit('setParam', 'skipLogin', true);
+                        }else {
                             common.$emit('go_home', 1);
                             _self.$router.replace('home');
+                            //console.log(1,common.pageParam.backRouter.split('/')[1])
                         }
                         
                     } else {
@@ -197,6 +201,9 @@ export default {
                             }
                         } else if (common.pageParam.backRouter == 'lowPriceRes') {
                             _self.$router.replace('cart')
+                        }else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
+                            _self.$router.replace(common.pageParam.backRouter);
+                            common.$emit('setParam', 'skipLogin', true);
                         } else {
                             common.$emit('go_home', 1);
                             _self.$router.replace('home');

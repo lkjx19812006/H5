@@ -36,7 +36,7 @@
                             </div>
                             <div class="third_level">
                                 <p class="the_left">库存：<span>{{obj.number}}</span>{{obj.number_unit}}</p>
-                                <p class="the_right">起订量：<span>{{obj.moq}}</span>kg</p>
+                                <p class="the_right">起订量：<span>{{obj.moq}}</span>{{obj.unit}}</p>
                             </div>
                             <div class="fourth_level">
                                 <p class="the_left">样品：<span>{{obj.sampling}}</span></p>

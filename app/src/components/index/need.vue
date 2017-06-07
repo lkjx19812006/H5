@@ -254,8 +254,11 @@ export default {
                 this.$router.push('search');
             },
             jumpDetail(id) {
-                common.$emit('needToDetail', id);
-                this.$router.push('needDetail/' + id);
+                // common.$emit('needToDetail', id);
+                // this.$router.push('needDetail/' + id);
+
+                common.$emit('needToDetails', id);
+                this.$router.push('/needDetails/' + id);
             },
             jump() {
                 function loadApp() {
@@ -322,7 +325,7 @@ export default {
                 _self.sortArr[3].url = "/static/icons/screen_selected.png";
                 if (item.length > 1) {
                     _self.sortArr[3].name += '...';
-                } else if (item.length == 0) {
+                } else if (!_self.sortArr[3].name) {
                     _self.sortArr[3].name = '产地';
                     _self.sortArr[3].class = "sort_content_detail";
                     _self.sortArr[3].url = "/static/icons/screen.png";

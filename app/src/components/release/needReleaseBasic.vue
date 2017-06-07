@@ -13,14 +13,83 @@ input {
     background-color: #fff;
 }
 
+.input {
+    text-align: left;
+    width: 100%;
+    font-size: 15px;
+}
+
 .basic_need_release {
+    background-color: #FBFBF6;
     .popup_unit {
-        height: 400px;
-        overflow: scroll;
+        width: 250px;
+        border-radius: 15px;
+        .pop_box {
+            width: 100%;
+            background-color: #fff;
+            min-height: 300px;
+            border-radius: 15px;
+            .title {
+                padding: 15px 13px 15px 20px;
+                display: flex;
+                flex-direction: row;
+                line-height: 15px;
+                justify-content: space-between;
+                border-bottom: 1px solid #E6E6E6;
+                .left {
+                    font-size: 15px;
+                    color: #000;
+                }
+                .right {
+                    font-size: 12px;
+                    color: #999;
+                }
+            }
+            .main {
+                height: 220px;
+                overflow: scroll;
+                .selects {
+                    float: left;
+                    width: 50%;
+                    padding: 8px 10px 8px 15px;
+                    .inbox {
+                        font-size: 15px;
+                        color: #909090;
+                        background-color: #F7F7F7;
+                        padding: 6px 0;
+                        border-radius: 8px;
+                    }
+                    .inbox_select {
+                        font-size: 15px;
+                        color: #fff;
+                        background-color: #FAA105;
+                        padding: 6px 0;
+                        border-radius: 8px;
+                    }
+                }
+            }
+            .confirm {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                border-top: 1px solid #E6E6E6;
+                box-sizing: border-box;
+                div {
+                    flex: 1;
+                    padding: 14px 0;
+                }
+                .left {
+                    border-right: 1px solid #E6E6E6;
+                    color: #A1A1A1;
+                }
+                .right {
+                    color: #FF6600;
+                }
+            }
+        }
     }
-    padding-top: 15px;
     .the_last {
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
     .breed_name {
         background-color: #fff;
@@ -36,15 +105,15 @@ input {
             .breed_left {
                 font-size: 15px;
                 color: #343434;
-                width: 50px;
+                width: 70px;
                 text-align: left;
             }
             .breed_center {
                 flex: 1;
-                input {
+                .title {
                     width: 100%;
-                    height: 30px;
-                    font-size: 15px;
+                    color: #8E97A1;
+                    text-align: left;
                 }
             }
             .img {
@@ -54,15 +123,19 @@ input {
                 }
             }
         }
+        .last {
+            margin-top: 10px;
+            border-bottom: none;
+        }
     }
     .number {
-        background-color: #fff;
+        background-color: #FBFBF6;
         box-sizing: border-box;
-        padding-left: 15px;
         width: 100%;
         .box {
+            padding-left: 15px;
+            background-color: #fff;
             height: 50px;
-            border-bottom: 1px solid #E6E6E6;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -74,11 +147,10 @@ input {
             }
             .number_center {
                 flex: 1;
-                input {
+                .input {
                     width: 100%;
-                    height: 30px;
+                    text-align: left;
                     font-size: 15px;
-                    text-align: right;
                 }
                 padding-right:10px;
             }
@@ -93,30 +165,8 @@ input {
                 position: relative;
                 .word {
                     flex: 1;
-                    text-align: left;
-                    margin-left: 10px;
+                    text-align: center;
                     color: #7CB159;
-                }
-                div {
-                    .select {
-                        width: 18px;
-                        position: absolute;
-                        right: 15px;
-                        top: 11px;
-                    }
-                }
-                .day {
-                    width: 100%;
-                    height: 100%;
-                    background: #fff url('/static/icons/rele-quan.png') no-repeat center center;
-                    background-size: 30px 30px;
-                    .today {
-                        position: absolute;
-                        font-size: 15px;
-                        color: #7CB159;
-                        left: 42px;
-                        top: 10px;
-                    }
                 }
             }
         }
@@ -160,30 +210,56 @@ input {
         </div>
         <div class="number" v-show="!obj.resource">
             <div class="box">
-                <div class="number_left">求购的数量</div>
+                <div class="number_left">需求数量</div>
                 <div class="number_center">
                     <input type="number" v-model="obj.number" placeholder="请输入">
                 </div>
                 <div class="number_right" @click="showAction('unit')">
-                    <div class="word">{{obj.number_unit}}</div>
-                    <div><img src="/static/icons/green-jian.png" class="select"></div>
-                </div>
-            </div>
-            <div class="box">
-                <div class="number_left">求购有效期</div>
-                <div class="number_center">
-                    <input type="number" v-model="obj.duedate" placeholder="请输入">
-                </div>
-                <div class="number_right">
-                    <div class="day">
-                        <div class="today">天</div>
-                    </div>
+                    <div class="word">元/{{obj.number_unit}}</div>
                 </div>
             </div>
         </div>
-        <mt-popup v-model="obj.sheetVisible" position="center" class="mint-popup-1 popup_unit" style="width:60%">
-            <div v-for="item in actions">
-                <div style="color: #656b79;background-color: #f6f8fa;box-shadow: 0 0 1px #b8bbbf;padding:10px 0" @click="setObj(item.key,item.name,item.id_key,item.id)">{{item.name}}</div>
+        <div class="breed_name">
+            <div class="inbox last" @click="showQuality()">
+                <div class="breed_left">质量要求</div>
+                <div class="breed_center">
+                    <!-- <input type="text" placeholder="请选择您的产品规格" disabled="false" v-model="obj.quality"> -->
+                    <div v-show="!obj.quality" class="title">请选择质量要求</div>
+                    <div class="input">{{obj.quality}}</div>
+                </div>
+                <div class="img">
+                    <img src="/static/icons/rele-right.png">
+                </div>
+            </div>
+        </div>
+        <mt-popup v-model="obj.sheetVisible" position="center" class="popup_unit" :closeOnClickModal="false">
+            <div class="pop_box" v-show="actions_show">
+                <div class="title">
+                    <div class="left">请选择</div>
+                </div>
+                <div class="main">
+                    <div v-for="item in actions" class="selects" @click="setObj(item.key,item.name,item.id_key,item.id)">
+                        <div class="inbox"> {{item.name}}</div>
+                    </div>
+                </div>
+                <div class="confirm">
+                    <div class="left" @click="cancel()">取消</div>
+                </div>
+            </div>
+            <div class="pop_box" v-show="quality_show">
+                <div class="title">
+                    <div class="left">质量要求</div>
+                    <div class="right">此为多选项</div>
+                </div>
+                <div class="main">
+                    <div v-for="(item,index) in quality" class="selects" @click="select(item)">
+                        <div v-bind:class="{inbox:item.show,'inbox_select':!item.show}"> {{item.name}}</div>
+                    </div>
+                </div>
+                <div class="confirm">
+                    <div class="left" @click="cancel()">取消</div>
+                    <div class="right" @click="confirm()">确定</div>
+                </div>
             </div>
         </mt-popup>
     </div>
@@ -198,13 +274,43 @@ export default {
                 breedSpec: [],
                 sheetVisible: false,
                 actions: [],
+                quality: [{
+                    name: '符合药典',
+                    show: true
+                }, {
+                    name: '硫不超标',
+                    show: true
+                }, {
+                    name: '无虫蛀',
+                    show: true
+                }, {
+                    name: '无毒',
+                    show: true
+                }, {
+                    name: '无变色',
+                    show: true
+                }, {
+                    name: '无走油',
+                    show: true
+                }, {
+                    name: '干度好',
+                    show: true
+                }, {
+                    name: '杂质少',
+                    show: true
+                }, {
+                    name: '含量够',
+                    show: true
+                }],
+                quality_show: false,
+                actions_show: false,
                 unit: [{
                     id: 1,
                     name: 'g'
                 }, {
                     id: 2,
                     name: 'kg'
-                }],
+                }]
             }
         },
         props: {
@@ -218,13 +324,42 @@ export default {
                 common.$emit("setParam", "router", "needRelease");
                 this.$router.push(router);
             },
-            setObj(key, value, id_key, id) {
+            showQuality() {
+                this.obj.sheetVisible = true;
+                this.quality_show = true;
+            },
+            setObj(key, value, id_key, id, index) {
                 this.obj[key] = value;
                 this.obj[id_key] = id;
                 console.log(id)
+                this.actions_show = false;
                 this.obj.sheetVisible = false;
             },
+            select(item) {
+                item.show = false;
+                if (this.obj.quality) this.obj.quality = this.obj.quality + ',' + item.name;
+                if (!this.obj.quality) this.obj.quality = item.name;
+            },
+            cancel() {
+                let _self = this;
+                this.obj.sheetVisible = false;
+                this.quality_show = false;
+                this.actions_show = false;
+                for (var key in _self.quality) {
+                    _self.quality[key].show = true;
+                }
+                this.obj.quality = '';
+            },
+            confirm() {
+                let _self = this;
+                this.obj.sheetVisible = false;
+                this.quality_show = false;
+                for (var key in _self.quality) {
+                    _self.quality[key].show = true;
+                }
+            },
             showAction(param) {
+                this.actions_show = true;
                 this.obj.sheetVisible = true;
                 this.actions = [];
                 let _self = this;
@@ -232,7 +367,7 @@ export default {
                     for (var i = 0; i < _self.breedSpec.length; i++) {
                         _self.actions.push({
                             name: _self.breedSpec[i].name,
-                            id:_self.breedSpec[i].id,
+                            id: _self.breedSpec[i].id,
                             key: 'spec'
                         });
                     }
@@ -251,7 +386,7 @@ export default {
                             name: _self.breedLocation[i].name,
                             id: _self.breedLocation[i].locationId,
                             key: 'place',
-                            id_key:'place_id'
+                            id_key: 'place_id'
                         });
                     }
                 }
@@ -331,7 +466,6 @@ export default {
             let _self = this;
             this.getUnit();
             common.$on("Needrelease", function(item) {
-                console.log(11,item)
                 if (item.breedName) {
                     _self.getBreedInformation(item.breedName);
                     _self.obj.drug_name = item.breedName;
@@ -342,7 +476,7 @@ export default {
                     _self.obj.breedId = item.id;
                 }
             });
-           
+
         },
         mounted() {
 

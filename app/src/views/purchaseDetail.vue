@@ -27,9 +27,9 @@
             <div class="detail">
                 <p>已报价：<span class="orange_font">{{obj.offer}}</span>人</p>
             </div>
-            <div class="detail">
+            <!-- <div class="detail">
                 <p>平均价格：<span class="orange_font">{{obj.offerVprice}}元/kg</span></p>
-            </div>
+            </div> -->
         </div>
         <!-- <div class="flowsheet">
             <p>流程图</p>

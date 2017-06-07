@@ -52,13 +52,13 @@
     </div>
 </template>
 <script>
-import common from '../common/common.js'
-import releaseSuccessTop from '../components/release/releaseSuccessTop'
-import releaseSuccessCenetr from '../components/release/needReleaseSuccessCenter'
-import userInfor from '../components/release/showUserInfor'
-import httpService from '../common/httpService.js'
-import myHeader from '../components/tools/myHeader'
-import filters from '../filters/filters.js'
+import common from '../../common/common.js'
+import releaseSuccessTop from '../../components/release/releaseSuccessTop'
+import releaseSuccessCenetr from '../../components/release/needReleaseSuccessCenter'
+import userInfor from '../../components/release/showUserInfor'
+import httpService from '../../common/httpService.js'
+import myHeader from '../../components/tools/myHeader'
+import filters from '../../filters/filters.js'
 export default {
     data() {
             return {

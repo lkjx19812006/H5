@@ -29,6 +29,29 @@ Vue.filter('timeDays', function(due) {
     }
     return days;
 });
+
+Vue.filter('timeDay', function(due) {
+    let days;
+    if (due) {
+        due = due.split('.')[0];
+        var arr = due.split(/[- : \/]/);
+        var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
+        var pubdateDate = new Date();
+        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+        days = Math.floor(dateValue / (24 * 3600 * 1000));
+
+        if (days == 0) {
+            days = 1;
+        } else if (days > 0) {
+            days = days;
+        } else if (days < 0) {
+            days = "已过期";
+        }
+    } else {
+        days = "已过期";
+    }
+    return days;
+});
 Vue.filter('theUnit', function(due) {
     let days;
     if (due) {

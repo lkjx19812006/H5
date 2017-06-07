@@ -55,7 +55,7 @@ const actions = {
             httpService.cart(url, body,
                 function(res) {
                     common.$emit('close-load');
-                    console.log(res)
+                    common.$emit('message', res.data.msg);
                     if (res.data.code == '1c01') {
                         commit('upDataInfor', params);
                     }
@@ -63,6 +63,7 @@ const actions = {
                 },
                 function(err) {
                     common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
                     reject(err);
                 })
         })

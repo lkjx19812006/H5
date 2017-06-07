@@ -66,7 +66,7 @@ export default {
                 if (common.wxshow) {
                     common.getWxUrl();
                 } else {
-                    _self.$router.push('/login');
+                    this.$router.push('/login');
                 }
             },
             open() {

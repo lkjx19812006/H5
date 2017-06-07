@@ -498,7 +498,7 @@
             <img src="/static/icon/presell.png">
         </div>
         <div class="guide_price">
-            <div class="top" @click="jumpEntrance('/transaction')">
+            <div class="top" @click="jumpEntrance('/marketQuotation')">
                 <div class='left'>药材指导价</div>
                 <div class="center"></div>
                 <img src="/static/icon/right-arrow.png">
@@ -578,7 +578,7 @@
                             <div class="center_top">{{todo.breedName}}</div>
                             <div class="center_box">
                                 <span>规格:{{todo.spec,2 | filterTxt}}</span>&nbsp;&nbsp;
-                                <span>场地:{{todo.location,3 | filterTxt}}</span>
+                                <span>产地:{{todo.location,3 | filterTxt}}</span>
                             </div>
                             <div class="center_bottom">
                                 ￥{{todo.price}}/{{todo.unit}}

@@ -7,8 +7,7 @@
             <!-- <mt-loadmore> -->
             <img src="/static/images/logo-login.png" class="my-logo">
             <!-- <myTab :param="myShow"></myTab> -->
-            
-            <div class="password" >
+            <div class="password">
                 <div class="phone">
                     <p class="tel">+86</p>
                     <input type="text" placeholder="请输入手机号" v-model="param.phone">
@@ -37,11 +36,11 @@
     </div>
 </template>
 <script>
-import common from '../common/common.js'
-import myTab from '../components/tools/tab'
-import validation from '../validation/validation.js'
-import httpService from '../common/httpService.js'
-import myHeader from '../components/tools/myHeader'
+import common from '../../common/common.js'
+import myTab from '../../components/tools/tab'
+import validation from '../../validation/validation.js'
+import httpService from '../../common/httpService.js'
+import myHeader from '../../components/tools/myHeader'
 
 export default {
     data() {
@@ -193,6 +192,9 @@ export default {
                             }
                         } else if (common.pageParam.backRouter == 'lowPriceRes') {
                             _self.$router.replace('cart')
+                        } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
+                            _self.$router.replace(common.pageParam.backRouter);
+                            common.$emit('setParam', 'skipLogin', true);
                         } else {
                             common.$emit('go_home', 1);
                             _self.$router.replace('home');
@@ -241,6 +243,9 @@ export default {
                             }
                         } else if (common.pageParam.backRouter == 'lowPriceRes') {
                             _self.$router.replace('cart')
+                        } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
+                            _self.$router.replace(common.pageParam.backRouter);
+                            common.$emit('setParam', 'skipLogin', true);
                         } else {
                             common.$emit('go_home', 1);
                             _self.$router.replace('home');
