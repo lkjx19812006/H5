@@ -125,6 +125,7 @@ export default {
                 this.obj.addressProvince = this.areaParam.addressProvince;
                 this.obj.addressCity = this.areaParam.addressCity;
                 this.obj.addressDistrict = this.areaParam.addressDistrict;
+                this.obj.address = this.obj.addressProvince+','+this.obj.addressCity+','+this.obj.addressDistrict;
                 this.obj.tshow = false;
             },
             selectPlace() {

@@ -471,7 +471,7 @@
             </mt-swipe>
         </div>
         <div class="release">
-            <div class="left" @click="loginJump('/releaseNeed/1')">
+            <div class="left" @click="loginJump('/releaseNeeds/1')">
                 <img src="/static/icon/home-buy.png">
                 <div class="word">
                     <div class="word_top">我要购买</div>

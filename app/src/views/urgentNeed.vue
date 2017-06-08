@@ -251,8 +251,8 @@ export default {
                 this.getHttp();
             },
             jumpDetail(id) {
-                common.$emit("needToDetail", id);
-                this.$router.push('needDetail/' + id);
+                common.$emit("needToDetails", id);
+                this.$router.push('needDetails/' + id);
             },
             jumpApp() {
                 common.$emit("confirm", {

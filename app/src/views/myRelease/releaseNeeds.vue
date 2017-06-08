@@ -171,7 +171,7 @@ input {
                             <img src="/static/icon/select.png" class="radio" v-show="payArr[1].show">
                             <img src="/static/icon/select_nor.png" class="radio" v-show="!payArr[1].show" @click="selectPay(1)">
                             <div class="content">
-                                <div>{{payArr[1].one}}</div>
+                                <div>{{payArr[1].two}}</div>
                             </div>
                         </div>
                     </div>
@@ -197,7 +197,7 @@ input {
                             </div>
                         </div>
                         <div class="other">
-                            <textarea placeholder="要等我的下家确认货物没有问题，立即现款" v-model="payArr[3].one"></textarea>
+                            <textarea placeholder="要等我的下家确认货物没有问题，立即现款" v-model="payArr[3].two"></textarea>
                         </div>
                     </div>
                 </div>
@@ -301,17 +301,17 @@ export default {
                 payArr: [{
                     show: false,
                     one: '合同签订后，预付定金',
-                    two: '1231',
+                    two: '',
                     three: '%'
                 }, {
                     show: false,
-                    one: '验收合格后，立即付款',
-                    two: '',
+                    one: '',
+                    two: '验收合格后，立即付款',
                     three: ''
                 }, {
                     show: false,
                     one: '验收合格后，',
-                    two: '1231',
+                    two: '',
                     three: '天内付款'
                 }, {
                     show: false,
@@ -347,6 +347,7 @@ export default {
                 }],
                 content: '',
                 obj: {
+                    need: true,
                     number_id: '',
                     update: false,
                     drug_name: '',
@@ -355,13 +356,15 @@ export default {
                     place_id: '',
                     number: '',
                     number_unit: '',
-                    selling_point: '',
+                    selling_point: [],
                     name: '',
                     phone: '',
                     duedate: '',
                     breedId: '',
                     quality: '',
                     address: '',
+                    paymentWay: '',
+                    paymentWay_index: '',
                     sheetVisible: false,
                     addressProvince: '',
                     addressCity: '',
@@ -369,7 +372,6 @@ export default {
                     detailAddr: '',
                     tshow: false
                 }
-
             }
         },
         methods: {
@@ -412,8 +414,7 @@ export default {
                     _self.payArr[key].show = false;
                 }
                 this.payArr[index].show = true;
-                let content = this.payArr[index].one + this.payArr[index].two + this.payArr[index].three;
-                console.log(content);
+                this.obj.paymentWay = index;
             },
             selectDate(index) {
                 let _self = this;
@@ -421,86 +422,158 @@ export default {
                     _self.dateArr[key].show = false;
                 }
                 this.dateArr[index].show = true;
-                let content = this.dateArr[index].one + '天';
-                console.log(content);
+                this.obj.duedate = index;
             },
             remarksDateNor(index) {
+                let _self = this;
                 this.remarksArr[index].show = false;
+                // for(var key in _self.obj.selling_point){
+                //     _self.obj.selling_point[key] = index;
+                //     _self.obj.selling_point.splice(key,1);
+                // }
+                for (var i = 0; i < _self.obj.selling_point.length; i++) {
+                    _self.obj.selling_point[i] = index;
+                    _self.obj.selling_point.splice(i, 1);
+                }
+                console.log(_self.obj.selling_point);
             },
             remarksDate(index) {
                 this.remarksArr[index].show = true;
-                if (this.content) this.content = this.content + ',' + this.remarksArr[index].one;
-                if (!this.content) this.content = this.remarksArr[index].one;
-                console.log(this.content)
+                //if (this.content) this.obj.selling_point = this.content + ',' + this.remarksArr[index].one;
+                //if (!this.content) this.obj.selling_point = this.remarksArr[index].one;
+                this.obj.selling_point.push(index);
+                console.log(this.obj.selling_point)
             },
             release() {
                 let _self = this;
-                console.log(_self.obj.number_id)
-                var checkArr = [];
-                let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
-                checkArr.push(checkBreedId);
-                let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格！');
-                checkArr.push(checkBreedSpec);
-                let checkBreedPlace = validation.checkNull(_self.obj.place_id, '请输入产地！');
-                checkArr.push(checkBreedPlace);
-                let checkNumber = validation.checkMaxNum(_self.obj.number, '数量');
-                checkArr.push(checkNumber);
-                let checkDuedate = validation.checkMaxNum(_self.obj.duedate, '有效期');
-                checkArr.push(checkDuedate);
-                let checkLookDes = validation.checkLook(_self.obj.selling_point);
-                checkArr.push(checkLookDes);
-                let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
-                checkArr.push(checkName);
-                let checkLookName = validation.checkLook(_self.obj.name);
-                checkArr.push(checkLookName);
-                let checkPhone = validation.checkPhone(_self.obj.phone, '请输入电话');
-                checkArr.push(checkPhone);
-                for (var i = 0; i < checkArr.length; i++) {
-                    if (checkArr[i]) {
-                        common.$emit('message', checkArr[i]);
-                        return;
+                let paymentWay = '';
+                switch (this.obj.paymentWay) {
+                    case 0:
+                        paymentWay = '合同签订后，预付定金' + _self.payArr[0].two + '%';
+                        break;
+                    case 1:
+                        paymentWay = '验收合格后，立即付款';
+                        break;
+                    case 2:
+                        paymentWay = '验收合格后' + _self.payArr[2].two + '天内付款';
+                        break;
+                    case 3:
+                        paymentWay = _self.payArr[3].two;
+                        break;
+                    default:
+                        paymentWay = '';
+                }
+
+                let duedate = '';
+                switch (this.obj.duedate) {
+                    case 0:
+                        duedate = '7';
+                        break;
+                    case 1:
+                        duedate = '15';
+                        break;
+                    case 2:
+                        duedate = '30';
+                        break;
+                    case 3:
+                        duedate = _self.dateArr[3].one;
+                        break;
+                    default:
+                        duedate = '';
+                }
+
+                let remarks = '';
+                for (var i = 0; i < _self.obj.selling_point.length; i++) {
+                    console.log(_self.obj.selling_point[i])
+                    if(i == 0){
+                        remarks = _self.remarksArr[_self.obj.selling_point[i]].one;
+                    }else{
+                        remarks = remarks + ',' + _self.remarksArr[_self.obj.selling_point[i]].one;
                     }
                 }
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'intentionService',
-                    biz_method: 'editBegBuyInfo',
-                    biz_param: {
-                        customerId: common.customerId,
-                        breedName: _self.obj.drug_name,
-                        spec: _self.obj.spec,
-                        location: _self.obj.place_id,
-                        number: _self.obj.number,
-                        quality: _self.obj.selling_point,
-                        customerName: _self.obj.name,
-                        customerPhone: _self.obj.phone,
-                        duedate: _self.obj.duedate,
-                        breedId: _self.obj.breedId,
-                        unit: _self.obj.number_id,
+
+                    var checkArr = [];
+                    let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
+                    checkArr.push(checkBreedId);
+                    let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格！');
+                    checkArr.push(checkBreedSpec);
+                    let checkBreedPlace = validation.checkNull(_self.obj.place_id, '请输入产地！');
+                    checkArr.push(checkBreedPlace);
+                    let checkNumber = validation.checkMaxNum(_self.obj.number, '数量');
+                    checkArr.push(checkNumber);
+                    let checkUnit = validation.checkMaxNum(_self.obj.number_id, '数量单位');
+                    checkArr.push(checkUnit);  
+                    let checkQuality = validation.checkNull(_self.obj.quality, '请输入质量要求！');
+                    checkArr.push(checkQuality);
+                    let checkAddress = validation.checkNull(_self.obj.address, '请选择交货地！');
+                    checkArr.push(checkAddress);
+                    let checkPay = validation.checkNull(paymentWay, '请选择付款方式');
+                    checkArr.push(checkPay);
+                    let checkDuedate = validation.checkNull(duedate, '请选择有效期');
+                    checkArr.push(checkDuedate);
+                    let checkRemarks = validation.checkNull(remarks, '请选择备注信息');
+                    checkArr.push(checkRemarks);
+                    let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
+                    checkArr.push(checkName);
+                    let checkLookName = validation.checkLook(_self.obj.name);
+                    checkArr.push(checkLookName);
+                    let checkPhone = validation.checkPhone(_self.obj.phone, '请输入电话');
+                    checkArr.push(checkPhone);
+                    for (var i = 0; i < checkArr.length; i++) {
+                        if (checkArr[i]) {
+                            common.$emit('message', checkArr[i]);
+                            return;
+                        }
                     }
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.needRelease(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code == '1c01') {
-                        common.$emit('message', suc.data.msg);
-                        common.$emit('informMyPurchase', 'refurbish');
-                        let id = suc.data.biz_result.intentionId;
-                        common.$emit('informNeedSuccess', id);
-                        _self.$store.dispatch('getCustomer', {
-                            name: _self.obj.name,
-                            phone: _self.obj.phone
-                        })
-                        _self.$router.push("/releaseNeedSuccess" + '/' + id);
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
+                    common.$emit('show-load');
+                    let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    let body = {
+                        biz_module: 'intentionService',
+                        biz_method: 'htmlEditBegBuyInfo',
+                        biz_param: {
+                            customerId: common.customerId,
+                            breedName: _self.obj.drug_name,
+                            spec: _self.obj.spec,
+                            location: _self.obj.place_id,
+                            number: _self.obj.number,
+                            duedate:duedate,
+                            description:remarks,
+                            breedId: _self.obj.breedId,
+                            unit:_self.obj.number_id,
+                            quality: _self.obj.quality,
+                            address:_self.obj.address,
+                            paymentWay:_self.obj.paymentWay
+                        }
+                    };
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                    httpService.needRelease(url, body, function(suc) {
+                        common.$emit('close-load');
+                        if (suc.data.code == '1c01') {
+                            common.$emit('message', suc.data.msg);
+                            common.$emit('informMyPurchase', 'refurbish');
+                            let id = suc.data.biz_result.intentionId;
+                            common.$emit('informNeedSuccess', id);
+                            _self.$store.dispatch('getCustomer', {
+                                name: _self.obj.name,
+                                phone: _self.obj.phone
+                            })
+                            _self.$router.push("/releaseNeedSuccess" + '/' + id);
+                        } else {
+                            common.$emit('message', suc.data.msg);
+                        }
+                    }, function(err) {
+                        common.$emit('close-load');
+                        common.$emit('message', err.data.msg);
+                    })
+            },
+            selectType(id) {
+                let _self = this;
+                if (id == '1') {
+
+                } else {
+                    _self.getNeedDetail(id);
+                }
             }
 
         },
@@ -511,21 +584,21 @@ export default {
         },
         created() {
             let _self = this;
-            // this.selectType(_self.$route.params.id);
-            // _self.getInfo();
-            // common.$on('inforReleases', function(item) {
-            //     _self.obj.drug_name = '';
-            //     _self.obj.spec = '';
-            //     _self.obj.place = '';
-            //     _self.obj.number = '';
-            //     _self.obj.number_unit = '斤';
-            //     _self.obj.duedate = '';
-            //     _self.obj.selling_point = '';
-            //     _self.getInfo();
-            // })
-            // common.$on("purchase-id", function(item) {
-            //     _self.getNeedDetail(item); 
-            // })
+            this.selectType(_self.$route.params.id);
+            _self.getInfo();
+            common.$on('inforReleases', function(item) {
+                _self.obj.drug_name = '';
+                _self.obj.spec = '';
+                _self.obj.place = '';
+                _self.obj.number = '';
+                _self.obj.number_unit = '斤';
+                _self.obj.duedate = '';
+                _self.obj.selling_point = '';
+                _self.getInfo();
+            })
+            common.$on("purchase-id", function(item) {
+                _self.getNeedDetail(item);
+            })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

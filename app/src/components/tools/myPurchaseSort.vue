@@ -70,6 +70,7 @@ export default {
 .mypurchase_sort {
     float: left;
     width: 100%;
+
 }
 
 .mypurchase_sort .sort_content {
@@ -77,12 +78,14 @@ export default {
     float: left;
     border-bottom: 1px solid #ddd;
     background: white;
+    display: flex;
+    flex-direction: row;
    
 }
 
 .mypurchase_sort .sort_content .sort_content_detail {
     float: left;
-    width: 25%;
+    flex:1;
     min-height: 40px;
     line-height: 40px;
     color: #666;
@@ -91,7 +94,7 @@ export default {
 
 .mypurchase_sort .sort_content .sort_content_detail_select {
     float: left;
-    width: 25%;
+   flex:1;
     min-height: 40px;
     line-height: 40px;
     color: #EC6817;

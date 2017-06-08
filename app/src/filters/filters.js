@@ -6,7 +6,13 @@ Vue.filter('timeFormat', function(val) {
     if (val) val = val.split(' ')[0];
     return val;
 });
-
+Vue.filter('timeFormats', function(val) {
+    if (val){
+        val = val.split(' ')[0];
+        val = val.split('-')[0] + '/' + val.split('-')[1] + '/' + val.split('-')[2];
+    } 
+    return val;
+});
 Vue.filter('timeDays', function(due) {
     let days;
     if (due) {
@@ -61,13 +67,13 @@ Vue.filter('theUnit', function(due) {
         var pubdateDate = new Date();
         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
         days = Math.floor(dateValue / (24 * 3600 * 1000));
-        if(days < 10){
+        if (days < 10) {
             days = days
-        }else{
+        } else {
             days = days.toString();
             days = days.split('')[1];
         }
-    } 
+    }
     return days;
 });
 
@@ -80,13 +86,13 @@ Vue.filter('decade', function(due) {
         var pubdateDate = new Date();
         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
         days = Math.floor(dateValue / (24 * 3600 * 1000));
-        if(days < 10){
+        if (days < 10) {
             days = 0;
-        }else{
+        } else {
             days = days.toString();
             days = days.split('')[0];
         }
-    } 
+    }
     return days;
 });
 
@@ -179,7 +185,29 @@ Vue.filter('shellStatus', function(val) {
     }
     return val;
 });
-
+Vue.filter('myStatus', function(val) {
+    switch (val) {
+        case 0:
+            val = '审核中';
+            break;
+        case 1:
+            val = '询价中';
+            break;
+        case 2:
+            val = '审核未通过';
+            break;
+        case -2:
+            val = '询价结束';
+            break;
+        case 3:
+            val = '询价结束';
+            break;
+        default:
+            val = '';
+            break;
+    }
+    return val;
+});
 Vue.filter('purchaseStatus', function(val) {
     switch (val) {
         case -2:
@@ -282,7 +310,7 @@ Vue.filter('sex', function(val) {
 })
 
 //过滤文字长度
-Vue.filter('filterTxt',function(txt, num){
+Vue.filter('filterTxt', function(txt, num) {
     if (txt && txt.length > num && num && num != 0) {
         return txt.substring(0, num) + '...';
     } else {

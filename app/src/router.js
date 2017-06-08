@@ -61,6 +61,9 @@ import releaseResource from './views/myRelease/releaseResource'
 import releaseResourceSuccess from './views/myRelease/releaseResourceSuccess'
 import offerDetail from './views/myOffer/offerDetail'
 import needDetails from './views/myNeed/needDetails'
+import myNeeds from './views/myNeed/myNeeds'
+import myOffer from './views/myOffer/myOffer'
+import releaseOffer from './views/myRelease/releaseOffer'
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -147,6 +150,9 @@ module.exports = {
         { name: 'releaseResourceSuccess', path: '/releaseResourceSuccess/:id', component: releaseResourceSuccess },
         { name: 'offerDetail', path: '/offerDetail/:id', component: offerDetail },
         { name: 'needDetails', path: '/needDetails/:id', component: needDetails },
+        { name: 'myNeeds', path: '/myNeeds', component: myNeeds },
+        { name: 'myOffer', path: '/myOffer', component: myOffer },
+        { name: 'releaseOffer', path: '/releaseOffer/:id', component: releaseOffer },
         { path: '*', redirect: '/home' }
     ]
 }

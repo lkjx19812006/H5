@@ -208,18 +208,18 @@ input {
                 </div>
             </div>
         </div>
-        <div class="number" v-show="!obj.resource">
+        <div class="number" v-show="obj.need">
             <div class="box">
                 <div class="number_left">需求数量</div>
                 <div class="number_center">
                     <input type="number" v-model="obj.number" placeholder="请输入">
                 </div>
                 <div class="number_right" @click="showAction('unit')">
-                    <div class="word">元/{{obj.number_unit}}</div>
+                    <div class="word">{{obj.number_unit}}</div>
                 </div>
             </div>
         </div>
-        <div class="breed_name">
+        <div class="breed_name" v-show="obj.need">
             <div class="inbox last" @click="showQuality()">
                 <div class="breed_left">质量要求</div>
                 <div class="breed_center">
@@ -252,7 +252,7 @@ input {
                     <div class="right">此为多选项</div>
                 </div>
                 <div class="main">
-                    <div v-for="(item,index) in quality" class="selects" @click="select(item)">
+                    <div v-for="(item,index) in quality" class="selects" @click="select(item,index)">
                         <div v-bind:class="{inbox:item.show,'inbox_select':!item.show}"> {{item.name}}</div>
                     </div>
                 </div>
@@ -302,6 +302,7 @@ export default {
                     name: '含量够',
                     show: true
                 }],
+                qualityArr: [],
                 quality_show: false,
                 actions_show: false,
                 unit: [{
@@ -327,6 +328,7 @@ export default {
             showQuality() {
                 this.obj.sheetVisible = true;
                 this.quality_show = true;
+                this.obj.quality = '';
             },
             setObj(key, value, id_key, id, index) {
                 this.obj[key] = value;
@@ -336,9 +338,17 @@ export default {
                 this.obj.sheetVisible = false;
             },
             select(item) {
-                item.show = false;
-                if (this.obj.quality) this.obj.quality = this.obj.quality + ',' + item.name;
-                if (!this.obj.quality) this.obj.quality = item.name;
+                let _self = this;
+                item.show = !item.show;
+                // if (this.obj.quality) this.obj.quality = this.obj.quality + ',' + item.name;
+                // if (!this.obj.quality) this.obj.quality = item.name;
+                _self.qualityArr = [];
+                for (var i = 0; i < _self.quality.length; i++) {
+                    if (!_self.quality[i].show) {
+                        _self.qualityArr.push(i);
+                    }
+                }
+                
             },
             cancel() {
                 let _self = this;
@@ -357,6 +367,14 @@ export default {
                 for (var key in _self.quality) {
                     _self.quality[key].show = true;
                 }
+                for(var i=0;i < _self.qualityArr.length;i++){
+                    if(i == 0){
+                        _self.obj.quality = _self.quality[_self.qualityArr[0]].name;
+                    }else{
+                        _self.obj.quality = _self.obj.quality + ',' + _self.quality[_self.qualityArr[i]].name;
+                    }
+                }
+                //console.log(_self.obj.quality)
             },
             showAction(param) {
                 this.actions_show = true;

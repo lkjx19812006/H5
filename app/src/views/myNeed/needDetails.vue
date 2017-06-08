@@ -8,6 +8,26 @@
     .onscroll {
         overflow-y: scroll;
     }
+    .static{
+        width:100%;
+        height:60px;
+        overflow:hidden;
+        position:relative;
+        display:flex;
+        flex-direction:row;
+        
+        align-items: center;
+        img{
+            width:100%;
+        }
+        div{
+            position:absolute;
+            font-size:16px;
+            color:#EB8545;
+            text-align:left;
+            padding:25px;
+        }
+    }
     .top {
         background-color: #fff;
         .box {
@@ -168,9 +188,9 @@
                 height: 8px;
                 margin-left: 10px;
             }
-            .share_frined{
-                height:20px;
-                margin:0px 6px;
+            .share_frined {
+                height: 20px;
+                margin: 0px 6px;
             }
         }
         .line {
@@ -218,6 +238,18 @@
         <opinion :arr="arr" class="opinion" v-show="opinion" v-on:selectIt="selectIt"></opinion>
         <myHeader :param="param"></myHeader>
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-bind:class="{onscroll:!show || !opinion}">
+            <div class="static" v-show="obj.onSell == 0">
+                <img src="/static/icon/examine.png">
+                <div>审核中</div>
+            </div>
+            <div class="static" v-show="obj.onSell == 3 || obj.onSell == -2">
+                <img src="/static/icon/askover.png">
+                <div>询价结束</div>
+            </div>
+            <div class="static" v-show="obj.onSell == 1">
+                <img src="/static/icon/ask.png">
+                <div>询价中</div>
+            </div>
             <div class="top">
                 <div class="box">
                     <img src="/static/icon/need-title.png">

@@ -72,7 +72,7 @@ export default {
                     img_src: '/static/icons/My-resources.png'
                 }, {
                     name: '我的求购',
-                    router: 'myPurchase',
+                    router: 'myNeeds',
                     img_src: '/static/icons/My-purchase.png'
                 }, {
                     name: '我的报价',
@@ -196,7 +196,7 @@ export default {
                         case 'myResource':
                             common.$emit("informMyRes", 1);
                             break;
-                        case 'myPurchase':
+                        case 'myNeeds':
                             common.$emit("informMyPurchase", 1);
                             break;
                         case 'myAttention':
