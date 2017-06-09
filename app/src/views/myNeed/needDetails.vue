@@ -8,24 +8,23 @@
     .onscroll {
         overflow-y: scroll;
     }
-    .static{
-        width:100%;
-        height:60px;
-        overflow:hidden;
-        position:relative;
-        display:flex;
-        flex-direction:row;
-        
+    .static {
+        width: 100%;
+        height: 60px;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: row;
         align-items: center;
-        img{
-            width:100%;
+        img {
+            width: 100%;
         }
-        div{
-            position:absolute;
-            font-size:16px;
-            color:#EB8545;
-            text-align:left;
-            padding:25px;
+        div {
+            position: absolute;
+            font-size: 16px;
+            color: #EB8545;
+            text-align: left;
+            padding: 25px;
         }
     }
     .top {
@@ -99,6 +98,9 @@
             }
             .right {
                 font-size: 14px;
+                display:flex;
+                flex-direction:row;
+                
                 img {
                     height: 15px;
                 }
@@ -261,8 +263,8 @@
                     <div class="left">{{obj.breedName}} <span>({{obj.number}}{{obj.unit}})</span></div>
                     <div class="emtry"></div>
                     <div class="right" v-if="obj.especial == 1 && obj.type == 0">
-                        <img src="/static/icon/times.png">&nbsp;剩余
-                        <span>{{obj.duedate | timeDay}}</span> 天
+                        <div class="images"><img src="/static/icon/times.png"></div>
+                        <div>&nbsp;剩余{{obj.duedate | timeDay}} 天</div>
                     </div>
                     <div class="right" v-if="obj.especial !== 1 && obj.type == 0">剩余 长期</div>
                 </div>
@@ -313,7 +315,7 @@
         <div class="share">
             <div class="offer_it">
                 <img src="/static/icon/offer-price.png">
-                <div>立即报价</div>
+                <div @click="jump(obj.id)">立即报价</div>
             </div>
             <div class="offer_it send_friend" @click="sendFriend()">
                 <img src="/static/icon/send-friend.png">
@@ -459,6 +461,10 @@ export default {
             selectIt(todo) {
                 let _self = this;
 
+            },
+            jump(id) {
+                common.$emit('needToReleaseOffer', id);
+                this.$router.push('/releaseOffer/' + id);
             }
         },
         mounted() {

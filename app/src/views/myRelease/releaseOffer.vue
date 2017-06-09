@@ -14,6 +14,10 @@ input {
 }
 
 .release_offer {
+    position: relative;
+    .main {
+        padding-bottom: 100px;
+    }
     .box {
         padding: 20px 15px;
         background-color: #fff;
@@ -24,8 +28,7 @@ input {
     .img {
         width: 100%;
         background-color: #fff;
-        margin-bottom: 15px;
-        padding: 15px;
+        padding: 20px 15px;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -50,46 +53,23 @@ input {
             height: 80px;
         }
     }
-    .sell {
-        padding: 15px;
-        background-color: #fff;
-        .top {
-            text-align: left;
-            font-size: 15px;
-            color: #000;
-            span {
-                color: #999999;
-                font-size: 12px;
-            }
-        }
-        .inbox {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            .name {
-                padding: 5px 10px;
-                margin: 8px 8px 8px 0;
-                font-size: 14px;
-                border-radius: 15px;
-                color: #7E7E7E;
-                background-color: #F4F4F4;
-            }
-            .active {
-                padding: 5px 10px;
-                margin: 8px 8px 8px 0;
-                font-size: 14px;
-                border-radius: 15px;
-                background-color: #FAA105;
-                color: #fff;
-            }
-        }
+    .confirm {
+        position: fixed;
+        bottom: 0;
+        height: 50px;
+        width: 100%;
+        background-color: #FA6705;
+        font-size: 17px;
+        line-height: 50px;
+        text-align: center;
+        color: #fff;
     }
 }
 </style>
 <template>
     <div class="release_offer">
         <myHeader :param="param"></myHeader>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
             <titles tab="1"></titles>
             <basicTop :obj="obj" v-on:showAction="showAction"></basicTop>
             <titles tab="2"></titles>
@@ -102,13 +82,10 @@ input {
                     <upLoadImgs :param="imgArr" v-on:postUrl="getUrl"></upLoadImgs>
                 </div>
             </div>
-            <div class="sell">
-                <div class="top">产品卖点 <span>(点击可多选哦)</span></div>
-                <div class="inbox">
-                    <div class="name" v-bind:class="{name:!todo.show,'active':todo.show}" v-for="(todo,index) in sell" @click="select(todo,index)">{{todo.name}}</div>
-                </div>
-            </div>
+            <selectQuality :obj="obj"></selectQuality>
+            <priceOrNumber :obj="obj" v-on:showAction="showAction"></priceOrNumber>
         </div>
+        <div class="confirm" @click="confirm">提交报价</div>
         <popSpec :obj="obj"></popSpec>
     </div>
 </template>
@@ -120,6 +97,8 @@ import popSpec from '../../components/popUpType/popSpec'
 import basicTop from '../../components/release/basicInTop'
 import titles from '../../components/release/title'
 import upLoadImgs from '../../components/release/upLoadImgs'
+import priceOrNumber from '../../components/release/priceOrNumber'
+import selectQuality from '../../components/release/selectQuality'
 import httpService from '../../common/httpService.js'
 export default {
     data() {
@@ -137,8 +116,40 @@ export default {
                     sheetVisible: false,
                     breedLocation: [],
                     breedSpec: [],
+                    unit: [{
+                        id: 1,
+                        name: 'g'
+                    }, {
+                        id: 2,
+                        name: 'kg'
+                    }],
+                    sell: [{
+                        name: '产品包交',
+                        show: false
+                    }, {
+                        name: '质量优势',
+                        show: false
+                    }, {
+                        name: '一手货源',
+                        show: false
+                    }, {
+                        name: '含量较高',
+                        show: false
+                    }, {
+                        name: '可以加工',
+                        show: false
+                    }],
                     actions: [],
                     sell_point: [],
+                    number_name: '可供量',
+                    price_name: '裸价',
+                    price: '',
+                    number: '',
+                    number_unit: '',
+                    number_id: '',
+                    quality: '',
+                    priceDescription: '',
+                    descriptions: ''
                 },
                 imgArr: [],
                 sell: [{
@@ -165,11 +176,52 @@ export default {
             },
             confirm() {
                 let _self = this;
-                common.$emit("confirm", {
-                    message: '确定发布求购？',
-                    title: '提示',
-                    ensure: this.release
-                });
+                // common.$emit("confirm", {
+                //     message: '确定发布求购？',
+                //     title: '提示',
+                //     ensure: this.release
+                // });
+                _self.obj.quality = '';
+                for (var i = 0; i < _self.obj.sell_point.length; i++) {
+                    if (!_self.obj.quality) {
+                        _self.obj.quality = _self.obj.sell_point[0];
+                    } else {
+                        _self.obj.quality = _self.obj.quality + ',' + _self.obj.sell_point[i];
+                    }
+                }
+                var checkArr = [];
+                let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格');
+                checkArr.push(checkBreedSpec);
+                let checkBreedPlace = validation.checkNull(_self.obj.place, '请输入产地');
+                checkArr.push(checkBreedPlace);
+
+                let count = '请上传图片';
+                for (let i = 0; i < _self.imgArr.length; i++) {
+                    if (_self.imgArr[i]) {
+                        count = false;
+                    }
+                }
+                if (count) {
+                    checkArr.push(count);
+                }
+                let checkQuality = validation.checkNull(_self.obj.quality, '请选择产品买点');
+                checkArr.push(checkQuality);
+                let checkDrugInfor = validation.checkNull(_self.obj.descriptions, '请填写产品信息');
+                checkArr.push(checkDrugInfor);
+                let checkNum = validation.checkMaxNum(_self.obj.number, '可供量');
+                checkArr.push(checkNum);
+                let checkPri = validation.checkPrice(_self.obj.price, '裸价');
+                checkArr.push(checkPri);
+                let checkPriDescription = validation.checkPrice(_self.obj.priceDescription, '价格补充说明');
+                checkArr.push(checkPriDescription);
+                for (var i = 0; i < checkArr.length; i++) {
+                    if (checkArr[i]) {
+                        common.$emit('message', checkArr[i]);
+                        return;
+                    }
+                }
+                
+                
             },
             showAction(param) {
                 this.obj.sheetVisible = true;
@@ -181,6 +233,15 @@ export default {
                             name: _self.obj.breedSpec[i].name,
                             id: _self.obj.breedSpec[i].id,
                             key: 'spec'
+                        });
+                    }
+                } else if (param == "unit") {
+                    for (var i = 0; i < _self.obj.unit.length; i++) {
+                        _self.obj.actions.push({
+                            name: _self.obj.unit[i].name,
+                            key: 'number_unit',
+                            id: _self.obj.unit[i].id,
+                            id_key: 'number_id'
                         });
                     }
                 } else {
@@ -227,6 +288,42 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
+            getUnit() {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'enumService',
+                    biz_method: 'queryEnumList',
+                    biz_param: {
+                        type: 'MU'
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.commonPost(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        _self.obj.unit = suc.data.biz_result.list;
+                        if (!_self.obj.number_unit) {
+                            _self.obj.number_unit = _self.obj.unit[0].name;
+                            _self.obj.number_id = _self.obj.unit[0].id;
+                        } else {
+                            for (var i = 0; i < _self.unit.length; i++) {
+                                if (_self.obj.number_unit == _self.obj.unit[i].name) {
+                                    _self.obj.number_id = _self.obj.unit[i].id;
+                                }
+                            }
+                        }
+
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
             getUrl(param) {
                 console.log(1, param)
                 this.imgArr.push(param.url);
@@ -248,12 +345,14 @@ export default {
                 let _self = this;
                 todo.show = !todo.show;
                 _self.sell_point = [];
-                for(var i=0;i<_self.sell.length;i++){
-                    if(_self.sell[i].show){
+                for (var i = 0; i < _self.sell.length; i++) {
+                    if (_self.sell[i].show) {
                         _self.sell_point.push(_self.sell[i].name)
                     }
                 }
-                console.log(_self.sell_point)
+            },
+            release() {
+                let _self = this;
             }
 
         },
@@ -262,11 +361,14 @@ export default {
             popSpec,
             basicTop,
             titles,
-            upLoadImgs
+            upLoadImgs,
+            priceOrNumber,
+            selectQuality
         },
         created() {
             let _self = this;
-            _self.getBreedInformation(this.obj.breedName)
+            _self.getBreedInformation(this.obj.breedName);
+            _self.getUnit();
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

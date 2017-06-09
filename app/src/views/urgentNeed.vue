@@ -34,7 +34,7 @@
                             </div>
                             <div class="bottom">
                                 <p>已报价<span>{{todo.offer}}</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jumpApp()" v-if="todo.isMy == 0">我要报价</button>
+                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jumpApp(todo.id)" v-if="todo.isMy == 0">我要报价</button>
                                 <button class="mint-button mint-button--primary mint-button--small" v-if="todo.isMy == 1">查看详情</button>
                             </div>
                         </li>
@@ -254,14 +254,9 @@ export default {
                 common.$emit("needToDetails", id);
                 this.$router.push('needDetails/' + id);
             },
-            jumpApp() {
-                common.$emit("confirm", {
-                    message: '请下载App后，在App内报价',
-                    title: '提示',
-                    ensure: function() {
-                        window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
-                    }
-                });
+            jumpApp(id) {
+                common.$emit('needToReleaseOffer',id);
+                this.$router.push('/releaseOffer/' + id);
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;

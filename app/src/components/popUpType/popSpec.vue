@@ -94,8 +94,8 @@ input {
                     </div>
                 </div>
                 <div class="confirm">
-                    <div class="left" @click="cancel()">取消</div>
-                    <div class="right" @click="confirm()">确定</div>
+                    <div class="right" @click="cancel()">取消</div>
+                    <!-- <div class="right" @click="confirm()">确定</div> -->
                 </div>
             </div>
         </mt-popup>
