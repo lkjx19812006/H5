@@ -101,7 +101,8 @@ export default {
                     breedId: '',
                     sheetVisible: false
                 },
-                show: true
+                show: true,
+                id:'',
             }
         },
         methods: {
@@ -185,6 +186,11 @@ export default {
                         unit: _self.obj.number_id,
                     }
                 };
+                if(_self.id !== '1'){
+                    body = {
+                        
+                    }
+                }
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.needRelease(url, body, function(suc) {
@@ -265,6 +271,7 @@ export default {
         created() {
             let _self = this;
             this.selectType(_self.$route.params.id);
+            this.id = _self.$route.params.id;
             _self.getInfo();
             common.$on('inforReleases', function(item) {
                 _self.obj.drug_name = '';
@@ -278,6 +285,7 @@ export default {
             })
             common.$on("purchase-id", function(item) {
                 _self.getNeedDetail(item); //来自我的求购
+                _self.id = item;
             })
         },
         mounted() {

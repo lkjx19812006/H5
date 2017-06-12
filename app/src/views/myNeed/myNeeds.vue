@@ -119,7 +119,7 @@
                                 <div class="right">
                                     <div class="date">
                                         <div><img src="/static/icon/times.png"></div>
-                                        <div v-if="todo.especial == 1 && todo.type == 0">剩余{{todo.duedate | timeDays}}天<span></span></div>
+                                        <div v-if="todo.especial == 1 && todo.type == 0">剩余{{todo.duedate | timeDays}}<span></span></div>
                                         <div v-if="todo.especial !== 1 && todo.type == 0">长期</div>
                                     </div>
                                     <div class="detail" @click="jump(router,todo.id)">
@@ -399,10 +399,13 @@ export default {
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp()
             },
-            jump: function(router, id, duedate) {
-                common.$emit("purchase-id", id);
-                common.$emit("myPurToPurDetail", id);
-                this.$router.push(router + '/' + id);
+            jump: function(router, id) {
+                common.$emit("needToDetails",{
+                    id:id,
+                    type:'my'
+                });
+                //common.$emit("myPurToPurDetail", id);
+                this.$router.push(router + '/' + id + '?type=my');
             },
             loadApp() {
                 window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';

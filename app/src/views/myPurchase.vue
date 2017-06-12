@@ -272,7 +272,6 @@ export default {
             },
             delet(id) {
                 let _self = this;
-
                 function beforeDelet() {
                     common.$emit('show-load');
                     let url = common.addSID(common.urlCommon + common.apiUrl.most);

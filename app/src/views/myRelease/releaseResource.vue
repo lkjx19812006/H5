@@ -144,6 +144,7 @@ export default {
                 imgArr: [],
                 selected: '1',
                 todos: {},
+                id: ''
 
             }
         },
@@ -251,6 +252,32 @@ export default {
                         sampleUnit: '份'
                     }
                 };
+                if (_self.id !== '1') {
+                    let body = {
+                        biz_module: 'intentionService',
+                        biz_method: 'updateEditSupplyInfo',
+                        biz_param: {
+                            customerId: common.customerId,
+                            breedName: _self.obj.drug_name,
+                            spec: _self.obj.spec,
+                            location: _self.obj.place_id,
+                            number: _self.obj.number,
+                            price: _self.obj.sales_price,
+                            sampling: _self.obj.sampling,
+                            quality: _self.obj.selling_point,
+                            customerName: _self.obj.name,
+                            customerPhone: _self.obj.phone,
+                            editImage: _self.imgArr,
+                            sampleNumber: _self.obj.weight,
+                            sampleAmount: _self.obj.price,
+                            duedate: _self.obj.duedate,
+                            breedId: _self.obj.breedId,
+                            unit: _self.obj.number_id,
+                            sampleUnit: '份',
+                            id:_self.id
+                        }
+                    };
+                }
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.supplyRelease(url, body, function(suc) {
@@ -260,9 +287,9 @@ export default {
                         common.$emit('message', suc.data.msg);
                         common.$emit('informMyRes', 'refurbish');
                         let id = suc.data.biz_result.intentionId;
-                        _self.$store.dispatch('getCustomer',{
-                            name:_self.obj.name,
-                            phone:_self.obj.phone
+                        _self.$store.dispatch('getCustomer', {
+                            name: _self.obj.name,
+                            phone: _self.obj.phone
                         })
                         common.$emit('informSupplySuccess', suc.data.biz_result.intentionId);
                         _self.$router.push("/releaseResourceSuccess" + '/' + id);
@@ -358,6 +385,7 @@ export default {
         created() {
             let _self = this;
             this.selectType(_self.$route.params.id);
+            this.id = _self.$route.params.id;
             _self.getInfo();
             common.$on('inforReleases', function(item) {
                 _self.obj.drug_name = '';
@@ -375,6 +403,7 @@ export default {
             })
             common.$on("res-id", function(item) {
                 _self.getResourceDetail(item); //来自我的资源
+                _self.id = item;
             })
         },
         mounted() {

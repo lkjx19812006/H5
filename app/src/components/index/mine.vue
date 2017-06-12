@@ -77,7 +77,7 @@ export default {
                 }, {
                     name: '我的报价',
                     img_src: '/static/icons/My-offer.png',
-                    router: 'app'
+                    router: 'myOffer'
                 }, {
                     name: '我的关注',
                     router: 'myAttention',
@@ -202,6 +202,9 @@ export default {
                         case 'myAttention':
                             common.$emit("informResAttention", 1);
                             break;
+                        case 'myOffer':
+                            common.$emit("inforMyOffer", 1);
+                            break;
                         default:
                             break;
                     }
@@ -222,6 +225,7 @@ export default {
                         });
                         return;
                     } else {
+                        
                         this.$router.push(router);
                     }
 

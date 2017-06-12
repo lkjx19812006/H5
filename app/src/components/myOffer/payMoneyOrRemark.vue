@@ -30,26 +30,26 @@
         <div class="title_box" v-show="tab == '1'">
             <div class="inbox">
                 <div class="left">{{obj.data.payMoney}}</div>
-                <div class="right">我就厄坑爹</div>
+                <div class="right">{{obj.content.paymentWay}}</div>
             </div>
         </div>
         <div class="title_box" v-show="tab == '1'">
             <div class="inbox last">
                 <div class="left">{{obj.data.remarks}}</div>
-                <div class="right">我就厄坑爹的考试的可能是打开拉萨的那款大苏打的撒大苏打</div>
+                <div class="right">{{obj.content.description}}</div>
             </div>
         </div>
 
         <div class="title_box" v-show="tab == '2'">
             <div class="inbox">
                 <div class="left">产品信息</div>
-                <div class="right">我就厄坑爹</div>
+                <div class="right">{{obj.newOffer.quality}}</div>
             </div>
         </div>
         <div class="title_box" v-show="tab == '2'">
             <div class="inbox last">
                 <div class="left">备注信息</div>
-                <div class="right">我就厄坑爹的考试的可能是打开拉萨的那款大苏打的撒大苏打</div>
+                <div class="right">{{obj.newOffer.quality}}</div>
             </div>
         </div>
     </div>

@@ -367,8 +367,16 @@ export default {
         },
         created() {
             let _self = this;
-            _self.getBreedInformation(this.obj.breedName);
+            let breedName = _self.$route.params.id;
+            _self.obj.breedName = breedName;
+            _self.getBreedInformation(breedName);
             _self.getUnit();
+            common.$on('needToReleaseOffer',function(item){
+                 _self.obj.breedName = item;
+                 console.log(_self.obj.breedName)
+                 //_self.getUnit();
+                 _self.getBreedInformation(item);
+            });
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

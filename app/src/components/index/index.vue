@@ -588,7 +588,7 @@
                     <div class="right">
                         <img src="/static/icon/homesample.png" v-show="todo.sampling == 1">
                         <div class="report_pri">我要购买</div>
-                        <div class="reported">已报价<span>{{todo.offer}}</span>人</div>
+                        <!-- <div class="reported">已报价<span>{{todo.offer}}</span>人</div> -->
                     </div>
                 </div>
             </div>

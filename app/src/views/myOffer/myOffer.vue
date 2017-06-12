@@ -26,11 +26,14 @@
                     flex-direction: row;
                     justify-content: space-between;
                     align-items: center;
+                    .black {
+                        color: #333;
+                    }
                     .red {
-                        color: #E96A6D;
+                        color: #f05555;
                     }
                     .gray {
-                        color: #C1C1C1;
+                        color: #999;
                     }
                     .left {
                         font-size: 15px;
@@ -50,6 +53,7 @@
                         .breed_name {
                             font-size: 15px;
                             color: #000;
+                            text-align: left;
                         }
                         .spec {
                             color: 6D6D6D;
@@ -90,12 +94,32 @@
         }
     }
 }
+
+.status {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    .items {
+        flex: 1;
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+    }
+    .red {
+        color: #fa6705;
+    }
+}
 </style>
 <template>
     <div class="my_needs">
         <div>
             <myHeader :param="param"></myHeader>
-            <myPurchaseSort v-on:postId="getId" :sort="sortRouter" :paramArr="sortArr"></myPurchaseSort>
+            <div class="status">
+                <div class="items" v-bind:class="{red:todo.show}" v-for="todo in status" @click="changeStatus(todo)">{{todo.name}}</div>
+            </div>
         </div>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
             <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
@@ -103,27 +127,34 @@
                     <li v-for="todo in todos">
                         <div class="box">
                             <div class="top">
-                                <div class="left" v-show="todo.onSell == 0 || todo.onSell == 2">求购状态: {{todo.onSell | myStatus}}</div>
-                                <div class="left" v-show="todo.onSell == 3 || todo.onSell == -2">求购状态:
-                                    <span class="gray">{{todo.onSell | myStatus}}</span>
+                                <div class="left black" v-show="todo.accept == 0">报价状态:
+                                    <span class="black">{{todo.accept | myOfferStatus}}</span>
                                 </div>
-                                <div class="left" v-show="todo.onSell == 1">求购状态: <span class="red">{{todo.onSell | myStatus}}</span></div>
-                                <div class="right">{{todo.pubdate | timeFormats}}</div>
+                                <div class="left" v-show="todo.accept == 1">报价状态:
+                                    <span class="red">{{todo.accept | myOfferStatus}}</span>
+                                </div>
+                                <div class="left" v-show="todo.accept == 2">报价状态:
+                                    <span class="gray">{{todo.accept | myOfferStatus}}</span>
+                                </div>
+                                <div class="left" v-show="todo.accept == 3">报价状态:
+                                    <span class="black">{{todo.accept | myOfferStatus}}</span>
+                                </div>
+                                <div class="right">{{todo.otime | timeFormats}}</div>
                             </div>
                             <div class="content">
                                 <div class="left">
                                     <div class="breed_name">{{todo.breedName}} ({{todo.number}}{{todo.unit}})</div>
                                     <div class="spec">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
-                                    <div class="spec">数量: {{todo.number}}{{todo.unit}}</div>
+                                    <div class="spec">裸价: {{todo.price}}元/{{todo.unit}}</div>
                                 </div>
                                 <div class="right">
                                     <div class="date">
                                         <div><img src="/static/icon/times.png"></div>
-                                        <div v-if="todo.especial == 1 && todo.type == 0">剩余{{todo.duedate | timeDays}}天<span></span></div>
-                                        <div v-if="todo.especial !== 1 && todo.type == 0">长期</div>
+                                        <div>剩余{{todo.duedate | timeDays}}<span></span></div>
+                                        <!-- <div v-if="todo.especial !== 1 && todo.type == 0">长期</div> -->
                                     </div>
-                                    <div class="detail" @click="jump(router,todo.id)">
-                                        求购详情
+                                    <div class="detail" @click="jump(router,todo.intentionId)">
+                                        报价详情
                                     </div>
                                 </div>
                             </div>
@@ -147,7 +178,6 @@
 import common from '../../common/common.js'
 import searchInput from '../../components/tools/inputSearch'
 import myHeader from '../../components/tools/myHeader'
-import myPurchaseSort from '../../components/tools/myPurchaseSort'
 import httpService from '../../common/httpService.js'
 import filters from '../../filters/filters'
 import errPage from '../../components/tools/err'
@@ -164,120 +194,7 @@ export default {
                     name: '我的报价',
                     router: 'home'
                 },
-                sortArr: [{
-                    name: '报价状态',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '审核状态',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '申请中',
-                        asc: 'low',
-                        show: false,
-                        testing: 1,
-                        key: 'testing'
-                    }, {
-                        name: '上架失败',
-                        asc: 'low',
-                        show: false,
-                        testing: -2,
-                        key: 'testing'
-                    }, {
-                        name: '下架',
-                        asc: 'low',
-                        show: false,
-                        testing: 4,
-                        key: 'testing'
-                    }, {
-                        name: '上架',
-                        asc: 'top',
-                        show: false,
-                        testing: 2,
-                        key: 'testing'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        testing: 0,
-                        key: 'testing'
-                    }]
-                },{
-                    name: '发布日期',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '发布日期',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由新到旧',
-                        asc: 'low',
-                        show: false,
-                        pubdate: 2,
-                        key: 'pubdate'
-                    }, {
-                        name: '由旧到新',
-                        asc: 'top',
-                        show: false,
-                        pubdate: 1,
-                        key: 'pubdate'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        pubdate: 0,
-                        key: 'pubdate'
-                    }]
-                }, {
-                    name: '报价人数',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '报价人数',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由少到多',
-                        asc: 'low',
-                        show: false,
-                        offer: 1,
-                        key: 'offer'
-                    }, {
-                        name: '由多到少',
-                        asc: 'top',
-                        show: false,
-                        offer: 2,
-                        key: 'offer'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        offer: 0,
-                        key: 'offer'
-                    }]
-                }, {
-                    name: '剩余时间',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '剩余时间',
-                    class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由短到长',
-                        asc: 'low',
-                        show: false,
-                        duedate: 1,
-                        key: 'duedate'
-                    }, {
-                        name: '由长到短',
-                        asc: 'top',
-                        show: false,
-                        duedate: 0,
-                        key: 'duedate'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        duedate: '',
-                        key: 'duedate'
-                    }]
-                }],
-                router: "/needDetails",
+                router: "/offerDetail",
                 // other_router: "revisePurchase",
                 other_router: "releaseNeed",
                 todos: [],
@@ -286,24 +203,38 @@ export default {
                 allLoaded: false,
                 bottomStatus: '',
                 httpPraram: {
-                    pubdate: 0,
-                    offer: 0,
-                    duedate: 0,
-                    testing: 0,
                     page: 1,
-                    pageSize: 10
-                }
+                    pageSize: 10,
+                    accept: '-1'
+                },
+                status: [{
+                    name: '全部',
+                    accept: '-1',
+                    show: true
+                }, {
+                    name: '待处理',
+                    accept: '0',
+                    show: false
+                }, {
+                    name: '已采用',
+                    accept: '1',
+                    show: false
+                }, {
+                    name: '未采用',
+                    accept: '2',
+                    show: false
+                }, {
+                    name: '待采用',
+                    accept: '3',
+                    show: false
+                }]
             }
         },
         components: {
             searchInput,
-            myPurchaseSort,
             myHeader,
             errPage
         },
-        filters: (filters, {
-
-        }),
         methods: {
             getHttp(back) {
                 let _self = this;
@@ -313,18 +244,10 @@ export default {
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
-                    biz_module: 'intentionService',
-                    biz_method: 'myBegIntentionList',
-                    version: 1,
-                    time: 0,
-                    sign: '',
+                    biz_module: 'intentionOfferService',
+                    biz_method: 'htmlMyIntentionOfferList',
                     biz_param: {
-                        sort: {
-                            "offer": _self.httpPraram.offer,
-                            "pubdate": _self.httpPraram.pubdate,
-                            "duedate": _self.httpPraram.duedate
-                        },
-                        onSell: _self.httpPraram.testing,
+                        accept: _self.httpPraram.accept,
                         pn: _self.httpPraram.page,
                         pSize: _self.httpPraram.pageSize
                     }
@@ -359,60 +282,19 @@ export default {
                     }
                 })
             },
-            delet(id) {
+            changeStatus(todo) {
                 let _self = this;
-
-                function beforeDelet() {
-                    common.$emit('show-load');
-                    let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                    let body = {
-                        biz_module: 'intentionService',
-                        biz_method: 'deleteIntentionInfo',
-                        biz_param: {
-                            id: id
-                        }
-                    };
-                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                    httpService.myResource(url, body, function(suc) {
-                        common.$emit('close-load');
-                        if (suc.data.code == '1c01') {
-                            _self.getHttp();
-                        } else {
-                            common.$emit('message', suc.data.msg);
-                        }
-
-                    }, function(err) {
-                        common.$emit('close-load');
-                        common.$emit('message', err.data.msg);
-                    })
+                for (var i = 0; i < _self.status.length; i++) {
+                    _self.status[i].show = false;
                 }
-                common.$emit("confirm", {
-                    message: '确认删除？',
-                    title: '提示',
-                    ensure: beforeDelet
-                });
+                todo.show = true;
+                _self.httpPraram.accept = todo.accept;
+                _self.getHttp();
             },
-            getId(param) {
-                let _self = this;
-                _self.httpPraram.page = 1;
-                _self.httpPraram[param.key] = param[param.key];
-                _self.getHttp()
-            },
-            jump: function(router, id, duedate) {
-                common.$emit("purchase-id", id);
-                common.$emit("myPurToPurDetail", id);
+            jump: function(router, id) {
+                common.$emit('myOfferToOfferDetail', id);
+                //console.log(id)
                 this.$router.push(router + '/' + id);
-            },
-            loadApp() {
-                window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
-            },
-            jumpApp() {
-                common.$emit("confirm", {
-                    message: '查看报价请下载App',
-                    title: '提示',
-                    ensure: this.loadApp
-                });
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;
@@ -430,19 +312,7 @@ export default {
                     }
                 }, 500);
             },
-            disTime: function(duedate) {
-                var now = new Date().getTime();
-                console.log(now);
-                var endDate = new Date(duedate).getTime();
-                console.log(endDate);
-                var dis = now - endDate;
-                console.log(dis);
-                if (dis < 0) {
-                    return true;
-                } else {
-                    return false;
-                }
-            },
+
             handleTopChange(status) {
                 this.topStatus = status;
             },
@@ -469,7 +339,7 @@ export default {
         created() {
             let _self = this;
             _self.getHttp();
-            common.$on('informMyPurchase', function(item) {
+            common.$on('inforMyOffer', function(item) {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });

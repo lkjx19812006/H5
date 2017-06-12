@@ -257,7 +257,10 @@ export default {
                 // common.$emit('needToDetail', id);
                 // this.$router.push('needDetail/' + id);
 
-                common.$emit('needToDetails', id);
+                common.$emit('needToDetails', {
+                     id:id,
+                     type:''
+                });
                 this.$router.push('/needDetails/' + id);
             },
             jump(id,name) {

@@ -43,25 +43,25 @@ input {
 </style>
 <template>
     <div class="release_title">
-        <div class="box" v-show="tab == '1'">
+        <div class="box" v-if="tab == '1'">
             <img src="/static/icon/need-title.png">
             <div class="title">基本信息</div>&nbsp;
         </div>
-        <div class="box" v-show="tab == '2'">
+        <div class="box" v-if="tab == '2'">
             <img src="/static/icon/product-infor.png">
             <div class="title">产品信息</div>&nbsp;
             <div class="word">(请至少上传一张图片，图片越多越真实)</div>
         </div>
-        <div class="box" v-show="tab == '3'">
+        <div class="box" v-if="tab == '3'">
             <img src="/static/icon/need-title.png">
             <div class="title">求购信息</div>&nbsp;
             <div class="offer_num">(已有<span>{{obj.content.offer}}</span>人报价)</div>
         </div>
-        <div class="box" v-show="tab == '4'">
+        <div class="box" v-if="tab == '4'">
             <img src="/static/icon/new-offer.png">
             <div class="title">最新报价</div>&nbsp;
         </div>
-        <div class="box" v-show="tab == '5'">
+        <div class="box" v-if="tab == '5'">
             <img src="/static/icon/history.png">
             <div class="title">历史报价</div>&nbsp;
         </div>

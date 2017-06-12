@@ -98,9 +98,8 @@
             }
             .right {
                 font-size: 14px;
-                display:flex;
-                flex-direction:row;
-                
+                display: flex;
+                flex-direction: row;
                 img {
                     height: 15px;
                 }
@@ -311,11 +310,12 @@
                     </div>
                 </div>
             </div>
+            <!-- <div @click="go(obj.id)">hsaddjsahdkj</div> -->
         </div>
-        <div class="share">
+        <div class="share" v-show="type">
             <div class="offer_it">
                 <img src="/static/icon/offer-price.png">
-                <div @click="jump(obj.id)">立即报价</div>
+                <div @click="jump(obj.breedName)">立即报价</div>
             </div>
             <div class="offer_it send_friend" @click="sendFriend()">
                 <img src="/static/icon/send-friend.png">
@@ -324,6 +324,16 @@
             <div class="send_nor" @click="sendNor()">
                 <img src="/static/icon/cry.png">
                 <div>暂不参加</div>
+            </div>
+        </div>
+        <div class="share" v-show="!type">
+           <!--  <div class="offer_it" @click="delet(obj.id)">
+                <img src="/static/icon/send-friend.png">
+                <div>删除</div>
+            </div> -->
+            <div class="offer_it send_friend" @click="resive(obj.id)">
+                <img src="/static/icon/offer-price.png">
+                <div>编辑</div>
             </div>
         </div>
     </div>
@@ -354,7 +364,8 @@ export default {
                     title: '质量不满足'
                 }, {
                     title: '麻烦不太了解'
-                }]
+                }],
+                type: true
             }
         },
         components: {
@@ -362,6 +373,10 @@ export default {
             opinion
         },
         methods: {
+            resive(id) {
+                common.$emit('purchase-id',id);
+                this.$router.push('/releaseNeeds/' + id);
+            },
             getHttp(id) {
                 let _self = this;
                 common.$emit('show-load');
@@ -462,9 +477,9 @@ export default {
                 let _self = this;
 
             },
-            jump(id) {
-                common.$emit('needToReleaseOffer', id);
-                this.$router.push('/releaseOffer/' + id);
+            jump(breedName) {
+                common.$emit('needToReleaseOffer', breedName);
+                this.$router.push('/releaseOffer/' + breedName);
             }
         },
         mounted() {
@@ -473,11 +488,25 @@ export default {
         created() {
             let _self = this;
             let id = _self.$route.params.id;
+            let type = _self.$route.query.type;
+            if (type == 'my') {
+                this.type = false;
+            } else {
+                this.type = true;
+            }
+            //console.log(_self.$route.query.type)
+            //console.log(1,_self.$route)
             _self.getHttp(id);
             _self.id = id;
             common.$on("needToDetails", function(item) {
-                _self.getHttp(item);
-                _self.id = item;
+                console.log(item.type)
+                if (item.type == 'my') {
+                    _self.type = false;
+                } else {
+                    _self.type = true;
+                }
+                _self.getHttp(item.id);
+                _self.id = item.id;
                 _self.show = false;
             });
             common.$on('getInfo', function(item) {

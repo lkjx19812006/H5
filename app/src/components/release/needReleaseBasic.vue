@@ -321,9 +321,13 @@ export default {
         },
         methods: {
             jumpSearch(router) {
+                let _self = this;
+
                 common.searchType = 'breed';
                 common.$emit("setParam", "router", "needRelease");
                 this.$router.push(router);
+
+
             },
             showQuality() {
                 this.obj.sheetVisible = true;
@@ -348,7 +352,7 @@ export default {
                         _self.qualityArr.push(i);
                     }
                 }
-                
+
             },
             cancel() {
                 let _self = this;
@@ -367,10 +371,10 @@ export default {
                 for (var key in _self.quality) {
                     _self.quality[key].show = true;
                 }
-                for(var i=0;i < _self.qualityArr.length;i++){
-                    if(i == 0){
+                for (var i = 0; i < _self.qualityArr.length; i++) {
+                    if (i == 0) {
                         _self.obj.quality = _self.quality[_self.qualityArr[0]].name;
-                    }else{
+                    } else {
                         _self.obj.quality = _self.obj.quality + ',' + _self.quality[_self.qualityArr[i]].name;
                     }
                 }
@@ -494,6 +498,7 @@ export default {
                     _self.obj.breedId = item.id;
                 }
             });
+
 
         },
         mounted() {

@@ -5,6 +5,9 @@
     .main {
         padding-bottom: 100px;
     }
+    .history_arr{
+        margin-bottom:10px;
+    }
     .box {
         padding: 15px 0 0 15px;
         background-color: #fff;
@@ -89,8 +92,14 @@
         font-size: 15px;
         text-align: left;
         position: relative;
+        .black {
+            color: #333;
+        }
         .red {
-            color: #F17676;
+            color: #f05555;
+        }
+        .gray {
+            color: #999;
         }
         .time {
             font-size: 12px;
@@ -159,19 +168,24 @@
             <payMoneyOrRemark :obj="obj" tab='1'></payMoneyOrRemark>
             <titles tab="4" :obj="obj"></titles>
             <div class="tbox">
-                <div>报价状态: <span class="red">已经采用</span></div>
-                <div class="time">报价时间: 2016-01-12</div>
+                <div>报价状态:
+                    <span class="black" v-if="obj.newOffer.accept == '0'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                    <span class="red" v-if="obj.newOffer.accept == '1'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                    <span class="gray" v-if="obj.newOffer.accept == '2'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                    <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                </div>
+                <div class="time">报价时间: {{obj.newOffer.otime | timeFormats}}</div>
                 <img src="/static/icon/used.png" class="used">
             </div>
             <div class="box">
                 <div class="inbox">
                     <div class="left">
-                        <div class="breed">{{obj.content.breedName}} <span>({{obj.content.number}}{{obj.content.unit}})</span></div>
-                        <div class="spec">{{obj.content.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.content.spec,4 | filterTxt}}</div>
-                        <div class="spec last">交货地: {{obj.content.address}}</div>
+                        <div class="breed">{{obj.newOffer.breedName}} <span>({{obj.newOffer.number}}{{obj.newOffer.unit}})</span></div>
+                        <div class="spec">{{obj.newOffer.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.newOffer.spec,4 | filterTxt}}</div>
+                        <div class="spec last">裸价: {{obj.newOffer.price}}元/{{obj.newOffer.unit}}</div>
                     </div>
                     <div class="image">
-                        <img src="/static/icon/times.png">
+                        <img :src="todo" v-for="(todo,index) in obj.newOffer.image" v-show="index == 0">
                     </div>
                 </div>
             </div>
@@ -181,6 +195,31 @@
                 <img src="/static/icon/retract.png">
             </div>
             <titles tab="5" :obj="obj" v-show="show"></titles>
+            <div class="history_arr" v-show="show" v-for="todo in obj.list">
+                <div class="tbox">
+                    <div>报价状态:
+                        <span class="black" v-if="obj.newOffer.accept == '0'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                        <span class="red" v-if="obj.newOffer.accept == '1'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                        <span class="gray" v-if="obj.newOffer.accept == '2'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                        <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                    </div>
+                    <div class="time">报价时间: {{obj.newOffer.otime | timeFormats}}</div>
+                    <img src="/static/icon/used.png" class="used">
+                </div>
+                <div class="box">
+                    <div class="inbox">
+                        <div class="left">
+                            <div class="breed">{{obj.newOffer.breedName}} <span>({{obj.newOffer.number}}{{obj.newOffer.unit}})</span></div>
+                            <div class="spec">{{obj.newOffer.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.newOffer.spec,4 | filterTxt}}</div>
+                            <div class="spec last">裸价: {{obj.newOffer.price}}元/{{obj.newOffer.unit}}</div>
+                        </div>
+                        <div class="image">
+                            <img :src="todo" v-for="(todo,index) in obj.newOffer.image" v-show="index == 0">
+                        </div>
+                    </div>
+                </div>
+                <payMoneyOrRemark :obj="obj" tab='2'></payMoneyOrRemark>
+            </div>
         </div>
         <div class="look_history" @click="launchHistory" v-show="!show">
             <div class="word">查看历史报价</div>
@@ -206,13 +245,21 @@ export default {
                     },
                     content: {
                         offer: '111',
-                    }
+                        breedName: '',
+                        number: '',
+                        location: '',
+                        spec: '',
+                        address: ''
+                    },
+                    newOffer: {},
+                    list: []
 
                 },
                 param: {
                     name: '报价详情',
                     topissue: true,
                 },
+                id:''
             }
         },
         components: {
@@ -241,13 +288,51 @@ export default {
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     let result = suc.data.biz_result;
-                    let shareData = common.shareParam;
+                    //console.log(1, result);
+                    //console.log(2, result.breedName)
                     if (suc.data.code == '1c01') {
-                        _self.obj.content = result;
-                        shareData.title = "【紧急求购】" + result.breedName + "-上【药材买卖网】你报价我就要了！";
-                        shareData.desc = result.breedName + ',规格:' + result.spec + ',需要' + result.number + result.unit + '要求：' + result.quality + '。--买卖药材就上药材买卖网！';
-                        shareData.link = window.location.href;
-                        common.share(shareData);
+                        _self.obj.content.breedName = result.breedName;
+                        _self.obj.content.number = result.number;
+                        _self.obj.content.location = result.location;
+                        _self.obj.content.spec = result.spec;
+                        _self.obj.content.address = result.address;
+                        _self.obj.content.duedate = result.duedate;
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
+            getOffer(id) {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
+                    biz_module: 'intentionOfferService',
+                    biz_method: 'htmlMyIntentionOfferListInfo',
+                    biz_param: {
+                        intentionId: id,
+                        pn: 1,
+                        pSize: 20
+                    }
+                }
+                if (common.KEY) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.version = 1;
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                }
+                httpService.myAttention(url, body, function(suc) {
+                    common.$emit('close-load');
+                    let result = suc.data.biz_result.list;
+                    console.log(3, result)
+                    if (suc.data.code == '1c01') {
+                        _self.obj.newOffer = result[0];
+                        if (_self.show) {
+                            _self.obj.list = result;
+                        }
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -258,9 +343,11 @@ export default {
             },
             launchHistory() {
                 this.show = true;
+                this.getOffer(this.id);
             },
             retractHistory() {
                 this.show = false;
+                this.obj.list = [];
             }
         },
         mounted() {
@@ -270,11 +357,16 @@ export default {
             let _self = this;
             let id = _self.$route.params.id;
             _self.getHttp(id);
-            common.$on("needToDetail", function(item) {
+            _self.getOffer(id);
+            _self.id = id;
+            common.$on("myOfferToOfferDetail", function(item) {
                 _self.getHttp(item);
+                _self.getOffer(item);
+                _self.id = item;
             });
             common.$on('getInfo', function(item) {
                 _self.getHttp(id);
+                _self.id = item;
             })
         }
 

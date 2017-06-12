@@ -14,7 +14,6 @@ input {
 }
 
 .release_needs {
-    padding-bottom: 65px;
     background-color: #FBFBF6;
     position: relative;
     .top {
@@ -127,6 +126,10 @@ input {
         position: fixed;
         bottom: 0;
     }
+}
+
+.page-loadmore-wrapper {
+    padding-bottom: 100px;
 }
 </style>
 <template>
@@ -370,8 +373,11 @@ export default {
                     addressCity: '',
                     addressDistrict: '',
                     detailAddr: '',
-                    tshow: false
-                }
+                    tshow: false,
+                    type_show: false
+                },
+                id: '',
+                payment: ''
             }
         },
         methods: {
@@ -427,10 +433,6 @@ export default {
             remarksDateNor(index) {
                 let _self = this;
                 this.remarksArr[index].show = false;
-                // for(var key in _self.obj.selling_point){
-                //     _self.obj.selling_point[key] = index;
-                //     _self.obj.selling_point.splice(key,1);
-                // }
                 for (var i = 0; i < _self.obj.selling_point.length; i++) {
                     _self.obj.selling_point[i] = index;
                     _self.obj.selling_point.splice(i, 1);
@@ -439,12 +441,12 @@ export default {
             },
             remarksDate(index) {
                 this.remarksArr[index].show = true;
-                //if (this.content) this.obj.selling_point = this.content + ',' + this.remarksArr[index].one;
-                //if (!this.content) this.obj.selling_point = this.remarksArr[index].one;
+                console.log(typeof this.obj.selling_point)
                 this.obj.selling_point.push(index);
-                console.log(this.obj.selling_point)
+
             },
             release() {
+                console.log(22, this.obj.paymentWay)
                 let _self = this;
                 let paymentWay = '';
                 switch (this.obj.paymentWay) {
@@ -483,95 +485,292 @@ export default {
                 }
 
                 let remarks = '';
+                console.log(22, _self.obj.selling_point)
                 for (var i = 0; i < _self.obj.selling_point.length; i++) {
-                    console.log(_self.obj.selling_point[i])
-                    if(i == 0){
+                    if (i == 0) {
                         remarks = _self.remarksArr[_self.obj.selling_point[i]].one;
-                    }else{
+                    } else {
                         remarks = remarks + ',' + _self.remarksArr[_self.obj.selling_point[i]].one;
                     }
                 }
 
-                    var checkArr = [];
-                    let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
-                    checkArr.push(checkBreedId);
-                    let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格！');
-                    checkArr.push(checkBreedSpec);
-                    let checkBreedPlace = validation.checkNull(_self.obj.place_id, '请输入产地！');
-                    checkArr.push(checkBreedPlace);
-                    let checkNumber = validation.checkMaxNum(_self.obj.number, '数量');
-                    checkArr.push(checkNumber);
-                    let checkUnit = validation.checkMaxNum(_self.obj.number_id, '数量单位');
-                    checkArr.push(checkUnit);  
-                    let checkQuality = validation.checkNull(_self.obj.quality, '请输入质量要求！');
-                    checkArr.push(checkQuality);
-                    let checkAddress = validation.checkNull(_self.obj.address, '请选择交货地！');
-                    checkArr.push(checkAddress);
-                    let checkPay = validation.checkNull(paymentWay, '请选择付款方式');
-                    checkArr.push(checkPay);
-                    let checkDuedate = validation.checkNull(duedate, '请选择有效期');
-                    checkArr.push(checkDuedate);
-                    let checkRemarks = validation.checkNull(remarks, '请选择备注信息');
-                    checkArr.push(checkRemarks);
-                    let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
-                    checkArr.push(checkName);
-                    let checkLookName = validation.checkLook(_self.obj.name);
-                    checkArr.push(checkLookName);
-                    let checkPhone = validation.checkPhone(_self.obj.phone, '请输入电话');
-                    checkArr.push(checkPhone);
-                    for (var i = 0; i < checkArr.length; i++) {
-                        if (checkArr[i]) {
-                            common.$emit('message', checkArr[i]);
-                            return;
-                        }
+                var checkArr = [];
+                let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
+                checkArr.push(checkBreedId);
+                let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格！');
+                checkArr.push(checkBreedSpec);
+                let checkBreedPlace = validation.checkNull(_self.obj.place_id, '请输入产地！');
+                checkArr.push(checkBreedPlace);
+                let checkNumber = validation.checkMaxNum(_self.obj.number, '数量');
+                checkArr.push(checkNumber);
+                let checkUnit = validation.checkMaxNum(_self.obj.number_id, '数量单位');
+                checkArr.push(checkUnit);
+                let checkQuality = validation.checkNull(_self.obj.quality, '请输入质量要求！');
+                checkArr.push(checkQuality);
+                let checkAddress = validation.checkNull(_self.obj.address, '请选择交货地！');
+                checkArr.push(checkAddress);
+                let checkPay = validation.checkNull(paymentWay, '请选择付款方式');
+                checkArr.push(checkPay);
+                let checkDuedate = validation.checkNull(duedate, '请选择有效期');
+                checkArr.push(checkDuedate);
+                let checkRemarks = validation.checkNull(remarks, '请选择备注信息');
+                checkArr.push(checkRemarks);
+                let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
+                checkArr.push(checkName);
+                let checkLookName = validation.checkLook(_self.obj.name);
+                checkArr.push(checkLookName);
+                let checkPhone = validation.checkPhone(_self.obj.phone, '请输入电话');
+                checkArr.push(checkPhone);
+                for (var i = 0; i < checkArr.length; i++) {
+                    if (checkArr[i]) {
+                        common.$emit('message', checkArr[i]);
+                        return;
                     }
-                    common.$emit('show-load');
-                    let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                    let body = {
+                }
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'htmlEditBegBuyInfo',
+                    biz_param: {
+                        customerId: common.customerId,
+                        breedName: _self.obj.drug_name,
+                        spec: _self.obj.spec,
+                        location: _self.obj.place_id,
+                        number: _self.obj.number,
+                        duedate: duedate,
+                        description: remarks,
+                        breedId: _self.obj.breedId,
+                        unit: _self.obj.number_id,
+                        quality: _self.obj.quality,
+                        address: _self.obj.address,
+                        paymentWay: paymentWay
+                    }
+                };
+                if (_self.id !== '1') {
+                    body = {
                         biz_module: 'intentionService',
-                        biz_method: 'htmlEditBegBuyInfo',
+                        biz_method: 'updatehtmlEditBegBuyInfo',
                         biz_param: {
                             customerId: common.customerId,
                             breedName: _self.obj.drug_name,
                             spec: _self.obj.spec,
                             location: _self.obj.place_id,
                             number: _self.obj.number,
-                            duedate:duedate,
-                            description:remarks,
+                            duedate: duedate,
+                            description: remarks,
                             breedId: _self.obj.breedId,
-                            unit:_self.obj.number_id,
+                            unit: _self.obj.number_id,
                             quality: _self.obj.quality,
-                            address:_self.obj.address,
-                            paymentWay:_self.obj.paymentWay
+                            address: _self.obj.address,
+                            paymentWay: _self.obj.paymentWay,
+                            id: _self.id
                         }
-                    };
-                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                    httpService.needRelease(url, body, function(suc) {
-                        common.$emit('close-load');
-                        if (suc.data.code == '1c01') {
-                            common.$emit('message', suc.data.msg);
-                            common.$emit('informMyPurchase', 'refurbish');
-                            let id = suc.data.biz_result.intentionId;
-                            common.$emit('informNeedSuccess', id);
-                            _self.$store.dispatch('getCustomer', {
-                                name: _self.obj.name,
-                                phone: _self.obj.phone
-                            })
-                            _self.$router.push("/releaseNeedSuccess" + '/' + id);
+                    }
+                }
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.needRelease(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        common.$emit('message', suc.data.msg);
+                        common.$emit('informMyPurchase', 'refurbish');
+                        let id = '';
+                        if (suc.data.biz_result.intentionId) {
+                            id = suc.data.biz_result.intentionId;
                         } else {
-                            common.$emit('message', suc.data.msg);
+                            id = _self.id;
                         }
-                    }, function(err) {
-                        common.$emit('close-load');
-                        common.$emit('message', err.data.msg);
-                    })
+
+                        common.$emit('informNeedSuccess', id);
+                        _self.$store.dispatch('getCustomer', {
+                            name: _self.obj.name,
+                            phone: _self.obj.phone
+                        })
+                        _self.$router.push("/releaseNeedSuccess" + '/' + id);
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
+            //编辑时获取付款方式
+            getEditPayment(paymentWay) {
+                let _self = this;
+                //获取Unicode编码
+                // var GB2312UnicodeConverter = {
+                //     ToUnicode: function(str) {
+                //         return escape(str).toLocaleLowerCase().replace(/%u/gi, '\\u');
+                //     },
+                //     ToGB2312: function(str) {
+                //         return unescape(str.replace(/\\u/gi, '%u'));
+                //     }
+                // };
+                for (var i = 0; i < _self.payArr.length; i++) {
+                    _self.payArr[i].show = false;
+                }
+                let Reg0 = /^\u5408\u540c\u7b7e\u8ba2\u540e\uff0c\u9884\u4ed8\u5b9a\u91d1[1-9]\d*%$/;
+                let Reg1 = /^\u9a8c\u6536\u5408\u683c\u540e\uff0c\u7acb\u5373\u4ed8\u6b3e$/;
+                let Reg2 = /^\u9a8c\u6536\u5408\u683c\u540e[1-9]\d*\u5929\u5185\u4ed8\u6b3e$/;
+                // 合同签订后，预付定金  % 0
+                // 验收合格后，立即付款    1
+                // 验收合格后 ? 天内付款   2
+                // 其他                    3
+                if (Reg0.test(paymentWay)) {
+                    //处理第一种方式
+                    this.payment = 0;
+                } else if (Reg1.test(paymentWay)) {
+                    //处理第二种方式
+                    this.payment = 1;
+                } else if (Reg2.test(paymentWay)) {
+                    //处理第三种方式
+                    this.payment = 2;
+                } else {
+                    this.payment = 3;
+                    //处理第四种方式
+                }
+                switch (this.payment) {
+                    case 0:
+                        _self.payArr[0].two = paymentWay.substring(10, paymentWay.length - 1);
+                        _self.obj.paymentWay = 0;
+                        _self.payArr[0].show = true;
+                        break;
+                    case 1:
+                        _self.payArr[1].show = true;
+                        _self.obj.paymentWay = 1;
+                        break;
+                    case 2:
+                        _self.payArr[2].two = paymentWay.substring(5, paymentWay.length - 4);
+                        _self.obj.paymentWay = 2;
+                        _self.payArr[2].show = true;
+                        break;
+                    case 3:
+                        _self.payArr[3].two = paymentWay;
+                        _self.obj.paymentWay = 3;
+                        _self.payArr[3].show = true;
+                        break;
+                }
+
+            },
+            getNeedDetail(id) {
+                let _self = this;
+                httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+                    biz_param: {
+                        id: id
+                    }
+                }, function(suc) {
+                    if (suc.data.code == '1c01') {
+                        let result = suc.data.biz_result;
+
+                        _self.obj.drug_name = result.breedName;
+                        _self.obj.spec = result.spec;
+                        _self.obj.place = result.location;
+                        _self.obj.place_id = result.locationId;
+                        _self.obj.number = result.number;
+                        _self.obj.number_unit = result.unit;
+                        if (result.address) {
+                            _self.obj.addressProvince = result.address.split(',')[0];
+                            _self.obj.addressCity = result.address.split(',')[1];
+                            _self.obj.addressDistrict = result.address.split(',')[2];
+                        }
+                        _self.obj.address = result.address;
+                        if (result.paymentWay) _self.getEditPayment(result.paymentWay);
+                        _self.obj.quality = result.quality;
+                        let date = _self.getDate(result.duedate);
+                        //_self.dateArr[_self.obj.duedate].one = date;
+                        if (date != 7 && date != 15 && date != 30) {
+                            //_self.dateArr[3].duedate = -1;
+                            _self.dateArr[3].one = date;
+                        } else {
+                            switch (date) {
+                                case '7':
+                                    _self.dateArr[0].one = date;
+                                    break;
+                                case '15':
+                                    _self.dateArr[1].one = date;
+                                    break;
+                                case '30':
+                                    _self.dateArr[2].one = date;
+                                    break;
+                            }
+                        }
+                        if (result.description) _self.getRemark(result.description);
+                        _self.id = result.id;
+                        _self.obj.breedId = result.breedId;
+
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('message', err.data.msg);
+                })
+
+            },
+            getDate(myDate) {
+                let _self = this;
+                myDate = myDate.split('.')[0];
+                let toDay = new Date();
+                toDay = toDay.getTime();
+
+                let due = new Date(myDate);
+                let duedate = due.getTime();
+
+                let time = duedate - toDay;
+                let day = Math.ceil(time / (1000 * 3600 * 24));
+                for (var i = 0; i < _self.dateArr.length; i++) {
+                    _self.dateArr[i].show = false;
+                }
+                switch (day) {
+                    case 7:
+                        _self.dateArr[0].show = true;
+                        _self.obj.duedate = 0;
+                        break;
+                    case 15:
+                        _self.dateArr[1].show = true;
+                        _self.obj.duedate = 1;
+                        break;
+                    case 30:
+                        _self.dateArr[2].show = true;
+                        _self.obj.duedate = 2;
+                        break;
+                    default:
+                        _self.dateArr[3].show = true;
+                        _self.obj.duedate = 3;
+                }
+                return day;
+            },
+            getRemark(remark) {
+                let _self = this;
+                _self.obj.selling_point = [];
+                let remarks = remark.split(',')
+                for (var i = 0; i < remarks.length; i++) {
+                    switch (remarks[i]) {
+                        case '时间紧':
+                            _self.remarksArr[0].show = true;
+                            break;
+                        case '价格适合，立即合作':
+                            _self.remarksArr[1].show = true;
+                            break;
+                        case '现款无账期':
+                            _self.remarksArr[2].show = true;
+                            break;
+                        case '常年有需求，可建立稳固渠道':
+                            _self.remarksArr[3].show = true;
+                            break;
+                    }
+                    _self.obj.selling_point.push(i);
+                }
             },
             selectType(id) {
                 let _self = this;
                 if (id == '1') {
-
+                    _self.obj.type_show = false;
                 } else {
+                    _self.obj.type_show = true;
                     _self.getNeedDetail(id);
                 }
             }
@@ -584,7 +783,11 @@ export default {
         },
         created() {
             let _self = this;
-            this.selectType(_self.$route.params.id);
+            if (_self.$route.params.id) {
+                this.id = _self.$route.params.id;
+                this.selectType(this.id);
+            }
+
             _self.getInfo();
             common.$on('inforReleases', function(item) {
                 _self.obj.drug_name = '';
@@ -593,14 +796,28 @@ export default {
                 _self.obj.number = '';
                 _self.obj.number_unit = '斤';
                 _self.obj.duedate = '';
-                _self.obj.selling_point = '';
+                _self.obj.quality = '';
+                _self.id = '1';
+                _self.obj.type_show = false;
+                _self.obj.selling_point = [];
+                for (var i = 0; i < 4; i++) {
+                    _self.payArr[i].show = false;
+                    if (i !== 1) _self.payArr[i].two = '';
+                    _self.dateArr[i].show = false;
+                    if (i == 3) _self.dateArr[i].one = '';
+                    _self.remarksArr[i].show = false;
+                }
                 _self.getInfo();
             })
             common.$on("purchase-id", function(item) {
                 _self.getNeedDetail(item);
+                _self.getInfo();
+                _self.obj.type_show = true;
+                _self.id = item;
             })
         },
         mounted() {
+
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
 }

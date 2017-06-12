@@ -1,16 +1,14 @@
 import Vue from 'vue'
 
-
-
 Vue.filter('timeFormat', function(val) {
     if (val) val = val.split(' ')[0];
     return val;
 });
 Vue.filter('timeFormats', function(val) {
-    if (val){
+    if (val) {
         val = val.split(' ')[0];
         val = val.split('-')[0] + '/' + val.split('-')[1] + '/' + val.split('-')[2];
-    } 
+    }
     return val;
 });
 Vue.filter('timeDays', function(due) {
@@ -201,6 +199,26 @@ Vue.filter('myStatus', function(val) {
             break;
         case 3:
             val = '询价结束';
+            break;
+        default:
+            val = '';
+            break;
+    }
+    return val;
+});
+Vue.filter('myOfferStatus', function(val) {
+    switch (val) {
+        case 0:
+            val = '待处理';
+            break;
+        case 1:
+            val = '已采用';
+            break;
+        case 2:
+            val = '未采用';
+            break;
+        case 3:
+            val = '待采用';
             break;
         default:
             val = '';
