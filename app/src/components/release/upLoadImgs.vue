@@ -48,9 +48,6 @@
 <template>
     <div class="img_upload" :v-loading.body="loading">
         <input ref="imgInput" :disabled="param.length > 4" type="file" @change="previewImg" :class="{'disabled':param.length > 4}" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
-        <!-- <div class="btn" :class="{'btn_disabled':param.length > 4}">
-            {{ flag === true? '已完成 ' + prgText + '%':'点击选择图片' }}
-        </div> -->
         <img src="/static/icons/add-imgs.png" class="uploads">
     </div>
 </template>
@@ -80,10 +77,7 @@ export default {
             let input = e.target;
             if (input.files && input.files[0]) {
                 if (input.files[0].size > 3036000) {
-                    this.$message({
-                        showClose: false,
-                        message: '上传图片过大'
-                    });
+                    common.$emit('message','上传图片不可大于3M')
                 } else {
                     let reader = new FileReader();
                     _self.size = input.files[0].size;
@@ -247,7 +241,6 @@ export default {
                         }
                     }
                     xhr.open("POST", url, true);
-
                     xhr.setRequestHeader("Content-Type", "application/octet-stream");
                     xhr.setRequestHeader("Authorization", "UpToken " + res.biz_result.token);
                     _self.flag = true;

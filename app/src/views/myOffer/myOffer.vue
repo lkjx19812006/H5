@@ -343,10 +343,10 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });
-            common.$on("revisePurtoPur", function(item) {
-                _self.httpPraram.page = 1;
-                _self.getHttp();
-            })
+            // common.$on("revisePurtoPur", function(item) {
+            //     _self.httpPraram.page = 1;
+            //     _self.getHttp();
+            // })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;

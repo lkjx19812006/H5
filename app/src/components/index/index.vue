@@ -530,7 +530,7 @@
                 <img src="/static/icon/right-arrow.png">
             </div>
             <div class="content">
-                <div class="item" v-for="(todo,index) in urgentArr" v-bind:class="{first: index !== 2}" @click="jumpNeed('needDetail/',todo.id)">
+                <div class="item" v-for="(todo,index) in urgentArr" v-bind:class="{first: index !== 2}" @click="jumpNeed(todo)">
                     <div class="left">
                         <div class="top">
                             <div class="word">{{todo.location,4 | filterTxt}}</div>
@@ -753,9 +753,28 @@ export default {
                 }
                 if (path) this.$router.push(path);
             },
-            jumpNeed(router, id) {
-                common.$emit('needToDetail', id);
-                this.$router.push(router + id);
+            jumpNeed(obj) {
+                let _self = this;
+                if (!common.customerId) {
+                    function loadApp() {
+                        common.$emit('setParam', 'backRouter', '/home');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            console.log(232131)
+                            _self.$router.push('/login');
+                        }
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                } else {
+                    common.$emit('needToReleaseOffer', obj.id);
+                    this.$router.push('/releaseOffer/' +  obj.id);
+                }
             },
             jumpRes(router, id) {
                 common.$emit('resourceDetail', id);
@@ -792,7 +811,14 @@ export default {
             },
             jumpLink(url) {
                 let _self = this;
-                if (url) window.location.href = url;
+                if(url == 'http://192.168.1.141/htm5/#/presell'){
+                    common.$emit("confirm", {
+                        message: '请下载App后，在App内查看',
+                        title: '提示',
+                        ensure: _self.loadApp
+                    });
+                }
+                if (url && url !== 'http://192.168.1.141/htm5/#/presell') window.location.href = url;
             },
             loginJump(router) {
                 let _self = this;

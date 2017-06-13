@@ -124,8 +124,32 @@ input {
             }
         }
         .last {
+            padding:14px 0;
             margin-top: 10px;
             border-bottom: none;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .breed_left {
+                font-size: 15px;
+                color: #343434;
+                width: 70px;
+                text-align: left;
+            }
+            .breed_center {
+                flex: 1;
+                .title {
+                    width: 100%;
+                    color: #8E97A1;
+                    text-align: left;
+                }
+            }
+            .img {
+                width: 30px;
+                img {
+                    height: 18px;
+                }
+            }
         }
     }
     .number {
@@ -220,7 +244,7 @@ input {
             </div>
         </div>
         <div class="breed_name" v-show="obj.need">
-            <div class="inbox last" @click="showQuality()">
+            <div class="last" @click="showQuality()">
                 <div class="breed_left">质量要求</div>
                 <div class="breed_center">
                     <!-- <input type="text" placeholder="请选择您的产品规格" disabled="false" v-model="obj.quality"> -->

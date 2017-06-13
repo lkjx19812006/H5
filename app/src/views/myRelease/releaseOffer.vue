@@ -149,7 +149,8 @@ export default {
                     number_id: '',
                     quality: '',
                     priceDescription: '',
-                    descriptions: ''
+                    descriptions: '',
+                    intentionId: ''
                 },
                 imgArr: [],
                 sell: [{
@@ -171,16 +172,40 @@ export default {
             }
         },
         methods: {
-            getInfo() {
-
+            getHttp(id) {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.urlCommon + common.apiUrl.most;
+                let body = {
+                    biz_module: 'intentionService',
+                    biz_method: 'queryIntentionInfo',
+                    biz_param: {
+                        id: id
+                    }
+                }
+                if (common.KEY) {
+                    url = common.addSID(common.urlCommon + common.apiUrl.most);
+                    body.version = 1;
+                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                }
+                httpService.myAttention(url, body, function(suc) {
+                    common.$emit('close-load');
+                    let result = suc.data.biz_result;
+                    if (suc.data.code == '1c01') {
+                       _self.getBreedInformation(result.breedName);
+                       _self.obj.breedName = result.breedName;
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
             },
             confirm() {
                 let _self = this;
-                // common.$emit("confirm", {
-                //     message: '确定发布求购？',
-                //     title: '提示',
-                //     ensure: this.release
-                // });
+
                 _self.obj.quality = '';
                 for (var i = 0; i < _self.obj.sell_point.length; i++) {
                     if (!_self.obj.quality) {
@@ -189,6 +214,8 @@ export default {
                         _self.obj.quality = _self.obj.quality + ',' + _self.obj.sell_point[i];
                     }
                 }
+                if (_self.obj.quality) _self.obj.quality = _self.obj.quality + ',' + _self.obj.descriptions;
+                if (!_self.obj.quality) _self.obj.quality = _self.obj.descriptions;
                 var checkArr = [];
                 let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格');
                 checkArr.push(checkBreedSpec);
@@ -206,13 +233,13 @@ export default {
                 }
                 let checkQuality = validation.checkNull(_self.obj.quality, '请选择产品买点');
                 checkArr.push(checkQuality);
-                let checkDrugInfor = validation.checkNull(_self.obj.descriptions, '请填写产品信息');
-                checkArr.push(checkDrugInfor);
+                // let checkDrugInfor = validation.checkNull(_self.obj.descriptions, '请填写产品信息');
+                // checkArr.push(checkDrugInfor);
                 let checkNum = validation.checkMaxNum(_self.obj.number, '可供量');
                 checkArr.push(checkNum);
                 let checkPri = validation.checkPrice(_self.obj.price, '裸价');
                 checkArr.push(checkPri);
-                let checkPriDescription = validation.checkPrice(_self.obj.priceDescription, '价格补充说明');
+                let checkPriDescription = validation.checkNull(_self.obj.priceDescription, '价格补充说明');
                 checkArr.push(checkPriDescription);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
@@ -220,8 +247,12 @@ export default {
                         return;
                     }
                 }
-                
-                
+
+                common.$emit("confirm", {
+                    message: '确定发布报价？',
+                    title: '提示',
+                    ensure: this.release
+                });
             },
             showAction(param) {
                 this.obj.sheetVisible = true;
@@ -353,6 +384,60 @@ export default {
             },
             release() {
                 let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'intentionOfferService',
+                    biz_method: 'htmlIntentionOffer',
+                    biz_param: {
+                        customerId: common.customerId,
+                        breedName: _self.obj.breedName,
+                        spec: _self.obj.spec,
+                        location: _self.obj.place_id,
+                        breedImage: _self.imgArr,
+                        quality: _self.obj.quality,
+                        number: _self.obj.number,
+                        unit: _self.obj.number_id,
+                        price: _self.obj.price,
+                        priceDescription: _self.obj.priceDescription,
+                        intentionId: _self.obj.intentionId
+                    }
+                };
+                // if (_self.id !== '1') {
+                //     body = {
+                //         biz_module: 'intentionService',
+                //         biz_method: 'updatehtmlEditBegBuyInfo',
+                //         biz_param: {
+                //             customerId: common.customerId,
+                //             breedName: _self.obj.drug_name,
+                //             spec: _self.obj.spec,
+                //             location: _self.obj.place_id,
+                //             number: _self.obj.number,
+                //             duedate: _self.duedate,
+                //             description: _self.remarks,
+                //             breedId: _self.obj.breedId,
+                //             unit: _self.obj.number_id,
+                //             quality: _self.obj.quality,
+                //             address: _self.obj.address,
+                //             paymentWay: _self.paymentWay,
+                //             id: _self.id
+                //         }
+                //     }
+                // }
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.needRelease(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        _self.$router.push('/myOffer')
+                        common.$emit('message', suc.data.msg);
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
             }
 
         },
@@ -367,15 +452,14 @@ export default {
         },
         created() {
             let _self = this;
-            let breedName = _self.$route.params.id;
-            _self.obj.breedName = breedName;
-            _self.getBreedInformation(breedName);
+            let id = _self.$route.params.id; 
+            _self.getHttp(id);
+            _self.obj.intentionId = id;
             _self.getUnit();
-            common.$on('needToReleaseOffer',function(item){
-                 _self.obj.breedName = item;
-                 console.log(_self.obj.breedName)
-                 //_self.getUnit();
-                 _self.getBreedInformation(item);
+            common.$on('needToReleaseOffer', function(item) {
+                _self.obj.intentionId = item;
+                _self.getHttp(item);
+                _self.getUnit();
             });
         },
         mounted() {

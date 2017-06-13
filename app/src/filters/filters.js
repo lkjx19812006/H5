@@ -185,19 +185,16 @@ Vue.filter('shellStatus', function(val) {
 });
 Vue.filter('myStatus', function(val) {
     switch (val) {
-        case 0:
+        case 1:
             val = '审核中';
             break;
-        case 1:
+        case 2:
             val = '询价中';
             break;
-        case 2:
+        case -2:
             val = '审核未通过';
             break;
-        case -2:
-            val = '询价结束';
-            break;
-        case 3:
+        case 4:
             val = '询价结束';
             break;
         default:

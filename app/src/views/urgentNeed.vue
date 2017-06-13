@@ -34,7 +34,7 @@
                             </div>
                             <div class="bottom">
                                 <p>已报价<span>{{todo.offer}}</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jumpApp(todo.id)" v-if="todo.isMy == 0">我要报价</button>
+                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jumpApp(todo)" v-if="todo.isMy == 0">我要报价</button>
                                 <button class="mint-button mint-button--primary mint-button--small" v-if="todo.isMy == 1">查看详情</button>
                             </div>
                         </li>
@@ -251,12 +251,34 @@ export default {
                 this.getHttp();
             },
             jumpDetail(id) {
-                common.$emit("needToDetails", id);
-                this.$router.push('needDetails/' + id);
+               common.$emit('needToDetails', {
+                    id: id,
+                    type: ''
+                });
+                this.$router.push('/needDetails/' + id);
             },
-            jumpApp(id) {
-                common.$emit('needToReleaseOffer',id);
-                this.$router.push('/releaseOffer/' + id);
+            jumpApp(obj) {
+                let _self = this;
+                if (!common.customerId) {
+                    function loadApp() {
+                        common.$emit('setParam', 'backRouter', '/home');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            console.log(232131)
+                            _self.$router.push('/login');
+                        }
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                } else {
+                    common.$emit('needToReleaseOffer',obj.id);
+                    this.$router.push('/releaseOffer/' + obj.id);
+                }
             },
             handleBottomChange(status) {
                 this.bottomStatus = status;

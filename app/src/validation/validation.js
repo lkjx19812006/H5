@@ -22,7 +22,7 @@ validation.checkMaxNum = (val, name) => {
     }
 }
 validation.checkPrice = (val, name) => {
-    let pattern = /^[1-9]\d{0,6}([.][0-9]{2}){0,1}$/;
+    let pattern = /^[0-9]\d{0,6}([.][0-9]{1,2}){0,1}$/;
     if (!val) {
         return '请输入' + name
     } else if (!pattern.test(val)) {

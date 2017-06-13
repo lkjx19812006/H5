@@ -104,7 +104,7 @@
                         <div class="box">
                             <div class="top">
                                 <div class="left" v-show="todo.onSell == 0 || todo.onSell == 2">求购状态: {{todo.onSell | myStatus}}</div>
-                                <div class="left" v-show="todo.onSell == 3 || todo.onSell == -2">求购状态:
+                                <div class="left" v-show="todo.onSell == 4 || todo.onSell == -2">求购状态:
                                     <span class="gray">{{todo.onSell | myStatus}}</span>
                                 </div>
                                 <div class="left" v-show="todo.onSell == 1">求购状态: <span class="red">{{todo.onSell | myStatus}}</span></div>
@@ -315,9 +315,6 @@ export default {
                 let body = {
                     biz_module: 'intentionService',
                     biz_method: 'myBegIntentionList',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         sort: {
                             "offer": _self.httpPraram.offer,
@@ -338,7 +335,7 @@ export default {
                         _self.todos.splice(0, _self.todos.length);
                     }
                     let result = suc.data.biz_result.list;
-                    console.log(result);
+                    //console.log(result);
                     if (suc.data.code == '1c01') {
                         for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);
@@ -476,10 +473,10 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });
-            common.$on("revisePurtoPur", function(item) {
-                _self.httpPraram.page = 1;
-                _self.getHttp();
-            })
+            // common.$on("revisePurtoPur", function(item) {
+            //     _self.httpPraram.page = 1;
+            //     _self.getHttp();
+            // })
         },
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;

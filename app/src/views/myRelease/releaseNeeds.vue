@@ -377,7 +377,9 @@ export default {
                     type_show: false
                 },
                 id: '',
-                payment: ''
+                payment: '',
+                paymentWay: '',
+                duedate: ''
             }
         },
         methods: {
@@ -443,57 +445,103 @@ export default {
                 this.remarksArr[index].show = true;
                 console.log(typeof this.obj.selling_point)
                 this.obj.selling_point.push(index);
-
             },
-            release() {
-                console.log(22, this.obj.paymentWay)
+            payWay() {
                 let _self = this;
-                let paymentWay = '';
+                _self.paymentWay = '';
+                let validate = true;
+                let msg = '';
                 switch (this.obj.paymentWay) {
                     case 0:
-                        paymentWay = '合同签订后，预付定金' + _self.payArr[0].two + '%';
+                        if (!_self.payArr[0].two) {
+                            msg = '请填写预付百分比';
+                            validate = false;
+                        } else if (_self.payArr[0].two <= 0) {
+                            msg = '预付百分比不能小于0';
+                            validate = false;
+                        } else if (_self.payArr[0].two > 100) {
+                            msg = '预付百分比不能大于100'
+                            validate = false;
+                        }
+                        _self.paymentWay = '合同签订后，预付定金' + _self.payArr[0].two + '%';
                         break;
                     case 1:
-                        paymentWay = '验收合格后，立即付款';
+                        _self.paymentWay = '验收合格后，立即付款';
                         break;
                     case 2:
-                        paymentWay = '验收合格后' + _self.payArr[2].two + '天内付款';
+                        if (!_self.payArr[2].two) {
+                            msg = '请填写付款期限';
+                            validate = false;
+                        } else if (_self.payArr[2].two < 0) {
+                            msg = '付款期限不能小于0天';
+                            validate = false;
+                        }
+                        _self.paymentWay = '验收合格后' + _self.payArr[2].two + '天内付款';
                         break;
                     case 3:
-                        paymentWay = _self.payArr[3].two;
+                        if (!_self.payArr[3].two) {
+                            msg = '请填写付款方式内容';
+                            validate = false;
+                        }
+                        _self.paymentWay = _self.payArr[3].two;
                         break;
                     default:
-                        paymentWay = '';
+                        msg = '请选择付款方式'
+                        validate = false;
+                        _self.paymentWay = '';
                 }
-
-                let duedate = '';
+                if (!validate) {
+                    return msg;
+                }
+            },
+            checkDates() {
+                let _self = this;
+                let validate = true;
+                _self.duedate = '';
+                let msg = '';
                 switch (this.obj.duedate) {
                     case 0:
-                        duedate = '7';
+                        _self.duedate = '7';
                         break;
                     case 1:
-                        duedate = '15';
+                        _self.duedate = '15';
                         break;
                     case 2:
-                        duedate = '30';
+                        _self.duedate = '30';
                         break;
                     case 3:
-                        duedate = _self.dateArr[3].one;
+                        if (!_self.dateArr[3].one) {
+                            msg = '请填写截至日期'
+                            validate = false;
+                        }
+                        _self.duedate = _self.dateArr[3].one;
                         break;
                     default:
-                        duedate = '';
+                        msg = '请选择截至日期';
+                        validate = false;
+                        _self.duedate = '';
                 }
-
-                let remarks = '';
-                console.log(22, _self.obj.selling_point)
+                if (!validate) {
+                    return msg;
+                }
+            },
+            RemarkSelect() {
+                let _self = this;
+                _self.remarks = '';
                 for (var i = 0; i < _self.obj.selling_point.length; i++) {
                     if (i == 0) {
-                        remarks = _self.remarksArr[_self.obj.selling_point[i]].one;
+                        _self.remarks = _self.remarksArr[_self.obj.selling_point[i]].one;
                     } else {
-                        remarks = remarks + ',' + _self.remarksArr[_self.obj.selling_point[i]].one;
+                        _self.remarks = _self.remarks + ',' + _self.remarksArr[_self.obj.selling_point[i]].one;
                     }
                 }
-
+                if (!_self.remarks) {
+                    return '请选择备注信息';
+                }
+            },
+            release() {
+                let _self = this;
+                console.log(12313)
                 var checkArr = [];
                 let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
                 checkArr.push(checkBreedId);
@@ -509,18 +557,12 @@ export default {
                 checkArr.push(checkQuality);
                 let checkAddress = validation.checkNull(_self.obj.address, '请选择交货地！');
                 checkArr.push(checkAddress);
-                let checkPay = validation.checkNull(paymentWay, '请选择付款方式');
+                let checkPay = _self.payWay();
                 checkArr.push(checkPay);
-                let checkDuedate = validation.checkNull(duedate, '请选择有效期');
+                let checkDuedate = _self.checkDates();
                 checkArr.push(checkDuedate);
-                let checkRemarks = validation.checkNull(remarks, '请选择备注信息');
+                let checkRemarks = _self.RemarkSelect();
                 checkArr.push(checkRemarks);
-                let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
-                checkArr.push(checkName);
-                let checkLookName = validation.checkLook(_self.obj.name);
-                checkArr.push(checkLookName);
-                let checkPhone = validation.checkPhone(_self.obj.phone, '请输入电话');
-                checkArr.push(checkPhone);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);
@@ -538,13 +580,13 @@ export default {
                         spec: _self.obj.spec,
                         location: _self.obj.place_id,
                         number: _self.obj.number,
-                        duedate: duedate,
-                        description: remarks,
+                        duedate: _self.duedate,
+                        description: _self.remarks,
                         breedId: _self.obj.breedId,
                         unit: _self.obj.number_id,
                         quality: _self.obj.quality,
                         address: _self.obj.address,
-                        paymentWay: paymentWay
+                        paymentWay: _self.paymentWay
                     }
                 };
                 if (_self.id !== '1') {
@@ -557,13 +599,13 @@ export default {
                             spec: _self.obj.spec,
                             location: _self.obj.place_id,
                             number: _self.obj.number,
-                            duedate: duedate,
-                            description: remarks,
+                            duedate: _self.duedate,
+                            description: _self.remarks,
                             breedId: _self.obj.breedId,
                             unit: _self.obj.number_id,
                             quality: _self.obj.quality,
                             address: _self.obj.address,
-                            paymentWay: _self.obj.paymentWay,
+                            paymentWay: _self.paymentWay,
                             id: _self.id
                         }
                     }
@@ -797,7 +839,13 @@ export default {
                 _self.obj.number_unit = '斤';
                 _self.obj.duedate = '';
                 _self.obj.quality = '';
+                _self.obj.address = '';
+                _self.obj.addressProvince = '',
+                _self.obj.addressCity = '',
+                _self.obj.addressDistrict = '',
                 _self.id = '1';
+                _self.obj.paymentWay = '';
+                _self.obj.duedate = '';
                 _self.obj.type_show = false;
                 _self.obj.selling_point = [];
                 for (var i = 0; i < 4; i++) {

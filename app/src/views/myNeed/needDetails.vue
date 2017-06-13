@@ -315,7 +315,7 @@
         <div class="share" v-show="type">
             <div class="offer_it">
                 <img src="/static/icon/offer-price.png">
-                <div @click="jump(obj.breedName)">立即报价</div>
+                <div @click="jump(obj)">立即报价</div>
             </div>
             <div class="offer_it send_friend" @click="sendFriend()">
                 <img src="/static/icon/send-friend.png">
@@ -327,7 +327,7 @@
             </div>
         </div>
         <div class="share" v-show="!type">
-           <!--  <div class="offer_it" @click="delet(obj.id)">
+            <!--  <div class="offer_it" @click="delet(obj.id)">
                 <img src="/static/icon/send-friend.png">
                 <div>删除</div>
             </div> -->
@@ -374,7 +374,7 @@ export default {
         },
         methods: {
             resive(id) {
-                common.$emit('purchase-id',id);
+                common.$emit('purchase-id', id);
                 this.$router.push('/releaseNeeds/' + id);
             },
             getHttp(id) {
@@ -475,11 +475,35 @@ export default {
             },
             selectIt(todo) {
                 let _self = this;
-
+                if (todo.title) {
+                    _self.submit(todo)
+                }
+                this.show = false;
+                this.opinion = false;
             },
-            jump(breedName) {
-                common.$emit('needToReleaseOffer', breedName);
-                this.$router.push('/releaseOffer/' + breedName);
+            jump(obj) {
+                let _self = this;
+                if (!common.customerId) {
+                    function loadApp() {
+                        common.$emit('setParam', 'backRouter', '/needDetails/' + _self.id);
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            console.log(232131)
+                            _self.$router.push('/login');
+                        }
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                } else {
+                    common.$emit('needToReleaseOffer', obj.id);
+                    this.$router.push('/releaseOffer/' + obj.id);
+                }
+
             }
         },
         mounted() {

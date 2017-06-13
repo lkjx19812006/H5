@@ -27,29 +27,41 @@
 </style>
 <template>
     <div>
-        <div class="title_box" v-show="tab == '1'">
+        <div class="title_box" v-if="tab == '1'">
             <div class="inbox">
-                <div class="left">{{obj.data.payMoney}}</div>
+                <div class="left">付款方式</div>
                 <div class="right">{{obj.content.paymentWay}}</div>
             </div>
         </div>
-        <div class="title_box" v-show="tab == '1'">
+        <div class="title_box" v-if="tab == '1'">
             <div class="inbox last">
-                <div class="left">{{obj.data.remarks}}</div>
+                <div class="left">备注信息</div>
                 <div class="right">{{obj.content.description}}</div>
             </div>
         </div>
 
-        <div class="title_box" v-show="tab == '2'">
+        <div class="title_box" v-if="tab == '2'">
             <div class="inbox">
                 <div class="left">产品信息</div>
                 <div class="right">{{obj.newOffer.quality}}</div>
             </div>
         </div>
-        <div class="title_box" v-show="tab == '2'">
+        <div class="title_box" v-if="tab == '2'">
             <div class="inbox last">
                 <div class="left">备注信息</div>
-                <div class="right">{{obj.newOffer.quality}}</div>
+                <div class="right">{{obj.newOffer.description}}</div>
+            </div>
+        </div>
+        <div class="title_box" v-if="tab == '3'">
+            <div class="inbox">
+                <div class="left">产品信息</div>
+                <div class="right">{{obj.quality}}</div>
+            </div>
+        </div>
+        <div class="title_box" v-if="tab == '3'">
+            <div class="inbox last">
+                <div class="left">备注信息</div>
+                <div class="right">{{obj.description}}</div>
             </div>
         </div>
     </div>

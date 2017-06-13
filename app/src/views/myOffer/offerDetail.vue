@@ -5,8 +5,8 @@
     .main {
         padding-bottom: 100px;
     }
-    .history_arr{
-        margin-bottom:10px;
+    .history_arr {
+        margin-bottom: 10px;
     }
     .box {
         padding: 15px 0 0 15px;
@@ -51,20 +51,27 @@
                 }
             }
             .right {
-                font-size: 15px;
                 display: flex;
-                flex-direction: row;
-                padding-top: 5px;
-                line-height: 15px;
-                .images {
-                    height: 15px;
-                    img {
-                        height: 100%;
+                flex-direction: column;
+                justify-content: center;
+                align-items:center;
+                .right_box {
+                    font-size: 15px;
+                    text-align:center;
+                    display: flex;
+                    flex-direction: row;
+                    padding-top: 5px;
+                    line-height: 15px;
+                    .images {
+                        height: 15px;
+                        img {
+                            height: 100%;
+                        }
                     }
-                }
-                .time {
-                    font-size: 11px;
-                    color: #CDCDCD;
+                    .time {
+                        font-size: 11px;
+                        color: #CDCDCD;
+                    }
                 }
             }
             .image {
@@ -129,6 +136,16 @@
         position:fixed;
         bottom:0;
     }
+    .detail {
+        background-color: #F3AA20;
+        height: 30px;
+        line-height: 30px;
+        color: #fff;
+        font-size: 14px;
+        border-radius: 20px;
+        width: 100px;
+        margin-top: 7px;
+    }
     .retract {
         margin-top: 10px;
         width: 100%;
@@ -160,8 +177,11 @@
                         <div class="spec last">交货地: {{obj.content.address}}</div>
                     </div>
                     <div class='right'>
-                        <div class="images"><img src="/static/icon/times.png"></div>
-                        <div>&nbsp;剩余{{obj.content.duedate | timeDay}} 天</div>
+                        <div class='right_box'>
+                            <div class="images"><img src="/static/icon/times.png"></div>
+                            <div>&nbsp;剩余{{obj.content.duedate | timeDay}} 天</div>
+                        </div>
+                        <div class="detail" @click="again()">再次报价</div>
                     </div>
                 </div>
             </div>
@@ -175,7 +195,7 @@
                     <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span>
                 </div>
                 <div class="time">报价时间: {{obj.newOffer.otime | timeFormats}}</div>
-                <img src="/static/icon/used.png" class="used">
+                <img src="/static/icon/used.png" class="used" v-if="obj.newOffer.accept == '1'">
             </div>
             <div class="box">
                 <div class="inbox">
@@ -198,27 +218,27 @@
             <div class="history_arr" v-show="show" v-for="todo in obj.list">
                 <div class="tbox">
                     <div>报价状态:
-                        <span class="black" v-if="obj.newOffer.accept == '0'">{{obj.newOffer.accept | myOfferStatus}}</span>
-                        <span class="red" v-if="obj.newOffer.accept == '1'">{{obj.newOffer.accept | myOfferStatus}}</span>
-                        <span class="gray" v-if="obj.newOffer.accept == '2'">{{obj.newOffer.accept | myOfferStatus}}</span>
-                        <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                        <span class="black" v-show="todo.accept == '0'">{{todo.accept | myOfferStatus}}</span>
+                        <span class="red" v-show="todo.accept == '1'">{{todo.accept | myOfferStatus}}</span>
+                        <span class="gray" v-show="todo.accept == '2'">{{todo.accept | myOfferStatus}}</span>
+                        <span class="black" v-show="todo.accept == '3'">{{todo.accept | myOfferStatus}}</span>
                     </div>
-                    <div class="time">报价时间: {{obj.newOffer.otime | timeFormats}}</div>
-                    <img src="/static/icon/used.png" class="used">
+                    <div class="time">报价时间: {{todo.otime | timeFormats}}</div>
+                    <img src="/static/icon/used.png" class="used" v-if="todo.accept == '1'">
                 </div>
                 <div class="box">
                     <div class="inbox">
                         <div class="left">
-                            <div class="breed">{{obj.newOffer.breedName}} <span>({{obj.newOffer.number}}{{obj.newOffer.unit}})</span></div>
-                            <div class="spec">{{obj.newOffer.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.newOffer.spec,4 | filterTxt}}</div>
-                            <div class="spec last">裸价: {{obj.newOffer.price}}元/{{obj.newOffer.unit}}</div>
+                            <div class="breed">{{todo.breedName}} <span>({{todo.number}}{{todo.unit}})</span></div>
+                            <div class="spec">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
+                            <div class="spec last">裸价: {{todo.price}}元/{{todo.unit}}</div>
                         </div>
                         <div class="image">
-                            <img :src="todo" v-for="(todo,index) in obj.newOffer.image" v-show="index == 0">
+                            <img :src="todo" v-for="(todo,index) in todo.image" v-show="index == 0">
                         </div>
                     </div>
                 </div>
-                <payMoneyOrRemark :obj="obj" tab='2'></payMoneyOrRemark>
+                <payMoneyOrRemark :obj="todo" tab='3'></payMoneyOrRemark>
             </div>
         </div>
         <div class="look_history" @click="launchHistory" v-show="!show">
@@ -259,7 +279,7 @@ export default {
                     name: '报价详情',
                     topissue: true,
                 },
-                id:''
+                id: ''
             }
         },
         components: {
@@ -297,6 +317,10 @@ export default {
                         _self.obj.content.spec = result.spec;
                         _self.obj.content.address = result.address;
                         _self.obj.content.duedate = result.duedate;
+                        _self.obj.content.offer = result.offer;
+                        _self.obj.content.unit = result.unit;
+                        _self.obj.content.paymentWay = result.paymentWay;
+                        _self.obj.content.description = result.description;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -304,6 +328,10 @@ export default {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
                 })
+            },
+            again() {
+                common.$emit('needToReleaseOffer', this.id);
+                this.$router.push('/releaseOffer/' + this.id);
             },
             getOffer(id) {
                 let _self = this;
@@ -329,9 +357,10 @@ export default {
                     let result = suc.data.biz_result.list;
                     console.log(3, result)
                     if (suc.data.code == '1c01') {
-                        _self.obj.newOffer = result[0];
+                        if (!_self.show) _self.obj.newOffer = result[0];
                         if (_self.show) {
                             _self.obj.list = result;
+                            console.log(2222, _self.obj.list)
                         }
                     } else {
                         common.$emit('message', suc.data.msg);

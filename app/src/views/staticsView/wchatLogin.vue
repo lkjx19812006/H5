@@ -195,7 +195,7 @@ export default {
                         } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
                             _self.$router.replace(common.pageParam.backRouter);
                             common.$emit('setParam', 'skipLogin', true);
-                        } else {
+                        }else {
                             common.$emit('go_home', 1);
                             _self.$router.replace('home');
                         }

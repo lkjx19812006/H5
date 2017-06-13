@@ -109,7 +109,7 @@ input {
             </div>
         </div>
         <div class="supplement">
-            <div>补充说明</div>
+            <div>价格说明</div>
             <textarea class='content' placeholder="示例:如果是现款可以考虑16元，运费需要买家承担" v-model="obj.priceDescription"></textarea>
         </div>
     </div>
