@@ -176,15 +176,6 @@ export default {
             },
             confirm() {
                 let _self = this;
-                common.$emit("confirm", {
-                    message: '确定发布求购？',
-                    title: '提示',
-                    ensure: this.release
-                });
-            },
-            release() {
-                let _self = this;
-                console.log(_self.obj.number_id);
                 var checkArr = [];
                 let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种');
                 checkArr.push(checkBreedId);
@@ -192,16 +183,6 @@ export default {
                 checkArr.push(checkBreedSpec);
                 let checkBreedPlace = validation.checkNull(_self.obj.place, '请输入产地');
                 checkArr.push(checkBreedPlace);
-                let checkNum = validation.checkMaxNum(_self.obj.number, '数量');
-                checkArr.push(checkNum);
-                let checkPri = validation.checkPrice(_self.obj.sales_price, '价格');
-                checkArr.push(checkPri);
-                if (_self.obj.sampling) {
-                    let checkSampleNum = validation.checkMaxNum(_self.obj.weight, '样品');
-                    checkArr.push(checkSampleNum);
-                    let checkSamplePri = validation.checkPrice(_self.obj.price, '样品价格');
-                    checkArr.push(checkSamplePri);
-                }
                 let count = '请上传图片';
                 for (let i = 0; i < _self.imgArr.length; i++) {
                     if (_self.imgArr[i]) {
@@ -211,6 +192,16 @@ export default {
                 if (count) {
                     checkArr.push(count);
                 }
+                let checkNum = validation.checkMaxNum(_self.obj.number, '数量');
+                checkArr.push(checkNum);
+                let checkPri = validation.checkPrice(_self.obj.sales_price, '价格');
+                checkArr.push(checkPri);
+                if (_self.obj.sampling) {
+                    let checkSampleNum = validation.checkMaxNum(_self.obj.weight, '样品');
+                    checkArr.push(checkSampleNum);
+                    let checkSamplePri = validation.checkPrice(_self.obj.price, '样品价格');
+                    checkArr.push(checkSamplePri);
+                } 
                 let checkDes = validation.checkNull(_self.obj.selling_point, '请输入药材资源卖点');
                 checkArr.push(checkDes);
                 let checkLookDes = validation.checkLook(_self.obj.selling_point);
@@ -227,6 +218,15 @@ export default {
                         return;
                     }
                 }
+                common.$emit("confirm", {
+                    message: '确定发布资源？',
+                    title: '提示',
+                    ensure: this.release
+                });
+            },
+            release() {
+                let _self = this;
+               
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -274,7 +274,7 @@ export default {
                             breedId: _self.obj.breedId,
                             unit: _self.obj.number_id,
                             sampleUnit: '份',
-                            id:_self.id
+                            id: _self.id
                         }
                     };
                 }

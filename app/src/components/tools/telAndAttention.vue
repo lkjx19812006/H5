@@ -6,11 +6,11 @@
         </button>
         <button v-if="obj.isAttention" class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention(0)">
             <img src="/static/icons/follow.png">
-            <p>已关注</p>
+            <p>已收藏</p>
         </button>
         <button v-if="!obj.isAttention" class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention(1)">
             <img src="/static/icons/unfollow.png">
-            <p>未关注</p>
+            <p>未收藏</p>
         </button>
     </div>
 </template>

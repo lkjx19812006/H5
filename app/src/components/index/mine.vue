@@ -79,7 +79,7 @@ export default {
                     img_src: '/static/icons/My-offer.png',
                     router: 'myOffer'
                 }, {
-                    name: '我的关注',
+                    name: '我的收藏',
                     router: 'myAttention',
                     img_src: '/static/icons/My-concern.png'
                 }, { //         

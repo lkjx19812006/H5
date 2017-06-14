@@ -68,7 +68,7 @@ export default {
                     err: "很抱歉，没有找到相关资源",
                     url: '/static/icons/maomao.png',
                     next_step: '去发布',
-                    router: '/needRelease'
+                    router: '/releaseNeeds/1'
                 },
                 sortRouter: 'urgentNeed',
                 sortArr: [{
@@ -332,6 +332,12 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });
+            common.$on('clearThisSearch',function(item){
+                _self.httpPraram.page = 1;
+                _self.headParam.keyword='';
+                _self.httpPraram.keyword = '';
+                _self.getHttp();
+            })
             common.$on('urgentNeed-sort', function(item) {
                 _self.httpPraram.location = item.idArr;
                 _self.sortArr[3].name = item.areaArr[0];

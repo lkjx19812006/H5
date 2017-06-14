@@ -105,8 +105,8 @@ export default {
                     myShow: true
                 },
                 param: {
-                    name: '资源关注',
-                    other_name: '求购关注',
+                    name: '资源收藏',
+                    other_name: '求购收藏',
                     show: true,
                     router: "home"
                 },

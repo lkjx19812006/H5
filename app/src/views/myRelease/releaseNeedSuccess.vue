@@ -48,7 +48,7 @@
             </mt-loadmore>
         </div>
         <div class="bottom">
-            <div class="left" @click="back()">继续放布</div>
+            <div class="left" @click="back()">继续发布</div>
             <div class="right" @click="jump()">查看匹配供应信息</div>
         </div>
     </div>
@@ -93,6 +93,7 @@ export default {
                 this.$router.push('/lowPriceRes');
             },
             back() {
+                common.$emit('inforReleases', 1);//清空发布缓存数据
                 window.history.go(-1);
             },
         },

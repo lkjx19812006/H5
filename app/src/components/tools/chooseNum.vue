@@ -65,7 +65,7 @@ export default {
             },
             subtraction() {
                 let _self = this;
-                if (_self.param.value > 1) {
+                if (_self.param.value > _self.param.moq) {
                     _self.param.value = Number(_self.param.value - 1);
                 }
             },
@@ -103,14 +103,14 @@ export default {
                         if (_self.param.isRed) {
                             if (newVal.value > _self.param.number) {
                                 newVal.value = _self.param.number;
-                            } else if (newVal.value < 1) {
-                                newVal.value = 1;
+                            } else if (newVal.value < _self.param.moq) {
+                                newVal.value = _self.param.moq;
                             }
                         } else {
                             if (newVal.value > _self.param.sampleNumber) {
                                 newVal.value = _self.param.sampleNumber;
-                            } else if (newVal.value < 1) {
-                                newVal.value = 1;
+                            } else if (newVal.value < _self.param.moq) {
+                                newVal.value = _self.param.moq;
                             }
                         }
 

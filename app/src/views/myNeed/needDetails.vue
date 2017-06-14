@@ -239,15 +239,19 @@
         <opinion :arr="arr" class="opinion" v-show="opinion" v-on:selectIt="selectIt"></opinion>
         <myHeader :param="param"></myHeader>
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-bind:class="{onscroll:!show || !opinion}">
-            <div class="static" v-show="obj.onSell == 0">
+            <div class="static" v-show="obj.onSell == 1">
                 <img src="/static/icon/examine.png">
                 <div>审核中</div>
             </div>
-            <div class="static" v-show="obj.onSell == 3 || obj.onSell == -2">
+            <div class="static" v-show="obj.onSell == -2">
+                <img src="/static/icon/un-pass.png">
+                <div>审核未通过</div>
+            </div>
+            <div class="static" v-show="obj.onSell == 4">
                 <img src="/static/icon/askover.png">
                 <div>询价结束</div>
             </div>
-            <div class="static" v-show="obj.onSell == 1">
+            <div class="static" v-show="obj.onSell == 2">
                 <img src="/static/icon/ask.png">
                 <div>询价中</div>
             </div>
@@ -533,9 +537,7 @@ export default {
                 _self.id = item.id;
                 _self.show = false;
             });
-            common.$on('getInfo', function(item) {
-                _self.getHttp(id);
-            })
+            
         }
 
 

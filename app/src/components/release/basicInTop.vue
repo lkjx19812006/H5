@@ -38,11 +38,41 @@ input {
                 color: #8E97A1;
                 text-align: left;
             }
+            input{
+                color:#333333;
+                opacity:1;
+            }
         }
         .img {
             width: 30px;
             img {
                 height: 18px;
+            }
+        }
+    }
+    .head{
+        justify-content:space-between;
+        padding-right:15px;
+        .left{
+            color:#333;
+            font-size:17px;
+            span{
+                color:#FA6705;
+                font-size:13px;
+            }
+        }
+        .right{
+            display:flex;
+            flex-direction:row;
+            .time{
+                height:19px;
+                margin-right:4px;
+                img{
+                    height:100%;
+                }
+            }
+            span{
+                color:#FA6705;
             }
         }
     }
@@ -55,10 +85,17 @@ input {
 <template>
     <div class="basic_top">
         <div class="breed_name">
-            <div class="inbox">
-                <div class="breed_left">品名</div>
+            <div class="inbox head">
+                <!-- <div class="breed_left">品名</div>
                 <div class="breed_center">
                     {{obj.breedName}}
+                </div> -->
+                <div class="left">{{obj.breedName}}<span>{{obj.need_number}}({{obj.need_unit}})</span></div>
+                <div class="right">
+                    <div class="time">
+                        <img src="/static/icon/times.png">
+                    </div>
+                    <div>剩余<span>{{obj.duedate | timeDay}}</span>天</div>
                 </div>
             </div>
         </div>

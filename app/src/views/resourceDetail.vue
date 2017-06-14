@@ -162,18 +162,15 @@ export default {
         },
         methods: {
             popUp(index, imgArr) {
-
                 this.my_param.url = imgArr;
                 this.my_param.show = !this.my_param.show;
                 this.my_param.whole_height = document.documentElement.clientHeight;
-
             },
             chooseType() {
                 let _self = this;
                 if (!_self.choose.push_num) {
                     _self.choose.isRed = false;
                 }
-
             },
             unchooseType() {
                 let _self = this;
@@ -190,6 +187,7 @@ export default {
                 if (common.pageParam.router == 'atOnceBuy') {
                     _self.atOnceBuy(id);
                 }
+
                 _self.choose.push_num = false;
             },
             addCart() {
@@ -280,6 +278,7 @@ export default {
                             _self.choose.moq = result.moq;
                             _self.choose.sampleAmount = result.sampleAmount;
                             _self.choose.sampleUnit = result.sampleUnit;
+                            _self.choose.value = result.moq;
                             _self.param.id = result.id;
                             _self.param.isMy = result.isMy;
                             if (result.image && result.image.length > 0) {
@@ -385,6 +384,7 @@ export default {
                     return;
                 }
                 common.$emit('setParam', 'router', 'addCart');
+                //_self.choose.value = 1;
                 _self.choose.push_num = true;
             },
             call() {

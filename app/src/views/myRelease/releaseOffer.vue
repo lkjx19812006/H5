@@ -110,6 +110,8 @@ export default {
                 wrapperHeight: '',
                 obj: {
                     breedName: '天麻',
+                    need_number:'',
+                    need_unit:'',
                     spec: '',
                     place: '',
                     place_id: '',
@@ -153,22 +155,6 @@ export default {
                     intentionId: ''
                 },
                 imgArr: [],
-                sell: [{
-                    name: '产品包交',
-                    show: false
-                }, {
-                    name: '质量优势',
-                    show: false
-                }, {
-                    name: '一手货源',
-                    show: false
-                }, {
-                    name: '含量较高',
-                    show: false
-                }, {
-                    name: '可以加工',
-                    show: false
-                }]
             }
         },
         methods: {
@@ -193,8 +179,11 @@ export default {
                     common.$emit('close-load');
                     let result = suc.data.biz_result;
                     if (suc.data.code == '1c01') {
-                       _self.getBreedInformation(result.breedName);
-                       _self.obj.breedName = result.breedName;
+                        _self.getBreedInformation(result.breedName);
+                        _self.obj.breedName = result.breedName;
+                        _self.obj.duedate = result.duedate;
+                        _self.obj.need_number = result.number;
+                        _self.obj.need_unit = result.unit;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -231,7 +220,7 @@ export default {
                 if (count) {
                     checkArr.push(count);
                 }
-                let checkQuality = validation.checkNull(_self.obj.quality, '请选择产品买点');
+                let checkQuality = validation.checkNull(_self.obj.quality, '请选择产品卖点');
                 checkArr.push(checkQuality);
                 // let checkDrugInfor = validation.checkNull(_self.obj.descriptions, '请填写产品信息');
                 // checkArr.push(checkDrugInfor);
@@ -308,9 +297,9 @@ export default {
                         _self.obj.place_id = '';
                         _self.obj.breedLocation = suc.data.biz_result.localList;
                         _self.obj.breedSpec = suc.data.biz_result.specList;
-                        if (_self.obj.breedSpec.length > 0) _self.obj.spec = _self.obj.breedSpec[0].name;
-                        if (_self.obj.breedLocation.length > 0) _self.obj.place = _self.obj.breedLocation[0].name;
-                        if (_self.obj.breedLocation.length > 0) _self.obj.place_id = _self.obj.breedLocation[0].locationId;
+                        // if (_self.obj.breedSpec.length > 0) _self.obj.spec = _self.obj.breedSpec[0].name;
+                        // if (_self.obj.breedLocation.length > 0) _self.obj.place = _self.obj.breedLocation[0].name;
+                        // if (_self.obj.breedLocation.length > 0) _self.obj.place_id = _self.obj.breedLocation[0].locationId;
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -340,7 +329,7 @@ export default {
                             _self.obj.number_unit = _self.obj.unit[0].name;
                             _self.obj.number_id = _self.obj.unit[0].id;
                         } else {
-                            for (var i = 0; i < _self.unit.length; i++) {
+                            for (var i = 0; i < _self.obj.unit.length; i++) {
                                 if (_self.obj.number_unit == _self.obj.unit[i].name) {
                                     _self.obj.number_id = _self.obj.unit[i].id;
                                 }
@@ -403,32 +392,13 @@ export default {
                         intentionId: _self.obj.intentionId
                     }
                 };
-                // if (_self.id !== '1') {
-                //     body = {
-                //         biz_module: 'intentionService',
-                //         biz_method: 'updatehtmlEditBegBuyInfo',
-                //         biz_param: {
-                //             customerId: common.customerId,
-                //             breedName: _self.obj.drug_name,
-                //             spec: _self.obj.spec,
-                //             location: _self.obj.place_id,
-                //             number: _self.obj.number,
-                //             duedate: _self.duedate,
-                //             description: _self.remarks,
-                //             breedId: _self.obj.breedId,
-                //             unit: _self.obj.number_id,
-                //             quality: _self.obj.quality,
-                //             address: _self.obj.address,
-                //             paymentWay: _self.paymentWay,
-                //             id: _self.id
-                //         }
-                //     }
-                // }
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.needRelease(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
+                        common.$emit('inforMyOffer', 1);
+
                         _self.$router.push('/myOffer')
                         common.$emit('message', suc.data.msg);
                     } else {
@@ -452,11 +422,25 @@ export default {
         },
         created() {
             let _self = this;
-            let id = _self.$route.params.id; 
+            let id = _self.$route.params.id;
             _self.getHttp(id);
             _self.obj.intentionId = id;
             _self.getUnit();
             common.$on('needToReleaseOffer', function(item) {
+                _self.obj.breedName = '';
+                _self.obj.spec = '';
+                _self.obj.location = '';
+                _self.imgArr = [];
+                _self.obj.quality = '';
+                _self.obj.sell_point = [];
+                _self.obj.number = '';
+                _self.obj.number_id = '';
+                _self.obj.price = '';
+                _self.obj.priceDescription = '';
+                for(var i=0;i<_self.obj.sell.length;i++){
+                    console.log
+                    _self.obj.sell[i].show = false;
+                }
                 _self.obj.intentionId = item;
                 _self.getHttp(item);
                 _self.getUnit();

@@ -48,6 +48,9 @@
                 }
                 .last {
                     margin-top: 5px;
+                    .red{
+                        color:#fa6705;
+                    }
                 }
             }
             .right {
@@ -162,6 +165,15 @@
             margin-left: 10px;
         }
     }
+    .no_history{
+        color: #f05555;
+        font-size:15px;
+        height:50px;
+        line-height:50px;
+        text-align:left;
+        padding-left:15px;
+        background-color:#fff;
+    }
 }
 </style>
 <template>
@@ -181,7 +193,7 @@
                             <div class="images"><img src="/static/icon/times.png"></div>
                             <div>&nbsp;剩余{{obj.content.duedate | timeDay}} 天</div>
                         </div>
-                        <div class="detail" @click="again()">再次报价</div>
+                        <div class="detail" @click="again()" v-if="obj.newOffer.accept == '3'">再次报价</div>
                     </div>
                 </div>
             </div>
@@ -202,7 +214,7 @@
                     <div class="left">
                         <div class="breed">{{obj.newOffer.breedName}} <span>({{obj.newOffer.number}}{{obj.newOffer.unit}})</span></div>
                         <div class="spec">{{obj.newOffer.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.newOffer.spec,4 | filterTxt}}</div>
-                        <div class="spec last">裸价: {{obj.newOffer.price}}元/{{obj.newOffer.unit}}</div>
+                        <div class="spec last">裸价: <span class="red">{{obj.newOffer.price}}</span>元/{{obj.newOffer.unit}}</div>
                     </div>
                     <div class="image">
                         <img :src="todo" v-for="(todo,index) in obj.newOffer.image" v-show="index == 0">
@@ -215,7 +227,7 @@
                 <img src="/static/icon/retract.png">
             </div>
             <titles tab="5" :obj="obj" v-show="show"></titles>
-            <div class="history_arr" v-show="show" v-for="todo in obj.list">
+            <div class="history_arr"  v-for="todo in obj.list" v-if='obj.list.length > 0 && show'>
                 <div class="tbox">
                     <div>报价状态:
                         <span class="black" v-show="todo.accept == '0'">{{todo.accept | myOfferStatus}}</span>
@@ -231,7 +243,7 @@
                         <div class="left">
                             <div class="breed">{{todo.breedName}} <span>({{todo.number}}{{todo.unit}})</span></div>
                             <div class="spec">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
-                            <div class="spec last">裸价: {{todo.price}}元/{{todo.unit}}</div>
+                            <div class="spec last">裸价: <span class="red">{{todo.price}}</span>元/{{todo.unit}}</div>
                         </div>
                         <div class="image">
                             <img :src="todo" v-for="(todo,index) in todo.image" v-show="index == 0">
@@ -240,6 +252,7 @@
                 </div>
                 <payMoneyOrRemark :obj="todo" tab='3'></payMoneyOrRemark>
             </div>
+            <div class="no_history" v-if="obj.list.length == 0 && show">无历史报价~</div>
         </div>
         <div class="look_history" @click="launchHistory" v-show="!show">
             <div class="word">查看历史报价</div>
@@ -359,8 +372,10 @@ export default {
                     if (suc.data.code == '1c01') {
                         if (!_self.show) _self.obj.newOffer = result[0];
                         if (_self.show) {
+                            result.shift();
                             _self.obj.list = result;
-                            console.log(2222, _self.obj.list)
+                            console.log(11,_self.obj.list)
+                            
                         }
                     } else {
                         common.$emit('message', suc.data.msg);

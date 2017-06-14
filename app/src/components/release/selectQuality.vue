@@ -15,11 +15,11 @@ input {
 
 .select_quality {
     padding: 15px 0;
-    border-top:1px solid #E6E6E6;
+    border-top: 1px solid #E6E6E6;
     background-color: #fff;
     margin-bottom: 10px;
     .top {
-        padding:0 15px;
+        padding: 0 15px;
         text-align: left;
         font-size: 15px;
         color: #000;
@@ -29,42 +29,63 @@ input {
         }
     }
     .inbox {
-        padding:0 15px;
+        padding: 0 15px;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        border-bottom:1px solid #E6E6E6;
-
+        border-bottom: 1px solid #E6E6E6;
         .name {
-            padding: 5px 10px;
-            margin: 8px 8px 8px 0;
-            font-size: 14px;
+            flex: 1;
+            padding: 5px 6px;
+            
             border-radius: 15px;
             color: #7E7E7E;
             background-color: #F4F4F4;
         }
+        @media screen {
+            .name {
+                font-size: 12px;
+                margin: 8px 8px 8px 0;
+            }
+            @media (max-width: 320px) {
+                .name {
+                    font-size: 10px;
+                    margin: 8px 5px 8px 0;
+                }
+            }
+        }
         .active {
-            padding: 5px 10px;
-            margin: 8px 8px 8px 0;
-            font-size: 14px;
+            padding: 5px 6px;
             border-radius: 15px;
             background-color: #FAA105;
             color: #fff;
         }
-    }
-    .supplement{
-        width:100%;
-        padding:20px 15px 20px 15px;
-        font-size:14px;
-        div{
-            color:#ADADAD;
-            text-align:left;
+         @media screen {
+            .active {
+                font-size: 12px;
+                margin: 8px 8px 8px 0;
+            }
+            @media (max-width: 320px) {
+                .active {
+                    font-size: 10px;
+                    margin: 8px 5px 8px 0;
+                }
+            }
         }
-        .content{
-             width:100%;
-             min-height:50px;
-             border:none;
-             color:#000;
+    }
+    .supplement {
+        width: 100%;
+        padding: 20px 15px 20px 15px;
+        font-size: 14px;
+        div {
+            color: #ADADAD;
+            text-align: left;
+        }
+        .content {
+            width: 100%;
+            min-height: 50px;
+            border: none;
+            color: #000;
         }
     }
 }

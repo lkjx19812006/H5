@@ -503,7 +503,7 @@
                 <div class="center"></div>
                 <img src="/static/icon/right-arrow.png">
             </div>
-            <div class="content">
+            <div class="content" @click="jumpEntrance('/marketQuotation')">
                 <div v-for="(todo,index) in drugGuidePrice" class="item" v-bind:class="{first:index !== 1}">
                     <div class="left">
                         <div class="image">
@@ -751,7 +751,11 @@ export default {
                         ensure: this.loadApp
                     });
                 }
-                if (path) this.$router.push(path);
+                if (path) {
+                    console.log(321321)
+                    common.$emit('clearThisSearch',1)
+                    this.$router.push(path);
+                }
             },
             jumpNeed(obj) {
                 let _self = this;
@@ -772,8 +776,11 @@ export default {
                     });
                     return;
                 } else {
-                    common.$emit('needToReleaseOffer', obj.id);
-                    this.$router.push('/releaseOffer/' +  obj.id);
+                    common.$emit('needToDetails', {
+                        id: obj.id,
+                        type: ''
+                    });
+                    this.$router.push('/needDetails/' + obj.id);
                 }
             },
             jumpRes(router, id) {
@@ -811,7 +818,7 @@ export default {
             },
             jumpLink(url) {
                 let _self = this;
-                if(url == 'http://192.168.1.141/htm5/#/presell'){
+                if (url == 'http://192.168.1.141/htm5/#/presell') {
                     common.$emit("confirm", {
                         message: '请下载App后，在App内查看',
                         title: '提示',

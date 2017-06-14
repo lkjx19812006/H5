@@ -69,14 +69,14 @@ export default {
                         });
                     } else if (_self.param.employee > 100000) {
                         _self.$router.push('/detailsPage');
-                    } else {
+                    } /*else {
                         common.$emit("confirm", {
                             message: '未设置专属客户，拨号去设置？',
                             title: '提示',
                             ensure: _self.call
                         });
 
-                    }
+                    }*/
 
                 } else {
                     switch (router) {

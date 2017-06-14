@@ -103,11 +103,11 @@
                     <li v-for="todo in todos">
                         <div class="box">
                             <div class="top">
-                                <div class="left" v-show="todo.onSell == 0 || todo.onSell == 2">求购状态: {{todo.onSell | myStatus}}</div>
+                                <div class="left" v-show="todo.onSell == 2">求购状态: <span class="red">{{todo.onSell | myStatus}}</span></div>
                                 <div class="left" v-show="todo.onSell == 4 || todo.onSell == -2">求购状态:
                                     <span class="gray">{{todo.onSell | myStatus}}</span>
                                 </div>
-                                <div class="left" v-show="todo.onSell == 1">求购状态: <span class="red">{{todo.onSell | myStatus}}</span></div>
+                                <div class="left" v-show="todo.onSell == 1">求购状态: {{todo.onSell | myStatus}}</div>
                                 <div class="right">{{todo.pubdate | timeFormats}}</div>
                             </div>
                             <div class="content">
@@ -240,10 +240,10 @@ export default {
                         key: 'duedate'
                     }]
                 }, {
-                    name: '审核状态',
+                    name: '求购状态',
                     asc: 'top',
                     url: '/static/icons/drop_down.png',
-                    saveName: '审核状态',
+                    saveName: '求购状态',
                     class: 'sort_content_detail',
                     sortArr: [{
                         name: '申请中',
@@ -252,19 +252,19 @@ export default {
                         testing: 1,
                         key: 'testing'
                     }, {
-                        name: '上架失败',
+                        name: '审核未通过',
                         asc: 'low',
                         show: false,
                         testing: -2,
                         key: 'testing'
                     }, {
-                        name: '下架',
+                        name: '询价结束',
                         asc: 'low',
                         show: false,
                         testing: 4,
                         key: 'testing'
                     }, {
-                        name: '上架',
+                        name: '询价中',
                         asc: 'top',
                         show: false,
                         testing: 2,

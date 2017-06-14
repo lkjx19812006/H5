@@ -410,6 +410,33 @@ export default {
             },
             confirm() {
                 let _self = this;
+                var checkArr = [];
+                let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
+                checkArr.push(checkBreedId);
+                let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格！');
+                checkArr.push(checkBreedSpec);
+                let checkBreedPlace = validation.checkNull(_self.obj.place_id, '请输入产地！');
+                checkArr.push(checkBreedPlace);
+                let checkNumber = validation.checkMaxNum(_self.obj.number, '数量');
+                checkArr.push(checkNumber);
+                let checkUnit = validation.checkMaxNum(_self.obj.number_id, '数量单位');
+                checkArr.push(checkUnit);
+                let checkQuality = validation.checkNull(_self.obj.quality, '请输入质量要求！');
+                checkArr.push(checkQuality);
+                let checkAddress = validation.checkNull(_self.obj.address, '请选择交货地！');
+                checkArr.push(checkAddress);
+                let checkPay = _self.payWay();
+                checkArr.push(checkPay);
+                let checkDuedate = _self.checkDates();
+                checkArr.push(checkDuedate);
+                let checkRemarks = _self.RemarkSelect();
+                checkArr.push(checkRemarks);
+                for (var i = 0; i < checkArr.length; i++) {
+                    if (checkArr[i]) {
+                        common.$emit('message', checkArr[i]);
+                        return;
+                    }
+                }
                 common.$emit("confirm", {
                     message: '确定发布求购？',
                     title: '提示',
@@ -541,34 +568,6 @@ export default {
             },
             release() {
                 let _self = this;
-                console.log(12313)
-                var checkArr = [];
-                let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
-                checkArr.push(checkBreedId);
-                let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格！');
-                checkArr.push(checkBreedSpec);
-                let checkBreedPlace = validation.checkNull(_self.obj.place_id, '请输入产地！');
-                checkArr.push(checkBreedPlace);
-                let checkNumber = validation.checkMaxNum(_self.obj.number, '数量');
-                checkArr.push(checkNumber);
-                let checkUnit = validation.checkMaxNum(_self.obj.number_id, '数量单位');
-                checkArr.push(checkUnit);
-                let checkQuality = validation.checkNull(_self.obj.quality, '请输入质量要求！');
-                checkArr.push(checkQuality);
-                let checkAddress = validation.checkNull(_self.obj.address, '请选择交货地！');
-                checkArr.push(checkAddress);
-                let checkPay = _self.payWay();
-                checkArr.push(checkPay);
-                let checkDuedate = _self.checkDates();
-                checkArr.push(checkDuedate);
-                let checkRemarks = _self.RemarkSelect();
-                checkArr.push(checkRemarks);
-                for (var i = 0; i < checkArr.length; i++) {
-                    if (checkArr[i]) {
-                        common.$emit('message', checkArr[i]);
-                        return;
-                    }
-                }
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -841,9 +840,9 @@ export default {
                 _self.obj.quality = '';
                 _self.obj.address = '';
                 _self.obj.addressProvince = '',
-                _self.obj.addressCity = '',
-                _self.obj.addressDistrict = '',
-                _self.id = '1';
+                    _self.obj.addressCity = '',
+                    _self.obj.addressDistrict = '',
+                    _self.id = '1';
                 _self.obj.paymentWay = '';
                 _self.obj.duedate = '';
                 _self.obj.type_show = false;

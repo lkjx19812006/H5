@@ -54,6 +54,18 @@ export default {
             need,
             mine
         },
+        watch: {
+            selected: function(newValue, oldValue) {
+                switch (newValue) {
+                    case 'resource':
+                        common.$emit('clearResourceSearch', 1)
+                        break;
+                    case 'purchase':
+                        common.$emit('clearNeedSearch', 1)
+                        break;
+                }
+            }
+        },
         created() {
             let _self = this;
             common.$on('go_home', function(item) {

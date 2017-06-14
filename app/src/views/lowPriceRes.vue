@@ -61,7 +61,7 @@ export default {
                     err: "很抱歉，没有找到相关资源",
                     url: '/static/icons/maomao.png',
                     next_step: '去发布',
-                    router: '/supplyRelease'
+                    router: '/releaseResource/1'
                 },
                 sortRouter: 'lowRes',
                 sortArr: [{
@@ -305,6 +305,12 @@ export default {
                 _self.headParam.keyword = item.keyWord;
                 _self.httpPraram.keyword = item.keyWord;
                 _self.httpPraram.page = 1;
+                _self.getHttp();
+            })
+            common.$on('clearThisSearch',function(item){
+                _self.httpPraram.page = 1;
+                _self.headParam.keyword='';
+                _self.httpPraram.keyword = '';
                 _self.getHttp();
             })
             common.$on('lowRes-sort', function(item) {
