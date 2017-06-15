@@ -124,7 +124,7 @@ input {
             }
         }
         .last {
-            padding:14px 0;
+            padding: 14px 0;
             margin-top: 10px;
             border-bottom: none;
             display: flex;
@@ -189,8 +189,20 @@ input {
                 position: relative;
                 .word {
                     flex: 1;
-                    text-align: center;
+                    text-align: left;
+                    margin-left: 10px;
                     color: #7CB159;
+                }
+                .green {
+                    color: #7CB159;
+                }
+                div {
+                    .select {
+                        width: 18px;
+                        position: absolute;
+                        right: 15px;
+                        top: 11px;
+                    }
                 }
             }
         }
@@ -240,6 +252,7 @@ input {
                 </div>
                 <div class="number_right" @click="showAction('unit')">
                     <div class="word">{{obj.number_unit}}</div>
+                    <div><img src="/static/icons/green-jian.png" class="select"></div>
                 </div>
             </div>
         </div>
@@ -405,35 +418,37 @@ export default {
                 //console.log(_self.obj.quality)
             },
             showAction(param) {
-                this.actions_show = true;
-                this.obj.sheetVisible = true;
-                this.actions = [];
                 let _self = this;
-                if (param == "spec") {
-                    for (var i = 0; i < _self.breedSpec.length; i++) {
-                        _self.actions.push({
-                            name: _self.breedSpec[i].name,
-                            id: _self.breedSpec[i].id,
-                            key: 'spec'
-                        });
-                    }
-                } else if (param == "unit") {
-                    for (var i = 0; i < _self.unit.length; i++) {
-                        _self.actions.push({
-                            name: _self.unit[i].name,
-                            key: 'number_unit',
-                            id: _self.unit[i].id,
-                            id_key: 'number_id'
-                        });
-                    }
-                } else {
-                    for (var i = 0; i < _self.breedLocation.length; i++) {
-                        _self.actions.push({
-                            name: _self.breedLocation[i].name,
-                            id: _self.breedLocation[i].locationId,
-                            key: 'place',
-                            id_key: 'place_id'
-                        });
+                if (_self.obj.drug_name) {
+                    _self.actions_show = true;
+                    _self.obj.sheetVisible = true;
+                    _self.actions = [];
+                    if (param == "spec") {
+                        for (var i = 0; i < _self.breedSpec.length; i++) {
+                            _self.actions.push({
+                                name: _self.breedSpec[i].name,
+                                id: _self.breedSpec[i].id,
+                                key: 'spec'
+                            });
+                        }
+                    } else if (param == "unit") {
+                        for (var i = 0; i < _self.unit.length; i++) {
+                            _self.actions.push({
+                                name: _self.unit[i].name,
+                                key: 'number_unit',
+                                id: _self.unit[i].id,
+                                id_key: 'number_id'
+                            });
+                        }
+                    } else {
+                        for (var i = 0; i < _self.breedLocation.length; i++) {
+                            _self.actions.push({
+                                name: _self.breedLocation[i].name,
+                                id: _self.breedLocation[i].locationId,
+                                key: 'place',
+                                id_key: 'place_id'
+                            });
+                        }
                     }
                 }
             },
@@ -522,6 +537,7 @@ export default {
                     _self.obj.breedId = item.id;
                 }
             });
+
 
 
         },

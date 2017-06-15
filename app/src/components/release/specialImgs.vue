@@ -49,8 +49,14 @@
 </style>
 <template>
     <div class="img_upload" :v-loading.body="loading">
-        <input ref="imgInput" :disabled="param.length > 4" type="file" @change="previewImg" :class="{'disabled':param.length > 4}" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
-            <img src="/static/icons/add-imgs.png" class="uploads">
+        <input ref="imgInput" :disabled="param.length > 1" type="file" @change="previewImg" :class="{'disabled':param.length > 1}" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
+        <img src="/static/icon/hand-photo.png" class="uploads" v-show="param.length == 0 && type == '0'">
+        <img src="/static/icon/details-photo.png" class="uploads" v-show="param.length == 0 && type == '1'">
+        <img src="/static/icon/cargo-photo.png" class="uploads" v-show="param.length == 0 && type == '2'">
+            <!-- <img src="/static/icons/add-imgs.png" class="uploads" v-show="param.length <= 4"> -->
+            <!-- <img src="/static/icon/hand-photo.png" class="uploads" v-show="param.length == 0">
+            <img src="/static/icon/details-photo.png" class="uploads" v-show="param.length == 1">
+            <img src="/static/icon/cargo-photo.png" class="uploads" v-show="param.length == 2"> -->  
     </div>
 </template>
 <script>
@@ -72,6 +78,7 @@ export default {
     },
     props: {
         param: '',
+        type:''
         // handPhoto:'',
         // detailsPhoto:'',
         // cargoPhoto:''

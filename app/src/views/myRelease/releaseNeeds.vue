@@ -200,7 +200,7 @@ input {
                             </div>
                         </div>
                         <div class="other">
-                            <textarea placeholder="要等我的下家确认货物没有问题，立即现款" v-model="payArr[3].two"></textarea>
+                            <textarea placeholder="示例: 要等我的下家确认货物没有问题，立即现款" v-model="payArr[3].two"></textarea>
                         </div>
                     </div>
                 </div>
@@ -725,7 +725,8 @@ export default {
                         //_self.dateArr[_self.obj.duedate].one = date;
                         if (date != 7 && date != 15 && date != 30) {
                             //_self.dateArr[3].duedate = -1;
-                            _self.dateArr[3].one = date;
+                            if (date > 0) _self.dateArr[3].one = date;
+                            if (date < 0) _self.dateArr[3].one = 0;
                         } else {
                             switch (date) {
                                 case '7':
@@ -742,10 +743,15 @@ export default {
                         if (result.description) _self.getRemark(result.description);
                         _self.id = result.id;
                         _self.obj.breedId = result.breedId;
+                        common.$emit("Needrelease", {
+                            breedName: result.breedName,
+                            breedId: result.breedId
+                        })
 
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
+
                 }, function(err) {
                     common.$emit('message', err.data.msg);
                 })

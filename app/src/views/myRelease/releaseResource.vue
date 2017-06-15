@@ -201,7 +201,7 @@ export default {
                     checkArr.push(checkSampleNum);
                     let checkSamplePri = validation.checkPrice(_self.obj.price, '样品价格');
                     checkArr.push(checkSamplePri);
-                } 
+                }
                 let checkDes = validation.checkNull(_self.obj.selling_point, '请输入药材资源卖点');
                 checkArr.push(checkDes);
                 let checkLookDes = validation.checkLook(_self.obj.selling_point);
@@ -226,7 +226,7 @@ export default {
             },
             release() {
                 let _self = this;
-               
+
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -338,6 +338,12 @@ export default {
                         _self.obj.id = result.id;
                         _self.obj.breedId = result.breedId;
                         _self.imgArr = result.image;
+
+                        common.$emit("Needrelease", {
+                            breedName: result.breedName,
+                            breedId: result.breedId
+                        })
+
                     } else {
                         common.$emit('message', suc.data.msg);
                     }

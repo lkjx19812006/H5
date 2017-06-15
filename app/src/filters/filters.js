@@ -18,7 +18,9 @@ Vue.filter('timeDays', function(due) {
         var arr = due.split(/[- : \/]/);
         var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
         var pubdateDate = new Date();
-        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+        var dateValue = duedateDate.getTime() - pubdateDate.getTime() - 5000;
+        let day = (dateValue / (24 * 3600 * 1000));
+        //console.log(45,day)
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
 
         if (days > 0) {
@@ -39,7 +41,7 @@ Vue.filter('timeDay', function(due) {
         var arr = due.split(/[- : \/]/);
         var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
         var pubdateDate = new Date();
-        var dateValue = duedateDate.getTime() - pubdateDate.getTime();
+        var dateValue = duedateDate.getTime() - pubdateDate.getTime() - 5000;
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
 
         if (days > 0) {

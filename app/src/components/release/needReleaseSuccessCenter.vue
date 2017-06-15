@@ -95,7 +95,7 @@
             </div>
             <div class="inbox">
                 <div class="t_left">样品数量：</div>
-                <div class="right">{{infor.sampleAmount}}份</div>
+                <div class="right">{{infor.sampleNumber}}份</div>
             </div>
             <div class="inbox">
                 <div class="t_left">样品价格：</div>

@@ -19,6 +19,8 @@ let common = new Vue({
     data: {
         wxrun: true,
         wxshow: true,
+        phoneRun: true,
+        phoneType: true,
         shareUrl: shareUrl,
         customerId: window.localStorage.ID,
         show: true,
@@ -80,7 +82,7 @@ let common = new Vue({
                     link: 'http://apps.yaocaimaimai.com/htm5/#/home'
                         /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
                 };
-            } else {
+            } else {                
                 _self.shareParam = {
                     imgUrl: data.imgUrl,
                     title: data.title,
@@ -88,7 +90,7 @@ let common = new Vue({
                     link: data.link
                 };
             }
-
+            
             wx.onMenuShareTimeline({
                 imgUrl: _self.shareParam.imgUrl,
                 title: _self.shareParam.title,
@@ -117,6 +119,7 @@ let common = new Vue({
         shareCreate(data) {
             let _self = this;
             console.log(data);
+
             wx.config({ //微信配置
                 debug: false,
                 appId: data.appId,
@@ -164,6 +167,7 @@ let common = new Vue({
                 }
             }).then((res) => {
                 if (res.data.biz_result) _self.shareCreate(res.data.biz_result);
+                alert(1231231)
             }, (err) => {
                 console.log(err);
             });
@@ -217,17 +221,41 @@ let common = new Vue({
         },
         isWeiXin() {
             let _self = this;
-            if (this.wxrun) {
-                var ua = window.navigator.userAgent.toLowerCase();
-                if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-                    _self.wxshow = true;
+            let url = window.location.href;
+            if (url.indexOf("apps.yaocaimaimai.com") !== -1) {
+                if (_self.wxrun) {
+                    var ua = window.navigator.userAgent.toLowerCase();
+                    if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+                        _self.wxshow = true;
 
-                } else {
-                    _self.wxshow = false;
+                    } else {
+                        _self.wxshow = false;
+                    }
+                    _self.wxrun = false;
                 }
-                this.wxrun = false;
+
+            } else {
+                _self.wxrun = false;
+                return _self.wxshow = false;
             }
 
+
+        },
+        phoneType() {
+            let _self = this;
+            if (_self.phoneRun) {
+                var u = navigator.userAgent;
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+
+                if (isiOS) {
+                    _self.phoneType = false;
+                }
+                if (isAndroid) {
+                    _self.phoneType = true;
+                }
+                _self.phoneRun = false;
+            }
 
         }
 

@@ -83,41 +83,7 @@ router.afterEach(route => {
 });
 
 
-var u = navigator.userAgent;
-var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
-var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 
-if (isiOS) {
-    /* function ios() {　
-         var ifr = document.createElement("iframe");
-         ifr.src = "YCMM://";
-         ifr.style.display = "none";
-         document.body.appendChild(ifr);
-         window.setTimeout(function() {
-             document.body.removeChild(ifr);
-             window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai";
-         }, 2000);
-     }
-     ios();*/
-}
-
-if (isAndroid) {
-    function Android() {
-        /*window.location = "mianguan://yaocaimaimai.yaocaimaimai";
-        window.setTimeout(function() {
-            window.location = "http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai";
-        }, 2000);*/
-        /*var ifr = document.createElement("iframe");
-        ifr.src = "mianguan://yaocaimaimai.yaocaimaimai";
-        ifr.style.display = "none";
-        document.body.appendChild(ifr);
-        window.setTimeout(function() {
-            document.body.removeChild(ifr);
-            window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai";
-        }, 2000);*/
-    }
-    Android();
-}
 
 Vue.http.interceptors.push((request, next) => {
     next((response) => {

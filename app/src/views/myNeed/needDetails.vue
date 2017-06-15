@@ -239,19 +239,19 @@
         <opinion :arr="arr" class="opinion" v-show="opinion" v-on:selectIt="selectIt"></opinion>
         <myHeader :param="param"></myHeader>
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-bind:class="{onscroll:!show || !opinion}">
-            <div class="static" v-show="obj.onSell == 1">
+            <div class="static" v-show="obj.onSell == 1 && !type">
                 <img src="/static/icon/examine.png">
                 <div>审核中</div>
             </div>
-            <div class="static" v-show="obj.onSell == -2">
+            <div class="static" v-show="obj.onSell == -2 && !type">
                 <img src="/static/icon/un-pass.png">
                 <div>审核未通过</div>
             </div>
-            <div class="static" v-show="obj.onSell == 4">
+            <div class="static" v-show="obj.onSell == 4 && !type">
                 <img src="/static/icon/askover.png">
                 <div>询价结束</div>
             </div>
-            <div class="static" v-show="obj.onSell == 2">
+            <div class="static" v-show="obj.onSell == 2 && !type">
                 <img src="/static/icon/ask.png">
                 <div>询价中</div>
             </div>
@@ -401,6 +401,7 @@ export default {
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     let result = suc.data.biz_result;
+                    console.log(11, result)
                     let shareData = common.shareParam;
                     if (suc.data.code == '1c01') {
                         _self.obj = result;
@@ -537,7 +538,7 @@ export default {
                 _self.id = item.id;
                 _self.show = false;
             });
-            
+
         }
 
 

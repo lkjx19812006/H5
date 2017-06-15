@@ -56,7 +56,7 @@ export default {
         },
         watch: {
             selected: function(newValue, oldValue) {
-                switch (newValue) {
+                switch (newValue) {//为了清除资源和求购原搜索
                     case 'resource':
                         common.$emit('clearResourceSearch', 1)
                         break;

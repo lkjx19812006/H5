@@ -8,6 +8,22 @@ textarea {
     border-radius: 0;
 }
 
+textarea::-webkit-input-placeholder {
+    color: #ADADAD;
+}
+
+textarea:-moz-placeholder {
+    color: #ADADAD;
+}
+
+textarea::-moz-placeholder {
+    color: #ADADAD;
+}
+
+textarea:-ms-input-placeholder {
+    color: #ADADAD;
+}
+
 input {
     border: none;
     background-color: #fff;
@@ -37,7 +53,6 @@ input {
         .name {
             flex: 1;
             padding: 5px 6px;
-            
             border-radius: 15px;
             color: #7E7E7E;
             background-color: #F4F4F4;
@@ -60,7 +75,7 @@ input {
             background-color: #FAA105;
             color: #fff;
         }
-         @media screen {
+        @media screen {
             .active {
                 font-size: 12px;
                 margin: 8px 8px 8px 0;

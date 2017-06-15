@@ -753,35 +753,17 @@ export default {
                 }
                 if (path) {
                     console.log(321321)
-                    common.$emit('clearThisSearch',1)
+                    common.$emit('clearThisSearch', 1)
                     this.$router.push(path);
                 }
             },
             jumpNeed(obj) {
                 let _self = this;
-                if (!common.customerId) {
-                    function loadApp() {
-                        common.$emit('setParam', 'backRouter', '/home');
-                        if (common.wxshow) {
-                            common.getWxUrl();
-                        } else {
-                            console.log(232131)
-                            _self.$router.push('/login');
-                        }
-                    }
-                    common.$emit('confirm', {
-                        message: '请先登录',
-                        title: '提示',
-                        ensure: loadApp
-                    });
-                    return;
-                } else {
-                    common.$emit('needToDetails', {
-                        id: obj.id,
-                        type: ''
-                    });
-                    this.$router.push('/needDetails/' + obj.id);
-                }
+                common.$emit('needToDetails', {
+                    id: obj.id,
+                    type: ''
+                });
+                this.$router.push('/needDetails/' + obj.id);
             },
             jumpRes(router, id) {
                 common.$emit('resourceDetail', id);

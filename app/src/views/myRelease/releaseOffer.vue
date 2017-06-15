@@ -51,6 +51,8 @@ input {
         .up_load {
             width: 80px;
             height: 80px;
+            margin-right: 30px;
+            margin-bottom:15px;
         }
     }
     .confirm {
@@ -74,12 +76,33 @@ input {
             <basicTop :obj="obj" v-on:showAction="showAction"></basicTop>
             <titles tab="2"></titles>
             <div class="img">
+                <div class="up_load" v-show="!handPhoto">
+                    <specialImgs :param="handPhoto" :type="Type0" v-on:postUrl="getUrlOne"></specialImgs>
+                </div>
+                <div class="img_box" v-show="handPhoto">
+                    <img :src="handPhoto" class="my_img">
+                    <img src="/static/icons/upload-delete.png" class="delete" @click="deletehandPhoto">
+                </div>
+                <div class="up_load" v-show="!detailsPhoto">
+                    <specialImgs :param="detailsPhoto" :type="Type1" v-on:postUrl="getUrlTwo"></specialImgs>
+                </div>
+                <div class="img_box" v-show="detailsPhoto">
+                    <img :src="detailsPhoto" class="my_img">
+                    <img src="/static/icons/upload-delete.png" class="delete" @click="deletedetailsPhoto">
+                </div>
+                <div class="up_load" v-show="!cargoPhoto">
+                    <specialImgs :param="cargoPhoto" :type="Type2" v-on:postUrl="getUrlThree"></specialImgs>
+                </div>
+                <div class="img_box" v-show="cargoPhoto">
+                    <img :src="cargoPhoto" class="my_img">
+                    <img src="/static/icons/upload-delete.png" class="delete" @click="deletecargoPhoto">
+                </div>
                 <div class="img_box" v-for="(todo,index) in imgArr">
                     <img :src="todo" class="my_img">
                     <img src="/static/icons/upload-delete.png" class="delete" @click="deletes">
                 </div>
                 <div class="up_load">
-                    <upLoadImgs :param="imgArr" v-on:postUrl="getUrl"></upLoadImgs>
+                    <upLoadImgs :param="imgArr"  v-on:postUrl="getUrl"></upLoadImgs>
                 </div>
             </div>
             <selectQuality :obj="obj"></selectQuality>
@@ -96,7 +119,8 @@ import myHeader from '../../components/tools/myHeader'
 import popSpec from '../../components/popUpType/popSpec'
 import basicTop from '../../components/release/basicInTop'
 import titles from '../../components/release/title'
-import upLoadImgs from '../../components/release/upLoadImgs'
+import upLoadImgs from '../../components/release/otherImgs'
+import specialImgs from '../../components/release/specialImgs'
 import priceOrNumber from '../../components/release/priceOrNumber'
 import selectQuality from '../../components/release/selectQuality'
 import httpService from '../../common/httpService.js'
@@ -107,11 +131,17 @@ export default {
                     name: '正在报价',
                     router: 'home'
                 },
+                handPhoto: '',
+                Type0: '0',
+                detailsPhoto: '',
+                Type1: '1',
+                cargoPhoto: '',
+                Type2: '2',
                 wrapperHeight: '',
                 obj: {
                     breedName: '天麻',
-                    need_number:'',
-                    need_unit:'',
+                    need_number: '',
+                    need_unit: '',
                     spec: '',
                     place: '',
                     place_id: '',
@@ -194,7 +224,20 @@ export default {
             },
             confirm() {
                 let _self = this;
-
+                let imgArr = [];
+                if(_self.handPhoto){
+                    imgArr.unshift(_self.handPhoto)
+                }
+                if(_self.detailsPhoto){
+                    imgArr.unshift(_self.detailsPhoto)
+                }
+                if(_self.cargoPhoto){
+                    imgArr.unshift(_self.cargoPhoto)
+                }
+                for(var i=0;i<_self.imgArr.length;i++){
+                    imgArr.unshift(_self.imgArr[i])
+                }
+                //console.log(imgArr);
                 _self.obj.quality = '';
                 for (var i = 0; i < _self.obj.sell_point.length; i++) {
                     if (!_self.obj.quality) {
@@ -212,8 +255,8 @@ export default {
                 checkArr.push(checkBreedPlace);
 
                 let count = '请上传图片';
-                for (let i = 0; i < _self.imgArr.length; i++) {
-                    if (_self.imgArr[i]) {
+                for (let i = 0; i < imgArr.length; i++) {
+                    if (imgArr[i]) {
                         count = false;
                     }
                 }
@@ -228,7 +271,7 @@ export default {
                 checkArr.push(checkNum);
                 let checkPri = validation.checkPrice(_self.obj.price, '裸价');
                 checkArr.push(checkPri);
-                let checkPriDescription = validation.checkNull(_self.obj.priceDescription, '价格补充说明');
+                let checkPriDescription = validation.checkNull(_self.obj.priceDescription, '请填写价格说明');
                 checkArr.push(checkPriDescription);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
@@ -346,7 +389,31 @@ export default {
             },
             getUrl(param) {
                 console.log(1, param)
-                this.imgArr.push(param.url);
+                if (param.url) this.imgArr.push(param.url);
+            },
+            getUrlOne(param) {
+                if (param.url) {
+                    this.handPhoto = param.url;
+                }
+            },
+            getUrlTwo(param) {
+                if (param.url) {
+                    this.detailsPhoto = param.url;
+                }
+            },
+            getUrlThree(param) {
+                if (param.url) {
+                    this.cargoPhoto = param.url;
+                }
+            },
+            deletehandPhoto() {
+                this.handPhoto = '';
+            },
+            deletedetailsPhoto() {
+                this.detailsPhoto = '';
+            },
+            deletecargoPhoto() {
+                this.cargoPhoto = '';
             },
             deletes(index) {
                 let _self = this;
@@ -359,7 +426,6 @@ export default {
                     title: '提示',
                     ensure: deletImgs
                 });
-
             },
             select(todo, index) {
                 let _self = this;
@@ -418,7 +484,8 @@ export default {
             titles,
             upLoadImgs,
             priceOrNumber,
-            selectQuality
+            selectQuality,
+            specialImgs
         },
         created() {
             let _self = this;
@@ -437,7 +504,7 @@ export default {
                 _self.obj.number_id = '';
                 _self.obj.price = '';
                 _self.obj.priceDescription = '';
-                for(var i=0;i<_self.obj.sell.length;i++){
+                for (var i = 0; i < _self.obj.sell.length; i++) {
                     console.log
                     _self.obj.sell[i].show = false;
                 }

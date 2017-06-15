@@ -49,7 +49,7 @@
 </style>
 <template>
     <div class="img_upload" :v-loading.body="loading">
-        <input ref="imgInput" :disabled="param.length > 4" type="file" @change="previewImg" :class="{'disabled':param.length > 4}" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
+        <input ref="imgInput" :disabled="param.length > 1" type="file" @change="previewImg" :class="{'disabled':param.length > 1}" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
             <img src="/static/icons/add-imgs.png" class="uploads">
     </div>
 </template>

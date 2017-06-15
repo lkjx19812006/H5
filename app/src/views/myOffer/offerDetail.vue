@@ -18,6 +18,7 @@
             flex-direction: row;
             justify-content: space-between;
             .left {
+                flex:1;
                 color: #343434;
                 text-align: left;
                 @media screen {
@@ -55,6 +56,7 @@
             }
             .right {
                 display: flex;
+
                 flex-direction: column;
                 justify-content: center;
                 align-items:center;
@@ -191,7 +193,7 @@
                     <div class='right'>
                         <div class='right_box'>
                             <div class="images"><img src="/static/icon/times.png"></div>
-                            <div>&nbsp;剩余{{obj.content.duedate | timeDay}} 天</div>
+                            <div>&nbsp;剩余{{obj.content.duedate | timeDay}}天</div>
                         </div>
                         <div class="detail" @click="again()" v-if="obj.newOffer.accept == '3'">再次报价</div>
                     </div>
@@ -407,6 +409,7 @@ export default {
                 _self.getHttp(item);
                 _self.getOffer(item);
                 _self.id = item;
+                _self.show = false;
             });
             common.$on('getInfo', function(item) {
                 _self.getHttp(id);

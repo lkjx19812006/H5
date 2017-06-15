@@ -8,12 +8,26 @@ textarea {
     border-radius: 0;
 }
 
+textarea::-webkit-input-placeholder {
+    color: #ADADAD;
+}
+
+textarea:-moz-placeholder {
+    color: #ADADAD;
+}
+
+textarea::-moz-placeholder {
+    color: #ADADAD;
+}
+
+textarea:-ms-input-placeholder {
+    color: #ADADAD;
+}
+
 input {
     border: none;
     background-color: #fff;
 }
-
-
 
 .price_number {
     background-color: #fff;
@@ -70,19 +84,19 @@ input {
             }
         }
     }
-    .supplement{
-        width:100%;
-        padding:20px 15px 20px 0;
-        font-size:14px;
-        div{
-            color:#ADADAD;
-            text-align:left;
+    .supplement {
+        width: 100%;
+        padding: 20px 15px 20px 0;
+        font-size: 14px;
+        div {
+            color: #ADADAD;
+            text-align: left;
         }
-        .content{
-             width:100%;
-             min-height:50px;
-             border:none;
-             color:#000;
+        .content {
+            width: 100%;
+            min-height: 50px;
+            border: none;
+            color: #000;
         }
     }
 }
@@ -121,24 +135,24 @@ export default {
     data() {
             return {}
         },
-        props:{
-            obj:{
+        props: {
+            obj: {
 
             }
         },
         methods: {
-            showAction(param){
-                this.$emit('showAction',param)
+            showAction(param) {
+                this.$emit('showAction', param)
             }
         },
         components: {
-            
+
         },
         created() {
-            
+
         },
         mounted() {
-            
+
         }
 }
 </script>

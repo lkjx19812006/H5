@@ -48,7 +48,7 @@
         </div>
         <div class="title_box" v-if="tab == '2'">
             <div class="inbox last">
-                <div class="left">备注信息</div>
+                <div class="left">价格说明</div>
                 <div class="right">{{obj.newOffer.priceDescription}}</div>
             </div>
         </div>
@@ -60,7 +60,7 @@
         </div>
         <div class="title_box" v-if="tab == '3'">
             <div class="inbox last">
-                <div class="left">备注信息</div>
+                <div class="left">价格说明</div>
                 <div class="right">{{obj.priceDescription}}</div>
             </div>
         </div>

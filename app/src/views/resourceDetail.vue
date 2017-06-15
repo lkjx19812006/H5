@@ -91,7 +91,7 @@
                 <p>电话</p>
             </button>
         </div>
-        <div class="choose" v-show="choose.push_num" v-bind:class="{swipe_active:choose.push_num,'swipe_default':!choose.push_num  }">
+        <div class="choose" v-show="choose.push_num && obj.isMy == 0" v-bind:class="{swipe_active:choose.push_num,'swipe_default':!choose.push_num  }">
             <chooseNum :param="choose" v-on:addCart="addBuy(obj.id)"></chooseNum>
         </div>
         <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>

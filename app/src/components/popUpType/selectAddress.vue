@@ -3,27 +3,29 @@
     background-color: #fff;
     .address {
         display: flex;
-        flex-direction: row;
-        line-height: 30px;
-        padding: 10px 0 10px 15px;
-        height: 50px;
+        flex-direction: row;  
+        padding: 15px 0 15px 15px;  
+        line-height:20px; 
         .left {
             font-size: 15px;
             color: #343434;
             width: 70px;
             text-align: left;
+
+           
         }
         .content {
             flex: 1;
             text-align: left;
             font-size: 15px;
+            
             span {
                 color: #999;
             }
         }
         .img {
             width: 30px;
-            padding-top: 6px;
+            padding-top: 0px;
             img {
                 height: 18px;
             }
