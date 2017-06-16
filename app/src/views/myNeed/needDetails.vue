@@ -111,7 +111,7 @@
         }
     }
     .share {
-        position: fixed;
+        position: absolute;
         z-index: 20;
         bottom: 0;
         height: 50px;
@@ -331,10 +331,6 @@
             </div>
         </div>
         <div class="share" v-show="!type">
-            <!--  <div class="offer_it" @click="delet(obj.id)">
-                <img src="/static/icon/send-friend.png">
-                <div>删除</div>
-            </div> -->
             <div class="offer_it send_friend" @click="resive(obj.id)">
                 <img src="/static/icon/offer-price.png">
                 <div>编辑</div>

@@ -10,7 +10,7 @@
         </button>
         <button v-if="!obj.isAttention" class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="myAttention(1)">
             <img src="/static/icons/unfollow.png">
-            <p>未收藏</p>
+            <p>收藏</p>
         </button>
     </div>
 </template>

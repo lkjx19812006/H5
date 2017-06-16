@@ -271,7 +271,7 @@ export default {
                         if (common.wxshow) {
                             common.getWxUrl();
                         } else {
-                            console.log(232131)
+                            //console.log(232131)
                             _self.$router.push('/login');
                         }
                     }

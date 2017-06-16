@@ -8,6 +8,32 @@
     .history_arr {
         margin-bottom: 10px;
     }
+    .title_box {
+        padding-left: 15px;
+        background-color: #fff;
+        .inbox {
+            display: flex;
+            flex-direction: row;
+            line-height: 15px;
+            text-align: left;
+            border-bottom: 1px solid #E6E6E6;
+            padding: 15px 15px 15px 0;
+        }
+        .last {
+            border-bottom: none;
+        }
+        .left {
+            font-size: 15px;
+            color: #343434;
+            width: 80px;
+        }
+        .right {
+            flex: 1;
+            font-size: 14px;
+            color: #494949;
+            word-break: break-all;
+        }
+    }
     .box {
         padding: 15px 0 0 15px;
         background-color: #fff;
@@ -18,7 +44,7 @@
             flex-direction: row;
             justify-content: space-between;
             .left {
-                flex:1;
+                flex: 1;
                 color: #343434;
                 text-align: left;
                 @media screen {
@@ -49,20 +75,18 @@
                 }
                 .last {
                     margin-top: 5px;
-                    .red{
-                        color:#fa6705;
+                    .red {
+                        color: #fa6705;
                     }
                 }
             }
             .right {
                 display: flex;
-
                 flex-direction: column;
-                justify-content: center;
-                align-items:center;
+                align-items: center;
                 .right_box {
                     font-size: 15px;
-                    text-align:center;
+                    text-align: center;
                     display: flex;
                     flex-direction: row;
                     padding-top: 5px;
@@ -86,6 +110,7 @@
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
+                overflow: hidden;
                 img {
                     width: 100%;
                     min-height: 80px;
@@ -167,105 +192,136 @@
             margin-left: 10px;
         }
     }
-    .no_history{
+    .no_history {
         color: #f05555;
-        font-size:15px;
-        height:50px;
-        line-height:50px;
-        text-align:left;
-        padding-left:15px;
-        background-color:#fff;
+        font-size: 15px;
+        height: 50px;
+        line-height: 50px;
+        text-align: left;
+        padding-left: 15px;
+        background-color: #fff;
+    }
+    .imgs {
+        width: 100%;
+        position: absolute;
+        height: 200px;
+        img {
+            width: 100%;
+            height: 100%;
+        }
     }
 }
 </style>
 <template>
     <div class="content need_detail">
-        <myHeader :param="param"></myHeader>
-        <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <titles tab="3" :obj="obj"></titles>
-            <div class="box">
-                <div class="inbox">
-                    <div class="left">
-                        <div class="breed">{{obj.content.breedName}} <span>({{obj.content.number}}{{obj.content.unit}})</span></div>
-                        <div class="spec">{{obj.content.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.content.spec,4 | filterTxt}}</div>
-                        <div class="spec last">交货地: {{obj.content.address}}</div>
-                    </div>
-                    <div class='right'>
-                        <div class='right_box'>
-                            <div class="images"><img src="/static/icon/times.png"></div>
-                            <div>&nbsp;剩余{{obj.content.duedate | timeDay}}天</div>
+        <myHeader :param="param" v-show="!my_param.show"></myHeader>
+        <div class="boxs" v-show="!my_param.show">
+            <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+                <!--  <div class="imgs">
+            <mt-swipe :auto="4000" :prevent="false">
+                <mt-swipe-item v-for="(todo,index) in bigImgs">
+                    <img :src="todo">
+                </mt-swipe-item>
+            </mt-swipe>
+        </div> -->
+                <titles tab="3" :obj="obj"></titles>
+                <div class="box">
+                    <div class="inbox">
+                        <div class="left">
+                            <div class="breed">{{obj.content.breedName}} <span>({{obj.content.number}}{{obj.content.unit}})</span></div>
+                            <div class="spec">{{obj.content.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.content.spec,4 | filterTxt}}</div>
+                            <div class="spec last">交货地: {{obj.content.address}}</div>
                         </div>
-                        <div class="detail" @click="again()" v-if="obj.newOffer.accept == '3'">再次报价</div>
+                        <div class='right'>
+                            <div class='right_box'>
+                                <div class="images"><img src="/static/icon/times.png"></div>
+                                <div>&nbsp;剩余{{obj.content.duedate | timeDay}}天</div>
+                            </div>
+                            <div class="detail" @click="again()" v-if="obj.newOffer.accept == '3'">再次报价</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <payMoneyOrRemark :obj="obj" tab='1'></payMoneyOrRemark>
-            <titles tab="4" :obj="obj"></titles>
-            <div class="tbox">
-                <div>报价状态:
-                    <span class="black" v-if="obj.newOffer.accept == '0'">{{obj.newOffer.accept | myOfferStatus}}</span>
-                    <span class="red" v-if="obj.newOffer.accept == '1'">{{obj.newOffer.accept | myOfferStatus}}</span>
-                    <span class="gray" v-if="obj.newOffer.accept == '2'">{{obj.newOffer.accept | myOfferStatus}}</span>
-                    <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span>
-                </div>
-                <div class="time">报价时间: {{obj.newOffer.otime | timeFormats}}</div>
-                <img src="/static/icon/used.png" class="used" v-if="obj.newOffer.accept == '1'">
-            </div>
-            <div class="box">
-                <div class="inbox">
-                    <div class="left">
-                        <div class="breed">{{obj.newOffer.breedName}} <span>({{obj.newOffer.number}}{{obj.newOffer.unit}})</span></div>
-                        <div class="spec">{{obj.newOffer.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.newOffer.spec,4 | filterTxt}}</div>
-                        <div class="spec last">裸价: <span class="red">{{obj.newOffer.price}}</span>元/{{obj.newOffer.unit}}</div>
-                    </div>
-                    <div class="image">
-                        <img :src="todo" v-for="(todo,index) in obj.newOffer.image" v-show="index == 0">
+                <div class="title_box">
+                    <div class="inbox">
+                        <div class="left">付款方式</div>
+                        <div class="right">{{obj.content.paymentWay}}</div>
                     </div>
                 </div>
-            </div>
-            <payMoneyOrRemark :obj="obj" tab='2'></payMoneyOrRemark>
-            <div class="retract" @click="retractHistory" v-show="show">
-                <div class="word">收起历史报价</div>
-                <img src="/static/icon/retract.png">
-            </div>
-            <titles tab="5" :obj="obj" v-show="show"></titles>
-            <div class="history_arr"  v-for="todo in obj.list" v-if='obj.list.length > 0 && show'>
+                <div class="title_box">
+                    <div class="inbox last">
+                        <div class="left">备注信息</div>
+                        <div class="right">{{obj.content.description}}</div>
+                    </div>
+                </div>
+                <titles tab="4" :obj="obj"></titles>
                 <div class="tbox">
                     <div>报价状态:
-                        <span class="black" v-show="todo.accept == '0'">{{todo.accept | myOfferStatus}}</span>
-                        <span class="red" v-show="todo.accept == '1'">{{todo.accept | myOfferStatus}}</span>
-                        <span class="gray" v-show="todo.accept == '2'">{{todo.accept | myOfferStatus}}</span>
-                        <span class="black" v-show="todo.accept == '3'">{{todo.accept | myOfferStatus}}</span>
+                        <span class="black" v-if="obj.newOffer.accept == '0'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                        <span class="red" v-if="obj.newOffer.accept == '1'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                        <span class="gray" v-if="obj.newOffer.accept == '2'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                        <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span>
                     </div>
-                    <div class="time">报价时间: {{todo.otime | timeFormats}}</div>
-                    <img src="/static/icon/used.png" class="used" v-if="todo.accept == '1'">
+                    <div class="time">报价时间: {{obj.newOffer.otime | timeFormats}}</div>
+                    <img src="/static/icon/used.png" class="used" v-if="obj.newOffer.accept == '1'">
                 </div>
                 <div class="box">
                     <div class="inbox">
                         <div class="left">
-                            <div class="breed">{{todo.breedName}} <span>({{todo.number}}{{todo.unit}})</span></div>
-                            <div class="spec">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
-                            <div class="spec last">裸价: <span class="red">{{todo.price}}</span>元/{{todo.unit}}</div>
+                            <div class="breed">{{obj.newOffer.breedName}} <span>({{obj.newOffer.number}}{{obj.newOffer.unit}})</span></div>
+                            <div class="spec">{{obj.newOffer.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.newOffer.spec,4 | filterTxt}}</div>
+                            <div class="spec last">裸价: <span class="red">{{obj.newOffer.price}}</span>元/{{obj.newOffer.unit}}</div>
                         </div>
                         <div class="image">
-                            <img :src="todo" v-for="(todo,index) in todo.image" v-show="index == 0">
+                            <img :src="todo" v-for="(todo,index) in obj.newOffer.image" v-show="index == 0" @click="popUp(obj.newOffer.image)">
                         </div>
                     </div>
                 </div>
-                <payMoneyOrRemark :obj="todo" tab='3'></payMoneyOrRemark>
+                <payMoneyOrRemark :obj="obj" tab='2'></payMoneyOrRemark>
+                <div class="retract" @click="retractHistory" v-show="show">
+                    <div class="word">收起历史报价</div>
+                    <img src="/static/icon/retract.png">
+                </div>
+                <titles tab="5" :obj="obj" v-show="show"></titles>
+                <div class="history_arr" v-for="todo in obj.list" v-if='obj.list.length > 0 && show'>
+                    <div class="tbox">
+                        <div>报价状态:
+                            <span class="black" v-show="todo.accept == '0'">{{todo.accept | myOfferStatus}}</span>
+                            <span class="red" v-show="todo.accept == '1'">{{todo.accept | myOfferStatus}}</span>
+                            <span class="gray" v-show="todo.accept == '2'">{{todo.accept | myOfferStatus}}</span>
+                            <span class="black" v-show="todo.accept == '3'">{{todo.accept | myOfferStatus}}</span>
+                        </div>
+                        <div class="time">报价时间: {{todo.otime | timeFormats}}</div>
+                        <img src="/static/icon/used.png" class="used" v-if="todo.accept == '1'">
+                    </div>
+                    <div class="box">
+                        <div class="inbox">
+                            <div class="left">
+                                <div class="breed">{{todo.breedName}} <span>({{todo.number}}{{todo.unit}})</span></div>
+                                <div class="spec">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
+                                <div class="spec last">裸价: <span class="red">{{todo.price}}</span>元/{{todo.unit}}</div>
+                            </div>
+                            <div class="image">
+                                <img :src="item" v-for="(item,index) in todo.image" v-show="index == 0" @click="popUp(todo.image)">
+                            </div>
+                        </div>
+                    </div>
+                    <payMoneyOrRemark :obj="todo" tab='3'></payMoneyOrRemark>
+                </div>
+                <div class="no_history" v-if="obj.list.length == 0 && show">无历史报价~</div>
             </div>
-            <div class="no_history" v-if="obj.list.length == 0 && show">无历史报价~</div>
+            <div class="look_history" @click="launchHistory" v-show="!show">
+                <div class="word">查看历史报价</div>
+                <img src="/static/icon/look-historyl.png">
+            </div>
         </div>
-        <div class="look_history" @click="launchHistory" v-show="!show">
-            <div class="word">查看历史报价</div>
-            <img src="/static/icon/look-historyl.png">
-        </div>
+        <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>
     </div>
 </template>
 <script>
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import payMoneyOrRemark from '../../components/myOffer/payMoneyOrRemark'
+import popUpBigImg from '../../components/tools/popUpBigImg'
 import myHeader from '../../components/tools/myHeader'
 import titles from '../../components/release/title'
 import filters from '../../filters/filters'
@@ -273,6 +329,11 @@ export default {
     data() {
             return {
                 show: false,
+                my_param: {
+                    url: '',
+                    show: false,
+                    whole_height: ''
+                },
                 obj: {
                     data: {
                         payMoney: '付款方式',
@@ -294,13 +355,15 @@ export default {
                     name: '报价详情',
                     topissue: true,
                 },
-                id: ''
+                id: '',
+                bigImgs: []
             }
         },
         components: {
             myHeader,
             titles,
-            payMoneyOrRemark
+            payMoneyOrRemark,
+            popUpBigImg
         },
         methods: {
             getHttp(id) {
@@ -336,6 +399,7 @@ export default {
                         _self.obj.content.unit = result.unit;
                         _self.obj.content.paymentWay = result.paymentWay;
                         _self.obj.content.description = result.description;
+                        //console.log(result.paymentWay)
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -347,6 +411,12 @@ export default {
             again() {
                 common.$emit('needToReleaseOffer', this.id);
                 this.$router.push('/releaseOffer/' + this.id);
+            },
+            popUp(imgArr) {
+                let _self = this;
+                this.my_param.url = imgArr;
+                this.my_param.show = !this.my_param.show;
+                this.my_param.whole_height = document.documentElement.clientHeight;
             },
             getOffer(id) {
                 let _self = this;
@@ -376,8 +446,10 @@ export default {
                         if (_self.show) {
                             result.shift();
                             _self.obj.list = result;
-                            console.log(11,_self.obj.list)
-                            
+                            if (_self.obj.list.length == 0) {
+                                common.$emit('message', '无历史报价~');
+                            }
+
                         }
                     } else {
                         common.$emit('message', suc.data.msg);

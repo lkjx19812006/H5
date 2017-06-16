@@ -217,6 +217,7 @@ export default {
 
 .good_detail .swipe_height img {
     width: 100%;
+    min-height: 18.8rem;
     position: absolute;
     left: 0;
 }

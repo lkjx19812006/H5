@@ -88,7 +88,11 @@ router.afterEach(route => {
 Vue.http.interceptors.push((request, next) => {
     next((response) => {
         if (response.status == 403) {
-            return router.push('/login');
+            if (common.wxshow == true) {
+                return router.push('/wchatLogin');
+            } else{
+                return router.push('/login');
+            }         
         }
         return response
     })

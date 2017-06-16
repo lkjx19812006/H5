@@ -529,7 +529,7 @@ export default {
 
 .resource_detail .swipe_height img {
     width: 100%;
-    height: 18.8rem;
+    min-height: 18.8rem;
     margin-top: 0;
 }
 

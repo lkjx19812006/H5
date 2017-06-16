@@ -167,7 +167,7 @@ let common = new Vue({
                 }
             }).then((res) => {
                 if (res.data.biz_result) _self.shareCreate(res.data.biz_result);
-                alert(1231231)
+                //alert(1231231)
             }, (err) => {
                 console.log(err);
             });

@@ -136,12 +136,18 @@ export default {
                 let _self = this;
                 todo.show = !todo.show;
                 _self.obj.sell_point = [];
+                let select_content = '';
                 for (var i = 0; i < _self.obj.sell.length; i++) {
                     if (_self.obj.sell[i].show) {
-                        _self.obj.sell_point.push(_self.obj.sell[i].name)
+                        _self.obj.sell_point.push(_self.obj.sell[i].name);
+                        if(select_content !== '')select_content = select_content + ',' + _self.obj.sell[i].name;
+                        if(select_content == '')select_content = _self.obj.sell[i].name;
+                        
                     }
                 }
-                console.log(_self.obj.sell_point);
+                _self.obj.descriptions = '';
+                _self.obj.descriptions = select_content;
+                
             }
 
         },

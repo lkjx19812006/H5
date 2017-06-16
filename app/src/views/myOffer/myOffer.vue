@@ -112,6 +112,10 @@
         color: #fa6705;
     }
 }
+
+.red {
+    color: #fa6705;
+}
 </style>
 <template>
     <div class="my_needs">
@@ -124,7 +128,7 @@
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
             <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                 <ul class="main">
-                    <li v-for="todo in todos">
+                    <li v-for="todo in todos" @click="jump(router,todo.intentionId)">
                         <div class="box">
                             <div class="top">
                                 <div class="left black" v-show="todo.accept == 0">报价状态:
@@ -145,7 +149,7 @@
                                 <div class="left">
                                     <div class="breed_name">{{todo.breedName}} ({{todo.number}}{{todo.unit}})</div>
                                     <div class="spec">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
-                                    <div class="spec">裸价: {{todo.price}}元/{{todo.unit}}</div>
+                                    <div class="spec">裸价: <span class="red">{{todo.price}}</span>元/{{todo.unit}}</div>
                                 </div>
                                 <div class="right">
                                     <div class="date">
@@ -153,7 +157,7 @@
                                         <div>剩余{{todo.duedate | timeDays}}<span></span></div>
                                         <!-- <div v-if="todo.especial !== 1 && todo.type == 0">长期</div> -->
                                     </div>
-                                    <div class="detail" @click="jump(router,todo.intentionId)">
+                                    <div class="detail">
                                         报价详情
                                     </div>
                                 </div>

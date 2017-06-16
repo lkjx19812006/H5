@@ -101,7 +101,7 @@ input {
                     <img :src="todo" class="my_img">
                     <img src="/static/icons/upload-delete.png" class="delete" @click="deletes">
                 </div>
-                <div class="up_load">
+                <div class="up_load" v-show="handPhoto && detailsPhoto && cargoPhoto && imgArr.length !== 2">
                     <upLoadImgs :param="imgArr"  v-on:postUrl="getUrl"></upLoadImgs>
                 </div>
             </div>
@@ -185,6 +185,7 @@ export default {
                     intentionId: ''
                 },
                 imgArr: [],
+                imageArrs:[]
             }
         },
         methods: {
@@ -224,30 +225,23 @@ export default {
             },
             confirm() {
                 let _self = this;
-                let imgArr = [];
+                 _self.imageArrs = [];
                 if(_self.handPhoto){
-                    imgArr.unshift(_self.handPhoto)
+                    _self.imageArrs.unshift(_self.handPhoto)
                 }
                 if(_self.detailsPhoto){
-                    imgArr.unshift(_self.detailsPhoto)
+                    _self.imageArrs.unshift(_self.detailsPhoto)
                 }
                 if(_self.cargoPhoto){
-                    imgArr.unshift(_self.cargoPhoto)
+                    _self.imageArrs.unshift(_self.cargoPhoto)
                 }
                 for(var i=0;i<_self.imgArr.length;i++){
-                    imgArr.unshift(_self.imgArr[i])
+                    _self.imageArrs.unshift(_self.imgArr[i])
                 }
-                //console.log(imgArr);
+                console.log(33,_self.imageArrs);
                 _self.obj.quality = '';
-                for (var i = 0; i < _self.obj.sell_point.length; i++) {
-                    if (!_self.obj.quality) {
-                        _self.obj.quality = _self.obj.sell_point[0];
-                    } else {
-                        _self.obj.quality = _self.obj.quality + ',' + _self.obj.sell_point[i];
-                    }
-                }
-                if (_self.obj.quality) _self.obj.quality = _self.obj.quality + ',' + _self.obj.descriptions;
-                if (!_self.obj.quality) _self.obj.quality = _self.obj.descriptions;
+                
+                console.log(1,_self.obj.descriptions)
                 var checkArr = [];
                 let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格');
                 checkArr.push(checkBreedSpec);
@@ -255,21 +249,21 @@ export default {
                 checkArr.push(checkBreedPlace);
 
                 let count = '请上传图片';
-                for (let i = 0; i < imgArr.length; i++) {
-                    if (imgArr[i]) {
+                for (let i = 0; i < _self.imageArrs.length; i++) {
+                    if (_self.imageArrs[i]) {
                         count = false;
                     }
                 }
                 if (count) {
                     checkArr.push(count);
                 }
-                let checkQuality = validation.checkNull(_self.obj.quality, '请选择产品卖点');
+                let checkQuality = validation.checkNull(_self.obj.descriptions, '请选择产品卖点');
                 checkArr.push(checkQuality);
                 // let checkDrugInfor = validation.checkNull(_self.obj.descriptions, '请填写产品信息');
                 // checkArr.push(checkDrugInfor);
                 let checkNum = validation.checkMaxNum(_self.obj.number, '可供量');
                 checkArr.push(checkNum);
-                let checkPri = validation.checkPrice(_self.obj.price, '裸价');
+                let checkPri = validation.checkPrice(_self.obj.price, '裸价请输入小数未2位小数');
                 checkArr.push(checkPri);
                 let checkPriDescription = validation.checkNull(_self.obj.priceDescription, '请填写价格说明');
                 checkArr.push(checkPriDescription);
@@ -389,7 +383,9 @@ export default {
             },
             getUrl(param) {
                 console.log(1, param)
+
                 if (param.url) this.imgArr.push(param.url);
+                console.log(this.imgArr.length)
             },
             getUrlOne(param) {
                 if (param.url) {
@@ -449,8 +445,8 @@ export default {
                         breedName: _self.obj.breedName,
                         spec: _self.obj.spec,
                         location: _self.obj.place_id,
-                        breedImage: _self.imgArr,
-                        quality: _self.obj.quality,
+                        breedImage: _self.imageArrs,
+                        quality: _self.obj.descriptions,
                         number: _self.obj.number,
                         unit: _self.obj.number_id,
                         price: _self.obj.price,
@@ -503,6 +499,7 @@ export default {
                 _self.obj.number = '';
                 _self.obj.number_id = '';
                 _self.obj.price = '';
+                _self.obj.descriptions = '';
                 _self.obj.priceDescription = '';
                 for (var i = 0; i < _self.obj.sell.length; i++) {
                     console.log

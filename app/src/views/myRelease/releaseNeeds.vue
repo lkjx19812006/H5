@@ -503,7 +503,7 @@ export default {
                             msg = '付款期限不能小于0天';
                             validate = false;
                         }
-                        _self.paymentWay = '验收合格后' + _self.payArr[2].two + '天内付款';
+                        _self.paymentWay = '验收合格后，' + _self.payArr[2].two + '天内付款';
                         break;
                     case 3:
                         if (!_self.payArr[3].two) {
@@ -654,7 +654,7 @@ export default {
                 }
                 let Reg0 = /^\u5408\u540c\u7b7e\u8ba2\u540e\uff0c\u9884\u4ed8\u5b9a\u91d1[1-9]\d*%$/;
                 let Reg1 = /^\u9a8c\u6536\u5408\u683c\u540e\uff0c\u7acb\u5373\u4ed8\u6b3e$/;
-                let Reg2 = /^\u9a8c\u6536\u5408\u683c\u540e[1-9]\d*\u5929\u5185\u4ed8\u6b3e$/;
+                let Reg2 = /^\u9a8c\u6536\u5408\u683c\u540e\uff0c[1-9]\d*\u5929\u5185\u4ed8\u6b3e$/;
                 // 合同签订后，预付定金  % 0
                 // 验收合格后，立即付款    1
                 // 验收合格后 ? 天内付款   2

@@ -22,24 +22,12 @@
         flex:1;
         font-size: 14px;
         color: #494949;
+        word-break:break-all;
     }
 }
 </style>
 <template>
     <div>
-        <div class="title_box" v-if="tab == '1'">
-            <div class="inbox">
-                <div class="left">付款方式</div>
-                <div class="right">{{obj.content.paymentWay}}</div>
-            </div>
-        </div>
-        <div class="title_box" v-if="tab == '1'">
-            <div class="inbox last">
-                <div class="left">备注信息</div>
-                <div class="right">{{obj.content.description}}</div>
-            </div>
-        </div>
-
         <div class="title_box" v-if="tab == '2'">
             <div class="inbox">
                 <div class="left">产品信息</div>

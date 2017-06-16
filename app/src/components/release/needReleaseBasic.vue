@@ -321,7 +321,7 @@ export default {
                     name: '无虫蛀',
                     show: true
                 }, {
-                    name: '无毒',
+                    name: '无霉',
                     show: true
                 }, {
                     name: '无变色',

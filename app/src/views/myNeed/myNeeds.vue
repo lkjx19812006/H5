@@ -48,6 +48,7 @@
                     align-items: center;
                     .left {
                         .breed_name {
+                            text-align:left;
                             font-size: 15px;
                             color: #000;
                         }
@@ -100,7 +101,7 @@
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
             <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                 <ul class="main">
-                    <li v-for="todo in todos">
+                    <li v-for="todo in todos" @click="jump(router,todo.id)">
                         <div class="box">
                             <div class="top">
                                 <div class="left" v-show="todo.onSell == 2">求购状态: <span class="red">{{todo.onSell | myStatus}}</span></div>
@@ -122,7 +123,7 @@
                                         <div v-if="todo.especial == 1 && todo.type == 0">剩余{{todo.duedate | timeDays}}<span></span></div>
                                         <div v-if="todo.especial !== 1 && todo.type == 0">长期</div>
                                     </div>
-                                    <div class="detail" @click="jump(router,todo.id)">
+                                    <div class="detail" >
                                         求购详情
                                     </div>
                                 </div>

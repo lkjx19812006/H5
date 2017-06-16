@@ -26,10 +26,10 @@ Vue.filter('timeDays', function(due) {
         if (days > 0) {
             days = days + '天'
         } else if (days <= 0) {
-            days = 0;
+            days = '0天';
         }
     } else {
-        days = "已过期";
+        days = '0天';
     }
     return days;
 });
@@ -50,7 +50,7 @@ Vue.filter('timeDay', function(due) {
             days = 0;
         }
     } else {
-        days = "已过期";
+        days = 0;
     }
     return days;
 });
