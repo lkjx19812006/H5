@@ -184,6 +184,9 @@ export default {
 
         created() {
             let _self = this;
+            common.$on('initial',function(id){
+                _self.selectArr = []
+            })
             common.$emit('show-load');
             httpService.specifiedPlace(common.urlCommon + common.apiUrl.most, {
                 biz_module: 'breedService',

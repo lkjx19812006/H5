@@ -65,9 +65,6 @@ export default {
             let body = {
                 biz_module: 'userService',
                 biz_method: 'userAttention',
-                version: 1,
-                time: 0,
-                sign: '',
                 biz_param: {
                     intentionId: _self.obj.id,
                     type: type,

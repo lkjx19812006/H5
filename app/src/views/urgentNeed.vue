@@ -1,54 +1,192 @@
+<style lang="less" scoped>
+.urgent_need .fixed {
+    position: fixed;
+    width: 100%;
+    z-index: 2000;
+    background: #fff;
+}
+.mint-loadmore-top span {
+    display: inline-block;
+    transition: .2s linear;
+    vertical-align: middle;
+}
+
+.mint-loadmore-bottom span {
+    display: inline-block;
+    transition: .2s linear;
+    vertical-align: middle;
+}
+.urgent_need {
+    overflow: hidden;
+    .main {
+        width: 100%;
+        padding-top: 142px;
+        overflow: scroll;
+        width: 100%;
+    }
+    .factory {
+        background-color: #fff;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        padding: 5px 10px;
+        border-bottom: 1px solid #E6E6E6;
+        .left {
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: #4D4D4D;
+            border: 1px solid #E4E4E4;
+            border-radius: 15px;
+            padding: 0px 20px;
+            margin-right: 10px;
+        }
+        .active {
+            border: 1px solid #FA6705;
+            color: #FA6705;
+        }
+    }
+    .list {
+        background-color: #F7F7F7;
+        .li {
+            padding-left: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            border-bottom: 1px solid #e5e5e5;
+            border-top: 1px solid #e5e5e5;
+            .top {
+                border-bottom: 1px solid #e5e5e5;
+                position: relative;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                height: 42px;
+                .flag {
+                    width: 23px;
+                    height: 16px;
+                }
+                .drug_factory {
+                    width: 40px;
+                    font-size: 12px;
+                    line-height: 16px;
+                    height: 16px;
+                    background-color: #FF7600;
+                    color: #fff;
+                    margin: 0 0 0 4px;
+                }
+                .breed {
+                    font-size: 17px;
+                    margin-left: 9px;
+                }
+                .urgent {
+                    height: 27px;
+                    position: absolute;
+                    right: 0;
+                }
+            }
+            .content {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding-right: 10px;
+                .left {
+                    text-align: left;
+                    font-size: 15px;
+                    color: #333;
+                    .one {
+                        margin-top: 15px;
+                    }
+                    .spec {
+                        line-height: 15px;
+                        margin-bottom: 15px;
+                    }
+                }
+                .right {
+                    width: 120px;
+                    .date {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 14px;
+                        color: #3F3F3F;
+                        line-height: 13px;
+                        img {
+                            height: 15px;
+                            margin: 0 10px 0 0;
+                            padding: 0;
+                        }
+                    }
+                    .detail {
+                        background-color: #FF8300;
+                        height: 40px;
+                        line-height: 40px;
+                        color: #fff;
+                        font-size: 16px;
+                        border-radius: 20px;
+                        width: 120px;
+                        margin-top: 7px;
+                    }
+                }
+            }
+        }
+    }
+}
+</style>
 <template>
     <div class="content urgent_need">
-        <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
-        <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
-        <div class="bg_white">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
-                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                    <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
-                            <div class="center">
-                                <img src="https://ojic8qd7z.qnssl.com/contry_icon/zhongguo.png" class="flag">
-                                <div class="title">
-                                    <div class="small_pic">
-                                        <img src="/static/icons/impatient.png" v-if="todo.especial == 1 && todo.type == 0">
-                                        <!-- <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 0"> -->{{todo.breedName}}
-                                    </div>
-                                    <p>上架时间：{{todo.shelveTime | timeFormat}}</p>
-                                </div>
-                                <div class="detail">
-                                    <div>
-                                        <p>规格</p>
-                                        <p>产地</p>
-                                        <p>剩余</p>
-                                        <p>需求数量</p>
-                                    </div>
-                                    <div class="last">
-                                        <p>{{todo.spec}}</p>
-                                        <p>{{todo.location}}</p>
-                                        <p v-if="todo.especial == 1 && todo.type == 0">{{todo.duedate | timeDays}}<span></span></p>
-                                        <p v-if="todo.especial !== 1 && todo.type == 0">长期</p>
-                                        <p>{{todo.number}}<span>{{todo.unit}}</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bottom">
-                                <p>已报价<span>{{todo.offer}}</span>人</p>
-                                <button class="mint-button mint-button--primary mint-button--small" v-on:click.stop="jumpApp(todo)" v-if="todo.isMy == 0">我要报价</button>
-                                <button class="mint-button mint-button--primary mint-button--small" v-if="todo.isMy == 1">查看详情</button>
-                            </div>
-                        </li>
-                    </ul>
-                    <div slot="top" class="mint-loadmore-top">
-                        <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
-                        <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                    </div>
-                    <div slot="bottom" class="mint-loadmore-bottom">
-                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop'}">↑</span>
-                        <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                    </div>
-                </mt-loadmore>
+        <div class="fixed">
+            <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
+            <sort v-on:postId="getId" v-on:initial="initial" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
+            <div class="factory">
+                <div class="left" v-bind:class="{active:httpPraram.indentType == 0}" @click="indentType(0)">药厂</div>
+                <div class="left" v-bind:class="{active:httpPraram.indentType == 1}" @click="indentType(1)">普通</div>
             </div>
+        </div>
+        <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
+            <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                <ul class="list">
+                    <li v-for="todo in todos" @click="jumpDetail(todo.id)" class="li">
+                        <div class="top">
+                            <img src="https://ojic8qd7z.qnssl.com/contry_icon/zhongguo.png" class="flag">
+                            <div class="drug_factory" v-show="todo.indentType == 0">药厂</div>
+                            <div class="breed">{{todo.breedName}}</div>
+                            <img src="/static/icon/demand.png" class="urgent" v-show="todo.especial == 1">
+                        </div>
+                        <div class="content">
+                            <div class="left">
+                                <div class="spec one">产品规格: {{todo.spec,4 | filterTxt}}</div>
+                                <div class="spec">产品产地: {{todo.location,4 | filterTxt}}</div>
+                                <div class="spec">需求数量: {{todo.number,5 | filterTxt}}({{todo.unit}})</div>
+                                <div class="spec">报价人数: {{todo.offer,4 | filterTxt}}人</div>
+                            </div>
+                            <div class="right">
+                                <div class="date">
+                                    <div><img src="/static/icon/times.png"></div>
+                                    <div v-if="todo.especial == 1 && todo.type == 0">剩余{{todo.duedate | timeDays}}<span></span></div>
+                                    <div v-if="todo.especial !== 1 && todo.type == 0">长期</div>
+                                </div>
+                                <div class="detail" v-show="todo.indentType == 1">
+                                    我要报价
+                                </div>
+                                <div class="detail" v-show="todo.indentType == 0">
+                                    抢先报价
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div slot="top" class="mint-loadmore-top">
+                    <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+                    <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                </div>
+                <div slot="bottom" class="mint-loadmore-bottom">
+                    <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                    <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                </div>
+            </mt-loadmore>
         </div>
         <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
@@ -72,30 +210,10 @@ export default {
                 },
                 sortRouter: 'urgentNeed',
                 sortArr: [{
-                    name: '上架时间',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '上架时间',
+                    name: '综合',
+                    asc: 'comprehensive',
+                    select: false,
                     class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由新到旧',
-                        asc: 'low',
-                        show: false,
-                        time: 1,
-                        key: 'time'
-                    }, {
-                        name: '由旧到新',
-                        asc: 'top',
-                        show: false,
-                        time: 2,
-                        key: 'time'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        time: 0,
-                        key: 'time'
-                    }]
                 }, {
                     name: '报价人数',
                     asc: 'top',
@@ -163,6 +281,7 @@ export default {
                     offer: 0,
                     duedate: 0,
                     location: [],
+                    indentType: -1,
                     keyword: '',
                     page: 1,
                     pageSize: 10
@@ -199,6 +318,7 @@ export default {
                             "duedate": _self.httpPraram.duedate
                         },
                         location: _self.httpPraram.location,
+                        indentType: _self.httpPraram.indentType,
                         pn: _self.httpPraram.page,
                         pSize: _self.httpPraram.pageSize
                     }
@@ -239,9 +359,42 @@ export default {
             },
             getId(param) {
                 let _self = this;
+                this.sortArr[0].class = 'sort_content_detail'; //综合筛选回归
+                this.sortArr[0].select = true; //综合筛选回归
                 _self.param = true;
                 _self.httpPraram.page = 1;
                 _self.httpPraram[param.key] = param[param.key];
+                _self.getHttp();
+            },
+            initial(param) {
+                let _self = this;
+                if (!param) {
+                    _self.httpPraram.time = 0;
+                    _self.httpPraram.offer = 0;
+                    _self.httpPraram.duedate = 0;
+                    _self.httpPraram.keyword = '';
+                    _self.httpPraram.location = [];
+                    _self.httpPraram.indentType = -1;
+                    _self.httpPraram.page = 1;
+                    for (var i = 1; i < _self.sortArr.length; i++) {
+                        if (i < 3) {
+                            _self.sortArr[i].name = _self.sortArr[i].saveName;
+                            _self.sortArr[i].url = '/static/icons/drop_down.png';
+                            _self.sortArr[i].class = 'sort_content_detail';
+                        }
+                        if (i == 3) {
+                            _self.sortArr[3].name = '产地';
+                            _self.sortArr[3].class = "sort_content_detail";
+                            _self.sortArr[3].url = "/static/icons/screen.png";
+                            common.$emit('initial', 1)
+                        }
+                    }
+                    _self.getHttp();
+                }
+            },
+            indentType(num) {
+                let _self = this;
+                _self.httpPraram.indentType = num;
                 _self.getHttp();
             },
             clearKeyword() {
@@ -251,7 +404,7 @@ export default {
                 this.getHttp();
             },
             jumpDetail(id) {
-               common.$emit('needToDetails', {
+                common.$emit('needToDetails', {
                     id: id,
                     type: ''
                 });
@@ -276,7 +429,7 @@ export default {
                     });
                     return;
                 } else {
-                    common.$emit('needToReleaseOffer',obj.id);
+                    common.$emit('needToReleaseOffer', obj.id);
                     this.$router.push('/releaseOffer/' + obj.id);
                 }
             },
@@ -332,9 +485,9 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             });
-            common.$on('clearThisSearch',function(item){
+            common.$on('clearThisSearch', function(item) {
                 _self.httpPraram.page = 1;
-                _self.headParam.keyword='';
+                _self.headParam.keyword = '';
                 _self.httpPraram.keyword = '';
                 _self.getHttp();
             })
@@ -361,14 +514,13 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
             this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.page-loadmore-listitem {
+<!-- .page-loadmore-listitem {
     height: 50px;
     border-bottom: solid 1px #eee;
     text-align: center;
@@ -569,5 +721,4 @@ export default {
     -ms-flex: 1;
     font-size: 1.109rem;
     color: #424242;
-}
-</style>
+} -->

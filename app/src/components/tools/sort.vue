@@ -26,23 +26,35 @@ export default {
             }
         },
         props: {
-            sortRouter:{
+            sortRouter: {
                 type: String,
                 default: '/home'
             },
-            paramArr:[Array]
+            paramArr: [Array]
         },
         methods: {
             showTable: function(item, index) {
+                let _self = this;
                 if (item.asc == 'location') {
-                    this.$router.push('/provenanceSelection/'+this.sortRouter);
+                    this.$router.push('/provenanceSelection/' + this.sortRouter);
+                }
+                if (item.asc == 'comprehensive') {
+                    console.log(2, this.paramArr[this.selectIndex].select)
+                    if (!this.paramArr[this.selectIndex].select || this.paramArr[this.selectIndex].select == 'undefined') {
+                        console.log(1231)
+                        //_self.paramArr[_self.selectIndex].class = 'sort_content_detail_select';
+                        //处罚综合筛选,让其他的class回归原来的样子,选择产地的页面地区清空      
+                        _self.$emit('initial', _self.paramArr[this.selectIndex].select);
+                        console.log(66,!this.paramArr[this.selectIndex].select)
+                    }
+
                 } else {
                     this.selectShow = !this.selectShow;
                     this.selectIndex = index;
                     this.selectArr = item.sortArr;
                 }
             },
-            getAsc: function(item,index) {
+            getAsc: function(item, index) {
                 if (!item.asc) {
                     this.paramArr[this.selectIndex].name = this.paramArr[this.selectIndex].saveName;
                     this.paramArr[this.selectIndex].url = '/static/icons/drop_down.png';
@@ -57,8 +69,8 @@ export default {
                     }
                 }
                 this.selectShow = false;
-                
-                
+
+
                 let _self = this;
                 _self.$emit("postId", item);
             }

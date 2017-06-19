@@ -217,13 +217,6 @@
         <myHeader :param="param" v-show="!my_param.show"></myHeader>
         <div class="boxs" v-show="!my_param.show">
             <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <!--  <div class="imgs">
-            <mt-swipe :auto="4000" :prevent="false">
-                <mt-swipe-item v-for="(todo,index) in bigImgs">
-                    <img :src="todo">
-                </mt-swipe-item>
-            </mt-swipe>
-        </div> -->
                 <titles tab="3" :obj="obj"></titles>
                 <div class="box">
                     <div class="inbox">
@@ -237,7 +230,7 @@
                                 <div class="images"><img src="/static/icon/times.png"></div>
                                 <div>&nbsp;剩余{{obj.content.duedate | timeDay}}天</div>
                             </div>
-                            <div class="detail" @click="again()" v-if="obj.newOffer.accept == '3'">再次报价</div>
+                            <div class="detail" @click="again()" v-if="obj.newOffer.accept == '3' || obj.newOffer.accept == '2'">再次报价</div>
                         </div>
                     </div>
                 </div>
@@ -482,6 +475,7 @@ export default {
                 _self.getOffer(item);
                 _self.id = item;
                 _self.show = false;
+                _self.my_param.show = false;
             });
             common.$on('getInfo', function(item) {
                 _self.getHttp(id);

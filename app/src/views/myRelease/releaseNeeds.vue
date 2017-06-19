@@ -526,6 +526,7 @@ export default {
                 let validate = true;
                 _self.duedate = '';
                 let msg = '';
+                let pattern = /^([12][0-9]|30|[1-9])$/;
                 switch (this.obj.duedate) {
                     case 0:
                         _self.duedate = '7';
@@ -539,6 +540,9 @@ export default {
                     case 3:
                         if (!_self.dateArr[3].one) {
                             msg = '请填写截至日期'
+                            validate = false;
+                        } else if (!pattern.test(_self.dateArr[3].one)) {
+                            msg = '截至日期需1~30天';
                             validate = false;
                         }
                         _self.duedate = _self.dateArr[3].one;

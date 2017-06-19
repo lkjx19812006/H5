@@ -1,46 +1,181 @@
+<style lang="less" scoped>
+.resource .fixed {
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+    background: #fff;
+}
+
+.mint-loadmore-top span {
+    display: inline-block;
+    transition: .2s linear;
+    vertical-align: middle;
+}
+
+.mint-loadmore-bottom span {
+    display: inline-block;
+    transition: .2s linear;
+    vertical-align: middle;
+}
+
+.resource .fixed .search_content {
+    float: left;
+    width: 100%;
+    background: #EC6817;
+}
+
+.resource .go-back {
+    position: absolute;
+    width: 15%;
+    padding-right: 5%;
+    height: 50px;
+    border-bottom: 1px solid #ccc;
+    background: #EC6817;
+}
+
+.resource {
+    overflow: hidden;
+    .main {
+        width: 100%;
+        padding-top: 90px;
+        overflow: scroll;
+        width: 100%;
+    }
+    .factory {
+        background-color: #fff;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        padding: 5px 10px;
+        border-bottom: 1px solid #E6E6E6;
+        .left {
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: #4D4D4D;
+            border: 1px solid #E4E4E4;
+            border-radius: 15px;
+            padding: 0px 20px;
+            margin-right: 10px;
+        }
+        .active {
+            border: 1px solid #FA6705;
+            color: #FA6705;
+        }
+    }
+    .list {
+        background-color: #F7F7F7;
+        padding: 10px 0;
+        .li {
+            padding-left: 10px;
+            background-color: #fff;
+            .content {
+                position: relative;
+                display: flex;
+                flex-direction: row;
+                padding: 10px 10px 10px 0;
+                border-bottom: 1px solid #E6E6E6;
+                .images {
+                    position:relative;
+                    width: 95px;
+                    height: 90px;
+                    overflow: hidden;
+                    .breedImg {
+                        width: 100%;
+                        height: 90px;
+                    }
+                    .zheng{
+                        position:absolute;
+                        top:0;
+                        left:0;
+                        width:21px;
+                    }
+                }
+                .collect {
+                    position: absolute;
+                    width: 30px;
+                    right: 16px;
+                    bottom: 10px;
+                }
+                .collected {
+                    position: absolute;
+                    padding: 5px 10px;
+                    border: 1px solid #e6e6e6;
+                    border-radius: 15px;
+                    font-size: 12px;
+                    color: #666;
+                    right: 16px;
+                    bottom: 10px;
+                }
+                .center {
+                    margin-left: 11px;
+                    text-align: left;
+                    .breed {
+                        font-size: 16px;
+                        color: #333;
+                        line-height: 16px;
+                        margin-bottom: 14px;
+                    }
+                    .spec {
+                        font-size: 13px;
+                        color: #666;
+                        line-height: 13px;
+                        margin-bottom: 5px;
+                    }
+                    .location {
+                        margin-top: 8px;
+                    }
+                    .price {
+                        font-size: 16px;
+                        color: #FF4541;
+                        span {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+</style>
 <template>
     <div class="content resource">
         <div class="fixed">
             <div @click="jumpSearch" class="search_content">
                 <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
             </div>
-            <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
+            <sort v-on:postId="getId" v-on:initial="initial" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
         </div>
-        <div class="bg_white">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                    <ul class="page-loadmore-list">
-                        <li v-for="todo in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
-                            <img :src="todo.image[0]" class="list_images">
-                            <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1" class="small_img">
-                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
-                            <div class="res_content">
-                                <div class="res_content_center">
-                                    <div>
-                                        {{todo.breedName}}
-                                    </div>
-                                    <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
-                                    <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
-                                    <p class="time_font">上架时间：<span>{{todo.shelveTime | timeFormat}}</span></p>
-                                </div>
-                                <div class="res_content_right">
-                                    <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>
-                                    <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 0">立即购买</button>
-                                    <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 1">查看详情</button>
-                                </div>
+        <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!==0">
+            <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                <ul class="list">
+                    <li class="li" v-for="todo in todos" @click="jumpDetail(todo.id)">
+                        <div class="content">
+                            <div class="images">
+                                <img :src="todo.image[0]" class="breedImg">
+                                <img src="/static/icon/zheng.png" class="zheng" v-show="todo.especial == 1">
                             </div>
-                        </li>
-                    </ul>
-                    <div slot="top" class="mint-loadmore-top">
-                        <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
-                        <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                    </div>
-                    <div slot="bottom" class="mint-loadmore-bottom">
-                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
-                        <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                    </div>
-                </mt-loadmore>
-            </div>
+                            <div class="center">
+                                <div class="breed">{{todo.breedName,8 | filterTxt}}</div>
+                                <div class="spec">规格: <span>{{todo.spec,8 | filterTxt}}</span></div>
+                                <div class="spec location">产地: <span>{{todo.location,8 | filterTxt}}</span></div>
+                                <div class="price">￥{{todo.price}}/<span>{{todo.unit}}</span></div>
+                                <div class="collected" @click.stop="myAttention(0,todo)" v-if="todo.isAttention">已收藏</div>
+                                <img src="/static/icon/supplyflower.png" class="collect" @click.stop="myAttention(1,todo)" v-if="!todo.isAttention">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div slot="top" class="mint-loadmore-top">
+                    <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+                    <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                </div>
+                <div slot="bottom" class="mint-loadmore-bottom">
+                    <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                    <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                </div>
+            </mt-loadmore>
         </div>
         <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
@@ -56,6 +191,7 @@ export default {
     data() {
             return {
                 scrollTop: 0,
+                isAttention: 0,
                 err: {
                     err: "很抱歉，没有找到相关资源",
                     url: '/static/icons/maomao.png',
@@ -68,35 +204,15 @@ export default {
                 },
                 sortRouter: 'resource',
                 sortArr: [{
-                    name: '上架时间',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '上架时间',
+                    name: '综合',
+                    asc: 'comprehensive',
+                    select: false,
                     class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由新到旧',
-                        asc: 'low',
-                        show: false,
-                        time: 2,
-                        key: 'time'
-                    }, {
-                        name: '由旧到新',
-                        asc: 'top',
-                        show: false,
-                        time: 1,
-                        key: 'time'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        time: 0,
-                        key: 'time'
-                    }]
                 }, {
-                    name: '价格排序',
+                    name: '价格',
                     asc: 'top',
                     url: '/static/icons/drop_down.png',
-                    saveName: '价格排序',
+                    saveName: '价格',
                     class: 'sort_content_detail',
                     sortArr: [{
                         name: '由低到高',
@@ -158,7 +274,7 @@ export default {
                     price: 0,
                     sample: '',
                     location: [],
-                    locationId:[],
+                    locationId: [],
                     keyword: '',
                     page: 1,
                     pageSize: 10
@@ -223,11 +339,88 @@ export default {
                     }
                 })
             },
+            myAttention(type, todo) {
+                if (!common.customerId) {
+                    let _self = this;
+
+                    function loadApp() {
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                }
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'userAttention',
+                    biz_param: {
+                        intentionId: todo.id,
+                        type: type,
+                        breedName: todo.breedName,
+                        intentionType: todo.type
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addAddress(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        common.$emit('message', suc.data.msg);
+                        common.$emit("informResAttention", todo.type);
+                        if (type) {
+                            _self.isAttention = 1;
+                        } else {
+                            _self.isAttention = 0;
+                        }
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
             getId(param) {
                 let _self = this;
                 _self.httpPraram.page = 1;
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp();
+            },
+            initial(param) {
+                let _self = this;
+                if (!param) {
+                    _self.httpPraram.time = 0;
+                    _self.httpPraram.price = 0;
+                    _self.httpPraram.keyword = '';
+                    _self.httpPraram.sample = '';
+                    _self.httpPraram.location = [];
+                    _self.httpPraram.page = 1;
+                    for (var i = 1; i < _self.sortArr.length; i++) {
+                        if (i < 3) {
+                            _self.sortArr[i].name = _self.sortArr[i].saveName;
+                            _self.sortArr[i].url = '/static/icons/drop_down.png';
+                            _self.sortArr[i].class = 'sort_content_detail';
+                        }
+                        if (i == 3) {
+                            _self.sortArr[3].name = '产地';
+                            _self.sortArr[3].class = "sort_content_detail";
+                            _self.sortArr[3].url = "/static/icons/screen.png";
+                            common.$emit('initial', 1)
+                        }
+                    }
+                    _self.getHttp();
+                }
             },
             clearKeyword() {
                 this.httpPraram.page = 1;
@@ -292,7 +485,7 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             })
-            common.$on('clearResourceSearch',function(item){
+            common.$on('clearResourceSearch', function(item) {
                 _self.httpPraram.page = 1;
                 _self.httpPraram.keyword = '';
                 _self.getHttp();
@@ -318,201 +511,8 @@ export default {
             })
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 165;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
             this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }
 </script>
-<style scoped>
-.page-loadmore-listitem {
-    height: 50px;
-    line-height: 50px;
-    border-bottom: solid 1px #eee;
-    text-align: center;
-    &:first-child {
-        border-top: solid 1px #eee;
-    }
-}
-
-.page-loadmore-wrapper {
-    margin-top: -1px;
-    overflow: scroll;
-    padding-bottom: 10px;
-    width: 100%;
-}
-
-.mint-load {
-    background: #fff;
-}
-
-.mint-spinner {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.mint-loadmore-top span {
-    display: inline-block;
-    transition: .2s linear;
-    vertical-align: middle;
-}
-
-.mint-loadmore-bottom span {
-    display: inline-block;
-    transition: .2s linear;
-    vertical-align: middle;
-}
-
-.resource {}
-
-.resource .search_content {
-    float: left;
-    width: 100%;
-    background: #EC6817;
-}
-
-.resource .go-back {
-    position: absolute;
-    width: 15%;
-    padding-right: 5%;
-    height: 50px;
-    border-bottom: 1px solid #ccc;
-    background: #EC6817;
-}
-
-.resource .fixed {
-    /*position: fixed;*/
-    top: 0;
-    width: 100%;
-    z-index: 2;
-    background: #fff;
-}
-
-.resource .bg_white {
-    /*margin-top: 90px;*/
-}
-
-.resource .bg_white {
-    background: #F5F5F5;
-    padding: 0 10px;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
-    float: left;
-    width: 100%;
-    min-height: 9.65rem;
-    margin-top: 10px;
-    background: white;
-    border-radius: 3px;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .list_images {
-    height: 8.1rem;
-    width: 25%;
-    left: 10px;
-    margin: 10px 10px 10px 0;
-    position: absolute;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li {
-    position: relative;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .small_img {
-    width: 16px;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 10;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .tsmall_img {
-    width: 16px;
-    position: absolute;
-    top: 10px;
-    left: 28px;
-    z-index: 10;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li div {
-    float: left;
-    text-align: left;
-    line-height: 20px;
-    font-size: 1.3rem;
-    margin-bottom: 8px;
-}
-
-
-/*.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center img {
-    float: left;
-    width: 1.4rem;
-    margin-right: 4px;
-}*/
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center p {
-    float: left;
-    width: 100%;
-    padding-right: 70px;
-    line-height: 1.2rem;
-    text-align: left;
-    font-size: 1.2rem;
-    color: #666;
-    margin-top: 0.8rem;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center>div {
-    word-break: keep-all;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 40%;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .over_lenght {
-    word-break: keep-all;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 200px;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list li .res_content_center .spec {
-    margin-top: 0.3rem;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content {
-    width: 100%;
-    padding-left: 30%;
-    padding-top: 10px;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right {
-    position: absolute;
-    max-width: 140px;
-    height: 8.1rem;
-    margin: 0;
-    right: 10px;
-    white-space: nowrap;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right p {
-    font-size: 1.25rem;
-    margin-top: 0px;
-    color: #EC6817;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .res_content_right button {
-    position: absolute;
-    bottom: 0px;
-    background: #EC6817;
-    font-size: 1.109rem;
-    width: 5.97rem;
-    right: 0px;
-    height: 2.38rem;
-    padding: 0 5px;
-}
-
-.resource .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {
-    font-size: 1.1rem;
-    color: #999;
-}
-</style>

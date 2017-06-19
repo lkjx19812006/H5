@@ -257,11 +257,11 @@
                     .box {
                         display: flex;
                         flex-direction: row;
-                        .left{
-                            flex:3;
+                        .left {
+                            flex: 3;
                         }
-                        .right{
-                            flex:5;
+                        .right {
+                            flex: 5;
                         }
                         @media screen {
                             .left,
@@ -485,16 +485,16 @@
                 <div class="left" @click="loginJump('/releaseNeeds/1')">
                     <img src="/static/icon/home-buy.png">
                     <div class="word">
-                        <div class="word_top">我要求购</div>
-                        <div class="word_bottom orgrance">快速帮你匹配求购需求</div>
+                        <div class="word_top">发布求购</div>
+                        <div class="word_bottom orgrance">为您要买的货全网比价</div>
                     </div>
                     <img src="/static/icon/buy.png" class="buy">
                 </div>
                 <div class="left" @click="loginJump('/releaseResource/1')">
                     <img src="/static/icon/home-sell.png" class="sell_img">
                     <div class="word">
-                        <div class="word_top">我要供应</div>
-                        <div class="word_bottom green">快速帮你发布您的资源</div>
+                        <div class="word_top">发布供应</div>
+                        <div class="word_bottom green">为您扩张更多销售渠道</div>
                     </div>
                     <img src="/static/icon/sell.png" class="buy">
                 </div>
@@ -567,7 +567,7 @@
                             </div>
                         </div>
                         <div class="right">
-                            <div class="report_pri">我要报价</div>
+                            <div class="report_pri">抢先报价</div>
                             <div class="reported">已报价<span>{{todo.offer}}</span>人</div>
                         </div>
                     </div>
@@ -598,7 +598,7 @@
                         </div>
                         <div class="right">
                             <img src="/static/icon/homesample.png" v-show="todo.sampling == 1">
-                            <div class="report_pri">我要购买</div>
+                            <div class="report_pri">抢先购买</div>
                             <!-- <div class="reported">已报价<span>{{todo.offer}}</span>人</div> -->
                         </div>
                     </div>

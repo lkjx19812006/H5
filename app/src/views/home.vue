@@ -1,6 +1,6 @@
 <template>
     <div class="page-tabbar">
-        <div class="page-wrap">
+        <div class="page-wrap" v-bind:class="{mine:selected=='mine'}">
             <mt-tab-container class="page-tabbar-container" v-model="selected">
                 <mt-tab-container-item id="index">
                     <index></index>
@@ -85,9 +85,11 @@ export default {
     overflow: hidden;
     height: 100vh;
 }
-
-.page-wrap {
+.mine{
     overflow: auto;
+}
+.page-wrap {
+    /*overflow: auto;*/
     height: 100%;
     padding-bottom: 60px;
 }

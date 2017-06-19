@@ -1,46 +1,178 @@
+<style lang="less" scoped>
+.low_price .fixed {
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+    background: #fff;
+}
+
+.mint-loadmore-top span {
+    display: inline-block;
+    transition: .2s linear;
+    vertical-align: middle;
+}
+
+.mint-loadmore-bottom span {
+    display: inline-block;
+    transition: .2s linear;
+    vertical-align: middle;
+}
+
+.low_price .fixed .search_content {
+    float: left;
+    width: 100%;
+    background: #EC6817;
+}
+
+.low_price .go-back {
+    position: absolute;
+    width: 15%;
+    padding-right: 5%;
+    height: 50px;
+    border-bottom: 1px solid #ccc;
+    background: #EC6817;
+}
+
+.low_price {
+    overflow: hidden;
+    .main {
+        width: 100%;
+        padding-top: 90px;
+        overflow-y: scroll;
+    }
+    .factory {
+        background-color: #fff;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        padding: 5px 10px;
+        border-bottom: 1px solid #E6E6E6;
+        .left {
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: #4D4D4D;
+            border: 1px solid #E4E4E4;
+            border-radius: 15px;
+            padding: 0px 20px;
+            margin-right: 10px;
+        }
+        .active {
+            border: 1px solid #FA6705;
+            color: #FA6705;
+        }
+    }
+    .list {
+        background-color: #F7F7F7;
+        padding: 10px 0;
+        .li {
+            padding-left: 10px;
+            background-color: #fff;
+            .content {
+                position: relative;
+                display: flex;
+                flex-direction: row;
+                padding: 10px 10px 10px 0;
+                border-bottom: 1px solid #E6E6E6;
+                .images {
+                    position: relative;
+                    width: 95px;
+                    height: 90px;
+                    overflow: hidden;
+                    .breedImg {
+                        width: 100%;
+                        height: 90px;
+                    }
+                    .zheng {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 25px;
+                    }
+                }
+                .collect {
+                    position: absolute;
+                    width: 30px;
+                    right: 16px;
+                    bottom: 10px;
+                }
+                .collected {
+                    position: absolute;
+                    padding: 5px 10px;
+                    border: 1px solid #e6e6e6;
+                    border-radius: 15px;
+                    font-size: 12px;
+                    color: #666;
+                    right: 16px;
+                    bottom: 10px;
+                }
+                .center {
+                    margin-left: 11px;
+                    text-align: left;
+                    .breed {
+                        font-size: 16px;
+                        color: #333;
+                        line-height: 16px;
+                        margin-bottom: 14px;
+                    }
+                    .spec {
+                        font-size: 13px;
+                        color: #666;
+                        line-height: 13px;
+                        margin-bottom: 5px;
+                    }
+                    .location {
+                        margin-top: 8px;
+                    }
+                    .price {
+                        font-size: 16px;
+                        color: #FF4541;
+                        span {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+</style>
 <template>
     <div class="low_price">
-        <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
-        <sort v-on:postId="getId" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
-        <div class="bg_white">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
-                <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
-                    <ul class="page-loadmore-list">
-                        <li v-for="(todo,index) in todos" class="page-loadmore-listitem list_content_item" @click="jumpDetail(todo.id)">
-                            <img v-bind:src="todo.image[0]" class="list_images">
-                            <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1" class="small_img">
-                            <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1" v-bind:class="{small_img:todo.especial !== 1 && todo.type == 1,'tsmall_img':todo.especial == 1 && todo.type == 1}">
-                            <div class="res_content">
-                                <div class="res_content_center">
-                                    <div>
-                                        <!-- <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
-                                        <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1"> -->{{todo.breedName}}
-                                    </div>
-                                    <p class="spec over_lenght">规格：<span>{{todo.spec}}</span></p>
-                                    <p class="over_lenght">产地：<span>{{todo.location}}</span></p>
-                                    <p class="time_font">上架时间:
-                                        <span v-if="todo.shelveTime">{{todo.shelveTime | timeFormat}}</span>
-                                        <span v-if="!todo.shelveTime">近期上架</span>
-                                    </p>
-                                </div>
-                                <div class="res_content_right">
-                                    <p>{{todo.price}}元/<span>{{todo.unit}}</span></p>
-                                    <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 0">立即购买</button>
-                                    <button class="mint-button mint-button--primary mint-button--small" v-show="todo.isMy == 1">查看详情</button>
-                                </div>
+        <div class="fixed">
+            <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
+            <sort v-on:postId="getId" v-on:initial="initial" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
+        </div>
+        <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
+            <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                <ul class="list">
+                    <li class="li" v-for="todo in todos" @click="jumpDetail(todo.id)">
+                        <div class="content">
+                            <div class="images">
+                                <img :src="todo.image[0]" class="breedImg">
+                                <img src="/static/icon/zheng.png" class="zheng" v-show="todo.especial == 1">
                             </div>
-                        </li>
-                    </ul>
-                    <div slot="top" class="mint-loadmore-top">
-                        <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
-                        <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                    </div>
-                    <div slot="bottom" class="mint-loadmore-bottom">
-                        <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
-                        <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
-                    </div>
-                </mt-loadmore>
-            </div>
+                            <div class="center">
+                                <div class="breed">{{todo.breedName,8 | filterTxt}}</div>
+                                <div class="spec">规格: <span>{{todo.spec,8 | filterTxt}}</span></div>
+                                <div class="spec location">产地: <span>{{todo.location,8 | filterTxt}}</span></div>
+                                <div class="price">￥{{todo.price}}/<span>{{todo.unit}}</span></div>
+                                <div class="collected" @click.stop="myAttention(0,todo)" v-if="todo.isAttention">已收藏</div>
+                                <img src="/static/icon/supplyflower.png" class="collect" @click.stop="myAttention(1,todo)" v-if="!todo.isAttention">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div slot="top" class="mint-loadmore-top">
+                    <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+                    <span v-show="topStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                </div>
+                <div slot="bottom" class="mint-loadmore-bottom">
+                    <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                    <span v-show="bottomStatus === 'loading'"><mt-spinner type="snake"></mt-spinner></span>
+                </div>
+            </mt-loadmore>
         </div>
         <errPage :param="err" v-show="todos.length==0"></errPage>
     </div>
@@ -57,6 +189,7 @@ export default {
     data() {
             return {
                 scrollTop: 0,
+                isAttention: 0,
                 err: {
                     err: "很抱歉，没有找到相关资源",
                     url: '/static/icons/maomao.png',
@@ -65,35 +198,15 @@ export default {
                 },
                 sortRouter: 'lowRes',
                 sortArr: [{
-                    name: '上架时间',
-                    asc: 'top',
-                    url: '/static/icons/drop_down.png',
-                    saveName: '上架时间',
+                    name: '综合',
+                    asc: 'comprehensive',
+                    select: false,
                     class: 'sort_content_detail',
-                    sortArr: [{
-                        name: '由新到旧',
-                        asc: 'low',
-                        show: false,
-                        time: 2,
-                        key: 'time'
-                    }, {
-                        name: '由旧到新',
-                        asc: 'top',
-                        show: false,
-                        time: 1,
-                        key: 'time'
-                    }, {
-                        name: '全部',
-                        asc: '',
-                        show: false,
-                        time: 0,
-                        key: 'time'
-                    }]
                 }, {
-                    name: '价格排序',
+                    name: '价格',
                     asc: 'top',
                     url: '/static/icons/drop_down.png',
-                    saveName: '价格排序',
+                    saveName: '价格',
                     class: 'sort_content_detail',
                     sortArr: [{
                         name: '由低到高',
@@ -237,6 +350,83 @@ export default {
                 _self.httpPraram[param.key] = param[param.key];
                 _self.getHttp();
             },
+            initial(param) {
+                let _self = this;
+                if (!param) {
+                    _self.httpPraram.time = 0;
+                    _self.httpPraram.price = 0;
+                    _self.httpPraram.keyword = '';
+                    _self.httpPraram.sample = '';
+                    _self.httpPraram.location = [];
+                    _self.httpPraram.page = 1;
+                    for (var i = 1; i < _self.sortArr.length; i++) {
+                        if (i < 3) {
+                            _self.sortArr[i].name = _self.sortArr[i].saveName;
+                            _self.sortArr[i].url = '/static/icons/drop_down.png';
+                            _self.sortArr[i].class = 'sort_content_detail';
+                        }
+                        if (i == 3) {
+                            _self.sortArr[3].name = '产地';
+                            _self.sortArr[3].class = "sort_content_detail";
+                            _self.sortArr[3].url = "/static/icons/screen.png";
+                            common.$emit('initial', 1)
+                        }
+                    }
+                    _self.getHttp();
+                }
+            },
+            myAttention(type, todo) {
+                if (!common.customerId) {
+                    let _self = this;
+
+                    function loadApp() {
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                }
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'userAttention',
+                    biz_param: {
+                        intentionId: todo.id,
+                        type: type,
+                        breedName: todo.breedName,
+                        intentionType: todo.type
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addAddress(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        common.$emit('message', suc.data.msg);
+                        common.$emit("informResAttention", todo.type);
+                        if (type) {
+                            _self.isAttention = 1;
+                        } else {
+                            _self.isAttention = 0;
+                        }
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
             clearKeyword() {
                 this.httpPraram.page = 1;
                 this.httpPraram.keyword = '';
@@ -307,9 +497,9 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.getHttp();
             })
-            common.$on('clearThisSearch',function(item){
+            common.$on('clearThisSearch', function(item) {
                 _self.httpPraram.page = 1;
-                _self.headParam.keyword='';
+                _self.headParam.keyword = '';
                 _self.httpPraram.keyword = '';
                 _self.getHttp();
             })
@@ -338,13 +528,12 @@ export default {
 
         },
         mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 90;
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
             this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         }
 }
 </script>
-<style scoped>
-.page-loadmore-wrapper {
+<!-- .page-loadmore-wrapper {
     margin-top: -1px;
     overflow: scroll;
     padding-bottom: 10px;
@@ -532,5 +721,4 @@ export default {
 .low_price .bg_white .page-loadmore-wrapper .page-loadmore-list .res_content .time_font {
     font-size: 1rem;
     color: #999;
-}
-</style>
+} -->
