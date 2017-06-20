@@ -32,7 +32,6 @@
     border-bottom: 1px solid #ccc;
     background: #EC6817;
 }
-
 .resource {
     overflow: hidden;
     .main {
@@ -83,7 +82,7 @@
                     overflow: hidden;
                     .breedImg {
                         width: 100%;
-                        height: 90px;
+                        min-height: 90px;
                     }
                     .zheng{
                         position:absolute;
@@ -150,7 +149,7 @@
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!==0">
             <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                 <ul class="list">
-                    <li class="li" v-for="todo in todos" @click="jumpDetail(todo.id)">
+                    <li class="li" v-for="(todo,index) in todos" @click="jumpDetail(todo.id)">
                         <div class="content">
                             <div class="images">
                                 <img :src="todo.image[0]" class="breedImg">
@@ -161,8 +160,8 @@
                                 <div class="spec">规格: <span>{{todo.spec,8 | filterTxt}}</span></div>
                                 <div class="spec location">产地: <span>{{todo.location,8 | filterTxt}}</span></div>
                                 <div class="price">￥{{todo.price}}/<span>{{todo.unit}}</span></div>
-                                <div class="collected" @click.stop="myAttention(0,todo)" v-if="todo.isAttention">已收藏</div>
-                                <img src="/static/icon/supplyflower.png" class="collect" @click.stop="myAttention(1,todo)" v-if="!todo.isAttention">
+                                <div class="collected" @click.stop="myAttention(0,todo,index)" v-show="todo.isAttention">已收藏</div>
+                                <img src="/static/icon/supplyflower.png" class="collect" @click.stop="myAttention(1,todo,index)" v-show="!todo.isAttention">
                             </div>
                         </div>
                     </li>
@@ -339,7 +338,7 @@ export default {
                     }
                 })
             },
-            myAttention(type, todo) {
+            myAttention(type, todo,index) {
                 if (!common.customerId) {
                     let _self = this;
 
@@ -377,11 +376,9 @@ export default {
                     if (suc.data.code == '1c01') {
                         common.$emit('message', suc.data.msg);
                         common.$emit("informResAttention", todo.type);
-                        if (type) {
-                            _self.isAttention = 1;
-                        } else {
-                            _self.isAttention = 0;
-                        }
+                        
+                        _self.todos[index].isAttention = type;
+                        
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -436,7 +433,6 @@ export default {
                 common.$emit("resourceDetail", id);
                 this.$router.push('resourceDetail/' + id);
             },
-
             handleBottomChange(status) {
                 this.bottomStatus = status;
             },

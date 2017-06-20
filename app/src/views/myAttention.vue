@@ -58,8 +58,7 @@
                                         <p>{{todo.spec}}</p>
                                         <p>{{todo.location}}</p>
                                         <!-- <p>{{todo.duedate | timeDays(todo.pubdate)}}<span></span></p> -->
-                                        <p v-if="todo.especial == 1 && todo.type == 0">{{todo.duedate | timeDays}}<span></span></p>
-                                        <p v-if="todo.especial !== 1 && todo.type == 0">长期</p>
+                                        <p>{{todo.duedate | needTimeDay}}<span>天</span></p>
                                         <p>{{todo.number}}<span>{{todo.unit}}</span></p>
                                     </div>
                                 </div>

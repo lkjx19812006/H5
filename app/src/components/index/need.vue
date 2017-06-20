@@ -184,13 +184,12 @@
                             <div class="right">
                                 <div class="date">
                                     <div><img src="/static/icon/times.png"></div>
-                                    <div v-if="todo.especial == 1 && todo.type == 0">剩余{{todo.duedate | timeDays}}<span></span></div>
-                                    <div v-if="todo.especial !== 1 && todo.type == 0">长期</div>
+                                    <div>剩余{{todo.duedate | needTimeDay}}<span>天</span></div>
                                 </div>
-                                <div class="detail" v-show="todo.indentType == 1">
+                                <div class="detail" v-if="todo.indentType !== 0">
                                     我要报价
                                 </div>
-                                <div class="detail" v-show="todo.indentType == 0">
+                                <div class="detail" v-if="todo.indentType == 0">
                                     抢先报价
                                 </div>
                             </div>
@@ -406,6 +405,7 @@ export default {
             },
             indentType(num) {
                 let _self = this;
+                this.httpPraram.page = 1;
                 _self.httpPraram.indentType = num;
                 _self.getHttp();
             },

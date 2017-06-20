@@ -90,8 +90,8 @@ input {
                 position: relative;
                 .word {
                     flex: 1;
-                    text-align: left;
-                    margin-left: 10px;
+                    text-align: right;
+                    margin-right: 10px;
                     color: #7CB159;
                 }
                 .green {
@@ -100,9 +100,9 @@ input {
                 div {
                     .select {
                         width: 18px;
-                        position: absolute;
                         right: 15px;
-                        top: 11px;
+                        margin-top: 6px;
+                        margin-right:15px;
                     }
                 }
             }

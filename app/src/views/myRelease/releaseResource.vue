@@ -48,6 +48,7 @@
             border: none;
             font-size: 15px;
         }
+
     }
     .title {
         font-size: 15px;
@@ -81,7 +82,7 @@
                     <img :src="todo" class="my_img">
                     <img src="/static/icons/upload-delete.png" class="delete" @click="deletes">
                 </div>
-                <div class="up_load">
+                <div class="up_load" v-show="imgArr.length !== 5">
                     <imageUpload :param="imgArr" v-on:postUrl="getUrl"></imageUpload>
                 </div>
             </div>
@@ -89,9 +90,9 @@
             <div class="sell_point">
                 <textarea placeholder="请根据实际情况填写药材资源卖点" v-model="obj.selling_point"></textarea>
             </div>
-            <div class="title">联系方式可根据实际情况修改</div>
+            <!-- <div class="title">联系方式可根据实际情况修改</div> -->
             <div class="name">
-                <userInfor :obj="obj"></userInfor>
+                <!-- <userInfor :obj="obj"></userInfor> -->
             </div>
         </div>
         <div class="confirm" @click="confirm">确认发布</div>
@@ -166,6 +167,7 @@ export default {
                     if (suc.data.code == "1c01") {
                         _self.obj.name = suc.data.biz_result.fullname;
                         _self.obj.phone = suc.data.biz_result.phone;
+                        //console.log(_self.obj.name)
                     } else {
                         //console.log('cuowusasdada')
                     }
@@ -206,12 +208,12 @@ export default {
                 checkArr.push(checkDes);
                 let checkLookDes = validation.checkLook(_self.obj.selling_point);
                 checkArr.push(checkLookDes);
-                let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
-                checkArr.push(checkName);
-                let checkLookName = validation.checkLook(_self.obj.name);
-                checkArr.push(checkLookName);
-                let checkPhone = validation.checkPhone(_self.obj.phone);
-                checkArr.push(checkPhone);
+                // let checkName = validation.checkNull(_self.obj.name, '请输入姓名');
+                // checkArr.push(checkName);
+                // let checkLookName = validation.checkLook(_self.obj.name);
+                // checkArr.push(checkLookName);
+                // let checkPhone = validation.checkPhone(_self.obj.phone);
+                // checkArr.push(checkPhone);
                 for (var i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);
@@ -226,7 +228,7 @@ export default {
             },
             release() {
                 let _self = this;
-
+                console.log(33,_self.id)
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -253,7 +255,7 @@ export default {
                     }
                 };
                 if (_self.id !== '1') {
-                    let body = {
+                    body = {
                         biz_module: 'intentionService',
                         biz_method: 'updateEditSupplyInfo',
                         biz_param: {
@@ -291,8 +293,15 @@ export default {
                             name: _self.obj.name,
                             phone: _self.obj.phone
                         })
-                        common.$emit('informSupplySuccess', suc.data.biz_result.intentionId);
-                        _self.$router.push("/releaseResourceSuccess" + '/' + id);
+                        
+                        if(id){
+                            common.$emit('informSupplySuccess', suc.data.biz_result.intentionId);
+                            _self.$router.push("/releaseResourceSuccess" + '/' + id);
+                        }
+                        if(!id){
+                            common.$emit('informSupplySuccess', _self.id);
+                            _self.$router.push("/releaseResourceSuccess" + '/' + _self.id);
+                        }
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -338,7 +347,7 @@ export default {
                         _self.obj.id = result.id;
                         _self.obj.breedId = result.breedId;
                         _self.imgArr = result.image;
-
+                        
                         common.$emit("Needrelease", {
                             breedName: result.breedName,
                             breedId: result.breedId
@@ -353,7 +362,14 @@ export default {
             },
             getUrl(param) {
                 console.log(1, param)
-                this.imgArr.push(param.url);
+                //this.imgArr.push(param.url);
+                let _self = this;
+                if(this.imgArr.length <= 5){
+                    if (param.url) _self.imgArr.push(param.url);
+                    if(_self.imgArr.length == 5){
+                        common.$emit('message','最多只能上传5张图片！')
+                    }
+                }
             },
             deletes(index) {
                 let _self = this;
@@ -408,6 +424,7 @@ export default {
                 _self.getInfo();
             })
             common.$on("res-id", function(item) {
+                _self.getInfo(item);
                 _self.getResourceDetail(item); //来自我的资源
                 _self.id = item;
             })

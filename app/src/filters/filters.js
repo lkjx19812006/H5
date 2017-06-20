@@ -54,6 +54,31 @@ Vue.filter('timeDay', function(due) {
     }
     return days;
 });
+
+Vue.filter('needTimeDay', function(due) {
+    let days;
+    if (due) {
+        due = due.split('.')[0];
+        var arr = due.split(/[- : \/]/);
+        var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
+        var pubdateDate = new Date();
+        var dateValue = duedateDate.getTime() - pubdateDate.getTime() - 5000;
+        days = Math.ceil(dateValue / (24 * 3600 * 1000));
+
+        if (days > 0) {
+            days = days;
+        } else if (days <= 0) {
+            days = 0;
+        }
+
+        if(days > 30){
+            days = 30;
+        }
+    } else {
+        days = 0;
+    }
+    return days;
+});
 Vue.filter('theUnit', function(due) {
     let days;
     if (due) {
@@ -65,7 +90,9 @@ Vue.filter('theUnit', function(due) {
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
         if (days < 10) {
             days = days
-        } else {
+        }else if(days > 30){
+            days = 0;
+        }  else {
             days = days.toString();
             days = days.split('')[1];
         }
@@ -84,6 +111,8 @@ Vue.filter('decade', function(due) {
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
         if (days < 10) {
             days = 0;
+        }else if(days > 30){
+            days = 3;
         } else {
             days = days.toString();
             days = days.split('')[0];

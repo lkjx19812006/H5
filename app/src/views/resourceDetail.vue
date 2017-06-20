@@ -17,7 +17,7 @@
                     </div>
                     <div class="top">
                         <div class="title">
-                            <img src="/static/images/bao.png" v-if="obj.especial == 1 && obj.type == 1">
+                            <img src="/static/icons/zheng.png" v-if="obj.especial == 1 && obj.type == 1">
                             <img src="/static/icons/sample.png" v-if="obj.sampling == 1 && obj.type == 1">
                             <p>{{obj.breedName}}</p>
                             <p class="price_right"><span>{{obj.price}}</span>元/{{obj.unit}}</p>
@@ -82,8 +82,8 @@
             <div class="attention">
                 <telAndAttention :obj='obj'></telAndAttention>
             </div>
-            <button class="mint-button orange_button" @click="pushCart(obj.id)">加入购物车</button>
-            <button class="mint-button mint-button--primary mint-button--normal disabled_button" @click="jump(obj.id)">立即购买</button>
+            <button class="mint-button orange_button" @click="pushCart(obj)">加入购物车</button>
+            <button class="mint-button mint-button--primary mint-button--normal disabled_button" @click="jump(obj)">立即购买</button>
         </div>
         <div class="fix_bottom" v-show="!my_param.show && obj.isMy == 1">
             <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()">
@@ -286,6 +286,7 @@ export default {
                             }
                             shareData.title = "【低价资源】" + result.breedName + "-上【药材买卖网】买我你就赚了！";
                             shareData.desc = result.breedName + ',规格:' + result.spec + ',剩余' + result.number + result.unit + '卖点：' + result.quality + '。--买卖药材就上药材买卖网！';
+                            //console.log(window.location.href);
                             shareData.link = window.location.href;
                             common.share(shareData);
                         } else {
@@ -303,16 +304,16 @@ export default {
             back() {
                 this.$router.go(-1);
             },
-            jump(id) {
+            jump(obj) {
                 let _self = this;
 
                 if (!common.customerId) {
                     function loadApp() {
                         common.$emit('back_login', {
-                            id: id,
+                            id: obj.id,
                             isMy: _self.obj.isMy
                         });
-                        common.$emit('setParam', 'backRouter', 'resourceDetail/' + id);
+                        common.$emit('setParam', 'backRouter', 'resourceDetail/' + obj.id);
                         if (common.wxshow) {
                             common.getWxUrl();
                         } else {
@@ -325,7 +326,10 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                }
+                }else if (obj.isMy == 1) {
+                    common.$emit('message', '您自己发布的资源不能进行购买！');
+                    return
+                } 
                 /*common.$emit('orderConfirm', {
                     id: id,
                     obj: _self.obj
@@ -361,15 +365,15 @@ export default {
                 //common.$emit('setParam', 'router', 'atOnceBuy');
 
             },
-            pushCart(id) {
+            pushCart(obj) {
                 let _self = this;
                 if (!common.customerId) {
                     function loadApp() {
                         common.$emit('back_login', {
-                            id: id,
+                            id: obj.id,
                             isMy: _self.obj.isMy
                         });
-                        common.$emit('setParam', 'backRouter', 'resourceDetail/' + id);
+                        common.$emit('setParam', 'backRouter', 'resourceDetail/' + obj.id);
                         if (common.wxshow) {
                             common.getWxUrl();
                         } else {
@@ -382,7 +386,10 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                }
+                }else if (obj.isMy == 1) {
+                    common.$emit('message', '您自己发布的资源不能进行购买！');
+                    return
+                } 
                 common.$emit('setParam', 'router', 'addCart');
                 //_self.choose.value = 1;
                 _self.choose.push_num = true;

@@ -90,12 +90,12 @@ input {
                 <div class="breed_center">
                     {{obj.breedName}}
                 </div> -->
-                <div class="left">{{obj.breedName}}<span> ({{obj.need_number}}{{obj.need_unit}})</span></div>
+                <div class="left">{{obj.breedName}}<span> {{obj.need_number}}({{obj.need_unit}})</span></div>
                 <div class="right">
                     <div class="time">
                         <img src="/static/icon/times.png">
                     </div>
-                    <div>剩余<span>{{obj.duedate | timeDay}}</span>天</div>
+                    <div>剩余<span>{{obj.duedate | needTimeDay}}</span>天</div>
                 </div>
             </div>
         </div>

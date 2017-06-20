@@ -263,13 +263,12 @@
                     <div class='offer'>已有<span>{{obj.offer}}</span>人报价</div>
                 </div>
                 <div class="breed_infor">
-                    <div class="left">{{obj.breedName}} <span>({{obj.number}}{{obj.unit}})</span></div>
+                    <div class="left">{{obj.breedName}} <span>{{obj.number}}({{obj.unit}})</span></div>
                     <div class="emtry"></div>
-                    <div class="right" v-if="obj.especial == 1 && obj.type == 0">
+                    <div class="right">
                         <div class="images"><img src="/static/icon/times.png"></div>
-                        <div>&nbsp;剩余{{obj.duedate | timeDay}} 天</div>
+                        <div>&nbsp;剩余{{obj.duedate | needTimeDay}} 天</div>
                     </div>
-                    <div class="right" v-if="obj.especial !== 1 && obj.type == 0">剩余 长期</div>
                 </div>
                 <div class="infor_box">
                     <div class="infor">
@@ -446,7 +445,7 @@ export default {
             },
             sendNor() {
                 let _self = this;
-                if (!common.customerId) {
+                if (!common.KEY) {
                     function loadApp() {
                         // common.$emit('back_login', {
                         //     id: id,
@@ -484,7 +483,8 @@ export default {
             },
             jump(obj) {
                 let _self = this;
-                if (!common.customerId) {
+                //alert(!common.customerId);
+                if (!common.KEY) {
                     function loadApp() {
                         common.$emit('setParam', 'backRouter', '/needDetails/' + _self.id);
                         if (common.wxshow) {
@@ -500,6 +500,8 @@ export default {
                         ensure: loadApp
                     });
                     return;
+                } else if (obj.isMy == 1) {
+                    common.$emit('message', '您自己发布的求购不能进行报价！')
                 } else {
                     common.$emit('needToReleaseOffer', obj.id);
                     this.$router.push('/releaseOffer/' + obj.id);
@@ -514,13 +516,19 @@ export default {
             let _self = this;
             let id = _self.$route.params.id;
             let type = _self.$route.query.type;
+            let value = _self.$route.query.value;
             if (type == 'my') {
                 this.type = false;
             } else {
                 this.type = true;
             }
-            //console.log(_self.$route.query.type)
-            //console.log(1,_self.$route)
+            if (value == 'web') {
+                _hmt.push(['_setAutoPageview', false]);
+                _hmt.push(['_trackPageview', '/needDetails/*?value=web']);
+            }else if(value == 'message'){
+                _hmt.push(['_setAutoPageview', false]);
+                _hmt.push(['_trackPageview', '/needDetails/*?value=message']);
+            }
             _self.getHttp(id);
             _self.id = id;
             common.$on("needToDetails", function(item) {

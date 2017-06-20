@@ -41,7 +41,7 @@
                 </div>
                 <releaseSuccessCenetr :words="words"></releaseSuccessCenetr>
                 <div class="footer">
-                    <userInfor></userInfor>
+                    <!-- <userInfor></userInfor> -->
                 </div>
             </mt-loadmore>
         </div>

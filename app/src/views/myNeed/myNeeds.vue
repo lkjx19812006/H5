@@ -113,15 +113,15 @@
                             </div>
                             <div class="content">
                                 <div class="left">
-                                    <div class="breed_name">{{todo.breedName}} ({{todo.number}}{{todo.unit}})</div>
+                                    <div class="breed_name">{{todo.breedName}} {{todo.number}}({{todo.unit}})</div>
                                     <div class="spec">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
                                     <div class="spec">数量: {{todo.number}}{{todo.unit}}</div>
                                 </div>
                                 <div class="right">
                                     <div class="date">
                                         <div><img src="/static/icon/times.png"></div>
-                                        <div v-if="todo.especial == 1 && todo.type == 0">剩余{{todo.duedate | timeDays}}<span></span></div>
-                                        <div v-if="todo.especial !== 1 && todo.type == 0">长期</div>
+                                        <div>剩余{{todo.duedate | needTimeDay}}<span>天</span></div>
+                                        <!-- <div v-if="todo.especial !== 1 && todo.type == 0">长期</div> -->
                                     </div>
                                     <div class="detail" >
                                         求购详情

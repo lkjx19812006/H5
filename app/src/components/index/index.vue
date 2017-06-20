@@ -355,13 +355,18 @@
                         line-height: 22px;
                     }
                     .center_box {
+                        display:flex;
+                        flex-direction:row;
+                        .specail_spec{
+                            width:66px;
+                        }
                         @media screen {
-                            span {
+                            .spec {
                                 font-size: 12px;
                                 color: #A9A9A9;
                             }
                             @media (max-width: 320px) {
-                                span {
+                                .spec {
                                     font-size: 10px;
                                     color: #A9A9A9;
                                 }
@@ -588,8 +593,8 @@
                             <div class="center">
                                 <div class="center_top">{{todo.breedName}}</div>
                                 <div class="center_box">
-                                    <span>规格:{{todo.spec,2 | filterTxt}}</span>&nbsp;&nbsp;
-                                    <span>产地:{{todo.location,3 | filterTxt}}</span>
+                                    <div class="spec specail_spec">规格:{{todo.spec,2 | filterTxt}}</div>&nbsp;&nbsp;
+                                    <div class="spec">产地:{{todo.location,3 | filterTxt}}</div>
                                 </div>
                                 <div class="center_bottom">
                                     {{todo.price}}元/{{todo.unit}}

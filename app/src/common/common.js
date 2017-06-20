@@ -15,6 +15,8 @@ var _hmt = _hmt || [];
     s.parentNode.insertBefore(hm, s);
 })();
 
+
+console.log(1565213516)
 let common = new Vue({
     data: {
         wxrun: true,

@@ -383,8 +383,15 @@ export default {
             },
             getUrl(param) {
                 console.log(1, param)
-
-                if (param.url) this.imgArr.push(param.url);
+                let _self = this;
+                if(this.imgArr.length <= 2){
+                    if (param.url) _self.imgArr.push(param.url);
+                    if(_self.imgArr.length == 2){
+                        common.$emit('message','最多只能上传5张图片！')
+                    }
+                }
+                
+                
                 console.log(this.imgArr.length)
             },
             getUrlOne(param) {
@@ -494,6 +501,10 @@ export default {
                 _self.obj.spec = '';
                 _self.obj.location = '';
                 _self.imgArr = [];
+                _self.handPhoto = '';
+                _self.detailsPhoto = '';
+                _self.cargoPhoto = '';
+                _self.imageArrs = [];
                 _self.obj.quality = '';
                 _self.obj.sell_point = [];
                 _self.obj.number = '';

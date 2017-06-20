@@ -93,7 +93,6 @@ export default {
                                 imgl.onload = function() {
                                     _self.image = _self.compress(img, imgl);
                                     _self.upload(_self.image);
-
                                 }
                             }
                         } else {
@@ -117,8 +116,8 @@ export default {
             let initSize = img.src.length;
             let width = img.width;
             let height = img.height;
-            let w = width / 3;
-            let h = w / 3;
+            let w = width / 9;
+            let h = w / 3.6;
             let canvas = document.createElement("canvas");
             let ctx = canvas.getContext('2d');
             let ratio;

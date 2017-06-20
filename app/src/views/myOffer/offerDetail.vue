@@ -113,7 +113,7 @@
                 overflow: hidden;
                 img {
                     width: 100%;
-                    min-height: 80px;
+                    height: 80px;
                 }
             }
         }

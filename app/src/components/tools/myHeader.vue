@@ -86,7 +86,7 @@ export default {
             jump(param) {
                 //console.log(param.id)
                 let _self = this;
-                if (!common.customerId) {
+                if (!common.KEY) {
                     function loadApp() {
                         common.$emit('back_login', {
                             id: param.id,
