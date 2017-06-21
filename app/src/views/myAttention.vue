@@ -21,8 +21,8 @@
                             <div class="main">
                                 <div class="names">{{todo.breedName}}</div>
                                 <div class="specs">规格：<span>{{todo.spec}}</span></div>
-                                <div class="places">产地：<span>{{todo.location}}</div>
-                                <div class="times">上架时间：<span>{{todo.shelveTime | timeFormat}}</div>
+                                <div class="places">产地：<span>{{todo.location}}</span></div>
+                                <div class="times">上架时间：<span>{{todo.shelveTime | timeFormat}}</span></div>
                             </div>
                             <div class="rights">
                                 <div class="top">
