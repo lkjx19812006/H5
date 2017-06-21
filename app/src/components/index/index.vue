@@ -877,9 +877,9 @@ export default {
                     });
                     return;
                 }
-                if(router == '/releaseNeeds/1'){
-                      if(common.getAddress)_self.$store.dispatch('getAreaJson')
-                }
+                // if(router == '/releaseNeeds/1'){
+                //       if(common.getAddress)_self.$store.dispatch('getAreaJson')
+                // }
                 common.$emit('inforReleases', 1);
                 this.$router.push(router);
             },

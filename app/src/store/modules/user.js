@@ -122,14 +122,35 @@ const mutations = {
         let area = res.body.biz_result.list;
         let province = [];
         let city = [];
-        let districtArr = [];
+        let county = [];
         for (var i = 0; i < area.length; i++) {
             var ps = {};
-
             ps.value = area[i].cname;
-            ps.id = area[i].id;
-            ps.parentId = area[i].pid;
+            ps.id = String(area[i].id);
+            ps.parentId = String(area[i].pid);
+            province.push(ps);
+            for(var j = 0; j<area[i].childList.length; j++){
+                var cs = {};
+                cs.value = area[i].childList[j].cname;
+                cs.id =  String(area[i].childList[j].id);
+                cs.parentId =  String(area[i].childList[j].pid);
+                city.push(cs);
+                for(var k = 0; k < area[i].childList[j].childList.length; k++){
+                    var ds = {};
+                    ds.value = area[i].childList[j].childList[k].cname;
+                    ds.id =  String(area[i].childList[j].childList[k].id);
+                    ds.parentId =  String(area[i].childList[j].childList[k].pid);
+                    county.push(ds)
+                }
+            }
         }
+        state.areaJson = {
+            province:province,
+            city:city,
+            county:county
+        }
+       
+
     }
 
 }
