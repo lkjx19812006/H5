@@ -363,8 +363,8 @@ export default {
                     if (suc.data.code == '1c01') {
                         _self.obj.unit = suc.data.biz_result.list;
                         if (!_self.obj.number_unit) {
-                            _self.obj.number_unit = _self.obj.unit[0].name;
-                            _self.obj.number_id = _self.obj.unit[0].id;
+                            _self.obj.number_unit = _self.obj.unit[2].name;
+                            _self.obj.number_id = _self.obj.unit[2].id;
                         } else {
                             for (var i = 0; i < _self.obj.unit.length; i++) {
                                 if (_self.obj.number_unit == _self.obj.unit[i].name) {
@@ -421,14 +421,14 @@ export default {
             deletes(index) {
                 let _self = this;
 
-                function deletImgs() {
+                // function deletImgs() {
                     _self.imgArr.splice(index, 1);
-                }
-                common.$emit("confirm", {
-                    message: '确定删除？',
-                    title: '提示',
-                    ensure: deletImgs
-                });
+                // }
+                // common.$emit("confirm", {
+                //     message: '确定删除？',
+                //     title: '提示',
+                //     ensure: deletImgs
+                // });
             },
             select(todo, index) {
                 let _self = this;

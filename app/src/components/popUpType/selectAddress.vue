@@ -3,22 +3,19 @@
     background-color: #fff;
     .address {
         display: flex;
-        flex-direction: row;  
-        padding: 15px 0 15px 15px;  
-        line-height:20px; 
+        flex-direction: row;
+        padding: 15px 0 15px 15px;
+        line-height: 20px;
         .left {
             font-size: 15px;
             color: #343434;
             width: 70px;
             text-align: left;
-
-           
         }
         .content {
             flex: 1;
             text-align: left;
             font-size: 15px;
-            
             span {
                 color: #999;
             }
@@ -79,8 +76,10 @@
 <script>
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
-import areaJson from '../../common/areaData'
-
+//import areaJson from '../../common/areaData'
+import {
+    mapGetters
+} from 'vuex'
 const addressArr = ['北京市', '天津市', '河北省', '山西省', '内蒙古自治区', '辽宁省', '吉林省', '黑龙江省', '上海市', '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省', '河南省', '湖北省', '湖南省', '广东省', '广西壮族自治区', '海南省', '重庆市', '四川省', '贵州省', '云南省', '西藏自治区', '陕西省', '甘肃省', '青海省', '宁夏回族自治区', '新疆维吾尔族自治区'];
 export default {
     data() {
@@ -119,6 +118,11 @@ export default {
         props: {
             obj: {}
         },
+        computed: {
+            areaJson() {
+                return this.$store.state.user.areaJson;
+            }
+        },
         methods: {
             cancel() {
                 this.obj.tshow = false;
@@ -127,49 +131,94 @@ export default {
                 this.obj.addressProvince = this.areaParam.addressProvince;
                 this.obj.addressCity = this.areaParam.addressCity;
                 this.obj.addressDistrict = this.areaParam.addressDistrict;
-                this.obj.address = this.obj.addressProvince+','+this.obj.addressCity+','+this.obj.addressDistrict;
+                this.obj.address = this.obj.addressProvince + ',' + this.obj.addressCity + ',' + this.obj.addressDistrict;
                 this.obj.tshow = false;
             },
             selectPlace() {
                 this.obj.tshow = true;
             },
             onAddressChange(picker, values) {
+                let _self = this;
                 let cityArr = [];
                 let districtArr = [];
                 let provinceId;
                 let cityId = '';
+                // if (this.obj.addressProvince != values[0]) {
+                //     for (var i = 0; i < areaJson.province.length; i++) {
+                //         if (values[0] == areaJson.province[i].value) {
+                //             provinceId = areaJson.province[i].id;
+                //         }
+                //     }
+                //     for (var i = 0; i < areaJson.city.length; i++) {
+                //         if (areaJson.city[i].parentId == provinceId) {
+                //             if (!cityId) cityId = areaJson.city[i].id;
+                //             cityArr.push(areaJson.city[i].value);
+                //         }
+                //     }
+                // }
+                // if (this.obj.addressCity != values[1]) {
+                //     for (var i = 0; i < areaJson.city.length; i++) {
+                //         if (values[1] == areaJson.city[i].value) {
+                //             cityId = areaJson.city[i].id;
+                //         }
+                //     }
+                // }
+                // if (cityId) {
+                //     for (var i = 0; i < areaJson.county.length; i++) {
+                //         if (areaJson.county[i].parentId == cityId) {
+                //             districtArr.push(areaJson.county[i].value);
+                //         }
+                //     }
+                // }
                 if (this.obj.addressProvince != values[0]) {
-                    for (var i = 0; i < areaJson.province.length; i++) {
-                        if (values[0] == areaJson.province[i].value) {
-                            provinceId = areaJson.province[i].id;
+                    console.log(values)
+                    for (var i = 0; i < _self.areaJson.length; i++) {
+                        
+                        if (values[0] == _self.areaJson[i].cname) {
+
+                            provinceId = _self.areaJson[i].id;
+                            
+
+                            // if (_self.obj.addressCity != values[1]) {
+                            //     for (var i = 0; i < areaJson.city.length; i++) {
+                            //         if (values[1] == areaJson.city[i].value) {
+                            //             cityId = areaJson.city[i].id;
+                            //         }
+                            //     }
+                            // }
+
+                        }
+                        for (var j = 0; j < _self.areaJson[2].childList.length; j++) {
+
+                            if (_self.areaJson[2].childList[j].pid == _self.areaJson[2].id) {
+                                if (!cityId) cityId = _self.areaJson[2].childList[j].id;
+                                cityArr.push(_self.areaJson[2].childList[j].cname);
+                            }
+
                         }
                     }
-                    for (var i = 0; i < areaJson.city.length; i++) {
-                        if (areaJson.city[i].parentId == provinceId) {
-                            if (!cityId) cityId = areaJson.city[i].id;
-                            cityArr.push(areaJson.city[i].value);
-                        }
-                    }
+
+
                 }
-                if (this.obj.addressCity != values[1]) {
-                    for (var i = 0; i < areaJson.city.length; i++) {
-                        if (values[1] == areaJson.city[i].value) {
-                            cityId = areaJson.city[i].id;
-                        }
-                    }
-                }
-                if (cityId) {
-                    for (var i = 0; i < areaJson.county.length; i++) {
-                        if (areaJson.county[i].parentId == cityId) {
-                            districtArr.push(areaJson.county[i].value);
-                        }
-                    }
-                }
+                // if (this.obj.addressCity != values[1]) {
+                //     for (var i = 0; i < areaJson.city.length; i++) {
+                //         if (values[1] == areaJson.city[i].value) {
+                //             cityId = areaJson.city[i].id;
+                //         }
+                //     }
+                // }
+                // if (cityId) {
+                //     for (var i = 0; i < areaJson.county.length; i++) {
+                //         if (areaJson.county[i].parentId == cityId) {
+                //             districtArr.push(areaJson.county[i].value);
+                //         }
+                //     }
+                // }
                 if (cityArr.length > 0) picker.setSlotValues(1, cityArr);
                 if (districtArr.length > 0) picker.setSlotValues(2, districtArr);
-                this.areaParam.addressProvince = values[0];
-                this.areaParam.addressCity = values[1];
-                this.areaParam.addressDistrict = values[2];
+                // this.areaParam.addressProvince = values[0];
+                // this.areaParam.addressCity = values[1];
+                // this.areaParam.addressDistrict = values[2];
 
             }
 

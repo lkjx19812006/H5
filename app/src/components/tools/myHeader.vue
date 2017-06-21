@@ -49,7 +49,7 @@ export default {
                         } else if (common.pageParam.skipLogin == true) {
                             common.pageParam.skipLogin = false;
                             //console.log(2222)
-                            window.history.go(-2)
+                            window.history.go(-2);
                         } else if (common.pageParam.skipPer == true) {
                             common.pageParam.skipPer = false;
                             window.history.go(-3)

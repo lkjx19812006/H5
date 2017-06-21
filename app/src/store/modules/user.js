@@ -5,12 +5,14 @@ import common from '../../common/common.js'
 const state = {
     userInfor: {},
     /*accountHead: ''*/
+    areaJson: {}
 }
 
 // getters
 const getters = {
     userInfor: state => state.userInfor,
     /*accountHead: state => state.accountHead,*/
+    areaJson: state => state.areaJson
 }
 
 // actions
@@ -70,7 +72,34 @@ const actions = {
     },
     clearUserInfor({ commit, state }) {
         commit('clearUserInfor');
-    }
+    },
+    getAreaJson({ commit, state }) {
+        return new Promise((resolve, reject) => { //
+            common.$emit('show-load');
+            let url = common.urlCommon + common.apiUrl.most;
+            let body = {
+                biz_module: 'locationService',
+                biz_method: 'queryLocationList'
+            };
+            body.time = Date.parse(new Date()) + parseInt(common.difTime);
+            body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+            httpService.cart(url, body,
+                function(res) {
+                    common.$emit('close-load');
+                    if (res.data.code == '1c01') {
+                        common.getAddress = false;
+                        console.log(99, res.body.biz_result.list)
+                        commit('getAreaJson', res);
+
+                    }
+                    resolve(res);
+                },
+                function(err) {
+                    common.$emit('close-load');
+                    reject(err);
+                })
+        })
+    },
 
 }
 
@@ -87,6 +116,20 @@ const mutations = {
     },
     clearUserInfor(state) {
         state.userInfor = {}
+    },
+    getAreaJson(state, res) {
+        //state.areaJson = res.body.biz_result.list;
+        let area = res.body.biz_result.list;
+        let province = [];
+        let city = [];
+        let districtArr = [];
+        for (var i = 0; i < area.length; i++) {
+            var ps = {};
+
+            ps.value = area[i].cname;
+            ps.id = area[i].id;
+            ps.parentId = area[i].pid;
+        }
     }
 
 }

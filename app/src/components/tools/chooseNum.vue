@@ -2,7 +2,7 @@
     <div class="choose_num">
         <div class="top">
             <div class="drug_img">
-                <img src="/static/images/bao.png" class="bao">
+                <img src="/static/icons/zheng.png" class="bao">
                 <img :src="param.image" class="drug">
             </div>
             <div class="top_center" v-if="param.isRed">

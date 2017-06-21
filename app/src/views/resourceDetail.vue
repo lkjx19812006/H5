@@ -83,7 +83,8 @@
                 <telAndAttention :obj='obj'></telAndAttention>
             </div>
             <button class="mint-button orange_button" @click="pushCart(obj)">加入购物车</button>
-            <button class="mint-button mint-button--primary mint-button--normal disabled_button" @click="jump(obj)">立即购买</button>
+            <button class="mint-button mint-button--primary mint-button--normal disabled_button"  @click="jump(obj)">立即购买</button>
+           
         </div>
         <div class="fix_bottom" v-show="!my_param.show && obj.isMy == 1">
             <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()">

@@ -687,7 +687,7 @@ export default {
                         _self.obj.paymentWay = 1;
                         break;
                     case 2:
-                        _self.payArr[2].two = paymentWay.substring(5, paymentWay.length - 4);
+                        _self.payArr[2].two = paymentWay.substring(6, paymentWay.length - 4);
                         _self.obj.paymentWay = 2;
                         _self.payArr[2].show = true;
                         break;

@@ -308,7 +308,7 @@
             .right {
                 width: 130px;
                 .report_pri {
-                    margin: 60px auto 0 auto;
+                    margin: 20px auto 0 auto;
                     width: 100px;
                     height: 32px;
                     background-color: #7BB157;
@@ -316,6 +316,11 @@
                     color: #fff;
                     border-radius: 16px;
                     line-height: 32px;
+                }
+                .dates{
+                    padding-top:15px;
+                    margin-right:15px;
+                    color: #A9A9A9;
                 }
                 .reported {
                     font-size: 12px;
@@ -549,13 +554,14 @@
                     <div class="item" v-for="(todo,index) in urgentArr" v-bind:class="{first: index !== 2}" @click="jumpNeed(todo)">
                         <div class="left">
                             <div class="top">
-                                <div class="word">{{todo.location,4 | filterTxt}}</div>
+                                <div class="word" v-if="todo.indentType == 0">药厂求购</div>
+                                <div class="word" v-if="todo.indentType !== 0">普通求购</div>
                             </div>
                             <div class="center">
                                 <div class="breed_name">{{todo.breedName}}</div>
                                 <div class="box">
                                     <div class="left">规格:{{todo.spec,2 | filterTxt}}</div>
-                                    <div class="right">发布时间:{{todo.pubdate | timeFormat}}</div>
+                                    <div class="right">产地:{{todo.location,4 | filterTxt}}</div><!-- 发布时间:{{todo.pubdate | timeFormat}} -->
                                 </div>
                             </div>
                             <div class="footer">
@@ -572,7 +578,9 @@
                             </div>
                         </div>
                         <div class="right">
-                            <div class="report_pri">抢先报价</div>
+                            <div class="reported dates">发布日期:{{todo.pubdate | timeFormat}}</div>
+                            <div class="report_pri" v-if="todo.indentType == 0">抢先报价</div>
+                            <div class="report_pri" v-if="todo.indentType !== 0">我要报价</div>
                             <div class="reported">已报价<span>{{todo.offer}}</span>人</div>
                         </div>
                     </div>
@@ -603,8 +611,8 @@
                         </div>
                         <div class="right">
                             <img src="/static/icon/homesample.png" v-show="todo.sampling == 1">
-                            <div class="report_pri">抢先购买</div>
-                            <!-- <div class="reported">已报价<span>{{todo.offer}}</span>人</div> -->
+                            <div class="report_pri">立即购买</div>
+                            <!-- <div class="report_pri" v-if="todo.indentType !== 0">我要购买</div>  -->
                         </div>
                     </div>
                 </div>
@@ -617,6 +625,9 @@ import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import longSearch from '../../components/tools/longSearch'
 import filters from '../../filters/filters'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
             return {
@@ -658,6 +669,11 @@ export default {
         },
         components: {
             longSearch
+        },
+        computed: {
+            areaJson() {
+                return this.$store.state.user.areaJson;
+            }
         },
         methods: {
             getInfo() {
@@ -776,7 +792,7 @@ export default {
                 }
                 if (path) {
                     console.log(321321)
-                    common.$emit('clearThisSearch', 1)
+                    common.$emit('clearThisSearch', 1);
                     this.$router.push(path);
                 }
             },
@@ -860,6 +876,9 @@ export default {
                         ensure: perfect
                     });
                     return;
+                }
+                if(router == '/releaseNeeds/1'){
+                      if(common.getAddress)_self.$store.dispatch('getAreaJson')
                 }
                 common.$emit('inforReleases', 1);
                 this.$router.push(router);

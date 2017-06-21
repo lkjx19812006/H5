@@ -119,7 +119,7 @@ export default {
             },
             passWordLogin() {
                 let _self = this;
-                
+
                 common.$emit('show-load');
                 httpService.login(common.urlCommon + common.apiUrl.login, {
                     biz_param: {
@@ -130,7 +130,7 @@ export default {
                     common.$emit('close-load');
 
                     if (response.data.code == '1c01') {
-                        
+
                         window.localStorage.KEY = response.data.biz_result.KEY;
                         window.localStorage.SID = response.data.biz_result.SID;
                         common.KEY = window.localStorage.KEY;
@@ -151,15 +151,19 @@ export default {
                             }
                         } else if (common.pageParam.backRouter == 'lowPriceRes') {
                             _self.$router.replace('cart')
-                        }else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
+                        } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
                             _self.$router.replace(common.pageParam.backRouter);
+                            common.$emit("loginToDetails", {
+                                id: common.pageParam.backRouter.split('/')[2],
+                                type: ''
+                            });
                             common.$emit('setParam', 'skipLogin', true);
-                        }else {
+                        } else {
                             common.$emit('go_home', 1);
                             _self.$router.replace('home');
                             //console.log(1,common.pageParam.backRouter.split('/')[1])
                         }
-                        
+
                     } else {
                         common.$emit('message', response.data.msg);
                     }
@@ -201,14 +205,18 @@ export default {
                             }
                         } else if (common.pageParam.backRouter == 'lowPriceRes') {
                             _self.$router.replace('cart')
-                        }else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
+                        } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
                             _self.$router.replace(common.pageParam.backRouter);
+                            common.$emit("loginToDetails", {
+                                id: common.pageParam.backRouter.split('/')[2],
+                                type: ''
+                            });
                             common.$emit('setParam', 'skipLogin', true);
                         } else {
                             common.$emit('go_home', 1);
                             _self.$router.replace('home');
                         }
-                        
+
                     } else {
                         common.$emit('message', response.data.msg);
                     }
@@ -262,7 +270,7 @@ export default {
             login() {
                 var checkArr = [];
                 let _self = this;
-                
+
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
                 if (_self.myShow.show == true) {
@@ -302,15 +310,17 @@ export default {
 .page-loadmore-wrapper {
     overflow-x: hidden;
 }
-.login #login_container{
-  position: absolute;
-  z-index: 10000;
-  background: #fff;
-  margin-left:-150px;
-  margin-top: -200px;
-  left:50%;
-  top:50%;
+
+.login #login_container {
+    position: absolute;
+    z-index: 10000;
+    background: #fff;
+    margin-left: -150px;
+    margin-top: -200px;
+    left: 50%;
+    top: 50%;
 }
+
 .login .my-logo {
     width: 66.5%;
     margin-top: 10.6%;

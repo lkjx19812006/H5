@@ -318,7 +318,8 @@
         <div class="share" v-show="type">
             <div class="offer_it">
                 <img src="/static/icon/offer-price.png">
-                <div @click="jump(obj)">立即报价</div>
+                <div @click="jump(obj)" v-if="obj.indentType !== 0">我要报价</div>
+                <div @click="jump(obj)" v-if="obj.indentType == 0">抢先报价</div>
             </div>
             <div class="offer_it send_friend" @click="sendFriend()">
                 <img src="/static/icon/send-friend.png">
@@ -364,7 +365,8 @@ export default {
                 }, {
                     title: '麻烦不太了解'
                 }],
-                type: true
+                type: true,
+                login: true
             }
         },
         components: {
@@ -399,6 +401,7 @@ export default {
                     console.log(11, result)
                     let shareData = common.shareParam;
                     if (suc.data.code == '1c01') {
+                        //common.$emit('message',result.isMy)
                         _self.obj = result;
                         shareData.title = "【紧急求购】" + result.breedName + "-上【药材买卖网】你报价我就要了！";
                         shareData.desc = result.breedName + ',规格:' + result.spec + ',需要' + result.number + result.unit + '要求：' + result.quality + '。--买卖药材就上药材买卖网！';
@@ -464,7 +467,9 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                } else {
+                }else if (_self.obj.isMy == 1) {
+                    common.$emit('message','您本人发布的求购不能参与评论！')
+                }  else {
                     this.opinion = true;
                 }
 
@@ -485,12 +490,13 @@ export default {
                 let _self = this;
                 //alert(!common.customerId);
                 if (!common.KEY) {
+                    _self.login = false;
+
                     function loadApp() {
                         common.$emit('setParam', 'backRouter', '/needDetails/' + _self.id);
                         if (common.wxshow) {
                             common.getWxUrl();
                         } else {
-                            console.log(232131)
                             _self.$router.push('/login');
                         }
                     }
@@ -501,12 +507,11 @@ export default {
                     });
                     return;
                 } else if (obj.isMy == 1) {
-                    common.$emit('message', '您自己发布的求购不能进行报价！')
+                    common.$emit('message','您本人发布的求购不能进行报价！')
                 } else {
                     common.$emit('needToReleaseOffer', obj.id);
-                    this.$router.push('/releaseOffer/' + obj.id);
+                    _self.$router.push('/releaseOffer/' + obj.id);
                 }
-
             }
         },
         mounted() {
@@ -525,7 +530,7 @@ export default {
             if (value == 'web') {
                 _hmt.push(['_setAutoPageview', false]);
                 _hmt.push(['_trackPageview', '/needDetails/*?value=web']);
-            }else if(value == 'message'){
+            } else if (value == 'message') {
                 _hmt.push(['_setAutoPageview', false]);
                 _hmt.push(['_trackPageview', '/needDetails/*?value=message']);
             }
@@ -541,7 +546,11 @@ export default {
                 _self.getHttp(item.id);
                 _self.id = item.id;
                 _self.show = false;
+                
             });
+            common.$on("loginToDetails", function(item) {
+                _self.getHttp(item.id);
+            })
 
         }
 

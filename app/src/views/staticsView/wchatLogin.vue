@@ -194,6 +194,10 @@ export default {
                             _self.$router.replace('cart')
                         } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
                             _self.$router.replace(common.pageParam.backRouter);
+                            common.$emit("loginToDetails", {
+                                id: common.pageParam.backRouter.split('/')[2],
+                                type: ''
+                            });
                             common.$emit('setParam', 'skipLogin', true);
                         }else {
                             common.$emit('go_home', 1);
@@ -245,6 +249,10 @@ export default {
                             _self.$router.replace('cart')
                         } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
                             _self.$router.replace(common.pageParam.backRouter);
+                            common.$emit("loginToDetails", {
+                                id: common.pageParam.backRouter.split('/')[2],
+                                type: ''
+                            });
                             common.$emit('setParam', 'skipLogin', true);
                         } else {
                             common.$emit('go_home', 1);

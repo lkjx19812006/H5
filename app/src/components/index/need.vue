@@ -67,7 +67,7 @@
     .list {
         background-color: #F7F7F7;
         .li {
-            padding-left: 10px;
+            padding-left: 15px;
             margin-bottom: 10px;
             background-color: #fff;
             border-bottom: 1px solid #e5e5e5;
@@ -160,8 +160,8 @@
             </div>
             <sort v-on:postId="getId" v-on:initial="initial" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
             <div class="factory">
-                <div class="left" v-bind:class="{active:httpPraram.indentType == 0}" @click="indentType(0)">药厂</div>
-                <div class="left" v-bind:class="{active:httpPraram.indentType == 1}" @click="indentType(1)">普通</div>
+                <div class="left" v-bind:class="{active:httpPraram.indentType == 0}" @click="indentType(0)">药厂求购</div>
+                <div class="left" v-bind:class="{active:httpPraram.indentType == 1}" @click="indentType(1)">普通求购</div>
             </div>
         </div>
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">

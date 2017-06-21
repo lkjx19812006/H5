@@ -374,14 +374,14 @@ export default {
             deletes(index) {
                 let _self = this;
 
-                function deletImgs() {
+                // function deletImgs() {
                     _self.imgArr.splice(index, 1);
-                }
-                common.$emit("confirm", {
-                    message: '确定删除？',
-                    title: '提示',
-                    ensure: deletImgs
-                });
+                // }
+                // common.$emit("confirm", {
+                //     message: '确定删除？',
+                //     title: '提示',
+                //     ensure: deletImgs
+                // });
 
             },
             judgeValue(param) {

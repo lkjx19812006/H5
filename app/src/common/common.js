@@ -2,7 +2,6 @@ import Vue from 'vue'
 import CryptoJS from "crypto-js"
 import crypto from "crypto"
 import { Indicator, Toast, MessageBox, DatetimePicker } from 'mint-ui'
-
 import wx from 'weixin-js-sdk'
 let shareUrl = window.location.href.split('#')[0];
 
@@ -23,6 +22,7 @@ let common = new Vue({
         wxshow: true,
         phoneRun: true,
         phoneType: true,
+        getAddress: true,
         shareUrl: shareUrl,
         customerId: window.localStorage.ID,
         show: true,
@@ -84,7 +84,7 @@ let common = new Vue({
                     link: 'http://apps.yaocaimaimai.com/htm5/#/home'
                         /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
                 };
-            } else {                
+            } else {
                 _self.shareParam = {
                     imgUrl: data.imgUrl,
                     title: data.title,
@@ -92,7 +92,7 @@ let common = new Vue({
                     link: data.link
                 };
             }
-            
+
             wx.onMenuShareTimeline({
                 imgUrl: _self.shareParam.imgUrl,
                 title: _self.shareParam.title,
@@ -259,12 +259,12 @@ let common = new Vue({
                 _self.phoneRun = false;
             }
 
-        }
-
+        },
 
     }
 })
 common.isWeiXin();
+
 common.$on('show-load', () => {
     Indicator.open('Loading...');
 

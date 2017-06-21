@@ -501,8 +501,8 @@ export default {
                     if (suc.data.code == '1c01') {
                         _self.unit = suc.data.biz_result.list;
                         if (!_self.obj.number_unit) {
-                            _self.obj.number_unit = _self.unit[0].name;
-                            _self.obj.number_id = _self.unit[0].id;
+                            _self.obj.number_unit = _self.unit[2].name;
+                            _self.obj.number_id = _self.unit[2].id;
                         } else {
                             for (var i = 0; i < _self.unit.length; i++) {
                                 if (_self.obj.number_unit == _self.unit[i].name) {
