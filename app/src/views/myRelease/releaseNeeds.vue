@@ -128,14 +128,19 @@ input {
     }
 }
 
+.preventScroll {
+    height: 100%;
+    overflow: hidden;
+}
+
 .page-loadmore-wrapper {
     padding-bottom: 100px;
 }
 </style>
 <template>
-    <div class="release_needs">
+    <div class="release_needs" v-bind:class="{preventScroll:obj.sheetVisible || obj.show || obj.tshow}">
         <myHeader :param="param"></myHeader>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-bind:class="{preventScroll:obj.sheetVisible  || obj.show || obj.tshow}">
             <div class="top">
                 <div class="box">
                     <img src="/static/icon/need-title.png">
@@ -283,7 +288,7 @@ input {
                 </div>
             </div>
         </div>
-        <div class="confirm" @click="confirm">发布求购</div>
+        <div class="confirm" @click="confirm" v-if="!obj.tshow">发布求购</div>
     </div>
 </template>
 <script>
@@ -370,8 +375,11 @@ export default {
                     paymentWay_index: '',
                     sheetVisible: false,
                     addressProvince: '',
+                    addressProvinceId: '',
                     addressCity: '',
+                    addressCityId: '',
                     addressDistrict: '',
+                    addressDistrictId: '',
                     detailAddr: '',
                     tshow: false,
                     type_show: false
@@ -403,7 +411,6 @@ export default {
                     } else {
                         //console.log('cuowusasdada')
                     }
-
                 }, function(err) {
                     common.$emit('close-load');
                 })
@@ -589,6 +596,9 @@ export default {
                         unit: _self.obj.number_id,
                         quality: _self.obj.quality,
                         address: _self.obj.address,
+                        province: _self.obj.addressProvinceId,
+                        city: _self.obj.addressCityId,
+                        district: _self.obj.addressDistrictId,
                         paymentWay: _self.paymentWay
                     }
                 };
@@ -608,6 +618,9 @@ export default {
                             unit: _self.obj.number_id,
                             quality: _self.obj.quality,
                             address: _self.obj.address,
+                            province: _self.obj.addressProvinceId,
+                            city: _self.obj.addressCityId,
+                            district: _self.obj.addressDistrictId,
                             paymentWay: _self.paymentWay,
                             id: _self.id
                         }
@@ -838,14 +851,13 @@ export default {
                 this.id = _self.$route.params.id;
                 this.selectType(this.id);
             }
-
             _self.getInfo();
             common.$on('inforReleases', function(item) {
                 _self.obj.drug_name = '';
                 _self.obj.spec = '';
                 _self.obj.place = '';
                 _self.obj.number = '';
-                _self.obj.number_unit = '斤';
+                _self.obj.number_unit = '公斤';
                 _self.obj.duedate = '';
                 _self.obj.quality = '';
                 _self.obj.address = '';

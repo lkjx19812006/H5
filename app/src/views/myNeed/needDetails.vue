@@ -19,12 +19,13 @@
         img {
             width: 100%;
         }
-        div {
+        .static_word {
             position: absolute;
             font-size: 16px;
             color: #EB8545;
             text-align: left;
             padding: 25px;
+            z-index:3000;
         }
     }
     .top {
@@ -239,21 +240,21 @@
         <opinion :arr="arr" class="opinion" v-show="opinion" v-on:selectIt="selectIt"></opinion>
         <myHeader :param="param"></myHeader>
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-bind:class="{onscroll:!show || !opinion}">
-            <div class="static" v-show="obj.onSell == 1 && !type">
+            <div class="static" v-if="obj.onSell == 1 && !type">
                 <img src="/static/icon/examine.png">
-                <div>审核中</div>
+                <div class="static_word">审核中</div>
             </div>
-            <div class="static" v-show="obj.onSell == -2 && !type">
+            <div class="static" v-if="obj.onSell == -2 && !type">
                 <img src="/static/icon/un-pass.png">
-                <div>审核未通过</div>
+                <div class="static_word">审核未通过</div>
             </div>
-            <div class="static" v-show="obj.onSell == 4 && !type">
+            <div class="static" v-if="obj.onSell == 4 && !type">
                 <img src="/static/icon/askover.png">
-                <div>询价结束</div>
+                <div class="static_word">询价结束</div>
             </div>
-            <div class="static" v-show="obj.onSell == 2 && !type">
+            <div class="static" v-if="obj.onSell == 2 && !type">
                 <img src="/static/icon/ask.png">
-                <div>询价中</div>
+                <div class="static_word">询价中</div>
             </div>
             <div class="top">
                 <div class="box">
@@ -297,19 +298,22 @@
                 <div class="infor_box">
                     <div class="infor">
                         <div class="name">交货地址</div>
-                        <div class="content">{{obj.address}}</div>
+                        <div class="content" v-show="obj.address">{{obj.address}}</div>
+                        <div class="content" v-show="!obj.address">面议</div>
                     </div>
                 </div>
                 <div class="infor_box">
                     <div class="infor">
                         <div class="name">付款方式</div>
-                        <div class="content">{{obj.paymentWay}}</div>
+                        <div class="content" v-show="obj.paymentWay">{{obj.paymentWay}}</div>
+                        <div class="content" v-show="!obj.paymentWay">面议</div>
                     </div>
                 </div>
                 <div class="infor_box">
                     <div class="infor infor_nor">
                         <div class="name">备注信息</div>
-                        <div class="content">{{obj.description}}</div>
+                        <div class="content" v-show="obj.description">{{obj.description}}</div>
+                        <div class="content" v-show="!obj.description"></div>
                     </div>
                 </div>
             </div>

@@ -56,14 +56,35 @@ export default {
         },
         watch: {
             selected: function(newValue, oldValue) {
-                switch (newValue) {//为了清除资源和求购原搜索
+                let _self = this;
+                switch (newValue) { //为了清除资源和求购原搜索
                     case 'resource':
-                        common.$emit('clearResourceSearch', 1)
+                        common.$emit('clearResourceSearch', 1);
+                        _self.shareResource();
                         break;
                     case 'purchase':
                         common.$emit('clearNeedSearch', 1)
+                        _self.shareNeed();
                         break;
                 }
+            }
+        },
+        methods: {
+            shareResource() {
+                let shareData = common.shareParam;
+                shareData.title = "【药材买卖网】 低价资源";
+                shareData.desc = "药农资源、产地资源的聚集地，就算是冷备品，药材买卖网也一应俱全，而且全网比价哦！赶紧进入资源专区进行抢购";
+                shareData.link = window.location.href;
+                common.share(shareData);
+                console.log(1, shareData.title)
+            },
+            shareNeed() {
+                let shareData = common.shareParam;
+                shareData.title = "【药材买卖网】 紧急求购";
+                shareData.desc = "药厂、提取物厂、保健品厂的求购需求实在是太多了！快来药材买卖网的求购专区进行报价抢单！手慢则无哦！";
+                shareData.link = window.location.href;
+                common.share(shareData);
+                console.log(2, shareData.title)
             }
         },
         created() {
@@ -85,9 +106,11 @@ export default {
     overflow: hidden;
     height: 100vh;
 }
-.mine{
+
+.mine {
     overflow: auto;
 }
+
 .page-wrap {
     /*overflow: auto;*/
     height: 100%;

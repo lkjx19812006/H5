@@ -54,7 +54,12 @@ export default {
                             isMy: _self.obj.isMy
                         });*/
                         common.$emit('setParam', 'backRouter', 'lowPriceRes');
-                        _self.$router.push('/login');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
+                        //_self.$router.push('/login');
                     }
                     common.$emit('confirm', {
                         message: '请先登录',

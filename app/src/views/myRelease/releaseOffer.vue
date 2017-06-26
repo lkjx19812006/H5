@@ -209,12 +209,17 @@ export default {
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     let result = suc.data.biz_result;
+                    console.log(44,result)
                     if (suc.data.code == '1c01') {
                         _self.getBreedInformation(result.breedName);
                         _self.obj.breedName = result.breedName;
                         _self.obj.duedate = result.duedate;
                         _self.obj.need_number = result.number;
                         _self.obj.need_unit = result.unit;
+                        _self.obj.spec = result.spec;
+                        _self.obj.place = result.location;
+                        _self.obj.place_id = result.locationId;
+                        //console.log(2112,_self.obj.spec)
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -329,9 +334,9 @@ export default {
                 httpService.commonPost(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
-                        _self.obj.spec = '';
-                        _self.obj.place = '';
-                        _self.obj.place_id = '';
+                        // _self.obj.spec = '';
+                        // _self.obj.place = '';
+                        // _self.obj.place_id = '';
                         _self.obj.breedLocation = suc.data.biz_result.localList;
                         _self.obj.breedSpec = suc.data.biz_result.specList;
                         // if (_self.obj.breedSpec.length > 0) _self.obj.spec = _self.obj.breedSpec[0].name;

@@ -14,7 +14,7 @@
                             <div class="images">
                                 <img :src="todo.image[0]" class="my_images">
                                 <div class="sampling">
-                                    <img src="/static/images/bao.png" v-if="todo.especial == 1 && todo.type == 1">
+                                    <img src="/static/images/zheng.png" v-if="todo.especial == 1 && todo.type == 1">
                                     <img src="/static/icons/sample.png" v-if="todo.sampling == 1 && todo.type == 1">
                                 </div>
                             </div>

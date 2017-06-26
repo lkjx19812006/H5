@@ -198,10 +198,10 @@ input {
                 }
                 div {
                     .select {
-                        width: 18px; 
+                        width: 18px;
                         right: 15px;
                         margin-top: 6px;
-                        margin-right:15px;
+                        margin-right: 15px;
                     }
                 }
             }
@@ -527,6 +527,7 @@ export default {
             let _self = this;
             this.getUnit();
             common.$on("Needrelease", function(item) {
+                _self.getUnit();
                 if (item.breedName) {
                     _self.getBreedInformation(item.breedName);
                     _self.obj.drug_name = item.breedName;
@@ -537,12 +538,13 @@ export default {
                     _self.obj.breedId = item.id;
                 }
             });
-
+            // common.$on('inforReleases', function(item) {
+            //     console.log(231)
+            //     _self.getUnit();
+            // })
 
 
         },
-        mounted() {
-
-        }
+       
 }
 </script>

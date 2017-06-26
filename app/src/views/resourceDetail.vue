@@ -83,8 +83,7 @@
                 <telAndAttention :obj='obj'></telAndAttention>
             </div>
             <button class="mint-button orange_button" @click="pushCart(obj)">加入购物车</button>
-            <button class="mint-button mint-button--primary mint-button--normal disabled_button"  @click="jump(obj)">立即购买</button>
-           
+            <button class="mint-button mint-button--primary mint-button--normal disabled_button" @click="jump(obj)">立即购买</button>
         </div>
         <div class="fix_bottom" v-show="!my_param.show && obj.isMy == 1">
             <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()">
@@ -116,7 +115,6 @@ export default {
             let _self = this;
             return {
                 phone: common.servicePhone,
-
                 choose: {
                     value: 1,
                     isRed: true,
@@ -236,7 +234,6 @@ export default {
                     _self.obj.cartSample = 1;
                     allPrice = Number(_self.obj.sampleAmount) * Number(_self.obj.cartNumber);
                 }
-                //console.log(allPrice)
                 arr.push(_self.obj);
                 localStorage.setItem('cartContent', JSON.stringify(arr));
                 localStorage.setItem('allPrice', JSON.stringify(allPrice));
@@ -287,7 +284,6 @@ export default {
                             }
                             shareData.title = "【低价资源】" + result.breedName + "-上【药材买卖网】买我你就赚了！";
                             shareData.desc = result.breedName + ',规格:' + result.spec + ',剩余' + result.number + result.unit + '卖点：' + result.quality + '。--买卖药材就上药材买卖网！';
-                            //console.log(window.location.href);
                             shareData.link = window.location.href;
                             common.share(shareData);
                         } else {
@@ -327,10 +323,10 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                }else if (obj.isMy == 1) {
+                } else if (obj.isMy == 1) {
                     common.$emit('message', '您自己发布的资源不能进行购买！');
                     return
-                } 
+                }
                 /*common.$emit('orderConfirm', {
                     id: id,
                     obj: _self.obj
@@ -387,10 +383,10 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                }else if (obj.isMy == 1) {
+                } else if (obj.isMy == 1) {
                     common.$emit('message', '您自己发布的资源不能进行购买！');
                     return
-                } 
+                }
                 common.$emit('setParam', 'router', 'addCart');
                 //_self.choose.value = 1;
                 _self.choose.push_num = true;
@@ -414,6 +410,12 @@ export default {
         created() {
             let _self = this;
             if (!common.servicePhone) this.getCustomerPhone();
+            let value = _self.$route.query.value;
+            //console.log(22,value)
+            if (value == 'message') {
+                _hmt.push(['_setAutoPageview', false]);
+                _hmt.push(['_trackPageview', '/resourceDetail/*?value=message']);
+            }
 
             function countSecond() {
                 _self.imageShow = false;

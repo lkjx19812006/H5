@@ -32,6 +32,7 @@
     border-bottom: 1px solid #ccc;
     background: #EC6817;
 }
+
 .resource {
     overflow: hidden;
     .main {
@@ -76,7 +77,7 @@
                 padding: 10px 10px 10px 0;
                 border-bottom: 1px solid #E6E6E6;
                 .images {
-                    position:relative;
+                    position: relative;
                     width: 95px;
                     height: 90px;
                     overflow: hidden;
@@ -84,11 +85,11 @@
                         width: 100%;
                         min-height: 90px;
                     }
-                    .zheng{
-                        position:absolute;
-                        top:0;
-                        left:0;
-                        width:21px;
+                    .zheng {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 21px;
                     }
                 }
                 .collect {
@@ -338,7 +339,7 @@ export default {
                     }
                 })
             },
-            myAttention(type, todo,index) {
+            myAttention(type, todo, index) {
                 if (!common.customerId) {
                     let _self = this;
 
@@ -376,9 +377,9 @@ export default {
                     if (suc.data.code == '1c01') {
                         common.$emit('message', suc.data.msg);
                         common.$emit("informResAttention", todo.type);
-                        
+
                         _self.todos[index].isAttention = type;
-                        
+
                     } else {
                         common.$emit('message', suc.data.msg);
                     }

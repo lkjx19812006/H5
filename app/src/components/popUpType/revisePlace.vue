@@ -4,7 +4,8 @@
     .address {
         display: flex;
         flex-direction: row;
-        padding: 15px 0 15px 15px;
+        box-sizing:border-box;
+        padding: 13px 0 13px 0;
         line-height: 20px;
         .left {
             font-size: 15px;
@@ -14,7 +15,7 @@
         }
         .content {
             flex: 1;
-            text-align: left;
+            text-align: right;
             font-size: 15px;
             span {
                 color: #999;
@@ -27,6 +28,7 @@
                 height: 18px;
             }
         }
+        border-bottom: 1px solid #DADADA;
     }
     .bottom {}
     .address_box {
@@ -55,7 +57,7 @@
 <template>
     <div class="release_need">
         <div class="address" @click="selectPlace">
-            <div class="left">交货地</div>
+            <div class="left">省市区(县)</div>
             <div class="content">
                 <span v-show="!obj.addressProvince">请选择</span> {{ obj.addressProvince }}<span v-show="obj.addressCity">,</span>{{ obj.addressCity }}<span v-show="obj.addressDistrict">,</span>{{obj.addressDistrict}}
             </div>
@@ -123,9 +125,7 @@ export default {
             obj: {}
         },
         computed: {
-            // areaJson() {
-            //     return this.$store.state.user.areaJson;
-            // }
+            
         },
         methods: {
             cancel() {
@@ -138,9 +138,9 @@ export default {
                 this.obj.addressProvinceId = this.areaParam.addressProvinceId;
                 this.obj.addressCityId = this.areaParam.addressCityId;
                 this.obj.addressDistrictId = this.areaParam.addressDistrictId;
-                if(this.obj.addressDistrict){
+                if (this.obj.addressDistrict) {
                     this.obj.address = this.obj.addressProvince + ',' + this.obj.addressCity + ',' + this.obj.addressDistrict;
-                }else{
+                } else {
                     this.obj.address = this.obj.addressProvince + ',' + this.obj.addressCity;
                 }
                 this.obj.tshow = false;
@@ -231,7 +231,6 @@ export default {
             }
         },
         created() {
-            //if(common.getAddress)this.$store.dispatch('getAreaJson');
             if(common.getAddress)this.getAreaJson();
         },
         mounted() {

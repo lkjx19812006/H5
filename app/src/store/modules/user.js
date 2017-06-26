@@ -90,7 +90,6 @@ const actions = {
                         common.getAddress = false;
                         console.log(99, res.body.biz_result.list)
                         commit('getAreaJson', res);
-
                     }
                     resolve(res);
                 },
@@ -117,7 +116,7 @@ const mutations = {
     clearUserInfor(state) {
         state.userInfor = {}
     },
-    getAreaJson(state, res) {
+    getAreaJson(state, res) {//暂时不用
         //state.areaJson = res.body.biz_result.list;
         let area = res.body.biz_result.list;
         let province = [];
@@ -126,20 +125,20 @@ const mutations = {
         for (var i = 0; i < area.length; i++) {
             var ps = {};
             ps.value = area[i].cname;
-            ps.id = String(area[i].id);
-            ps.parentId = String(area[i].pid);
+            ps.id = area[i].id;
+            ps.parentId = 0;
             province.push(ps);
             for(var j = 0; j<area[i].childList.length; j++){
                 var cs = {};
                 cs.value = area[i].childList[j].cname;
-                cs.id =  String(area[i].childList[j].id);
-                cs.parentId =  String(area[i].childList[j].pid);
+                cs.id =  area[i].childList[j].id;
+                cs.parentId =  area[i].childList[j].pid;
                 city.push(cs);
                 for(var k = 0; k < area[i].childList[j].childList.length; k++){
                     var ds = {};
                     ds.value = area[i].childList[j].childList[k].cname;
-                    ds.id =  String(area[i].childList[j].childList[k].id);
-                    ds.parentId =  String(area[i].childList[j].childList[k].pid);
+                    ds.id =  area[i].childList[j].childList[k].id;
+                    ds.parentId =  area[i].childList[j].childList[k].pid;
                     county.push(ds)
                 }
             }

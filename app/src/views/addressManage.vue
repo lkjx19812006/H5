@@ -227,8 +227,10 @@ export default {
                 let _self = this;
                 //跳转到修改地址
                 common.$emit('setParam', 'addressId', item.id);
-                common.$emit('revise-address', item.id);
-                _self.$router.push('/addressRevise' + '/' + item.id);
+                common.$emit('revise-address', item);
+                let address = item.province + ':' + item.city + ':' + item.district;
+                console.log(item.province)
+                _self.$router.push('/addressRevise' + '/' + item.id + '?value=' + address);
             },
             handleScroll() {
                 this.scrollTop = this.$refs.wrapper.scrollTop;

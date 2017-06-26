@@ -41,7 +41,7 @@
                     <li v-for="todo in datas" class="page-loadmore-listitem list_content_item" @click="jumpRes(todo)">
                         <div>
                             <img src="/static/icons/search.png">
-                            <p>{{todo.keyWord}}<span v-if="searchType!='keyword'">({{todo.breedName}})</span></p>
+                            <p>{{todo.breedName}}<span v-if="searchType!='keyword'">({{todo.breedName}})</span></p>
                         </div>
                     </li>
                 </ul>
@@ -170,13 +170,13 @@ export default {
                             pSize: 20
                         }
                     }
-                    if (common.searchType == 'keyword') {
-                        body.biz_module = 'searchKeywordService';
-                        body.biz_method = 'querySearchKeyword';
-                    } else {
+                    // if (common.searchType == 'keyword') {
+                    //     body.biz_module = 'searchKeywordService';
+                    //     body.biz_method = 'querySearchKeyword';
+                    // } else {
                         body.biz_module = 'searchKeywordService';
                         body.biz_method = 'querySearchKeywordBreed';
-                    }
+                    // }
                     httpService.searchWord(common.urlCommon + common.apiUrl.most, body, function(suc) {
                         common.$emit('close-load');
                         let result = suc.data.biz_result.list;
@@ -338,6 +338,7 @@ export default {
     background-color: #F1EFEF;
     height: 30px;
     position: absolute;
+    width:60%;
     left: 32px;
     border: none;
 }

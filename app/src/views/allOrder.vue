@@ -47,7 +47,7 @@
                                     <!-- <p class="transport"></p> -->
                                 </div>
                                 <p class="sum_left">
-                                    <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click.stop="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button>
+                                    <!-- <button v-if="'cancel' ==judgeOrderStatus(todo.orderStatus) " @click.stop="cancelOrder(todo.id,todo.no,todo.type)">取消订单</button> -->
                                     <button v-if="'success' ==judgeOrderStatus(todo.orderStatus)" @click.stop="jump(todo.id)">查看订单</button>
                                     <!-- <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" @click.stop="jump(todo.id)">查看订单</button> -->
                                     <button v-if="'send' ==judgeOrderStatus(todo.orderStatus)&&httpPraram.type==0" class="special" @click.stop="prompt('确认收货')">确认收货</button>
