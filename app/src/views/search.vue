@@ -170,13 +170,13 @@ export default {
                             pSize: 20
                         }
                     }
-                    // if (common.searchType == 'keyword') {
+                    // // if (common.searchType == 'keyword') {
+                    // //     body.biz_module = 'searchKeywordService';
+                    // //     body.biz_method = 'querySearchKeyword';
+                    // // } else {
                     //     body.biz_module = 'searchKeywordService';
-                    //     body.biz_method = 'querySearchKeyword';
-                    // } else {
-                        body.biz_module = 'searchKeywordService';
-                        body.biz_method = 'querySearchKeywordBreed';
-                    // }
+                    //     body.biz_method = 'querySearchKeywordBreed';
+                    // // }
                     httpService.searchWord(common.urlCommon + common.apiUrl.most, body, function(suc) {
                         common.$emit('close-load');
                         let result = suc.data.biz_result.list;
@@ -192,7 +192,6 @@ export default {
                 }, 300)
             }
         },
-
         created() {
             let _self = this;
             common.$on('informIosType', function(item) {

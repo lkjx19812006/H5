@@ -4,8 +4,6 @@ import menu from './components/menu'
 import home from './views/home'
 import drugResTable from './views/drugResTable'
 import marketQuotation from './views/marketQuotation'
-// import supplyRelease from './views/supplyRelease'
-// import needRelease from './views/needRelease'
 import provenanceSelection from './views/provenanceSelection'
 import drugResTableDetail from './views/drugResTableDetail'
 import transaction from './views/transaction'
@@ -14,7 +12,7 @@ import lowPriceRes from './views/lowPriceRes'
 import urgentNeed from './views/urgentNeed'
 import myAttention from './views/myAttention'
 import myResource from './views/myResource'
-import register from './views/register'
+// import register from './views/register'
 import findPassWord from './views/findPassWord'
 import mySet from './views/mySet'
 import revisePassWord from './views/revisePassWord'
@@ -24,8 +22,6 @@ import addressRevise from './views/addressRevise'
 import feedBack from './views/feedBack'
 import needDetail from './views/needDetail'
 import resourceDetail from './views/resourceDetail'
-// import needReleaseSuccess from './views/needReleaseSuccess'
-// import supplyReleaseSuccess from './views/supplyReleaseSuccess'
 import detailsPage from './views/detailsPage'
 import goodDetail from './views/goodDetail'
 import addAddress from './views/addAddress'
@@ -33,8 +29,6 @@ import myPurchase from './views/myPurchase'
 import purchaseDetail from './views/purchaseDetail'
 import companyAuthentication from './views/companyAuthentication'
 import certification from './views/certification'
-// import reviseResource from './views/reviseResource'
-// import revisePurchase from './views/revisePurchase'
 import areaName from './views/areaName'
 import aboutus from './views/aboutus'
 import perfectInfo from './views/perfectInfo'
@@ -64,6 +58,10 @@ import needDetails from './views/myNeed/needDetails'
 import myNeeds from './views/myNeed/myNeeds'
 import myOffer from './views/myOffer/myOffer'
 import releaseOffer from './views/myRelease/releaseOffer'
+import register from './views/user/register'
+import perfectObject from './views/user/perfectObject'
+import perfectId from './views/user/perfectId'
+import majorBusiness from './views/user/majorBusiness'
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -94,8 +92,6 @@ module.exports = {
         { name: 'home', path: '/home', component: home },
         { name: 'drugResTable', path: '/drugResTable/:from', component: drugResTable },
         { name: 'marketQuotation', path: '/marketQuotation', component: marketQuotation },
-        // { name: 'supplyRelease', path: '/supplyRelease', component: supplyRelease },
-        // { name: 'needRelease', path: '/needRelease', component: needRelease },
         { name: 'provenanceSelection', path: '/provenanceSelection/:from', component: provenanceSelection },
         { name: 'drugResTableDetail', path: '/drugResTableDetail/:from/:drugId', component: drugResTableDetail },
         { name: 'transaction', path: '/transaction', component: transaction },
@@ -104,7 +100,7 @@ module.exports = {
         { name: 'urgentNeed', path: '/urgentNeed', component: urgentNeed },
         { name: 'myAttention', path: '/myAttention', component: myAttention },
         { name: 'myResource', path: '/myResource', component: myResource },
-        { name: 'register', path: '/register', component: register },
+        // { name: 'register', path: '/register', component: register },
         { name: 'findPassWord', path: '/findPassWord', component: findPassWord },
         { name: 'mySet', path: '/mySet', component: mySet },
         { name: 'detailsPage', path: '/detailsPage', component: detailsPage },
@@ -116,14 +112,10 @@ module.exports = {
         { name: 'goodDetail', path: '/goodDetail/:odId', component: goodDetail },
         { name: 'addAddress', path: '/addAddress', component: addAddress },
         { name: 'areaName', path: '/areaName', component: areaName },
-        // { name: 'revisePurchase', path: '/revisePurchase/:visePurId', component: revisePurchase },
-        // { name: 'reviseResource', path: '/reviseResource/:revId', component: reviseResource },
         { name: 'companyAuthentication', path: '/companyAuthentication', component: companyAuthentication },
         { name: 'certification', path: '/certification', component: certification },
         { name: 'myPurchase', path: '/myPurchase', component: myPurchase },
         { name: 'purchaseDetail', path: '/purchaseDetail/:rchaseId', component: purchaseDetail },
-        // { name: 'needReleaseSuccess', path: '/needReleaseSuccess/:needSucId', component: needReleaseSuccess },
-        // { name: 'supplyReleaseSuccess', path: '/supplyReleaseSuccess/:suppSucId', component: supplyReleaseSuccess },
         { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
         { name: 'aboutus', path: '/aboutus/:from', component: aboutus },
@@ -153,6 +145,10 @@ module.exports = {
         { name: 'myNeeds', path: '/myNeeds', component: myNeeds },
         { name: 'myOffer', path: '/myOffer', component: myOffer },
         { name: 'releaseOffer', path: '/releaseOffer/:id', component: releaseOffer },
+        { name: 'register', path: '/register', component: register },
+        { name: 'perfectObject', path: '/perfectObject', component: perfectObject },
+        { name: 'perfectId', path: '/perfectId', component: perfectId },
+        { name: 'majorBusiness', path: '/majorBusiness', component: majorBusiness },
         { path: '*', redirect: '/home' }
     ]
 }

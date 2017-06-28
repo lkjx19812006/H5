@@ -67,7 +67,6 @@ export default {
         },
         created() {
             let _self = this;
-
             common.$on('broughtCode', function(item) {
                 _self.referralCode = item;
             })
