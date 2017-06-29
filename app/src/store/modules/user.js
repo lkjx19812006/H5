@@ -5,13 +5,18 @@ import common from '../../common/common.js'
 const state = {
     userInfor: {},
     /*accountHead: ''*/
-    areaJson: {}
+    areaJson: {},
+    mainBusiness: {
+        router: '',
+        main: ''
+    }
 }
 
 // getters
 const getters = {
     userInfor: state => state.userInfor,
     /*accountHead: state => state.accountHead,*/
+    mainBusiness: state => state.mainBusiness,
     areaJson: state => state.areaJson
 }
 
@@ -99,6 +104,12 @@ const actions = {
                 })
         })
     },
+    getMainBusiness({ commit, state }, params) {
+        commit('getMainBusiness', params);
+    },
+    clearRouter({ commit, state }) {
+        commit('clearRouter');
+    }
 
 }
 
@@ -116,7 +127,14 @@ const mutations = {
     clearUserInfor(state) {
         state.userInfor = {}
     },
-    getAreaJson(state, res) {//暂时不用
+    getMainBusiness(state, params) {
+        state.mainBusiness.router = '/account';
+        state.mainBusiness.main = params.main;
+    },
+    clearRouter(state) {
+        state.mainBusiness.router = '';
+    },
+    getAreaJson(state, res) { //暂时不用
         //state.areaJson = res.body.biz_result.list;
         let area = res.body.biz_result.list;
         let province = [];
@@ -128,27 +146,27 @@ const mutations = {
             ps.id = area[i].id;
             ps.parentId = 0;
             province.push(ps);
-            for(var j = 0; j<area[i].childList.length; j++){
+            for (var j = 0; j < area[i].childList.length; j++) {
                 var cs = {};
                 cs.value = area[i].childList[j].cname;
-                cs.id =  area[i].childList[j].id;
-                cs.parentId =  area[i].childList[j].pid;
+                cs.id = area[i].childList[j].id;
+                cs.parentId = area[i].childList[j].pid;
                 city.push(cs);
-                for(var k = 0; k < area[i].childList[j].childList.length; k++){
+                for (var k = 0; k < area[i].childList[j].childList.length; k++) {
                     var ds = {};
                     ds.value = area[i].childList[j].childList[k].cname;
-                    ds.id =  area[i].childList[j].childList[k].id;
-                    ds.parentId =  area[i].childList[j].childList[k].pid;
+                    ds.id = area[i].childList[j].childList[k].id;
+                    ds.parentId = area[i].childList[j].childList[k].pid;
                     county.push(ds)
                 }
             }
         }
         state.areaJson = {
-            province:province,
-            city:city,
-            county:county
+            province: province,
+            city: city,
+            county: county
         }
-       
+
 
     }
 

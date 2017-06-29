@@ -254,6 +254,7 @@ export default {
 <style scoped>
 .address_manage .bg_white {
     background-color: #F0F0F0;
+    text-align:left;
 }
 
 .address_manage ul {
@@ -297,6 +298,7 @@ export default {
     line-height: 1.2rem;
     height: 1.2rem;
     top: 0;
+    text-align: left;
 }
 
 .address_manage ul li .address_top p span input {
@@ -313,6 +315,7 @@ export default {
 .address_manage ul li .address_top .address {
     position: absolute;
     top: 5rem;
+
 }
 
 .address_manage ul li .address_bottom {

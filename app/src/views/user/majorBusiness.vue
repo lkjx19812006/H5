@@ -58,7 +58,7 @@ input {
             }
             .data {
                 position: absolute;
-                left:0;
+                left: 0;
                 z-index: 30;
                 width: 100%;
                 height: 220px;
@@ -186,7 +186,8 @@ input {
         </div>
         <div class="footer">
             <div class="back" @click="back">返回上一步</div>
-            <div class="next" @click="next">完成注册</div>
+            <div class="next" @click="next" v-if="!mainBusiness.router">完成注册</div>
+            <div class="next" @click="goAccout" v-if="mainBusiness.router == '/account'">保存</div>
         </div>
     </div>
 </template>
@@ -194,20 +195,54 @@ input {
 import common from '../../common/common.js'
 import validation from '../../validation/validation.js'
 import httpService from '../../common/httpService.js'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
             return {
                 value: '',
                 todos: [],
                 arr: [],
-                datas: []
+                datas: [],
+                upDataInfor: {
+                    gender: '',
+                    fullname: '',
+                    phone: '',
+                    birthday: '',
+                    company: '',
+                    companyShort: '',
+                    bizMain: '',
+                    avatar: '',
+                    companyJob: '',
+                    invoice: '',
+                    userType: '',
+                    manageType: ''
+
+                },
+                register: false
             }
         },
         components: {
 
         },
         created() {
+            let _self = this;
+            // if (this.$route.query.value) {
+            //     _self.$store.dispatch('getMainBusiness', '/account');
+            //     var str = this.$route.query.value;
+            //     console.log(33, str);
+            //     _self.arr = str.split(',');
+            // }
             this.hotDrug();
+        },
+        computed: {
+            mainBusiness() {
+                return this.$store.state.user.mainBusiness;
+            },
+            userInfor() {
+                return this.$store.state.user.userInfor;
+            }
         },
         methods: {
             hotDrug() {
@@ -234,10 +269,35 @@ export default {
                 })
             },
             back() {
-                this.$router.push('/perfectObject')
+                //this.$router.push('/perfectId')
+                window.history.go(-1);
             },
             next() {
-
+                //this.getVal()
+                let _self = this;
+                // if (localStorage.getItem('userType') && localStorage.getItem('manageType')) {
+                this.register = true;
+                var str = '';
+                for (var i = 0; i < _self.arr.length; i++) {
+                    if (i == 0) str = _self.arr[0];
+                    if (i !== 0) str = str + ',' + _self.arr[i];
+                }
+                _self.upDataInfor.bizMain = str;
+                this.getVal()
+                console.log(55, _self.userInfor)
+                    // }
+            },
+            goAccout() {
+                let _self = this;
+                var str = '';
+                if (_self.mainBusiness.router == '/account') {
+                    //console.log(33, _self.arr)
+                    for (var i = 0; i < _self.arr.length; i++) {
+                        if (i == 0) str = _self.arr[0];
+                        if (i !== 0) str = str + ',' + _self.arr[i];
+                    }
+                    _self.getVal(str);
+                }
             },
             clear() {
                 let _self = this;
@@ -283,6 +343,76 @@ export default {
                     if (_self.arr[i] == todo) {
                         _self.arr.splice(i, 1);
                     }
+                }
+            },
+            getVal(param) {
+                let _self = this;
+                let obj = {
+                    bizMain: _self.upDataInfor.bizMain,
+                    userType: localStorage.getItem('userType'),
+                    manageType: localStorage.getItem('manageType')
+                }
+                if (!_self.register) {
+                    for (var key in _self.upDataInfor) {
+                        if (key == 'bizMain') {
+                            _self.upDataInfor['bizMain'] = param;
+                        } else {
+                            _self.upDataInfor[key] = _self.userInfor[key];
+                        }
+                    }
+                }
+                /*else {
+                                   console.log(132131)
+                                   for (var key in _self.upDataInfor) {
+                                       if (key == 'bizMain') {
+
+                                       }
+                                       if (key == 'userType') {
+                                           _self.upDataInfor['userType'] = localStorage.getItem('userType');
+                                       }
+                                       if (key == 'manageType') {
+                                           _self.upDataInfor['manageType'] = localStorage.getItem('manageType');
+                                       } else {
+
+                                       }
+                                       //console.log(_self.userInfor[key])
+                                   }
+
+
+                               }*/
+                console.log(12, _self.upDataInfor, _self.userInfor)
+                    //校验
+                let checkArr = [];
+                let checkBizMain = validation.checkNull(_self.upDataInfor.bizMain, '主营品类不能为空！');
+                checkArr.push(checkBizMain);
+                // let checkName = validation.checkNameTrue(_self.upDataInfor.fullname);
+                // checkArr.push(checkName);
+                // let checkLookcompany = validation.checkLook(_self.upDataInfor.company);
+                // checkArr.push(checkLookcompany);
+                // let checkLookcompanyShort = validation.checkLook(_self.upDataInfor.companyShort);
+                // checkArr.push(checkLookcompanyShort);
+                let checkLookbizMain = validation.checkLook(_self.upDataInfor.bizMain);
+                checkArr.push(checkLookbizMain);
+                for (let i = 0; i < checkArr.length; i++) {
+                    if (checkArr[i]) {
+                        common.$emit('message', checkArr[i]);
+                        return
+                    }
+                }
+                if (_self.mainBusiness.router == '/account') {
+                    _self.$store.dispatch('upDataInfor', this.upDataInfor).then(() => {
+                        window.history.go(-1)
+                    }), (() => {
+                        common.$emit('message', '更新失败');
+                    })
+                } else {
+                    _self.$store.dispatch('upDataInfor', obj).then(() => {
+                        _self.$router.push('/home')
+                    }), (() => {
+                        common.$emit('message', '更新失败');
+                    })
+                    localStorage.removeItem('userType');
+                    localStorage.removeItem('manageType');
                 }
             }
         },

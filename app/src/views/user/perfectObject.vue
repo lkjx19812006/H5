@@ -56,8 +56,8 @@ input {
         <div class="box" ref="wrapper">
             <div class="title_1">请完善以下信息</div>
             <div class="title_2">我们希望为您提供更好更快的服务</div>
-            <div class="select" v-for="todo in arr"  >
-                <img :src="todo.url" @click="jump">
+            <div class="select" v-for="todo in arr">
+                <img :src="todo.url" @click="jump(todo)">
                 <div class="name">{{todo.name}}</div>
             </div>
         </div>
@@ -76,14 +76,17 @@ export default {
                 },
                 arr: [{
                     url: '/static/icon/sell-man.png',
-                    name: '我是买家'
+                    name: '我是买家',
+                    userType:'1',
                 }, {
                     url: '/static/icon/sell-man.png',
-                    name: '我是卖家'
+                    name: '我是卖家',
+                    userType:'2',
                 }, {
                     url: '/static/icon/sell-man.png',
-                    name: '即买又卖'
-                }]
+                    name: '即买又卖',
+                    userType:'3',
+                }],
             }
         },
         components: {
@@ -93,9 +96,11 @@ export default {
 
         },
         methods: {
-            jump(){
+            jump(todo) {
+                localStorage.setItem('userType',todo.userType);
+                common.$emit('go_perfectId',1)
                 this.$router.push('/perfectId')
-            }
+            },
         },
         mounted() {
             // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

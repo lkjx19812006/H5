@@ -85,7 +85,7 @@
                         <div class="left">主营品类</div>
                         <div class="empty"></div>
                         <div class="right">
-                            <div>{{userInfor.bizMain}}</div>
+                            <div>{{userInfor.bizMain,6 | filterTxt}}</div>
                             <img src="/static/images/jiantou.png">
                         </div>
                     </div>
@@ -152,6 +152,8 @@ export default {
                     avatar: '',
                     companyJob: '',
                     invoice: '',
+                    userType:'',
+                    manageType:''
                 },
                 item: '',
                 show: false
@@ -267,9 +269,17 @@ export default {
                         }
                         break;
                 }
-                common.$emit('postUsers', obj);
-                let str = 'val=' + obj.val + ';name=' + obj.name + ';type=' + obj.type;
-                _self.$router.push('accountRevise/' + str);
+                if (obj.type !== 'bizMain') {
+                    common.$emit('postUsers', obj);
+                    let str = 'val=' + obj.val + ';name=' + obj.name + ';type=' + obj.type;
+                    _self.$router.push('accountRevise/' + str);
+                }else{
+                    _self.$store.dispatch('getMainBusiness',{
+                        router:'/account',
+                        main:_self.$store.state.user.userInfor.bizMain
+                    });
+                    _self.$router.push('/majorBusiness?value='+this.$store.state.user.userInfor.bizMain)
+                }
             }
         },
         created() {

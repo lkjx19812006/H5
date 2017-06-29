@@ -37,39 +37,38 @@ input {
         margin-bottom: 5px;
     }
     .list {
-        margin-top:36px;
+        margin-top: 36px;
         width: 100%;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-
         .item {
             width: 50%;
             padding: 0 9px 0 18px;
-            margin-bottom:16px;
+            margin-bottom: 16px;
         }
         .active {
             width: 50%;
             padding: 0 18px 0 9px;
-            margin-bottom:16px;
+            margin-bottom: 16px;
         }
         .inbox {
             height: 36px;
-            line-height:36px;
-            color:#000;
-            font-size:15px;
+            line-height: 36px;
+            color: #000;
+            font-size: 15px;
             border: 1px solid #ccc;
             border-radius: 18px;
-            background-color:#fff;
+            background-color: #fff;
         }
-        .selected{
+        .selected {
             height: 36px;
-            line-height:36px;
-            color:#fff;
-            font-size:15px;
+            line-height: 36px;
+            color: #fff;
+            font-size: 15px;
             border: 1px solid #ccc;
             border-radius: 18px;
-            background-color:#FA6705;
+            background-color: #FA6705;
         }
     }
     .footer {
@@ -121,71 +120,66 @@ import httpService from '../../common/httpService.js'
 export default {
     data() {
             return {
-                arr: [{
-                    show: false,
-                    name: '产地药农'
-                }, {
-                    show: false,
-                    name: '合作社'
-                }, {
-                    show: false,
-                    name: '贸易商'
-                }, {
-                    show: false,
-                    name: '产地药农'
-                }, {
-                    show: false,
-                    name: '合作社'
-                }, {
-                    show: false,
-                    name: '贸易商'
-                }, {
-                    show: false,
-                    name: '产地药农'
-                }, {
-                    show: false,
-                    name: '合作社'
-                }, {
-                    show: false,
-                    name: '贸易商'
-                }, {
-                    show: false,
-                    name: '产地药农'
-                }, {
-                    show: false,
-                    name: '合作社'
-                }, {
-                    show: false,
-                    name: '贸易商'
-                }, {
-                    show: false,
-                    name: '产地药农'
-                }, {
-                    show: false,
-                    name: '合作社'
-                }]
+                arr: [],
+                manageType:''
             }
         },
         components: {
 
         },
         created() {
-
+            //console.log(localStorage.getItem('userType'))
+            let _self = this;
+            this.getHttp();
+            common.$on('go_perfectId', function(id) {
+                _self.getHttp();
+            })
         },
         methods: {
-             select(todo){
+            select(todo) {
                 let _self = this;
-                for(var i=0;i<_self.arr.length;i++){
+                for (var i = 0; i < _self.arr.length; i++) {
                     _self.arr[i].show = false;
                 }
                 todo.show = true;
-             },
-             back(){
+                _self.manageType = todo.id;
+            },
+            back() {
                 this.$router.push('/perfectObject')
-             },
-             next(){
+            },
+            next() {
+                localStorage.setItem('manageType',this.manageType);
                 this.$router.push('/majorBusiness')
-             }
+            },
+            getHttp() {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'queryCustomerTypeMap',
+                    biz_param: {
+
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addAddress(url, body, function(suc) {
+                    common.$emit('close-load');
+                    let result = suc.data.biz_result.list;
+                    if (suc.data.code == '1c01') {
+                        for (var i = 0; i < result.length; i++) {
+                            result[i].show = false;
+                        }
+                        _self.arr = result;
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            }
         },
         mounted() {
             // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

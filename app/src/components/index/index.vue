@@ -317,9 +317,9 @@
                     border-radius: 16px;
                     line-height: 32px;
                 }
-                .dates{
-                    padding-top:15px;
-                    margin-right:15px;
+                .dates {
+                    padding-top: 15px;
+                    margin-right: 15px;
                     color: #A9A9A9;
                 }
                 .reported {
@@ -360,10 +360,10 @@
                         line-height: 22px;
                     }
                     .center_box {
-                        display:flex;
-                        flex-direction:row;
-                        .specail_spec{
-                            width:66px;
+                        display: flex;
+                        flex-direction: row;
+                        .specail_spec {
+                            width: 66px;
                         }
                         @media screen {
                             .spec {
@@ -468,9 +468,13 @@
 <template>
     <div class="home" id="home" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
         <div class="search" v-bind:class="{searchs:show}">
-            <div class="left" @click="jump('/cart')">
+            <!-- <div class="left" @click="jump('/cart')">
                 <img src="/static/icon/shopping.png">
                 <div class="left_word">购物车</div>
+            </div> -->
+            <div class="right" @click="call">
+                <img src="/static/icon/tele.png">
+                <div class="right_word">电话</div>
             </div>
             <div class="center" @click="fromIndex">
                 <div class="inbox">
@@ -478,9 +482,9 @@
                     <div class="center_word">请输入你想要的资源</div>
                 </div>
             </div>
-            <div class="right" @click="call">
-                <img src="/static/icon/tele.png">
-                <div class="right_word">电话</div>
+            <div class="right" @click="message">
+                <img src="/static/icon/message.png">
+                <div class="right_word">消息</div>
             </div>
         </div>
         <div class="swiper">
@@ -561,7 +565,8 @@
                                 <div class="breed_name">{{todo.breedName}}</div>
                                 <div class="box">
                                     <div class="left">规格:{{todo.spec,2 | filterTxt}}</div>
-                                    <div class="right">产地:{{todo.location,4 | filterTxt}}</div><!-- 发布时间:{{todo.pubdate | timeFormat}} -->
+                                    <div class="right">产地:{{todo.location,4 | filterTxt}}</div>
+                                    <!-- 发布时间:{{todo.pubdate | timeFormat}} -->
                                 </div>
                             </div>
                             <div class="footer">
@@ -821,6 +826,9 @@ export default {
             },
             call() {
                 window.location.href = "tel:" + this.phone;
+            },
+            message(){
+                this.$router.push('/message')
             },
             getImgArr() {
                 let _self = this;

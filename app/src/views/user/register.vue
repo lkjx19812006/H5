@@ -16,7 +16,8 @@ input {
     height: 100vh;
     background-color: #F5F5F5;
     .box {
-        height:92vh;
+        height: 92vh;
+        overflow-y: auto;
         width: 100%;
         @media screen {
             .logo {
@@ -57,13 +58,24 @@ input {
                 }
                 .fbox {
                     margin-left: 10px;
-                    height: 36px;
                     width: 100px;
                     background-color: #F7C000;
                     color: #fff;
                     line-height: 36px;
                     padding: 0 15px;
                     border-radius: 18px;
+                    input {
+                        width: 100%;
+                        background-color: #F7C000;
+                        height: 36px;
+                        text-align: center;
+                    }
+                    input[disabled] {
+                        color: #fff;
+                        opacity: 1;
+                        -webkit-text-fill-color: #fff;
+                        -webkit-opacity: 1;
+                    }
                 }
             }
             .inbox {
@@ -104,38 +116,45 @@ input {
     }
 }
 </style>
+<style></style>
 <template>
     <div class="register">
-        <userHead :param="param"></userHead>
+        <userHead :param="paramHead"></userHead>
         <div class="box">
             <img src="static/icon/logo_net.png" class="logo">
             <div class="main">
                 <div class="inbox">
-                    <img src="/static/icons/my-phone.png">
+                    <img src="/static/icon/i-name.png">
                     <div class="content">
-                        <input type="text" placeholder="请输入企业名称">
+                        <input type="text" placeholder="请输入姓名" v-model="param.name">
                     </div>
                 </div>
                 <div class="inbox">
-                    <img src="/static/icons/my-phone.png">
+                    <img src="/static/icon/i-phone.png">
                     <div class="content">
-                        <input type="text" placeholder="请输入您的手机号">
+                        <input type="text" placeholder="请输入您的手机号" v-model="param.phone">
+                    </div>
+                </div>
+                <div class="inbox">
+                    <img src="/static/icon/i-password.png">
+                    <div class="content">
+                        <input type="password" placeholder="请设置您的密码" v-model="param.password">
                     </div>
                 </div>
                 <div class="pass_code">
                     <div class="tbox">
-                        <img src="/static/icons/my-phone.png">
+                        <img src="/static/icon/i-code.png">
                         <div class="content">
                             <div>
-                                <input type="text" placeholder="请输入验证码">
+                                <input type="text" placeholder="请输入验证码" v-model="param.code">
                             </div>
                         </div>
                     </div>
-                    <div class="fbox">
-                        获取验证码
+                    <div class="fbox" @click="confirm">
+                        <input type="text" :disabled="buttonDisabled" v-model="code">
                     </div>
                 </div>
-                <div class="confirm">立即注册</div>
+                <div class="confirm" @click="register">立即注册</div>
                 <div class="title" @click="goProtocol">* 注册代表您同意《<span>药材买卖网用户协议</span>》</div>
             </div>
         </div>
@@ -149,9 +168,17 @@ import httpService from '../../common/httpService.js'
 export default {
     data() {
             return {
-                param: {
+                paramHead: {
                     name: '注册',
                 },
+                buttonDisabled: true,
+                param: {
+                    phone: '',
+                    password: '',
+                    name: '',
+                    code: ''
+                },
+                code: '获取验证码'
             }
         },
         components: {
@@ -164,8 +191,8 @@ export default {
             })
         },
         methods: {
-            goProtocol(){
-                  this.$router.push('/protocol')
+            goProtocol() {
+                this.$router.push('/protocol')
             },
             confirm: function() {
                 let _self = this;
@@ -173,7 +200,7 @@ export default {
                 if (checkPhone) {
                     common.$emit('message', checkPhone);
                 } else {
-                    _self.buttonDisabled = true;
+                    //_self.buttonDisabled = true;
                     let wait = 60;
                     let time = setInterval(function() {
                         wait--;
@@ -181,7 +208,7 @@ export default {
                         if (wait == 0) {
                             clearInterval(time);
                             _self.code = '获取验证码';
-                            _self.buttonDisabled = false;
+                            //_self.buttonDisabled = true;
                         }
                     }, 1000);
 
@@ -192,12 +219,10 @@ export default {
                             mobile: _self.param.phone
                         }
                     }, function(response) {
-
                         if (response.data.code == '1c01') {} else {
                             common.$emit('message', response.data.msg);
                         }
                     }, function(err) {
-
                         common.$emit('message', err.data.msg);
                     })
                 }
@@ -220,9 +245,10 @@ export default {
                         common.KEY = window.localStorage.KEY;
                         common.SID = window.localStorage.SID;
                         common.getDate();
-                        common.$emit('nextRegister', 1);
-                        common.$emit('getInfo', 1);
-                        _self.$router.replace('perfectInfo');
+                        _self.$router.push('/perfectObject')
+                        // common.$emit('nextRegister', 1);
+                        // common.$emit('getInfo', 1);
+                        // _self.$router.replace('perfectInfo');
                     } else {
                         //common.$emit('message', response.data.msg);
                     }
@@ -234,16 +260,18 @@ export default {
             register() {
                 var checkArr = [];
                 let _self = this;
+                let checkName = validation.checkNull(_self.param.name, '请输入姓名！');
+                checkArr.push(checkName);
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 checkArr.push(checkPhone);
                 let checkPassword = validation.checkNull(_self.param.password, '请输入密码！');
                 checkArr.push(checkPassword);
-                let checkagainPassword = validation.checkNull(_self.param.againPassword, '请确认密码！');
-                checkArr.push(checkagainPassword);
+                // let checkagainPassword = validation.checkNull(_self.param.againPassword, '请确认密码！');
+                // checkArr.push(checkagainPassword);
                 let checkMinNumber = validation.checkMinNumber(_self.param.password);
                 checkArr.push(checkMinNumber);
-                let checkCommon = validation.checkCommon(_self.param.password, _self.param.againPassword);
-                checkArr.push(checkCommon);
+                // let checkCommon = validation.checkCommon(_self.param.password, _self.param.againPassword);
+                // checkArr.push(checkCommon);
 
 
                 for (var i = 0; i < checkArr.length; i++) {
@@ -258,18 +286,18 @@ export default {
                     biz_module: 'userSmsService',
                     biz_method: 'registerUser',
                     biz_param: {
+                        fullname:_self.param.name,
                         phone: _self.param.phone,
                         code: _self.param.code,
                         password: _self.param.password,
-                        rePassword: _self.param.againPassword,
-                        referralCode: _self.referralCode
+                        // rePassword: _self.param.againPassword,
+                        //referralCode: _self.referralCode
                     }
                 }, function(response) {
                     common.$emit('close-load');
                     if (response.data.code == '1c01') {
                         common.$emit('message', response.data.msg);
                         _self.login();
-
                     } else {
                         common.$emit('message', response.data.msg);
                     }

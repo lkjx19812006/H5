@@ -149,9 +149,6 @@ export default {
                 let body = {
                     biz_module: 'userAddressService',
                     biz_method: 'addUserAddress',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         contactName: _self.obj.name,
                         contactPhone: _self.obj.phone,

@@ -96,6 +96,8 @@ export default {
                     avatar: '',
                     companyJob: '',
                     invoice: '',
+                    userType:'',
+                    manageType:''
                 },
             }
         },
@@ -140,6 +142,7 @@ export default {
                 console.log(this.upDataInfor)
                     //console.log(this.upDataInfor, 111)
                 this.$store.dispatch('upDataInfor', this.upDataInfor).then(() => {
+                    //console.log(this.upDataInfor)
                     window.history.go(-1)
                 }), (() => {
                     common.$emit('message', '更新失败');
