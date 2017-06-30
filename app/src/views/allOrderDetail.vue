@@ -130,6 +130,7 @@ export default {
             let _self = this;
             _self.getHttp(_self.$route.params.allOrderId);
             common.$on('post-no', function(id) {
+                console.log(id)
                 _self.getHttp(id);
             })
             if (!common.servicePhone) this.getCustomerPhone();

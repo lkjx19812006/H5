@@ -164,6 +164,20 @@ Vue.filter('successTimeFormat', function(val) {
     }
     return val;
 });
+
+Vue.filter('successTimeFormats', function(val) {
+    if (val) {
+        var date = new Date(val);
+        let Y = date.getFullYear();
+        let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+        let D = date.getDate();
+        let h = date.getHours();
+        let m = date.getMinutes();
+        // let s = date.getSeconds(); 
+        val = Y + '年' + M + '月' + D + '号' + ' ' + h + ':' + m;
+    }
+    return val;
+});
 Vue.filter('birthdayTime', function(val) {
     if (val) {
         var date = new Date(val * 1000);

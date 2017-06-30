@@ -63,6 +63,11 @@ import perfectObject from './views/user/perfectObject'
 import perfectId from './views/user/perfectId'
 import majorBusiness from './views/user/majorBusiness'
 import message from './views/message/message'
+import sayPriceNotice from './views/message/sayPriceNotice'
+import orderNotice from './views/message/orderNotice'
+import activityNotice from './views/message/activityNotice'
+import intentionNotice from './views/message/intentionNotice'
+
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -151,6 +156,10 @@ module.exports = {
         { name: 'perfectId', path: '/perfectId', component: perfectId },
         { name: 'majorBusiness', path: '/majorBusiness', component: majorBusiness },
         { name: 'message', path: '/message', component: message },
+        { name: 'sayPriceNotice', path: '/sayPriceNotice', component: sayPriceNotice },
+        { name: 'orderNotice', path: '/orderNotice', component: orderNotice },
+        { name: 'activityNotice', path: '/activityNotice', component: activityNotice },
+        { name: 'intentionNotice', path: '/intentionNotice', component: intentionNotice },
         { path: '*', redirect: '/home' }
     ]
 }

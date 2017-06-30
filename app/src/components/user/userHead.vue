@@ -27,6 +27,17 @@
         font-size: 1.7rem;
         color: #fff;
     }
+    .revise{
+        position: absolute;
+        z-index: 20;
+        right: 0;
+        top: 0;
+        width: 20%;
+        height: 100%;
+        font-size:1.3rem;
+        line-height:8vh;
+        color:#fff;
+    }
 }
 </style>
 <template>
@@ -35,6 +46,8 @@
             <img src="/static/images/go-back.png">
         </div>
         <div class="title">{{param.name}}</div>
+        <div class="revise" v-if="param.revise && !param.show" @click="revise">编辑</div>
+        <div class="revise" v-if="param.revise && param.show" @click="over">完成</div>
     </div>
 </template>
 <script>
@@ -60,7 +73,13 @@ export default {
             jumpBack() {
                 let _self = this;
                 window.history.go(-1);
-            }
+            },
+            revise(){
+                this.param.show = true;
+            },
+            over(){
+                this.param.show = false;
+            },
         },
 
 }

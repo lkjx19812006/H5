@@ -49,7 +49,15 @@
         }
         .right {
             padding: 5px 15px 0 15px;
-            img {
+            position: relative;
+            .red_img {
+                position: absolute;
+                width: 9px;
+                height: 9px;
+                right: 13px;
+                top: 4px;
+            }
+            .img {
                 width: 20px;
             }
             .right_word {
@@ -473,7 +481,7 @@
                 <div class="left_word">购物车</div>
             </div> -->
             <div class="right" @click="call">
-                <img src="/static/icon/tele.png">
+                <img src="/static/icon/tele.png" class="img">
                 <div class="right_word">电话</div>
             </div>
             <div class="center" @click="fromIndex">
@@ -483,7 +491,8 @@
                 </div>
             </div>
             <div class="right" @click="message">
-                <img src="/static/icon/message.png">
+                <img src="/static/icon/i-red.png" class="red_img" v-show="isMessage == '0'">
+                <img src="/static/icon/message.png" class="img">
                 <div class="right_word">消息</div>
             </div>
         </div>
@@ -670,6 +679,7 @@ export default {
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
+                isMessage:'',
             }
         },
         components: {
@@ -767,7 +777,7 @@ export default {
             },
             jump(path) {
                 let _self = this;
-                if (!common.customerId) {
+                if (!common.KEY) {
                     function loadApp() {
                         if (common.wxshow) {
                             common.getWxUrl();
@@ -827,7 +837,23 @@ export default {
             call() {
                 window.location.href = "tel:" + this.phone;
             },
-            message(){
+            message() {
+                let _self = this;
+                if (!common.KEY) {
+                    function loadApp() {
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                }
                 this.$router.push('/message')
             },
             getImgArr() {
@@ -845,6 +871,32 @@ export default {
                 }, function(err) {
                     common.$emit('message', err.data.msg);
 
+                })
+            },
+            getMessage() {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'pushService',
+                    biz_method: 'showIsRead',
+                    biz_param: {
+
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.myResource(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        _self.isMessage = suc.data.biz_result.isRead;
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
                 })
             },
             jumpLink(url) {
@@ -906,6 +958,7 @@ export default {
                     _self.drugGuidePrice();
                     _self.resourceHttp();
                     _self.getImgArr();
+                    if (common.KEY)_self.getMessage();
                     _self.$refs.loadmore.onTopLoaded(id);
                 }, 500);
             },
@@ -926,15 +979,19 @@ export default {
             let _self = this;
             if (!common.servicePhone) this.getCustomerPhone();
             if (common.KEY) _self.getInfo();
+            if (common.KEY)_self.getMessage();
             common.$on('toMine', function(item) {
                 if (common.KEY) _self.getInfo();
+                if (common.KEY)_self.getMessage();
             })
             common.$on('getInfo', function(item) {
                 _self.resourceHttp();
+                if (common.KEY)_self.getMessage();
             })
             this.resourceHttp();
             this.drugGuidePrice();
             this.getImgArr();
+            
         },
         mounted() {
             let _self = this;

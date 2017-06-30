@@ -25,7 +25,7 @@
             color: #EB8545;
             text-align: left;
             padding: 25px;
-            z-index:3000;
+            z-index: 3000;
         }
     }
     .top {
@@ -210,6 +210,15 @@
         left: 50%;
         margin-top: 30%;
     }
+    @media (max-height: 480px) {
+        .opinion {
+            position: absolute;
+            z-index: 31;
+            margin-left: -127px;
+            left: 50%;
+            margin-top: 15%;
+        }
+    }
 }
 </style>
 <template>
@@ -237,7 +246,7 @@
             </div>
         </div>
         <!-- 不发送朋友圈理由 -->
-        <opinion :arr="arr" class="opinion" v-show="opinion" v-on:selectIt="selectIt"></opinion>
+        <opinion :arr="arr" class="opinion" v-show="opinion" v-on:selectIt="selectIt" v-on:cancel="cancel"></opinion>
         <myHeader :param="param"></myHeader>
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-bind:class="{onscroll:!show || !opinion}">
             <div class="static" v-if="obj.onSell == 1 && !type">
@@ -361,13 +370,17 @@ export default {
                 show: false,
                 opinion: false,
                 arr: [{
+                    title: '不做这个品种了'
+                }, {
                     title: '暂时没货',
                 }, {
-                    title: '不做这个品种了'
+                    title: '货量不足',
                 }, {
                     title: '质量不满足'
                 }, {
-                    title: '麻烦不太了解'
+                    title: '时间来不及'
+                }, {
+                    title: '对不起，点错了'
                 }],
                 type: true,
                 login: true
@@ -471,9 +484,9 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                }else if (_self.obj.isMy == 1) {
-                    common.$emit('message','您本人发布的求购不能参与评论！')
-                }  else {
+                } else if (_self.obj.isMy == 1) {
+                    common.$emit('message', '您本人发布的求购不能参与评论！')
+                } else {
                     this.opinion = true;
                 }
 
@@ -511,7 +524,7 @@ export default {
                     });
                     return;
                 } else if (obj.isMy == 1) {
-                    common.$emit('message','您本人发布的求购不能进行报价！')
+                    common.$emit('message', '您本人发布的求购不能进行报价！')
                 } else {
                     common.$emit('needToReleaseOffer', obj.id);
                     _self.$router.push('/releaseOffer/' + obj.id);
@@ -550,7 +563,7 @@ export default {
                 _self.getHttp(item.id);
                 _self.id = item.id;
                 _self.show = false;
-                
+
             });
             common.$on("loginToDetails", function(item) {
                 _self.getHttp(item.id);

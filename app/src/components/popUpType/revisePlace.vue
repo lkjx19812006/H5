@@ -146,6 +146,7 @@ export default {
                 this.obj.tshow = false;
             },
             selectPlace() {
+                this.getAreaJson();
                 this.obj.tshow = true;
             },
             onAddressChange(picker, values) {
@@ -231,7 +232,7 @@ export default {
             }
         },
         created() {
-            if(common.getAddress)this.getAreaJson();
+            //if(common.getAddress)this.getAreaJson();
         },
         mounted() {
 

@@ -151,7 +151,7 @@ input {
                         </div>
                     </div>
                     <div class="fbox" @click="confirm">
-                        <input type="text" :disabled="buttonDisabled" v-model="code">
+                        <input type="text" :disabled="true" v-model="code">
                     </div>
                 </div>
                 <div class="confirm" @click="register">立即注册</div>
@@ -171,7 +171,7 @@ export default {
                 paramHead: {
                     name: '注册',
                 },
-                buttonDisabled: true,
+                buttonDisabled: false,
                 param: {
                     phone: '',
                     password: '',
@@ -199,16 +199,17 @@ export default {
                 let checkPhone = validation.checkPhone(_self.param.phone);
                 if (checkPhone) {
                     common.$emit('message', checkPhone);
-                } else {
-                    //_self.buttonDisabled = true;
+                } else if(!_self.buttonDisabled){
+                    _self.buttonDisabled = true;
                     let wait = 60;
+
                     let time = setInterval(function() {
                         wait--;
                         _self.code = wait;
                         if (wait == 0) {
                             clearInterval(time);
                             _self.code = '获取验证码';
-                            //_self.buttonDisabled = true;
+                            _self.buttonDisabled = false;
                         }
                     }, 1000);
 
@@ -225,8 +226,8 @@ export default {
                     }, function(err) {
                         common.$emit('message', err.data.msg);
                     })
-                }
 
+                }
 
             },
             login() {
@@ -246,9 +247,9 @@ export default {
                         common.SID = window.localStorage.SID;
                         common.getDate();
                         _self.$router.push('/perfectObject')
-                        // common.$emit('nextRegister', 1);
-                        // common.$emit('getInfo', 1);
-                        // _self.$router.replace('perfectInfo');
+                            // common.$emit('nextRegister', 1);
+                            // common.$emit('getInfo', 1);
+                            // _self.$router.replace('perfectInfo');
                     } else {
                         //common.$emit('message', response.data.msg);
                     }
@@ -286,7 +287,7 @@ export default {
                     biz_module: 'userSmsService',
                     biz_method: 'registerUser',
                     biz_param: {
-                        fullname:_self.param.name,
+                        fullname: _self.param.name,
                         phone: _self.param.phone,
                         code: _self.param.code,
                         password: _self.param.password,

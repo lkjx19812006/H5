@@ -14,6 +14,7 @@
         border-top: 1px solid #E6E6E6;
         color: #0181EE;
     }
+
 }
 </style>
 <template>
@@ -21,7 +22,10 @@
         <div class="title">
             请告知您不参加的理由
         </div>
-        <div class="title item" v-for="todo in arr" @click="select(todo)">
+        <div class="title item" v-for="(todo,index) in arr" @click="select(todo)" v-show="index<5">
+            {{todo.title}}
+        </div>
+        <div class="title item" v-for="(todo,index) in arr" @click="cancel(todo)" v-show="index==5">
             {{todo.title}}
         </div>
     </div>
@@ -39,6 +43,9 @@ export default {
         methods: {
             select(todo){
                 this.$emit('selectIt',todo)
+            },
+            cancel(todo){
+                this.$emit('cancel',todo)
             }
         },
         mounted() {
