@@ -13,9 +13,9 @@ import store from './store'
 // import infiniteScroll from 'vue-infinite-scroll'
 
 
-/*document.addEventListener('DOMContentLoaded', function() {
-  if (window.FastClick) window.FastClick.attach(document.body);
-}, false);*/
+// document.addEventListener('DOMContentLoaded', function() {
+//   if (window.FastClick) window.FastClick.attach(document.body);
+// }, false);
 
 Vue.use(vueTap);
 Vue.use(Mint);

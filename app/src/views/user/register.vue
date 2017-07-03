@@ -185,10 +185,16 @@ export default {
             userHead
         },
         created() {
-            let _self = this;
-            common.$on('broughtCode', function(item) {
-                _self.referralCode = item;
+            let _self = this;    
+            common.$on('loginToRegister', function(item) {
+                    _self.param.phone = '';
+                    _self.param.password = '';
+                    _self.param.name = '';
+                    _self.param.code = '';   
             })
+            // common.$on('broughtCode', function(item) {
+            //     _self.referralCode = item;
+            // })
         },
         methods: {
             goProtocol() {
@@ -246,9 +252,10 @@ export default {
                         common.KEY = window.localStorage.KEY;
                         common.SID = window.localStorage.SID;
                         common.getDate();
+                        common.$emit('getInfo', 1);
                         _self.$router.push('/perfectObject')
                             // common.$emit('nextRegister', 1);
-                            // common.$emit('getInfo', 1);
+                        
                             // _self.$router.replace('perfectInfo');
                     } else {
                         //common.$emit('message', response.data.msg);

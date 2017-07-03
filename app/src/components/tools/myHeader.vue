@@ -29,11 +29,21 @@ export default {
         props: {
             param: {}
         },
+        computed: {
+            backRouter() {
+                return this.$store.state.user.backRouter.back;
+            }
+        },
         methods: {
             jumpBack() {
                 let _self = this;
-                common.$emit('infor_choose', 1)
-                if (this.param.goBack) {
+                common.$emit('infor_choose', 1);
+                /*if (_self.backRouter) { //但返回路由存在时候，注册那个部分
+                    let router = _self.backRouter;
+                    _self.$store.dispatch('clearChangeRouter')
+                    console.log('qq', router)
+                    _self.$router.push(router)
+                } else*/ if (this.param.goBack) {
                     _self.$router.push('/home');
                 } else {
                     if (window.history.length == 1) {

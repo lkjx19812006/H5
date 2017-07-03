@@ -310,6 +310,8 @@ common.$on('confirm', (obj) => {
     })
 })
 
+
+
 common.$on('judge', (obj) => {
     MessageBox.confirm(obj.message, obj.title).then(action => {
         obj.ensure();

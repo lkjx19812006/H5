@@ -71,8 +71,8 @@ input {
                     </div>
                     <div class="footer">
                         <span class="delet" v-if='paramHead.show' @click.stop="delet(todo)">删除</span>
-                        <span v-show="todo.intentionType=='0' && !paramHead.show">进入我的求购</span>
-                        <span v-show="todo.intentionType=='1' && !paramHead.show">进入我的资源</span>
+                        <span v-show="todo.intentionType=='0' && !paramHead.show">查看详情</span>
+                        <span v-show="todo.intentionType=='1' && !paramHead.show">查看详情</span>
                         <img src="/static/icon/right.png" class="right">
                     </div>
                 </div>

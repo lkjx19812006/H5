@@ -75,7 +75,7 @@ export default {
                     name: '完善身份',
                 },
                 arr: [{
-                    url: '/static/icon/sell-man.png',
+                    url: '/static/icon/buy-man.png',
                     name: '我是买家',
                     userType:'1',
                 }, {
@@ -83,7 +83,7 @@ export default {
                     name: '我是卖家',
                     userType:'2',
                 }, {
-                    url: '/static/icon/sell-man.png',
+                    url: '/static/icon/sellorbuy-man.png',
                     name: '即买又卖',
                     userType:'3',
                 }],
@@ -93,13 +93,13 @@ export default {
             userHead
         },
         created() {
-
+            
         },
         methods: {
             jump(todo) {
                 localStorage.setItem('userType',todo.userType);
-                common.$emit('go_perfectId',1)
-                this.$router.push('/perfectId')
+                common.$emit('go_perfectId',todo.userType);
+                this.$router.push('/perfectId?type='+todo.userType);
             },
         },
         mounted() {

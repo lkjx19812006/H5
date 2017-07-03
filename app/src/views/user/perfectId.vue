@@ -39,18 +39,31 @@ input {
     .list {
         margin-top: 36px;
         width: 100%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        .item {
-            width: 50%;
-            padding: 0 9px 0 18px;
-            margin-bottom: 16px;
+        .item{
+            padding:0 30px;
+            margin-bottom:15px;
         }
-        .active {
-            width: 50%;
-            padding: 0 18px 0 9px;
-            margin-bottom: 16px;
+        .tbox{
+            margin:30px auto;
+            width:120px;
+            height:120px;
+            border-radius:50px;
+            background: url('/static/icon/push-button.png') no-repeat;
+            background-size:100% 100%;
+            line-height:120px;
+            font-size:15px;
+            color:#000;
+        }
+        .selected_tbox{
+            margin:30px auto;
+            width:120px;
+            height:120px;
+            border-radius:50px;
+            background: url('/static/icon/push-button-selected.png') no-repeat;
+            background-size:100% 100%;
+            line-height:120px;
+            font-size:15px;
+            color:#fff;
         }
         .inbox {
             height: 36px;
@@ -97,14 +110,26 @@ input {
 <template>
     <div class="perfect_id">
         <div class="box">
-            <div class="title_1">请完善以下信息</div>
-            <div class="title_2">我们希望为您提供更好更快的服务</div>
+            <div class="title_1" v-if="type == '1'">我是买方</div>
+            <div class="title_1" v-if="type == '2'">我是卖方</div>
+            <div class="title_1" v-if="type == '3'">我是买卖方</div>
+            <div class="title_2">根据您的身份信息，我们为您做了精准的分类</div>
             <div class="list">
-                <div class="item" v-for="(todo,index) in arr" v-bind:class="{active:index%2==1}">
+                <div class="item" v-for="(todo,index) in arr" v-if="type == '1'">
                     <div class="inbox" @click="select(todo)" v-bind:class="{selected:todo.show}">
                         {{todo.name}}
                     </div>
                 </div>
+                <div class="item" v-for="(todo,index) in arr" v-if="type == '2'">
+                    <div class="tbox" @click="select(todo)" v-bind:class="{selected_tbox:todo.show}">
+                        {{todo.name}}
+                    </div>
+                </div> 
+                <div class="item" v-for="(todo,index) in arr" v-if="type == '3'">
+                    <div class="tbox" @click="select(todo)" v-bind:class="{selected_tbox:todo.show}">
+                        {{todo.name}}
+                    </div>
+                </div> 
             </div>
         </div>
         <div class="footer">
@@ -121,7 +146,8 @@ export default {
     data() {
             return {
                 arr: [],
-                manageType:''
+                manageType:'',
+                type:''
             }
         },
         components: {
@@ -130,14 +156,19 @@ export default {
         created() {
             //console.log(localStorage.getItem('userType'))
             let _self = this;
+            _self.type = this.$route.query.type;
+            _self.manageType = '';
             this.getHttp();
             common.$on('go_perfectId', function(id) {
+                _self.type = id;
+                _self.manageType = '';
                 _self.getHttp();
             })
         },
         methods: {
             select(todo) {
                 let _self = this;
+                console.log(22,todo)
                 for (var i = 0; i < _self.arr.length; i++) {
                     _self.arr[i].show = false;
                 }
@@ -148,7 +179,13 @@ export default {
                 this.$router.push('/perfectObject')
             },
             next() {
+                let _self = this;
+                if(!_self.manageType){
+                    common.$emit('message','请选择类型');
+                    return
+                }
                 localStorage.setItem('manageType',this.manageType);
+                common.$emit('perfectidToMajorBusiness',1)
                 this.$router.push('/majorBusiness')
             },
             getHttp() {
@@ -159,7 +196,7 @@ export default {
                     biz_module: 'userService',
                     biz_method: 'queryCustomerTypeMap',
                     biz_param: {
-
+                         userType:_self.type
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);

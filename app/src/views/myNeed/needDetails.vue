@@ -390,6 +390,11 @@ export default {
             myHeader,
             opinion
         },
+        computed: {
+            userInfor() {
+                return this.$store.state.user.userInfor;
+            }
+        },
         methods: {
             resive(id) {
                 common.$emit('purchase-id', id);
@@ -526,6 +531,21 @@ export default {
                 } else if (obj.isMy == 1) {
                     common.$emit('message', '您本人发布的求购不能进行报价！')
                 } else {
+                    if (_self.userInfor.userType == '' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '') {
+                        function perfect() {
+                            _self.$store.dispatch('changeRouter',{
+                                index:3,
+                                id:obj.id
+                            })
+                            _self.$router.push('/perfectObject');
+                        }
+                        common.$emit('confirm', {
+                            message: '请先完善信息',
+                            title: '提示',
+                            ensure: perfect
+                        });
+                        return;
+                    }
                     common.$emit('needToReleaseOffer', obj.id);
                     _self.$router.push('/releaseOffer/' + obj.id);
                 }

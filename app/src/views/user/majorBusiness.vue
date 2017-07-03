@@ -228,12 +228,20 @@ export default {
         },
         created() {
             let _self = this;
-            // if (this.$route.query.value) {
-            //     _self.$store.dispatch('getMainBusiness', '/account');
-            //     var str = this.$route.query.value;
-            //     console.log(33, str);
-            //     _self.arr = str.split(',');
-            // }
+            if (this.$route.query.value) {
+                _self.$store.dispatch('getMainBusiness', '/account');
+                var str = this.$route.query.value;
+                _self.arr = str.split(',');
+                //console.log(11,_self.arr);
+            }
+            common.$on('perfectidToMajorBusiness',function(id){
+                 _self.$store.dispatch('clearRouter');
+                _self.arr = [];
+            })
+            common.$on('accountTomajorBusiness',function(item){//来自个人账户页面主营品种，处理缓存问题
+                _self.$store.dispatch('getMainBusiness', '/account');
+                 _self.arr = item.split(',');
+            })
             this.hotDrug();
         },
         computed: {
@@ -242,6 +250,9 @@ export default {
             },
             userInfor() {
                 return this.$store.state.user.userInfor;
+            },
+            backRouter(){
+                return this.$store.state.user.backRouter.router;
             }
         },
         methods: {
@@ -361,25 +372,6 @@ export default {
                         }
                     }
                 }
-                /*else {
-                                   console.log(132131)
-                                   for (var key in _self.upDataInfor) {
-                                       if (key == 'bizMain') {
-
-                                       }
-                                       if (key == 'userType') {
-                                           _self.upDataInfor['userType'] = localStorage.getItem('userType');
-                                       }
-                                       if (key == 'manageType') {
-                                           _self.upDataInfor['manageType'] = localStorage.getItem('manageType');
-                                       } else {
-
-                                       }
-                                       //console.log(_self.userInfor[key])
-                                   }
-
-
-                               }*/
                 console.log(12, _self.upDataInfor, _self.userInfor)
                     //校验
                 let checkArr = [];
@@ -407,7 +399,10 @@ export default {
                     })
                 } else {
                     _self.$store.dispatch('upDataInfor', obj).then(() => {
-                        _self.$router.push('/home')
+                        common.$emit('perfectOldCustomer',1);
+                        console.log(_self.backRouter)
+                        _self.$router.push('/home');
+                        
                     }), (() => {
                         common.$emit('message', '更新失败');
                     })

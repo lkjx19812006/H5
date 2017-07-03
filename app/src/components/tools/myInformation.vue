@@ -62,11 +62,12 @@ export default {
                 let _self = this;
                 if (router == 'detailsPage') {
                     if (_self.param.employee <= 100000) {
-                        common.$emit("confirm", {
-                            message: '未设置专属客户，去设置？',
-                            title: '提示',
-                            ensure: _self.call
-                        });
+                        // common.$emit("confirm", {
+                        //     message: '暂无专属客户',
+                        //     title: '提示',
+                        //     ensure:'' 
+                        // });
+                        common.$emit('message','暂无专属客服')
                     } else if (_self.param.employee > 100000) {
                         _self.$router.push('/detailsPage');
                     } /*else {
@@ -90,7 +91,7 @@ export default {
                         default:
                             break;
                     }
-                    if (!common.customerId) {
+                    if (!common.KEY) {
                         function loadApp() {
                             common.$emit('setParam', 'backRouter', '/home');
                             if (common.wxshow) {

@@ -2,9 +2,9 @@
     <div class="account_overview">
         <div class="header">
             <img :src="param.avatar" v-show="param.avatar">
-            <img src="/static/images/my-header.png" v-show="!param.avatar">
-            <div class="login" v-show='login_show' @click="jump">登录/注册</div>
-            <div class="cerifi" v-show='!login_show'>
+            <img src="/static/images/my-header.png" v-if="!param.avatar">
+            <div class="login" v-if='login_show' @click="jump">登录/注册</div>
+            <div class="cerifi" v-if='!login_show'>
                 <img src="/static/images/personnal-cer.png" class="left_img" v-show="param.utype !== 2">
                 <img src="/static/images/personnals-Cer.png" class="left_img" v-show="param.utype == 2">
                 <img src="/static/images/company-cer.png" v-show="param.ctype !== 2">

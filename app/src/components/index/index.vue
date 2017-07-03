@@ -649,6 +649,8 @@ export default {
                 imgArray: [],
                 perfect: {
                     name: '',
+                    manageType:'',
+                    userType:'',
                     bizMain: ''
                 },
                 scrollTop: 0,
@@ -688,6 +690,9 @@ export default {
         computed: {
             areaJson() {
                 return this.$store.state.user.areaJson;
+            },
+            userInfor(){
+                return this.$store.state.user.userInfor;
             }
         },
         methods: {
@@ -707,6 +712,8 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == "1c01") {
                         _self.perfect.name = suc.data.biz_result.fullname;
+                        _self.perfect.manageType = suc.data.biz_result.manageType;
+                        _self.perfect.userType = suc.data.biz_result.userType;
                         _self.perfect.bizMain = suc.data.biz_result.bizMain;
                         let myInfo = suc.data.biz_result; //传给mine
                         common.customerId = suc.data.biz_result.customerId;
@@ -854,6 +861,7 @@ export default {
                     });
                     return;
                 }
+                common.$emit('indexToMessage',1)
                 this.$router.push('/message')
             },
             getImgArr() {
@@ -912,7 +920,7 @@ export default {
             },
             loginJump(router) {
                 let _self = this;
-                if (!common.customerId) {
+                if (!common.KEY) {
                     function loadApp() {
                         if (common.wxshow) {
                             common.getWxUrl();
@@ -926,9 +934,20 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                } else if (_self.perfect.name == '' || _self.perfect.bizMain == '') {
+                } else if (_self.userInfor.userType == '' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '') {
                     function perfect() {
-                        _self.$router.push('/perfectInfo');
+                        if(router == '/releaseNeeds/1'){
+                            _self.$store.dispatch('changeRouter',{
+                                index:1,
+                                id:''
+                            })
+                        }else if(router == '/releaseResource/1'){
+                            _self.$store.dispatch('changeRouter',{
+                                index:2,
+                                id:''
+                            })
+                        }
+                        _self.$router.push('/perfectObject');
                     }
                     common.$emit('confirm', {
                         message: '请先完善信息',
@@ -978,13 +997,17 @@ export default {
         created() {
             let _self = this;
             if (!common.servicePhone) this.getCustomerPhone();
-            if (common.KEY) _self.getInfo();
+            if (common.KEY) _self.$store.dispatch('getUserInfor');
             if (common.KEY)_self.getMessage();
             common.$on('toMine', function(item) {
-                if (common.KEY) _self.getInfo();
+                if (common.KEY) _self.$store.dispatch('getUserInfor');
                 if (common.KEY)_self.getMessage();
             })
+            common.$on('perfectOldCustomer',function(item){//完善老客户信息，处理缓存不调用接口问题
+                if (common.KEY) _self.$store.dispatch('getUserInfor')
+            })
             common.$on('getInfo', function(item) {
+                if (common.KEY) _self.$store.dispatch('getUserInfor');//来自登录，调用下个人信息接口
                 _self.resourceHttp();
                 if (common.KEY)_self.getMessage();
             })

@@ -278,6 +278,7 @@ export default {
                         router:'/account',
                         main:_self.$store.state.user.userInfor.bizMain
                     });
+                    common.$emit('accountTomajorBusiness',this.$store.state.user.userInfor.bizMain)
                     _self.$router.push('/majorBusiness?value='+this.$store.state.user.userInfor.bizMain)
                 }
             }

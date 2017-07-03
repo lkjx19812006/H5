@@ -109,7 +109,7 @@ export default {
             // },
             jumpOrder(index) {
                 let _self = this;
-                if (!common.customerId) {
+                if (!common.KEY) {
                     function loadApp() {
                         common.$emit('setParam', 'backRouter', '/home');
                         if (common.wxshow) {
@@ -209,7 +209,7 @@ export default {
                             break;
                     }
                     let _self = this;
-                    if (!common.customerId) { /*&&router!='mySet'*/
+                    if (!common.KEY) { /*&&router!='mySet'*/
                         function loadApp() {
                             common.$emit('setParam', 'backRouter', '/home');
                             if (common.wxshow) {

@@ -19,19 +19,7 @@
                     </p>
                 </div>
             </div>
-            <!-- <div class="prompt" id="prompt">
-                        <router-link to="findPassWord">
-                            <p class="left">忘记密码</p>
-                        </router-link>
-                        
-                        <div @click="jump('register')">
-                            <p class="right">立即注册</p>
-                        </div>
-                       
-                    </div> -->
             <div class="confirm" @click="accredit()">登录</div>
-            <!-- </mt-loadmore> -->
-            <!--  </div> -->
         </div>
     </div>
 </template>

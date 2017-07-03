@@ -106,6 +106,9 @@ import chooseNum from '../components/tools/chooseNum'
 import filters from '../filters/filters'
 import popUpBigImg from '../components/tools/popUpBigImg'
 import {
+    mapGetters
+} from 'vuex'
+import {
     swiper,
     swiperSlide,
     swiperPlugins
@@ -159,6 +162,11 @@ export default {
             popUpBigImg,
             chooseNum
         },
+        computed: {
+            userInfor() {
+                return this.$store.state.user.userInfor;
+            }
+        },
         methods: {
             popUp(index, imgArr) {
                 this.my_param.url = imgArr;
@@ -180,6 +188,21 @@ export default {
             },
             addBuy(id) {
                 let _self = this;
+                if (_self.userInfor.userType == '' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '') {
+                    function perfect() {
+                        _self.$store.dispatch('changeRouter', {
+                            index: 4,
+                            id: id
+                        })
+                        _self.$router.push('/perfectObject');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先完善信息',
+                        title: '提示',
+                        ensure: perfect
+                    });
+                    return;
+                }
                 if (common.pageParam.router == 'addCart') {
                     _self.addCart();
                 }
@@ -304,7 +327,7 @@ export default {
             jump(obj) {
                 let _self = this;
 
-                if (!common.customerId) {
+                if (!common.KEY) {
                     function loadApp() {
                         common.$emit('back_login', {
                             id: obj.id,
@@ -337,7 +360,7 @@ export default {
             },
             jumpBuy(id) {
                 let _self = this;
-                if (!common.customerId) {
+                if (!common.KEY) {
                     function loadApp() {
                         common.$emit('back_login', {
                             id: id,
@@ -364,7 +387,7 @@ export default {
             },
             pushCart(obj) {
                 let _self = this;
-                if (!common.customerId) {
+                if (!common.KEY) {
                     function loadApp() {
                         common.$emit('back_login', {
                             id: obj.id,

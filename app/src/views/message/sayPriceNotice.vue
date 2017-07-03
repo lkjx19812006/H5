@@ -63,7 +63,7 @@ input {
 <template>
     <div class="say_price">
         <userHead :param="paramHead"></userHead>
-        <div class="box">
+        <div class="box" ref="wrapper" >
            <div class="item" v-for="todo in arr" @click="jump(todo)">
                <div class="top">{{todo.creatTime | successTimeFormats}}</div>
                <div class="main">
@@ -94,7 +94,8 @@ export default {
                     revise:true,
                     show:false
                 },
-                arr: []
+                arr: [],
+                
             }
         },
         components: {
@@ -128,6 +129,7 @@ export default {
                     if (suc.data.code == '1c01') {
                         //console.log(11,suc.data.biz_result.list)
                         _self.arr = suc.data.biz_result.list;
+                        console.log(23,_self.arr)
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -172,7 +174,7 @@ export default {
             }
         },
         mounted() {
-
+            /// this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
         }
 }
 </script>

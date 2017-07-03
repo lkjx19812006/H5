@@ -9,13 +9,19 @@ const state = {
     mainBusiness: {
         router: '',
         main: ''
-    }
+    },
+    backRouter: {
+        router: '',
+        back: '',
+        id: ''
+    },
 }
 
 // getters
 const getters = {
     userInfor: state => state.userInfor,
     /*accountHead: state => state.accountHead,*/
+    backRouter: state => state.backRouter,
     mainBusiness: state => state.mainBusiness,
     areaJson: state => state.areaJson
 }
@@ -109,6 +115,12 @@ const actions = {
     },
     clearRouter({ commit, state }) {
         commit('clearRouter');
+    },
+    changeRouter({ commit, state }, params) {
+        commit('changeRouter', params)
+    },
+    clearChangeRouter({ commit, state }) {
+        commit('clearChangeRouter')
     }
 
 }
@@ -168,6 +180,32 @@ const mutations = {
         }
 
 
+    },
+    changeRouter(state, params) {
+        console.log(44, params.index)
+        switch (params.index) {
+            case 1:
+                state.backRouter.router = '/releaseNeeds/1';
+                state.backRouter.back = '/home';
+                break;
+            case 2:
+                state.backRouter.router = '/releaseResource/1';
+                state.backRouter.back = '/home';
+                break;
+            case 3:
+                state.backRouter.router = '/releaseOffer/' + params.id;
+                state.backRouter.back = '/urgentNeed';
+                break;
+            case 4:
+                state.backRouter.router = '/resourceDetail/' + params.id;
+                state.backRouter.back = '/lowPriceRes';
+                break;
+        }
+    },
+    clearChangeRouter(state) {
+        state.backRouter.router = '';
+        state.backRouter.back = '';
+        state.backRouter.id = '';
     }
 
 }

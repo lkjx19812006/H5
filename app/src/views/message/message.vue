@@ -76,7 +76,8 @@ input {
                 </div>
                 <div class="content">
                     <div class="title">{{todo.name}}</div>
-                    <div class="other">{{todo.content}}</div>
+                    <div class="other" v-show="todo.total!==0">{{todo.content}}</div>
+                    <div class="other" v-show="todo.total==0">暂无最新消息</div>
                 </div>
             </div>
         </div>
@@ -102,6 +103,10 @@ export default {
         },
         created() {
             let _self = this;
+            common.$on('indexToMessage',function(id){
+                console.log(212131)
+                _self.getHttp();
+            })
             _self.getHttp();
         },
         methods: {
@@ -134,23 +139,24 @@ export default {
                             switch (obj.type) {
                                 case 1:
                                     obj.url = '/static/icon/intent.png';
-                                    obj.content = '亲爱的用户，您发布的意向消息已经有' + obj.total + '反馈';
+                                    obj.content = '亲爱的用户，您发布的意向消息已经有' + obj.total + '条反馈';
                                     break;
                                 case 2:
                                     obj.url = '/static/icon/i-activity.png';
-                                    obj.content = '亲爱的用户，您发布的活动消息已经有' + obj.total + '反馈';
+                                    obj.content = '亲爱的用户，您发布的活动消息已经有' + obj.total + '条反馈';
                                     break;
                                 case 3:
                                     obj.url = '/static/icon/i-order.png';
-                                    obj.content = '亲爱的用户，您发布的订单消息已经有' + obj.total + '反馈';
+                                    obj.content = '亲爱的用户，您发布的订单消息已经有' + obj.total + '条反馈';
                                     break;
                                 case 4:
                                     obj.url = '/static/icon/i-report-sell.png';
-                                    obj.content = '亲爱的用户，您发布的报价消息已经有' + obj.total + '反馈';
+                                    obj.content = '亲爱的用户，您发布的报价消息已经有' + obj.total + '条反馈';
                                     break;
                                 default:
                                     obj.url = ''
                             }
+                            _self.arr = [];
                             _self.arr.push(obj);
                         }
                         console.log(33, _self.arr)

@@ -105,41 +105,34 @@ export default {
                 allLoaded: false,
                 bottomStatus: '',
                 data: [{
-                        name: '全部订单',
-                        back_id: 0,
-                        show: true
-                    }, {
-                        name: '待审核',
-                        back_id: 10,
-                        show: false
-                    }, {
-                        name: '待付款',
-                        back_id: 20,
-                        show: false
-                    },
-                    /*{
-                                       name: '待收款',
-                                       back_id: 30,
-                                       show: false
-                                   },*/
-                    {
-                        name: '待卖家发货',
-                        back_id: 40,
-                        show: false
-                    }, {
-                        name: '待收货',
-                        back_id: 50,
-                        show: false
-                    }, {
-                        name: '已完成',
-                        back_id: 60,
-                        show: false
-                    }, {
-                        name: '已取消',
-                        back_id: -1,
-                        show: false
-                    }
-                ],
+                    name: '全部订单',
+                    back_id: 0,
+                    show: true
+                }, {
+                    name: '待审核',
+                    back_id: 10,
+                    show: false
+                }, {
+                    name: '待付款',
+                    back_id: 20,
+                    show: false
+                }, {
+                    name: '待卖家发货',
+                    back_id: 40,
+                    show: false
+                }, {
+                    name: '待收货',
+                    back_id: 50,
+                    show: false
+                }, {
+                    name: '已完成',
+                    back_id: 60,
+                    show: false
+                }, {
+                    name: '已取消',
+                    back_id: -1,
+                    show: false
+                }],
                 buttonStatus: [{
 
                 }],
@@ -272,9 +265,6 @@ export default {
                 let body = {
                     biz_module: 'orderService',
                     biz_method: 'queryCartOrderList',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         orderStatus: _self.httpPraram.orderstatus,
                         type: _self.httpPraram.type,
@@ -407,6 +397,7 @@ export default {
             let _self = this;
             this.httpPraram.page = 1;
             _self.httpPraram.type = 0;
+            //_self.param.show = true;
             _self.httpPraram.orderstatus = _self.data[common.pageParam.orderStatus].back_id;
             for (let i = 0; i < _self.data.length; i++) {
                 _self.data[i].show = false;
@@ -417,10 +408,41 @@ export default {
                 _self.httpPraram.orderstatus = _self.data[index].back_id;
                 _self.httpPraram.type = 0;
                 _self.httpPraram.page = 1;
-                for (let i = 0; i < _self.data.length; i++) {
-                    _self.data[i].show = false;
-                }
+                _self.param.show = true;
+                // for (let i = 0; i < _self.data.length; i++) {
+                //     _self.data[i].show = false;
+                // }
+                _self.data = [{
+                    name: '全部订单',
+                    back_id: 0,
+                    show: true
+                }, {
+                    name: '待审核',
+                    back_id: 10,
+                    show: false
+                }, {
+                    name: '待付款',
+                    back_id: 20,
+                    show: false
+                }, {
+                    name: '待卖家发货',
+                    back_id: 40,
+                    show: false
+                }, {
+                    name: '待收货',
+                    back_id: 50,
+                    show: false
+                }, {
+                    name: '已完成',
+                    back_id: 60,
+                    show: false
+                }, {
+                    name: '已取消',
+                    back_id: -1,
+                    show: false
+                }]
                 _self.data[index].show = true;
+
                 _self.getHttp();
             });
         },

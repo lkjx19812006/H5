@@ -93,6 +93,7 @@
             </div>
             <div class="footer">
                 <p @click="call()" v-if="todo.orderStatus !== 20">联系我们</p>
+                <p @click="prompt('如需发货，')" v-if="todo.orderStatus == 40  && todo.type == 1">我要发货</p>
                 <p class="pay-money" v-if="todo.orderStatus == 20 && todo.type == 0" @click="prompt('支付')">立即付款</p>
                 <p @click="prompt('如需申请，')" v-if="todo.orderStatus >= 60 && todo.type == 0">申请售后</p>
                 <p @click="cancelOrder(todo.id,todo.no,todo.type)" v-if="todo.orderStatus == 0 || todo.orderStatus == 10 && todo.type == 0">取消订单</p>
@@ -221,9 +222,11 @@ export default {
                         if (listObj.type == 0) {
                             listObj.my_title = '采购订单';
                             _self.my_header.name = '采购订单';
+                            // _self.todo.my_title = '采购订单';
                         } else if (listObj.type == 1) {
                             listObj.my_title = '销售订单';
                             _self.my_header.name = '销售订单';
+                            // _self.todo.my_title = '销售订单';
                         }
 
                         _self.todo = listObj;
