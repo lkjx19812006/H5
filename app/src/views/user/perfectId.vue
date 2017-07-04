@@ -39,31 +39,31 @@ input {
     .list {
         margin-top: 36px;
         width: 100%;
-        .item{
-            padding:0 30px;
-            margin-bottom:15px;
+        .item {
+            padding: 0 30px;
+            margin-bottom: 15px;
         }
-        .tbox{
-            margin:30px auto;
-            width:120px;
-            height:120px;
-            border-radius:50px;
+        .tbox {
+            margin: 30px auto;
+            width: 120px;
+            height: 120px;
+            border-radius: 50px;
             background: url('/static/icon/push-button.png') no-repeat;
-            background-size:100% 100%;
-            line-height:120px;
-            font-size:15px;
-            color:#000;
+            background-size: 100% 100%;
+            line-height: 120px;
+            font-size: 15px;
+            color: #000;
         }
-        .selected_tbox{
-            margin:30px auto;
-            width:120px;
-            height:120px;
-            border-radius:50px;
+        .selected_tbox {
+            margin: 30px auto;
+            width: 120px;
+            height: 120px;
+            border-radius: 50px;
             background: url('/static/icon/push-button-selected.png') no-repeat;
-            background-size:100% 100%;
-            line-height:120px;
-            font-size:15px;
-            color:#fff;
+            background-size: 100% 100%;
+            line-height: 120px;
+            font-size: 15px;
+            color: #fff;
         }
         .inbox {
             height: 36px;
@@ -124,12 +124,12 @@ input {
                     <div class="tbox" @click="select(todo)" v-bind:class="{selected_tbox:todo.show}">
                         {{todo.name}}
                     </div>
-                </div> 
+                </div>
                 <div class="item" v-for="(todo,index) in arr" v-if="type == '3'">
                     <div class="tbox" @click="select(todo)" v-bind:class="{selected_tbox:todo.show}">
                         {{todo.name}}
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
         <div class="footer">
@@ -146,8 +146,8 @@ export default {
     data() {
             return {
                 arr: [],
-                manageType:'',
-                type:''
+                manageType: '',
+                type: ''
             }
         },
         components: {
@@ -168,25 +168,27 @@ export default {
         methods: {
             select(todo) {
                 let _self = this;
-                console.log(22,todo)
+                console.log(22, todo)
                 for (var i = 0; i < _self.arr.length; i++) {
                     _self.arr[i].show = false;
                 }
                 todo.show = true;
                 _self.manageType = todo.id;
+                console.log(99, _self.manageType)
             },
             back() {
                 this.$router.push('/perfectObject')
             },
             next() {
                 let _self = this;
-                if(!_self.manageType){
-                    common.$emit('message','请选择类型');
+                if (_self.manageType || _self.manageType === 0) {
+                    localStorage.setItem('manageType', this.manageType);
+                    common.$emit('perfectidToMajorBusiness', 1)
+                    _self.$router.push('/majorBusiness')
+                } else{
+                    common.$emit('message', '请选择类型');
                     return
                 }
-                localStorage.setItem('manageType',this.manageType);
-                common.$emit('perfectidToMajorBusiness',1)
-                this.$router.push('/majorBusiness')
             },
             getHttp() {
                 let _self = this;
@@ -196,7 +198,7 @@ export default {
                     biz_module: 'userService',
                     biz_method: 'queryCustomerTypeMap',
                     biz_param: {
-                         userType:_self.type
+                        userType: _self.type
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);

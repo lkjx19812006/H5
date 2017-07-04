@@ -288,7 +288,7 @@ export default {
                         return;
                     }
                 }
-                console.log(_self.referralCode)
+                //console.log(_self.referralCode)
                 common.$emit('show-load');
                 httpService.register(common.urlCommon + common.apiUrl.most, {
                     biz_module: 'userSmsService',

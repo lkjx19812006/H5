@@ -19,6 +19,12 @@ input {
         height: 92vh;
         overflow-y: scroll;
         padding: 0 15px;
+        .is_read {
+            opacity: 0.9;
+        }
+        .word_read {
+            opacity: 0.7;
+        }
         .item {
             margin-bottom: 7px;
             .top {
@@ -95,35 +101,55 @@ input {
             }
         }
     }
+    .box {
+        .fbox {
+            margin-top: 100px;
+            .no_message {
+                width: 83px;
+            }
+            .words {
+                font-size: 14px;
+                color: #D0D0D0;
+                text-align: center;
+                margin-top: 10px;
+            }
+        }
+    }
 }
 </style>
 <template>
     <div class="order_notice">
         <userHead :param="paramHead"></userHead>
-        <div class="box">
+        <div class="box" v-if="arr.length !== 0">
             <div class="item" v-for="todo in arr" @click="jump(todo)">
                 <div class="top">{{todo.creatTime | successTimeFormats}}</div>
-                <div class="main">
+                <div class="main" v-bind:class="{is_read:todo.isRead==1}">
                     <div class="type">
                         <div class="left">
-                            <!-- 已发货 -->
                         </div>
-                        <!-- <img src="/static/icon/need-order.png" class="right" v-if="todo.intentionType == '1'"> -->
+                        <img src="/static/icon/presell-order.png" class="right" v-if="todo.intentionType == '1'">
                         <img src="/static/icon/need-order.png" class="right" v-if="todo.intentionType == '2'">
                         <img src="/static/icon/sell-order.png" class="right" v-if="todo.intentionType == '3'">
                     </div>
-                    <div class="content">
+                    <div class="content" v-bind:class="{word_read:todo.isRead==1}">
                         {{todo.message}}
                     </div>
-                    <div class="footer">
+                    <div class="footer" v-bind:class="{word_read:todo.isRead==1}">
                         <div class="order_num">订单编号: {{todo.no}}</div>
                         <div class="right">
-                            <!-- <div>点击查看</div> -->
                             <div v-if='!paramHead.show'>点击查看</div>
                             <div class="delet" v-if='paramHead.show' @click.stop="delet(todo)">删除</div>
                             <img src="/static/icon/right.png" v-if='!paramHead.show'>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="box" v-if="arr.length == 0">
+            <div class="fbox">
+                <img src="/static/icon/no-message.png" class="no_message">
+                <div class="words">
+                    亲，暂时没有消息哦！
                 </div>
             </div>
         </div>

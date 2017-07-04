@@ -188,28 +188,12 @@ export default {
             },
             addBuy(id) {
                 let _self = this;
-                if (_self.userInfor.userType == '' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '') {
-                    function perfect() {
-                        _self.$store.dispatch('changeRouter', {
-                            index: 4,
-                            id: id
-                        })
-                        _self.$router.push('/perfectObject');
-                    }
-                    common.$emit('confirm', {
-                        message: '请先完善信息',
-                        title: '提示',
-                        ensure: perfect
-                    });
-                    return;
-                }
                 if (common.pageParam.router == 'addCart') {
                     _self.addCart();
                 }
                 if (common.pageParam.router == 'atOnceBuy') {
                     _self.atOnceBuy(id);
                 }
-
                 _self.choose.push_num = false;
             },
             addCart() {
@@ -346,6 +330,21 @@ export default {
                         ensure: loadApp
                     });
                     return;
+                } else if (_self.userInfor.userType == '' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '') {
+                    function perfect() {
+                        _self.$store.dispatch('changeRouter', {
+                            index: 4,
+                            id: obj.id
+                        })
+                        console.log(21321313)
+                        _self.$router.push('/perfectObject');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先完善信息',
+                        title: '提示',
+                        ensure: perfect
+                    });
+                    return;
                 } else if (obj.isMy == 1) {
                     common.$emit('message', '您自己发布的资源不能进行购买！');
                     return
@@ -406,6 +405,20 @@ export default {
                         ensure: loadApp
                     });
                     return;
+                } else if (_self.userInfor.userType == '' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '') {
+                    function perfect() {
+                        _self.$store.dispatch('changeRouter', {
+                            index: 4,
+                            id: obj.id
+                        })
+                        _self.$router.push('/perfectObject');
+                    }
+                    common.$emit('confirm', {
+                        message: '请先完善信息',
+                        title: '提示',
+                        ensure: perfect
+                    });
+                    return;
                 } else if (obj.isMy == 1) {
                     common.$emit('message', '您自己发布的资源不能进行购买！');
                     return
@@ -439,6 +452,7 @@ export default {
                 _hmt.push(['_setAutoPageview', false]);
                 _hmt.push(['_trackPageview', '/resourceDetail/*?value=message']);
             }
+            if (common.KEY) _self.$store.dispatch('getUserInfor');
 
             function countSecond() {
                 _self.imageShow = false;

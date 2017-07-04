@@ -290,7 +290,7 @@ export default {
                 if (common.KEY) _self.$store.dispatch('getUserInfor');
             })*/
             _self.start = new Date("1900-01-01");
-            _self.end = new Date("2017-04-20");
+            _self.end = new Date();
             let type = '';
             let ua = navigator.userAgent.toLowerCase();
             if (/iphone|ipad|ipod/.test(ua)) {
@@ -298,7 +298,7 @@ export default {
             }
             if (type == 'ios') {
                 _self.start = new Date("1900/01/01");
-                _self.end = new Date("2017/04/20");
+                _self.end = new Date();
             }
         },
         mounted() {

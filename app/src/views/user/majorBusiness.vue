@@ -125,6 +125,11 @@ input {
                 margin-bottom: 14px;
                 color: #888888;
             }
+            .active {
+                background: #F5F5F5 url('/static/icon/red-selected.png') no-repeat;
+                background-size: 20px 12px;
+                background-position: bottom right;
+            }
         }
     }
     .footer {
@@ -168,7 +173,7 @@ input {
                 </div>
                 <div class="selected" v-if="arr.length > 0">
                     <div class="todo" v-for="todo in arr">
-                        {{todo}}
+                        {{todo,5 | filterTxt}}
                         <img src="/static/icon/red-canel.png" @click="clearArr(todo)">
                     </div>
                 </div>
@@ -178,7 +183,7 @@ input {
                     热门药材 <span>(最少一个品种，最多十个品种)</span>
                 </div>
                 <div class="main">
-                    <div class="item" v-for="todo in todos" @click="selected(todo)">
+                    <div class="item" v-for="todo in todos" @click="selected(todo)" v-bind:class="{active:todo.show}">
                         {{todo.keyWord}}
                     </div>
                 </div>
@@ -232,17 +237,19 @@ export default {
                 _self.$store.dispatch('getMainBusiness', '/account');
                 var str = this.$route.query.value;
                 _self.arr = str.split(',');
-                //console.log(11,_self.arr);
             }
-            common.$on('perfectidToMajorBusiness',function(id){
-                 _self.$store.dispatch('clearRouter');
+            common.$on('perfectidToMajorBusiness', function(id) {
+                _self.$store.dispatch('clearRouter');
                 _self.arr = [];
             })
-            common.$on('accountTomajorBusiness',function(item){//来自个人账户页面主营品种，处理缓存问题
+            common.$on('accountTomajorBusiness', function(item) { //来自个人账户页面主营品种，处理缓存问题
                 _self.$store.dispatch('getMainBusiness', '/account');
-                 _self.arr = item.split(',');
+                if (item) {
+                    _self.arr = item.split(',');
+                    _self.hotDrug();
+                }
             })
-            this.hotDrug();
+            _self.hotDrug();
         },
         computed: {
             mainBusiness() {
@@ -251,7 +258,7 @@ export default {
             userInfor() {
                 return this.$store.state.user.userInfor;
             },
-            backRouter(){
+            backRouter() {
                 return this.$store.state.user.backRouter.router;
             }
         },
@@ -270,6 +277,17 @@ export default {
                     common.$emit('close-load');
                     let result = suc.data.biz_result.list;
                     if (suc.data.code == '1c01') {
+                        console.log(_self.arr.length)
+                        for (var i = 0; i < result.length; i++) {
+                            result[i].show = false;
+                            if (_self.arr.length > 0) {
+                                for (var j = 0; j < _self.arr.length; j++) {
+                                    if (result[i].keyWord == _self.arr[j]) {
+                                        result[i].show = true;
+                                    }
+                                }
+                            }
+                        }
                         _self.todos = result;
                     } else {
                         common.$emit('message', suc.data.msg);
@@ -295,7 +313,7 @@ export default {
                 }
                 _self.upDataInfor.bizMain = str;
                 this.getVal()
-                console.log(55, _self.userInfor)
+                    //console.log(55, _self.userInfor);
                     // }
             },
             goAccout() {
@@ -317,15 +335,25 @@ export default {
             },
             selected(todo) {
                 let _self = this;
+                //todo.show = !todo.show;
                 if (_self.datas.length == 0) {
                     if (_self.arr.length < 10) {
-                        for (var i = 0; i < _self.arr.length; i++) {
-                            if (_self.arr[i] == todo.keyWord) {
-                                common.$emit('message', '请不要重复选择同一个品种！')
-                                return
+                        // for (var i = 0; i < _self.arr.length; i++) {
+                        //     if (_self.arr[i] == todo.keyWord) {
+                        //         common.$emit('message', '请不要重复选择同一个品种！')
+                        //         return
+                        //     }
+                        // }
+                        // _self.arr.push(todo.keyWord);
+                        todo.show = !todo.show;
+                        if (todo.show) _self.arr.push(todo.keyWord);
+                        if (!todo.show) {
+                            for (var i = 0; i < _self.arr.length; i++) {
+                                if (_self.arr[i] == todo.keyWord) {
+                                    _self.arr.splice(i, 1);
+                                }
                             }
                         }
-                        _self.arr.push(todo.keyWord);
                     } else {
                         common.$emit('message', '您选择的品种已经超过十个！')
                     }
@@ -355,6 +383,12 @@ export default {
                         _self.arr.splice(i, 1);
                     }
                 }
+                for (var j = 0; j < _self.todos.length; j++) {
+                    if (_self.todos[j].keyWord == todo) {
+                        _self.todos[j].show = false;
+                    }
+                }
+
             },
             getVal(param) {
                 let _self = this;
@@ -399,10 +433,10 @@ export default {
                     })
                 } else {
                     _self.$store.dispatch('upDataInfor', obj).then(() => {
-                        common.$emit('perfectOldCustomer',1);
+                        common.$emit('perfectOldCustomer', 1);
                         console.log(_self.backRouter)
                         _self.$router.push('/home');
-                        
+
                     }), (() => {
                         common.$emit('message', '更新失败');
                     })

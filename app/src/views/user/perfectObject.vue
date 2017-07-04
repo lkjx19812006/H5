@@ -55,7 +55,7 @@ input {
         <userHead :param="param"></userHead>
         <div class="box" ref="wrapper">
             <div class="title_1">请完善以下信息</div>
-            <div class="title_2">我们希望为您提供更好更快的服务</div>
+            <div class="title_2">我们将更好的为您提供有价值的服务</div>
             <div class="select" v-for="todo in arr">
                 <img :src="todo.url" @click="jump(todo)">
                 <div class="name">{{todo.name}}</div>
@@ -84,7 +84,7 @@ export default {
                     userType:'2',
                 }, {
                     url: '/static/icon/sellorbuy-man.png',
-                    name: '即买又卖',
+                    name: '我是买卖方',
                     userType:'3',
                 }],
             }

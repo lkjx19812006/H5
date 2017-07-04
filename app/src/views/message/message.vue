@@ -76,8 +76,8 @@ input {
                 </div>
                 <div class="content">
                     <div class="title">{{todo.name}}</div>
-                    <div class="other" v-show="todo.total!==0">{{todo.content}}</div>
-                    <div class="other" v-show="todo.total==0">暂无最新消息</div>
+                    <div class="other"  v-show="todo.total!==0">{{todo.content}}</div>
+                    <div class="other" v-show="todo.total==0">暂无最新信息</div>
                 </div>
             </div>
         </div>
@@ -127,6 +127,7 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         let result = suc.body.biz_result.list;
+                        _self.arr = [];
                         for (var i = 0; i < result.length; i++) {
                             let obj = {
                                 name: result[i].name,
@@ -139,24 +140,23 @@ export default {
                             switch (obj.type) {
                                 case 1:
                                     obj.url = '/static/icon/intent.png';
-                                    obj.content = '亲爱的用户，您发布的意向消息已经有' + obj.total + '条反馈';
+                                    obj.content = '亲爱的用户，您发布的意向信息已经有' + obj.total + '条反馈';
                                     break;
                                 case 2:
                                     obj.url = '/static/icon/i-activity.png';
-                                    obj.content = '亲爱的用户，您发布的活动消息已经有' + obj.total + '条反馈';
+                                    obj.content = '亲爱的用户，您发布的活动信息已经有' + obj.total + '条反馈';
                                     break;
                                 case 3:
                                     obj.url = '/static/icon/i-order.png';
-                                    obj.content = '亲爱的用户，您发布的订单消息已经有' + obj.total + '条反馈';
+                                    obj.content = '亲爱的用户，您发布的订单信息已经有' + obj.total + '条反馈';
                                     break;
                                 case 4:
                                     obj.url = '/static/icon/i-report-sell.png';
-                                    obj.content = '亲爱的用户，您发布的报价消息已经有' + obj.total + '条反馈';
+                                    obj.content = '亲爱的用户，您发布的报价信息已经有' + obj.total + '条反馈';
                                     break;
                                 default:
                                     obj.url = ''
                             }
-                            _self.arr = [];
                             _self.arr.push(obj);
                         }
                         console.log(33, _self.arr)

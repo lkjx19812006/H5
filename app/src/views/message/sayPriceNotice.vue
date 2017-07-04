@@ -16,45 +16,64 @@ input {
     height: 100vh;
     background-color: #F5F5F5;
     .box {
+        .is_read{
+            opacity:0.9;
+        }
+        .word_read{
+            opacity:0.7;
+        }
         height: 92vh;
-        overflow-y:scroll;
-        padding:0 15px;
-        .item{
-            margin-bottom:7px;
-            .top{
-                color:#A6A6A6;
-                font-size:12px;
-                height:33px;
-                line-height:33px;
+        overflow-y: scroll;
+        padding: 0 15px;
+        .item {
+            margin-bottom: 7px;
+            .top {
+                color: #A6A6A6;
+                font-size: 12px;
+                height: 33px;
+                line-height: 33px;
             }
-            .main{
-                text-align:left;
-                border-radius:4px;
-                background-color:#fff;
-                padding:10px 10px 11px 10px;
-                .content{
-                    padding:9px 4px 18px 4px;
-                    color:#4D4D4D;
-                    font-size:15px;
-                    line-height:20px;
-                    border-bottom:1px solid #E6E6E6;
-
+            .main {
+                text-align: left;
+                border-radius: 4px;
+                background-color: #fff;
+                padding: 10px 10px 11px 10px;
+                .content {
+                    padding: 9px 4px 18px 4px;
+                    color: #4D4D4D;
+                    font-size: 15px;
+                    line-height: 20px;
+                    border-bottom: 1px solid #E6E6E6;
                 }
-                .footer{
-                    .delet{
-                        color:red;
+                .footer {
+                    .delet {
+                        color: red;
                     }
                     padding:9px 4px 0px 4px;
                     color:#999999;
                     font-size:15px;
                     position:relative;
-                    .right{
-                        position:absolute;
-                        height:14px;
-                        top:12px;
-                        right:0;
+                    .right {
+                        position: absolute;
+                        height: 14px;
+                        top: 12px;
+                        right: 0;
                     }
                 }
+            }
+        }
+    }
+    .box {
+        .fbox {
+            margin-top: 100px;
+            .no_message {
+                width: 83px;
+            }
+            .words {
+                font-size: 14px;
+                color: #D0D0D0;
+                text-align: center;
+                margin-top: 10px;
             }
         }
     }
@@ -63,20 +82,28 @@ input {
 <template>
     <div class="say_price">
         <userHead :param="paramHead"></userHead>
-        <div class="box" ref="wrapper" >
-           <div class="item" v-for="todo in arr" @click="jump(todo)">
-               <div class="top">{{todo.creatTime | successTimeFormats}}</div>
-               <div class="main">
-                   <div class="content">
-                       {{todo.message}}
-                   </div>
-                   <div class="footer">
-                       <span v-if='!paramHead.show'>点击查看</span>
-                       <span class="delet" v-if='paramHead.show' @click.stop="delet(todo)">删除</span>
-                       <img src="/static/icon/right.png" class="right">
-                   </div>
-               </div>
-           </div>    
+        <div class="box" ref="wrapper" v-if="arr.length !== 0">
+            <div class="item" v-for="todo in arr" @click="jump(todo)">
+                <div class="top">{{todo.creatTime | successTimeFormats}}</div>
+                <div class="main" v-bind:class="{is_read:todo.isRead==1}">
+                    <div class="content" v-bind:class="{word_read:todo.isRead==1}">
+                        {{todo.message}}
+                    </div>
+                    <div class="footer" v-bind:class="{word_read:todo.isRead==1}">
+                        <span v-if='!paramHead.show'>点击查看</span>
+                        <span class="delet" v-if='paramHead.show' @click.stop="delet(todo)">删除</span>
+                        <img src="/static/icon/right.png" class="right">
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="box" v-if="arr.length == 0">
+            <div class="fbox">
+                <img src="/static/icon/no-message.png" class="no_message">
+                <div class="words">
+                    亲，暂时没有消息哦！
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -91,11 +118,11 @@ export default {
             return {
                 paramHead: {
                     name: '报价通知',
-                    revise:true,
-                    show:false
+                    revise: true,
+                    show: false
                 },
                 arr: [],
-                
+
             }
         },
         components: {
@@ -104,8 +131,8 @@ export default {
         created() {
             let _self = this;
             _self.getHttp();
-            common.$on('messageDetail',function(id){
-                if(id == '4'){
+            common.$on('messageDetail', function(id) {
+                if (id == '4') {
                     _self.getHttp();
                 }
             })
@@ -119,7 +146,7 @@ export default {
                     biz_module: 'pushService',
                     biz_method: 'myMessagePushList',
                     biz_param: {
-                         type:'4'
+                        type: '4'
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -129,7 +156,7 @@ export default {
                     if (suc.data.code == '1c01') {
                         //console.log(11,suc.data.biz_result.list)
                         _self.arr = suc.data.biz_result.list;
-                        console.log(23,_self.arr)
+                        console.log(23, _self.arr)
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -139,7 +166,7 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            delet(todo){
+            delet(todo) {
                 let _self = this;
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -147,7 +174,7 @@ export default {
                     biz_module: 'pushService',
                     biz_method: 'deleteMyMessage',
                     biz_param: {
-                         messageList:[todo.id]
+                        messageList: [todo.id]
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -167,10 +194,10 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            jump(todo){
+            jump(todo) {
                 let _self = this;
                 common.$emit('myOfferToOfferDetail', todo.intentionId);
-                _self.$router.push('/offerDetail/'+todo.intentionId);     
+                _self.$router.push('/offerDetail/' + todo.intentionId);
             }
         },
         mounted() {

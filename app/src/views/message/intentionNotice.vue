@@ -16,6 +16,12 @@ input {
     height: 100vh;
     background-color: #F5F5F5;
     .box {
+        .is_read {
+            opacity: 0.9;
+        }
+        .word_read {
+            opacity: 0.7;
+        }
         height: 92vh;
         overflow-y: scroll;
         padding: 0 15px;
@@ -57,24 +63,46 @@ input {
             }
         }
     }
+    .box {
+        .fbox {
+            margin-top: 100px;
+            .no_message {
+                width: 83px;
+            }
+            .words {
+                font-size: 14px;
+                color: #D0D0D0;
+                text-align: center;
+                margin-top: 10px;
+            }
+        }
+    }
 }
 </style>
 <template>
     <div class="intentions">
         <userHead :param="paramHead"></userHead>
-        <div class="box">
+        <div class="box" v-if="arr.length !== 0">
             <div class="item" v-for="todo in arr" @click="jump(todo)">
                 <div class="top">{{todo.creatTime | successTimeFormats}}</div>
-                <div class="main">
-                    <div class="content">
+                <div class="main" v-bind:class="{is_read:todo.isRead==1}">
+                    <div class="content" v-bind:class="{word_read:todo.isRead==1}">
                         {{todo.message}}
                     </div>
-                    <div class="footer">
+                    <div class="footer" v-bind:class="{word_read:todo.isRead==1}">
                         <span class="delet" v-if='paramHead.show' @click.stop="delet(todo)">删除</span>
                         <span v-show="todo.intentionType=='0' && !paramHead.show">查看详情</span>
                         <span v-show="todo.intentionType=='1' && !paramHead.show">查看详情</span>
                         <img src="/static/icon/right.png" class="right">
                     </div>
+                </div>
+            </div>
+        </div>
+         <div class="box" v-if="arr.length == 0">
+            <div class="fbox">
+                <img src="/static/icon/no-message.png" class="no_message">
+                <div class="words">
+                    亲，暂时没有消息哦！
                 </div>
             </div>
         </div>
@@ -91,8 +119,8 @@ export default {
             return {
                 paramHead: {
                     name: '意向通知',
-                    revise:true,
-                    show:false
+                    revise: true,
+                    show: false
                 },
                 arr: []
             }
@@ -118,7 +146,7 @@ export default {
                     biz_module: 'pushService',
                     biz_method: 'myMessagePushList',
                     biz_param: {
-                        type: '1'
+                        type: 1
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -136,15 +164,17 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
-            delet(todo){
+            delet(todo) {
                 let _self = this;
+                let arr = [];
+                arr.push(todo.id);
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'pushService',
                     biz_method: 'deleteMyMessage',
                     biz_param: {
-                         messageList:[todo.id]
+                        messageList: arr
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -164,8 +194,34 @@ export default {
                     common.$emit('message', err.data.msg);
                 })
             },
+            isRead(id) {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'pushService',
+                    biz_method: 'setMessageIsRead',
+                    biz_param: {
+                        isReadList: [id]
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.myResource(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        // common.$emit('message', suc.data.msg);
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            },
             jump(todo) {
                 let _self = this;
+                _self.isRead(todo.id);
                 if (todo.intentionType == '0') {
                     common.$emit("needToDetails", {
                         id: todo.intentionId,

@@ -41,7 +41,7 @@ validation.checkLook = (look) => {
     }
 }
 validation.checkMinNumber = (password) => {
-    let pattern = /^[a-zA-Z0-9]{6,16}$/
+    let pattern = /^(?=.{6,16})(?=.*[a-zA-Z])(?=.*[0-9])[0-9a-zA-Z]*$/
     if (!pattern.test(password)) {
         return '密码必须为6~16位数字或字母'
     } else {

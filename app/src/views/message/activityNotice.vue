@@ -19,6 +19,12 @@ input {
         height: 92vh;
         overflow-y: scroll;
         padding: 0 15px;
+        .is_read {
+            opacity: 0.9;
+        }
+        .word_read {
+            opacity: 0.7;
+        }
         .item {
             margin-bottom: 7px;
             .top {
@@ -62,27 +68,45 @@ input {
             }
         }
     }
+    .box {
+        .fbox {
+            margin-top: 100px;
+            .no_message {
+                width: 83px;
+            }
+            .words {
+                font-size: 14px;
+                color: #D0D0D0;
+                text-align: center;
+                margin-top: 10px;
+            }
+        }
+    }
 }
 </style>
 <template>
     <div class="activity_notice">
         <userHead :param="paramHead"></userHead>
-        <div class="box">
+        <div class="box" v-if="arr.length !== 0">
             <div class="item" v-for="todo in arr" @click="jump(todo)">
                 <div class="top">{{todo.creatTime | successTimeFormats}}</div>
-                <div class="main">
+                <div class="main" v-bind:class="{is_read:todo.isRead==1}">
                     <div class="title">{{todo.title}}</div>
-                    <!-- <div class="activity_img">
-                        <img src="/static/icon/activity-img.jpg" >
-                    </div> -->
-                    <div class="content">
+                    <div class="content" v-bind:class="{word_read:todo.isRead==1}">
                         {{todo.message}}
                     </div>
-                    <div class="footer">
-                        <span v-if='!paramHead.show'>点击查看</span>
-                        <span class="delet" v-if='paramHead.show' @click.stop="delet(todo)">删除</span>
+                    <div class="footer" v-bind:class="{word_read:todo.isRead==1}">
+                        <span>点击查看</span>
                         <img src="/static/icon/right.png" class="right">
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="box" v-if="arr.length == 0">
+            <div class="fbox">
+                <img src="/static/icon/no-message.png" class="no_message">
+                <div class="words">
+                    亲，暂时没有消息哦！
                 </div>
             </div>
         </div>
@@ -99,8 +123,6 @@ export default {
             return {
                 paramHead: {
                     name: '活动消息',
-                    revise: true,
-                    show: false
                 },
                 arr: []
             }
@@ -113,7 +135,6 @@ export default {
             _self.getHttp();
             common.$on('messageDetail', function(id) {
                 if (id == '2') {
-                    _self.paramHead.show = false;
                     _self.getHttp();
                 }
             })
@@ -148,35 +169,7 @@ export default {
             jump(todo) {
                 let _self = this;
                 window.location.href = todo.url;
-            },
-            delet(todo){
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'pushService',
-                    biz_method: 'deleteMyMessage',
-                    biz_param: {
-                         messageList:[todo.id]
-                    }
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.myResource(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code == '1c01') {
-                        common.$emit('message', suc.data.msg);
-                        console.log(1212)
-                        _self.getHttp();
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-            },
+            }
         },
         mounted() {
 
