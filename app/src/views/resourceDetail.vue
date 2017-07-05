@@ -330,7 +330,7 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                } else if (_self.userInfor.userType == '' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '') {
+                } else if (_self.userInfor.userType == '' && _self.userInfor.bizMain == '' && _self.userInfor.manageType == '') {
                     function perfect() {
                         _self.$store.dispatch('changeRouter', {
                             index: 4,
@@ -405,7 +405,7 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                } else if (_self.userInfor.userType == '' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '') {
+                } else if (_self.userInfor.userType == '' && _self.userInfor.bizMain == '' && _self.userInfor.manageType == '') {
                     function perfect() {
                         _self.$store.dispatch('changeRouter', {
                             index: 4,

@@ -72,6 +72,11 @@ export default {
         methods: {
             jumpBack() {
                 let _self = this;
+                if(_self.param.message){
+                    common.$emit('indexToMessage',1)
+                }else if(_self.param.index){
+                    common.$emit('messageBack',1)
+                }
                 window.history.go(-1);
             },
             revise(){

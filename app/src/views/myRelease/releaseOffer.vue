@@ -8,7 +8,7 @@ textarea {
     border-radius: 0;
 }
 
-input {
+input,textarea {
     border: none;
     background-color: #fff;
 }

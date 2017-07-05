@@ -35,10 +35,10 @@
                         <p v-bind:class="{point:index == 0,'nor_point':index == 1}">{{todo.point}}</p>
                     </div>
                 </div>
-                <div class="other_item">
+               <!--  <div class="other_item">
                     <p>已通过审核照片</p>
                     <div class="pass_image"><img :src="obj.url"></div>
-                </div>
+                </div> -->
             </div>
             <div class="common_problem">
                 <div class="common_problem_inner">
@@ -55,7 +55,9 @@ import common from '../common/common.js'
 import imageUpload from '../components/tools/imageUpload'
 import myHeader from '../components/tools/myHeader'
 import httpService from '../common/httpService.js'
-
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
             return {
@@ -100,6 +102,11 @@ export default {
             imageUpload,
             myHeader
         },
+        computed: {
+            userInfor() {
+                return this.$store.state.user.userInfor;
+            }
+        },
         methods: {
             getHttp() { //获取用户信息的接口
                 let _self = this;
@@ -108,9 +115,6 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'queryUserInfo',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {}
                 };
                 console.log(common.difTime);
@@ -133,9 +137,6 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'queryUserAuthenList',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         type: 0
                     }
@@ -146,7 +147,11 @@ export default {
                 httpService.queryUserInfo(url, body, function(suc) {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
-                        _self.obj.url = suc.data.biz_result.list[0]; //将通过的照片显示出来；
+                        // if (suc.data.biz_result.list[0]) {
+                        //     _self.obj.url = suc.data.biz_result.list[0]; //将通过的照片显示出来；
+                        // } else {
+                        //     _self.obj.url = ''
+                        // }
                         _self.obj.authenType = suc.data.biz_result.authenType;
                         if (suc.data.biz_result.authenType == 1) { //通过获取的authenType值判断应该表述的状态
                             _self.authen_name = '审核中';
@@ -157,6 +162,9 @@ export default {
                         } else if (suc.data.biz_result.authenType == 3) {
                             _self.authen_name = '未通过';
                             _self.authen_title = "未通过审核";
+                        }else if (suc.data.biz_result.authenType == 0) {
+                            _self.authen_name = '申请认证';
+                            _self.authen_title = "未审核";
                         }
                     } else {
                         common.$emit('message', suc.data.msg)
@@ -181,9 +189,6 @@ export default {
                 let body = {
                     biz_module: 'userService',
                     biz_method: 'submitAuthen',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         type: 0,
                         authenImage: _self.arr
@@ -287,7 +292,7 @@ export default {
 
 .certification .main {
     padding: 0 1.5rem;
-    height: 51rem;
+    height: 41rem;
     background: white;
 }
 

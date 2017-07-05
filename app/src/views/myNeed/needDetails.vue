@@ -531,7 +531,7 @@ export default {
                 } else if (obj.isMy == 1) {
                     common.$emit('message', '您本人发布的求购不能进行报价！')
                 } else {
-                    if (_self.userInfor.userType == '' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '') {
+                    if (_self.userInfor.userType == '' && _self.userInfor.bizMain == '' && _self.userInfor.manageType == '') {
                         function perfect() {
                             _self.$store.dispatch('changeRouter',{
                                 index:3,

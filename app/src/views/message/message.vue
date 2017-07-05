@@ -76,8 +76,8 @@ input {
                 </div>
                 <div class="content">
                     <div class="title">{{todo.name}}</div>
-                    <div class="other"  v-show="todo.total!==0">{{todo.content}}</div>
-                    <div class="other" v-show="todo.total==0">暂无最新信息</div>
+                    <div class="other" v-show="todo.total!==0">{{todo.content}}</div>
+                    <div class="other" v-show="todo.total==0">{{todo.nohave}}</div>
                 </div>
             </div>
         </div>
@@ -94,6 +94,7 @@ export default {
             return {
                 paramHead: {
                     name: '消息中心',
+                    index: true
                 },
                 arr: []
             }
@@ -103,7 +104,7 @@ export default {
         },
         created() {
             let _self = this;
-            common.$on('indexToMessage',function(id){
+            common.$on('indexToMessage', function(id) {
                 console.log(212131)
                 _self.getHttp();
             })
@@ -135,24 +136,34 @@ export default {
                                 total: result[i].total,
                                 type: result[i].type,
                                 url: '',
-                                content: ''
+                                content: '',
+                                nohave:''
                             }
                             switch (obj.type) {
                                 case 1:
                                     obj.url = '/static/icon/intent.png';
-                                    obj.content = '亲爱的用户，您发布的意向信息已经有' + obj.total + '条反馈';
+                                    obj.content = '意向信息已更新' + obj.total + '条，赶紧点击查看吧。';
+                                    obj.nohave = '暂无意向消息更新';
                                     break;
                                 case 2:
                                     obj.url = '/static/icon/i-activity.png';
-                                    obj.content = '亲爱的用户，您发布的活动信息已经有' + obj.total + '条反馈';
+                                    obj.content = '我们给您推送了新的活动消息，赶快来体验吧。';
+                                    obj.nohave = '我们马上会有新活动推出，敬请期待。';
                                     break;
                                 case 3:
                                     obj.url = '/static/icon/i-order.png';
-                                    obj.content = '亲爱的用户，您发布的订单信息已经有' + obj.total + '条反馈';
+                                    obj.content = '您的订单状态已有' + obj.total + '条更新啦，快点击查看吧。';
+                                    obj.nohave = '暂时没有订单反馈新消息';
                                     break;
                                 case 4:
                                     obj.url = '/static/icon/i-report-sell.png';
-                                    obj.content = '亲爱的用户，您发布的报价信息已经有' + obj.total + '条反馈';
+                                    obj.content = '您有' + obj.total + '条报价反馈新消息，快点击查看吧。';
+                                    obj.nohave = '暂时没有报价反馈新消息';
+                                    break;
+                                case 5:
+                                    obj.url = '/static/icon/system-message.png';
+                                    obj.content = '您有' + obj.total + '条系统消息，快点击查看吧';
+                                    obj.nohave = '暂时没有新的系统消息';
                                     break;
                                 default:
                                     obj.url = ''
@@ -185,10 +196,13 @@ export default {
                     case 4:
                         router = '/sayPriceNotice';
                         break;
+                    case 5:
+                        router = '/systemMessage';
+                        break;  
                 }
-                if(router){
+                if (router) {
                     this.$router.push(router + '?type=' + todo.type);
-                    common.$emit('messageDetail',todo.type);
+                    common.$emit('messageDetail', todo.type);
                 }
 
             }

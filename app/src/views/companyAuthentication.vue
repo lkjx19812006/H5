@@ -257,6 +257,8 @@ export default {
                         } else if (suc.data.biz_result.authenType == 3) {
                             _self.authen_name = '未通过';
 
+                        }else if(suc.data.biz_result.authenType == 0){
+                            _self.authen_name = '申请认证';
                         }
 
                     } else {
@@ -370,9 +372,6 @@ export default {
                     }
                     common.$emit('message', suc.data.msg);
                     //console.log(suc.data.msg)  
-
-
-
                 }, function(err) {
                     common.$emit('close-load');
                 })
@@ -385,9 +384,7 @@ export default {
             common.$on("companyAuthentication", function(item) {
                 _self.inquiry();
             })
-
         },
-
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }

@@ -47,10 +47,10 @@
                         <div class="left">个人认证</div>
                         <div class="empty"></div>
                         <div class="right">
-                            <div class="utype" v-if="userInfor.ctype == 0">未认证</div>
-                            <div class="utype" v-if="userInfor.ctype == 1">待审核</div>
-                            <div class="utype" v-if="userInfor.ctype == 2">已认证</div>
-                            <div class="utype" v-if="userInfor.ctype == 3">未通过</div>
+                            <div class="utype" v-if="userInfor.utype == 0">未认证</div>
+                            <div class="utype" v-if="userInfor.utype == 1">待审核</div>
+                            <div class="utype" v-if="userInfor.utype == 2">已认证</div>
+                            <div class="utype" v-if="userInfor.utype == 3">未通过</div>
                             <img src="/static/images/jiantou.png">
                         </div>
                     </div>
@@ -101,10 +101,10 @@
                         <div class="left">企业认证</div>
                         <div class="empty"></div>
                         <div class="right">
-                            <div class="utype" v-if="userInfor.utype == 0">未认证</div>
-                            <div class="utype" v-if="userInfor.utype == 1">待审核</div>
-                            <div class="utype" v-if="userInfor.utype == 2">已认证</div>
-                            <div class="utype" v-if="userInfor.utype == 3">未通过</div>
+                            <div class="utype" v-if="userInfor.ctype == 0">未认证</div>
+                            <div class="utype" v-if="userInfor.ctype == 1">待审核</div>
+                            <div class="utype" v-if="userInfor.ctype == 2">已认证</div>
+                            <div class="utype" v-if="userInfor.ctype == 3">未通过</div>
                             <img src="/static/images/jiantou.png">
                         </div>
                     </div>

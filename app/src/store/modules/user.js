@@ -15,6 +15,7 @@ const state = {
         back: '',
         id: ''
     },
+    isRead:1
 }
 
 // getters
@@ -121,7 +122,34 @@ const actions = {
     },
     clearChangeRouter({ commit, state }) {
         commit('clearChangeRouter')
-    }
+    },
+    getMessage({ commit, state }) {
+        let _self = this;
+        common.$emit('show-load');
+        let url = common.addSID(common.urlCommon + common.apiUrl.most);
+        let body = {
+            biz_module: 'pushService',
+            biz_method: 'showIsRead',
+            biz_param: {
+
+            }
+        };
+        body.time = Date.parse(new Date()) + parseInt(common.difTime);
+        body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+        httpService.myResource(url, body, function(suc) {
+            common.$emit('close-load');
+            if (suc.data.code == '1c01') {
+                let isMessage = suc.data.biz_result.isRead;
+                commit('getMessage',isMessage);
+            } else {
+                common.$emit('message', suc.data.msg);
+            }
+
+        }, function(err) {
+            common.$emit('close-load');
+            common.$emit('message', err.data.msg);
+        })
+    },
 
 }
 
@@ -206,6 +234,9 @@ const mutations = {
         state.backRouter.router = '';
         state.backRouter.back = '';
         state.backRouter.id = '';
+    },
+    getMessage(state,isMessage){
+        state.isRead = isMessage;
     }
 
 }

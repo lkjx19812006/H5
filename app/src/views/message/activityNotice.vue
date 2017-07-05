@@ -88,19 +88,21 @@ input {
     <div class="activity_notice">
         <userHead :param="paramHead"></userHead>
         <div class="box" v-if="arr.length !== 0">
-            <div class="item" v-for="todo in arr" @click="jump(todo)">
-                <div class="top">{{todo.creatTime | successTimeFormats}}</div>
-                <div class="main" v-bind:class="{is_read:todo.isRead==1}">
-                    <div class="title">{{todo.title}}</div>
-                    <div class="content" v-bind:class="{word_read:todo.isRead==1}">
-                        {{todo.message}}
-                    </div>
-                    <div class="footer" v-bind:class="{word_read:todo.isRead==1}">
-                        <span>点击查看</span>
-                        <img src="/static/icon/right.png" class="right">
+            <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                <div class="item" v-for="todo in arr" @click="jump(todo)">
+                    <div class="top">{{todo.creatTime | successTimeFormats}}</div>
+                    <div class="main" v-bind:class="{is_read:todo.isRead==1}">
+                        <div class="title" v-bind:class="{word_read:todo.isRead==1}">{{todo.title}}</div>
+                        <div class="content" v-bind:class="{word_read:todo.isRead==1}">
+                            {{todo.message}}
+                        </div>
+                        <div class="footer" v-bind:class="{word_read:todo.isRead==1}">
+                            <span>点击查看</span>
+                            <img src="/static/icon/right.png" class="right">
+                        </div>
                     </div>
                 </div>
-            </div>
+            </mt-loadmore>
         </div>
         <div class="box" v-if="arr.length == 0">
             <div class="fbox">
@@ -123,8 +125,17 @@ export default {
             return {
                 paramHead: {
                     name: '活动消息',
+                    message: true
                 },
-                arr: []
+                arr: [],
+                topStatus: '',
+                wrapperHeight: 0,
+                allLoaded: false,
+                bottomStatus: '',
+                param: {
+                    pn: 1,
+                    pSize: 20
+                }
             }
         },
         components: {
@@ -140,7 +151,7 @@ export default {
             })
         },
         methods: {
-            getHttp() {
+            getHttp(back) {
                 let _self = this;
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -148,19 +159,91 @@ export default {
                     biz_module: 'pushService',
                     biz_method: 'myMessagePushList',
                     biz_param: {
-                        type: '2'
+                        type: '2',
+                        pn: _self.param.pn,
+                        pSize: _self.param.pSize
                     }
                 };
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.myResource(url, body, function(suc) {
                     common.$emit('close-load');
+                    if (_self.param.pn == 1) {
+                        _self.arr.splice(0, _self.arr.length);
+                    }
+                    let result = suc.data.biz_result.list;
                     if (suc.data.code == '1c01') {
-                        _self.arr = suc.data.biz_result.list;
+                        for (var i = 0; i < result.length; i++) {
+                            _self.arr.push(result[i]);
+                        }
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
+                    if (result.length < _self.param.pSize) {
+                        _self.allLoaded = true;
+                    }
+                    if (back) {
+                        back();
+                    }
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                    if (back) {
+                        back();
+                    }
+                })
+            },
+            handleBottomChange(status) {
+                this.bottomStatus = status;
+            },
+            loadBottom(id) {
+                let _self = this;
+                console.log(21323)
+                setTimeout(() => {
+                    if (this.arr.length < this.param.pn * this.param.pSize) {
+                        this.allLoaded = true;
+                    } else {
+                        this.param.pn++;
+                        this.getHttp(function() {
+                            _self.$refs.loadmore.onBottomLoaded(id);
+                        });
+                    }
+                }, 500);
+            },
+            handleTopChange(status) {
+                this.topStatus = status;
+            },
+            loadTop(id) {
+                let _self = this;
+                setTimeout(() => {
+                    _self.param.pn = 1;
+                    _self.getHttp(function() {
+                        _self.$refs.loadmore.onTopLoaded(id);
+                    });
+                }, 500);
+            },
+            isRead(id) {
+                let _self = this;
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'pushService',
+                    biz_method: 'setMessageIsRead',
+                    biz_param: {
+                        isReadList: [id]
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.myResource(url, body, function(suc) {
+                    common.$emit('close-load');
 
+                    if (suc.data.code == '1c01') {
+                        _self.getHttp()
+                            // common.$emit('message', suc.data.msg);
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);
@@ -168,6 +251,7 @@ export default {
             },
             jump(todo) {
                 let _self = this;
+                _self.isRead(todo.id);
                 window.location.href = todo.url;
             }
         },

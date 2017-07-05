@@ -457,12 +457,33 @@
                         text-align: right;
                         line-height: 20px;
                         margin-bottom: 10px;
+                        color: #FA6705;
+                    }
+                    .black {
+                        text-align: right;
+                        line-height: 20px;
+                        margin-bottom: 10px;
+                        color: #000;
+                    }
+                    .green {
+                        text-align: right;
+                        line-height: 20px;
+                        margin-bottom: 10px;
+                        color: green;
                     }
                     .spec {
                         text-align: left;
                         color: #747474;
                         line-height: 14px;
                         margin-bottom: 10px;
+                        display: flex;
+                        flex-direction: row;
+                        div {
+                            img {
+                                height: 14px;
+                                margin: 0 4px;
+                            }
+                        }
                     }
                     .location {
                         margin-bottom: 0px;
@@ -476,14 +497,14 @@
 <template>
     <div class="home" id="home" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
         <div class="search" v-bind:class="{searchs:show}">
-            <!-- <div class="left" @click="jump('/cart')">
+            <div class="left" @click="jump('/cart')">
                 <img src="/static/icon/shopping.png">
                 <div class="left_word">购物车</div>
-            </div> -->
-            <div class="right" @click="call">
+            </div>
+            <!--  <div class="right" @click="call">
                 <img src="/static/icon/tele.png" class="img">
                 <div class="right_word">电话</div>
-            </div>
+            </div> -->
             <div class="center" @click="fromIndex">
                 <div class="inbox">
                     <img src="/static/icon/enlarge.png">
@@ -491,7 +512,7 @@
                 </div>
             </div>
             <div class="right" @click="message">
-                <img src="/static/icon/i-red.png" class="red_img" v-show="isMessage == '0'">
+                <img src="/static/icon/i-red.png" class="red_img" v-show="isRead == '0'">
                 <img src="/static/icon/message.png" class="img">
                 <div class="right_word">消息</div>
             </div>
@@ -550,9 +571,25 @@
                             </div>
                         </div>
                         <div class="right">
-                            <div class='red'>{{todo.unitprice}}元</div>
-                            <div class="spec">跌涨价格:{{todo.dayMoney,5 | filterTxt}}</div>
-                            <div class="spec location">跌涨幅度:{{todo.dayDowns | indexFloatType}}%</div>
+                            <div class='red' v-if="todo.dayDowns >= 0">{{todo.unitprice}}元/公斤</div>
+                            <!-- <div class='black' v-if="todo.dayDowns == 0">{{todo.unitprice}}元/公斤</div> -->
+                            <div class='green' v-if="todo.dayDowns < 0">{{todo.unitprice}}元/公斤</div>
+                            <div class="spec" v-if="todo.dayDowns >= 0">
+                                <div>跌涨价格:</div>
+                                <div><img src="/static/icons/up.png"></div>
+                                <div> +{{todo.dayMoney,5 | filterTxt}}</div>
+                            </div>
+                           <!--  <div class="spec" v-if="todo.dayDowns == 0">
+                                跌涨价格: {{todo.dayMoney,5 | filterTxt}}
+                            </div> -->
+                            <div class="spec" v-if="todo.dayDowns < 0">
+                                <div>跌涨价格:</div>
+                                <div><img src="/static/icons/down.png"></div>
+                                <div> -{{todo.dayMoney,5 | filterTxt}}</div>
+                            </div>
+                            <div class="spec location" v-if="todo.dayDowns >= 0">跌涨幅度: +{{todo.dayDowns | indexFloatType}}%</div>
+                            <!-- <div class="spec location" v-if="todo.dayDowns == 0">跌涨幅度: {{todo.dayDowns | indexFloatType}}%</div> -->
+                            <div class="spec location" v-if="todo.dayDowns < 0">跌涨幅度: -{{todo.dayDowns | indexFloatType}}%</div>
                         </div>
                     </div>
                 </div>
@@ -649,8 +686,8 @@ export default {
                 imgArray: [],
                 perfect: {
                     name: '',
-                    manageType:'',
-                    userType:'',
+                    manageType: '',
+                    userType: '',
                     bizMain: ''
                 },
                 scrollTop: 0,
@@ -681,7 +718,7 @@ export default {
                 wrapperHeight: 0,
                 allLoaded: false,
                 bottomStatus: '',
-                isMessage:'',
+                isMessage: '',
             }
         },
         components: {
@@ -691,8 +728,11 @@ export default {
             areaJson() {
                 return this.$store.state.user.areaJson;
             },
-            userInfor(){
+            userInfor() {
                 return this.$store.state.user.userInfor;
+            },
+            isRead() {
+                return this.$store.state.user.isRead;
             }
         },
         methods: {
@@ -738,8 +778,8 @@ export default {
                     }
                 }, function(suc) {
                     let result = suc.data.biz_result.list;
-                    console.log(result)
-                        // _self.drugGuidePrice = [];
+                    //console.log(result)
+                    // _self.drugGuidePrice = [];
                     _self.drugGuidePrices = result;
                 }, function(err) {
                     common.$emit('message', err.data.msg);
@@ -848,6 +888,7 @@ export default {
                 let _self = this;
                 if (!common.KEY) {
                     function loadApp() {
+                        common.$emit('setParam', 'backRouter', 'message');
                         if (common.wxshow) {
                             common.getWxUrl();
                         } else {
@@ -861,7 +902,7 @@ export default {
                     });
                     return;
                 }
-                common.$emit('indexToMessage',1)
+                common.$emit('indexToMessage', 1)
                 this.$router.push('/message')
             },
             getImgArr() {
@@ -879,32 +920,6 @@ export default {
                 }, function(err) {
                     common.$emit('message', err.data.msg);
 
-                })
-            },
-            getMessage() {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'pushService',
-                    biz_method: 'showIsRead',
-                    biz_param: {
-
-                    }
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.myResource(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code == '1c01') {
-                        _self.isMessage = suc.data.biz_result.isRead;
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
                 })
             },
             jumpLink(url) {
@@ -934,17 +949,17 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                } else if (_self.userInfor.userType == '' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '') {
+                } else if (_self.userInfor.userType == '' && _self.userInfor.bizMain == '' && _self.userInfor.manageType == '') {
                     function perfect() {
-                        if(router == '/releaseNeeds/1'){
-                            _self.$store.dispatch('changeRouter',{
-                                index:1,
-                                id:''
+                        if (router == '/releaseNeeds/1') {
+                            _self.$store.dispatch('changeRouter', {
+                                index: 1,
+                                id: ''
                             })
-                        }else if(router == '/releaseResource/1'){
-                            _self.$store.dispatch('changeRouter',{
-                                index:2,
-                                id:''
+                        } else if (router == '/releaseResource/1') {
+                            _self.$store.dispatch('changeRouter', {
+                                index: 2,
+                                id: ''
                             })
                         }
                         _self.$router.push('/perfectObject');
@@ -977,7 +992,7 @@ export default {
                     _self.drugGuidePrice();
                     _self.resourceHttp();
                     _self.getImgArr();
-                    if (common.KEY)_self.getMessage();
+                    if (common.KEY) _self.getMessage();
                     _self.$refs.loadmore.onTopLoaded(id);
                 }, 500);
             },
@@ -998,23 +1013,26 @@ export default {
             let _self = this;
             if (!common.servicePhone) this.getCustomerPhone();
             if (common.KEY) _self.$store.dispatch('getUserInfor');
-            if (common.KEY)_self.getMessage();
+            if (common.KEY) _self.$store.dispatch('getMessage');
+            common.$on('messageBack', function(item) { //由消息列表回来，处理缓存问题
+                if (common.KEY) _self.$store.dispatch('getMessage');
+            })
             common.$on('toMine', function(item) {
                 if (common.KEY) _self.$store.dispatch('getUserInfor');
-                if (common.KEY)_self.getMessage();
+                if (common.KEY) _self.$store.dispatch('getMessage');
             })
-            common.$on('perfectOldCustomer',function(item){//完善老客户信息，处理缓存不调用接口问题
+            common.$on('perfectOldCustomer', function(item) { //完善老客户信息，处理缓存问题
                 if (common.KEY) _self.$store.dispatch('getUserInfor')
             })
             common.$on('getInfo', function(item) {
-                if (common.KEY) _self.$store.dispatch('getUserInfor');//来自登录，调用下个人信息接口
+                if (common.KEY) _self.$store.dispatch('getUserInfor'); //来自登录，调用下个人信息接口
                 _self.resourceHttp();
-                if (common.KEY)_self.getMessage();
+                if (common.KEY) _self.$store.dispatch('getMessage');
             })
             this.resourceHttp();
             this.drugGuidePrice();
             this.getImgArr();
-            
+
         },
         mounted() {
             let _self = this;

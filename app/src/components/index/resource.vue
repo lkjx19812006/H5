@@ -200,7 +200,8 @@ export default {
                 },
                 myShow: {
                     myShow: false,
-                    mycart: true
+                    mycart: true,
+                    resource:true
                 },
                 sortRouter: 'resource',
                 sortArr: [{

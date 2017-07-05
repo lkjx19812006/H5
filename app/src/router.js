@@ -67,7 +67,7 @@ import sayPriceNotice from './views/message/sayPriceNotice'
 import orderNotice from './views/message/orderNotice'
 import activityNotice from './views/message/activityNotice'
 import intentionNotice from './views/message/intentionNotice'
-
+import systemMessage from './views/message/systemMessage'
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -160,6 +160,7 @@ module.exports = {
         { name: 'orderNotice', path: '/orderNotice', component: orderNotice },
         { name: 'activityNotice', path: '/activityNotice', component: activityNotice },
         { name: 'intentionNotice', path: '/intentionNotice', component: intentionNotice },
+        { name: 'systemMessage', path: '/systemMessage', component: systemMessage },
         { path: '*', redirect: '/home' }
     ]
 }

@@ -8,7 +8,7 @@ textarea {
     border-radius: 0;
 }
 
-input {
+input,textarea  {
     border: none;
     background-color: #fff;
 }
@@ -41,6 +41,16 @@ input {
             input{
                 color:#333333;
                 opacity:1;
+            }
+            .my_spec{
+                width:150px;
+                overflow:hidden;
+                text-overflow:ellipsis;
+            }
+            textarea{
+                color:#333333;
+                opacity:1;
+                height:18px;
             }
         }
         .img {
@@ -103,7 +113,9 @@ input {
             <div class="inbox">
                 <div class="breed_left">规格</div>
                 <div class="breed_center">
-                    <input type="text" placeholder="请选择您的产品规格" disabled="false" v-model="obj.spec">
+                    <input type="text" class="my_spec" placeholder="请选择您的产品规格" disabled="false" v-model="obj.spec">
+
+                    <!-- <textarea placeholder="请选择您的产品规格" disabled="false" v-model="obj.spec"></textarea> -->
                 </div>
                 <div class="img">
                     <img src="/static/icons/rele-right.png">

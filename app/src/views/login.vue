@@ -91,7 +91,7 @@ export default {
         },
         methods: {
             jump(router) {
-                common.$emit('loginToRegister',1)
+                common.$emit('loginToRegister', 1)
                 this.$router.push(router);
             },
             getOpenId() {
@@ -137,8 +137,10 @@ export default {
                                 common.$emit('inforCartPop', 1);
                                 _self.$router.replace('resourceDetail/' + common.pageParam.backRouter.split('/')[1]);
                             }
-                        } else if (common.pageParam.backRouter == 'lowPriceRes') {
+                        } else if (common.pageParam.backRouter == 'lowPriceRes') {//购物车返回到下一个动作
                             _self.$router.replace('cart')
+                        } else if (common.pageParam.backRouter == 'message') {//消息返回到下一个动作
+                            _self.$router.replace('/message')
                         } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
                             _self.$router.replace(common.pageParam.backRouter);
                             common.$emit("loginToDetails", {
@@ -193,7 +195,9 @@ export default {
                             }
                         } else if (common.pageParam.backRouter == 'lowPriceRes') {
                             _self.$router.replace('cart')
-                        } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
+                        } else if (common.pageParam.backRouter == 'message') {//消息返回到下一个动作
+                            _self.$router.replace('/message')
+                        }  else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
                             _self.$router.replace(common.pageParam.backRouter);
                             common.$emit("loginToDetails", {
                                 id: common.pageParam.backRouter.split('/')[2],

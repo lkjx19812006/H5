@@ -1,13 +1,22 @@
 <template>
     <div class="content long_search">
         <div class="search_div" v-show="!param.myShow">
-            <div class="search_content" v-bind:class="{ search_active: keyword }">
+            <img src="/static/icons/cart.png" v-show="param.mycart" class="mycart" @click.stop.prevent="jump('/cart')">
+            <div class="search_content" v-bind:class="{ search_active: keyword }" v-if="!param.resource">
                 <img src="/static/images/search.png" class="search_image" v-show="!keyword">
                 <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image">
                 </div>
                 <input type="text" v-bind:class="{ search_active: keyword }" placeholder="请输入您想要的货物资源" disabled="true" v-model="keyword">
             </div>
-            <img src="/static/icons/cart.png" v-show="param.mycart" class="mycart" @click.stop.prevent="jump()">
+            <!-- 资源 -->
+            <div class="search_content special" v-bind:class="{ search_active: keyword }" v-if="param.resource">
+                <img src="/static/images/search.png" class="search_image" v-show="!keyword">
+                <div class="clear" v-show="keyword" @click.stop.prevent="clearWord()"><img src="/static/images/false.png" class="search_image">
+                </div>
+                <input type="text" v-bind:class="{ search_active: keyword }" placeholder="请输入您想要的货物资源" disabled="true" v-model="keyword">
+            </div>
+            <img src="/static/icon/i-red.png" class="red_img" v-if="isRead == '0'">
+            <img src="/static/icon/message.png" class="message" @click.stop.prevent="jump('/message')">
         </div>
         <div class="search-div" v-show="param.myShow">
             <div class="search_content" v-bind:class="{ search_active: keyword }">
@@ -40,26 +49,27 @@ export default {
 
             }
         },
+        computed: {
+            isRead(){
+                return this.$store.state.user.isRead;
+            }
+        },
         methods: {
             clearWord() {
                 this.$emit("clearSearch");
             },
-            jump() {
+            jump(router) {
                 if (!common.customerId) {
                     let _self = this;
 
                     function loadApp() {
-                        /*common.$emit('back_login', {
-                            id: id,
-                            isMy: _self.obj.isMy
-                        });*/
-                        common.$emit('setParam', 'backRouter', 'lowPriceRes');
+                        if(router == '/cart')common.$emit('setParam', 'backRouter', 'lowPriceRes');
+                        if(router == '/message')common.$emit('setParam', 'backRouter', 'message');
                         if (common.wxshow) {
                             common.getWxUrl();
                         } else {
                             _self.$router.push('/login');
                         }
-                        //_self.$router.push('/login');
                     }
                     common.$emit('confirm', {
                         message: '请先登录',
@@ -69,7 +79,7 @@ export default {
                     return;
                 }
                 this.$store.dispatch('getHttp');
-                this.$router.push('/cart')
+                this.$router.push(router)
             }
         }
 }
@@ -106,6 +116,10 @@ export default {
     position: relative;
 }
 
+.long_search .search_div .special {
+    margin: 10px 55px 10px 55px;
+}
+
 .long_search .search_div .search_content {
     background: #fff;
 }
@@ -113,9 +127,25 @@ export default {
 .long_search .search_div .mycart {
     height: 24px;
     position: absolute;
+    left: 13px;
+    top: 13px;
+    z-index: 20;
+}
+
+.long_search .search_div .message {
+    height: 24px;
+    position: absolute;
     right: 13px;
     top: 13px;
     z-index: 20;
+}
+
+.long_search .search_div .red_img {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    right: 8px;
+    top: 12px;
 }
 
 .long_search .search-div .search_content {

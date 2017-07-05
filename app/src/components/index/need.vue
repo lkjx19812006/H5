@@ -494,6 +494,7 @@ export default {
         },
         created() {
             let _self = this;
+            _self.httpPraram.page = 1;
             _self.getHttp();
             common.$on('need', function(item) {
                 console.log(item);

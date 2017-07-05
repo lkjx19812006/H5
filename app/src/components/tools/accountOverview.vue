@@ -1,7 +1,9 @@
 <template>
     <div class="account_overview">
         <div class="header">
-            <img :src="param.avatar" v-show="param.avatar">
+            <div class="image_box" v-if="param.avatar">
+                <img :src="param.avatar" >
+            </div>
             <img src="/static/images/my-header.png" v-if="!param.avatar">
             <div class="login" v-if='login_show' @click="jump">登录/注册</div>
             <div class="cerifi" v-if='!login_show'>
@@ -109,10 +111,22 @@ export default {
     margin: 0;
     padding: 0;
     position: relative;
+    padding-top:2.815rem;
 }
-
+.account_overview .header .image_box{
+    margin:auto;
+    margin-bottom: 10px;
+    width: 5.119rem;
+    height: 5.119rem;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.account_overview .header .image_box>img{
+    width:5.119rem;
+    min-height: 5.119rem;
+}
 .account_overview .header>img {
-    margin-top: 2.815rem;
+    /*margin-top: 2.815rem;*/
     margin-bottom: 10px;
     width: 5.119rem;
     height: 5.119rem;
