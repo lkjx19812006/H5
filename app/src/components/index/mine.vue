@@ -50,7 +50,7 @@ export default {
 
                 },
                 entrance: [{
-                    name: '待审核',
+                    name: '受理中',
                     router: 'myOrder',
                     img_src: '/static/images/All-orders.png'
                 }, {

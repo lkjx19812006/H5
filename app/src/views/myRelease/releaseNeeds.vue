@@ -116,16 +116,42 @@ input {
             text-align: left;
         }
     }
-    .confirm {
-        height: 50px;
-        width: 100%;
-        line-height: 50px;
-        font-size: 18px;
-        color: #fff;
-        background-color: #FA6705;
-        position: fixed;
-        bottom: 0;
+    .foot {
+        background-color: #F5F5F5;
+        padding-bottom: 22px;
+        .confirm {
+            height: 50px;
+            width: 90%;
+            border-radius: 25px;
+            margin: 13px auto;
+            line-height: 50px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #FA6705;
+        }
+        .other {
+            background-color: #fff;
+            color: #FA9B05;
+            border: 1px solid #FA9B05;
+        }
+        .titles {
+            font-size: 12px;
+            color: #FF0000;
+            text-align: left;
+            padding: 12px 8px;
+            line-height: 20px;
+        }
     }
+}
+
+.black_shade {
+    position: absolute;
+    top: 0;
+    z-index: 3000;
+    opacity: 0.6;
+    background-color: #000;
+    width: 100%;
+    height: 100vh;
 }
 
 .preventScroll {
@@ -133,9 +159,7 @@ input {
     overflow: hidden;
 }
 
-.page-loadmore-wrapper {
-    padding-bottom: 100px;
-}
+.page-loadmore-wrapper {}
 </style>
 <template>
     <div class="release_needs" v-bind:class="{preventScroll:obj.sheetVisible || obj.show || obj.tshow}">
@@ -154,7 +178,7 @@ input {
                     <div class="title">交货要求</div>
                 </div>
                 <selectAddress :obj="obj"></selectAddress>
-                <div class="outbox">
+                <!--               <div class="outbox">
                     <div class="pay">
                         <div class="inbox">
                             <div class="left">付款方式</div>
@@ -208,7 +232,7 @@ input {
                             <textarea placeholder="示例: 要等我的下家确认货物没有问题，立即现款" v-model="payArr[3].two"></textarea>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="outbox outbox_nor">
                     <div class="pay">
                         <div class="inbox">
@@ -287,18 +311,43 @@ input {
                     </div>
                 </div>
             </div>
+            <div class="foot" v-if="userInfor.ctype == 0 && userInfor.utype == 0">
+                <div class="titles">
+                    * 通过认证后，您发布的需求排序将会货的大量的曝光！
+                </div>
+                <div class="confirm other" @click="confirm(1)" v-if="!obj.tshow">
+                    发布求购并认证
+                </div>
+                <div class="confirm" @click="confirm(2)" v-if="!obj.tshow">
+                    发布求购
+                </div>
+            </div>
+            <div class="foot" v-if="userInfor.ctype !== 0 || userInfor.utype !== 0">
+                <div class="titles">
+                    * 您已通过认证，您发布的需求将会大量曝光！
+                </div>
+                <div class="confirm" @click="confirm(2)" v-if="!obj.tshow">
+                    发布求购
+                </div>
+            </div>
         </div>
-        <div class="confirm" @click="confirm" v-if="!obj.tshow">发布求购</div>
+        <authenPopUp :param="Titles"></authenPopUp>
+        <div class="black_shade" v-show="Titles.selectType" @click="cancelTitle">
+        </div>
     </div>
 </template>
 <script>
 import common from '../../common/common.js'
 import validation from '../../validation/validation.js'
 import myHeader from '../../components/tools/myHeader'
+import authenPopUp from '../../components/popUpType/authenPopUp'
 import httpService from '../../common/httpService.js'
 import needBasic from '../../components/release/needReleaseBasic'
 import areaJson from '../../common/areaData'
 import selectAddress from '../../components/popUpType/selectAddress'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
             return {
@@ -306,27 +355,31 @@ export default {
                     name: '我要采购',
                     router: 'home'
                 },
-                payArr: [{
-                    show: false,
-                    one: '合同签订后，预付定金',
-                    two: '',
-                    three: '%'
-                }, {
-                    show: false,
-                    one: '',
-                    two: '验收合格后，立即付款',
-                    three: ''
-                }, {
-                    show: false,
-                    one: '验收合格后，',
-                    two: '',
-                    three: '天内付款'
-                }, {
-                    show: false,
-                    one: '',
-                    two: '',
-                    three: ''
-                }],
+                Titles: {
+                    myTitle: true,
+                    selectType: false
+                },
+                // payArr: [{
+                //     show: false,
+                //     one: '合同签订后，预付定金',
+                //     two: '',
+                //     three: '%'
+                // }, {
+                //     show: false,
+                //     one: '',
+                //     two: '验收合格后，立即付款',
+                //     three: ''
+                // }, {
+                //     show: false,
+                //     one: '验收合格后，',
+                //     two: '',
+                //     three: '天内付款'
+                // }, {
+                //     show: false,
+                //     one: '',
+                //     two: '',
+                //     three: ''
+                // }],
                 dateArr: [{
                     show: false,
                     one: '7'
@@ -387,7 +440,13 @@ export default {
                 id: '',
                 payment: '',
                 paymentWay: '',
-                duedate: ''
+                duedate: '',
+                typeIndex: 2,
+            }
+        },
+        computed: {
+            userInfor() {
+                return this.$store.state.user.userInfor;
             }
         },
         methods: {
@@ -415,7 +474,7 @@ export default {
                     common.$emit('close-load');
                 })
             },
-            confirm() {
+            confirm(index) {
                 let _self = this;
                 var checkArr = [];
                 let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种！');
@@ -432,8 +491,8 @@ export default {
                 checkArr.push(checkQuality);
                 let checkAddress = validation.checkNull(_self.obj.address, '请选择交货地！');
                 checkArr.push(checkAddress);
-                let checkPay = _self.payWay();
-                checkArr.push(checkPay);
+                // let checkPay = _self.payWay();
+                // checkArr.push(checkPay);
                 let checkDuedate = _self.checkDates();
                 checkArr.push(checkDuedate);
                 let checkRemarks = _self.RemarkSelect();
@@ -444,20 +503,22 @@ export default {
                         return;
                     }
                 }
+                _self.typeIndex = index;
+                //console.log(222,_self.typeIndex)
                 common.$emit("confirm", {
                     message: '确定发布求购？',
                     title: '提示',
                     ensure: this.release
                 });
             },
-            selectPay(index) {
-                let _self = this;
-                for (var key in this.payArr) {
-                    _self.payArr[key].show = false;
-                }
-                this.payArr[index].show = true;
-                this.obj.paymentWay = index;
-            },
+            // selectPay(index) {
+            //     let _self = this;
+            //     for (var key in this.payArr) {
+            //         _self.payArr[key].show = false;
+            //     }
+            //     this.payArr[index].show = true;
+            //     this.obj.paymentWay = index;
+            // },
             selectDate(index) {
                 let _self = this;
                 for (var key in this.dateArr) {
@@ -480,54 +541,54 @@ export default {
                 console.log(typeof this.obj.selling_point)
                 this.obj.selling_point.push(index);
             },
-            payWay() {
-                let _self = this;
-                _self.paymentWay = '';
-                let validate = true;
-                let msg = '';
-                switch (this.obj.paymentWay) {
-                    case 0:
-                        if (!_self.payArr[0].two) {
-                            msg = '请填写预付百分比';
-                            validate = false;
-                        } else if (_self.payArr[0].two <= 0) {
-                            msg = '预付百分比不能小于0';
-                            validate = false;
-                        } else if (_self.payArr[0].two > 100) {
-                            msg = '预付百分比不能大于100'
-                            validate = false;
-                        }
-                        _self.paymentWay = '合同签订后，预付定金' + _self.payArr[0].two + '%';
-                        break;
-                    case 1:
-                        _self.paymentWay = '验收合格后，立即付款';
-                        break;
-                    case 2:
-                        if (!_self.payArr[2].two) {
-                            msg = '请填写付款期限';
-                            validate = false;
-                        } else if (_self.payArr[2].two < 0) {
-                            msg = '付款期限不能小于0天';
-                            validate = false;
-                        }
-                        _self.paymentWay = '验收合格后，' + _self.payArr[2].two + '天内付款';
-                        break;
-                    case 3:
-                        if (!_self.payArr[3].two) {
-                            msg = '请填写付款方式内容';
-                            validate = false;
-                        }
-                        _self.paymentWay = _self.payArr[3].two;
-                        break;
-                    default:
-                        msg = '请选择付款方式'
-                        validate = false;
-                        _self.paymentWay = '';
-                }
-                if (!validate) {
-                    return msg;
-                }
-            },
+            // payWay() {
+            //     let _self = this;
+            //     _self.paymentWay = '';
+            //     let validate = true;
+            //     let msg = '';
+            //     switch (this.obj.paymentWay) {
+            //         case 0:
+            //             if (!_self.payArr[0].two) {
+            //                 msg = '请填写预付百分比';
+            //                 validate = false;
+            //             } else if (_self.payArr[0].two <= 0) {
+            //                 msg = '预付百分比不能小于0';
+            //                 validate = false;
+            //             } else if (_self.payArr[0].two > 100) {
+            //                 msg = '预付百分比不能大于100'
+            //                 validate = false;
+            //             }
+            //             _self.paymentWay = '合同签订后，预付定金' + _self.payArr[0].two + '%';
+            //             break;
+            //         case 1:
+            //             _self.paymentWay = '验收合格后，立即付款';
+            //             break;
+            //         case 2:
+            //             if (!_self.payArr[2].two) {
+            //                 msg = '请填写付款期限';
+            //                 validate = false;
+            //             } else if (_self.payArr[2].two < 0) {
+            //                 msg = '付款期限不能小于0天';
+            //                 validate = false;
+            //             }
+            //             _self.paymentWay = '验收合格后，' + _self.payArr[2].two + '天内付款';
+            //             break;
+            //         case 3:
+            //             if (!_self.payArr[3].two) {
+            //                 msg = '请填写付款方式内容';
+            //                 validate = false;
+            //             }
+            //             _self.paymentWay = _self.payArr[3].two;
+            //             break;
+            //         default:
+            //             msg = '请选择付款方式'
+            //             validate = false;
+            //             _self.paymentWay = '';
+            //     }
+            //     if (!validate) {
+            //         return msg;
+            //     }
+            // },
             checkDates() {
                 let _self = this;
                 let validate = true;
@@ -599,7 +660,7 @@ export default {
                         province: _self.obj.addressProvinceId,
                         city: _self.obj.addressCityId,
                         district: _self.obj.addressDistrictId,
-                        paymentWay: _self.paymentWay
+                        // paymentWay: _self.paymentWay
                     }
                 };
                 if (_self.id !== '1') {
@@ -621,7 +682,7 @@ export default {
                             province: _self.obj.addressProvinceId,
                             city: _self.obj.addressCityId,
                             district: _self.obj.addressDistrictId,
-                            paymentWay: _self.paymentWay,
+                            // paymentWay: _self.paymentWay,
                             id: _self.id
                         }
                     }
@@ -639,13 +700,18 @@ export default {
                         } else {
                             id = _self.id;
                         }
+                        if (_self.typeIndex == 2) {
+                            common.$emit('informNeedSuccess', id);
+                            _self.$store.dispatch('getCustomer', {
+                                name: _self.obj.name,
+                                phone: _self.obj.phone
+                            })
+                            _self.$router.push("/releaseNeedSuccess" + '/' + id);
+                        } else if (_self.typeIndex == 1) {
+                            console.log(12313213)
+                            _self.Titles.selectType = true;
+                        }
 
-                        common.$emit('informNeedSuccess', id);
-                        _self.$store.dispatch('getCustomer', {
-                            name: _self.obj.name,
-                            phone: _self.obj.phone
-                        })
-                        _self.$router.push("/releaseNeedSuccess" + '/' + id);
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -655,63 +721,63 @@ export default {
                 })
             },
             //编辑时获取付款方式
-            getEditPayment(paymentWay) {
-                let _self = this;
-                //获取Unicode编码
-                // var GB2312UnicodeConverter = {
-                //     ToUnicode: function(str) {
-                //         return escape(str).toLocaleLowerCase().replace(/%u/gi, '\\u');
-                //     },
-                //     ToGB2312: function(str) {
-                //         return unescape(str.replace(/\\u/gi, '%u'));
-                //     }
-                // };
-                for (var i = 0; i < _self.payArr.length; i++) {
-                    _self.payArr[i].show = false;
-                }
-                let Reg0 = /^\u5408\u540c\u7b7e\u8ba2\u540e\uff0c\u9884\u4ed8\u5b9a\u91d1[1-9]\d*%$/;
-                let Reg1 = /^\u9a8c\u6536\u5408\u683c\u540e\uff0c\u7acb\u5373\u4ed8\u6b3e$/;
-                let Reg2 = /^\u9a8c\u6536\u5408\u683c\u540e\uff0c[1-9]\d*\u5929\u5185\u4ed8\u6b3e$/;
-                // 合同签订后，预付定金  % 0
-                // 验收合格后，立即付款    1
-                // 验收合格后 ? 天内付款   2
-                // 其他                    3
-                if (Reg0.test(paymentWay)) {
-                    //处理第一种方式
-                    this.payment = 0;
-                } else if (Reg1.test(paymentWay)) {
-                    //处理第二种方式
-                    this.payment = 1;
-                } else if (Reg2.test(paymentWay)) {
-                    //处理第三种方式
-                    this.payment = 2;
-                } else {
-                    this.payment = 3;
-                    //处理第四种方式
-                }
-                switch (this.payment) {
-                    case 0:
-                        _self.payArr[0].two = paymentWay.substring(10, paymentWay.length - 1);
-                        _self.obj.paymentWay = 0;
-                        _self.payArr[0].show = true;
-                        break;
-                    case 1:
-                        _self.payArr[1].show = true;
-                        _self.obj.paymentWay = 1;
-                        break;
-                    case 2:
-                        _self.payArr[2].two = paymentWay.substring(6, paymentWay.length - 4);
-                        _self.obj.paymentWay = 2;
-                        _self.payArr[2].show = true;
-                        break;
-                    case 3:
-                        _self.payArr[3].two = paymentWay;
-                        _self.obj.paymentWay = 3;
-                        _self.payArr[3].show = true;
-                        break;
-                }
+            // getEditPayment(paymentWay) {
+            //     let _self = this;
+            //     //获取Unicode编码
+            //     // var GB2312UnicodeConverter = {
+            //     //     ToUnicode: function(str) {
+            //     //         return escape(str).toLocaleLowerCase().replace(/%u/gi, '\\u');
+            //     //     },
+            //     //     ToGB2312: function(str) {
+            //     //         return unescape(str.replace(/\\u/gi, '%u'));
+            //     //     }
+            //     // };
+            //     for (var i = 0; i < _self.payArr.length; i++) {
+            //         _self.payArr[i].show = false;
+            //     }
+            //     let Reg0 = /^\u5408\u540c\u7b7e\u8ba2\u540e\uff0c\u9884\u4ed8\u5b9a\u91d1[1-9]\d*%$/;
+            //     let Reg1 = /^\u9a8c\u6536\u5408\u683c\u540e\uff0c\u7acb\u5373\u4ed8\u6b3e$/;
+            //     let Reg2 = /^\u9a8c\u6536\u5408\u683c\u540e\uff0c[1-9]\d*\u5929\u5185\u4ed8\u6b3e$/;
+            //     // 合同签订后，预付定金  % 0
+            //     // 验收合格后，立即付款    1
+            //     // 验收合格后 ? 天内付款   2
+            //     // 其他                    3
+            //     if (Reg0.test(paymentWay)) {
+            //         //处理第一种方式
+            //         this.payment = 0;
+            //     } else if (Reg1.test(paymentWay)) {
+            //         //处理第二种方式
+            //         this.payment = 1;
+            //     } else if (Reg2.test(paymentWay)) {
+            //         //处理第三种方式
+            //         this.payment = 2;
+            //     } else {
+            //         this.payment = 3;
+            //         //处理第四种方式
+            //     }
+            //     switch (this.payment) {
+            //         case 0:
+            //             _self.payArr[0].two = paymentWay.substring(10, paymentWay.length - 1);
+            //             _self.obj.paymentWay = 0;
+            //             _self.payArr[0].show = true;
+            //             break;
+            //         case 1:
+            //             _self.payArr[1].show = true;
+            //             _self.obj.paymentWay = 1;
+            //             break;
+            //         case 2:
+            //             _self.payArr[2].two = paymentWay.substring(6, paymentWay.length - 4);
+            //             _self.obj.paymentWay = 2;
+            //             _self.payArr[2].show = true;
+            //             break;
+            //         case 3:
+            //             _self.payArr[3].two = paymentWay;
+            //             _self.obj.paymentWay = 3;
+            //             _self.payArr[3].show = true;
+            //             break;
+            //     }
 
-            },
+            // },
             getNeedDetail(id) {
                 let _self = this;
                 httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
@@ -736,7 +802,7 @@ export default {
                             _self.obj.addressDistrict = result.address.split(',')[2];
                         }
                         _self.obj.address = result.address;
-                        if (result.paymentWay) _self.getEditPayment(result.paymentWay);
+                        //if (result.paymentWay) _self.getEditPayment(result.paymentWay);
                         _self.obj.quality = result.quality;
                         let date = _self.getDate(result.duedate);
                         //_self.dateArr[_self.obj.duedate].one = date;
@@ -837,13 +903,18 @@ export default {
                     _self.obj.type_show = true;
                     _self.getNeedDetail(id);
                 }
+            },
+            cancelTitle() {
+                let _self = this;
+                _self.Titles.selectType = false;
             }
 
         },
         components: {
             myHeader,
             needBasic,
-            selectAddress
+            selectAddress,
+            authenPopUp
         },
         created() {
             let _self = this;
@@ -851,7 +922,7 @@ export default {
                 this.id = _self.$route.params.id;
                 this.selectType(this.id);
             }
-            _self.getInfo();
+            _self.$store.dispatch('getUserInfor');
             common.$on('inforReleases', function(item) {
                 _self.obj.drug_name = '';
                 _self.obj.spec = '';
@@ -870,20 +941,21 @@ export default {
                 _self.obj.type_show = false;
                 _self.obj.selling_point = [];
                 for (var i = 0; i < 4; i++) {
-                    _self.payArr[i].show = false;
-                    if (i !== 1) _self.payArr[i].two = '';
+                    // _self.payArr[i].show = false;
+                    // if (i !== 1) _self.payArr[i].two = '';
                     _self.dateArr[i].show = false;
                     if (i == 3) _self.dateArr[i].one = '';
                     _self.remarksArr[i].show = false;
                 }
-                _self.getInfo();
+                _self.$store.dispatch('getUserInfor');
             })
             common.$on("purchase-id", function(item) {
                 _self.getNeedDetail(item);
-                _self.getInfo();
+                _self.$store.dispatch('getUserInfor');
                 _self.obj.type_show = true;
                 _self.id = item;
             })
+
         },
         mounted() {
 

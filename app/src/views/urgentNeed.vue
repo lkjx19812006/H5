@@ -4,7 +4,9 @@
     width: 100%;
     z-index: 2000;
     background: #fff;
+    position: relative;
 }
+
 .mint-loadmore-top span {
     display: inline-block;
     transition: .2s linear;
@@ -16,13 +18,50 @@
     transition: .2s linear;
     vertical-align: middle;
 }
+
+@keyframes mymove {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .urgent_need {
     overflow: hidden;
+    .newAdd {
+        position: absolute;
+        width: 100%;
+        top: 50px;
+        height: 20px;
+        background-color: #E9F2FA;
+        color: #3D7DB8;
+        font-size: 13px;
+        line-height: 20px;
+        z-index: 300;
+    }
+    .emtry {
+        position: static;
+        height: 10px;
+        background-color: #F7F7F7;
+    }
+    .change_opcaity {
+        animation: mymove 1s;
+    }
     .main {
         width: 100%;
-        padding-top: 142px;
+        padding-bottom: 142px;
         overflow: scroll;
         width: 100%;
+        .newAdd_p {
+            height: 20px;
+            width: 100%;
+            background-color: #F7F7F7;
+        }
+    }
+    .have_title {
+        padding-bottom: 172px;
     }
     .factory {
         background-color: #fff;
@@ -134,19 +173,34 @@
         }
     }
 }
+
+.black_shade {
+    position: absolute;
+    top: 0;
+    z-index: 2000;
+    opacity: 0.6;
+    background-color: #000;
+    width: 100%;
+    height: 100vh;
+}
 </style>
 <template>
     <div class="content urgent_need">
         <div class="fixed">
             <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
+            <perfectTitle :param="Titles" v-if="userInfor.ctype == 0 && userInfor.utype == 0"></perfectTitle>
             <sort v-on:postId="getId" v-on:initial="initial" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
             <div class="factory">
                 <div class="left" v-bind:class="{active:httpPraram.indentType == 0}" @click="indentType(0)">药厂求购</div>
                 <div class="left" v-bind:class="{active:httpPraram.indentType == 1}" @click="indentType(1)">普通求购</div>
             </div>
         </div>
-        <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0">
+        <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0" v-bind:class="{have_title:Titles.myTitle}">
             <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
+                <div class="newAdd" v-bind:class="{emtry:!newAdd,emtry_before:'change_opcaity'}">
+                    <span v-show="newAdd">今日新增{{newAdd}}条求购信息</span>
+                </div>
+                <div class="newAdd_p" v-show="newAdd"></div>
                 <ul class="list">
                     <li v-for="todo in todos" @click="jumpDetail(todo.id)" class="li">
                         <div class="top">
@@ -188,6 +242,9 @@
             </mt-loadmore>
         </div>
         <errPage :param="err" v-show="todos.length==0"></errPage>
+        <authenPopUp :param="Titles"></authenPopUp>
+        <div class="black_shade" v-show="Titles.selectType" @click="cancelTitle">
+        </div>
     </div>
 </template>
 <script>
@@ -196,11 +253,21 @@ import headFix from '../components/tools/head'
 import sort from '../components/tools/sort'
 import httpService from '../common/httpService.js'
 import errPage from '../components/tools/err'
+import perfectTitle from '../components/popUpType/perfectTitle'
+import authenPopUp from '../components/popUpType/authenPopUp'
 import filters from '../filters/filters'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
             return {
+                Titles: {
+                    myTitle: true,
+                    selectType: false
+                },
                 scrollTop: 0,
+                newAdd: '',
                 err: {
                     err: "很抱歉，没有找到相关资源",
                     url: '/static/icons/maomao.png',
@@ -295,7 +362,14 @@ export default {
         components: {
             headFix,
             sort,
-            errPage
+            errPage,
+            perfectTitle,
+            authenPopUp
+        },
+        computed: {
+            userInfor() {
+                return this.$store.state.user.userInfor;
+            }
         },
         methods: {
             getHttp(back) {
@@ -334,6 +408,7 @@ export default {
                         _self.todos.splice(0, _self.todos.length);
                     }
                     let result = suc.data.biz_result.list;
+                    _self.newAdd = suc.data.biz_result.newAdd;
                     if (suc.data.code == '1c01') {
                         for (var i = 0; i < result.length; i++) {
                             _self.todos.push(result[i]);
@@ -470,15 +545,27 @@ export default {
             },
             getScrollTop() {
                 this.$refs.wrapper.scrollTop = this.scrollTop;
+            },
+            cancelTitle() {
+                let _self = this;
+                _self.Titles.selectType = false;
             }
         },
         watch: {
-            '$route': 'getScrollTop'
+            '$route': 'getScrollTop',
+            scrollTop: function(val, oldVal) {
+                if (val > 50) {
+                    this.newAdd = '';
+                } else {
+
+                }
+            }
         },
         created() {
             let _self = this;
             _self.headParam.keyword = common.pageParam.Urgentneed;
             _self.getHttp();
+            if (common.KEY) _self.$store.dispatch('getUserInfor');
             common.$on('Urgentneed', function(item) {
                 _self.headParam.keyword = item.keyWord;
                 _self.httpPraram.keyword = item.keyWord;
@@ -489,6 +576,7 @@ export default {
                 _self.httpPraram.page = 1;
                 _self.headParam.keyword = '';
                 _self.httpPraram.keyword = '';
+                if (common.KEY) _self.$store.dispatch('getUserInfor');
                 _self.getHttp();
             })
             common.$on('urgentNeed-sort', function(item) {
@@ -511,6 +599,7 @@ export default {
              })*/
             common.$on('getInfo', function(item) {
                 _self.getHttp();
+
             })
         },
         mounted() {

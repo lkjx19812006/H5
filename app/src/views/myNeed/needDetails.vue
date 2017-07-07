@@ -311,13 +311,13 @@
                         <div class="content" v-show="!obj.address">面议</div>
                     </div>
                 </div>
-                <div class="infor_box">
+               <!--  <div class="infor_box">
                     <div class="infor">
                         <div class="name">付款方式</div>
                         <div class="content" v-show="obj.paymentWay">{{obj.paymentWay}}</div>
                         <div class="content" v-show="!obj.paymentWay">面议</div>
                     </div>
-                </div>
+                </div> -->
                 <div class="infor_box">
                     <div class="infor infor_nor">
                         <div class="name">备注信息</div>

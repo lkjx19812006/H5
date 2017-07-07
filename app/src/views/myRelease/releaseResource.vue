@@ -48,7 +48,6 @@
             border: none;
             font-size: 15px;
         }
-
     }
     .title {
         font-size: 15px;
@@ -58,16 +57,42 @@
     .name {
         padding-bottom: 65px;
     }
-    .confirm {
-        height: 50px;
-        width: 100%;
-        line-height: 50px;
-        font-size: 18px;
-        color: #fff;
-        background-color: #FA6705;
-        position: fixed;
-        bottom: 0;
+    .foot {
+        background-color: #F5F5F5;
+        padding-bottom: 22px;
+        .confirm {
+            height: 50px;
+            width: 90%;
+            border-radius: 25px;
+            margin: 13px auto;
+            line-height: 50px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #FA6705;
+        }
+        .other {
+            background-color: #fff;
+            color: #FA9B05;
+            border: 1px solid #FA9B05;
+        }
+        .titles {
+            font-size: 12px;
+            color: #FF0000;
+            text-align: left;
+            padding: 12px 8px;
+            line-height: 20px;
+        }
     }
+}
+
+.black_shade {
+    position: absolute;
+    top: 0;
+    z-index: 3000;
+    opacity: 0.6;
+    background-color: #000;
+    width: 100%;
+    height: 100vh;
 }
 </style>
 <template>
@@ -91,29 +116,58 @@
                 <textarea placeholder="请根据实际情况填写药材资源卖点" v-model="obj.selling_point"></textarea>
             </div>
             <!-- <div class="title">联系方式可根据实际情况修改</div> -->
-            <div class="name">
-                <!-- <userInfor :obj="obj"></userInfor> -->
+            <!--  <div class="name">
+                <userInfor :obj="obj"></userInfor>
+            </div> -->
+            <div class="foot" v-if="userInfor.ctype == 0 && userInfor.utype == 0">
+                <div class="titles">
+                    * 通过认证后，您发布的需求排序将会货的大量的曝光！
+                </div>
+                <div class="confirm other" @click="confirm(1)" v-if="!obj.tshow">
+                    发布资源并认证
+                </div>
+                <div class="confirm" @click="confirm(2)" v-if="!obj.tshow">
+                    发布资源
+                </div>
+            </div>
+            <div class="foot" v-if="userInfor.ctype !== 0 || userInfor.utype !== 0">
+                <div class="titles">
+                    * 您已通过认证，您发布的需求将会大量曝光！
+                </div>
+                <div class="confirm" @click="confirm(2)" v-if="!obj.tshow">
+                    发布资源
+                </div>
             </div>
         </div>
-        <div class="confirm" @click="confirm">确认发布</div>
+        <!-- <div class="confirm" @click="confirm">确认发布</div> -->
+        <authenPopUp :param="Titles"></authenPopUp>
+        <div class="black_shade" v-show="Titles.selectType" @click="cancelTitle">
+        </div>
     </div>
 </template>
 <script>
 import common from '../../common/common.js'
 import validation from '../../validation/validation.js'
 import myHeader from '../../components/tools/myHeader'
+import authenPopUp from '../../components/popUpType/authenPopUp'
 import imageUpload from '../../components/release/upLoadImgs' /**/
 import needBasic from '../../components/release/needReleaseBasic' //resourceReleaseTop
 import releaseBasic from '../../components/release/resourceReleaseBasic'
 import userInfor from '../../components/release/userInfor'
 import httpService from '../../common/httpService.js'
-
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
             return {
                 param: {
                     name: '资源发布',
                     router: 'home'
+                },
+                Titles: {
+                    myTitle: true,
+                    selectType: false
                 },
                 imgs: [],
                 img_src: '/static/images/3.jpg',
@@ -145,8 +199,14 @@ export default {
                 imgArr: [],
                 selected: '1',
                 todos: {},
-                id: ''
+                id: '',
+                typeIndex: 2,
 
+            }
+        },
+        computed: {
+            userInfor() {
+                return this.$store.state.user.userInfor;
             }
         },
         methods: {
@@ -176,7 +236,7 @@ export default {
                     common.$emit('close-load');
                 })
             },
-            confirm() {
+            confirm(index) {
                 let _self = this;
                 var checkArr = [];
                 let checkBreedId = validation.checkNull(_self.obj.breedId, '请先选择品种');
@@ -220,6 +280,8 @@ export default {
                         return;
                     }
                 }
+                _self.typeIndex = index;
+                console.log(222, _self.typeIndex)
                 common.$emit("confirm", {
                     message: '确定发布资源？',
                     title: '提示',
@@ -228,7 +290,8 @@ export default {
             },
             release() {
                 let _self = this;
-                console.log(33,_self.id)
+                console.log(33, _self.id);
+                console.log(this.userInfor.fullname)
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -243,8 +306,8 @@ export default {
                         price: _self.obj.sales_price,
                         sampling: _self.obj.sampling,
                         quality: _self.obj.selling_point,
-                        customerName: _self.obj.name,
-                        customerPhone: _self.obj.phone,
+                        customerName: _self.userInfor.fullname,
+                        customerPhone: _self.userInfor.phone,
                         editImage: _self.imgArr,
                         sampleNumber: _self.obj.weight,
                         sampleAmount: _self.obj.price,
@@ -267,8 +330,8 @@ export default {
                             price: _self.obj.sales_price,
                             sampling: _self.obj.sampling,
                             quality: _self.obj.selling_point,
-                            customerName: _self.obj.name,
-                            customerPhone: _self.obj.phone,
+                            customerName: _self.userInfor.fullname,
+                            customerPhone: _self.userInfor.phone,
                             editImage: _self.imgArr,
                             sampleNumber: _self.obj.weight,
                             sampleAmount: _self.obj.price,
@@ -288,20 +351,27 @@ export default {
                     if (suc.data.code == '1c01') {
                         common.$emit('message', suc.data.msg);
                         common.$emit('informMyRes', 'refurbish');
+
                         let id = suc.data.biz_result.intentionId;
+                        if (_self.typeIndex == 2) {
+                            if (id) {
+                                common.$emit('informSupplySuccess', suc.data.biz_result.intentionId);
+                                _self.$router.push("/releaseResourceSuccess" + '/' + id);
+                            }
+                            if (!id) {
+                                common.$emit('informSupplySuccess', _self.id);
+                                _self.$router.push("/releaseResourceSuccess" + '/' + _self.id);
+                            }
+                        } else if (_self.typeIndex == 1) {
+                            //console.log(12313213)
+                            _self.Titles.selectType = true;
+                        }
                         _self.$store.dispatch('getCustomer', {
-                            name: _self.obj.name,
-                            phone: _self.obj.phone
+                            name: _self.userInfor.fullname,
+                            phone: _self.userInfor.phone
                         })
-                        
-                        if(id){
-                            common.$emit('informSupplySuccess', suc.data.biz_result.intentionId);
-                            _self.$router.push("/releaseResourceSuccess" + '/' + id);
-                        }
-                        if(!id){
-                            common.$emit('informSupplySuccess', _self.id);
-                            _self.$router.push("/releaseResourceSuccess" + '/' + _self.id);
-                        }
+
+
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
@@ -347,7 +417,7 @@ export default {
                         _self.obj.id = result.id;
                         _self.obj.breedId = result.breedId;
                         _self.imgArr = result.image;
-                        
+
                         common.$emit("Needrelease", {
                             breedName: result.breedName,
                             breedId: result.breedId
@@ -362,12 +432,12 @@ export default {
             },
             getUrl(param) {
                 console.log(1, param)
-                //this.imgArr.push(param.url);
+                    //this.imgArr.push(param.url);
                 let _self = this;
-                if(this.imgArr.length <= 5){
+                if (this.imgArr.length <= 5) {
                     if (param.url) _self.imgArr.push(param.url);
-                    if(_self.imgArr.length == 5){
-                        common.$emit('message','最多只能上传5张图片！')
+                    if (_self.imgArr.length == 5) {
+                        common.$emit('message', '最多只能上传5张图片！')
                     }
                 }
             },
@@ -375,7 +445,7 @@ export default {
                 let _self = this;
 
                 // function deletImgs() {
-                    _self.imgArr.splice(index, 1);
+                _self.imgArr.splice(index, 1);
                 // }
                 // common.$emit("confirm", {
                 //     message: '确定删除？',
@@ -394,6 +464,10 @@ export default {
                 } else {
                     _self.getResourceDetail(id);
                 }
+            },
+            cancelTitle() {
+                let _self = this;
+                _self.Titles.selectType = false;
             }
 
         },
@@ -402,13 +476,15 @@ export default {
             needBasic,
             myHeader,
             releaseBasic,
-            userInfor
+            userInfor,
+            authenPopUp
         },
         created() {
             let _self = this;
             this.selectType(_self.$route.params.id);
             this.id = _self.$route.params.id;
-            _self.getInfo();
+            //_self.getInfo();
+            _self.$store.dispatch('getUserInfor');
             common.$on('inforReleases', function(item) {
                 _self.obj.drug_name = '';
                 _self.obj.spec = '';
@@ -421,10 +497,12 @@ export default {
                 _self.obj.number_unit = '斤';
                 _self.obj.number_id = 1;
                 _self.imgArr = [];
-                _self.getInfo();
+                //_self.getInfo();
+                _self.$store.dispatch('getUserInfor');
             })
             common.$on("res-id", function(item) {
-                _self.getInfo(item);
+                //_self.getInfo(item);
+                _self.$store.dispatch('getUserInfor');
                 _self.getResourceDetail(item); //来自我的资源
                 _self.id = item;
             })

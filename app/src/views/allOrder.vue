@@ -109,7 +109,7 @@ export default {
                     back_id: 0,
                     show: true
                 }, {
-                    name: '待审核',
+                    name: '受理中',
                     back_id: 10,
                     show: false
                 }, {
@@ -415,9 +415,9 @@ export default {
                 _self.data = [{
                     name: '全部订单',
                     back_id: 0,
-                    show: true
+                    show: false
                 }, {
-                    name: '待审核',
+                    name: '受理中',
                     back_id: 10,
                     show: false
                 }, {

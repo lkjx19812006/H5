@@ -845,6 +845,7 @@ export default {
                 window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
             },
             jumpEntrance(path) {
+                let _self = this;
                 if (!path) {
                     common.$emit("confirm", {
                         message: '请下载App后，在App内查看',
@@ -854,6 +855,7 @@ export default {
                 }
                 if (path) {
                     console.log(321321)
+                    
                     common.$emit('clearThisSearch', 1);
                     this.$router.push(path);
                 }

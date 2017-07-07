@@ -273,10 +273,10 @@ Vue.filter('purchaseStatus', function(val) {
             val = '已取消';
             break;
         case 0:
-            val = '待审核';
+            val = '受理中';
             break;
         case 10:
-            val = '待审核';
+            val = '受理中';
             break;
         case 20:
             val = '待付款';
@@ -308,10 +308,10 @@ Vue.filter('sellStatus', function(val) {
             val = '已取消';
             break;
         case 0:
-            val = '待审核';
+            val = '受理中';
             break;
         case 10:
-            val = '待审核';
+            val = '受理中';
             break;
         case 20:
             val = '待买家付款';
