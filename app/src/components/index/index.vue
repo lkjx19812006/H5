@@ -571,24 +571,24 @@
                             </div>
                         </div>
                         <div class="right">
-                            <div class='red' v-if="todo.dayDowns >= 0">{{todo.unitprice}}元/公斤</div>
-                            <!-- <div class='black' v-if="todo.dayDowns == 0">{{todo.unitprice}}元/公斤</div> -->
+                            <div class='red' v-if="todo.dayDowns > 0">{{todo.unitprice}}元/公斤</div>
+                            <div class='black' v-if="todo.dayDowns == 0">{{todo.unitprice}}元/公斤</div>
                             <div class='green' v-if="todo.dayDowns < 0">{{todo.unitprice}}元/公斤</div>
-                            <div class="spec" v-if="todo.dayDowns >= 0">
+                            <div class="spec" v-if="todo.dayDowns > 0">
                                 <div>跌涨价格:</div>
                                 <div><img src="/static/icons/up.png"></div>
                                 <div> +{{todo.dayMoney,5 | filterTxt}}</div>
                             </div>
-                           <!--  <div class="spec" v-if="todo.dayDowns == 0">
+                            <div class="spec" v-if="todo.dayDowns == 0">
                                 跌涨价格: {{todo.dayMoney,5 | filterTxt}}
-                            </div> -->
+                            </div>
                             <div class="spec" v-if="todo.dayDowns < 0">
                                 <div>跌涨价格:</div>
                                 <div><img src="/static/icons/down.png"></div>
                                 <div> -{{todo.dayMoney,5 | filterTxt}}</div>
                             </div>
-                            <div class="spec location" v-if="todo.dayDowns >= 0">跌涨幅度: +{{todo.dayDowns | indexFloatType}}%</div>
-                            <!-- <div class="spec location" v-if="todo.dayDowns == 0">跌涨幅度: {{todo.dayDowns | indexFloatType}}%</div> -->
+                            <div class="spec location" v-if="todo.dayDowns > 0">跌涨幅度: +{{todo.dayDowns | indexFloatType}}%</div>
+                            <div class="spec location" v-if="todo.dayDowns == 0">跌涨幅度: {{todo.dayDowns | indexFloatType}}%</div>
                             <div class="spec location" v-if="todo.dayDowns < 0">跌涨幅度: -{{todo.dayDowns | indexFloatType}}%</div>
                         </div>
                     </div>
@@ -949,7 +949,8 @@ export default {
                         ensure: loadApp
                     });
                     return;
-                } else if (_self.userInfor.userType == '' && _self.userInfor.bizMain == '' && _self.userInfor.manageType == '') {
+                } else if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
+                    console.log(213162376178)
                     function perfect() {
                         if (router == '/releaseNeeds/1') {
                             _self.$store.dispatch('changeRouter', {
@@ -1012,7 +1013,10 @@ export default {
         created() {
             let _self = this;
             if (!common.servicePhone) this.getCustomerPhone();
-            if (common.KEY) _self.$store.dispatch('getUserInfor');
+            if (common.KEY) {
+                console.log(1217389279)
+                _self.$store.dispatch('getUserInfor');
+            }
             if (common.KEY) _self.$store.dispatch('getMessage');
             common.$on('messageBack', function(item) { //由消息列表回来，处理缓存问题
                 if (common.KEY) _self.$store.dispatch('getMessage');

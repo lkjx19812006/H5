@@ -287,7 +287,7 @@ export default {
                     _self.$router.push('/needDetails/' + todo.intentionId);
                 } else if (todo.intentionType == '1') {
                     common.$emit("inform-goodDetail", todo.intentionId);
-                    this.$router.push("/goodDetail/" + todo.intentionId);
+                    this.$router.push("/resourceDetail/" + todo.intentionId);
                 }
             }
         },

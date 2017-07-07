@@ -227,7 +227,8 @@ export default {
                     router: '/releaseNeeds/1'
                 },
                 myShow: {
-                    myShow: false
+                    myShow: false,
+                    myMessage:true,
                 },
                 sortRouter: 'need',
                 sortArr: [{

@@ -15,8 +15,8 @@
                 </div>
                 <input type="text" v-bind:class="{ search_active: keyword }" placeholder="请输入您想要的货物资源" disabled="true" v-model="keyword">
             </div>
-            <img src="/static/icon/i-red.png" class="red_img" v-if="isRead == '0'">
-            <img src="/static/icon/message.png" class="message" @click.stop.prevent="jump('/message')">
+            <img src="/static/icon/i-red.png" class="red_img" v-if="isRead == '0'" v-show="param.myMessage">
+            <img src="/static/icon/message.png" class="message" @click.stop.prevent="jump('/message')" v-show="param.myMessage">
         </div>
         <div class="search-div" v-show="param.myShow">
             <div class="search_content" v-bind:class="{ search_active: keyword }">

@@ -12,6 +12,9 @@
 </template>
 <script>
 import common from '../../common/common.js'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
             return {
@@ -34,7 +37,12 @@ export default {
         },
         props: {
             param: {
-                default: null
+                
+            }
+        },
+        computed: {
+            userInfor() {
+                return this.$store.state.user.userInfor;
             }
         },
         created() {
@@ -60,15 +68,18 @@ export default {
             },
             jump(router) {
                 let _self = this;
+                //console.log(1,_self.param)
                 if (router == 'detailsPage') {
-                    if (_self.param.employee <= 100000) {
+                    if (_self.userInfor.employee <= 100000) {
                         // common.$emit("confirm", {
                         //     message: '暂无专属客户',
                         //     title: '提示',
                         //     ensure:'' 
                         // });
+
                         common.$emit('message','暂无专属客服')
-                    } else if (_self.param.employee > 100000) {
+                    } else if (_self.userInfor.employee > 100000) {
+                        common.$emit('mineToDetailPage',1)
                         _self.$router.push('/detailsPage');
                     } /*else {
                         common.$emit("confirm", {

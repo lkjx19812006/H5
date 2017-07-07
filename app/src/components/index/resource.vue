@@ -201,7 +201,8 @@ export default {
                 myShow: {
                     myShow: false,
                     mycart: true,
-                    resource:true
+                    resource:true,
+                    myMessage:true,
                 },
                 sortRouter: 'resource',
                 sortArr: [{

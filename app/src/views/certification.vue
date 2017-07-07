@@ -35,7 +35,7 @@
                         <p v-bind:class="{point:index == 0,'nor_point':index == 1}">{{todo.point}}</p>
                     </div>
                 </div>
-               <!--  <div class="other_item">
+                <!--  <div class="other_item">
                     <p>已通过审核照片</p>
                     <div class="pass_image"><img :src="obj.url"></div>
                 </div> -->
@@ -86,15 +86,23 @@ export default {
                 imgageArr: [{
                     name: 'intention',
                     index: 0,
+                    catagory: '1',
                     url: ''
                 }, {
                     name: 'intention',
                     index: 1,
+                    catagory: '2',
                     url: ''
                 }],
                 left_url: '',
                 right_url: '',
-                arr: ['', '']
+                arr: [{
+                    path: '',
+                    catagory: '1',
+                }, {
+                    path: '',
+                    catagory: '2',
+                }]
 
             }
         },
@@ -136,7 +144,7 @@ export default {
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'userService',
-                    biz_method: 'queryUserAuthenList',
+                    biz_method: 'queryUserAuthenImage',
                     biz_param: {
                         type: 0
                     }
@@ -153,16 +161,32 @@ export default {
                         //     _self.obj.url = ''
                         // }
                         _self.obj.authenType = suc.data.biz_result.authenType;
+                        let list = suc.data.biz_result.list;
                         if (suc.data.biz_result.authenType == 1) { //通过获取的authenType值判断应该表述的状态
                             _self.authen_name = '审核中';
                             _self.authen_title = "正在审核";
+                            for (var i = 0; i < _self.imgageArr.length; i++) {
+                                for (var j = 0; j < list.length; j++) {
+                                    if (_self.imgageArr[i].catagory == list[j].category) {
+                                        _self.imgageArr[i].url = list[j].path;
+                                    }
+                                }
+                            }
+
                         } else if (suc.data.biz_result.authenType == 2) {
                             _self.authen_name = '已通过';
                             _self.authen_title = "已通过审核";
+                            for (var i = 0; i < _self.imgageArr.length; i++) {
+                                for (var j = 0; j < list.length; j++) {
+                                    if (_self.imgageArr[i].catagory == list[j].category) {
+                                        _self.imgageArr[i].url = list[j].path;
+                                    }
+                                }
+                            }
                         } else if (suc.data.biz_result.authenType == 3) {
                             _self.authen_name = '未通过';
                             _self.authen_title = "未通过审核";
-                        }else if (suc.data.biz_result.authenType == 0) {
+                        } else if (suc.data.biz_result.authenType == 0) {
                             _self.authen_name = '申请认证';
                             _self.authen_title = "未审核";
                         }
@@ -176,19 +200,21 @@ export default {
             },
             getUrl(param) { //上传图片的url放入return中储存起来
                 let _self = this;
+                console.log(param)
                 if (param.index == 0) {
-                    _self.arr[0] = param.url;
+                    _self.arr[0].path = param.url;
                 } else if (param.index == 1) {
-                    _self.arr[1] = param.url;
+                    _self.arr[1].path = param.url;
                 }
             },
             referTo() { //用户认证提交接口
                 let _self = this;
+                console.log(_self.arr)
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'userService',
-                    biz_method: 'submitAuthen',
+                    biz_method: 'submitAuthenImage',
                     biz_param: {
                         type: 0,
                         authenImage: _self.arr
@@ -201,8 +227,9 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         _self.inquiry();
-                        common.$emit("informAccountinfo", 1);
-                        common.$emit("informAccountFinish", 1);
+                        _self.$store.dispatch('getUserInfor');
+                        // common.$emit("informAccountinfo", 1);
+                        // common.$emit("informAccountFinish", 1);
                     }
                     common.$emit('message', suc.data.msg);
                     console.log(suc);

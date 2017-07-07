@@ -249,19 +249,19 @@
         <opinion :arr="arr" class="opinion" v-show="opinion" v-on:selectIt="selectIt" v-on:cancel="cancel"></opinion>
         <myHeader :param="param"></myHeader>
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-bind:class="{onscroll:!show || !opinion}">
-            <div class="static" v-if="obj.onSell == 1 && !type">
+            <div class="static" v-if="obj.onSell == 1 && obj.isMy==1">
                 <img src="/static/icon/examine.png">
                 <div class="static_word">审核中</div>
             </div>
-            <div class="static" v-if="obj.onSell == -2 && !type">
+            <div class="static" v-if="obj.onSell == -2 && obj.isMy==1">
                 <img src="/static/icon/un-pass.png">
                 <div class="static_word">审核未通过</div>
             </div>
-            <div class="static" v-if="obj.onSell == 4 && !type">
+            <div class="static" v-if="obj.onSell == 4 && obj.isMy==1">
                 <img src="/static/icon/askover.png">
                 <div class="static_word">询价结束</div>
             </div>
-            <div class="static" v-if="obj.onSell == 2 && !type">
+            <div class="static" v-if="obj.onSell == 2 && obj.isMy==1">
                 <img src="/static/icon/ask.png">
                 <div class="static_word">询价中</div>
             </div>
@@ -328,7 +328,7 @@
             </div>
             <!-- <div @click="go(obj.id)">hsaddjsahdkj</div> -->
         </div>
-        <div class="share" v-show="type">
+        <div class="share" v-show="obj.isMy !== 1">
             <div class="offer_it">
                 <img src="/static/icon/offer-price.png">
                 <div @click="jump(obj)" v-if="obj.indentType !== 0">我要报价</div>
@@ -343,7 +343,7 @@
                 <div>暂不参加</div>
             </div>
         </div>
-        <div class="share" v-show="!type">
+        <div class="share" v-show="obj.isMy == 1">
             <div class="offer_it send_friend" @click="resive(obj.id)">
                 <img src="/static/icon/offer-price.png">
                 <div>编辑</div>
@@ -472,10 +472,6 @@ export default {
                 let _self = this;
                 if (!common.KEY) {
                     function loadApp() {
-                        // common.$emit('back_login', {
-                        //     id: id,
-                        //     isMy: _self.obj.isMy
-                        // });
                         common.$emit('setParam', 'backRouter', '/needDetails/' + _self.id);
                         if (common.wxshow) {
                             common.getWxUrl();
@@ -492,6 +488,21 @@ export default {
                 } else if (_self.obj.isMy == 1) {
                     common.$emit('message', '您本人发布的求购不能参与评论！')
                 } else {
+                    if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
+                        function perfect() {
+                            // _self.$store.dispatch('changeRouter',{
+                            //     index:3,
+                            //     id:obj.id
+                            // })
+                            _self.$router.push('/perfectObject');
+                        }
+                        common.$emit('confirm', {
+                            message: '请先完善信息',
+                            title: '提示',
+                            ensure: perfect
+                        });
+                        return;
+                    }
                     this.opinion = true;
                 }
 
@@ -531,7 +542,7 @@ export default {
                 } else if (obj.isMy == 1) {
                     common.$emit('message', '您本人发布的求购不能进行报价！')
                 } else {
-                    if (_self.userInfor.userType == '' && _self.userInfor.bizMain == '' && _self.userInfor.manageType == '') {
+                    if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
                         function perfect() {
                             _self.$store.dispatch('changeRouter',{
                                 index:3,

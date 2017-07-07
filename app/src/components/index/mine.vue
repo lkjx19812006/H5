@@ -247,7 +247,7 @@ export default {
         },
         created() {
             let _self = this;
-
+            
             common.$on('myInfo', function(myInfo) {
                 if (common.SID) {
                     _self.information = myInfo;

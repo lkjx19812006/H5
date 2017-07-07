@@ -140,6 +140,9 @@ export default {
 
         created() {
             let _self = this;
+            common.$on('mineToDetailPage',function(id){
+                _self.getHttp();
+            })
             _self.getHttp();
 
         },

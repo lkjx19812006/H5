@@ -1,6 +1,6 @@
 <template>
     <div class="content telAndAttention">
-        <button class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="call()"> 
+        <button class="mint-button mint-button--primary mint-button--normal small_button" v-on:click="call()">
             <img src="/static/icons/tel.png">
             <p>电话</p>
         </button>
@@ -17,34 +17,44 @@
 <script>
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
+import {
+    mapGetters
+} from 'vuex'
 export default {
-    data(){
-        return{
-            phone:common.servicePhone
-        }
-    },
-    props: {
-        obj: {}
-    },
-    methods: {
-        call(){
-             window.location.href = "tel:"+this.phone;
+    data() {
+            return {
+                phone: common.servicePhone
+            }
         },
-        getCustomerPhone() {
-            let _self = this;
-            this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
-                if (response.data.code == '1c01') {
-                    console.log(response.data);
-                    common.servicePhone=response.data.biz_result.serviceMobile;
-                    _self.phone=response.data.biz_result.serviceMobile;
-                }
-            }, (err) => {
-                common.$emit('message', err.data.msg);
-            });
+        props: {
+            obj: {}
         },
-        myAttention(type) {
-            if (!common.customerId) {
-                 let _self=this;
+        computed: {
+            userInfor() {
+                return this.$store.state.user.userInfor;
+            }
+        },
+        methods: {
+            call() {
+                window.location.href = "tel:" + this.phone;
+            },
+            getCustomerPhone() {
+                let _self = this;
+                this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
+                    if (response.data.code == '1c01') {
+                        console.log(response.data);
+                        common.servicePhone = response.data.biz_result.serviceMobile;
+                        _self.phone = response.data.biz_result.serviceMobile;
+                    }
+                }, (err) => {
+                    common.$emit('message', err.data.msg);
+                });
+            },
+            myAttention(type) {
+                let _self = this;
+                if (!common.KEY) {
+                    let _self = this;
+
                     function loadApp() {
                         if (common.wxshow) {
                             common.getWxUrl();
@@ -57,46 +67,61 @@ export default {
                         title: '提示',
                         ensure: loadApp
                     });
-                    return ;
-            }
-            let _self = this;
-            common.$emit('show-load');
-            let url = common.addSID(common.urlCommon + common.apiUrl.most);
-            let body = {
-                biz_module: 'userService',
-                biz_method: 'userAttention',
-                biz_param: {
-                    intentionId: _self.obj.id,
-                    type: type,
-                    breedName: _self.obj.breedName,
-                    intentionType: _self.obj.type
-                }
-            };
-            body.time = Date.parse(new Date()) + parseInt(common.difTime);
-            body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-            httpService.addAddress(url, body, function(suc) {
-                common.$emit('close-load');
-                if (suc.data.code == '1c01') {
-                    common.$emit('message', suc.data.msg);
-                    common.$emit("informResAttention",_self.obj.type);
-                    if (type) {
-                        _self.obj.isAttention = 1;
-                    } else {
-                        _self.obj.isAttention = 0;
+                    return;
+                } else if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
+                    function perfect() {
+                        // _self.$store.dispatch('changeRouter', {
+                        //     index: 4,
+                        //     id: obj.id
+                        // })
+                        //console.log(21321313)
+                        _self.$router.push('/perfectObject');
                     }
-                } else {
-                    common.$emit('message', suc.data.msg);
+                    common.$emit('confirm', {
+                        message: '请先完善信息',
+                        title: '提示',
+                        ensure: perfect
+                    });
+                    return;
                 }
 
-            }, function(err) {
-                common.$emit('close-load');
-                common.$emit('message', err.data.msg);
-            })
+                common.$emit('show-load');
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
+                    biz_module: 'userService',
+                    biz_method: 'userAttention',
+                    biz_param: {
+                        intentionId: _self.obj.id,
+                        type: type,
+                        breedName: _self.obj.breedName,
+                        intentionType: _self.obj.type
+                    }
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.addAddress(url, body, function(suc) {
+                    common.$emit('close-load');
+                    if (suc.data.code == '1c01') {
+                        common.$emit('message', suc.data.msg);
+                        common.$emit("informResAttention", _self.obj.type);
+                        if (type) {
+                            _self.obj.isAttention = 1;
+                        } else {
+                            _self.obj.isAttention = 0;
+                        }
+                    } else {
+                        common.$emit('message', suc.data.msg);
+                    }
+
+                }, function(err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            }
+        },
+        created() {
+            if (!common.servicePhone) this.getCustomerPhone();
         }
-    },
-    created() {
-        if(!common.servicePhone)this.getCustomerPhone();
-    }
 }
 </script>
 <style scoped>

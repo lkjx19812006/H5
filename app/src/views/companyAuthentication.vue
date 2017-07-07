@@ -201,7 +201,7 @@ export default {
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'userService',
-                    biz_method: 'queryUserAuthenList',
+                    biz_method: 'queryUserAuthenImage',
                     biz_param: {
                         type: 1
                     }
@@ -216,39 +216,42 @@ export default {
                         let list = suc.data.biz_result.list;
                         if (suc.data.biz_result.authenType == 1) {
                             _self.authen_name = '审核中';
-                            if (list.length == 4) {
-                                if (list[0].catagory) {
+                            if (list[0].category) {
+                                if (list[0].category > 8) {
                                     for (var i = 0; i < _self.companyArr.length; i++) {
-                                        if (_self.companyArr[i].catagory == list[i].catagory) {
-                                            _self.companyArr[i].url = list[i].path;
+                                        for (var j = 0; j < list.length; j++) {
+                                            if (_self.companyArr[i].catagory == list[j].category) {
+                                                _self.companyArr[i].url = list[j].path;
+                                            }
                                         }
                                     }
-                                }
-                            } else if (list.length == 6) {
-                                if (list[0].catagory) {
+                                } else {
                                     for (var i = 0; i < _self.personImgArr.length; i++) {
-                                        if (_self.personImgArr[i].catagory == list[i].catagory) {
-                                            _self.personImgArr[i].url = list[i].path;
+                                        for (var j = 0; j < list.length; j++) {
+                                            if (_self.personImgArr[i].catagory == list[j].category) {
+                                                _self.personImgArr[i].url = list[j].path;
+                                            }
                                         }
                                     }
                                 }
                             }
-
                         } else if (suc.data.biz_result.authenType == 2) {
                             _self.authen_name = '已通过';
-                            if (list.length == 4) {
-                                if (list[0].catagory) {
+                            if (list[0].category) {
+                                if (list[0].category > 8) {
                                     for (var i = 0; i < _self.companyArr.length; i++) {
-                                        if (_self.companyArr[i].catagory == list[i].catagory) {
-                                            _self.companyArr[i].url = list[i].path;
+                                        for (var j = 0; j < list.length; j++) {
+                                            if (_self.companyArr[i].catagory == list[j].category) {
+                                                _self.companyArr[i].url = list[j].path;
+                                            }
                                         }
                                     }
-                                }
-                            } else if (list.length == 6) {
-                                if (list[0].catagory) {
+                                } else {
                                     for (var i = 0; i < _self.personImgArr.length; i++) {
-                                        if (_self.personImgArr[i].catagory == list[i].catagory) {
-                                            _self.personImgArr[i].url = list[i].path;
+                                        for (var j = 0; j < list.length; j++) {
+                                            if (_self.personImgArr[i].catagory == list[j].category) {
+                                                _self.personImgArr[i].url = list[j].path;
+                                            }
                                         }
                                     }
                                 }
@@ -257,7 +260,7 @@ export default {
                         } else if (suc.data.biz_result.authenType == 3) {
                             _self.authen_name = '未通过';
 
-                        }else if(suc.data.biz_result.authenType == 0){
+                        } else if (suc.data.biz_result.authenType == 0) {
                             _self.authen_name = '申请认证';
                         }
 
@@ -354,7 +357,7 @@ export default {
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'userService',
-                    biz_method: 'submitAuthen',
+                    biz_method: 'submitAuthenImage',
                     biz_param: {
                         type: 1,
                         authenImage: arr
@@ -367,8 +370,9 @@ export default {
                     common.$emit('close-load');
                     if (suc.data.code == '1c01') {
                         _self.inquiry();
-                        common.$emit("informAccountinfo", 1);
-                        common.$emit("informAccountFinish", 1);
+                        _self.$store.dispatch('getUserInfor');
+                        // common.$emit("informAccountinfo", 1);
+                        // common.$emit("informAccountFinish", 1);
                     }
                     common.$emit('message', suc.data.msg);
                     //console.log(suc.data.msg)  
