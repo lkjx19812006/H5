@@ -311,9 +311,9 @@ input {
                     </div>
                 </div>
             </div>
-            <div class="foot" v-if="userInfor.ctype == 0 && userInfor.utype == 0">
+            <div class="foot" v-if="myTypes">
                 <div class="titles">
-                    * 通过认证后，您发布的需求排序将会货的大量的曝光！
+                    * 通过认证后，您发布的需求将会货的大量的曝光！
                 </div>
                 <div class="confirm other" @click="confirm(1)" v-if="!obj.tshow">
                     发布求购并认证
@@ -322,8 +322,8 @@ input {
                     发布求购
                 </div>
             </div>
-            <div class="foot" v-if="userInfor.ctype !== 0 || userInfor.utype !== 0">
-                <div class="titles">
+            <div class="foot" v-if="!myTypes">
+                <div class="titles" v-if="userInfor.utype == 2 || userInfor.ctype == 2">
                     * 您已通过认证，您发布的需求将会大量曝光！
                 </div>
                 <div class="confirm" @click="confirm(2)" v-if="!obj.tshow">
@@ -447,6 +447,21 @@ export default {
         computed: {
             userInfor() {
                 return this.$store.state.user.userInfor;
+            },
+            myTypes() {
+                let ctype = this.$store.state.user.userInfor.ctype;
+                let utype = this.$store.state.user.userInfor.utype;
+                if (ctype == 0 && utype == 0) {
+                    return true
+                } else if (ctype == 0 && utype == 3) {
+                    return true
+                } else if (ctype == 3 && utype == 0) {
+                    return true
+                } else if (ctype == 3 && utype == 3) {
+                    return true
+                } else {
+                    return false
+                }
             }
         },
         methods: {

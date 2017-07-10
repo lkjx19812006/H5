@@ -952,7 +952,7 @@ export default {
                     });
                     return;
                 } else if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
-                    console.log(213162376178)
+                    console.log(213162376178);
                     function perfect() {
                         if (router == '/releaseNeeds/1') {
                             _self.$store.dispatch('changeRouter', {

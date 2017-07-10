@@ -40,6 +40,7 @@ input {
                 text-align: left;
                 padding-left: 15px;
                 .title {
+                    font-weight: bold;
                     font-size: 16px;
                     line-height: 16px;
                     color: #1A1A1A;
@@ -63,12 +64,26 @@ input {
             }
         }
     }
+    .sbox {
+        .fbox {
+            margin-top: 100px;
+            .no_message {
+                width: 83px;
+            }
+            .words {
+                font-size: 14px;
+                color: #D0D0D0;
+                text-align: center;
+                margin-top: 10px;
+            }
+        }
+    }
 }
 </style>
 <template>
     <div class="message">
         <userHead :param="paramHead"></userHead>
-        <div class="box">
+        <div class="box" v-if="arr.length !== 0">
             <div class="inbox" v-for="(todo,index) in arr" @click="jump(todo)">
                 <div class="image">
                     <img :src="todo.url" class="img">
@@ -78,6 +93,14 @@ input {
                     <div class="title">{{todo.name}}</div>
                     <div class="other" v-show="todo.total!==0">{{todo.content}}</div>
                     <div class="other" v-show="todo.total==0">{{todo.nohave}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="sbox" v-if="arr.length == 0">
+            <div class="fbox">
+                <img src="/static/icon/no-message.png" class="no_message">
+                <div class="words">
+                    亲，暂时没有消息哦！
                 </div>
             </div>
         </div>
@@ -137,7 +160,7 @@ export default {
                                 type: result[i].type,
                                 url: '',
                                 content: '',
-                                nohave:''
+                                nohave: ''
                             }
                             switch (obj.type) {
                                 case 1:
@@ -198,7 +221,7 @@ export default {
                         break;
                     case 5:
                         router = '/systemMessage';
-                        break;  
+                        break;
                 }
                 if (router) {
                     this.$router.push(router + '?type=' + todo.type);

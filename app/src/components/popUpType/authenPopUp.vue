@@ -47,8 +47,8 @@
 <template>
     <div class="select_type" v-show="param.selectType">
         <div class="name">选择认证</div>
-        <div class="type_one" @click="person">个人用户</div>
-        <div class="type_two" @click="company">企业用户</div>
+        <div class="type_one" @click="person">个人认证</div>
+        <div class="type_two" @click="company">企业认证</div>
     </div>
 </template>
 <script>

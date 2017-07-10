@@ -174,7 +174,7 @@ Vue.filter('successTimeFormats', function(val) {
         let h = date.getHours();
         let m = date.getMinutes();
         // let s = date.getSeconds(); 
-        val = Y + '年' + M + '月' + D + '号' + ' ' + h + ':' + m;
+        val = Y + '年' + M + '月' + D + '日' + ' ' + h + ':' + m;
     }
     return val;
 });

@@ -234,12 +234,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="title_box">
+                <!-- <div class="title_box">
                     <div class="inbox">
                         <div class="left">付款方式</div>
                         <div class="right">{{obj.content.paymentWay}}</div>
                     </div>
-                </div>
+                </div> -->
                 <div class="title_box">
                     <div class="inbox last">
                         <div class="left">备注信息</div>

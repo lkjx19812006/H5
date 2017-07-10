@@ -54,6 +54,7 @@ input {
                 .content {
                     padding: 9px 4px 10px 4px;
                     color: #4D4D4D;
+                    font-weight: bold;
                     font-size: 15px;
                     line-height: 20px;
                     border-bottom: 1px solid #E6E6E6;

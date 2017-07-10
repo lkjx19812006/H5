@@ -41,6 +41,7 @@ input {
                 .content {
                     padding: 9px 4px 18px 4px;
                     color: #4D4D4D;
+                    font-weight: bold;
                     font-size: 15px;
                     line-height: 20px;
                     border-bottom: 1px solid #E6E6E6;
@@ -281,12 +282,11 @@ export default {
                 _self.isRead(todo.id);
                 if (todo.intentionType == '0') {
                     common.$emit("needToDetails", {
-                        id: todo.intentionId,
-                        
+                        id: todo.intentionId,        
                     });
                     _self.$router.push('/needDetails/' + todo.intentionId);
                 } else if (todo.intentionType == '1') {
-                    common.$emit("inform-goodDetail", todo.intentionId);
+                    common.$emit("resourceDetail", todo.intentionId);
                     this.$router.push("/resourceDetail/" + todo.intentionId);
                 }
             }

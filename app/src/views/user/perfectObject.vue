@@ -76,11 +76,11 @@ export default {
                 },
                 arr: [{
                     url: '/static/icon/buy-man.png',
-                    name: '我是买家',
+                    name: '我是买方',
                     userType:'1',
                 }, {
                     url: '/static/icon/sell-man.png',
-                    name: '我是卖家',
+                    name: '我是卖方',
                     userType:'2',
                 }, {
                     url: '/static/icon/sellorbuy-man.png',

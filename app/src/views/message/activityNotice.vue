@@ -40,12 +40,13 @@ input {
                 padding: 10px 10px 11px 10px;
                 .title {
                     padding: 0px 4px;
-                    color: #000;
+                    color: #333;
                     font-size: 15px;
+                    font-weight: bold;
                 }
                 .content {
                     padding: 9px 4px 10px 4px;
-                    color: #4D4D4D;
+                    color: #737373;
                     font-size: 15px;
                     line-height: 20px;
                     border-bottom: 1px solid #E6E6E6;
@@ -92,9 +93,9 @@ input {
                 <div class="item" v-for="todo in arr" @click="jump(todo)">
                     <div class="top">{{todo.creatTime | successTimeFormats}}</div>
                     <div class="main" v-bind:class="{is_read:todo.isRead==1}">
-                        <div class="title" v-bind:class="{word_read:todo.isRead==1}">{{todo.title}}</div>
+                        <div class="title" v-bind:class="{word_read:todo.isRead==1}">{{todo.title,16 | filterTxt}}</div>
                         <div class="content" v-bind:class="{word_read:todo.isRead==1}">
-                            {{todo.message}}
+                            {{todo.message,30 | filterTxt}}
                         </div>
                         <div class="footer" v-bind:class="{word_read:todo.isRead==1}">
                             <span>点击查看</span>

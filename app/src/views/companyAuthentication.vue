@@ -49,6 +49,8 @@ export default {
     data() {
             return {
                 authen_name: '申请认证',
+                photo: false,
+                other_photo: false,
                 myShow: {
                     show: true,
                     left: true,
@@ -215,7 +217,7 @@ export default {
                         _self.obj.authenType = suc.data.biz_result.authenType;
                         let list = suc.data.biz_result.list;
                         if (suc.data.biz_result.authenType == 1) {
-                            _self.authen_name = '审核中';
+                            _self.authen_name = '正在审核';
                             if (list[0].category) {
                                 if (list[0].category > 8) {
                                     for (var i = 0; i < _self.companyArr.length; i++) {
@@ -258,7 +260,7 @@ export default {
                             }
 
                         } else if (suc.data.biz_result.authenType == 3) {
-                            _self.authen_name = '未通过';
+                            _self.authen_name = '重新申请';
 
                         } else if (suc.data.biz_result.authenType == 0) {
                             _self.authen_name = '申请认证';
@@ -272,40 +274,82 @@ export default {
                     common.$emit('message', err.data.msg)
                 })
             },
+            leftIndex() {
+                let _self = this;
+                let count = 0;
+                for (var i = 0; i < 4; i++) {
+                    if (!_self.leftArr[i].path) {
+                        return i;
+                    } else {
+                        count++;
+                    }
+                }
+                if (count == 4) {
+                    _self.photo = true;
+                    console.log(count)
+                }
+            },
+            rightIndex() {
+                let _self = this;
+                let count = 0;
+                for (var i = 0; i < 2; i++) {
+                    if (!_self.rightArr[i].path) {
+                        return i;
+                    } else {
+                        count++;
+                    }
+                }
+                if (count == 2) {
+                    _self.other_photo = true;
+                    console.log(count)
+                }
+            },
             confirm() {
                 let _self = this;
-                console.log(this.leftArr)
                 if (_self.myShow.left) {
-
-                    if (_self.obj.authenType !== 0) {
+                    let index = _self.leftIndex();
+                    if (_self.obj.authenType !== 0 && _self.obj.authenType !== 3) {
                         _self.referTo(_self.obj.authenType);
                     } else {
-
-                        for (var i = 0; i < 4; i++) {
-                            if (_self.leftArr[i] == '') {
-                                common.$emit('message', '请至少上传前四张照片');
-                                console.log(_self.leftArr)
-                                return;
-                            }
+                        switch (index) {
+                            case 0:
+                                common.$emit('message', '请上传工商营业执照');
+                                break;
+                            case 1:
+                                common.$emit('message', '请上传组织机构代码证');
+                                break;
+                            case 2:
+                                common.$emit('message', '请上传税务登记证');
+                                break;
+                            case 3:
+                                common.$emit('message', '请上传银行开户许可证');
+                                break;
                         }
-                        _self.authentication(_self.leftArr);
+                        if (_self.photo) {
+                            _self.authentication(_self.leftArr);
+                        }
                     }
 
                 }
 
 
                 if (_self.myShow.right) {
-                    if (_self.obj.authenType !== 0) {
+                    let other_index = _self.rightIndex();
+                    if (_self.obj.authenType !== 0 && _self.obj.authenType !== 3) {
                         _self.referTo(_self.obj.authenType);
 
                     } else {
-                        for (var i = 0; i < 2; i++) {
-                            if (_self.rightArr[i] == '') {
-                                common.$emit('message', '请至少上传前两张张照片');
-                                return;
-                            }
+                        switch (other_index) {
+                            case 0:
+                                common.$emit('message', '请上传三证合一');
+                                break;
+                            case 1:
+                                common.$emit('message', '请上传银行开户许可证');
+                                break;
                         }
-                        _self.authentication(_self.rightArr);
+                        if(_self.other_photo){
+                            _self.authentication(_self.rightArr);
+                        }
                     }
                 }
 
@@ -344,9 +388,9 @@ export default {
                     case 2:
                         common.$emit("message", '已通过认证');
                         break;
-                    case 3:
-                        common.$emit("message", '未通过认证');
-                        break;
+                        /*case 3:
+                            common.$emit("message", '未通过认证');
+                            break;*/
                     default:
                         break;
                 }

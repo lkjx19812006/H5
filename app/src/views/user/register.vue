@@ -214,7 +214,7 @@ export default {
                         _self.code = wait;
                         if (wait == 0) {
                             clearInterval(time);
-                            _self.code = '获取验证码';
+                            _self.code = '重新获取';
                             _self.buttonDisabled = false;
                         }
                     }, 1000);
@@ -304,7 +304,7 @@ export default {
                 }, function(response) {
                     common.$emit('close-load');
                     if (response.data.code == '1c01') {
-                        common.$emit('message', response.data.msg);
+                        //common.$emit('message', response.data.msg);
                         _self.login();
                     } else {
                         common.$emit('message', response.data.msg);

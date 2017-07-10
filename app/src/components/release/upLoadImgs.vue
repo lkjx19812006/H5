@@ -227,6 +227,7 @@ export default {
 
                     xhr.onreadystatechange = function() {
                         _self.loading = false;
+                        console.log(xhr.readyState)
                         if (xhr.readyState == 4) {
                             let response = JSON.parse(xhr.response);
                             if (response.key) {

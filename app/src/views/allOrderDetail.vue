@@ -266,9 +266,13 @@ export default {
 }
 </script>
 <style scoped>
+.all_order_detail{
+    height:100vh;
+}
 .all_order_detail .box {
     width: 100%;
     float: left;
+    overflow: auto;
 }
 
 .all_order_detail .box .status {

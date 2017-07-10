@@ -181,6 +181,7 @@ export default {
                                 }
                             }
                         }
+
                         xhr.open("POST", url, true);
                         xhr.setRequestHeader("Content-Type", "application/octet-stream");
                         xhr.setRequestHeader("Authorization", "UpToken " + res.biz_result.token);

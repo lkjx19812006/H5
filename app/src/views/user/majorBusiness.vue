@@ -240,6 +240,10 @@ export default {
             }
             common.$on('perfectidToMajorBusiness', function(id) {
                 _self.$store.dispatch('clearRouter');
+                //_self.hotDrug();
+                for(var i=0;i<_self.todos.length;i++){
+                    _self.todos[i].show = false;
+                }
                 _self.arr = [];
             })
             common.$on('accountTomajorBusiness', function(item) { //来自个人账户页面主营品种，处理缓存问题

@@ -85,7 +85,7 @@ export default {
                         _self.code = wait;
                         if (wait == 0) {
                             clearInterval(time);
-                            _self.code = '获取验证码';
+                            _self.code = '重新获取';
                             _self.buttonDisabled = false;
                         }
                     }, 1000);
@@ -97,7 +97,6 @@ export default {
                             mobile: _self.param.phone
                         }
                     }, function(response) {
-
                         if (response.data.code == '1c01') {} else {
                             common.$emit('message', response.data.msg);
                         }

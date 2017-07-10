@@ -248,7 +248,7 @@
             <div @click="jumpSearch" class="search_content">
                 <longSearch :keyword="httpPraram.keyword" v-on:clearSearch="clearKeyword" :param="myShow"></longSearch>
             </div>
-            <perfectTitle :param="Titles" v-if="userInfor.ctype == 0 && userInfor.utype == 0"></perfectTitle>
+            <perfectTitle :param="Titles" v-if="myTypes"></perfectTitle>
             <sort v-on:postId="getId" v-on:initial="initial" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
             <div class="factory">
                 <div class="left" v-bind:class="{active:httpPraram.indentType == 0}" @click="indentType(0)">药厂求购</div>
@@ -429,6 +429,21 @@ export default {
         computed: {
             userInfor() {
                 return this.$store.state.user.userInfor;
+            },
+            myTypes(){
+                let ctype = this.$store.state.user.userInfor.ctype;
+                let utype = this.$store.state.user.userInfor.utype;
+                if(ctype == 0 && utype == 0){
+                    return true
+                }else if(ctype == 0 && utype == 3){
+                    return true
+                }else if(ctype == 3 && utype == 0){
+                    return true
+                }else if (ctype == 3 && utype == 3){
+                    return true
+                }else{
+                    return false
+                }
             }
         },
         methods: {

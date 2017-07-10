@@ -188,7 +188,7 @@ export default {
             },
             jumpPerson() {
                 let _self = this;
-                common.$emit("certification", 1)
+                common.$emit("certification", 1);
                 _self.$router.push('/certification');
             },
             jumpCompany() {

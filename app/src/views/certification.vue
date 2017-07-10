@@ -63,6 +63,7 @@ export default {
             return {
                 authen_name: '申请认证',
                 authen_title: '未审核',
+                photo: false,
                 param: {
                     name: '实名认证',
 
@@ -140,6 +141,7 @@ export default {
             },
             inquiry() { //查询用户认证列表接口
                 let _self = this;
+
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -163,7 +165,7 @@ export default {
                         _self.obj.authenType = suc.data.biz_result.authenType;
                         let list = suc.data.biz_result.list;
                         if (suc.data.biz_result.authenType == 1) { //通过获取的authenType值判断应该表述的状态
-                            _self.authen_name = '审核中';
+                            _self.authen_name = '正在审核';
                             _self.authen_title = "正在审核";
                             for (var i = 0; i < _self.imgageArr.length; i++) {
                                 for (var j = 0; j < list.length; j++) {
@@ -184,7 +186,7 @@ export default {
                                 }
                             }
                         } else if (suc.data.biz_result.authenType == 3) {
-                            _self.authen_name = '未通过';
+                            _self.authen_name = '重新申请';
                             _self.authen_title = "未通过审核";
                         } else if (suc.data.biz_result.authenType == 0) {
                             _self.authen_name = '申请认证';
@@ -238,9 +240,24 @@ export default {
                 })
 
             },
+            arrIndex() {
+                let _self = this;
+                let count = 0;
+                for (var i = 0; i < _self.arr.length; i++) {
+                    if (!_self.arr[i].path) {
+                        return i;
+                    } else {
+                        count++
+                    }
+                }
+                if (count == 2) {
+                    _self.photo = true;
+                }
+            },
             confirm() {
                 let _self = this;
-                if (_self.obj.authenType != 0) {
+                let index = _self.arrIndex();
+                if (_self.obj.authenType != 0 && _self.obj.authenType != 3) {
                     switch (_self.obj.authenType) {
                         case 1:
                             common.$emit("message", '已申请认证，正在审核中');
@@ -248,31 +265,36 @@ export default {
                         case 2:
                             common.$emit("message", '已通过认证');
                             break;
-                        case 3:
-                            common.$emit("message", '未通过认证');
-                            break;
-                        default:
-                            break;
                     }
                 } else {
-                    for (var i = 0; i < _self.arr.length; i++) {
-                        if (_self.arr[i] == '') { //要求用户上传两张照片
-                            common.$emit('message', '请上传身份证照片');
-                            return;
-                        }
+                    switch (index) {
+                        case 0:
+                            common.$emit('message', '请上传身份证正面照！');
+                            break;
+                        case 1:
+                            common.$emit('message', '请上传身份证反面照！');
+                            break;
+                    }
+                    if (_self.photo) {
+                        _self.referTo();
                     }
 
-                    _self.referTo();
-
-
                 }
+            },
+            clearPhoto() {
+
             }
         },
         created() {
             let _self = this;
+
             _self.getHttp();
             _self.inquiry(); //页面刷新的时候调用1.用户信息接口，2.查询用户列表接口
             common.$on("certification", function(item) {
+                // for (var i = 0; i < _self.imgageArr.length; i++) {
+                //     _self.imgageArr[i].url = '';
+                //     _self.arr[i].path = '';
+                // }
                 _self.inquiry(); //从账户信息完成页过来的通知，调用查询用户列表接口
                 _self.getHttp();
             })
