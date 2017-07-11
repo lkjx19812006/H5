@@ -42,9 +42,9 @@
                     <releaseSuccessTop :words="words"></releaseSuccessTop>
                 </div>
                 <releaseSuccessCenetr :words="words"></releaseSuccessCenetr>
-                <div class="footer">
+                <!-- <div class="footer">
                     <userInfor></userInfor>
-                </div>
+                </div> -->
             </mt-loadmore>
         </div>
         <div class="bottom">

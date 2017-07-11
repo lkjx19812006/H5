@@ -34,8 +34,25 @@
             word-break: break-all;
         }
     }
+    @media screen {
+        .no_pass {
+            background-color: #fffafa;
+            min-height: 32px;
+            font-size: 14px;
+            text-align: left;
+            padding-left: 15px;
+            color: #ff0000;
+            border-bottom: 1px solid #E6E6E6;
+            line-height: 32px;
+        }
+        @media (max-width: 320px) {
+            .no_pass {
+                font-size: 12px;
+            }
+        }
+    }
     .box {
-        padding: 15px 0 0 15px;
+        padding: 10px 0 0 15px;
         background-color: #fff;
         .inbox {
             border-bottom: 1px solid #E6E6E6;
@@ -45,11 +62,13 @@
             justify-content: space-between;
             .left {
                 flex: 1;
+                margin-left: 19px;
                 color: #343434;
                 text-align: left;
                 @media screen {
                     .breed {
                         font-size: 17px;
+                        line-height: 23px;
                         color: #000;
                         span {
                             font-size: 15px;
@@ -58,10 +77,12 @@
                     }
                     .spec {
                         font-size: 15px;
+                        line-height: 15px;
                     }
                     @media (max-width: 320px) {
                         .breed {
                             font-size: 14px;
+                            line-height: 14px;
                             color: #000;
                             span {
                                 font-size: 12px;
@@ -70,15 +91,22 @@
                         }
                         .spec {
                             font-size: 12px;
+                            line-height: 12px;
                         }
                     }
                 }
+                .first {
+                    margin-top: 20px;
+                }
                 .last {
-                    margin-top: 5px;
+                    margin-top: 6px;
                     .red {
                         color: #fa6705;
                     }
                 }
+            }
+            .top_left {
+                margin-left: 0;
             }
             .right {
                 display: flex;
@@ -145,9 +173,14 @@
         .used {
             position: absolute;
             width: 80px;
-            top: 0px;
-            right: 30px;
+            top: 41px;
+            right: 12px;
         }
+    }
+    .top_titles {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
     .look_history {
         width: 100%;
@@ -220,7 +253,7 @@
                 <titles tab="3" :obj="obj"></titles>
                 <div class="box">
                     <div class="inbox">
-                        <div class="left">
+                        <div class="left top_left">
                             <div class="breed">{{obj.content.breedName}} <span>({{obj.content.number}}{{obj.content.unit}})</span></div>
                             <div class="spec">{{obj.content.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.content.spec,4 | filterTxt}}</div>
                             <div class="spec last">交货地: {{obj.content.address}}</div>
@@ -247,25 +280,28 @@
                     </div>
                 </div>
                 <titles tab="4" :obj="obj"></titles>
-                <div class="tbox">
+                <div class="tbox top_titles">
                     <div>报价状态:
                         <span class="black" v-if="obj.newOffer.accept == '0'">{{obj.newOffer.accept | myOfferStatus}}</span>
                         <span class="red" v-if="obj.newOffer.accept == '1'">{{obj.newOffer.accept | myOfferStatus}}</span>
                         <span class="gray" v-if="obj.newOffer.accept == '2'">{{obj.newOffer.accept | myOfferStatus}}</span>
                         <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span>
                     </div>
-                    <div class="time">报价时间: {{obj.newOffer.otime | timeFormats}}</div>
+                    <div class="time">报价时间: {{obj.newOffer.otime | timeFormat}}</div>
                     <img src="/static/icon/used.png" class="used" v-if="obj.newOffer.accept == '1'">
+                </div>
+                <div class="no_pass" v-if="obj.newOffer.accept == '2'">
+                    未采用理由: {{obj.newOffer.comments}}
                 </div>
                 <div class="box">
                     <div class="inbox">
-                        <div class="left">
-                            <div class="breed">{{obj.newOffer.breedName}} <span>({{obj.newOffer.number}}{{obj.newOffer.unit}})</span></div>
-                            <div class="spec">{{obj.newOffer.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.newOffer.spec,4 | filterTxt}}</div>
-                            <div class="spec last">裸价: <span class="red">{{obj.newOffer.price}}</span>元/{{obj.newOffer.unit}}</div>
-                        </div>
                         <div class="image">
                             <img :src="todo" v-for="(todo,index) in obj.newOffer.image" v-show="index == 0" @click="popUp(obj.newOffer.image)">
+                        </div>
+                        <div class="left">
+                            <div class="breed">{{obj.newOffer.breedName}} <span>({{obj.newOffer.number}}{{obj.newOffer.unit}})</span></div>
+                            <div class="spec first">{{obj.newOffer.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.newOffer.spec,4 | filterTxt}}</div>
+                            <div class="spec last">裸价: <span class="red">{{obj.newOffer.price}}</span>元/{{obj.newOffer.unit}}</div>
                         </div>
                     </div>
                 </div>
@@ -276,25 +312,28 @@
                 </div>
                 <titles tab="5" :obj="obj" v-show="show"></titles>
                 <div class="history_arr" v-for="todo in obj.list" v-if='obj.list.length > 0 && show'>
-                    <div class="tbox">
+                    <div class="tbox top_titles">
                         <div>报价状态:
                             <span class="black" v-show="todo.accept == '0'">{{todo.accept | myOfferStatus}}</span>
                             <span class="red" v-show="todo.accept == '1'">{{todo.accept | myOfferStatus}}</span>
                             <span class="gray" v-show="todo.accept == '2'">{{todo.accept | myOfferStatus}}</span>
                             <span class="black" v-show="todo.accept == '3'">{{todo.accept | myOfferStatus}}</span>
                         </div>
-                        <div class="time">报价时间: {{todo.otime | timeFormats}}</div>
-                        <img src="/static/icon/used.png" class="used" v-if="todo.accept == '1'">
+                        <div class="time">报价时间: {{todo.otime | timeFormat}}</div>
+                        <img src="/static/icon/used.png" class="used" v-show="todo.accept == '1'">
+                    </div>
+                    <div class="no_pass" v-if="todo.accept == '2'">
+                        未采用理由: {{todo.comments}}
                     </div>
                     <div class="box">
                         <div class="inbox">
-                            <div class="left">
-                                <div class="breed">{{todo.breedName}} <span>({{todo.number}}{{todo.unit}})</span></div>
-                                <div class="spec">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
-                                <div class="spec last">裸价: <span class="red">{{todo.price}}</span>元/{{todo.unit}}</div>
-                            </div>
                             <div class="image">
                                 <img :src="item" v-for="(item,index) in todo.image" v-show="index == 0" @click="popUp(todo.image)">
+                            </div>
+                            <div class="left">
+                                <div class="breed">{{todo.breedName}} <span>({{todo.number}}{{todo.unit}})</span></div>
+                                <div class="spec first">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
+                                <div class="spec last">裸价: <span class="red">{{todo.price}}</span>元/{{todo.unit}}</div>
                             </div>
                         </div>
                     </div>

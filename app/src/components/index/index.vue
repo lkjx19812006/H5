@@ -995,7 +995,7 @@ export default {
                     _self.drugGuidePrice();
                     _self.resourceHttp();
                     _self.getImgArr();
-                    if (common.KEY) _self.getMessage();
+                    if (common.KEY) _self.$store.dispatch('getMessage');
                     _self.$refs.loadmore.onTopLoaded(id);
                 }, 500);
             },
@@ -1028,7 +1028,7 @@ export default {
                 if (common.KEY) _self.$store.dispatch('getMessage');
             })
             common.$on('perfectOldCustomer', function(item) { //完善老客户信息，处理缓存问题
-                if (common.KEY) _self.$store.dispatch('getUserInfor')
+                if (common.KEY) _self.$store.dispatch('getUserInfor');
             })
             common.$on('getInfo', function(item) {
                 if (common.KEY) _self.$store.dispatch('getUserInfor'); //来自登录，调用下个人信息接口

@@ -7,7 +7,7 @@
                     {{head.name}}
                 </div>
                 <div class="content">
-                    <input type="text" v-model="head.val">
+                    <textarea v-model="head.val" class="myfullname"></textarea>
                 </div>
             </div>
             <div class="single" v-if="head.type == 'gender'">
@@ -120,13 +120,13 @@ export default {
                         console.log(14565)
                     }
                 }
-
+                //alert(_self.upDataInfor.fullname)
                 //校验
                 let checkArr = [];
                 let checkBizMain = validation.checkNull(_self.upDataInfor.bizMain, '主营品类不能为空！');
                 checkArr.push(checkBizMain);
-                let checkName = validation.checkNameTrue(_self.upDataInfor.fullname);
-                checkArr.push(checkName);
+                // let checkName = validation.checkNameTrue(_self.upDataInfor.fullname);
+                // checkArr.push(checkName);
                 let checkLookcompany = validation.checkLook(_self.upDataInfor.company);
                 checkArr.push(checkLookcompany);
                 let checkLookcompanyShort = validation.checkLook(_self.upDataInfor.companyShort);
@@ -203,7 +203,8 @@ textarea {
 }
 
 .account_revise .single input,
-select {
+select,
+.myfullname {
     width: 100%;
     outline: none;
     border: 0;

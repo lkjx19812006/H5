@@ -24,12 +24,12 @@ export default {
                 selectIndex: 0
             }
         },
-         props: {
-            sortRouter:{
+        props: {
+            sortRouter: {
                 type: String,
                 default: '/home'
             },
-            paramArr:[Array]
+            paramArr: [Array]
         },
         methods: {
             showTable: function(item, index) {
@@ -58,7 +58,7 @@ export default {
                 }
                 this.selectShow = false;
                 let _self = this;
-                _self.$emit("postId", item); 
+                _self.$emit("postId", item);
             }
         },
         created() {
@@ -70,7 +70,6 @@ export default {
 .mypurchase_sort {
     float: left;
     width: 100%;
-
 }
 
 .mypurchase_sort .sort_content {
@@ -78,14 +77,14 @@ export default {
     float: left;
     border-bottom: 1px solid #ddd;
     background: white;
-    display: flex;
-    flex-direction: row;
-   
+    /*display: flex;
+    flex-direction: row;*/
+
 }
 
 .mypurchase_sort .sort_content .sort_content_detail {
     float: left;
-    flex:1;
+    width:25%;
     min-height: 40px;
     line-height: 40px;
     color: #666;
@@ -94,7 +93,7 @@ export default {
 
 .mypurchase_sort .sort_content .sort_content_detail_select {
     float: left;
-   flex:1;
+    width:25%;
     min-height: 40px;
     line-height: 40px;
     color: #EC6817;

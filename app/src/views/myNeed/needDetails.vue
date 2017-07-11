@@ -16,17 +16,29 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        img {
-            width: 100%;
-        }
         .static_word {
-            position: absolute;
             font-size: 16px;
             color: #EB8545;
             text-align: left;
             padding: 25px;
             z-index: 3000;
         }
+    }
+    .examine {
+        background: #fff url('/static/icon/examine.png') no-repeat;
+        background-size: 100% 100%;
+    }
+    .no_pass {
+        background: #fff url('/static/icon/un-pass.png') no-repeat;
+        background-size: 100% 100%;
+    }
+    .over {
+        background: #fff url('/static/icon/askover.png') no-repeat;
+        background-size: 100% 100%;
+    }
+    .ask {
+        background: #fff url('/static/icon/ask.png') no-repeat;
+        background-size: 100% 100%;
     }
     .top {
         background-color: #fff;
@@ -249,20 +261,16 @@
         <opinion :arr="arr" class="opinion" v-show="opinion" v-on:selectIt="selectIt" v-on:cancel="cancel"></opinion>
         <myHeader :param="param"></myHeader>
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-bind:class="{onscroll:!show || !opinion}">
-            <div class="static" v-if="obj.onSell == 1 && obj.isMy==1">
-                <img src="/static/icon/examine.png">
+            <div class="static examine" v-if="obj.onSell == 1 && obj.isMy==1">
                 <div class="static_word">审核中</div>
             </div>
-            <div class="static" v-if="obj.onSell == -2 && obj.isMy==1">
-                <img src="/static/icon/un-pass.png">
+            <div class="static no_pass" v-if="obj.onSell == -2 && obj.isMy==1">
                 <div class="static_word">审核未通过</div>
             </div>
-            <div class="static" v-if="obj.onSell == 4 && obj.isMy==1">
-                <img src="/static/icon/askover.png">
+            <div class="static over" v-if="obj.onSell == 4 && obj.isMy==1">
                 <div class="static_word">询价结束</div>
             </div>
-            <div class="static" v-if="obj.onSell == 2 && obj.isMy==1">
-                <img src="/static/icon/ask.png">
+            <div class="static ask" v-if="obj.onSell == 2 && obj.isMy==1">
                 <div class="static_word">询价中</div>
             </div>
             <div class="top">
@@ -311,7 +319,7 @@
                         <div class="content" v-show="!obj.address">面议</div>
                     </div>
                 </div>
-               <!--  <div class="infor_box">
+                <!--  <div class="infor_box">
                     <div class="infor">
                         <div class="name">付款方式</div>
                         <div class="content" v-show="obj.paymentWay">{{obj.paymentWay}}</div>
@@ -544,9 +552,9 @@ export default {
                 } else {
                     if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
                         function perfect() {
-                            _self.$store.dispatch('changeRouter',{
-                                index:3,
-                                id:obj.id
+                            _self.$store.dispatch('changeRouter', {
+                                index: 3,
+                                id: obj.id
                             })
                             _self.$router.push('/perfectObject');
                         }

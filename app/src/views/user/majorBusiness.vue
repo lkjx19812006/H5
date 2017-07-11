@@ -241,7 +241,7 @@ export default {
             common.$on('perfectidToMajorBusiness', function(id) {
                 _self.$store.dispatch('clearRouter');
                 //_self.hotDrug();
-                for(var i=0;i<_self.todos.length;i++){
+                for (var i = 0; i < _self.todos.length; i++) {
                     _self.todos[i].show = false;
                 }
                 _self.arr = [];
@@ -379,6 +379,7 @@ export default {
                 } else {
                     common.$emit('message', '您选择的品种已经超过十个！')
                 }
+
             },
             clearArr(todo) {
                 let _self = this;
@@ -452,36 +453,32 @@ export default {
         watch: {
             value: function(newValue, oldValue) {
                 let _self = this;
-                window.clearTimeout(this.time);
-                this.time = setTimeout(() => {
-                    common.$emit('show-load');
-                    let body = {
-                        biz_module: 'searchKeywordService',
-                        biz_method: 'querySearchKeywordBreed',
-                        biz_param: {
-                            keyWord: _self.value,
-                            pn: 1,
-                            pSize: 20
+                    window.clearTimeout(this.time);
+                    this.time = setTimeout(() => {
+                        common.$emit('show-load');
+                        let body = {
+                            biz_module: 'searchKeywordService',
+                            biz_method: 'querySearchKeywordBreed',
+                            biz_param: {
+                                keyWord: _self.value,
+                                pn: 1,
+                                pSize: 20
+                            }
                         }
-                    }
-                    if (_self.value) {
+
                         httpService.searchWord(common.urlCommon + common.apiUrl.most, body, function(suc) {
                             common.$emit('close-load');
                             let result = suc.data.biz_result.list;
                             if (suc.data.code == '1c01') {
                                 _self.datas = result;
                             } else {
-                                common.$emit('message', suc.data.msg);
+                            
                             }
                         }, function(err) {
                             common.$emit('close-load');
                             common.$emit('message', err.data.msg);
                         })
-                    } else {
-                        common.$emit('close-load');
-                        _self.datas = [];
-                    }
-                }, 300)
+                    }, 300)
             }
         },
         mounted() {
