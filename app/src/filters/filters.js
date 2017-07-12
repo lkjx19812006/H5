@@ -71,7 +71,7 @@ Vue.filter('needTimeDay', function(due) {
             days = 0;
         }
 
-        if(days > 30){
+        if (days > 30) {
             days = 30;
         }
     } else {
@@ -90,9 +90,9 @@ Vue.filter('theUnit', function(due) {
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
         if (days < 10) {
             days = days
-        }else if(days > 30){
+        } else if (days > 30) {
             days = 0;
-        }  else {
+        } else {
             days = days.toString();
             days = days.split('')[1];
         }
@@ -111,7 +111,7 @@ Vue.filter('decade', function(due) {
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
         if (days < 10) {
             days = 0;
-        }else if(days > 30){
+        } else if (days > 30) {
             days = 3;
         } else {
             days = days.toString();
@@ -371,5 +371,29 @@ Vue.filter('filterTxt', function(txt, num) {
         return txt.substring(0, num) + '...';
     } else {
         return txt
+    }
+})
+
+//遇到；换行
+Vue.filter('lineTxt', function(txt) {
+    if (txt.indexOf('；') !== -1) {
+        let arr = txt.split('');
+        let val1 = arr.splice(0, txt.indexOf('；') + 1).join('');
+        //let val2 = arr.splice(txt.indexOf('；') + 1, txt.length).join('');
+        return val1;
+    } else {
+        return txt;
+    }
+    // if(txt){
+    //     var arr = txt.split('')
+    // }
+})
+
+Vue.filter('lineTxtTwo', function(txt) {
+    if (txt.indexOf('；') !== -1) {
+        let arr = txt.split('');
+        //let val1 = arr.splice(0, txt.indexOf('；') + 1).join('');
+        let val2 = arr.splice(txt.indexOf('；') + 1, txt.length).join('');
+        return val2;
     }
 })

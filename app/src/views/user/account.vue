@@ -1,0 +1,347 @@
+<style lang="less" scoped>
+input[type="text"],
+input[type="submit"],
+input[type="reset"],
+select,
+textarea {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+.killAccScroll {
+    height: 100%;
+    overflow: hidden;
+}
+
+.account {
+    position: relative;
+    .have_border {
+        border-bottom: 1px solid #E6E6E6;
+    }
+    .top_border {
+        border-top: 1px solid #E6E6E6;
+    }
+    .distance {
+        margin-top: 10px;
+    }
+    .basic {
+        .title {
+            padding: 12px 0;
+            padding-left: 15px;
+            background-color: #F5F5F5;
+            color: #AEAEAE;
+            font-size: 13px;
+            text-align: left;
+            border-bottom: 1px solid #E6E6E6;
+        }
+        .box {
+            width: 100%;
+            background-color: #fff;
+            padding-left: 18px;
+            .inbox {
+                padding: 15px 0;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                .left {
+                    font-size: 17px;
+                    line-height: 17px;
+                }
+                .right {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    .photo {
+                        width: 60px;
+                        height: 60px;
+                        overflow: hidden;
+                        border-radius: 30px;
+                    }
+                    .content {
+                        color: #666;
+                        font-size: 14px;
+                    }
+                    .image {
+                        padding: 0 15px;
+                        .right_dir {
+                            height: 12px;
+                            width: 8px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+</style>
+<template>
+    <div class="account">
+        <myHeader :param="head"></myHeader>
+        <div class="page-loadmore-wrapper" ref="wrapper" v-bind:class="{killAccScroll:visible}" :style="{ height: wrapperHeight + 'px' }">
+            <div class="basic">
+                <div class="title">基础信息</div>
+                <div class="box">
+                    <div class="inbox have_border">
+                        <div class="left">头像</div>
+                        <div class="right">
+                            <div class="photo">
+                                <imageUpload :param="param" v-on:postUrl="getUrl"></imageUpload>
+                            </div>
+                            <div class="image">
+                                <img src="/static/images/jiantou.png" class="right_dir">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box have_border" @click="change(userInfor.fullname,1)">
+                    <div class="inbox">
+                        <div class="left">姓名</div>
+                        <div class="right">
+                            <div class="content">{{userInfor.fullname}}</div>
+                            <div class="image">
+                                <img src="/static/images/jiantou.png" class="right_dir">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box top_border distance" @click="open('picker')">
+                    <div class="inbox have_border">
+                        <div class="left">生日</div>
+                        <div class="right">
+                            <div class="content">{{userInfor.birthday | birthdayTime}}</div>
+                            <div class="image">
+                                <img src="/static/images/jiantou.png" class="right_dir">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box" @click="change(userInfor.gender,2)">
+                    <div class="inbox have_border">
+                        <div class="left">性别</div>
+                        <div class="right">
+                            <div class="content">{{userInfor.gender}}</div>
+                            <div class="image">
+                                <img src="/static/images/jiantou.png" class="right_dir">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box have_border">
+                    <div class="inbox">
+                        <div class="left">手机</div>
+                        <div class="right">
+                            <div class="image">
+                                {{userInfor.phone}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box top_border distance" @click="change(userInfor.bizMain,6)">
+                    <div class="inbox have_border">
+                        <div class="left">主营品种</div>
+                        <div class="right">
+                            <div class="content">{{userInfor.bizMain,6 | filterTxt}}</div>
+                            <div class="image">
+                                <img src="/static/images/jiantou.png" class="right_dir">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <mt-datetime-picker ref="picker" type="date" v-model="pickerValue" :startDate="start" :endDate="end" @confirm="handleConfirm">
+        </mt-datetime-picker>
+    </div>
+</template>
+<script>
+import common from '../../common/common.js'
+import httpService from '../../common/httpService.js'
+import myHeader from '../../components/tools/myHeader'
+import imageUpload from '../../components/tools/imageUpload'
+import validation from '../../validation/validation.js'
+import filters from '../../filters/filters.js'
+import {
+    mapGetters
+} from 'vuex'
+export default {
+    data() {
+            return {
+                head: {
+                    name: '账户信息'
+                },
+                param: {
+                    name: 'intention',
+                    index: 0,
+                    header_url: '',
+                    tall: true,
+                    url: '/static/images/my-header.png'
+                },
+                pickerValue: '',
+                start: '',
+                end: '',
+                upDataInfor: {
+                    gender: '',
+                    fullname: '',
+                    phone: '',
+                    birthday: '',
+                    company: '',
+                    companyShort: '',
+                    bizMain: '',
+                    avatar: '',
+                    companyJob: '',
+                    invoice: '',
+                    userType: '',
+                    manageType: ''
+                },
+                item: '',
+                show: false
+
+            }
+        },
+        components: {
+            imageUpload,
+            myHeader
+        },
+        computed: {
+            userInfor() {
+                if (this.$store.state.user.userInfor.avatar) {
+                    this.param.url = this.$store.state.user.userInfor.avatar;
+                } else {
+                    this.param.url = '/static/images/my-header.png'
+                }
+                return this.$store.state.user.userInfor;
+            }
+        },
+        methods: {
+            getUrl(param) {
+                console.log(param);
+                let _self = this;
+                this.upDataInfor.avatar = param.url;
+                for (var key in _self.upDataInfor) {
+                    if (key !== 'avatar') {
+                        _self.upDataInfor[key] = _self.userInfor[key]
+                    }
+                }
+                this.$store.dispatch('upDataInfor', this.upDataInfor);
+            },
+            jumpPerson() {
+                let _self = this;
+                common.$emit("certification", 1);
+                _self.$router.push('/certification');
+            },
+            jumpCompany() {
+                let _self = this;
+                common.$emit("companyAuthentication", 1);
+                _self.$router.push('/companyAuthentication');
+            },
+            getTimeStamp(str) {
+                str = str.replace(/-/g, '/');
+                var date = new Date(str);
+                return date.getTime();
+            },
+            handleConfirm(value) {
+                let _self = this;
+                _self.upDataInfor.birthday = value.getTime() / 1000;
+                //console.log(_self.upDataInfor.birthday)
+                for (var key in _self.upDataInfor) {
+                    if (key !== 'birthday') {
+                        _self.upDataInfor[key] = _self.userInfor[key]
+                    }
+                }
+                this.$store.dispatch('upDataInfor', this.upDataInfor);
+            },
+            open(picker) {
+                this.$refs[picker].open();
+            },
+            change(val, index) {
+                let _self = this;
+                let obj = {};
+                switch (index) {
+                    case 1:
+                        obj = {
+                            val: val,
+                            name: '姓名',
+                            type: 'fullname'
+                        }
+                        break;
+                    case 2:
+                        obj = {
+                            val: val,
+                            name: '性别',
+                            type: 'gender'
+                        }
+                        break;
+                    case 3:
+                        obj = {
+                            val: val,
+                            name: '公司',
+                            type: 'company'
+                        }
+                        break;
+                    case 4:
+                        obj = {
+                            val: val,
+                            name: '简称',
+                            type: 'companyShort'
+                        }
+                        break;
+                    case 5:
+                        obj = {
+                            val: val,
+                            name: '职位',
+                            type: 'companyJob'
+                        }
+                        break;
+                    case 6:
+                        obj = {
+                            val: val,
+                            name: '主营品类',
+                            type: 'bizMain'
+                        }
+                        break;
+                    case 7:
+                        obj = {
+                            val: val,
+                            name: '开票信息',
+                            type: 'invoice'
+                        }
+                        break;
+                }
+                if (obj.type !== 'bizMain') {
+                    common.$emit('postUsers', obj);
+                    let str = 'val=' + obj.val + ';name=' + obj.name + ';type=' + obj.type;
+                    _self.$router.push('accountRevise/' + str);
+                } else {
+                    _self.$store.dispatch('getMainBusiness', {
+                        router: '/account',
+                        main: _self.$store.state.user.userInfor.bizMain
+                    });
+                    common.$emit('accountTomajorBusiness', this.$store.state.user.userInfor.bizMain)
+                    _self.$router.push('/majorBusiness?value=' + this.$store.state.user.userInfor.bizMain)
+                }
+            }
+        },
+        created() {
+            let _self = this;
+            _self.$store.dispatch('getUserInfor');
+            /*common.$on('getInfo', function(item) {
+                if (common.KEY) _self.$store.dispatch('getUserInfor');
+            })*/
+            _self.start = new Date("1900-01-01");
+            _self.end = new Date();
+            let type = '';
+            let ua = navigator.userAgent.toLowerCase();
+            if (/iphone|ipad|ipod/.test(ua)) {
+                type = 'ios';
+            }
+            if (type == 'ios') {
+                _self.start = new Date("1900/01/01");
+                _self.end = new Date();
+            }
+        },
+        mounted() {
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        }
+}
+</script>

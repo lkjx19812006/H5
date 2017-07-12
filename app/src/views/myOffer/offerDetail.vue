@@ -38,16 +38,23 @@
         .no_pass {
             background-color: #fffafa;
             min-height: 32px;
+            padding:4px 0;
             font-size: 14px;
             text-align: left;
             padding-left: 15px;
             color: #ff0000;
             border-bottom: 1px solid #E6E6E6;
-            line-height: 32px;
+            line-height: 24px;
+            .line {
+                padding-left: 77px;
+            }
         }
         @media (max-width: 320px) {
             .no_pass {
                 font-size: 12px;
+                .line {
+                    padding-left: 65px;
+                }
             }
         }
     }
@@ -291,7 +298,8 @@
                     <img src="/static/icon/used.png" class="used" v-if="obj.newOffer.accept == '1'">
                 </div>
                 <div class="no_pass" v-if="obj.newOffer.accept == '2'">
-                    未采用理由: {{obj.newOffer.comments}}
+                    未采用理由: {{obj.newOffer.comments | lineTxt}}
+                    <div class="line">{{obj.newOffer.comments | lineTxtTwo}}</div>
                 </div>
                 <div class="box">
                     <div class="inbox">
@@ -323,7 +331,8 @@
                         <img src="/static/icon/used.png" class="used" v-show="todo.accept == '1'">
                     </div>
                     <div class="no_pass" v-if="todo.accept == '2'">
-                        未采用理由: {{todo.comments}}
+                        未采用理由: {{todo.comments | lineTxt}}
+                        <div class="line">{{todo.comments | lineTxtTwo}}</div>
                     </div>
                     <div class="box">
                         <div class="inbox">
@@ -361,6 +370,7 @@ export default {
     data() {
             return {
                 show: false,
+                text:'',
                 my_param: {
                     url: '',
                     show: false,
@@ -432,6 +442,7 @@ export default {
                         _self.obj.content.paymentWay = result.paymentWay;
                         _self.obj.content.description = result.description;
                         //console.log(result.paymentWay)
+
                     } else {
                         common.$emit('message', suc.data.msg);
                     }

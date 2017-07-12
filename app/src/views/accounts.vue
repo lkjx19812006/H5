@@ -1,3 +1,120 @@
+<style lang="less" scoped>
+input[type="text"],
+input[type="submit"],
+input[type="reset"],
+select,
+textarea {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+.account {
+    width: 100%;
+    float: left;
+    font-size: 12px;
+    position: relative;
+}
+
+.killAccScroll {
+    height: 100%;
+    overflow: hidden;
+}
+
+.account .bbox {
+    float: left;
+    width: 100%;
+}
+
+.account .image_box {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    line-height: 100px;
+    padding: 0 15px;
+    background-color: #fff;
+}
+
+.account .image_box .empty {
+    flex: 1;
+}
+
+.account .image_box .left {
+    font-size: 14px;
+    color: #333;
+}
+
+.account .image_box .right {
+    width: 60px;
+    height: 60px;
+    margin-top: 20px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.account .basis {
+    width: 100%;
+    float: left;
+}
+
+.account .company {
+    padding-bottom: 40px;
+}
+
+.account .basis .title {
+    font-size: 16px;
+    height: 50px;
+    line-height: 49px;
+    text-align: left;
+    padding: 0 15px;
+    font-weight: 600;
+    box-sizing: border-box;
+}
+
+.account .basis .box {
+    width: 100%;
+    padding: 0 15px;
+    height: 50px;
+    line-height: 49px;
+    border-top: 1px solid #E5E5E5;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+}
+
+.account .basis .box .left {
+    font-size: 14px;
+    color: #333;
+}
+
+.account .basis .box .empty {
+    flex: 1;
+}
+
+.account .basis .box .right {
+    font-size: 13px;
+    color: #000;
+    display: flex;
+    flex-direction: row;
+}
+
+.account .basis .box .right .special {
+    margin-right: 25px;
+}
+
+.account .basis .box .right .utype {
+    color: #666;
+    opacity: 0.6;
+}
+
+.account .basis .box .right>img {
+    width: 10px;
+    height: 14px;
+    margin-top: 17px;
+    margin-left: 15px;
+}
+</style>
 <template>
     <div class="account">
         <myHeader :param="head"></myHeader>
@@ -306,120 +423,4 @@ export default {
         }
 }
 </script>
-<style scoped>
-input[type="text"],
-input[type="submit"],
-input[type="reset"],
-select,
-textarea {
-    -webkit-appearance: none;
-    border-radius: 0;
-}
 
-.account {
-    width: 100%;
-    float: left;
-    font-size: 12px;
-    position: relative;
-}
-
-.killAccScroll {
-    height: 100%;
-    overflow: hidden;
-}
-
-.account .bbox {
-    float: left;
-    width: 100%;
-}
-
-.account .image_box {
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    height: 100px;
-    line-height: 100px;
-    padding: 0 15px;
-    background-color: #fff;
-}
-
-.account .image_box .empty {
-    flex: 1;
-}
-
-.account .image_box .left {
-    font-size: 14px;
-    color: #333;
-}
-
-.account .image_box .right {
-    width: 60px;
-    height: 60px;
-    margin-top: 20px;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-.account .basis {
-    width: 100%;
-    float: left;
-}
-
-.account .company {
-    padding-bottom: 40px;
-}
-
-.account .basis .title {
-    font-size: 16px;
-    height: 50px;
-    line-height: 49px;
-    text-align: left;
-    padding: 0 15px;
-    font-weight: 600;
-    box-sizing: border-box;
-}
-
-.account .basis .box {
-    width: 100%;
-    padding: 0 15px;
-    height: 50px;
-    line-height: 49px;
-    border-top: 1px solid #E5E5E5;
-    background-color: #fff;
-    display: flex;
-    flex-direction: row;
-}
-
-.account .basis .box .left {
-    font-size: 14px;
-    color: #333;
-}
-
-.account .basis .box .empty {
-    flex: 1;
-}
-
-.account .basis .box .right {
-    font-size: 13px;
-    color: #000;
-    display: flex;
-    flex-direction: row;
-}
-
-.account .basis .box .right .special {
-    margin-right: 25px;
-}
-
-.account .basis .box .right .utype {
-    color: #666;
-    opacity: 0.6;
-}
-
-.account .basis .box .right>img {
-    width: 10px;
-    height: 14px;
-    margin-top: 17px;
-    margin-left: 15px;
-}
-</style>
