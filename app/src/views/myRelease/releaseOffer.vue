@@ -8,7 +8,8 @@ textarea {
     border-radius: 0;
 }
 
-input,textarea {
+input,
+textarea {
     border: none;
     background-color: #fff;
 }
@@ -52,7 +53,7 @@ input,textarea {
             width: 80px;
             height: 80px;
             margin-right: 30px;
-            margin-bottom:15px;
+            margin-bottom: 15px;
         }
     }
     .confirm {
@@ -102,7 +103,7 @@ input,textarea {
                     <img src="/static/icons/upload-delete.png" class="delete" @click="deletes">
                 </div>
                 <div class="up_load" v-show="handPhoto && detailsPhoto && cargoPhoto && imgArr.length !== 2">
-                    <upLoadImgs :param="imgArr"  v-on:postUrl="getUrl"></upLoadImgs>
+                    <upLoadImgs :param="imgArr" v-on:postUrl="getUrl"></upLoadImgs>
                 </div>
             </div>
             <selectQuality :obj="obj"></selectQuality>
@@ -185,7 +186,7 @@ export default {
                     intentionId: ''
                 },
                 imgArr: [],
-                imageArrs:[]
+                imageArrs: []
             }
         },
         methods: {
@@ -209,7 +210,7 @@ export default {
                 httpService.myAttention(url, body, function(suc) {
                     common.$emit('close-load');
                     let result = suc.data.biz_result;
-                    console.log(44,result)
+                    console.log(44, result)
                     if (suc.data.code == '1c01') {
                         _self.getBreedInformation(result.breedName);
                         _self.obj.breedName = result.breedName;
@@ -219,6 +220,8 @@ export default {
                         _self.obj.spec = result.spec;
                         _self.obj.place = result.location;
                         _self.obj.place_id = result.locationId;
+                        _self.obj.number_unit = result.unit;
+                        _self.obj.number_id = result.unitId;
                         //console.log(2112,_self.obj.spec)
                     } else {
                         common.$emit('message', suc.data.msg);
@@ -230,23 +233,23 @@ export default {
             },
             confirm() {
                 let _self = this;
-                 _self.imageArrs = [];
-                if(_self.handPhoto){
+                _self.imageArrs = [];
+                if (_self.handPhoto) {
                     _self.imageArrs.unshift(_self.handPhoto)
                 }
-                if(_self.detailsPhoto){
+                if (_self.detailsPhoto) {
                     _self.imageArrs.unshift(_self.detailsPhoto)
                 }
-                if(_self.cargoPhoto){
+                if (_self.cargoPhoto) {
                     _self.imageArrs.unshift(_self.cargoPhoto)
                 }
-                for(var i=0;i<_self.imgArr.length;i++){
+                for (var i = 0; i < _self.imgArr.length; i++) {
                     _self.imageArrs.unshift(_self.imgArr[i])
                 }
-                console.log(33,_self.imageArrs);
+                console.log(33, _self.imageArrs);
                 _self.obj.quality = '';
-                
-                console.log(1,_self.obj.descriptions)
+
+                console.log(1, _self.obj.descriptions)
                 var checkArr = [];
                 let checkBreedSpec = validation.checkNull(_self.obj.spec, '请输入规格');
                 checkArr.push(checkBreedSpec);
@@ -368,8 +371,8 @@ export default {
                     if (suc.data.code == '1c01') {
                         _self.obj.unit = suc.data.biz_result.list;
                         if (!_self.obj.number_unit) {
-                            _self.obj.number_unit = _self.obj.unit[2].name;
-                            _self.obj.number_id = _self.obj.unit[2].id;
+                            // _self.obj.number_unit = _self.obj.unit[2].name;
+                            // _self.obj.number_id = _self.obj.unit[2].id;
                         } else {
                             for (var i = 0; i < _self.obj.unit.length; i++) {
                                 if (_self.obj.number_unit == _self.obj.unit[i].name) {
@@ -389,14 +392,14 @@ export default {
             getUrl(param) {
                 console.log(1, param)
                 let _self = this;
-                if(this.imgArr.length <= 2){
+                if (this.imgArr.length <= 2) {
                     if (param.url) _self.imgArr.push(param.url);
-                    if(_self.imgArr.length == 2){
-                        common.$emit('message','最多只能上传5张图片！')
+                    if (_self.imgArr.length == 2) {
+                        common.$emit('message', '最多只能上传5张图片！')
                     }
                 }
-                
-                
+
+
                 console.log(this.imgArr.length)
             },
             getUrlOne(param) {
@@ -427,7 +430,7 @@ export default {
                 let _self = this;
 
                 // function deletImgs() {
-                    _self.imgArr.splice(index, 1);
+                _self.imgArr.splice(index, 1);
                 // }
                 // common.$emit("confirm", {
                 //     message: '确定删除？',

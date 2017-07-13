@@ -174,7 +174,7 @@ export default {
                 }
                 todo.show = true;
                 _self.manageType = todo.id;
-                console.log(99, _self.manageType)
+                //console.log(99, _self.manageType)
             },
             back() {
                 this.$router.push('/perfectObject')

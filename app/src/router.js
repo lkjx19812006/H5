@@ -12,7 +12,6 @@ import lowPriceRes from './views/lowPriceRes'
 import urgentNeed from './views/urgentNeed'
 import myAttention from './views/myAttention'
 import myResource from './views/myResource'
-// import register from './views/register'
 import findPassWord from './views/findPassWord'
 import mySet from './views/mySet'
 import revisePassWord from './views/revisePassWord'
@@ -20,7 +19,6 @@ import revisePassWordConfirm from './views/revisePassWordConfirm'
 import addressManage from './views/addressManage'
 import addressRevise from './views/addressRevise'
 import feedBack from './views/feedBack'
-import needDetail from './views/needDetail'
 import resourceDetail from './views/resourceDetail'
 import detailsPage from './views/detailsPage'
 import goodDetail from './views/goodDetail'
@@ -28,7 +26,7 @@ import addAddress from './views/addAddress'
 import myPurchase from './views/myPurchase'
 import purchaseDetail from './views/purchaseDetail'
 import companyAuthentication from './views/companyAuthentication'
-import certification from './views/certification'
+// import certification from './views/certification'
 import areaName from './views/areaName'
 import aboutus from './views/aboutus'
 import perfectInfo from './views/perfectInfo'
@@ -68,6 +66,11 @@ import orderNotice from './views/message/orderNotice'
 import activityNotice from './views/message/activityNotice'
 import intentionNotice from './views/message/intentionNotice'
 import systemMessage from './views/message/systemMessage'
+import personalStep1 from './views/authen/personalStep1'
+import personalStep2 from './views/authen/personalStep2'
+import authResult from './views/authen/authResult'
+import authPhoto from './views/authen/authPhoto'
+
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -119,10 +122,12 @@ module.exports = {
         { name: 'addAddress', path: '/addAddress', component: addAddress },
         { name: 'areaName', path: '/areaName', component: areaName },
         { name: 'companyAuthentication', path: '/companyAuthentication', component: companyAuthentication },
-        { name: 'certification', path: '/certification', component: certification },
+        { name: 'personalStep1', path: '/personalStep1', component: personalStep1 },
+        { name: 'personalStep2', path: '/personalStep2', component: personalStep2 },
+        { name: 'authResult', path: '/authResult', component: authResult },
+        // { name: 'certification', path: '/certification', component: certification },
         { name: 'myPurchase', path: '/myPurchase', component: myPurchase },
         { name: 'purchaseDetail', path: '/purchaseDetail/:rchaseId', component: purchaseDetail },
-        { name: 'needDetail', path: '/needDetail/:needId', component: needDetail },
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
         { name: 'aboutus', path: '/aboutus/:from', component: aboutus },
         { name: 'perfectInfo', path: '/perfectInfo', component: perfectInfo },
@@ -161,6 +166,7 @@ module.exports = {
         { name: 'activityNotice', path: '/activityNotice', component: activityNotice },
         { name: 'intentionNotice', path: '/intentionNotice', component: intentionNotice },
         { name: 'systemMessage', path: '/systemMessage', component: systemMessage },
+        { name: 'authPhoto', path: '/authPhoto', component: authPhoto },
         { path: '*', redirect: '/home' }
     ]
 }

@@ -41,6 +41,8 @@
                     .right {
                         color: #CACACA;
                         font-size: 14px;
+                        flex:1;
+                        text-align: right;
                     }
                 }
                 .content {
@@ -140,9 +142,9 @@
                                 <div class="left" v-show="todo.accept == 2">报价状态:
                                     <span class="gray">{{todo.accept | myOfferStatus}}</span>
                                 </div>
-                                <div class="left" v-show="todo.accept == 3">报价状态:
+                                <!-- <div class="left" v-show="todo.accept == 3">报价状态:
                                     <span class="black">{{todo.accept | myOfferStatus}}</span>
-                                </div>
+                                </div> -->
                                 <div class="right">{{todo.otime | timeFormats}}</div>
                             </div>
                             <div class="content">
@@ -216,7 +218,7 @@ export default {
                     accept: '-1',
                     show: true
                 }, {
-                    name: '待处理',
+                    name: '处理中',
                     accept: '0',
                     show: false
                 }, {
@@ -226,10 +228,6 @@ export default {
                 }, {
                     name: '未采用',
                     accept: '2',
-                    show: false
-                }, {
-                    name: '待采用',
-                    accept: '3',
                     show: false
                 }]
             }

@@ -261,7 +261,7 @@
                 <div class="box">
                     <div class="inbox">
                         <div class="left top_left">
-                            <div class="breed">{{obj.content.breedName}} <span>({{obj.content.number}}{{obj.content.unit}})</span></div>
+                            <div class="breed">{{obj.content.breedName}} <span>{{obj.content.number}}({{obj.content.unit}})</span></div>
                             <div class="spec">{{obj.content.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.content.spec,4 | filterTxt}}</div>
                             <div class="spec last">交货地: {{obj.content.address}}</div>
                         </div>
@@ -270,7 +270,7 @@
                                 <div class="images"><img src="/static/icon/times.png"></div>
                                 <div>&nbsp;剩余{{obj.content.duedate | timeDay}}天</div>
                             </div>
-                            <div class="detail" @click="again()" v-if="obj.newOffer.accept == '3' || obj.newOffer.accept == '2'">再次报价</div>
+                            <div class="detail" @click="again()" v-if="obj.newOffer.accept == '2'">再次报价</div>
                         </div>
                     </div>
                 </div>
@@ -292,7 +292,7 @@
                         <span class="black" v-if="obj.newOffer.accept == '0'">{{obj.newOffer.accept | myOfferStatus}}</span>
                         <span class="red" v-if="obj.newOffer.accept == '1'">{{obj.newOffer.accept | myOfferStatus}}</span>
                         <span class="gray" v-if="obj.newOffer.accept == '2'">{{obj.newOffer.accept | myOfferStatus}}</span>
-                        <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span>
+                        <!-- <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span> -->
                     </div>
                     <div class="time">报价时间: {{obj.newOffer.otime | timeFormat}}</div>
                     <img src="/static/icon/used.png" class="used" v-if="obj.newOffer.accept == '1'">
@@ -307,7 +307,7 @@
                             <img :src="todo" v-for="(todo,index) in obj.newOffer.image" v-show="index == 0" @click="popUp(obj.newOffer.image)">
                         </div>
                         <div class="left">
-                            <div class="breed">{{obj.newOffer.breedName}} <span>({{obj.newOffer.number}}{{obj.newOffer.unit}})</span></div>
+                            <div class="breed">{{obj.newOffer.breedName}} <span>{{obj.newOffer.number}}({{obj.newOffer.unit}})</span></div>
                             <div class="spec first">{{obj.newOffer.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.newOffer.spec,4 | filterTxt}}</div>
                             <div class="spec last">裸价: <span class="red">{{obj.newOffer.price}}</span>元/{{obj.newOffer.unit}}</div>
                         </div>
@@ -325,7 +325,7 @@
                             <span class="black" v-show="todo.accept == '0'">{{todo.accept | myOfferStatus}}</span>
                             <span class="red" v-show="todo.accept == '1'">{{todo.accept | myOfferStatus}}</span>
                             <span class="gray" v-show="todo.accept == '2'">{{todo.accept | myOfferStatus}}</span>
-                            <span class="black" v-show="todo.accept == '3'">{{todo.accept | myOfferStatus}}</span>
+                           <!--  <span class="black" v-show="todo.accept == '3'">{{todo.accept | myOfferStatus}}</span> -->
                         </div>
                         <div class="time">报价时间: {{todo.otime | timeFormat}}</div>
                         <img src="/static/icon/used.png" class="used" v-show="todo.accept == '1'">
@@ -340,7 +340,7 @@
                                 <img :src="item" v-for="(item,index) in todo.image" v-show="index == 0" @click="popUp(todo.image)">
                             </div>
                             <div class="left">
-                                <div class="breed">{{todo.breedName}} <span>({{todo.number}}{{todo.unit}})</span></div>
+                                <div class="breed">{{todo.breedName}} <span>{{todo.number}}({{todo.unit}})</span></div>
                                 <div class="spec first">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
                                 <div class="spec last">裸价: <span class="red">{{todo.price}}</span>元/{{todo.unit}}</div>
                             </div>

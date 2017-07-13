@@ -14,7 +14,11 @@ textarea {
 }
 
 .account {
+    background-color: #F5F5F5;
     position: relative;
+    .main{
+        padding-bottom:40px;
+    }
     .have_border {
         border-bottom: 1px solid #E6E6E6;
     }
@@ -78,7 +82,7 @@ textarea {
 <template>
     <div class="account">
         <myHeader :param="head"></myHeader>
-        <div class="page-loadmore-wrapper" ref="wrapper" v-bind:class="{killAccScroll:visible}" :style="{ height: wrapperHeight + 'px' }">
+        <div class="page-loadmore-wrapper main" ref="wrapper" v-bind:class="{killAccScroll:visible}" :style="{ height: wrapperHeight + 'px' }">
             <div class="basic">
                 <div class="title">基础信息</div>
                 <div class="box">
@@ -131,7 +135,7 @@ textarea {
                     <div class="inbox">
                         <div class="left">手机</div>
                         <div class="right">
-                            <div class="image">
+                            <div class="image content">
                                 {{userInfor.phone}}
                             </div>
                         </div>
@@ -147,6 +151,74 @@ textarea {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="box">
+                    <div class="inbox have_border">
+                        <div class="left">买卖性质</div>
+                        <div class="right">
+                            <div class="image content">
+                                {{userInfor.userType | userTypes}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="inbox have_border">
+                        <div class="left">经营类型</div>
+                        <div class="right">
+                            <div class="image content">
+                                {{userInfor.manageTypeName}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box have_border" @click="jumpPerson()">
+                    <div class="inbox">
+                        <div class="left">个人认证</div>
+                        <div class="right">
+                            <div class="content">
+                                <span v-if="userInfor.utype == 0">未认证</span>
+                                <span v-if="userInfor.utype == 1">待审核</span>
+                                <span v-if="userInfor.utype == 2">已认证</span>
+                                <span v-if="userInfor.utype == 3">未通过</span>
+                            </div>
+                            <div class="image">
+                                <img src="/static/images/jiantou.png" class="right_dir">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="title">企业信息</div>
+                <div class="basic">
+                    <div class="box" @click="change(userInfor.company,3)">
+                        <div class="inbox have_border">
+                            <div class="left">公司</div>
+                            <div class="right">
+                                <div class="content">
+                                    {{userInfor.company,13 | filterTxt}}
+                                </div>
+                                <div class="image">
+                                    <img src="/static/images/jiantou.png" class="right_dir">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box have_border" @click="jumpCompany()">
+                    <div class="inbox">
+                        <div class="left">企业认证</div>
+                        <div class="right">
+                            <div class="content">
+                                <span v-if="userInfor.utype == 0">未认证</span>
+                                <span v-if="userInfor.utype == 1">待审核</span>
+                                <span v-if="userInfor.utype == 2">已认证</span>
+                                <span v-if="userInfor.utype == 3">未通过</span>
+                            </div>
+                            <div class="image">
+                                <img src="/static/images/jiantou.png" class="right_dir">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -227,8 +299,8 @@ export default {
             },
             jumpPerson() {
                 let _self = this;
-                common.$emit("certification", 1);
-                _self.$router.push('/certification');
+                common.$emit("toAuthResult", 1);
+                _self.$router.push('/personalStep1');
             },
             jumpCompany() {
                 let _self = this;

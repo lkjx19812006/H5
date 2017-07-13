@@ -247,16 +247,13 @@ Vue.filter('myStatus', function(val) {
 Vue.filter('myOfferStatus', function(val) {
     switch (val) {
         case 0:
-            val = '待处理';
+            val = '处理中';
             break;
         case 1:
             val = '已采用';
             break;
         case 2:
             val = '未采用';
-            break;
-        case 3:
-            val = '待采用';
             break;
         default:
             val = '';
@@ -396,4 +393,67 @@ Vue.filter('lineTxtTwo', function(txt) {
         let val2 = arr.splice(txt.indexOf('；') + 1, txt.length).join('');
         return val2;
     }
+})
+
+
+//买卖性质
+Vue.filter('userTypes', function(val) {
+    switch (val) {
+        case 1:
+            val = '买方';
+            break;
+        case 2:
+            val = '卖方';
+            break;
+        case 3:
+            val = '买卖方';
+            break;
+    }
+    return val;
+})
+
+//对应照片
+Vue.filter('selectPhoto', function(val) {
+    switch (val) {
+        case 0:
+            val = '手持身份证照';
+            break;
+        case 1:
+            val = '身份证正面';
+            break;
+        case 2:
+            val = '身份证反面';
+            break;
+        case 3:
+            val = '工商营业执照';
+            break;
+        case 4:
+            val = '组织机构代码证';
+            break;
+        case 5:
+            val = '税务登记证';
+            break;
+        case 6:
+            val = '银行开户许可证';
+            break;
+        case 7:
+            val = 'GMP资质证书';
+            break;
+        case 8:
+            val = 'GSP资质证书';
+            break;
+        case 9:
+            val = '三证合一';
+            break;
+        case 10:
+            val = '银行开户许可证';
+            break;
+        case 11:
+            val = 'GMP资质证书';
+            break;
+        case 12:
+            val = 'GSP资质证书';
+            break;
+    }
+    return val;
 })
