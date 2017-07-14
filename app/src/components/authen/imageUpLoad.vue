@@ -1,4 +1,4 @@
-<style scoped>
+<style lang="less" scoped>
 .img_upload {
     position: relative;
 }
@@ -8,6 +8,8 @@
     width: 100%;
     height: 100%;
     position: absolute;
+    left:0;
+    z-index: 20;
 }
 
 .img_upload .image_show {
@@ -46,11 +48,45 @@
     background-color: #eef1f6;
     border-color: #d1dbe5;
 }
+
+.img_upload {
+    .inbox {
+        border: 1px solid #E6E6E6;
+        width: 100%;
+        height: 115px;
+        background: #fff;
+        border-radius: 10px;
+        position: relative;
+        .word {
+            font-size: 16px;
+            line-height: 115px;
+        }
+        .default {
+            position: absolute;
+            width: 25px;
+            left: 15px;
+            top: 10px;
+        }
+        .title{
+            position: absolute;
+            bottom: 25px;
+            color:#A9A9A9;
+            font-size: 11px;
+            width:100%;
+            text-align: center;
+        }
+    }
+}
 </style>
 <template>
     <div class="img_upload" :v-loading.body="loading">
-        <input ref="imgInput"  type="file" @change="previewImg"  class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
-            <img :src="param.default" class="uploads">
+        <input ref="imgInput" type="file" @change="previewImg" class="input_image" name="photo" accept="image/png,image/jpeg,image/jpg,image/bmp">
+        <img :src="param.default" class="uploads" v-if="param.default">
+        <div class="inbox" v-if="param.defaults">
+            <img :src="param.defaults" class="default">
+            <div class="word">{{param.title}}</div>
+            <div class="title" v-show="param.name">* 此项非必须上传项</div>
+        </div>
     </div>
 </template>
 <script>
@@ -233,7 +269,8 @@ export default {
                                 _self.key = response.key;
                                 _self.$emit("postUrl", {
                                     url: res.biz_result.url + '/' + _self.key,
-                                    catagory:_self.param.catagory
+                                    catagory: _self.param.catagory,
+                                    index:_self.param.index
                                 });
                                 clearInterval(_self.timer);
                                 _self.$refs.imgInput.value = '';

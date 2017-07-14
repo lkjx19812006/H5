@@ -55,7 +55,8 @@ input {
                 <input v-model="param.fullname" placeholder="请输入您的姓名">
             </div>
             <div class="close">
-                <img src="/static/icon/close.png" @click="clearName">
+                <img src="/static/icon/my-close.png" @click="clearName" v-show="param.fullname">
+                <img src="/static/icon/closes.png" @click="clearName" v-show="!param.fullname">
             </div>
         </div>
         <div class="inbox no_border">
@@ -64,7 +65,8 @@ input {
                 <input v-model="param.idnumber" placeholder="请输入您的身份证号">
             </div>
             <div class="close">
-                <img src="/static/icon/close.png" @click="clearId">
+                <img src="/static/icon/my-close.png" @click="clearId" v-show="param.idnumber">
+                <img src="/static/icon/closes.png" @click="clearId" v-show="!param.idnumber">
             </div>
         </div>
     </div>

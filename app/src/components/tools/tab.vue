@@ -25,7 +25,7 @@ export default {
 </script>
 <style scoped>
 .tab{
-    width:86%;
+    width:100%;
     display: flex;
     display:-webkit-box;
     display:-webkit-flex;
@@ -34,29 +34,30 @@ export default {
     -webkit-box-orient: horizontal;
     -webkit-flex-direction:row;
     -ms-flex-direction: row;
-    margin-left:7%;
-    padding-bottom: 5px;
+    background-color: #fff;
+    
 }
 .tab div{
     flex:1;
     -webkit-box-flex:1;
     -webkit-flex:1;
     -ms-flex:1;
+
 }
 .tab .left,
 .right{
      width:50%;
-     border-bottom: 1px solid #CBCBCB;
-     font-size: 1.4rem;
+     /*border-bottom: 1px solid #CBCBCB;*/
+     font-size: 16px;
      color:#666;
-     padding: 1rem 0;
+     padding: 14px 0;
 }
 
 .tab .active{
      width:50%;
-     border-bottom: 1px solid #FF0000;
-     font-size: 1.4rem;
-     color:#FA6705;
-     padding: 1rem 0;
+     border-bottom: 2px solid #FF0000;
+     color:#FA6705; 
+     padding: 14px 0;  
+     font-size: 16px;
 }
 </style>

@@ -14,63 +14,107 @@ input {
 
 .auth_result {
     width: 100%;
-    .top {
-        padding: 55px 0 25px 0;
-        .top_img {
-            width: 60px;
-            margin-bottom: 25px;
-        }
-        .word {
-            font-size: 16px;
-            color: #666;
-        }
-        .word_top {
-            margin-top: 12px;
-        }
-    }
-    .my_infor {
-        width: 100%;
-        .bbox {
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            aligin-items: center;
-            justify-content: space-between;
-            padding: 15px 27px 15px 17px;
-            line-height: 17px;
-            background-color: #fff;
-            border-top: 1px solid #E6E6E6;
-            .right {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                .content {
-                    color: #666;
-                    font-size: 14px;
-                }
-                .image {
-                    padding: 0 0 0 10px;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    .right_dir {
-                        height: 12px;
-                        width: 8px;
-                    }
-                    .default{
-                        height:17px;
-                    }
-                }
+    @media screen {
+        .top {
+            padding: 55px 0 25px 0;
+            .top_img {
+                width: 60px;
+                margin-bottom: 25px;
             }
-            .name {
-                font-size: 17px;
-                color: #333;
-            }
-            .content {
-                font-size: 15px;
+            .word {
+                font-size: 16px;
                 color: #666;
             }
+            .word_top {
+                margin-top: 12px;
+            }
+            .no_top {
+                margin-bottom: 35px;
+            }
+            .green {
+                color: green;
+                margin-bottom: 35px;
+            }
+            .red {
+                color: #E64A4A;
+            }
         }
+        @media (max-height:568px) {
+            .top {
+                padding: 20px 0 15px 0;
+                .top_img {
+                    width: 60px;
+                    margin-bottom: 15px;
+                }
+                .word {
+                    font-size: 16px;
+                    color: #666;
+                }
+                .word_top {
+                    margin-top: 12px;
+                }
+                .no_top {
+                    margin-bottom: 15px;
+                }
+                .green {
+                    color: green;
+                    margin-bottom: 20px;
+                }
+                .red {
+                    color: #E64A4A;
+                }
+            }
+        }
+        @media (max-height:480px) {
+            .top {
+                padding: 20px 0 15px 0;
+                .top_img {
+                    width: 40px;
+                    margin-bottom: 15px;
+                }
+                .word {
+                    font-size: 14px;
+                    color: #666;
+                }
+                .word_top {
+                    margin-top: 12px;
+                }
+                .no_top {
+                    margin-bottom: 15px;
+                }
+                .green {
+                    color: green;
+                    margin-bottom: 20px;
+                }
+                .red {
+                    color: #E64A4A;
+                }
+            }
+        }
+    }
+    .main {
+        position: relative;
+        .footers {
+            position: absolute;
+            bottom: 15px;
+            font-size: 13px;
+            color: #939Ebb;
+            width: 100%;
+        }
+        .again {
+            height: 50px;
+            background-color: #FA6705;
+            color: #fff;
+            font-size: 17px;
+            line-height: 50px;
+            width: 90%;
+            margin: 0 auto;
+            border-radius: 25px;
+            margin-bottom: 20px;
+        }
+    }
+    .box {
+        margin-bottom: 25px;
     }
 }
 </style>
@@ -78,37 +122,28 @@ input {
     <div class="auth_result">
         <myHeader :param="head"></myHeader>
         <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <div class="box" v-show="authenType == 2">
-                <div class="top">
+            <div class="box">
+                <div class="top" v-show="authenType == 1">
                     <img src="/static/icon/wait-auth.png" class="top_img">
                     <div class="word">你的实名认证正在审核中</div>
                     <div class="word word_top">请耐心等待...</div>
                 </div>
-                <div class="my_infor">
-                    <div class="bbox">
-                        <div class="name">身份认证</div>
-                        <div class="content">个人</div>
-                    </div>
-                    <div class="bbox">
-                        <div class="name">真实姓名</div>
-                        <div class="content">{{userInfor.fullname}}</div>
-                    </div>
-                    <div class="bbox">
-                        <div class="name">身份证号</div>
-                        <div class="content">{{userInfor.idnumber}}</div>
-                    </div>
-                    <div class="bbox" @click="jump">
-                        <div class="name">证件照片</div>
-                        <div class="right">
-                            <div class="image">
-                                <img src="/static/icon/default-pic.png" class="default">
-                            </div>
-                            <div class="image">
-                                <img src="/static/images/jiantou.png" class="right_dir">
-                            </div>
-                        </div>
-                    </div>
+                <div class="top" v-show="authenType == 2">
+                    <img src="/static/icon/pass-auth.png" class="top_img no_top">
+                    <div class="word green">恭喜您，你的认证审核已经通过啦！</div>
                 </div>
+                <div class="top" v-show="authenType == 3">
+                    <img src="/static/icon/un-pass-auth.png" class="top_img">
+                    <div class="word red">你的认证未通过，请核对您的信息</div>
+                    <div class="word word_top red">进行再次认证</div>
+                </div>
+                <personPhoto :type="type"></personPhoto>
+            </div>
+            <div class="again" @click="again" v-show="authenType == 3">
+                再次认证
+            </div>
+            <div class="footers">
+                药材买卖网保障你的信息安全
             </div>
         </div>
     </div>
@@ -117,6 +152,7 @@ input {
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import myHeader from '../../components/tools/myHeader'
+import personPhoto from '../../components/authen/personPhoto'
 import validation from '../../validation/validation.js'
 import filters from '../../filters/filters.js'
 import {
@@ -129,18 +165,19 @@ export default {
                     name: '认证中'
                 },
                 authenType: '',
-                list: []
-
+                list: [],
+                type:''
             }
         },
         components: {
-            myHeader
+            myHeader,
+            personPhoto
         },
         computed: {
             userInfor() {
                 return this.$store.state.user.userInfor;
             },
-            photo(){
+            photo() {
                 return this.$store.state.authen.photoList;
             }
         },
@@ -153,7 +190,7 @@ export default {
                     biz_module: 'userService',
                     biz_method: 'queryUserAuthenImage',
                     biz_param: {
-                        type: 0
+                        type: _self.type
                     }
                 }
                 if (common.KEY) {
@@ -169,7 +206,7 @@ export default {
                         //console.log(suc.data.biz_result.authenType);
                         _self.authenType = suc.data.biz_result.authenType;
                         //console.log(22,suc.data.biz_result.list)
-                        _self.$store.dispatch('getPhoto',suc.data.biz_result.list)
+                        _self.$store.dispatch('getPhoto', suc.data.biz_result.list)
                         _self.headName(_self.authenType);
                     }
                 }, function(err) {
@@ -191,17 +228,31 @@ export default {
                         break;
                 }
             },
-            jump(){
+            jump() {
                 let _self = this;
                 _self.$router.push('/authPhoto')
+            },
+            again() {
+                let _self = this;
+                //个人认证
+                if(_self.type == 0)_self.$router.push('/personalStep1');   
+                //企业认证
+                if(_self.type == 1){
+                    common.$emit('toCompanyAuth',1)//去判断是不是药厂和饮片厂
+                    _self.$router.push('/companyAuth');  
+                }
             }
         },
         created() {
             let _self = this;
             common.$on("toAuthResult", function(item) {
+                console.log(item)
+                _self.type = item;
                 _self.getHttp();
                 _self.$store.dispatch('getUserInfor');
             })
+            _self.type = this.$route.query.authen;
+            //console.log(22,this.$route.query.authen)
             _self.getHttp();
             _self.$store.dispatch('getUserInfor');
         },

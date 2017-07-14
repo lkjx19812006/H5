@@ -158,7 +158,7 @@ input {
 <template>
     <div class="perfect_id">
         <div class="box">
-            <div class="title_1">您主要经营什么产品</div>
+            <div class="title_1">您主要经营什么品种</div>
             <div class="title_2">我们会实时推送相关订单至您的手机</div>
             <div class="search_box">
                 <div class="search">

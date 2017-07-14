@@ -176,10 +176,29 @@
                     font-size: 17px;
                     margin-left: 9px;
                 }
-                .urgent {
-                    height: 27px;
+                .emtrys{
+                    flex:1;
+                }
+                .urgent{
                     position: absolute;
-                    right: 0;
+                    height: 28px;
+                    right:5px;
+                    bottom: -29px;
+                }
+                .date {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 14px;
+                    color: #3F3F3F;
+                    line-height: 13px;
+                    padding-right:15px;
+                    img {
+                        height: 15px;
+                        margin: 0 5px 0 0;
+                        padding: 0;
+                    }
                 }
             }
             .content {
@@ -202,20 +221,6 @@
                 }
                 .right {
                     width: 120px;
-                    .date {
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: center;
-                        align-items: center;
-                        font-size: 14px;
-                        color: #3F3F3F;
-                        line-height: 13px;
-                        img {
-                            height: 15px;
-                            margin: 0 10px 0 0;
-                            padding: 0;
-                        }
-                    }
                     .detail {
                         background-color: #FF8300;
                         height: 40px;
@@ -225,6 +230,13 @@
                         border-radius: 20px;
                         width: 120px;
                         margin-top: 7px;
+                    }
+                    .offerNum{
+                        font-size: 14px;
+                        margin-top: 8px;
+                        span{
+                            color:#FA6705;
+                        }
                     }
                 }
             }
@@ -258,7 +270,7 @@
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0" v-bind:class="{have_title:Titles.myTitle}">
             <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                 <div class="newAdd" v-bind:class="{emtry:!newAdd,emtry_before:'change_opcaity'}">
-                    <span v-show="newAdd">今日新增{{newAdd}}条求购信息</span>
+                    <span v-show="newAdd">今日新增{{newAdd}}条药厂求购信息</span>
                 </div>
                 <div class="newAdd_p" v-show="newAdd"></div>
                 <ul class="list">
@@ -267,26 +279,28 @@
                             <img src="https://ojic8qd7z.qnssl.com/contry_icon/zhongguo.png" class="flag">
                             <div class="drug_factory" v-show="todo.indentType == 0">药厂</div>
                             <div class="breed">{{todo.breedName}}</div>
-                            <img src="/static/icon/demand.png" class="urgent" v-show="todo.especial == 1">
+                            <div class="emtrys"></div>
+                            <div class="date">
+                                <div><img src="/static/icon/times.png"></div>
+                                <div>剩余{{todo.duedate | needTimeDay}}<span>天</span></div>
+                            </div>
+                            <img src="/static/icon/urgent-2.png" class="urgent" v-show="todo.especial == 1">
                         </div>
                         <div class="content">
                             <div class="left">
                                 <div class="spec one">产品规格: {{todo.spec,4 | filterTxt}}</div>
                                 <div class="spec">产品产地: {{todo.location,4 | filterTxt}}</div>
                                 <div class="spec">需求数量: {{todo.number,5 | filterTxt}}({{todo.unit}})</div>
-                                <div class="spec">报价人数: {{todo.offer,4 | filterTxt}}人</div>
+                                <div class="spec">交货地址: {{todo.address,8 | filterTxt}}</div>
                             </div>
                             <div class="right">
-                                <div class="date">
-                                    <div><img src="/static/icon/times.png"></div>
-                                    <div>剩余{{todo.duedate | needTimeDay}}<span>天</span></div>
-                                </div>
                                 <div class="detail" v-if="todo.indentType !== 0">
                                     我要报价
                                 </div>
                                 <div class="detail" v-if="todo.indentType == 0">
                                     抢先报价
                                 </div>
+                                <div class="offerNum">已报价<span>{{todo.offer}}</span>人</div>
                             </div>
                         </div>
                     </li>
@@ -430,18 +444,18 @@ export default {
             userInfor() {
                 return this.$store.state.user.userInfor;
             },
-            myTypes(){
+            myTypes() {
                 let ctype = this.$store.state.user.userInfor.ctype;
                 let utype = this.$store.state.user.userInfor.utype;
-                if(ctype == 0 && utype == 0){
+                if (ctype == 0 && utype == 0) {
                     return true
-                }else if(ctype == 0 && utype == 3){
+                } else if (ctype == 0 && utype == 3) {
                     return true
-                }else if(ctype == 3 && utype == 0){
+                } else if (ctype == 3 && utype == 0) {
                     return true
-                }else if (ctype == 3 && utype == 3){
+                } else if (ctype == 3 && utype == 3) {
                     return true
-                }else{
+                } else {
                     return false
                 }
             }

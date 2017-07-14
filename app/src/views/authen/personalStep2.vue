@@ -110,17 +110,17 @@ export default {
                 }, {
                     default: '/static/icon/auth3.png',
                     title: '手持身份证照片',
-                    catagory: 3,
+                    catagory: 0,
                     url: ''
                 }],
                 arr: [{
+                    catagory: '0',
+                    path: ''
+                }, {
                     catagory: '1',
                     path: ''
                 }, {
                     catagory: '2',
-                    path: ''
-                }, {
-                    catagory: '3',
                     path: ''
                 }],
                 param: {
@@ -142,8 +142,8 @@ export default {
         methods: {
             getUrl(param) {
                 let _self = this;
-                if (param.url) this.imgArr[param.catagory - 1].url = param.url;
-                if (param.url) this.arr[param.catagory - 1].path = param.url;
+                if (param.url) this.imgArr[param.catagory].url = param.url;
+                if (param.url) this.arr[param.catagory].path = param.url;
             },
             deletes(todo,index) {
                 let _self = this;
@@ -174,8 +174,8 @@ export default {
                     common.$emit('close-load');
                     common.$emit('message', suc.data.msg);
                     if(suc.data.code == '1c01'){
-                        common.$emit("toAuthResult", 1);
-                        _self.$router.push('/authResult');
+                        common.$emit("toAuthResult", 0);
+                        _self.$router.push('/authResult?authen=0');
                     }
                 }, function(err) {
                     common.$emit('close-load');
@@ -211,7 +211,6 @@ export default {
         },
         created() {
             let _self = this;
-
             var query = this.$route.query.val;
             var fullname = query.split(';')[0];
             var idnumber = query.split(';')[1];

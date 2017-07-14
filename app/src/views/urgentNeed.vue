@@ -30,6 +30,7 @@
 
 .urgent_need {
     overflow: hidden;
+    height: 100vh;
     .newAdd {
         position: absolute;
         width: 100%;
@@ -52,7 +53,7 @@
     .main {
         width: 100%;
         padding-bottom: 142px;
-        overflow: scroll;
+        overflow-y: scroll;
         width: 100%;
         .newAdd_p {
             height: 20px;
@@ -118,10 +119,29 @@
                     font-size: 17px;
                     margin-left: 9px;
                 }
-                .urgent {
-                    height: 27px;
+                .emtrys{
+                    flex:1;
+                }
+                .urgent{
                     position: absolute;
-                    right: 0;
+                    height: 28px;
+                    right:5px;
+                    bottom: -29px;
+                }
+                .date {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 14px;
+                    color: #3F3F3F;
+                    line-height: 13px;
+                    padding-right:15px;
+                    img {
+                        height: 15px;
+                        margin: 0 5px 0 0;
+                        padding: 0;
+                    }
                 }
             }
             .content {
@@ -144,20 +164,6 @@
                 }
                 .right {
                     width: 120px;
-                    .date {
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: center;
-                        align-items: center;
-                        font-size: 14px;
-                        color: #3F3F3F;
-                        line-height: 13px;
-                        img {
-                            height: 15px;
-                            margin: 0 10px 0 0;
-                            padding: 0;
-                        }
-                    }
                     .detail {
                         background-color: #FF8300;
                         height: 40px;
@@ -167,6 +173,13 @@
                         border-radius: 20px;
                         width: 120px;
                         margin-top: 7px;
+                    }
+                    .offerNum{
+                        font-size: 14px;
+                        margin-top: 8px;
+                        span{
+                            color:#FA6705;
+                        }
                     }
                 }
             }
@@ -185,7 +198,7 @@
 }
 </style>
 <template>
-    <div class="content urgent_need">
+    <div class="urgent_need">
         <div class="fixed">
             <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
             <perfectTitle :param="Titles" v-if="myTypes"></perfectTitle>
@@ -198,7 +211,7 @@
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0" v-bind:class="{have_title:Titles.myTitle}">
             <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                 <div class="newAdd" v-bind:class="{emtry:!newAdd,emtry_before:'change_opcaity'}">
-                    <span v-show="newAdd">今日新增{{newAdd}}条求购信息</span>
+                    <span v-show="newAdd">今日新增{{newAdd}}条药厂求购信息</span>
                 </div>
                 <div class="newAdd_p" v-show="newAdd"></div>
                 <ul class="list">
@@ -207,26 +220,28 @@
                             <img src="https://ojic8qd7z.qnssl.com/contry_icon/zhongguo.png" class="flag">
                             <div class="drug_factory" v-show="todo.indentType == 0">药厂</div>
                             <div class="breed">{{todo.breedName}}</div>
-                            <img src="/static/icon/demand.png" class="urgent" v-show="todo.especial == 1">
+                            <div class="emtrys"></div>
+                            <div class="date">
+                                <div><img src="/static/icon/times.png"></div>
+                                <div>剩余{{todo.duedate | needTimeDay}}<span>天</span></div>
+                            </div>
+                            <img src="/static/icon/urgent-2.png" class="urgent" v-show="todo.especial == 1">
                         </div>
                         <div class="content">
                             <div class="left">
                                 <div class="spec one">产品规格: {{todo.spec,4 | filterTxt}}</div>
                                 <div class="spec">产品产地: {{todo.location,4 | filterTxt}}</div>
                                 <div class="spec">需求数量: {{todo.number,5 | filterTxt}}({{todo.unit}})</div>
-                                <div class="spec">报价人数: {{todo.offer,4 | filterTxt}}人</div>
+                                <div class="spec">交货地址: {{todo.address,8 | filterTxt}}</div>
                             </div>
                             <div class="right">
-                                <div class="date">
-                                    <div><img src="/static/icon/times.png"></div>
-                                    <div>剩余{{todo.duedate | needTimeDay}}<span>天</span></div>
-                                </div>
                                 <div class="detail" v-show="todo.indentType !== 0">
                                     我要报价
                                 </div>
                                 <div class="detail" v-show="todo.indentType == 0">
                                     抢先报价
                                 </div>
+                                <div class="offerNum">已报价<span>{{todo.offer}}</span>人</div>
                             </div>
                         </div>
                     </li>
@@ -623,206 +638,4 @@ export default {
         }
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<!-- .page-loadmore-listitem {
-    height: 50px;
-    border-bottom: solid 1px #eee;
-    text-align: center;
-    &:first-child {
-        border-top: solid 1px #eee;
-    }
-}
 
-.page-loadmore-wrapper {
-    margin-top: -1px;
-    overflow: scroll;
-    padding-bottom: 10px;
-    width: 100%;
-}
-
-.mint-load {
-    background: #fff;
-}
-
-.mint-spinner {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.mint-loadmore-top span {
-    display: inline-block;
-    transition: .2s linear;
-    vertical-align: middle;
-}
-
-.mint-loadmore-bottom span {
-    display: inline-block;
-    transition: .2s linear;
-    vertical-align: middle;
-}
-
-.urgent_need {}
-
-.urgent_need .go-back {
-    position: absolute;
-    width: 15%;
-    padding-right: 5%;
-    height: 50px;
-    border-bottom: 1px solid #ccc;
-    background: #EC6817;
-}
-
-.urgent_need .title-name {
-    position: absolute;
-    left: 15%;
-    width: 70%;
-    height: 50px;
-    border-bottom: 1px solid #ccc;
-    background: #EC6817;
-    font-size: 1.7rem;
-    line-height: 50px;
-    color: white;
-}
-
-.urgent_need .go-back img {
-    margin-top: 15px;
-    height: 20px;
-}
-
-.urgent_need .bg_white {
-    background: #fff;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list {
-    padding: 0 10px;
-    float: left;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem {
-    float: left;
-    width: 100%;
-    min-height: 100px;
-    padding: 0;
-    height: auto;
-    background: white;
-    margin-top: 10px;
-    border-radius: 3px;
-    box-shadow: 0px 0px 20px #F5F5F5;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom {
-    float: left;
-    width: 100%;
-    padding: 0 10px;
-    height: 4.18rem;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom p {
-    line-height: 4.18rem;
-    float: left;
-    font-size: 1.2rem;
-    color: #666;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom span {
-    color: #EC6817;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .bottom button {
-    float: right;
-    background: #EC6817;
-    font-size: 1.2rem;
-    width: 5.97rem;
-    height: 2.389rem;
-    padding: 0 5px;
-    border: none;
-    color: #fff;
-    line-height: 0;
-    margin-top: 0.8955rem;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center {
-    float: left;
-    width: 100%;
-    border-bottom: 1px solid #ddd;
-    padding: 0 10px 1.066rem 10px;
-    /*padding:0 0 10px 0;*/
-    position: relative;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .flag {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    width: 1.7rem;
-    height: 1.23rem;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center div {
-    float: left;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title {
-    width: 100%;
-    font-size: 1.365rem;
-    color: #333;
-    line-height: 1.365rem;
-    /*margin: 10px 0;*/
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title>div {
-    margin-top: 1.06rem;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title p {
-    float: right;
-    font-size: 1rem;
-    color: #999;
-    margin: 1.2rem 2.559rem 0 0;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .title img {
-    width: 16px;
-    margin-right: 5px;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail {
-    width: 100%;
-    display: flex;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    flex-direction: column;
-    -webkit-box-orient: vertical;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div {
-    flex: 1;
-    -webkit-box-flex: 1;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    display: flex;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    flex-direction: row;
-    -webkit-box-orient: horizontal;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    margin-top: 1.279rem;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail .last p {
-    color: #666666;
-}
-
-.urgent_need .bg_white .page-loadmore-wrapper .page-loadmore-list .page-loadmore-listitem .center .detail div p {
-    flex: 1;
-    -webkit-box-flex: 1;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    font-size: 1.109rem;
-    color: #424242;
-} -->

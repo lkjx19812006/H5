@@ -454,6 +454,12 @@ Vue.filter('selectPhoto', function(val) {
         case 12:
             val = 'GSP资质证书';
             break;
+        case 13:
+            val = '生产许可证';
+            break;
+        case 14:
+            val = '生产许可证';
+            break;
     }
     return val;
 })

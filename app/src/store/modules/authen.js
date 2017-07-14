@@ -16,12 +16,18 @@ const actions = {
     getPhoto({ commit, state }, param) {
         commit('getPhoto', param)
         console.log(param)
+    },
+    removePhoto({ commit, state }){
+        commit('removePhoto')
     }
 
 }
 
 // mutations
 const mutations = {
+    removePhoto(state){
+        state.photoList = [];
+    },
     getPhoto(state, param) {
         console.log(param);
         for (var i = 0; i < param.length; i++) {
@@ -64,6 +70,12 @@ const mutations = {
                     break;
                 case 12:
                     param.name = 'GSP资质证书';
+                    break;
+                case 13:
+                    param.name = '生产许可证';
+                    break;
+                case 14:
+                    param.name = '生产许可证';
                     break;
             }
         }

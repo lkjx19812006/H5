@@ -25,7 +25,7 @@ import goodDetail from './views/goodDetail'
 import addAddress from './views/addAddress'
 import myPurchase from './views/myPurchase'
 import purchaseDetail from './views/purchaseDetail'
-import companyAuthentication from './views/companyAuthentication'
+// import companyAuthentication from './views/companyAuthentication'
 // import certification from './views/certification'
 import areaName from './views/areaName'
 import aboutus from './views/aboutus'
@@ -70,7 +70,7 @@ import personalStep1 from './views/authen/personalStep1'
 import personalStep2 from './views/authen/personalStep2'
 import authResult from './views/authen/authResult'
 import authPhoto from './views/authen/authPhoto'
-
+import companyAuth from './views/authen/companyAuth'
 
 const scrollBehavior = (to, from, savedPosition) => {
     console.log(savedPosition);
@@ -121,7 +121,8 @@ module.exports = {
         { name: 'goodDetail', path: '/goodDetail/:odId', component: goodDetail },
         { name: 'addAddress', path: '/addAddress', component: addAddress },
         { name: 'areaName', path: '/areaName', component: areaName },
-        { name: 'companyAuthentication', path: '/companyAuthentication', component: companyAuthentication },
+        // { name: 'companyAuthentication', path: '/companyAuthentication', component: companyAuthentication },
+        { name: 'companyAuth', path: '/companyAuth', component: companyAuth },
         { name: 'personalStep1', path: '/personalStep1', component: personalStep1 },
         { name: 'personalStep2', path: '/personalStep2', component: personalStep2 },
         { name: 'authResult', path: '/authResult', component: authResult },

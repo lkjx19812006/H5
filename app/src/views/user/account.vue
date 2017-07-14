@@ -16,8 +16,8 @@ textarea {
 .account {
     background-color: #F5F5F5;
     position: relative;
-    .main{
-        padding-bottom:40px;
+    .main {
+        padding-bottom: 40px;
     }
     .have_border {
         border-bottom: 1px solid #E6E6E6;
@@ -172,7 +172,7 @@ textarea {
                         </div>
                     </div>
                 </div>
-                <div class="box have_border" @click="jumpPerson()">
+                <div class="box have_border" @click="jumpPerson(userInfor.utype)">
                     <div class="inbox">
                         <div class="left">个人认证</div>
                         <div class="right">
@@ -203,22 +203,22 @@ textarea {
                             </div>
                         </div>
                     </div>
-                    <div class="box have_border" @click="jumpCompany()">
-                    <div class="inbox">
-                        <div class="left">企业认证</div>
-                        <div class="right">
-                            <div class="content">
-                                <span v-if="userInfor.utype == 0">未认证</span>
-                                <span v-if="userInfor.utype == 1">待审核</span>
-                                <span v-if="userInfor.utype == 2">已认证</span>
-                                <span v-if="userInfor.utype == 3">未通过</span>
-                            </div>
-                            <div class="image">
-                                <img src="/static/images/jiantou.png" class="right_dir">
+                    <div class="box have_border" @click="jumpCompany(userInfor.ctype)">
+                        <div class="inbox">
+                            <div class="left">企业认证</div>
+                            <div class="right">
+                                <div class="content">
+                                    <span v-if="userInfor.ctype == 0">未认证</span>
+                                    <span v-if="userInfor.ctype == 1">待审核</span>
+                                    <span v-if="userInfor.ctype == 2">已认证</span>
+                                    <span v-if="userInfor.ctype == 3">未通过</span>
+                                </div>
+                                <div class="image">
+                                    <img src="/static/images/jiantou.png" class="right_dir">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -297,15 +297,25 @@ export default {
                 }
                 this.$store.dispatch('upDataInfor', this.upDataInfor);
             },
-            jumpPerson() {
+            jumpPerson(type) {
                 let _self = this;
-                common.$emit("toAuthResult", 1);
-                _self.$router.push('/personalStep1');
+                if (type == 0) {
+                    _self.$router.push('/personalStep1');
+                } else {
+                    common.$emit("toAuthResult", 0);
+                    _self.$router.push('/authResult?authen=0');
+                }
             },
-            jumpCompany() {
+            jumpCompany(type) {
                 let _self = this;
-                common.$emit("companyAuthentication", 1);
-                _self.$router.push('/companyAuthentication');
+                if (type == 0) {
+                    common.$emit('toCompanyAuth',1)//去判断是不是药厂和饮片厂
+                    _self.$router.push('/companyAuth');
+                } else {
+                    common.$emit("toAuthResult", 1);
+                    _self.$router.push('/authResult?authen=1');
+                }
+
             },
             getTimeStamp(str) {
                 str = str.replace(/-/g, '/');
@@ -315,7 +325,6 @@ export default {
             handleConfirm(value) {
                 let _self = this;
                 _self.upDataInfor.birthday = value.getTime() / 1000;
-                //console.log(_self.upDataInfor.birthday)
                 for (var key in _self.upDataInfor) {
                     if (key !== 'birthday') {
                         _self.upDataInfor[key] = _self.userInfor[key]
@@ -397,9 +406,6 @@ export default {
         created() {
             let _self = this;
             _self.$store.dispatch('getUserInfor');
-            /*common.$on('getInfo', function(item) {
-                if (common.KEY) _self.$store.dispatch('getUserInfor');
-            })*/
             _self.start = new Date("1900-01-01");
             _self.end = new Date();
             let type = '';
