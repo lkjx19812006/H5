@@ -292,7 +292,7 @@
                         <span class="black" v-if="obj.newOffer.accept == '0'">{{obj.newOffer.accept | myOfferStatus}}</span>
                         <span class="red" v-if="obj.newOffer.accept == '1'">{{obj.newOffer.accept | myOfferStatus}}</span>
                         <span class="gray" v-if="obj.newOffer.accept == '2'">{{obj.newOffer.accept | myOfferStatus}}</span>
-                        <!-- <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span> -->
+                        <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span>
                     </div>
                     <div class="time">报价时间: {{obj.newOffer.otime | timeFormat}}</div>
                     <img src="/static/icon/used.png" class="used" v-if="obj.newOffer.accept == '1'">
@@ -325,7 +325,7 @@
                             <span class="black" v-show="todo.accept == '0'">{{todo.accept | myOfferStatus}}</span>
                             <span class="red" v-show="todo.accept == '1'">{{todo.accept | myOfferStatus}}</span>
                             <span class="gray" v-show="todo.accept == '2'">{{todo.accept | myOfferStatus}}</span>
-                           <!--  <span class="black" v-show="todo.accept == '3'">{{todo.accept | myOfferStatus}}</span> -->
+                            <span class="black" v-show="todo.accept == '3'">{{todo.accept | myOfferStatus}}</span>
                         </div>
                         <div class="time">报价时间: {{todo.otime | timeFormat}}</div>
                         <img src="/static/icon/used.png" class="used" v-show="todo.accept == '1'">

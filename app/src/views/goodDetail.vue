@@ -129,14 +129,17 @@ export default {
             getHttp(id) {
                 let _self = this;
                 //common.$emit('show-load');
-                httpService.getIntentionDetails(common.urlCommon + common.apiUrl.most, {
+                let url = common.addSID(common.urlCommon + common.apiUrl.most);
+                let body = {
                     biz_module: 'intentionService',
                     biz_method: 'queryIntentionInfo',
-
                     biz_param: {
                         id: id
                     }
-                }, function(suc) {
+                };
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+                httpService.getIntentionDetails(url, body,function(suc) {
 
 
                     console.log(suc.data.biz_result);

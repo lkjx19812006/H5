@@ -52,6 +52,9 @@
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import filters from '../../filters/filters'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
             return {
@@ -63,6 +66,11 @@ export default {
 
             }
         },
+        computed: {
+            userInfor() {
+                return this.$store.state.user.userInfor;
+            }
+        },
         methods: {
             closeTitle() {
                 let _self = this;
@@ -70,6 +78,17 @@ export default {
             },
             perfectMessage() {
                 let _self = this;
+                if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
+                        function perfect() {
+                            _self.$router.push('/perfectObject');
+                        }
+                        common.$emit('confirm', {
+                            message: '请先完善信息',
+                            title: '提示',
+                            ensure: perfect
+                        });
+                        return;
+                }
                 _self.param.selectType = true;
             }
         },

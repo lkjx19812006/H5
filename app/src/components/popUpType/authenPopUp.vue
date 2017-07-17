@@ -70,13 +70,11 @@ export default {
         methods: {
             person() {
                 let _self = this;
-                common.$emit("certification", 1)
-                _self.$router.push('/certification');
+                _self.$router.push('/personalStep1');
             },
             company() {
                 let _self = this;
-                common.$emit("companyAuthentication", 1);
-                _self.$router.push('/companyAuthentication');
+                _self.$router.push('/companyAuth');
             }
         },
         created() {

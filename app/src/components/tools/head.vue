@@ -37,7 +37,13 @@ export default {
         },
         methods: {
             back() {
-                window.history.go(-1);
+                let _self = this;
+                if (window.history.length == 1) {
+                    _self.$router.push('/home');
+                }else{
+                    window.history.go(-1);
+                }
+                
             },
             clearWord() {
                 this.param.keyword='';

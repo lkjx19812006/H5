@@ -13,8 +13,8 @@
         transition: .2s linear;
         vertical-align: middle;
     }
-    .main {
-        li {
+      .main {
+          li {
             background-color: #fff;
             margin-top: 10px;
             .box {
@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="left" v-show="todo.onSell == 1">求购状态: {{todo.onSell | myStatus}}</div>
                                 <div class="right">{{todo.pubdate | timeFormats}}</div>
-                            </div>
+                        </div>
                             <div class="content">
                                 <div class="left">
                                     <div class="breed_name">{{todo.breedName}} {{todo.number}}({{todo.unit}})</div>
@@ -120,10 +120,10 @@
                                 <div class="right">
                                     <div class="date">
                                         <div><img src="/static/icon/times.png"></div>
-                                        <div>剩余{{todo.duedate | needTimeDay}}<span>天</span></div>
+                                        <div>{{todo.duedate | needTimeDay}}</div>
                                         <!-- <div v-if="todo.especial !== 1 && todo.type == 0">长期</div> -->
                                     </div>
-                                    <div class="detail" >
+                                <div class="detail" >
                                         求购详情
                                     </div>
                                 </div>

@@ -282,7 +282,7 @@
                             <div class="emtrys"></div>
                             <div class="date">
                                 <div><img src="/static/icon/times.png"></div>
-                                <div>剩余{{todo.duedate | needTimeDay}}<span>天</span></div>
+                                <div>{{todo.duedate | needTimeDay}}</div>
                             </div>
                             <img src="/static/icon/urgent-2.png" class="urgent" v-show="todo.especial == 1">
                         </div>

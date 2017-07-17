@@ -79,6 +79,7 @@ textarea {
     }
 }
 </style>
+
 <template>
     <div class="account">
         <myHeader :param="head"></myHeader>
@@ -98,13 +99,23 @@ textarea {
                         </div>
                     </div>
                 </div>
-                <div class="box have_border" @click="change(userInfor.fullname,1)">
+                <div class="box have_border" @click="change(userInfor.fullname,1)" v-show="userInfor.utype !== 2">
                     <div class="inbox">
                         <div class="left">姓名</div>
                         <div class="right">
                             <div class="content">{{userInfor.fullname}}</div>
                             <div class="image">
                                 <img src="/static/images/jiantou.png" class="right_dir">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box" v-show="userInfor.name && userInfor.utype == 2">
+                    <div class="inbox have_border">
+                        <div class="left">姓名</div>
+                        <div class="right">
+                            <div class="image content">
+                                {{userInfor.name}}
                             </div>
                         </div>
                     </div>
@@ -227,6 +238,7 @@ textarea {
     </div>
 </template>
 <script>
+
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import myHeader from '../../components/tools/myHeader'
@@ -299,6 +311,17 @@ export default {
             },
             jumpPerson(type) {
                 let _self = this;
+                if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
+                        function perfect() {
+                            _self.$router.push('/perfectObject');
+                        }
+                        common.$emit('confirm', {
+                            message: '请先完善信息',
+                            title: '提示',
+                            ensure: perfect
+                        });
+                        return;
+                }
                 if (type == 0) {
                     _self.$router.push('/personalStep1');
                 } else {
@@ -308,6 +331,18 @@ export default {
             },
             jumpCompany(type) {
                 let _self = this;
+                if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
+                        function perfect() {
+                            //common.$emit('setParam','authRouter','account');
+                            _self.$router.push('/perfectObject');
+                        }
+                        common.$emit('confirm', {
+                            message: '请先完善信息',
+                            title: '提示',
+                            ensure: perfect
+                        });
+                        return;
+                }
                 if (type == 0) {
                     common.$emit('toCompanyAuth',1)//去判断是不是药厂和饮片厂
                     _self.$router.push('/companyAuth');

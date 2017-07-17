@@ -101,26 +101,29 @@ export default {
                     default: '/static/icon/auth.png',
                     title: '身份证正面照片',
                     url: '',
+                    index:0,
                     catagory: 1
                 }, {
                     default: '/static/icon/auth2.png',
                     title: '身份证反面照片',
                     catagory: 2,
+                    index: 1,
                     url: '',
                 }, {
                     default: '/static/icon/auth3.png',
                     title: '手持身份证照片',
                     catagory: 0,
+                    index: 2,
                     url: ''
                 }],
                 arr: [{
-                    catagory: '0',
-                    path: ''
-                }, {
                     catagory: '1',
                     path: ''
                 }, {
                     catagory: '2',
+                    path: ''
+                }, {
+                    catagory: '0',
                     path: ''
                 }],
                 param: {
@@ -142,8 +145,9 @@ export default {
         methods: {
             getUrl(param) {
                 let _self = this;
-                if (param.url) this.imgArr[param.catagory].url = param.url;
-                if (param.url) this.arr[param.catagory].path = param.url;
+                
+                if (param.url) this.imgArr[param.index].url = param.url;
+                if (param.url) this.arr[param.index].path = param.url;
             },
             deletes(todo,index) {
                 let _self = this;
@@ -151,7 +155,9 @@ export default {
                 this.arr[index].path = '';
             },
             submit(){
+
                 let _self = this;
+                console.log(22,_self.param.fullname)
                 common.$emit('show-load');
                 let url = common.urlCommon + common.apiUrl.most;
                 let body = {
@@ -159,7 +165,7 @@ export default {
                     biz_method: 'webSubmitAuthenImage',
                     biz_param: {
                         type: 0,
-                        fullname:_self.param.fullname,
+                        name:_self.param.fullname,
                         idnumber:_self.param.idnumber,
                         authenImage:_self.arr
                     }

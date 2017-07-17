@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import CryptoJS from "crypto-js"
 import crypto from "crypto"
-import { Indicator, Toast, MessageBox, DatetimePicker } from 'mint-ui'
+import {
+    Indicator,
+    Toast,
+    MessageBox,
+    DatetimePicker
+} from 'mint-ui'
 import wx from 'weixin-js-sdk'
 let shareUrl = window.location.href.split('#')[0];
-
 //百度统计代码
 var _hmt = _hmt || [];
 (function() {
@@ -13,8 +17,6 @@ var _hmt = _hmt || [];
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
 })();
-
-
 console.log(1565213516)
 let common = new Vue({
     data: {
@@ -63,14 +65,15 @@ let common = new Vue({
             skipLogin: '',
             myInfo: '',
             clickEvent: '',
-            postUsers: ''
+            postUsers: '',
+            authRouter:''
         },
         shareParam: {
             imgUrl: 'http://apps.yaocaimaimai.com/htm5/static/icons/err.png',
             title: "买卖药材就上药材买卖网！",
             desc: '药材买卖网（yaocaimaimai.com）隶属于上海冕冠电子商务有限公司，是由知名VC、天使投资人投资千万人民币，旨在打造全球最大的药材交易平台!',
             link: 'http://apps.yaocaimaimai.com/htm5/#/home'
-                /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
+            /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
         }
     },
     methods: {
@@ -82,7 +85,7 @@ let common = new Vue({
                     title: "买卖药材就上药材买卖网！",
                     desc: '药材买卖网（yaocaimaimai.com）隶属于上海冕冠电子商务有限公司，是由知名VC、天使投资人投资千万人民币，旨在打造全球最大的药材交易平台!',
                     link: 'http://apps.yaocaimaimai.com/htm5/#/home'
-                        /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
+                    /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
                 };
             } else {
                 _self.shareParam = {
@@ -92,36 +95,26 @@ let common = new Vue({
                     link: data.link
                 };
             }
-
             wx.onMenuShareTimeline({
                 imgUrl: _self.shareParam.imgUrl,
                 title: _self.shareParam.title,
                 desc: _self.shareParam.desc,
                 link: _self.shareParam.link,
-                success: function() {
-
-                },
-                cancel: function() {
-
-                }
+                success: function() {},
+                cancel: function() {}
             });
             wx.onMenuShareAppMessage({
                 imgUrl: _self.shareParam.imgUrl,
                 title: _self.shareParam.title,
                 desc: _self.shareParam.desc,
                 link: _self.shareParam.link,
-                success: function() {
-
-                },
-                cancel: function() {
-
-                }
+                success: function() {},
+                cancel: function() {}
             });
         },
         shareCreate(data) {
             let _self = this;
             console.log(data);
-
             wx.config({ //微信配置
                 debug: false,
                 appId: data.appId,
@@ -229,19 +222,15 @@ let common = new Vue({
                     var ua = window.navigator.userAgent.toLowerCase();
                     if (ua.match(/MicroMessenger/i) == 'micromessenger') {
                         _self.wxshow = true;
-
                     } else {
                         _self.wxshow = false;
                     }
                     _self.wxrun = false;
                 }
-
             } else {
                 _self.wxrun = false;
                 return _self.wxshow = false;
             }
-
-
         },
         phoneType() {
             let _self = this;
@@ -249,7 +238,6 @@ let common = new Vue({
                 var u = navigator.userAgent;
                 var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
                 var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-
                 if (isiOS) {
                     _self.phoneType = false;
                 }
@@ -258,30 +246,22 @@ let common = new Vue({
                 }
                 _self.phoneRun = false;
             }
-
         },
-
     }
 })
 common.isWeiXin();
-
 common.$on('show-load', () => {
     Indicator.open('Loading...');
-
 })
-
 common.$on('close-load', () => {
     Indicator.close();
 })
-
 common.$on('success', () => {
     Toast({
         message: '操作成功',
         iconClass: 'icon icon-success'
     });
 })
-
-
 common.$on('message', message => {
     if (!message) {
         return;
@@ -292,26 +272,21 @@ common.$on('message', message => {
     });
 })
 common.$on('prompt', (obj) => {
-    MessageBox.prompt(' ', obj.text).then(({ value }) => {
+    MessageBox.prompt(' ', obj.text).then(({
+        value
+    }) => {
         if (value) {
             this
             MessageBox.alert(obj.title + `${ value }`, '输入成功');
         }
     });
 })
-
 common.$on('touch', )
-
 common.$on('confirm', (obj) => {
     MessageBox.confirm(obj.message, obj.title).then(action => {
         obj.ensure();
-    }, action => {
-
-    })
+    }, action => {})
 })
-
-
-
 common.$on('judge', (obj) => {
     MessageBox.confirm(obj.message, obj.title).then(action => {
         obj.ensure();
@@ -319,9 +294,7 @@ common.$on('judge', (obj) => {
         obj.unensure();
     })
 })
-
 common.$on('setParam', (key, value) => {
     common.pageParam[key] = value;
 })
-
 module.exports = common;

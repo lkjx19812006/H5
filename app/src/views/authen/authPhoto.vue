@@ -1,68 +1,68 @@
 <style lang="less" scoped>
-input[type="text"],
-input[type="submit"],
-input[type="reset"],
-select,
-textarea {
-    -webkit-appearance: none;
-    border-radius: 0;
-}
-
-input {
-    border: none;
-}
-
-.auth_photo {
-    .person {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        .box {
-            width: 50%;
-            box-sizing: border-box;
-            .image {
-                padding: 15px 0;
-                img {
-                    width: 150px;
-                    height: 115px;
+    input[type="text"],
+    input[type="submit"],
+    input[type="reset"],
+    select,
+    textarea {
+        -webkit-appearance: none;
+        border-radius: 0;
+    }
+    
+    input {
+        border: none;
+    }
+    
+    .auth_photo {
+        .person {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            .box {
+                width: 50%;
+                box-sizing: border-box;
+                .image {
+                    padding: 15px 0;
+                    img {
+                        width: 150px;
+                        height: 115px;
+                    }
                 }
             }
         }
     }
-}
 </style>
 <template>
-    <div class="auth_photo">
+   <div class="auth_photo">
         <myHeader :param="head" v-show="!my_param.show"></myHeader>
-        <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="!my_param.show">
-            <div class="person">
+    <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="!my_param.show">
+         <div class="person">
                 <div class="box" v-for="(todo,index) in photo" @click="popUp(index,photo)">
                     <div class="image">
                         <img :src="todo.path">
                     </div>
                     <div class="title">{{todo.category | selectPhoto}}</div>
                 </div>
-            </div>
+        </div>
         </div>
         <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>
     </div>
 </template>
 <script>
-import common from '../../common/common.js'
-import httpService from '../../common/httpService.js'
-import myHeader from '../../components/tools/myHeader'
-import validation from '../../validation/validation.js'
-import filters from '../../filters/filters.js'
-import popUpBigImg from '../../components/tools/popUpBigImg'
-import {
-    mapGetters
-} from 'vuex'
-export default {
-    data() {
+    import common from '../../common/common.js'
+    import httpService from '../../common/httpService.js'
+    import myHeader from '../../components/tools/myHeader'
+    import validation from '../../validation/validation.js'
+    import filters from '../../filters/filters.js'
+    import popUpBigImg from '../../components/tools/popUpBigImg'
+    import {
+        mapGetters
+    } from 'vuex'
+    export default {
+        data() {
             return {
-                head: {
+            head: {
                     name: '证件照片'
                 },
                 my_param: {
@@ -118,7 +118,7 @@ export default {
             },
             popUp(index, imgArr) {
                 let arr = [];
-                for(var i=0;i<imgArr.length;i++){
+                for (var i = 0; i < imgArr.length; i++) {
                     arr.push(imgArr[i].path)
                 }
                 console.log(arr);
@@ -137,5 +137,5 @@ export default {
         mounted() {
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
-}
+    }
 </script>

@@ -66,16 +66,16 @@ Vue.filter('needTimeDay', function(due) {
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
 
         if (days > 0) {
-            days = days;
+            days = '剩余' + days + '天';
         } else if (days <= 0) {
-            days = 0;
+            days = '已过期';
         }
 
         if (days > 30) {
-            days = 30;
+            days = '剩余' + 30 + '天';
         }
     } else {
-        days = 0;
+        days = '已过期';
     }
     return days;
 });
@@ -255,8 +255,30 @@ Vue.filter('myOfferStatus', function(val) {
         case 2:
             val = '未采用';
             break;
+        case 3:
+            val = '处理中';
+            break;
         default:
             val = '';
+            break;
+    }
+    return val;
+});
+
+//认证类别
+Vue.filter('myAuthStatus', function(val) {
+    switch (val) {
+        case 0:
+            val = '';
+            break;
+        case 1:
+            val = '个人认证';
+            break;
+        case 2:
+            val = '三证合一';
+            break;
+        case 3:
+            val = '传统三证';
             break;
     }
     return val;
@@ -399,6 +421,9 @@ Vue.filter('lineTxtTwo', function(txt) {
 //买卖性质
 Vue.filter('userTypes', function(val) {
     switch (val) {
+        case 0:
+            val = '';
+            break;
         case 1:
             val = '买方';
             break;

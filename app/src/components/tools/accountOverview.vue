@@ -12,7 +12,10 @@
                 <img src="/static/images/company-cer.png" v-show="param.ctype !== 2">
                 <img src="/static/images/companys-Cer.png" v-show="param.ctype == 2">
             </div>
-            <p class="company-name">{{param.company}}<span v-show="param.fullname">(</span>{{param.fullname}}<span v-show="param.fullname">)</span></p>
+            <p class="company-name">{{param.company}}
+                <span v-show="userInfor.utype !== 2"><span v-show="param.fullname">(</span>{{param.fullname}}<span v-show="param.fullname">)</span></span>
+                <span v-show="userInfor.utype == 2 && userInfor.name">({{userInfor.name}})</span>
+            </p>
             <!-- <p class="company-name">{{param.company}}</p> -->
             <div class="footer">
                 <div class="drug_money">
@@ -61,7 +64,10 @@ export default {
         computed: {
             param() {
                 return this.$store.state.user.userInfor;
-            }
+            },
+            userInfor() {
+                return this.$store.state.user.userInfor;
+            },
         },
         methods: {
             jump() {

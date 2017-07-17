@@ -125,16 +125,16 @@ input {
             <div class="box">
                 <div class="top" v-show="authenType == 1">
                     <img src="/static/icon/wait-auth.png" class="top_img">
-                    <div class="word">你的实名认证正在审核中</div>
+                    <div class="word">您的<span v-show="type == 0">实名</span><span v-show="type == 1">企业</span>认证正在审核中</div>
                     <div class="word word_top">请耐心等待...</div>
                 </div>
                 <div class="top" v-show="authenType == 2">
                     <img src="/static/icon/pass-auth.png" class="top_img no_top">
-                    <div class="word green">恭喜您，你的认证审核已经通过啦！</div>
+                    <div class="word green">恭喜您，您的认证审核已经通过啦！</div>
                 </div>
                 <div class="top" v-show="authenType == 3">
                     <img src="/static/icon/un-pass-auth.png" class="top_img">
-                    <div class="word red">你的认证未通过，请核对您的信息</div>
+                    <div class="word red">您的认证未通过，请核对您的信息</div>
                     <div class="word word_top red">进行再次认证</div>
                 </div>
                 <personPhoto :type="type"></personPhoto>
@@ -143,7 +143,7 @@ input {
                 再次认证
             </div>
             <div class="footers">
-                药材买卖网保障你的信息安全
+                药材买卖网保障您的信息安全
             </div>
         </div>
     </div>

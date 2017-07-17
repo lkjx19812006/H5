@@ -105,7 +105,7 @@ input,textarea  {
                     <div class="time">
                         <img src="/static/icon/times.png">
                     </div>
-                    <div>剩余<span>{{obj.duedate | needTimeDay}}</span>天</div>
+                    <div>{{obj.duedate | needTimeDay}}</div>
                 </div>
             </div>
         </div>

@@ -36,17 +36,17 @@ function isWeiXin() {
 
 if (isWeiXin()) common.getWeixinSign(common.shareUrl);
 
-function stopPropagation(e) {  
-    e = e || window.event;  
-    if(e.stopPropagation) { //W3C阻止冒泡方法  
-        e.stopPropagation();  
-    } else {  
+function stopPropagation(e) {
+    e = e || window.event;
+    if (e.stopPropagation) { //W3C阻止冒泡方法  
+        e.stopPropagation();
+    } else {
         e.cancelBubble = true; //IE阻止冒泡方法  
-    }  
-}  
-document.getElementsByTagName('div').touch = function(e) {  
-    stopPropagation(e);  
-}  
+    }
+}
+document.getElementsByTagName('div').touch = function(e) {
+    stopPropagation(e);
+}
 
 document.getElementsByTagName("html")[0].style.fontSize = Math.floor(document.documentElement.clientWidth * 100000 / 32) / 100000 + "px";
 const router = new VueRouter(
@@ -88,9 +88,9 @@ Vue.http.interceptors.push((request, next) => {
         if (response.status == 403) {
             if (common.wxshow == true) {
                 return router.push('/wchatLogin');
-            } else{
+            } else {
                 return router.push('/login');
-            }         
+            }
         }
         return response
     })

@@ -142,9 +142,9 @@
                                 <div class="left" v-show="todo.accept == 2">报价状态:
                                     <span class="gray">{{todo.accept | myOfferStatus}}</span>
                                 </div>
-                                <!-- <div class="left" v-show="todo.accept == 3">报价状态:
+                                <div class="left black" v-show="todo.accept == 3">报价状态:
                                     <span class="black">{{todo.accept | myOfferStatus}}</span>
-                                </div> -->
+                                </div>
                                 <div class="right">{{todo.otime | timeFormats}}</div>
                             </div>
                             <div class="content">
@@ -156,7 +156,7 @@
                                 <div class="right">
                                     <div class="date">
                                         <div><img src="/static/icon/times.png"></div>
-                                        <div>剩余{{todo.duedate | needTimeDay}}<span>天</span></div>
+                                        <div>{{todo.duedate | needTimeDay}}</div>
                                         <!-- <div v-if="todo.especial !== 1 && todo.type == 0">长期</div> -->
                                     </div>
                                     <div class="detail">

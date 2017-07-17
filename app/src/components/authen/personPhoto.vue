@@ -75,7 +75,7 @@ input {
         </div>
         <div class="bbox" v-if="type == 0">
             <div class="name">真实姓名</div>
-            <div class="content">{{userInfor.fullname}}</div>
+            <div class="content">{{userInfor.name}}</div>
         </div>
         <div class="bbox" v-if="type == 0">
             <div class="name">身份证号</div>
@@ -87,14 +87,15 @@ input {
         </div>
         <div class="bbox" v-if="type == 1">
             <div class="name">认证类别</div>
-            <div class="content">三证合一</div>
+            <div class="content">{{userInfor.authenStyle | myAuthStatus}}</div>
         </div>
         <div class="bbox" @click="jump(type)">
             <div class="name">证件照片</div>
             <div class="right">
-                <div class="image">
+                <!-- <div class="image">
                     <img src="/static/icon/default-pic.png" class="default">
-                </div>
+                </div> -->
+                <div class="content">点击查看</div>
                 <div class="image">
                     <img src="/static/images/jiantou.png" class="right_dir">
                 </div>

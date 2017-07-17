@@ -439,7 +439,8 @@ export default {
                 } else {
                     _self.$store.dispatch('upDataInfor', obj).then(() => {
                         common.$emit('perfectOldCustomer', 1);
-                        console.log(_self.backRouter)
+                        //console.log(_self.backRouter)
+                        //if(co)
                         _self.$router.push('/home');
 
                     }), (() => {

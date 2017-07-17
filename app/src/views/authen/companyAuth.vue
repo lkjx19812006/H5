@@ -42,7 +42,7 @@ input {
     }
     .box {
         padding-left: 20px;
-        margin-top: 25px;
+        margin-top: 15px;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -72,6 +72,25 @@ input {
             }
         }
     }
+    .company{
+        padding: 13px;
+        width:90%;
+        border:1px solid #E6E6E6;
+        margin:20px auto 0 auto;
+        background-color: #fff;
+        border-radius: 3px;
+        input{
+            width:100%;
+            height:100%;
+        }
+    }
+    .tt{
+        text-align: left;
+        font-size: 12px;
+        color: #ff0000;
+        margin-left: 5%;
+        margin-top:5px;
+    }
 }
 </style>
 <template>
@@ -85,6 +104,10 @@ input {
             <div class="title">
                 请完成一下内容
             </div>
+            <div class="company">
+                <input type="text" v-model="company" placeholder="请输入您的企业名称">
+            </div>  
+            <div class="tt">* 企业名称为必填项目</div>  
             <div class="box" v-if="myShow.left">
                 <div class="tbox" v-for="(todo,index) in leftImgArr">
                     <imageUpLoad :param="todo" v-on:postUrl="getUrl" v-if="!todo.url"></imageUpLoad>
@@ -127,6 +150,8 @@ export default {
                 head: {
                     name: '企业认证'
                 },
+                company:'',
+                authenStyle:'2',
                 authenType: '',
                 list: [],
                 myShow: {
@@ -280,9 +305,11 @@ export default {
                 todo.url = '';
                 if (_self.myShow.left) {
                     this.leftArr[index].path = '';
+                    
                 }
                 if (_self.myShow.right) {
                     this.rightArr[index].path = '';
+
                 }
 
             },
@@ -291,9 +318,11 @@ export default {
                 let arr = '';
                 if (_self.myShow.left) {
                     arr = _self.leftArr;
+                    _self.authenStyle = '2';
                 }
                 if (_self.myShow.right) {
                     arr = _self.rightArr;
+                    _self.authenStyle = '3';
                 }
                 common.$emit('show-load');
                 let url = common.urlCommon + common.apiUrl.most;
@@ -302,7 +331,9 @@ export default {
                     biz_method: 'webSubmitAuthenImage',
                     biz_param: {
                         type: 1,
-                        authenImage: arr
+                        authenImage: arr,
+                        company:_self.company,
+                        authenStyle:_self.authenStyle
                     }
                 }
                 if (common.KEY) {
@@ -326,6 +357,10 @@ export default {
             confirm() {
                 let _self = this;
                 let val = '';
+                if(!_self.company){
+                    common.$emit('message', '请输入公司名称');
+                    return
+                }
                 //三证合一
                 if (_self.myShow.left) {
                     if (_self.userInfor.manageType == 3 || _self.userInfor.manageType == 23) {
