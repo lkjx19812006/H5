@@ -136,6 +136,7 @@
         padding: 0 0 0 10px;
         display: flex;
         flex-direction: row;
+        
         .cat {
             height: 100px;
         }
@@ -145,6 +146,12 @@
             position: relative;
             .circle {
                 width: 225px;
+            }
+            .cancel{
+                width:26px;
+                position: absolute;
+                right:-13px;
+                top:-13px;
             }
             .my_title {
                 position: absolute;
@@ -309,7 +316,7 @@
             </div>
         </div>
         <!-- 不发送朋友圈理由 -->
-        <opinion :arr="arr" class="opinion" v-on:cancel="cancel" v-on:selectit="selectIt" v-show="opinion">
+        <opinion :arr="arr" class="opinion" v-on:cancel="cancel" v-on:selectIt="selectIt" v-show="opinion">
         </opinion>
         <myHeader :param="param">
         </myHeader>
@@ -421,12 +428,12 @@
                     </div>
                 </div>
                 <!--  <div class="infor_box">
-                                <div class="infor">
-                                    <div class="name">付款方式</div>
-                                    <div class="content" v-show="obj.paymentWay">{{obj.paymentWay}}</div>
-                                    <div class="content" v-show="!obj.paymentWay">面议</div>
-                                </div>
-                            </div> -->
+                                    <div class="infor">
+                                        <div class="name">付款方式</div>
+                                        <div class="content" v-show="obj.paymentWay">{{obj.paymentWay}}</div>
+                                        <div class="content" v-show="!obj.paymentWay">面议</div>
+                                    </div>
+                                </div> -->
                 <div class="infor_box">
                     <div class="infor infor_nor">
                         <div class="name">
@@ -446,12 +453,13 @@
             <img alt="" class="cat" src="/static/icon/mascot.png">
             <div class="circle_box">
                 <img alt="" class="circle" src="/static/icon/circle.png" />
+                <!-- <img src="/static/icons/upload-delete.png" alt="" class="cancel"> -->
                 <div class="my_title">
                     本条求购已有
                     <span>
                         {{obj.offer}}
                     </span>
-                    报价预计很快成交, 不报价会后悔哟
+                    人报价预计很快成交, 不报价会后悔哟
                 </div>
     
             </div>
@@ -570,7 +578,7 @@ export default {
                     //common.$emit('message',result.isMy)
                     _self.obj = result;
                     if (result.isMy == 0 && result.offer >= 3) {
-                        _self.mascot = false;
+
                         setTimeout(() => {
                             _self.mascot = true;
                         }, 2000)
@@ -733,8 +741,10 @@ export default {
             _hmt.push(['_setAutoPageview', false]);
             _hmt.push(['_trackPageview', '/needDetails/*?value=message']);
         }
+        _self.mascot = false;
         _self.getHttp(id);
         _self.id = id;
+
         // _self.mascot = false;
         //  setTimeout(()=>{
         //      _self.mascot = true;
@@ -746,18 +756,20 @@ export default {
             } else {
                 _self.type = true;
             }
+            _self.mascot = false;
             _self.getHttp(item.id);
             _self.id = item.id;
             _self.show = false;
-            // _self.mascot = false;
+
             // setTimeout(()=>{
             //    _self.mascot = true;
             // },3000)
 
         });
         common.$on("loginToDetails", function (item) {
+            _self.mascot = false;
             _self.getHttp(item.id);
-            // _self.mascot = false;
+
             // setTimeout(()=>{
             //    _self.mascot = true;
             // },3000)

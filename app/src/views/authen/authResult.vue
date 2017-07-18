@@ -120,12 +120,14 @@ input {
 </style>
 <template>
     <div class="auth_result">
-        <myHeader :param="head"></myHeader>
-        <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <myHeader :param="head" v-show="!my_param.show"></myHeader>
+        <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="!my_param.show">
             <div class="box">
                 <div class="top" v-show="authenType == 1">
                     <img src="/static/icon/wait-auth.png" class="top_img">
-                    <div class="word">您的<span v-show="type == 0">实名</span><span v-show="type == 1">企业</span>认证正在审核中</div>
+                    <div class="word">您的
+                        <span v-show="type == 0">实名</span>
+                        <span v-show="type == 1">企业</span>认证正在审核中</div>
                     <div class="word word_top">请耐心等待...</div>
                 </div>
                 <div class="top" v-show="authenType == 2">
@@ -137,7 +139,7 @@ input {
                     <div class="word red">您的认证未通过，请核对您的信息</div>
                     <div class="word word_top red">进行再次认证</div>
                 </div>
-                <personPhoto :type="type"></personPhoto>
+                <personPhoto :type="type" :myType="myType" v-on:allPhoto="allPhoto"></personPhoto>
             </div>
             <div class="again" @click="again" v-show="authenType == 3">
                 再次认证
@@ -146,6 +148,7 @@ input {
                 药材买卖网保障您的信息安全
             </div>
         </div>
+        <popUpBigImg :param="my_param" v-show="my_param.show"></popUpBigImg>
     </div>
 </template>
 <script>
@@ -153,6 +156,7 @@ import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import myHeader from '../../components/tools/myHeader'
 import personPhoto from '../../components/authen/personPhoto'
+import popUpBigImg from '../../components/tools/popUpBigImg'
 import validation from '../../validation/validation.js'
 import filters from '../../filters/filters.js'
 import {
@@ -160,104 +164,119 @@ import {
 } from 'vuex'
 export default {
     data() {
-            return {
-                head: {
-                    name: '认证中'
-                },
-                authenType: '',
-                list: [],
-                type:''
-            }
-        },
-        components: {
-            myHeader,
-            personPhoto
-        },
-        computed: {
-            userInfor() {
-                return this.$store.state.user.userInfor;
+        return {
+            head: {
+                name: '认证中'
             },
-            photo() {
-                return this.$store.state.authen.photoList;
-            }
+            authenType: '',
+            list: [],
+            type: '',
+            myType: '',
+            my_param: {
+                url: '',
+                show: false,
+                whole_height: ''
+            },
+        }
+    },
+    components: {
+        myHeader,
+        personPhoto,
+        popUpBigImg
+    },
+    computed: {
+        userInfor() {
+            return this.$store.state.user.userInfor;
         },
-        methods: {
-            getHttp() {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.urlCommon + common.apiUrl.most;
-                let body = {
-                    biz_module: 'userService',
-                    biz_method: 'queryUserAuthenImage',
-                    biz_param: {
-                        type: _self.type
-                    }
-                }
-                if (common.KEY) {
-                    url = common.addSID(common.urlCommon + common.apiUrl.most);
-                    body.version = 1;
-                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                }
-                httpService.myAttention(url, body, function(suc) {
-                    common.$emit('close-load');
-                    //common.$emit('message', suc.data.msg);
-                    if (suc.data.code == '1c01') {
-                        //console.log(suc.data.biz_result.authenType);
-                        _self.authenType = suc.data.biz_result.authenType;
-                        //console.log(22,suc.data.biz_result.list)
-                        _self.$store.dispatch('getPhoto', suc.data.biz_result.list)
-                        _self.headName(_self.authenType);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-            },
-            headName(index) {
-                let _self = this;
-                switch (index) {
-                    case 1:
-                        _self.head.name = '认证中';
-                        break;
-                    case 2:
-                        _self.head.name = '认证通过';
-                        break;
-                    case 3:
-                        _self.head.name = '认证未通过';
-                        break;
-                }
-            },
-            jump() {
-                let _self = this;
-                _self.$router.push('/authPhoto')
-            },
-            again() {
-                let _self = this;
-                //个人认证
-                if(_self.type == 0)_self.$router.push('/personalStep1');   
-                //企业认证
-                if(_self.type == 1){
-                    common.$emit('toCompanyAuth',1)//去判断是不是药厂和饮片厂
-                    _self.$router.push('/companyAuth');  
-                }
-            }
-        },
-        created() {
+        photo() {
+            return this.$store.state.authen.photoList;
+        }
+    },
+    methods: {
+        getHttp() {
             let _self = this;
-            common.$on("toAuthResult", function(item) {
-                console.log(item)
-                _self.type = item;
-                _self.getHttp();
-                _self.$store.dispatch('getUserInfor');
+            common.$emit('show-load');
+            let url = common.urlCommon + common.apiUrl.most;
+            let body = {
+                biz_module: 'userService',
+                biz_method: 'queryUserAuthenImage',
+                biz_param: {
+                    type: _self.type
+                }
+            }
+            if (common.KEY) {
+                url = common.addSID(common.urlCommon + common.apiUrl.most);
+                body.version = 1;
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+            }
+            httpService.myAttention(url, body, function (suc) {
+                common.$emit('close-load');
+                if (suc.data.code == '1c01') {
+                    _self.authenType = suc.data.biz_result.authenType;
+                    _self.$store.dispatch('getPhoto', suc.data.biz_result.list)
+                    _self.headName(_self.authenType);
+                }
+            }, function (err) {
+                common.$emit('close-load');
+                common.$emit('message', err.data.msg);
             })
-            _self.type = this.$route.query.authen;
-            //console.log(22,this.$route.query.authen)
+        },
+        headName(index) {
+            let _self = this;
+            switch (index) {
+                case 1:
+                    _self.head.name = '认证中';
+                    break;
+                case 2:
+                    _self.head.name = '认证通过';
+                    break;
+                case 3:
+                    _self.head.name = '认证未通过';
+                    break;
+            }
+        },
+        jump() {
+            let _self = this;
+            _self.$router.push('/authPhoto')
+        },
+        again() {
+            let _self = this;
+            //个人认证
+            if (_self.type == 0) _self.$router.push('/personalStep1');
+            //企业认证
+            if (_self.type == 1) {
+                common.$emit('toCompanyAuth', 1)//去判断是不是药厂和饮片厂
+                _self.$router.push('/companyAuth');
+            }
+        },
+        allPhoto() {
+            //console.log(this.photo)
+            let _self = this;
+            let arr = [];
+            for(var i=0;i<_self.photo.length;i++){
+                arr.push(_self.photo[i].path)
+            }
+            this.my_param.url = arr;
+            this.my_param.show = !this.my_param.show;
+            this.my_param.whole_height = document.documentElement.clientHeight;
+        }
+    },
+    created() {
+        let _self = this;
+        common.$on("toAuthResult", function (item) {
+            console.log(item)
+            _self.type = item;
             _self.getHttp();
             _self.$store.dispatch('getUserInfor');
-        },
-        mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
-        }
+        })
+        _self.type = this.$route.query.authen;
+        //console.log(22,this.$route.query.authen)
+        _self.getHttp();
+        _self.$store.dispatch('getUserInfor');
+    },
+    mounted() {
+        this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+    }
 }
 </script>

@@ -628,8 +628,7 @@ export default {
                  _self.getHttp();
              })*/
             common.$on('getInfo', function(item) {
-                _self.getHttp();
-
+               _self.getHttp();
             })
         },
         mounted() {

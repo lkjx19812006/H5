@@ -200,7 +200,7 @@ export default {
                             case '2':
                                 val = '请上传身份证反面照！';
                                 break;
-                            case '3':
+                            case '0':
                                 val = '请上传手持身份证照！';
                                 break;
                         }
@@ -226,6 +226,16 @@ export default {
             common.$on('personStep1To2', function(item) {
                 _self.param.fullname = item.fullname;
                 _self.param.idnumber = item.idnumber;
+                _self.arr = [{
+                    catagory: '1',
+                    path: ''
+                }, {
+                    catagory: '2',
+                    path: ''
+                }, {
+                    catagory: '0',
+                    path: ''
+                }]
                 console.log(1,_self.param)
             })
         },

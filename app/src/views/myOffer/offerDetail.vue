@@ -38,7 +38,7 @@
         .no_pass {
             background-color: #fffafa;
             min-height: 32px;
-            padding:4px 0;
+            padding: 4px 0;
             font-size: 14px;
             text-align: left;
             padding-left: 15px;
@@ -261,25 +261,29 @@
                 <div class="box">
                     <div class="inbox">
                         <div class="left top_left">
-                            <div class="breed">{{obj.content.breedName}} <span>{{obj.content.number}}({{obj.content.unit}})</span></div>
+                            <div class="breed">{{obj.content.breedName}}
+                                <span>{{obj.content.number}}({{obj.content.unit}})</span>
+                            </div>
                             <div class="spec">{{obj.content.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.content.spec,4 | filterTxt}}</div>
                             <div class="spec last">交货地: {{obj.content.address}}</div>
                         </div>
                         <div class='right'>
                             <div class='right_box'>
-                                <div class="images"><img src="/static/icon/times.png"></div>
-                                <div>&nbsp;剩余{{obj.content.duedate | timeDay}}天</div>
+                                <div class="images">
+                                    <img src="/static/icon/times.png">
+                                </div>
+                                <div>&nbsp;{{obj.content.duedate | needTimeDay}}</div>
                             </div>
-                            <div class="detail" @click="again()" v-if="obj.newOffer.accept == '2'">再次报价</div>
+                            <div class="detail" @click="again()" v-if="obj.newOffer.accept == '2' && sellShow">再次报价</div>
                         </div>
                     </div>
                 </div>
                 <!-- <div class="title_box">
-                    <div class="inbox">
-                        <div class="left">付款方式</div>
-                        <div class="right">{{obj.content.paymentWay}}</div>
-                    </div>
-                </div> -->
+                        <div class="inbox">
+                            <div class="left">付款方式</div>
+                            <div class="right">{{obj.content.paymentWay}}</div>
+                        </div>
+                    </div> -->
                 <div class="title_box">
                     <div class="inbox last">
                         <div class="left">备注信息</div>
@@ -307,9 +311,12 @@
                             <img :src="todo" v-for="(todo,index) in obj.newOffer.image" v-show="index == 0" @click="popUp(obj.newOffer.image)">
                         </div>
                         <div class="left">
-                            <div class="breed">{{obj.newOffer.breedName}} <span>{{obj.newOffer.number}}({{obj.newOffer.unit}})</span></div>
+                            <div class="breed">{{obj.newOffer.breedName}}
+                                <span>{{obj.newOffer.number}}({{obj.newOffer.unit}})</span>
+                            </div>
                             <div class="spec first">{{obj.newOffer.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{obj.newOffer.spec,4 | filterTxt}}</div>
-                            <div class="spec last">裸价: <span class="red">{{obj.newOffer.price}}</span>元/{{obj.newOffer.unit}}</div>
+                            <div class="spec last">裸价:
+                                <span class="red">{{obj.newOffer.price}}</span>元/{{obj.newOffer.unit}}</div>
                         </div>
                     </div>
                 </div>
@@ -340,9 +347,12 @@
                                 <img :src="item" v-for="(item,index) in todo.image" v-show="index == 0" @click="popUp(todo.image)">
                             </div>
                             <div class="left">
-                                <div class="breed">{{todo.breedName}} <span>{{todo.number}}({{todo.unit}})</span></div>
+                                <div class="breed">{{todo.breedName}}
+                                    <span>{{todo.number}}({{todo.unit}})</span>
+                                </div>
                                 <div class="spec first">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
-                                <div class="spec last">裸价: <span class="red">{{todo.price}}</span>元/{{todo.unit}}</div>
+                                <div class="spec last">裸价:
+                                    <span class="red">{{todo.price}}</span>元/{{todo.unit}}</div>
                             </div>
                         </div>
                     </div>
@@ -368,170 +378,193 @@ import titles from '../../components/release/title'
 import filters from '../../filters/filters'
 export default {
     data() {
-            return {
+        return {
+            show: false,
+            text: '',
+            my_param: {
+                url: '',
                 show: false,
-                text:'',
-                my_param: {
-                    url: '',
-                    show: false,
-                    whole_height: ''
+                whole_height: ''
+            },
+            obj: {
+                data: {
+                    payMoney: '付款方式',
+                    remarks: '备注信息',
                 },
-                obj: {
-                    data: {
-                        payMoney: '付款方式',
-                        remarks: '备注信息',
-                    },
-                    content: {
-                        offer: '111',
-                        breedName: '',
-                        number: '',
-                        location: '',
-                        spec: '',
-                        address: ''
-                    },
-                    newOffer: {},
-                    list: []
-
+                content: {
+                    offer: '111',
+                    breedName: '',
+                    number: '',
+                    location: '',
+                    spec: '',
+                    address: ''
                 },
-                param: {
-                    name: '报价详情',
-                    topissue: true,
-                },
-                id: '',
-                bigImgs: []
-            }
-        },
-        components: {
-            myHeader,
-            titles,
-            payMoneyOrRemark,
-            popUpBigImg
-        },
-        methods: {
-            getHttp(id) {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.urlCommon + common.apiUrl.most;
-                let body = {
-                    biz_module: 'intentionService',
-                    biz_method: 'queryIntentionInfo',
-                    biz_param: {
-                        id: id
-                    }
-                }
-                if (common.KEY) {
-                    url = common.addSID(common.urlCommon + common.apiUrl.most);
-                    body.version = 1;
-                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                }
-                httpService.myAttention(url, body, function(suc) {
-                    common.$emit('close-load');
-                    let result = suc.data.biz_result;
-                    //console.log(1, result);
-                    //console.log(2, result.breedName)
-                    if (suc.data.code == '1c01') {
-                        _self.obj.content.breedName = result.breedName;
-                        _self.obj.content.number = result.number;
-                        _self.obj.content.location = result.location;
-                        _self.obj.content.spec = result.spec;
-                        _self.obj.content.address = result.address;
-                        _self.obj.content.duedate = result.duedate;
-                        _self.obj.content.offer = result.offer;
-                        _self.obj.content.unit = result.unit;
-                        _self.obj.content.paymentWay = result.paymentWay;
-                        _self.obj.content.description = result.description;
-                        //console.log(result.paymentWay)
+                newOffer: {},
+                list: []
 
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
             },
-            again() {
-                common.$emit('needToReleaseOffer', this.id);
-                this.$router.push('/releaseOffer/' + this.id);
+            param: {
+                name: '报价详情',
+                topissue: true,
             },
-            popUp(imgArr) {
-                let _self = this;
-                this.my_param.url = imgArr;
-                this.my_param.show = !this.my_param.show;
-                this.my_param.whole_height = document.documentElement.clientHeight;
-            },
-            getOffer(id) {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.urlCommon + common.apiUrl.most;
-                let body = {
-                    biz_module: 'intentionOfferService',
-                    biz_method: 'htmlMyIntentionOfferListInfo',
-                    biz_param: {
-                        intentionId: id,
-                        pn: 1,
-                        pSize: 20
-                    }
-                }
-                if (common.KEY) {
-                    url = common.addSID(common.urlCommon + common.apiUrl.most);
-                    body.version = 1;
-                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                }
-                httpService.myAttention(url, body, function(suc) {
-                    common.$emit('close-load');
-                    let result = suc.data.biz_result.list;
-                    console.log(3, result)
-                    if (suc.data.code == '1c01') {
-                        if (!_self.show) _self.obj.newOffer = result[0];
-                        if (_self.show) {
-                            result.shift();
-                            _self.obj.list = result;
-                            if (_self.obj.list.length == 0) {
-                                common.$emit('message', '无历史报价~');
-                            }
-
-                        }
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-            },
-            launchHistory() {
-                this.show = true;
-                this.getOffer(this.id);
-            },
-            retractHistory() {
-                this.show = false;
-                this.obj.list = [];
-            }
-        },
-        mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
-        },
-        created() {
-            let _self = this;
-            let id = _self.$route.params.id;
-            _self.getHttp(id);
-            _self.getOffer(id);
-            _self.id = id;
-            common.$on("myOfferToOfferDetail", function(item) {
-                _self.getHttp(item);
-                _self.getOffer(item);
-                _self.id = item;
-                _self.show = false;
-                _self.my_param.show = false;
-            });
-            common.$on('getInfo', function(item) {
-                _self.getHttp(id);
-                _self.id = item;
-            })
+            id: '',
+            bigImgs: [],
+            sellShow: ''
         }
+    },
+    components: {
+        myHeader,
+        titles,
+        payMoneyOrRemark,
+        popUpBigImg
+    },
+    methods: {
+        getHttp(id) {
+            let _self = this;
+            common.$emit('show-load');
+            let url = common.urlCommon + common.apiUrl.most;
+            let body = {
+                biz_module: 'intentionService',
+                biz_method: 'queryIntentionInfo',
+                biz_param: {
+                    id: id
+                }
+            }
+            if (common.KEY) {
+                url = common.addSID(common.urlCommon + common.apiUrl.most);
+                body.version = 1;
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+            }
+            httpService.myAttention(url, body, function (suc) {
+                common.$emit('close-load');
+                let result = suc.data.biz_result;
+                //console.log(1, result);
+                //console.log(2, result.breedName)
+                if (suc.data.code == '1c01') {
+                    _self.obj.content.breedName = result.breedName;
+                    _self.obj.content.number = result.number;
+                    _self.obj.content.location = result.location;
+                    _self.obj.content.spec = result.spec;
+                    _self.obj.content.address = result.address;
+                    _self.obj.content.duedate = result.duedate;
+                    _self.obj.content.offer = result.offer;
+                    _self.obj.content.unit = result.unit;
+                    _self.obj.content.paymentWay = result.paymentWay;
+                    _self.obj.content.description = result.description;
+                    _self.sellShow = _self.sellShows(result.duedate);
+                    //console.log(result.paymentWay)
+
+                } else {
+                    common.$emit('message', suc.data.msg);
+                }
+            }, function (err) {
+                common.$emit('close-load');
+                common.$emit('message', err.data.msg);
+            })
+        },
+        sellShows(due) {
+            let days;
+            if (due) {
+                due = due.split('.')[0];
+                var arr = due.split(/[- : \/]/);
+                var duedateDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
+                var pubdateDate = new Date();
+                var dateValue = duedateDate.getTime() - pubdateDate.getTime() - 5000;
+                days = Math.ceil(dateValue / (24 * 3600 * 1000));
+
+                if(days <= 0){
+                    return false;
+                }else{
+                    return true;
+                }
+
+            } else {
+                return false;
+            }
+            
+        },
+        again() {
+            common.$emit('needToReleaseOffer', this.id);
+            this.$router.push('/releaseOffer/' + this.id);
+        },
+        popUp(imgArr) {
+            let _self = this;
+            this.my_param.url = imgArr;
+            this.my_param.show = !this.my_param.show;
+            this.my_param.whole_height = document.documentElement.clientHeight;
+        },
+        getOffer(id) {
+            let _self = this;
+            common.$emit('show-load');
+            let url = common.urlCommon + common.apiUrl.most;
+            let body = {
+                biz_module: 'intentionOfferService',
+                biz_method: 'htmlMyIntentionOfferListInfo',
+                biz_param: {
+                    intentionId: id,
+                    pn: 1,
+                    pSize: 20
+                }
+            }
+            if (common.KEY) {
+                url = common.addSID(common.urlCommon + common.apiUrl.most);
+                body.version = 1;
+                body.time = Date.parse(new Date()) + parseInt(common.difTime);
+                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+            }
+            httpService.myAttention(url, body, function (suc) {
+                common.$emit('close-load');
+                let result = suc.data.biz_result.list;
+                console.log(3, result)
+                if (suc.data.code == '1c01') {
+                    if (!_self.show) _self.obj.newOffer = result[0];
+                    if (_self.show) {
+                        result.shift();
+                        _self.obj.list = result;
+                        if (_self.obj.list.length == 0) {
+                            common.$emit('message', '无历史报价~');
+                        }
+
+                    }
+                } else {
+                    common.$emit('message', suc.data.msg);
+                }
+            }, function (err) {
+                common.$emit('close-load');
+                common.$emit('message', err.data.msg);
+            })
+        },
+        launchHistory() {
+            this.show = true;
+            this.getOffer(this.id);
+        },
+        retractHistory() {
+            this.show = false;
+            this.obj.list = [];
+        }
+    },
+    mounted() {
+        this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+    },
+    created() {
+        let _self = this;
+        let id = _self.$route.params.id;
+        _self.getHttp(id);
+        _self.getOffer(id);
+        _self.id = id;
+        common.$on("myOfferToOfferDetail", function (item) {
+            _self.getHttp(item);
+            _self.getOffer(item);
+            _self.id = item;
+            _self.show = false;
+            _self.my_param.show = false;
+        });
+        common.$on('getInfo', function (item) {
+            _self.getHttp(id);
+            _self.id = item;
+        })
+    }
 
 
 }

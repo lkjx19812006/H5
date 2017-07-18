@@ -68,12 +68,12 @@
     </div>
 </template>
 <script>
-import common from '../common/common.js'
-import httpService from '../common/httpService.js'
-import myHeader from '../components/tools/accountHead'
-import imageUpload from '../components/tools/imageUpload'
-import validation from '../validation/validation.js'
-import filters from '../filters/filters.js'
+import common from '../../common/common.js'
+import httpService from '../../common/httpService.js'
+import myHeader from '../../components/tools/accountHead'
+import imageUpload from '../../components/tools/imageUpload'
+import validation from '../../validation/validation.js'
+import filters from '../../filters/filters.js'
 import {
     mapGetters
 } from 'vuex'

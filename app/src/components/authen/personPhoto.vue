@@ -85,7 +85,7 @@ input {
             <div class="name">身份认证</div>
             <div class="content">企业</div>
         </div>
-        <div class="bbox" v-if="type == 1">
+        <div class="bbox" v-if="type == 1 && userInfor.authenStyle">
             <div class="name">认证类别</div>
             <div class="content">{{userInfor.authenStyle | myAuthStatus}}</div>
         </div>
@@ -118,7 +118,8 @@ export default {
             }
         },
         props: {
-            type: ''
+            type: '',
+            myType:''
         },
         computed: {
             userInfor() {
@@ -128,9 +129,10 @@ export default {
         methods: {
             jump() {
                 let _self = this;
-                console.log(this.type)
-                common.$emit('toMyPhoto', _self.type)
-                _self.$router.push('/authPhoto?type=' + _self.type)
+                _self.$emit('allPhoto')
+                // console.log(this.type)
+                // common.$emit('toMyPhoto', _self.type)
+                // _self.$router.push('/authPhoto?type=' + _self.type)
             }
         },
         created() {

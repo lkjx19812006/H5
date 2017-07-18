@@ -174,9 +174,9 @@ export default {
             ctx.fillStyle = "#fff";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0, width, height);
-            ctx.globalAlpha = 0.5;
-            ctx.beginPath();
-            ctx.drawImage(imgl, ww, wh, w, h);
+            // ctx.globalAlpha = 0.5;
+            // ctx.beginPath();
+            // ctx.drawImage(imgl, ww, wh, w, h);
             ctx.closePath();
             ctx.save();
 

@@ -40,7 +40,8 @@
             </div>
             <ul class="son_order">
                 <li v-for="item in todo.goodsArray">
-                    <img v-bind:src="item.image" class="list_images">
+                    <img v-bind:src="item.image" class="list_images"  v-show="item.image">
+                    <img src="/static/icon/default_logo.png"  class="list_images" v-show="!item.image">
                     <div class="res_content">
                         <div class="res_content_left">
                             <div>

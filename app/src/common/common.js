@@ -66,14 +66,14 @@ let common = new Vue({
             myInfo: '',
             clickEvent: '',
             postUsers: '',
-            authRouter:''
+            authRouter: ''
         },
         shareParam: {
             imgUrl: 'http://apps.yaocaimaimai.com/htm5/static/icons/err.png',
             title: "买卖药材就上药材买卖网！",
             desc: '药材买卖网（yaocaimaimai.com）隶属于上海冕冠电子商务有限公司，是由知名VC、天使投资人投资千万人民币，旨在打造全球最大的药材交易平台!',
             link: 'http://apps.yaocaimaimai.com/htm5/#/home'
-            /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
+                /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
         }
     },
     methods: {
@@ -85,7 +85,7 @@ let common = new Vue({
                     title: "买卖药材就上药材买卖网！",
                     desc: '药材买卖网（yaocaimaimai.com）隶属于上海冕冠电子商务有限公司，是由知名VC、天使投资人投资千万人民币，旨在打造全球最大的药材交易平台!',
                     link: 'http://apps.yaocaimaimai.com/htm5/#/home'
-                    /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
+                        /*link:'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai'*/
                 };
             } else {
                 _self.shareParam = {
@@ -209,12 +209,14 @@ let common = new Vue({
                     state: 'wchat_login'
                 }
             }).then((res) => {
+                //alert(11, res.data.biz_result.wxUrl)
                 if (res.data.biz_result.wxUrl) window.location.href = res.data.biz_result.wxUrl;
             }, (err) => {
                 console.log(err);
             });
         },
         isWeiXin() {
+            //apps.yaocaimaimai.com
             let _self = this;
             let url = window.location.href;
             if (url.indexOf("apps.yaocaimaimai.com") !== -1) {
@@ -249,6 +251,7 @@ let common = new Vue({
         },
     }
 })
+
 common.isWeiXin();
 common.$on('show-load', () => {
     Indicator.open('Loading...');

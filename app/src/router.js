@@ -25,26 +25,21 @@ import goodDetail from './views/goodDetail'
 import addAddress from './views/addAddress'
 import myPurchase from './views/myPurchase'
 import purchaseDetail from './views/purchaseDetail'
-// import companyAuthentication from './views/companyAuthentication'
-// import certification from './views/certification'
-import areaName from './views/areaName'
-import aboutus from './views/aboutus'
-import perfectInfo from './views/perfectInfo'
+import aboutus from './views/staticsView/aboutus'
 import requestCode from './views/requestCode'
 import releaseSearch from './views/releaseSearch'
-import news from './views/news'
+import news from './views/staticsView/news'
 import cart from './views/cart'
 import multipleOrders from './views/multipleOrders'
 import allOrder from './views/allOrder'
 import allOrderDetail from './views/allOrderDetail'
 import drugThat from './views/drugThat'
 import account from './views/user/account'
-import accountRevise from './views/accountRevise'
+import accountRevise from './views/user/accountRevise'
 import subCompany from './views/subCompany'
 import oneStopService from './views/oneStopService'
 import fourAdvantages from './views/fourAdvantages'
 import protocol from './views/staticsView/protocol'
-import tests from './views/staticsView/tests'
 import wchatLogin from './views/staticsView/wchatLogin'
 import releaseNeed from './views/myRelease/releaseNeed'
 import releaseNeeds from './views/myRelease/releaseNeeds'
@@ -109,7 +104,6 @@ module.exports = {
         { name: 'urgentNeed', path: '/urgentNeed', component: urgentNeed },
         { name: 'myAttention', path: '/myAttention', component: myAttention },
         { name: 'myResource', path: '/myResource', component: myResource },
-        // { name: 'register', path: '/register', component: register },
         { name: 'findPassWord', path: '/findPassWord', component: findPassWord },
         { name: 'mySet', path: '/mySet', component: mySet },
         { name: 'detailsPage', path: '/detailsPage', component: detailsPage },
@@ -120,18 +114,14 @@ module.exports = {
         { name: 'feedBack', path: '/feedBack', component: feedBack },
         { name: 'goodDetail', path: '/goodDetail/:odId', component: goodDetail },
         { name: 'addAddress', path: '/addAddress', component: addAddress },
-        { name: 'areaName', path: '/areaName', component: areaName },
-        // { name: 'companyAuthentication', path: '/companyAuthentication', component: companyAuthentication },
         { name: 'companyAuth', path: '/companyAuth', component: companyAuth },
         { name: 'personalStep1', path: '/personalStep1', component: personalStep1 },
         { name: 'personalStep2', path: '/personalStep2', component: personalStep2 },
         { name: 'authResult', path: '/authResult', component: authResult },
-        // { name: 'certification', path: '/certification', component: certification },
         { name: 'myPurchase', path: '/myPurchase', component: myPurchase },
         { name: 'purchaseDetail', path: '/purchaseDetail/:rchaseId', component: purchaseDetail },
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
         { name: 'aboutus', path: '/aboutus/:from', component: aboutus },
-        { name: 'perfectInfo', path: '/perfectInfo', component: perfectInfo },
         { name: 'requestCode', path: '/requestCode', component: requestCode },
         { name: 'releaseSearch', path: '/releaseSearch', component: releaseSearch },
         { name: 'cart', path: '/cart', component: cart },
@@ -145,7 +135,6 @@ module.exports = {
         { name: 'oneStopService', path: '/oneStopService', component: oneStopService },
         { name: 'fourAdvantages', path: '/fourAdvantages', component: fourAdvantages },
         { name: 'protocol', path: '/protocol', component: protocol },
-        { name: 'tests', path: '/tests', component: tests },
         { name: 'wchatLogin', path: '/wchatLogin', component: wchatLogin },
         { name: 'releaseNeed', path: '/releaseNeed/:id', component: releaseNeed },
         { name: 'releaseNeeds', path: '/releaseNeeds/:id', component: releaseNeeds },

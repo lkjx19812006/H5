@@ -19,8 +19,8 @@
     </div>
 </template>
 <script>
-    import common from '../common/common.js'
-    import myHeader from '../components/tools/myHeader'
+    import common from '../../common/common.js'
+    import myHeader from '../../components/tools/myHeader'
     export default {
         data() {
             return {

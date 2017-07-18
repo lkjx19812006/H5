@@ -44,8 +44,10 @@ Vue.filter('timeDay', function(due) {
         var dateValue = duedateDate.getTime() - pubdateDate.getTime() - 5000;
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
 
-        if (days > 0) {
+        if (days > 0 && days <= 30) {
             days = days;
+        } else if (days > 30) {
+            days = 30;
         } else if (days <= 0) {
             days = 0;
         }
@@ -65,15 +67,15 @@ Vue.filter('needTimeDay', function(due) {
         var dateValue = duedateDate.getTime() - pubdateDate.getTime() - 5000;
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
 
-        if (days > 0) {
+        if (days > 0 && days <= 30) {
             days = '剩余' + days + '天';
+        } else if (days > 30) {
+            days = '剩余' + 30 + '天';
         } else if (days <= 0) {
             days = '已过期';
         }
 
-        if (days > 30) {
-            days = '剩余' + 30 + '天';
-        }
+
     } else {
         days = '已过期';
     }

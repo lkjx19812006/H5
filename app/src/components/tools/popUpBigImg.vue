@@ -21,6 +21,7 @@ export default {
         },
         methods: {
             backDetail(index, imgArr) {
+                this.param.url = [];
                 this.param.show = !this.param.show;
             }
         },

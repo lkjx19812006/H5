@@ -187,6 +187,21 @@ import myHeader from '../../components/tools/myHeader'
 import httpService from '../../common/httpService.js'
 import filters from '../../filters/filters'
 import errPage from '../../components/tools/err'
+/**
+ * https://github.com/ZZKll/
+ *  .--,       .--,
+ * ( (  \.---./  ) )
+ *  '.__/o   o\__.'
+ *     {=  ^  =}
+ *      >  -  <
+ *     /       \
+ *    //       \\
+ *   //|   .   |\\
+ *   "'\       /'"_.-~^`'-.
+ *      \  _  /--'         `
+ *    ___)( )(___
+ *   (((__) (__)))    高山仰止,景行行止.虽不能至,心向往之。
+ */
 export default {
     data() {
             return {

@@ -32,268 +32,269 @@ import myHeader from '../../components/tools/myHeader'
 
 export default {
     data() {
-            return {
-                id: '',
-                isMy: '',
-                wrapperHeight: '',
-                my_header: {
-                    name: '登录',
-                    router: ''
-                },
-                myShow: {
-                    show: true,
-                    left_name: '密码登录',
-                    right_name: '短信登录'
-                },
-                selected: 'identiCode',
-                identify_code: '',
-                codes: '获取验证码',
-                buttonDisabled: false,
-                param: {
-                    phone: '',
-                    codes: '',
-                    imageCode: '',
-                    password: ''
-                },
-                code: '',
-                openId: '',
-                wxShow: false
-            }
-        },
-        created() {
-            let _self = this;
-            let url = window.location.href;
+        return {
+            id: '',
+            isMy: '',
+            wrapperHeight: '',
+            my_header: {
+                name: '登录',
+                router: ''
+            },
+            myShow: {
+                show: true,
+                left_name: '密码登录',
+                right_name: '短信登录'
+            },
+            selected: 'identiCode',
+            identify_code: '',
+            codes: '获取验证码',
+            buttonDisabled: false,
+            param: {
+                phone: '',
+                codes: '',
+                imageCode: '',
+                password: ''
+            },
+            code: '',
+            openId: '',
+            wxShow: false
+        }
+    },
+    created() {
+        let _self = this;
+        let url = window.location.href;
+        if (url.indexOf('?code=') !== -1) {
             let behind = url.split('?code=')[1];
             let state = behind.split('&state=')[1];
             this.code = behind.split('&')[0];
             this.getOpenId();
-
+        }
+    },
+    components: {
+        myTab,
+        myHeader
+    },
+    methods: {
+        jump(router) {
+            /*common.$emit('inforRegister',1)*/
+            this.$router.push(router);
         },
-        components: {
-            myTab,
-            myHeader
-        },
-        methods: {
-            jump(router) {
-                /*common.$emit('inforRegister',1)*/
-                this.$router.push(router);
-            },
-            getOpenId() {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.urlCommon + common.apiUrl.most;
-                let body = {
-                    biz_module: 'weiXinService',
-                    biz_method: 'getWeiXinOpenId',
-                    biz_param: {
-                        code: _self.code,
-                        appSecret: '',
-                        appId: ''
-                    }
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.addressManage(url, body, function(suc) {
-                    common.$emit('close-load');
-
-                    if (suc.data.code == '1c01') {
-                        if (suc.data.biz_result.openid) {
-                            _self.openId = suc.data.biz_result.openid;
-                            _self.wxLogin();
-                        } else {
-                            _self.$router.push('/login')
-                        }
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-
-                })
-            },
-            accredit() {
-                let _self = this;
-                let checkArr = [];
-                let checkPhone = validation.checkPhone(_self.param.phone);
-                checkArr.push(checkPhone);
-                for (var i = 0; i < checkArr.length; i++) {
-                    if (checkArr[i]) {
-                        common.$emit('message', checkArr[i]);
-                        return;
-                    }
+        getOpenId() {
+            let _self = this;
+            common.$emit('show-load');
+            let url = common.urlCommon + common.apiUrl.most;
+            let body = {
+                biz_module: 'weiXinService',
+                biz_method: 'getWeiXinOpenId',
+                biz_param: {
+                    code: _self.code,
+                    appSecret: '',
+                    appId: ''
                 }
-                common.$emit('show-load');
-                let url = common.urlCommon + common.apiUrl.most;
-                let body = {
-                    biz_module: 'userSmsService',
-                    biz_method: 'openIdBinding',
-                    biz_param: {
-                        mobile: _self.param.phone,
-                        code: _self.param.codes,
-                        openId: _self.openId
-                    }
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.addressManage(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code == '1c01') {
-                        _self.passWordLogin();
+            };
+            body.time = Date.parse(new Date()) + parseInt(common.difTime);
+            body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+            httpService.addressManage(url, body, function (suc) {
+                common.$emit('close-load');
+
+                if (suc.data.code == '1c01') {
+                    if (suc.data.biz_result.openid) {
+                        _self.openId = suc.data.biz_result.openid;
+                        _self.wxLogin();
                     } else {
-                        common.$emit('message', suc.data.msg);
+                        _self.$router.push('/login')
                     }
-                }, function(err) {
-                    common.$emit('close-load');
-
-                })
-            },
-            wxLogin() {
-                let _self = this;
-
-                common.$emit('show-load');
-                httpService.login(common.urlCommon + '/account/openLogin.do', {
-                    biz_param: {
-                        openId: _self.openId
-                    }
-                }, function(response) {
-                    common.$emit('close-load');
-
-                    if (response.data.code == '1c01') {
-
-                        window.localStorage.KEY = response.data.biz_result.KEY;
-                        window.localStorage.SID = response.data.biz_result.SID;
-                        common.KEY = window.localStorage.KEY;
-                        common.SID = window.localStorage.SID;
-                        common.getDate();
-                        common.$emit('getInfo', 1);
-                        if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {
-                            if (_self.id) {
-                                common.$emit('resourceDetail', _self.id); //点击购买时未登录，登陆成功之后提醒商品那个详情页面刷新
-                                common.$emit('setParam', 'skipLogin', true);
-                                common.$emit('inforCartPop', 1); //通知购物车弹出
-                                _self.$router.replace('resourceDetail/' + _self.id);
-                            } else {
-                                common.$emit('resourceDetail', common.pageParam.backRouter.split('/')[1]); //没有_self.id的时候
-                                common.$emit('setParam', 'skipLogin', true);
-                                common.$emit('inforCartPop', 1);
-                                _self.$router.replace('resourceDetail/' + common.pageParam.backRouter.split('/')[1]);
-                            }
-                        } else if (common.pageParam.backRouter == 'lowPriceRes') {
-                            _self.$router.replace('cart')
-                        } else if (common.pageParam.backRouter == 'message') { //消息返回到下一个动作
-                            _self.$router.replace('/message')
-                        } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
-                            _self.$router.replace(common.pageParam.backRouter);
-                            common.$emit("loginToDetails", {
-                                id: common.pageParam.backRouter.split('/')[2],
-                                type: ''
-                            });
-                            common.$emit('setParam', 'skipLogin', true);
-                        } else {
-                            common.$emit('go_home', 1);
-                            _self.$router.replace('home');
-                        }
-
-                    } else if (response.data.code == '0e99') {
-                        _self.wxShow = true;
-
-                    } else {
-                        common.$emit('message', response.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-            },
-            passWordLogin() {
-                let _self = this;
-                common.$emit('show-load');
-                httpService.login(common.urlCommon + '/account/openLogin.do', {
-                    biz_param: {
-                        openId: _self.openId
-                    }
-                }, function(response) {
-                    common.$emit('close-load');
-
-                    if (response.data.code == '1c01') {
-
-                        window.localStorage.KEY = response.data.biz_result.KEY;
-                        window.localStorage.SID = response.data.biz_result.SID;
-                        common.KEY = window.localStorage.KEY;
-                        common.SID = window.localStorage.SID;
-                        common.getDate();
-                        common.$emit('getInfo', 1);
-                        if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {
-                            if (_self.id) {
-                                common.$emit('resourceDetail', _self.id); //点击购买时未登录，登陆成功之后提醒商品那个详情页面刷新
-                                common.$emit('setParam', 'skipLogin', true);
-                                common.$emit('inforCartPop', 1); //通知购物车弹出
-                                _self.$router.replace('resourceDetail/' + _self.id);
-                            } else {
-                                common.$emit('resourceDetail', common.pageParam.backRouter.split('/')[1]); //没有_self.id的时候
-                                common.$emit('setParam', 'skipLogin', true);
-                                common.$emit('inforCartPop', 1);
-                                _self.$router.replace('resourceDetail/' + common.pageParam.backRouter.split('/')[1]);
-                            }
-                        } else if (common.pageParam.backRouter == 'lowPriceRes') {
-                            _self.$router.replace('cart')
-                        } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
-                            _self.$router.replace(common.pageParam.backRouter);
-                            common.$emit("loginToDetails", {
-                                id: common.pageParam.backRouter.split('/')[2],
-                                type: ''
-                            });
-                            common.$emit('setParam', 'skipLogin', true);
-                        } else {
-                            common.$emit('go_home', 1);
-                            _self.$router.replace('home');
-                        }
-
-                    } else {
-                        common.$emit('message', response.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-            },
-            confirmLogin: function() {
-                let _self = this;
-                let checkPhone = validation.checkPhone(_self.param.phone);
-                if (checkPhone) {
-                    common.$emit('message', checkPhone);
                 } else {
-                    _self.buttonDisabled = true;
-                    var wait = 60;
-                    var time = setInterval(function() {
-                        wait--;
-                        _self.codes = wait;
-                        if (wait == 0) {
-                            clearInterval(time);
-                            _self.codes = '获取验证码';
-                            _self.buttonDisabled = false;
-                        }
-                    }, 1000);
-
-                    httpService.register(common.urlCommon + common.apiUrl.most, {
-                        biz_module: 'userSmsService',
-                        biz_method: 'getBindingCode',
-                        biz_param: {
-                            mobile: _self.param.phone
-                        }
-                    }, function(response) {
-                        common.$emit('message', response.data.msg);
-                    }, function(err) {
-                        common.$emit('message', err.data.msg);
-                    })
+                    common.$emit('message', suc.data.msg);
                 }
+            }, function (err) {
+                common.$emit('close-load');
 
+            })
+        },
+        accredit() {
+            let _self = this;
+            let checkArr = [];
+            let checkPhone = validation.checkPhone(_self.param.phone);
+            checkArr.push(checkPhone);
+            for (var i = 0; i < checkArr.length; i++) {
+                if (checkArr[i]) {
+                    common.$emit('message', checkArr[i]);
+                    return;
+                }
+            }
+            common.$emit('show-load');
+            let url = common.urlCommon + common.apiUrl.most;
+            let body = {
+                biz_module: 'userSmsService',
+                biz_method: 'openIdBinding',
+                biz_param: {
+                    mobile: _self.param.phone,
+                    code: _self.param.codes,
+                    openId: _self.openId
+                }
+            };
+            body.time = Date.parse(new Date()) + parseInt(common.difTime);
+            body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+            httpService.addressManage(url, body, function (suc) {
+                common.$emit('close-load');
+                if (suc.data.code == '1c01') {
+                    _self.passWordLogin();
+                } else {
+                    common.$emit('message', suc.data.msg);
+                }
+            }, function (err) {
+                common.$emit('close-load');
+
+            })
+        },
+        wxLogin() {
+            let _self = this;
+
+            common.$emit('show-load');
+            httpService.login(common.urlCommon + '/account/openLogin.do', {
+                biz_param: {
+                    openId: _self.openId
+                }
+            }, function (response) {
+                common.$emit('close-load');
+
+                if (response.data.code == '1c01') {
+
+                    window.localStorage.KEY = response.data.biz_result.KEY;
+                    window.localStorage.SID = response.data.biz_result.SID;
+                    common.KEY = window.localStorage.KEY;
+                    common.SID = window.localStorage.SID;
+                    common.getDate();
+                    common.$emit('getInfo', 1);
+                    if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {
+                        if (_self.id) {
+                            common.$emit('resourceDetail', _self.id); //点击购买时未登录，登陆成功之后提醒商品那个详情页面刷新
+                            common.$emit('setParam', 'skipLogin', true);
+                            common.$emit('inforCartPop', 1); //通知购物车弹出
+                            _self.$router.replace('resourceDetail/' + _self.id);
+                        } else {
+                            common.$emit('resourceDetail', common.pageParam.backRouter.split('/')[1]); //没有_self.id的时候
+                            common.$emit('setParam', 'skipLogin', true);
+                            common.$emit('inforCartPop', 1);
+                            _self.$router.replace('resourceDetail/' + common.pageParam.backRouter.split('/')[1]);
+                        }
+                    } else if (common.pageParam.backRouter == 'lowPriceRes') {
+                        _self.$router.replace('cart')
+                    } else if (common.pageParam.backRouter == 'message') { //消息返回到下一个动作
+                        _self.$router.replace('/message')
+                    } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
+                        _self.$router.replace(common.pageParam.backRouter);
+                        common.$emit("loginToDetails", {
+                            id: common.pageParam.backRouter.split('/')[2],
+                            type: ''
+                        });
+                        common.$emit('setParam', 'skipLogin', true);
+                    } else {
+                        common.$emit('go_home', 1);
+                        _self.$router.replace('home');
+                    }
+
+                } else if (response.data.code == '0e99') {
+                    _self.wxShow = true;
+
+                } else {
+                    common.$emit('message', response.data.msg);
+                }
+            }, function (err) {
+                common.$emit('close-load');
+                common.$emit('message', err.data.msg);
+            })
+        },
+        passWordLogin() {
+            let _self = this;
+            common.$emit('show-load');
+            httpService.login(common.urlCommon + '/account/openLogin.do', {
+                biz_param: {
+                    openId: _self.openId
+                }
+            }, function (response) {
+                common.$emit('close-load');
+
+                if (response.data.code == '1c01') {
+
+                    window.localStorage.KEY = response.data.biz_result.KEY;
+                    window.localStorage.SID = response.data.biz_result.SID;
+                    common.KEY = window.localStorage.KEY;
+                    common.SID = window.localStorage.SID;
+                    common.getDate();
+                    common.$emit('getInfo', 1);
+                    if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {
+                        if (_self.id) {
+                            common.$emit('resourceDetail', _self.id); //点击购买时未登录，登陆成功之后提醒商品那个详情页面刷新
+                            common.$emit('setParam', 'skipLogin', true);
+                            common.$emit('inforCartPop', 1); //通知购物车弹出
+                            _self.$router.replace('resourceDetail/' + _self.id);
+                        } else {
+                            common.$emit('resourceDetail', common.pageParam.backRouter.split('/')[1]); //没有_self.id的时候
+                            common.$emit('setParam', 'skipLogin', true);
+                            common.$emit('inforCartPop', 1);
+                            _self.$router.replace('resourceDetail/' + common.pageParam.backRouter.split('/')[1]);
+                        }
+                    } else if (common.pageParam.backRouter == 'lowPriceRes') {
+                        _self.$router.replace('cart')
+                    } else if (common.pageParam.backRouter.split('/')[1] == 'needDetails') {
+                        _self.$router.replace(common.pageParam.backRouter);
+                        common.$emit("loginToDetails", {
+                            id: common.pageParam.backRouter.split('/')[2],
+                            type: ''
+                        });
+                        common.$emit('setParam', 'skipLogin', true);
+                    } else {
+                        common.$emit('go_home', 1);
+                        _self.$router.replace('home');
+                    }
+
+                } else {
+                    common.$emit('message', response.data.msg);
+                }
+            }, function (err) {
+                common.$emit('close-load');
+                common.$emit('message', err.data.msg);
+            })
+        },
+        confirmLogin: function () {
+            let _self = this;
+            let checkPhone = validation.checkPhone(_self.param.phone);
+            if (checkPhone) {
+                common.$emit('message', checkPhone);
+            } else {
+                _self.buttonDisabled = true;
+                var wait = 60;
+                var time = setInterval(function () {
+                    wait--;
+                    _self.codes = wait;
+                    if (wait == 0) {
+                        clearInterval(time);
+                        _self.codes = '获取验证码';
+                        _self.buttonDisabled = false;
+                    }
+                }, 1000);
+
+                httpService.register(common.urlCommon + common.apiUrl.most, {
+                    biz_module: 'userSmsService',
+                    biz_method: 'getBindingCode',
+                    biz_param: {
+                        mobile: _self.param.phone
+                    }
+                }, function (response) {
+                    common.$emit('message', response.data.msg);
+                }, function (err) {
+                    common.$emit('message', err.data.msg);
+                })
             }
 
-        },
-        mounted() {
-
         }
+
+    },
+    mounted() {
+
+    }
 }
 </script>
 <style scoped>

@@ -183,21 +183,7 @@ export default {
                 })
             },
             confirm() {
-                /*localStorage.removeItem('cartContent');*/
-                //_self.cart = ''
-
                 let _self = this;
-                if (_self.perfect.name == '' || _self.perfect.bizMain == '') {
-                    function perfect() {
-                        _self.$router.push('/perfectInfo');
-                    }
-                    common.$emit('confirm', {
-                        message: '请先完善信息',
-                        title: '提示',
-                        ensure: perfect
-                    });
-                    return;
-                }
                 let arr = [];
                 let obj = {};
                 let sampleArr = [];
