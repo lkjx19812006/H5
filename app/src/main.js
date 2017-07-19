@@ -88,6 +88,7 @@ Vue.http.interceptors.push((request, next) => {
         if (response.status == 403) {
             if (common.wxshow == true) {
                 return router.push('/wchatLogin');
+                //return common.getWxUrl();
             } else {
                 return router.push('/login');
             }

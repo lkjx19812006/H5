@@ -443,6 +443,9 @@ export default {
                         //if(co)
                         _self.$router.push('/home');
 
+
+                        
+
                     }), (() => {
                         common.$emit('message', '更新失败');
                     })

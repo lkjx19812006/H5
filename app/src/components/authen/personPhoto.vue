@@ -85,10 +85,10 @@ input {
             <div class="name">身份认证</div>
             <div class="content">企业</div>
         </div>
-        <div class="bbox" v-if="type == 1 && userInfor.authenStyle">
+        <!-- <div class="bbox" v-if="type == 1 && userInfor.authenStyle">
             <div class="name">认证类别</div>
             <div class="content">{{userInfor.authenStyle | myAuthStatus}}</div>
-        </div>
+        </div> -->
         <div class="bbox" @click="jump(type)">
             <div class="name">证件照片</div>
             <div class="right">

@@ -14,7 +14,7 @@
                     </ul>
                 </mt-loadmore>
             </div>
-            <div class="quit" @click="quit" v-show="wxshow">退出当前账号</div>
+            <div class="quit" @click="quit">退出当前账号</div>
         </div>
     </div>
 </template>

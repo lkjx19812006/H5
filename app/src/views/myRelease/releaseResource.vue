@@ -151,7 +151,7 @@ import validation from '../../validation/validation.js'
 import myHeader from '../../components/tools/myHeader'
 import authenPopUp from '../../components/popUpType/authenPopUp'
 import imageUpload from '../../components/release/upLoadImgs' /**/
-import needBasic from '../../components/release/needReleaseBasic' //resourceReleaseTop
+import needBasic from '../../components/release/needReleaseBasic' 
 import releaseBasic from '../../components/release/resourceReleaseBasic'
 import userInfor from '../../components/release/userInfor'
 import httpService from '../../common/httpService.js'

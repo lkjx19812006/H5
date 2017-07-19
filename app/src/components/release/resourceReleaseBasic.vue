@@ -112,7 +112,7 @@ input {
 </style>
 <template>
     <div class="release_basic">
-        <div class="number">
+        <div class="number" v-show="!obj.myoffer">
             <div class="box">
                 <div class="number_left">数量</div>
                 <div class="number_center">

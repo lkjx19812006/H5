@@ -20,8 +20,8 @@ var _hmt = _hmt || [];
 console.log(1565213516)
 let common = new Vue({
     data: {
-        wxrun: true,
-        wxshow: true,
+        wxrun: false,
+        wxshow: false,
         phoneRun: true,
         phoneType: true,
         getAddress: true,
@@ -205,7 +205,7 @@ let common = new Vue({
                 biz_module: 'weiXinService',
                 biz_method: 'getWeiXinCodeUrl',
                 biz_param: {
-                    url: 'http://apps.yaocaimaimai.com/htm5/#/wchatLogin',
+                    url: 'http:/apps.yaocaimaimai.com/htm5/#/wchatLogin',
                     state: 'wchat_login'
                 }
             }).then((res) => {
@@ -217,22 +217,22 @@ let common = new Vue({
         },
         isWeiXin() {
             //apps.yaocaimaimai.com
-            let _self = this;
-            let url = window.location.href;
-            if (url.indexOf("apps.yaocaimaimai.com") !== -1) {
-                if (_self.wxrun) {
-                    var ua = window.navigator.userAgent.toLowerCase();
-                    if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-                        _self.wxshow = true;
-                    } else {
-                        _self.wxshow = false;
-                    }
-                    _self.wxrun = false;
-                }
-            } else {
-                _self.wxrun = false;
-                return _self.wxshow = false;
-            }
+            // let _self = this;
+            // let url = window.location.href;
+            // if (url.indexOf("apps.yaocaimaimai.com") !== -1) {
+            //     if (_self.wxrun) {
+            //         var ua = window.navigator.userAgent.toLowerCase();
+            //         if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+            //             _self.wxshow = true;
+            //         } else {
+            //             _self.wxshow = false;
+            //         }
+            //         _self.wxrun = false;
+            //     }
+            // } else {
+            //     _self.wxrun = false;
+            //     return _self.wxshow = false;
+            // }
         },
         phoneType() {
             let _self = this;
@@ -252,7 +252,7 @@ let common = new Vue({
     }
 })
 
-common.isWeiXin();
+//common.isWeiXin();
 common.$on('show-load', () => {
     Indicator.open('Loading...');
 })

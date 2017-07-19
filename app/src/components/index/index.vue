@@ -132,7 +132,7 @@
     }
     .entrance {
         width: 100%;
-        height: 78px;
+        height: 82px;
         box-sizing: border-box;
         display: flex;
         flex-direction: row;
@@ -141,11 +141,14 @@
         .box {
             flex: 1;
             background-color: #fff;
-            border-right: 1px solid #D8D8D8;
+
             img {
-                height: 25px;
-                font-size: 13px;
-                margin: 14px 0 3px 0;
+                height: 40px;
+                margin: 8px 0 3px 0;
+            }
+            .title {
+                font-size: 12px;
+                color: #999;
             }
         }
         .tbox {
@@ -502,9 +505,9 @@
                 <div class="left_word">购物车</div>
             </div>
             <!--  <div class="right" @click="call">
-                <img src="/static/icon/tele.png" class="img">
-                <div class="right_word">电话</div>
-            </div> -->
+                        <img src="/static/icon/tele.png" class="img">
+                        <div class="right_word">电话</div>
+                    </div> -->
             <div class="center" @click="fromIndex">
                 <div class="inbox">
                     <img src="/static/icon/enlarge.png">
@@ -546,7 +549,7 @@
             <div class="entrance">
                 <div class="box" v-for="(todo,index) in entrance" v-bind:class="{tbox:index == 3}" @click="jumpEntrance(todo.router)">
                     <img :src="todo.url">
-                    <div>{{todo.text}}</div>
+                    <div class="title">{{todo.text}}</div>
                 </div>
             </div>
             <div class="pre_sell" @click="jumpEntrance('')">
@@ -576,7 +579,9 @@
                             <div class='green' v-if="todo.dayDowns < 0">{{todo.unitprice}}元/公斤</div>
                             <div class="spec" v-if="todo.dayDowns > 0">
                                 <div>跌涨价格:</div>
-                                <div><img src="/static/icons/up.png"></div>
+                                <div>
+                                    <img src="/static/icons/up.png">
+                                </div>
                                 <div> +{{todo.dayMoney,5 | filterTxt}}</div>
                             </div>
                             <div class="spec" v-if="todo.dayDowns == 0">
@@ -584,7 +589,9 @@
                             </div>
                             <div class="spec" v-if="todo.dayDowns < 0">
                                 <div>跌涨价格:</div>
-                                <div><img src="/static/icons/down.png"></div>
+                                <div>
+                                    <img src="/static/icons/down.png">
+                                </div>
                                 <div> -{{todo.dayMoney,5 | filterTxt}}</div>
                             </div>
                             <div class="spec location" v-if="todo.dayDowns > 0">跌涨幅度: +{{todo.dayDowns | indexFloatType}}%</div>
@@ -632,7 +639,8 @@
                             <div class="reported dates">发布日期:{{todo.pubdate | timeFormat}}</div>
                             <div class="report_pri" v-if="todo.indentType == 0">抢先报价</div>
                             <div class="report_pri" v-if="todo.indentType !== 0">我要报价</div>
-                            <div class="reported">已报价<span>{{todo.offer}}</span>人</div>
+                            <div class="reported">已报价
+                                <span>{{todo.offer}}</span>人</div>
                         </div>
                     </div>
                 </div>
@@ -681,371 +689,383 @@ import {
 } from 'vuex'
 export default {
     data() {
-            return {
-                phone: common.servicePhone,
-                imgArray: [],
-                perfect: {
-                    name: '',
-                    manageType: '',
-                    userType: '',
-                    bizMain: ''
-                },
-                scrollTop: 0,
-                show: true,
-                drugGuidePrices: [],
-                urgentArr: [],
-                resourceArr: [],
-                loca: '黑龙江黑龙江',
-                time: '11111.00',
-                entrance: [{
-                    url: '/static/icon/pre-sell.png',
-                    router: '',
-                    text: '预售专区'
-                }, {
-                    url: '/static/icon/real-time.png',
-                    router: '/transaction',
-                    text: '实时成交'
-                }, {
-                    url: '/static/icon/market.png',
-                    router: '/marketQuotation',
-                    text: '市场行情'
-                }, {
-                    url: '/static/icon/encyclopedia.png',
-                    router: '/drugResTable/my',
-                    text: '药材百科'
-                }],
-                topStatus: '',
-                wrapperHeight: 0,
-                allLoaded: false,
-                bottomStatus: '',
-                isMessage: '',
-            }
-        },
-        components: {
-            longSearch
-        },
-        computed: {
-            areaJson() {
-                return this.$store.state.user.areaJson;
+        return {
+            phone: common.servicePhone,
+            imgArray: [],
+            perfect: {
+                name: '',
+                manageType: '',
+                userType: '',
+                bizMain: ''
             },
-            userInfor() {
-                return this.$store.state.user.userInfor;
-            },
-            isRead() {
-                return this.$store.state.user.isRead;
-            }
+            scrollTop: 0,
+            show: true,
+            drugGuidePrices: [],
+            urgentArr: [],
+            resourceArr: [],
+            loca: '黑龙江黑龙江',
+            time: '11111.00',
+            entrance: [{
+                url: '/static/icon/pre-sell.png',
+                router: '',
+                text: '预售专区'
+            }, {
+                url: '/static/icon/real-time.png',
+                router: '/transaction',
+                text: '实时成交'
+            }, {
+                url: '/static/icon/my-main-sell.png',
+                router: '/majorBusiness',
+                text: '我的主营'
+            }, {
+                url: '/static/icon/market.png',
+                router: '/marketQuotation',
+                text: '市场行情'
+            }, {
+                url: '/static/icon/encyclopedia.png',
+                router: '/drugResTable/my',
+                text: '药材百科'
+            }],
+            topStatus: '',
+            wrapperHeight: 0,
+            allLoaded: false,
+            bottomStatus: '',
+            isMessage: '',
+        }
+    },
+    components: {
+        longSearch
+    },
+    computed: {
+        areaJson() {
+            return this.$store.state.user.areaJson;
         },
-        methods: {
-            getInfo() {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'userService',
-                    biz_method: 'queryUserInfo',
-                    biz_param: {},
-                };
+        userInfor() {
+            return this.$store.state.user.userInfor;
+        },
+        isRead() {
+            return this.$store.state.user.isRead;
+        }
+    },
+    methods: {
+        getInfo() {
+            let _self = this;
+            common.$emit('show-load');
+            let url = common.addSID(common.urlCommon + common.apiUrl.most);
+            let body = {
+                biz_module: 'userService',
+                biz_method: 'queryUserInfo',
+                biz_param: {},
+            };
 
+            body.time = Date.parse(new Date()) + parseInt(common.difTime);
+            body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+            httpService.queryUserInfo(url, body, function (suc) {
+                common.$emit('close-load');
+                if (suc.data.code == "1c01") {
+                    _self.perfect.name = suc.data.biz_result.fullname;
+                    _self.perfect.manageType = suc.data.biz_result.manageType;
+                    _self.perfect.userType = suc.data.biz_result.userType;
+                    _self.perfect.bizMain = suc.data.biz_result.bizMain;
+                    let myInfo = suc.data.biz_result; //传给mine
+                    common.customerId = suc.data.biz_result.customerId;
+                    window.localStorage.ID = suc.data.biz_result.customerId;
+                    console.log(myInfo)
+                    common.$emit('myInfo', myInfo);
+                } else {
+
+                }
+            }, function (err) {
+                common.$emit('close-load');
+            })
+        },
+        drugGuidePrice() {
+            let _self = this;
+            httpService.commonPost(common.urlCommon + common.apiUrl.most, {
+                biz_module: 'breedService',
+                biz_method: 'breedPriceGuide',
+                biz_param: {
+                    pn: 1,
+                    pSize: 2
+                }
+            }, function (suc) {
+                let result = suc.data.biz_result.list;
+                //console.log(result)
+                // _self.drugGuidePrice = [];
+                _self.drugGuidePrices = result;
+            }, function (err) {
+                common.$emit('message', err.data.msg);
+
+            })
+        },
+        resourceHttp() {
+            let _self = this;
+            common.$emit('show-load');
+            let url = common.addSID(common.urlCommon + common.apiUrl.most);
+            let body = {
+                biz_module: 'intentionService',
+                biz_method: 'reconnendList',
+                biz_param: {
+                    pn: 1,
+                    pSize: 3
+                }
+            };
+            if (common.KEY) {
+                url = common.addSID(common.urlCommon + common.apiUrl.most);
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.queryUserInfo(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code == "1c01") {
-                        _self.perfect.name = suc.data.biz_result.fullname;
-                        _self.perfect.manageType = suc.data.biz_result.manageType;
-                        _self.perfect.userType = suc.data.biz_result.userType;
-                        _self.perfect.bizMain = suc.data.biz_result.bizMain;
-                        let myInfo = suc.data.biz_result; //传给mine
-                        common.customerId = suc.data.biz_result.customerId;
-                        window.localStorage.ID = suc.data.biz_result.customerId;
-                        console.log(myInfo)
-                        common.$emit('myInfo', myInfo);
+            }
+            httpService.begBuyList(url, body, function (suc) {
+                common.$emit('close-load');
+                let result = suc.data.biz_result;
+                let begBuyList = result.begBuyList;
+                let supplyList = result.supplyList;
+                _self.urgentArr = begBuyList;
+                _self.resourceArr = supplyList;
+                common.$emit('post-revise-address', _self.obj);
+
+            }, function (err) {
+                common.$emit('close-load');
+
+            })
+        },
+        fromIndex() {
+            common.searchType = 'keyword';
+            common.$emit('setParam', 'router', 'index');
+            this.$router.push("/search");
+        },
+        jump(path) {
+            let _self = this;
+            if (!common.KEY) {
+                function loadApp() {
+                    if (common.wxshow) {
+                        common.getWxUrl();
                     } else {
-
+                        _self.$router.push('/login');
                     }
-                }, function(err) {
-                    common.$emit('close-load');
-                })
-            },
-            drugGuidePrice() {
-                let _self = this;
-                httpService.commonPost(common.urlCommon + common.apiUrl.most, {
-                    biz_module: 'breedService',
-                    biz_method: 'breedPriceGuide',
-                    biz_param: {
-                        pn: 1,
-                        pSize: 2
-                    }
-                }, function(suc) {
-                    let result = suc.data.biz_result.list;
-                    //console.log(result)
-                    // _self.drugGuidePrice = [];
-                    _self.drugGuidePrices = result;
-                }, function(err) {
-                    common.$emit('message', err.data.msg);
-
-                })
-            },
-            resourceHttp() {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'intentionService',
-                    biz_method: 'reconnendList',
-                    biz_param: {
-                        pn: 1,
-                        pSize: 3
-                    }
-                };
-                if (common.KEY) {
-                    url = common.addSID(common.urlCommon + common.apiUrl.most);
-                    body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                    body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 }
-                httpService.begBuyList(url, body, function(suc) {
-                    common.$emit('close-load');
-                    let result = suc.data.biz_result;
-                    let begBuyList = result.begBuyList;
-                    let supplyList = result.supplyList;
-                    _self.urgentArr = begBuyList;
-                    _self.resourceArr = supplyList;
-                    common.$emit('post-revise-address', _self.obj);
-
-                }, function(err) {
-                    common.$emit('close-load');
-
-                })
-            },
-            fromIndex() {
-                common.searchType = 'keyword';
-                common.$emit('setParam', 'router', 'index');
-                this.$router.push("/search");
-            },
-            jump(path) {
-                let _self = this;
-                if (!common.KEY) {
-                    function loadApp() {
-                        if (common.wxshow) {
-                            common.getWxUrl();
-                        } else {
-                            _self.$router.push('/login');
-                        }
-                    }
-                    common.$emit('confirm', {
-                        message: '请先登录',
-                        title: '提示',
-                        ensure: loadApp
+                common.$emit('confirm', {
+                    message: '请先登录',
+                    title: '提示',
+                    ensure: loadApp
+                });
+                return;
+            }
+            this.$router.push(path);
+        },
+        loadApp() {
+            window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
+        },
+        jumpEntrance(path) {
+            let _self = this;
+            if (!path) {
+                common.$emit("confirm", {
+                    message: '请下载App后，在App内查看',
+                    title: '提示',
+                    ensure: this.loadApp
+                });
+            }
+            if (path) {
+                console.log(321321)
+                if (path == '/majorBusiness') {
+                    _self.$store.dispatch('getMainBusiness', {
+                        router: '/account',
+                        main: _self.$store.state.user.userInfor.bizMain
                     });
-                    return;
-                }
-                this.$router.push(path);
-            },
-            loadApp() {
-                window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
-            },
-            jumpEntrance(path) {
-                let _self = this;
-                if (!path) {
-                    common.$emit("confirm", {
-                        message: '请下载App后，在App内查看',
-                        title: '提示',
-                        ensure: this.loadApp
-                    });
-                }
-                if (path) {
-                    console.log(321321)
-                    
+                    common.$emit('accountTomajorBusiness', this.$store.state.user.userInfor.bizMain)
+                    _self.$router.push('/majorBusiness?value=' + this.$store.state.user.userInfor.bizMain)
+                } else {
                     common.$emit('clearThisSearch', 1);
                     this.$router.push(path);
                 }
-            },
-            jumpNeed(obj) {
-                let _self = this;
-                common.$emit('needToDetails', {
-                    id: obj.id,
-                    type: ''
-                });
-                this.$router.push('/needDetails/' + obj.id);
-            },
-            jumpRes(router, id) {
-                common.$emit('resourceDetail', id);
-                this.$router.push(router + id);
-            },
-            getCustomerPhone() {
-                let _self = this;
-                this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
-                    if (response.data.code == '1c01') {
-                        common.servicePhone = response.data.biz_result.serviceMobile;
-                        _self.phone = response.data.biz_result.serviceMobile;
-                    }
-                }, (err) => {
-                    common.$emit('message', err.data.msg);
-                });
-            },
-            call() {
-                window.location.href = "tel:" + this.phone;
-            },
-            message() {
-                let _self = this;
-                if (!common.KEY) {
-                    function loadApp() {
-                        common.$emit('setParam', 'backRouter', 'message');
-                        if (common.wxshow) {
-                            common.getWxUrl();
-                        } else {
-                            _self.$router.push('/login');
-                        }
-                    }
-                    common.$emit('confirm', {
-                        message: '请先登录',
-                        title: '提示',
-                        ensure: loadApp
-                    });
-                    return;
-                }
-                common.$emit('indexToMessage', 1)
-                this.$router.push('/message')
-            },
-            getImgArr() {
-                let _self = this;
-                httpService.commonPost(common.urlCommon + common.apiUrl.most, {
-                    biz_module: 'activityService',
-                    biz_method: 'queryActivityList',
-                    biz_param: {
-                        type: 4
-                    }
-                }, function(suc) {
-                    let result = suc.data.biz_result.list;
-                    _self.imgArray = result;
 
-                }, function(err) {
-                    common.$emit('message', err.data.msg);
-
-                })
-            },
-            jumpLink(url) {
-                let _self = this;
-                if (url == 'http://192.168.1.141/htm5/#/presell') {
-                    common.$emit("confirm", {
-                        message: '请下载App后，在App内查看',
-                        title: '提示',
-                        ensure: _self.loadApp
-                    });
-                }
-                if (url && url !== 'http://192.168.1.141/htm5/#/presell') window.location.href = url;
-            },
-            loginJump(router) {
-                let _self = this;
-                if (!common.KEY) {
-                    function loadApp() {
-                        if (common.wxshow) {
-                            common.getWxUrl();
-                        } else {
-                            _self.$router.push('/login');
-                        }
-                    }
-                    common.$emit('confirm', {
-                        message: '请先登录',
-                        title: '提示',
-                        ensure: loadApp
-                    });
-                    return;
-                } else if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
-                    console.log(213162376178);
-                    function perfect() {
-                        if (router == '/releaseNeeds/1') {
-                            _self.$store.dispatch('changeRouter', {
-                                index: 1,
-                                id: ''
-                            })
-                        } else if (router == '/releaseResource/1') {
-                            _self.$store.dispatch('changeRouter', {
-                                index: 2,
-                                id: ''
-                            })
-                        }
-                        _self.$router.push('/perfectObject');
-                    }
-                    common.$emit('confirm', {
-                        message: '请先完善信息',
-                        title: '提示',
-                        ensure: perfect
-                    });
-                    return;
-                }
-                // if(router == '/releaseNeeds/1'){
-                //       if(common.getAddress)_self.$store.dispatch('getAreaJson')
-                // }
-                common.$emit('inforReleases', 1);
-                this.$router.push(router);
-            },
-            handleScroll() {
-                this.scrollTop = this.$refs.wrapper.scrollTop;
-            },
-            getScrollTop() {
-                this.$refs.wrapper.scrollTop = this.scrollTop;
-            },
-            handleTopChange(status) {
-                this.topStatus = status;
-            },
-            loadTop(id) {
-                let _self = this;
-                setTimeout(() => {
-                    _self.drugGuidePrice();
-                    _self.resourceHttp();
-                    _self.getImgArr();
-                    if (common.KEY) _self.$store.dispatch('getMessage');
-                    _self.$refs.loadmore.onTopLoaded(id);
-                }, 500);
-            },
-
-        },
-        watch: {
-            '$route': 'getScrollTop',
-            scrollTop: function(newValue, oldValue) {
-                if (newValue > 200) {
-                    this.show = false;
-                }
-                if (newValue < 200) {
-                    this.show = true;
-                }
             }
         },
-        created() {
-            let _self = this;      
-            if (!common.servicePhone) this.getCustomerPhone();
-            if (common.KEY) {
-                console.log(1217389279)
-                _self.$store.dispatch('getUserInfor');
-            }
-            if (common.KEY) _self.$store.dispatch('getMessage');
-            common.$on('messageBack', function(item) { //由消息列表回来，处理缓存问题
-                if (common.KEY) _self.$store.dispatch('getMessage');
-            })
-            common.$on('toMine', function(item) {
-                if (common.KEY) _self.$store.dispatch('getUserInfor');
-                if (common.KEY) _self.$store.dispatch('getMessage');
-            })
-            common.$on('perfectOldCustomer', function(item) { //完善老客户信息，处理缓存问题
-                if (common.KEY) _self.$store.dispatch('getUserInfor');
-            })
-            common.$on('getInfo', function(item) {
-                if (common.KEY) _self.$store.dispatch('getUserInfor'); //来自登录，调用下个人信息接口
-                _self.resourceHttp();
-                if (common.KEY) _self.$store.dispatch('getMessage');
-            })
-            this.resourceHttp();
-            this.drugGuidePrice();
-            this.getImgArr();
-
-        },
-        mounted() {
+        jumpNeed(obj) {
             let _self = this;
-            this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
-            this.$nextTick(function() {
-                _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
+            common.$emit('needToDetails', {
+                id: obj.id,
+                type: ''
+            });
+            this.$router.push('/needDetails/' + obj.id);
+        },
+        jumpRes(router, id) {
+            common.$emit('resourceDetail', id);
+            this.$router.push(router + id);
+        },
+        getCustomerPhone() {
+            let _self = this;
+            this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
+                if (response.data.code == '1c01') {
+                    common.servicePhone = response.data.biz_result.serviceMobile;
+                    _self.phone = response.data.biz_result.serviceMobile;
+                }
+            }, (err) => {
+                common.$emit('message', err.data.msg);
+            });
+        },
+        call() {
+            window.location.href = "tel:" + this.phone;
+        },
+        message() {
+            let _self = this;
+            if (!common.KEY) {
+                function loadApp() {
+                    common.$emit('setParam', 'backRouter', 'message');
+                    if (common.wxshow) {
+                        common.getWxUrl();
+                    } else {
+                        _self.$router.push('/login');
+                    }
+                }
+                common.$emit('confirm', {
+                    message: '请先登录',
+                    title: '提示',
+                    ensure: loadApp
+                });
+                return;
+            }
+            common.$emit('indexToMessage', 1)
+            this.$router.push('/message')
+        },
+        getImgArr() {
+            let _self = this;
+            httpService.commonPost(common.urlCommon + common.apiUrl.most, {
+                biz_module: 'activityService',
+                biz_method: 'queryActivityList',
+                biz_param: {
+                    type: 4
+                }
+            }, function (suc) {
+                let result = suc.data.biz_result.list;
+                _self.imgArray = result;
+
+            }, function (err) {
+                common.$emit('message', err.data.msg);
+
             })
+        },
+        jumpLink(url) {
+            let _self = this;
+            if (url == 'http://192.168.1.141/htm5/#/presell') {
+                common.$emit("confirm", {
+                    message: '请下载App后，在App内查看',
+                    title: '提示',
+                    ensure: _self.loadApp
+                });
+            }
+            if (url && url !== 'http://192.168.1.141/htm5/#/presell') window.location.href = url;
+        },
+        loginJump(router) {
+            let _self = this;
+            if (!common.KEY) {
+                function loadApp() {
+                    if (common.wxshow) {
+                        common.getWxUrl();
+                    } else {
+                        _self.$router.push('/login');
+                    }
+                }
+                common.$emit('confirm', {
+                    message: '请先登录',
+                    title: '提示',
+                    ensure: loadApp
+                });
+                return;
+            } else if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
+                function perfect() {
+                    if (router == '/releaseNeeds/1') {
+                        _self.$store.dispatch('changeRouter', {
+                            index: 1,
+                            id: ''
+                        })
+                    } else if (router == '/releaseResource/1') {
+                        _self.$store.dispatch('changeRouter', {
+                            index: 2,
+                            id: ''
+                        })
+                    }
+                    _self.$router.push('/perfectObject');
+                }
+                common.$emit('confirm', {
+                    message: '请先完善信息',
+                    title: '提示',
+                    ensure: perfect
+                });
+                return;
+            }
+            // if(router == '/releaseNeeds/1'){
+            //       if(common.getAddress)_self.$store.dispatch('getAreaJson')
+            // }
+            common.$emit('inforReleases', 1);
+            this.$router.push(router);
+        },
+        handleScroll() {
+            this.scrollTop = this.$refs.wrapper.scrollTop;
+        },
+        getScrollTop() {
+            this.$refs.wrapper.scrollTop = this.scrollTop;
+        },
+        handleTopChange(status) {
+            this.topStatus = status;
+        },
+        loadTop(id) {
+            let _self = this;
+            setTimeout(() => {
+                _self.drugGuidePrice();
+                _self.resourceHttp();
+                _self.getImgArr();
+                if (common.KEY) _self.$store.dispatch('getMessage');
+                _self.$refs.loadmore.onTopLoaded(id);
+            }, 500);
+        },
+
+    },
+    watch: {
+        '$route': 'getScrollTop',
+        scrollTop: function (newValue, oldValue) {
+            if (newValue > 200) {
+                this.show = false;
+            }
+            if (newValue < 200) {
+                this.show = true;
+            }
         }
+    },
+    created() {
+        let _self = this;
+        if (!common.servicePhone) this.getCustomerPhone();
+        if (common.KEY) {
+            //console.log(1217389279)
+            _self.$store.dispatch('getUserInfor');
+        }
+        if (common.KEY) _self.$store.dispatch('getMessage');
+        common.$on('messageBack', function (item) { //由消息列表回来，处理缓存问题
+            if (common.KEY) _self.$store.dispatch('getMessage');
+        })
+        common.$on('toMine', function (item) {
+            if (common.KEY) _self.$store.dispatch('getUserInfor');
+            if (common.KEY) _self.$store.dispatch('getMessage');
+        })
+        common.$on('perfectOldCustomer', function (item) { //完善老客户信息，处理缓存问题
+            if (common.KEY) _self.$store.dispatch('getUserInfor');
+        })
+        common.$on('getInfo', function (item) {
+            if (common.KEY) _self.$store.dispatch('getUserInfor'); //来自登录，调用下个人信息接口
+            _self.resourceHttp();
+            if (common.KEY) _self.$store.dispatch('getMessage');
+        })
+        this.resourceHttp();
+        this.drugGuidePrice();
+        this.getImgArr();
+
+    },
+    mounted() {
+        let _self = this;
+        this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
+        this.$nextTick(function () {
+            _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
+        })
+    }
 }
 </script>

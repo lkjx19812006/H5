@@ -116,7 +116,7 @@ input {
         <div class="box">
             <div class="number_left">{{obj.price_name}}</div>
             <div class="number_center">
-                <input type="number" v-model="obj.price" placeholder="请输入">
+                <input type="number" v-model="obj.sale_price" placeholder="请输入">
             </div>
             <div class="number_right">
                 <div class="green">元/{{obj.number_unit}}</div>

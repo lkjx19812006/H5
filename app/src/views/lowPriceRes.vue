@@ -115,6 +115,18 @@
                         color: #333;
                         line-height: 16px;
                         margin-bottom: 14px;
+                        display: flex;
+                        flex-direction: row;
+                        .its_mine {
+                            background-color: #FF6060;
+                            color: #fff;
+                            font-size: 12px;
+                            line-height: 16px;
+                            height: 16px;
+                            padding: 0 4px;
+                            border-radius: 3px;
+                            margin: 0 4px 0 2px;
+                        }
                     }
                     .spec {
                         font-size: 13px;
@@ -154,7 +166,10 @@
                                 <img src="/static/icon/zheng.png" class="zheng" v-show="todo.especial == 1">
                             </div>
                             <div class="center">
-                                <div class="breed">{{todo.breedName,8 | filterTxt}}</div>
+                                <div class="breed">
+                                    <div class="its_mine" v-show="todo.isMy==1">我的</div>
+                                    <div class="breed_name">{{todo.breedName,8 | filterTxt}}</div>
+                                </div>
                                 <div class="spec">规格:
                                     <span>{{todo.spec,8 | filterTxt}}</span>
                                 </div>
@@ -164,8 +179,9 @@
                                 <div class="price">￥{{todo.price}}/
                                     <span>{{todo.unit}}</span>
                                 </div>
-                                <div class="collected" @click.stop="myAttention(0,todo,index)" v-if="todo.isAttention">已收藏</div>
-                                <img src="/static/icon/supplyflower.png" class="collect" @click.stop="myAttention(1,todo,index)" v-if="!todo.isAttention">
+                                <div class="collected" @click.stop="myAttention(0,todo,index)" v-if="todo.isAttention && todo.isMy==0">已收藏</div>
+                                <img src="/static/icon/is-mine.png" class="collect" v-show="!todo.isAttention && todo.isMy==1">
+                                <img src="/static/icon/supplyflower.png" class="collect" @click.stop="myAttention(1,todo,index)" v-if="!todo.isAttention && todo.isMy==0">
                             </div>
                         </div>
                     </li>

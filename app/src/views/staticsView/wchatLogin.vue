@@ -1,6 +1,6 @@
 <template>
     <div class="login" v-show="wxShow">
-        <!-- <myHeader :param="my_header"></myHeader> -->
+        <myHeader :param="my_header"></myHeader>
         <!-- <div id='login_container'></div> -->
         <!-- <div class="bg_white"> -->
         <div class="box">
@@ -62,12 +62,15 @@ export default {
     },
     created() {
         let _self = this;
+
         let url = window.location.href;
-        if (url.indexOf('?code=') !== -1) {
+        if (url.indexOf("?code=") !== -1) {
             let behind = url.split('?code=')[1];
             let state = behind.split('&state=')[1];
             this.code = behind.split('&')[0];
             this.getOpenId();
+        }else{
+            this.wxShow = true;
         }
     },
     components: {
@@ -96,7 +99,6 @@ export default {
             body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
             httpService.addressManage(url, body, function (suc) {
                 common.$emit('close-load');
-
                 if (suc.data.code == '1c01') {
                     if (suc.data.biz_result.openid) {
                         _self.openId = suc.data.biz_result.openid;
