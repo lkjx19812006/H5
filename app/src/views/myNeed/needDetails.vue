@@ -131,12 +131,12 @@
         }
     }
     .mascot {
-        position: fixed;
+        position:  absolute;
         bottom: 47px;
         padding: 0 0 0 10px;
         display: flex;
         flex-direction: row;
-        
+
         .cat {
             height: 100px;
         }
@@ -147,11 +147,11 @@
             .circle {
                 width: 225px;
             }
-            .cancel{
-                width:26px;
+            .cancel {
+                width: 26px;
                 position: absolute;
-                right:-13px;
-                top:-13px;
+                right: -13px;
+                top: -13px;
             }
             .my_title {
                 position: absolute;
@@ -170,7 +170,7 @@
         }
     }
     .share {
-        position: fixed;
+        position: absolute;
         z-index: 20;
         bottom: 0;
         height: 50px;
@@ -191,6 +191,9 @@
                 height: 20px;
                 margin-right: 3px;
             }
+        }
+        .report {
+            background-color: #B5B5B5;
         }
         .send_friend {
             flex: 1;
@@ -428,12 +431,12 @@
                     </div>
                 </div>
                 <!--  <div class="infor_box">
-                                    <div class="infor">
-                                        <div class="name">付款方式</div>
-                                        <div class="content" v-show="obj.paymentWay">{{obj.paymentWay}}</div>
-                                        <div class="content" v-show="!obj.paymentWay">面议</div>
-                                    </div>
-                                </div> -->
+                                                        <div class="infor">
+                                                            <div class="name">付款方式</div>
+                                                            <div class="content" v-show="obj.paymentWay">{{obj.paymentWay}}</div>
+                                                            <div class="content" v-show="!obj.paymentWay">面议</div>
+                                                        </div>
+                                                    </div> -->
                 <div class="infor_box">
                     <div class="infor infor_nor">
                         <div class="name">
@@ -461,27 +464,26 @@
                     </span>
                     人报价预计很快成交, 不报价会后悔哟
                 </div>
-    
             </div>
-    
         </div>
         <div class="share" v-show="obj.isMy !== 1">
-            <div class="offer_it">
+            <div class="offer_it" v-bind:class="{report:obj.isOffer == 1}">
                 <img src="/static/icon/offer-price.png">
-                <div @click="jump(obj)" v-if="obj.indentType !== 0">
+                <div @click="jump(obj)" v-if="obj.indentType !== 0 && obj.isOffer == 0">
                     我要报价
                 </div>
-                <div @click="jump(obj)" v-if="obj.indentType == 0">
+                <div @click="jump(obj)" v-if="obj.indentType == 0 && obj.isOffer == 0">
                     抢先报价
                 </div>
-    
+                <div v-if="obj.isOffer == 1" @click="jumpDetail(obj)">
+                    查看报价
+                </div>
             </div>
             <div @click="sendFriend()" class="offer_it send_friend">
                 <img src="/static/icon/send-friend.png" />
                 <div>
                     发给朋友
                 </div>
-    
             </div>
             <div @click="sendNor()" class="send_nor">
                 <img src="/static/icon/cry.png">
@@ -499,7 +501,6 @@
                 </div>
             </div>
         </div>
-    
     </div>
 </template>
 <script>
@@ -676,6 +677,11 @@ export default {
             }
             this.show = false;
             this.opinion = false;
+        },
+        jumpDetail(obj){
+            let _self = this;
+            common.$emit('myOfferToOfferDetail', obj.id);
+            _self.$router.push('/offerDetail/'+obj.id)
         },
         jump(obj) {
             let _self = this;

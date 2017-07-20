@@ -309,21 +309,21 @@
                                 <div class="spec one">产品规格: {{todo.spec,4 | filterTxt}}</div>
                                 <div class="spec">产品产地: {{todo.location,4 | filterTxt}}</div>
                                 <div class="spec">需求数量: {{todo.number,5 | filterTxt}}({{todo.unit}})</div>
-                                <div class="spec">交货地址: {{todo.address,8 | filterTxt}}</div>
+                                <div class="spec">交货地址: {{todo.treadAddress,8 | filterTxt}}</div>
                             </div>
                             <div class="right">
-                                <div class="detail" v-if="todo.indentType !== 0 && todo.isMy == 0">
+                                <div class="detail" v-if="todo.indentType !== 0 && todo.isMy == 0 && todo.isOffer == 0">
                                     我要报价
                                 </div>
-                                <div class="detail" v-if="todo.indentType == 0 && todo.isMy == 0">
+                                <div class="detail" v-if="todo.indentType == 0 && todo.isMy == 0 && todo.isOffer == 0">
                                     抢先报价
                                 </div>
-                                <div class="detail mine_color" v-if="todo.isMy == 1">
+                                <div class="detail mine_color" v-if="todo.isMy == 1 && todo.isOffer == 0">
                                     我的求购
                                 </div>
-                                <!-- <div class="detail report">
+                                <div class="detail report" v-if="todo.isOffer == 1">
                                     已报价
-                                </div> -->
+                                </div>
                                 <div class="offerNum">已报价
                                     <span>{{todo.offer}}</span>人</div>
                             </div>
@@ -438,7 +438,7 @@ export default {
                     key: 'duedate'
                 }]
             }, {
-                name: '产地',
+                name: '交货地',
                 asc: 'location',
                 url: '/static/icons/screen.png',
                 class: 'sort_content_detail',
@@ -504,7 +504,7 @@ export default {
                         "offer": _self.httpPraram.offer,
                         "duedate": _self.httpPraram.duedate
                     },
-                    location: _self.httpPraram.location,
+                    province: _self.httpPraram.location,
                     indentType: _self.httpPraram.indentType,
                     pn: _self.httpPraram.page,
                     pSize: _self.httpPraram.pageSize
@@ -570,7 +570,7 @@ export default {
                         _self.sortArr[i].class = 'sort_content_detail';
                     }
                     if (i == 3) {
-                        _self.sortArr[3].name = '产地';
+                        _self.sortArr[3].name = '交货地';
                         _self.sortArr[3].class = "sort_content_detail";
                         _self.sortArr[3].url = "/static/icons/screen.png";
                         common.$emit('initial', 1)

@@ -415,6 +415,12 @@
                     border-radius: 16px;
                     line-height: 32px;
                 }
+                .mine_color {
+                    background-color: #FF6060;
+                }
+                .report {
+                    background-color: #B5B5B5;
+                }
                 .reported {
                     font-size: 12px;
                     margin-top: 5px;
@@ -505,9 +511,9 @@
                 <div class="left_word">购物车</div>
             </div>
             <!--  <div class="right" @click="call">
-                        <img src="/static/icon/tele.png" class="img">
-                        <div class="right_word">电话</div>
-                    </div> -->
+                                <img src="/static/icon/tele.png" class="img">
+                                <div class="right_word">电话</div>
+                            </div> -->
             <div class="center" @click="fromIndex">
                 <div class="inbox">
                     <img src="/static/icon/enlarge.png">
@@ -637,8 +643,20 @@
                         </div>
                         <div class="right">
                             <div class="reported dates">发布日期:{{todo.pubdate | timeFormat}}</div>
-                            <div class="report_pri" v-if="todo.indentType == 0">抢先报价</div>
-                            <div class="report_pri" v-if="todo.indentType !== 0">我要报价</div>
+                            <!-- <div class="report_pri" v-if="todo.indentType == 0">抢先报价</div>
+                                    <div class="report_pri" v-if="todo.indentType !== 0">我要报价</div> -->
+                            <div class="report_pri" v-if="todo.indentType !== 0 && todo.isMy == 0 && todo.isOffer == 0">
+                                我要报价
+                            </div>
+                            <div class="report_pri" v-if="todo.indentType == 0 && todo.isMy == 0 && todo.isOffer == 0">
+                                抢先报价
+                            </div>
+                            <div class="report_pri mine_color" v-if="todo.isMy == 1 && todo.isOffer == 0">
+                                我的求购
+                            </div>
+                            <div class="report_pri report" v-if="todo.isOffer == 1">
+                                已报价
+                            </div>
                             <div class="reported">已报价
                                 <span>{{todo.offer}}</span>人</div>
                         </div>

@@ -107,7 +107,9 @@ input {
 </style>
 <template>
     <div class="select_quality">
-        <div class="top">产品卖点 <span>(点击可多选哦)</span></div>
+        <div class="top">产品卖点
+            <span>(点击可多选哦)</span>
+        </div>
         <div class="inbox">
             <div class="name" v-bind:class="{name:!todo.show,'active':todo.show}" v-for="(todo,index) in obj.sell" @click="select(todo,index)">{{todo.name}}</div>
         </div>
@@ -122,43 +124,46 @@ import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 export default {
     data() {
-            return {
-
-            }
-        },
-        props: {
-            obj: {
-
-            }
-        },
-        methods: {
-            select(todo, index) {
-                let _self = this;
-                todo.show = !todo.show;
-                _self.obj.sell_point = [];
-                let select_content = '';
-                for (var i = 0; i < _self.obj.sell.length; i++) {
-                    if (_self.obj.sell[i].show) {
-                        _self.obj.sell_point.push(_self.obj.sell[i].name);
-                        if(select_content !== '')select_content = select_content + ',' + _self.obj.sell[i].name;
-                        if(select_content == '')select_content = _self.obj.sell[i].name;
-                        
-                    }
-                }
-                _self.obj.descriptions = '';
-                _self.obj.descriptions = select_content;
-                
-            }
-
-        },
-        components: {
-
-        },
-        created() {
-
-        },
-        mounted() {
+        return {
 
         }
+    },
+    props: {
+        obj: {
+
+        }
+    },
+    methods: {
+        select(todo, index) {
+            let _self = this;
+            todo.show = !todo.show;
+            _self.obj.sell_point = [];
+            let select_content = '';
+            let arr = _self.obj.descriptions.split(',');
+            for (var i = 0; i < _self.obj.sell.length; i++) {
+                if (_self.obj.sell[i].show) {
+                    _self.obj.sell_point.push(_self.obj.sell[i].name);
+                    if (select_content !== '') select_content = select_content + ',' + _self.obj.sell[i].name;
+                    if (select_content == '') select_content = _self.obj.sell[i].name;
+                }
+            }
+            
+            //console.log(222,_self.obj.descriptions.split(','))
+            //let last = _self.obj.descriptions.split(',')
+            _self.obj.descriptions = '';
+            if(select_content)_self.obj.descriptions = select_content + ',';
+
+        }
+
+    },
+    components: {
+
+    },
+    created() {
+
+    },
+    mounted() {
+
+    }
 }
 </script>

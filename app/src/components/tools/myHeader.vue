@@ -132,7 +132,7 @@ export default {
 
 .my-header .header_content {
     background: #EC6817;
-    position: fixed;
+    position: absolute;
     top: 0;
     width: 100%;
     height: 50px;

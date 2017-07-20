@@ -249,16 +249,16 @@ Vue.filter('myStatus', function(val) {
 Vue.filter('myOfferStatus', function(val) {
     switch (val) {
         case 0:
-            val = '处理中';
+            val = '受理中';
             break;
         case 1:
-            val = '已采用';
+            val = '已采纳';
             break;
         case 2:
-            val = '未采用';
+            val = '未采纳';
             break;
         case 3:
-            val = '处理中';
+            val = '受理中';
             break;
         default:
             val = '';

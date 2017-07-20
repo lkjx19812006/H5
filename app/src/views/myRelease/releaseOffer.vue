@@ -67,8 +67,8 @@ textarea {
         text-align: center;
         color: #fff;
     }
-    .sample_offer{
-        margin-bottom:10px;
+    .sample_offer {
+        margin-bottom: 10px;
     }
 }
 </style>
@@ -265,17 +265,50 @@ export default {
             }
             httpService.myAttention(url, body, function (suc) {
                 common.$emit('close-load');
-                let result = suc.data.biz_result.list[0];
-                console.log(3, result)
+                let result = [];
+                if (suc.data.biz_result.list.length > 0) {
+                    result = suc.data.biz_result.list[0];
+                }
+
+                //console.log(3, result)
                 if (suc.data.code == '1c01') {
                     console.log(1111, result);
-                    if (result.image[0]) _self.handPhoto = result.image[0];
-                    if (result.image[1]) _self.detailsPhoto = result.image[1];
-                    if (result.image[2]) _self.cargoPhoto = result.image[2];
-                    if (result.image[3]) {
-                        for (var i = 3; i < result.image.length; i++) {
-                            _self.imgArr.push(result.image[i]);
+                    if (result !== []) {
+                        //处理带过来的图片匹配  
+                        if (result.image[0]) _self.handPhoto = result.image[0];
+                        if (result.image[1]) _self.detailsPhoto = result.image[1];
+                        if (result.image[2]) _self.cargoPhoto = result.image[2];
+                        if (result.image[3]) {
+                            for (var i = 3; i < result.image.length; i++) {
+                                _self.imgArr.push(result.image[i]);
+                            }
                         }
+                        //处理带过来的卖点匹配
+                        _self.obj.descriptions = result.quality;
+                        let qualityArr = result.quality.split(',');
+                        for (var i = 0; i < qualityArr.length; i++) {
+                            for (var j = 0; j < _self.obj.sell.length; j++) {
+                                if (_self.obj.sell[j].name == qualityArr[i]) {
+                                    _self.obj.sell[j].show = true;
+                                }
+                            }
+                        }
+                        //处理是否有样品
+                        _self.obj.sampling = result.sampling;
+                        if (result.sampling == 1) {
+                            _self.obj.weight = result.sampleNumber;
+                            _self.obj.price = result.sampleAmount;
+                        }
+                        //处理价格和供应量
+                        _self.obj.number = result.number;
+                        //_self.obj.sale_price = result.price;
+                        //价格说明
+                        _self.obj.priceDescription = result.priceDescription;
+                        //产地
+                        _self.obj.place = result.location;
+                        _self.obj.place_id = result.locationId;
+                        //规格
+                        _self.obj.spec = result.spec;
                     }
 
                 } else {
@@ -324,7 +357,7 @@ export default {
             checkArr.push(checkQuality);
             // let checkDrugInfor = validation.checkNull(_self.obj.descriptions, '请填写产品信息');
             // checkArr.push(checkDrugInfor);
-            if(_self.obj.sampling==1){
+            if (_self.obj.sampling == 1) {
                 let checkSampleNum = validation.checkMaxNum(_self.obj.weight, '样品数量');
                 checkArr.push(checkSampleNum);
                 let checkSamplePrice = validation.checkPrice(_self.obj.price, '样品价格');
@@ -528,9 +561,9 @@ export default {
                     price: _self.obj.sale_price,
                     priceDescription: _self.obj.priceDescription,
                     intentionId: _self.obj.intentionId,
-                    sampleNumber:_self.obj.weight,
-                    sampling:_self.obj.sampling,
-                    sampleAmount:_self.obj.price
+                    sampleNumber: _self.obj.weight,
+                    sampling: _self.obj.sampling,
+                    sampleAmount: _self.obj.price
                 }
             };
             body.time = Date.parse(new Date()) + parseInt(common.difTime);
@@ -584,6 +617,8 @@ export default {
             _self.obj.number = '';
             _self.obj.number_id = '';
             _self.obj.price = '';
+            _self.obj.sale_price = '';
+            _self.obj.weight = '';
             _self.obj.descriptions = '';
             _self.obj.priceDescription = '';
             for (var i = 0; i < _self.obj.sell.length; i++) {

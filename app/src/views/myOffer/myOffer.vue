@@ -233,15 +233,15 @@ export default {
                     accept: '-1',
                     show: true
                 }, {
-                    name: '处理中',
+                    name: '受理中',
                     accept: '0',
                     show: false
                 }, {
-                    name: '已采用',
+                    name: '已采纳',
                     accept: '1',
                     show: false
                 }, {
-                    name: '未采用',
+                    name: '未采纳',
                     accept: '2',
                     show: false
                 }]

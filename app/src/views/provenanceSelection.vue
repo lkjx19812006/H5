@@ -7,11 +7,11 @@
             <mt-button slot="right" @click="save()">确定</mt-button>
         </mt-header>
         <!-- <div class="select_box">
-            <mt-navbar v-model="selected">
-                <mt-tab-item id="1">国内</mt-tab-item>
-                <mt-tab-item id="2">国外</mt-tab-item>
-            </mt-navbar>
-        </div> -->
+                        <mt-navbar v-model="selected">
+                            <mt-tab-item id="1">国内</mt-tab-item>
+                            <mt-tab-item id="2">国外</mt-tab-item>
+                        </mt-navbar>
+                    </div> -->
         <div class="history_box" v-show="selectArr.length>0">
             <div class="history">
                 <div v-for="(item,index) in selectArr">
@@ -29,12 +29,12 @@
                 </mt-index-section>
             </div>
             <!-- <div class="list" v-for="todo in outer_list" v-if="selected==2">
-                <mt-index-section :index="todo.index" class="index_name">
-                    <a @click="selectPlace(item)" v-for="item in todo.place_list">
-                        <mt-cell :title="item.place"></mt-cell>
-                    </a>
-                </mt-index-section>
-            </div> -->
+                            <mt-index-section :index="todo.index" class="index_name">
+                                <a @click="selectPlace(item)" v-for="item in todo.place_list">
+                                    <mt-cell :title="item.place"></mt-cell>
+                                </a>
+                            </mt-index-section>
+                        </div> -->
         </mt-index-list>
     </div>
 </template>
@@ -43,150 +43,16 @@ import common from '../common/common.js'
 import httpService from '../common/httpService.js'
 export default {
     data() {
-            return {
-                selected: '1',
-                list: [],
-                home_list: [{
-                    key: 'A',
-                    value: [{
-                        name: '湖北'
-                    }, {
-                        name: '湖北'
-                    }, {
-                        name: '湖北'
-                    }]
-                }, {
-                    key: 'B',
-                    value: [{
-                        name: '湖北'
-                    }, {
-                        name: '湖北'
-                    }, {
-                        name: '湖北'
-                    }]
-                }, {
-                    key: 'C',
-                    value: [{
-                        name: '湖北'
-                    }, {
-                        name: '湖北'
-                    }, {
-                        name: '湖北'
-                    }]
-                }, {
-                    key: 'D',
-                    value: [{
-                        name: '湖北'
-                    }, {
-                        name: '湖北'
-                    }, {
-                        name: '湖北'
-                    }]
-                }],
-                outer_list: [{
-                    key: 'A',
-                    value: [{
-                        name: '巴西'
-                    }, {
-                        name: '巴西'
-                    }, {
-                        name: '巴西'
-                    }]
-                }, {
-                    key: 'B',
-                    value: [{
-                        name: '巴西'
-                    }, {
-                        name: '巴西'
-                    }, {
-                        name: '巴西'
-                    }]
-                }, {
-                    key: 'C',
-                    value: [{
-                        name: '巴西'
-                    }, {
-                        name: '巴西'
-                    }, {
-                        name: '巴西'
-                    }]
-                }, {
-                    key: 'D',
-                    value: [{
-                        name: '巴西'
-                    }, {
-                        name: '巴西'
-                    }, {
-                        name: '巴西'
-                    }]
-                }],
-                selectArr: []
-            }
-        },
+        return {
+            selected: '1',
+            list: [],
+            selectArr: []
+        }
+    },
 
-        methods: {
-            selectPlace: function(item) {
-                console.log(1,item)
-                let count = 1;
-                for (let i = 0; i < this.selectArr.length; i++) {
-                    if (this.selectArr[i].name == item.name) {
-                        count = 0;
-                    }
-                }
-                if (count) this.selectArr.push(item);
-            },
-            delItem: function(id) {
-                this.selectArr.splice(id, 1);
-            },
-            back: function() {
-                this.$router.go(-1);
-            },
-            save: function() {
-                let areaArr=[];
-                let idArr=[];
-                for(var i=0;i<this.selectArr.length;i++){
-                        areaArr.push(this.selectArr[i].name);
-                        idArr.push(this.selectArr[i].locationId);
-                }
-
-                switch (this.$route.params.from) {
-                    case 'need':
-                        common.$emit('need-sort',{
-                            areaArr:areaArr,
-                            idArr:idArr
-                        });
-                        break;
-                    case 'resource':
-                        common.$emit('resource-sort',{
-                            areaArr:areaArr,
-                            idArr:idArr
-                        });
-                        break;
-                    case 'lowRes':
-                        common.$emit('lowRes-sort',{
-                            areaArr:areaArr,
-                            idArr:idArr
-                        });
-                        break;
-                    case 'urgentNeed':
-                        common.$emit('urgentNeed-sort',{
-                            areaArr:areaArr,
-                            idArr:idArr
-                        });
-                        break;
-                    default:
-                        break;
-
-                }
-                this.$router.go(-1);
-            }
-        },
-
-        created() {
+    methods: {
+        getHttp() {
             let _self = this;
-            common.$on('initial',function(id){
-                _self.selectArr = []
-            })
             common.$emit('show-load');
             httpService.specifiedPlace(common.urlCommon + common.apiUrl.most, {
                 biz_module: 'breedService',
@@ -194,16 +60,103 @@ export default {
                 biz_param: {
                     breedId: 0,
                 }
-            }, function(suc) {
+            }, function (suc) {
                 common.$emit('close-load');
                 let result = suc.data.biz_result.list;
                 _self.list = result;
-                console.log(result);
-            }, function(err) {
+                //console.log(result);
+            }, function (err) {
                 common.$emit('close-load');
                 common.$emit('message', err.data.msg);
             })
+        },
+        getNeedHttp() {
+            let _self = this;
+            common.$emit('show-load');
+            httpService.specifiedPlace(common.urlCommon + common.apiUrl.most, {
+                biz_module: 'locationService',
+                biz_method: 'queryProvinceByChina',
+                biz_param: {
+
+                }
+            }, function (suc) {
+                common.$emit('close-load');
+                let result = suc.data.biz_result.list; 
+                _self.list = result;
+                //console.log(result);
+            }, function (err) {
+                common.$emit('close-load');
+                common.$emit('message', err.data.msg);
+            })
+        },
+        selectPlace: function (item) {
+            console.log(1, item)
+            let count = 1;
+            for (let i = 0; i < this.selectArr.length; i++) {
+                if (this.selectArr[i].name == item.name) {
+                    count = 0;
+                }
+            }
+            if (count) this.selectArr.push(item);
+        },
+        delItem: function (id) {
+            this.selectArr.splice(id, 1);
+        },
+        back: function () {
+            this.$router.go(-1);
+        },
+        save: function () {
+            let areaArr = [];
+            let idArr = [];
+            for (var i = 0; i < this.selectArr.length; i++) {
+                areaArr.push(this.selectArr[i].name);
+                if (this.selectArr[i].locationId) {
+                    idArr.push(this.selectArr[i].locationId);
+                } else {
+                    idArr.push(this.selectArr[i].id);
+                }
+
+            }
+            switch (this.$route.params.from) {
+                case 'need':
+                    common.$emit('need-sort', {
+                        areaArr: areaArr,
+                        idArr: idArr
+                    });
+                    break;
+                case 'resource':
+                    common.$emit('resource-sort', {
+                        areaArr: areaArr,
+                        idArr: idArr
+                    });
+                    break;
+                case 'lowRes':
+                    common.$emit('lowRes-sort', {
+                        areaArr: areaArr,
+                        idArr: idArr
+                    });
+                    break;
+                case 'urgentNeed':
+                    common.$emit('urgentNeed-sort', {
+                        areaArr: areaArr,
+                        idArr: idArr
+                    });
+                    break;
+                default:
+                    break;
+
+            }
+            this.$router.go(-1);
         }
+    },
+    created() {
+        let _self = this;
+        common.$on('initial', function (id) {
+            _self.selectArr = []
+        })
+        //_self.getHttp();
+        _self.getNeedHttp();
+    }
 }
 </script>
 <style scoped>

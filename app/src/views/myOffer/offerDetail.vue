@@ -34,6 +34,7 @@
             word-break: break-all;
         }
     }
+
     @media screen {
         .no_pass {
             background-color: #fffafa;
@@ -67,6 +68,13 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            position: relative;
+            .used {
+                position: absolute;
+                width: 60px;
+                top: 20px;
+                right: 24px;
+            }
             .left {
                 flex: 1;
                 margin-left: 19px;
@@ -177,12 +185,6 @@
             font-size: 12px;
             color: #999999;
         }
-        .used {
-            position: absolute;
-            width: 80px;
-            top: 41px;
-            right: 12px;
-        }
     }
     .top_titles {
         display: flex;
@@ -279,11 +281,11 @@
                     </div>
                 </div>
                 <!-- <div class="title_box">
-                        <div class="inbox">
-                            <div class="left">付款方式</div>
-                            <div class="right">{{obj.content.paymentWay}}</div>
-                        </div>
-                    </div> -->
+                                                <div class="inbox">
+                                                    <div class="left">付款方式</div>
+                                                    <div class="right">{{obj.content.paymentWay}}</div>
+                                                </div>
+                                            </div> -->
                 <div class="title_box">
                     <div class="inbox last">
                         <div class="left">备注信息</div>
@@ -299,12 +301,12 @@
                         <span class="black" v-if="obj.newOffer.accept == '3'">{{obj.newOffer.accept | myOfferStatus}}</span>
                     </div>
                     <div class="time">报价时间: {{obj.newOffer.otime | timeFormat}}</div>
-                    <img src="/static/icon/used.png" class="used" v-if="obj.newOffer.accept == '1'">
                 </div>
                 <div class="no_pass" v-if="obj.newOffer.accept == '2'">
                     未采用理由: {{obj.newOffer.comments | lineTxt}}
                     <div class="line">{{obj.newOffer.comments | lineTxtTwo}}</div>
                 </div>
+                <process :todo="obj.newOffer"></process>
                 <div class="box">
                     <div class="inbox">
                         <div class="image">
@@ -318,6 +320,7 @@
                             <div class="spec last">裸价:
                                 <span class="red">{{obj.newOffer.price}}</span>元/{{obj.newOffer.unit}}</div>
                         </div>
+                        <img src="/static/icon/used.png" class="used" v-if="obj.newOffer.accept == '1'">
                     </div>
                 </div>
                 <payMoneyOrRemark :obj="obj" tab='2'></payMoneyOrRemark>
@@ -335,12 +338,12 @@
                             <span class="black" v-show="todo.accept == '3'">{{todo.accept | myOfferStatus}}</span>
                         </div>
                         <div class="time">报价时间: {{todo.otime | timeFormat}}</div>
-                        <img src="/static/icon/used.png" class="used" v-show="todo.accept == '1'">
                     </div>
                     <div class="no_pass" v-if="todo.accept == '2'">
                         未采用理由: {{todo.comments | lineTxt}}
                         <div class="line">{{todo.comments | lineTxtTwo}}</div>
                     </div>
+                    <process :todo="todo"></process>
                     <div class="box">
                         <div class="inbox">
                             <div class="image">
@@ -352,8 +355,10 @@
                                 </div>
                                 <div class="spec first">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
                                 <div class="spec last">裸价:
-                                    <span class="red">{{todo.price}}</span>元/{{todo.unit}}</div>
+                                    <span class="red">{{todo.price}}</span>元/{{todo.unit}}
+                                </div>
                             </div>
+                            <img src="/static/icon/used.png" class="used" v-show="todo.accept == '1'">
                         </div>
                     </div>
                     <payMoneyOrRemark :obj="todo" tab='3'></payMoneyOrRemark>
@@ -372,6 +377,7 @@
 import common from '../../common/common.js'
 import httpService from '../../common/httpService.js'
 import payMoneyOrRemark from '../../components/myOffer/payMoneyOrRemark'
+import process from '../../components/myOffer/process'
 import popUpBigImg from '../../components/tools/popUpBigImg'
 import myHeader from '../../components/tools/myHeader'
 import titles from '../../components/release/title'
@@ -416,7 +422,8 @@ export default {
         myHeader,
         titles,
         payMoneyOrRemark,
-        popUpBigImg
+        popUpBigImg,
+        process
     },
     methods: {
         getHttp(id) {
@@ -473,16 +480,16 @@ export default {
                 var dateValue = duedateDate.getTime() - pubdateDate.getTime() - 5000;
                 days = Math.ceil(dateValue / (24 * 3600 * 1000));
 
-                if(days <= 0){
+                if (days <= 0) {
                     return false;
-                }else{
+                } else {
                     return true;
                 }
 
             } else {
                 return false;
             }
-            
+
         },
         again() {
             common.$emit('needToReleaseOffer', this.id);

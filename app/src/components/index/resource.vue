@@ -1,6 +1,6 @@
 <style lang="less" scoped>
 .resource .fixed {
-    position: fixed;
+    position: absolute;
     width: 100%;
     z-index: 2;
     background: #fff;
