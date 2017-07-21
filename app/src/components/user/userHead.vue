@@ -45,7 +45,7 @@
         <div class="go_back" @click="jumpBack()">
             <img src="/static/images/go-back.png">
         </div>
-        <div class="title">{{param.name}}</div>
+        <div class="title" v-if="param.name">{{param.name}}</div>
         <div class="revise" v-if="param.revise && !param.show" @click="revise">编辑</div>
         <div class="revise" v-if="param.revise && param.show" @click="over">完成</div>
     </div>

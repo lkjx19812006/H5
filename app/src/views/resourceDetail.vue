@@ -1,6 +1,8 @@
 <style lang="less" scoped>
 .resource_detail {
     width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
     position: relative;
 }
 
@@ -172,6 +174,7 @@
 
 
 
+
 /*购物车修改*/
 
 .resource_detail .center_box {}
@@ -333,6 +336,9 @@
         position: absolute;
         bottom: 39px;
     }
+    .load_apps_my {
+        bottom: 0px;
+    }
 }
 </style>
 <template>
@@ -363,12 +369,12 @@
                         </div>
                     </div>
                     <div class="center_box">
-                         <div class="center" v-if="obj.sampling == 1 && obj.type == 1">
+                        <div class="center" v-if="obj.sampling == 1 && obj.type == 1">
                             <div class="choose_type">
                                 <div class="large_cargo" :class="{ active: choose.isRed,'default':!choose.isRed }" @click="unchooseType()">大货</div>
                                 <div class="sample_cargo" :class="{ active: !choose.isRed,'default':choose.isRed }" @click="chooseType()">样品</div>
                             </div>
-                        </div> 
+                        </div>
                         <div class="center_content" v-if="choose.isRed">
                             <div class="detail">
                                 <p>产地：
@@ -441,7 +447,7 @@
                 </mt-loadmore>
             </div>
         </div>
-        <div class="load_apps">
+        <div class="load_apps" v-bind:class="{load_apps_my:obj.isMy==1}">
             <loadApp :loadApps="loadApps"></loadApp>
         </div>
         <div class="fix_bottom" v-show="!my_param.show && obj.isMy == 0">
@@ -449,14 +455,17 @@
                 <telAndAttention :obj='obj'></telAndAttention>
             </div>
             <button class="mint-button orange_button" @click="pushCart(obj)">加入购物车</button>
-            <button class="mint-button mint-button--primary mint-button--normal disabled_button" @click="jump(obj)">立即购买</button>
+            <button class="mint-button mint-button--primary mint-button--normal disabled_button" @click="jump(obj)">
+                <span v-show="obj.especial !== 1">我要购买</span>
+                <span v-show="obj.especial == 1">立即抢购</span>
+            </button>
         </div>
         <!-- <div class="fix_bottom" v-show="!my_param.show && obj.isMy == 1">
-                            <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()">
-                                <img src="/static/icons/tel.png">
-                                <p>电话</p>
-                            </button>
-                        </div> -->
+                                <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()">
+                                    <img src="/static/icons/tel.png">
+                                    <p>电话</p>
+                                </button>
+                            </div> -->
         <div class="choose" v-show="choose.push_num && obj.isMy == 0" v-bind:class="{swipe_active:choose.push_num,'swipe_default':!choose.push_num  }">
             <chooseNum :param="choose" v-on:addCart="addBuy(obj.id)"></chooseNum>
         </div>

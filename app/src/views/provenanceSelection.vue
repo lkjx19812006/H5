@@ -7,11 +7,11 @@
             <mt-button slot="right" @click="save()">确定</mt-button>
         </mt-header>
         <!-- <div class="select_box">
-                        <mt-navbar v-model="selected">
-                            <mt-tab-item id="1">国内</mt-tab-item>
-                            <mt-tab-item id="2">国外</mt-tab-item>
-                        </mt-navbar>
-                    </div> -->
+            <mt-navbar v-model="selected">
+                <mt-tab-item id="1">国内</mt-tab-item>
+                <mt-tab-item id="2">国外</mt-tab-item>
+            </mt-navbar>
+        </div> -->
         <div class="history_box" v-show="selectArr.length>0">
             <div class="history">
                 <div v-for="(item,index) in selectArr">
@@ -21,7 +21,7 @@
             </div>
         </div>
         <mt-index-list>
-            <div class="list" v-for="todo in list">
+            <div class="list" v-for="todo in list" v-if="selected==1">
                 <mt-index-section :index="todo.key" class="index_name">
                     <a @click="selectPlace(item)" v-for="item in todo.value">
                         <mt-cell :title="item.name"></mt-cell>
@@ -29,12 +29,12 @@
                 </mt-index-section>
             </div>
             <!-- <div class="list" v-for="todo in outer_list" v-if="selected==2">
-                            <mt-index-section :index="todo.index" class="index_name">
-                                <a @click="selectPlace(item)" v-for="item in todo.place_list">
-                                    <mt-cell :title="item.place"></mt-cell>
-                                </a>
-                            </mt-index-section>
-                        </div> -->
+                <mt-index-section :index="todo.index" class="index_name">
+                    <a @click="selectPlace(item)" v-for="item in todo.place_list">
+                        <mt-cell :title="item.place"></mt-cell>
+                    </a>
+                </mt-index-section>
+            </div> -->
         </mt-index-list>
     </div>
 </template>
@@ -81,7 +81,7 @@ export default {
                 }
             }, function (suc) {
                 common.$emit('close-load');
-                let result = suc.data.biz_result.list; 
+                let result = suc.data.biz_result.list;
                 _self.list = result;
                 //console.log(result);
             }, function (err) {

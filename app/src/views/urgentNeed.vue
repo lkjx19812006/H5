@@ -232,7 +232,7 @@
                 <ul class="list">
                     <li v-for="todo in todos" @click="jumpDetail(todo.id)" class="li">
                         <div class="top">
-                            <img src="https://ojic8qd7z.qnssl.com/contry_icon/zhongguo.png" class="flag">
+                            <img :src="todo.cFlagsPath" class="flag">
                             <div class="drug_factory" v-show="todo.indentType == 0">药厂</div>
                             <div class="its_mine" v-show="todo.isMy==1">我的</div>
                             <div class="breed">{{todo.breedName}}</div>

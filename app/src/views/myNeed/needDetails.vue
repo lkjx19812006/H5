@@ -467,7 +467,7 @@
             </div>
         </div>
         <div class="share" v-show="obj.isMy !== 1">
-            <div class="offer_it" v-bind:class="{report:obj.isOffer == 1}">
+            <div class="offer_it" >
                 <img src="/static/icon/offer-price.png">
                 <div @click="jump(obj)" v-if="obj.indentType !== 0 && obj.isOffer == 0">
                     我要报价
@@ -578,8 +578,7 @@ export default {
                 if (suc.data.code == '1c01') {
                     //common.$emit('message',result.isMy)
                     _self.obj = result;
-                    if (result.isMy == 0 && result.offer >= 3) {
-
+                    if (result.isMy == 0 && result.offer >= 3 && result.isOffer == 0) {
                         setTimeout(() => {
                             _self.mascot = true;
                         }, 2000)

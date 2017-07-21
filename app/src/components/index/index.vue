@@ -511,9 +511,9 @@
                 <div class="left_word">购物车</div>
             </div>
             <!--  <div class="right" @click="call">
-                                <img src="/static/icon/tele.png" class="img">
-                                <div class="right_word">电话</div>
-                            </div> -->
+                                    <img src="/static/icon/tele.png" class="img">
+                                    <div class="right_word">电话</div>
+                                </div> -->
             <div class="center" @click="fromIndex">
                 <div class="inbox">
                     <img src="/static/icon/enlarge.png">
@@ -644,7 +644,7 @@
                         <div class="right">
                             <div class="reported dates">发布日期:{{todo.pubdate | timeFormat}}</div>
                             <!-- <div class="report_pri" v-if="todo.indentType == 0">抢先报价</div>
-                                    <div class="report_pri" v-if="todo.indentType !== 0">我要报价</div> -->
+                                        <div class="report_pri" v-if="todo.indentType !== 0">我要报价</div> -->
                             <div class="report_pri" v-if="todo.indentType !== 0 && todo.isMy == 0 && todo.isOffer == 0">
                                 我要报价
                             </div>
@@ -688,8 +688,8 @@
                         </div>
                         <div class="right">
                             <img src="/static/icon/homesample.png" v-show="todo.sampling == 1">
-                            <div class="report_pri">立即购买</div>
-                            <!-- <div class="report_pri" v-if="todo.indentType !== 0">我要购买</div>  -->
+                            <div class="report_pri" v-if="todo.especial !== 1">我要购买</div>
+                            <div class="report_pri" v-if="todo.especial == 1">立即抢购</div>
                         </div>
                     </div>
                 </div>

@@ -190,8 +190,9 @@ input {
             </div>
         </div>
         <div class="footer">
-            <div class="back" @click="back">返回上一步</div>
+            <div class="back" @click="back"v-if="!mainBusiness.router">返回上一步</div>
             <div class="next" @click="next" v-if="!mainBusiness.router">完成注册</div>
+            <div class="back" @click="back"v-if="mainBusiness.router == '/account'">返回</div>
             <div class="next" @click="goAccout" v-if="mainBusiness.router == '/account'">保存</div>
         </div>
     </div>

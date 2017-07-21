@@ -76,7 +76,7 @@
             <div class="word">受理中</div>
             <div class="word" v-show="todo.accept == '1'">已采纳</div>
             <div class="word word_default" v-show="todo.accept == '2'">未采纳</div>
-            <div class="word word_default" v-show="todo.accept == '0' || todo.accept == '3'">受理中</div>
+            <div class="word word_default" v-show="todo.accept == '0' || todo.accept == '3'">待采纳</div>
             <div class="word word_default">待寄样</div>
             <div class="word word_default">待成交</div>
         </div>

@@ -13,9 +13,12 @@
         }
         .title {
             color: #fff;
+            text-align: left;
             font-size: 14px;
+            margin-left:8px;
             .last {
-                text-indent: 1em;
+                //text-indent: 1em;
+                text-align: left;
             }
         }
         @media (max-width: 320px) {
@@ -27,7 +30,7 @@
                 color: #fff;
                 font-size: 12px;
                 .last {
-                    text-indent: 1em;
+                    //text-indent: 1em;
                 }
             }
         }
@@ -52,8 +55,10 @@
     <div class="load_app" v-show="loadApps.show">
         <img src="/static/icon/load-app-logo.png" class="logo">
         <div class="title">
-            <div>买药材上药材买卖网</div>
-            <div class="last">更多信息尽在APP上！</div>
+            <div>
+                买卖药材就上药材
+            </div>
+            <div class="last">买卖网APP！</div>
         </div>
         <div class="emtry"></div>
         <div class="button" @click="loadIos">
@@ -72,24 +77,24 @@ export default {
     },
     props: {
         loadApps: {
-            
+
         }
     },
     methods: {
         cancel() {
             let _self = this;
             this.loadApps.show = false;
-            setTimeout(()=>{
+            setTimeout(() => {
                 _self.loadApps.show = true;
-            },120000);
+            }, 120000);
         },
-        loadIos(){
+        loadIos() {
             window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
         }
     },
     created() {
         let _self = this;
-        
+
     }
 
 }

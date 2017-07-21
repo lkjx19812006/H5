@@ -110,7 +110,8 @@ export default {
                 httpPraram: {
                     page: 1,
                     pageSize: 10,
-                    keyword: ''
+                    keyword: '',
+                    breedId:''
                 }
             }
         },
@@ -130,6 +131,7 @@ export default {
                         name: _self.httpPraram.keyword,
                         pn: _self.httpPraram.page,
                         pSize: _self.httpPraram.pageSize,
+                        breedId:_self.httpPraram.breedId
                     }
                 }, function(suc) {
                     common.$emit('close-load');
@@ -180,6 +182,7 @@ export default {
                 this.httpPraram.page = 1;
                 this.todos.splice(0, _self.todos.length);
                 this.httpPraram.keyword = '';
+                this.httpPraram.breedId = '';
                 this.getHttp();
             },
             jump() {
@@ -224,8 +227,10 @@ export default {
             common.$on('marketQuotation', function(item) {
                 if (item.breedName) {
                     _self.httpPraram.keyword = item.breedName;
+                    _self.httpPraram.breedId = item.breedId;
                 } else {
                     _self.httpPraram.keyword = item.keyWord;
+                    _self.httpPraram.breedId = item.breedId;
                 }
                 _self.httpPraram.page = 1;
                 _self.todos.splice(0, _self.todos.length);
