@@ -118,15 +118,10 @@
                         margin-bottom: 14px;
                         display: flex;
                         flex-direction: row;
-                        .its_mine {
-                            background-color: #FF6060;
-                            color: #fff;
-                            font-size: 12px;
+                        .its_mine {    
                             line-height: 16px;
-                            height: 16px;
-                            padding: 0 4px;
-                            border-radius: 3px;
-                            margin: 0 4px 0 2px;
+                            height: 16px;     
+                            margin: 0 4px 0 -2px;
                         }
                     }
                     .spec {
@@ -166,11 +161,15 @@
                         <div class="content">
                             <div class="images">
                                 <img :src="todo.image[0]" class="breedImg">
-                                <img src="/static/icon/zheng.png" class="zheng" v-show="todo.especial == 1">
+                                <!-- <img src="/static/icon/zheng.png" class="zheng" v-show="todo.especial == 1"> -->
+                                <img :src="todo.cFlagsPath"  class="zheng">
                             </div>
                             <div class="center">
                                 <div class="breed">
-                                    <div class="its_mine" v-show="todo.isMy==1">我的</div>
+                                     <!-- <div class="its_mine" v-show="todo.isMy==1">我的</div>  -->
+                                    <img src="/static/icon/its-mines.png" class="its_mine" v-show="todo.isMy==1">
+                                    <img src="/static/icon/auth-icon.png" class="its_mine" v-show="todo.especial == 1">
+
                                     <div class="breed_name">{{todo.breedName,8 | filterTxt}}</div>
                                 </div>
                                 <div class="spec">规格:

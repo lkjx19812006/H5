@@ -411,7 +411,10 @@ export default {
 .my_resource .title {
     font-size: 1.7rem;
 }
-
+.my_resource  {
+    height:100vh;
+    overflow: hidden;
+}
 .my_resource .bg_white {
     background: #F5F5F5;
 }

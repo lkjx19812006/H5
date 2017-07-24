@@ -234,14 +234,14 @@ export default {
                     show: true
                 }, {
                     name: '受理中',
-                    accept: '0',
+                    accept: '3',
                     show: false
                 }, {
-                    name: '已采纳',
+                    name: '已采用',
                     accept: '1',
                     show: false
                 }, {
-                    name: '未采纳',
+                    name: '未采用',
                     accept: '2',
                     show: false
                 }]

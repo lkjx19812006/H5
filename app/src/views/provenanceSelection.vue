@@ -1,6 +1,6 @@
 <template>
     <div class="provenance">
-        <mt-header title="产地选择" class="header">
+        <mt-header :title="title" class="header">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click="back()"></mt-button>
             </router-link>
@@ -46,7 +46,9 @@ export default {
         return {
             selected: '1',
             list: [],
-            selectArr: []
+            selectArr: [],
+            title:'产地选择'
+
         }
     },
 
@@ -151,10 +153,18 @@ export default {
     },
     created() {
         let _self = this;
+        let type = _self.$route.query.type;
+        if(type){
+            _self.title = '交货地选择'
+        }else{
+            _self.title = '产地选择'
+        }
         common.$on('initial', function (id) {
             _self.selectArr = []
         })
-        //_self.getHttp();
+        common.$on('addressSelect',function(item){
+            _self.title=item;
+        })
         _self.getNeedHttp();
     }
 }

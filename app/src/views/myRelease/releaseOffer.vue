@@ -109,12 +109,10 @@ textarea {
                     <upLoadImgs :param="imgArr" v-on:postUrl="getUrl"></upLoadImgs>
                 </div>
             </div>
-    
             <selectQuality :obj="obj"></selectQuality>
             <div class="sample_offer">
                 <releaseBasic :obj="obj"></releaseBasic>
             </div>
-    
             <priceOrNumber :obj="obj" v-on:showAction="showAction"></priceOrNumber>
         </div>
         <div class="confirm" @click="confirm">提交报价</div>
@@ -199,7 +197,9 @@ export default {
                 intentionId: ''
             },
             imgArr: [],
-            imageArrs: []
+            imageArrs: [],
+            accept_type:'',
+            report_id:''
         }
     },
     methods: {
@@ -268,6 +268,7 @@ export default {
                 let result = [];
                 if (suc.data.biz_result.list.length > 0) {
                     result = suc.data.biz_result.list[0];
+                    _self.report_id = result.id;
                 }
 
                 //console.log(3, result)
@@ -566,6 +567,11 @@ export default {
                     sampleAmount: _self.obj.price
                 }
             };
+            if(_self.accept_type == 0){
+                console.log(999999)
+                body.biz_method = 'updateIntentionOffer'
+                body.biz_param.id = _self.report_id;
+            }
             body.time = Date.parse(new Date()) + parseInt(common.difTime);
             body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
             httpService.needRelease(url, body, function (suc) {
@@ -599,6 +605,8 @@ export default {
     created() {
         let _self = this;
         let id = _self.$route.params.id;
+        //let type = _self.$route.params.
+        _self.accept_type = _self.$route.query.type;
         _self.getHttp(id);
         _self.getOffer(id);
         _self.obj.intentionId = id;
@@ -622,12 +630,13 @@ export default {
             _self.obj.descriptions = '';
             _self.obj.priceDescription = '';
             for (var i = 0; i < _self.obj.sell.length; i++) {
-                console.log
                 _self.obj.sell[i].show = false;
             }
-            _self.obj.intentionId = item;
-            _self.getHttp(item);
-            _self.getOffer(item);
+            console.log(12312123)
+            _self.obj.intentionId = item.id;
+            _self.accept_type = item.accept_type;
+            _self.getHttp(item.id);
+            _self.getOffer(item.id);
             _self.getUnit();
         });
     },

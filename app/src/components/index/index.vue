@@ -232,10 +232,18 @@
             border-top: 1px solid #D8D8D8;
             padding-left: 15px;
             .item {
-                min-height: 117px;
+                min-height: 100px;
                 display: flex;
                 flex-direction: row;
+                align-items: center;
                 padding-left: 4px;
+                position: relative;
+                .urgent_img {
+                    position: absolute;
+                    height: 28px;
+                    right: 5px;
+                    top: 0px;
+                }
             }
             .first {
                 border-bottom: 1px solid #D8D8D8;
@@ -259,17 +267,24 @@
                     }
                 }
                 .center {
-                    margin-top: 45px;
+                    margin-top: 15px;
                     .breed_name {
                         font-size: 15px;
                         color: #000;
                         margin-bottom: 3px;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        img {
+                            height: 15px;
+                            margin-right: 4px;
+                        }
                     }
                     .box {
                         display: flex;
                         flex-direction: row;
                         .left {
-                            flex: 3;
+                            flex: 2;
                         }
                         .right {
                             flex: 5;
@@ -312,6 +327,7 @@
                             font-size: 18px;
                             line-height: 28px;
                             text-align: center;
+                            color: #FA6705;
                         }
                     }
                 }
@@ -340,6 +356,12 @@
                         color: #7BB157;
                     }
                 }
+                .mine_color {
+                    background-color: #FF6060;
+                }
+                .report {
+                    background-color: #B5B5B5;
+                }
             }
         }
     }
@@ -358,9 +380,17 @@
                     width: 82px;
                     height: 68px;
                     overflow: hidden;
-                    img {
+                    .left_img {
                         width: 100%;
                         min-height: 68px;
+                    }
+                    position: relative;
+                    .flag {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 25px;
+                        z-index: 200;
                     }
                 }
                 .center {
@@ -369,6 +399,13 @@
                     .center_top {
                         font-size: 15px;
                         line-height: 22px;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        .its_mine {
+                            height: 16px;
+                            margin: 0 4px 0 -2px;
+                        }
                     }
                     .center_box {
                         display: flex;
@@ -511,9 +548,9 @@
                 <div class="left_word">购物车</div>
             </div>
             <!--  <div class="right" @click="call">
-                                    <img src="/static/icon/tele.png" class="img">
-                                    <div class="right_word">电话</div>
-                                </div> -->
+                                                                                        <img src="/static/icon/tele.png" class="img">
+                                                                                        <div class="right_word">电话</div>
+                                                                                    </div> -->
             <div class="center" @click="fromIndex">
                 <div class="inbox">
                     <img src="/static/icon/enlarge.png">
@@ -528,8 +565,8 @@
         </div>
         <div class="swiper">
             <mt-swipe :auto="4000" :prevent="false">
-                <mt-swipe-item v-for="item in imgArray">
-                    <img v-bind:src="item.htmlImg" @click="jumpLink(item.htmlUrl)">
+                <mt-swipe-item v-for="(item,index) in imgArray">
+                    <img v-bind:src="item.htmlImg" @click="jumpLink(item.htmlUrl,index)">
                 </mt-swipe-item>
             </mt-swipe>
         </div>
@@ -615,16 +652,20 @@
                 </div>
                 <div class="content">
                     <div class="item" v-for="(todo,index) in urgentArr" v-bind:class="{first: index !== 2}" @click="jumpNeed(todo)">
+                        <img src="/static/icon/urgent-2.png" class="urgent_img">
                         <div class="left">
-                            <div class="top">
-                                <div class="word" v-if="todo.indentType == 0">药厂求购</div>
-                                <div class="word" v-if="todo.indentType !== 0">普通求购</div>
-                            </div>
+                            <!-- <div class="top">
+                                                    <div class="word" v-if="todo.indentType == 0">药厂求购</div>
+                                                    <div class="word" v-if="todo.indentType !== 0">普通求购</div>
+                                                </div> -->
                             <div class="center">
-                                <div class="breed_name">{{todo.breedName}}</div>
+                                <div class="breed_name">
+                                    <img src="/static/icon/yaochang.png">
+                                    <div>{{todo.breedName}}</div>
+                                </div>
                                 <div class="box">
                                     <div class="left">规格:{{todo.spec,2 | filterTxt}}</div>
-                                    <div class="right">产地:{{todo.location,4 | filterTxt}}</div>
+                                    <div class="right">{{todo.location,4 | filterTxt}}</div>
                                     <!-- 发布时间:{{todo.pubdate | timeFormat}} -->
                                 </div>
                             </div>
@@ -642,13 +683,11 @@
                             </div>
                         </div>
                         <div class="right">
-                            <div class="reported dates">发布日期:{{todo.pubdate | timeFormat}}</div>
-                            <!-- <div class="report_pri" v-if="todo.indentType == 0">抢先报价</div>
-                                        <div class="report_pri" v-if="todo.indentType !== 0">我要报价</div> -->
-                            <div class="report_pri" v-if="todo.indentType !== 0 && todo.isMy == 0 && todo.isOffer == 0">
+                            <!-- <div class="reported dates">发布日期:{{todo.pubdate | timeFormat}}</div> -->
+                            <div class="report_pri" v-if="todo.especial == 0 && todo.isMy == 0 && todo.isOffer == 0">
                                 我要报价
                             </div>
-                            <div class="report_pri" v-if="todo.indentType == 0 && todo.isMy == 0 && todo.isOffer == 0">
+                            <div class="report_pri" v-if="todo.especial == 1 && todo.isMy == 0 && todo.isOffer == 0">
                                 抢先报价
                             </div>
                             <div class="report_pri mine_color" v-if="todo.isMy == 1 && todo.isOffer == 0">
@@ -673,10 +712,15 @@
                     <div class="items" v-for="(todo,index) in resourceArr" v-bind:class="{firsts: index !== 2}" @click="jumpRes('resourceDetail/',todo.id)">
                         <div class="left">
                             <div class="image">
-                                <img :src="todo.image[0]">
+                                <img :src="todo.image[0]" class="left_img">
+                                <img :src="todo.cFlagsPath" class="flag" v-show="todo.cFlagsPath">
+                                <img src="/static/icon/zhongguo.png" class="flag" v-show="!todo.cFlagsPath">
                             </div>
                             <div class="center">
-                                <div class="center_top">{{todo.breedName}}</div>
+                                <div class="center_top">
+                                    <img src="/static/icon/auth-icon.png" class="its_mine" v-show="todo.especial == 1">
+                                    <div>{{todo.breedName}}</div>
+                                </div>
                                 <div class="center_box">
                                     <div class="spec specail_spec">规格:{{todo.spec,2 | filterTxt}}</div>&nbsp;&nbsp;
                                     <div class="spec">产地:{{todo.location,3 | filterTxt}}</div>
@@ -883,15 +927,33 @@ export default {
                     ensure: this.loadApp
                 });
             }
+
             if (path) {
                 console.log(321321)
                 if (path == '/majorBusiness') {
-                    _self.$store.dispatch('getMainBusiness', {
-                        router: '/account',
-                        main: _self.$store.state.user.userInfor.bizMain
-                    });
-                    common.$emit('accountTomajorBusiness', this.$store.state.user.userInfor.bizMain)
-                    _self.$router.push('/majorBusiness?value=' + this.$store.state.user.userInfor.bizMain)
+                    if (!common.KEY) {
+                        function loadApp() {
+                            if (common.wxshow) {
+                                common.getWxUrl();
+                            } else {
+                                _self.$router.push('/login');
+                            }
+                        }
+                        common.$emit('confirm', {
+                            message: '请先登录',
+                            title: '提示',
+                            ensure: loadApp
+                        });
+                        return;
+                    } else {
+                        _self.$store.dispatch('getMainBusiness', {
+                            router: '/account',
+                            main: _self.$store.state.user.userInfor.bizMain
+                        });
+                        common.$emit('accountTomajorBusiness', this.$store.state.user.userInfor.bizMain)
+                        _self.$router.push('/majorBusiness?value=' + this.$store.state.user.userInfor.bizMain)
+                    }
+
                 } else {
                     common.$emit('clearThisSearch', 1);
                     this.$router.push(path);
@@ -963,16 +1025,37 @@ export default {
 
             })
         },
-        jumpLink(url) {
+        jumpLink(url, index) {
             let _self = this;
-            if (url == 'http://192.168.1.141/htm5/#/presell') {
-                common.$emit("confirm", {
-                    message: '请下载App后，在App内查看',
-                    title: '提示',
-                    ensure: _self.loadApp
-                });
+            if (index == 3) {
+                if (!common.KEY) {
+                    function loadApp() {
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                } else {
+                    window.location.href = url;
+                }
+            } else {
+                window.location.href = url;
             }
-            if (url && url !== 'http://192.168.1.141/htm5/#/presell') window.location.href = url;
+            // if (url == 'http://192.168.1.141/htm5/#/presell') {
+            //     common.$emit("confirm", {
+            //         message: '请下载App后，在App内查看',
+            //         title: '提示',
+            //         ensure: _self.loadApp
+            //     });
+            // }
+            // if (url && url !== 'http://192.168.1.141/htm5/#/presell') window.location.href = url;
         },
         loginJump(router) {
             let _self = this;

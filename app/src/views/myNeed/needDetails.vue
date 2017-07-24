@@ -326,7 +326,7 @@
         <div :style="{ height: wrapperHeight + 'px' }" class="main" ref="wrapper" v-bind:class="{onscroll:!show || !opinion}">
             <div class="static examine" v-if="obj.onSell == 1 && obj.isMy==1">
                 <div class="static_word">
-                    审核中
+                    受理中
                 </div>
             </div>
             <div class="static no_pass" v-if="obj.onSell == -2 && obj.isMy==1">
@@ -467,12 +467,12 @@
             </div>
         </div>
         <div class="share" v-show="obj.isMy !== 1">
-            <div class="offer_it" >
+            <div class="offer_it">
                 <img src="/static/icon/offer-price.png">
-                <div @click="jump(obj)" v-if="obj.indentType !== 0 && obj.isOffer == 0">
+                <div @click="jump(obj)" v-if="obj.especial == 0 && obj.isOffer == 0">
                     我要报价
                 </div>
-                <div @click="jump(obj)" v-if="obj.indentType == 0 && obj.isOffer == 0">
+                <div @click="jump(obj)" v-if="obj.especial == 1 && obj.isOffer == 0">
                     抢先报价
                 </div>
                 <div v-if="obj.isOffer == 1" @click="jumpDetail(obj)">

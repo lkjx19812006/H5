@@ -2,7 +2,8 @@
     <div class="content sort">
         <div class="sort_content">
             <div v-bind:class="item.class" v-for="(item,index) in paramArr" @click="showTable(item,index)">
-                {{item.name}}<img v-bind:src="item.url">
+                {{item.name}}
+                <img v-bind:src="item.url">
             </div>
             <div class="sort_cell" v-show="selectShow">
                 <a v-for="(item,index) in selectArr" @click="getAsc(item,index)">
@@ -19,65 +20,73 @@
 import common from '../../common/common.js'
 export default {
     data() {
-            return {
-                selectShow: false,
-                selectArr: [],
-                selectIndex: 0
-            }
-        },
-        props: {
-            sortRouter: {
-                type: String,
-                default: '/home'
-            },
-            paramArr: [Array]
-        },
-        methods: {
-            showTable: function(item, index) {
-                let _self = this;
-                if (item.asc == 'location') {
-                    this.$router.push('/provenanceSelection/' + this.sortRouter);
-                }
-                if (item.asc == 'comprehensive') {
-                    console.log(2, this.paramArr[this.selectIndex].select)
-                    if (!this.paramArr[this.selectIndex].select || this.paramArr[this.selectIndex].select == 'undefined') {
-                        console.log(1231)
-                        //_self.paramArr[_self.selectIndex].class = 'sort_content_detail_select';
-                        //处罚综合筛选,让其他的class回归原来的样子,选择产地的页面地区清空      
-                        _self.$emit('initial', _self.paramArr[this.selectIndex].select);
-                        console.log(66,!this.paramArr[this.selectIndex].select)
-                    }
-
-                } else {
-                    this.selectShow = !this.selectShow;
-                    this.selectIndex = index;
-                    this.selectArr = item.sortArr;
-                }
-            },
-            getAsc: function(item, index) {
-                if (!item.asc) {
-                    this.paramArr[this.selectIndex].name = this.paramArr[this.selectIndex].saveName;
-                    this.paramArr[this.selectIndex].url = '/static/icons/drop_down.png';
-                    this.paramArr[this.selectIndex].class = 'sort_content_detail';
-                } else {
-                    this.paramArr[this.selectIndex].class = 'sort_content_detail_select';
-                    this.paramArr[this.selectIndex].name = item.name;
-                    if (item.asc == 'low') {
-                        this.paramArr[this.selectIndex].url = '/static/icons/drop_down_selected.png';
-                    } else if (item.asc == 'top') {
-                        this.paramArr[this.selectIndex].url = '/static/icons/take_back.png';
-                    }
-                }
-                this.selectShow = false;
-
-
-                let _self = this;
-                _self.$emit("postId", item);
-            }
-        },
-        created() {
-            this.selectArr = this.paramArr[0].sortArr;
+        return {
+            selectShow: false,
+            selectArr: [],
+            selectIndex: 0
         }
+    },
+    props: {
+        sortRouter: {
+            type: String,
+            default: '/home'
+        },
+        paramArr: [Array],
+        addressSele: ''
+    },
+    methods: {
+        showTable: function (item, index) {
+            let _self = this;
+            if (item.asc == 'location') {
+                if (_self.addressSele) {
+                    common.$emit('addressSelect', '交货地选择')
+                    _self.$router.push('/provenanceSelection/' + this.sortRouter+'?type=true');
+                }else{
+                    common.$emit('addressSelect', '产地选择')
+                    _self.$router.push('/provenanceSelection/' + this.sortRouter+'?type=false');
+                }
+
+            }
+            if (item.asc == 'comprehensive') {
+                console.log(2, this.paramArr[this.selectIndex].select)
+                if (!this.paramArr[this.selectIndex].select || this.paramArr[this.selectIndex].select == 'undefined') {
+                    console.log(1231)
+                    //_self.paramArr[_self.selectIndex].class = 'sort_content_detail_select';
+                    //处罚综合筛选,让其他的class回归原来的样子,选择产地的页面地区清空      
+                    _self.$emit('initial', _self.paramArr[this.selectIndex].select);
+                    console.log(66, !this.paramArr[this.selectIndex].select)
+                }
+
+            } else {
+                this.selectShow = !this.selectShow;
+                this.selectIndex = index;
+                this.selectArr = item.sortArr;
+            }
+        },
+        getAsc: function (item, index) {
+            if (!item.asc) {
+                this.paramArr[this.selectIndex].name = this.paramArr[this.selectIndex].saveName;
+                this.paramArr[this.selectIndex].url = '/static/icons/drop_down.png';
+                this.paramArr[this.selectIndex].class = 'sort_content_detail';
+            } else {
+                this.paramArr[this.selectIndex].class = 'sort_content_detail_select';
+                this.paramArr[this.selectIndex].name = item.name;
+                if (item.asc == 'low') {
+                    this.paramArr[this.selectIndex].url = '/static/icons/drop_down_selected.png';
+                } else if (item.asc == 'top') {
+                    this.paramArr[this.selectIndex].url = '/static/icons/take_back.png';
+                }
+            }
+            this.selectShow = false;
+
+
+            let _self = this;
+            _self.$emit("postId", item);
+        }
+    },
+    created() {
+        this.selectArr = this.paramArr[0].sortArr;
+    }
 }
 </script>
 <style scoped>

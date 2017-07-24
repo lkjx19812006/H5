@@ -217,10 +217,10 @@
         <div class="fixed">
             <headFix :param="headParam" v-on:postClear="clearKeyword"></headFix>
             <perfectTitle :param="Titles" v-if="myTypes"></perfectTitle>
-            <sort v-on:postId="getId" v-on:initial="initial" :sortRouter="sortRouter" :paramArr="sortArr"></sort>
+            <sort v-on:postId="getId" v-on:initial="initial" :sortRouter="sortRouter" :paramArr="sortArr" :addressSele='address_select'></sort>
             <div class="factory">
-                <div class="left" v-bind:class="{active:httpPraram.indentType == 0}" @click="indentType(0)">药厂求购</div>
-                <div class="left" v-bind:class="{active:httpPraram.indentType == 1}" @click="indentType(1)">普通求购</div>
+                <div class="left" v-bind:class="{active:httpPraram.indentType == 0}" @click="indentType(0)">药厂</div>
+                <div class="left" v-bind:class="{active:httpPraram.indentType == 1}" @click="indentType(1)">其他</div>
             </div>
         </div>
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-show="todos.length!=0" v-bind:class="{have_title:Titles.myTitle}">
@@ -232,7 +232,8 @@
                 <ul class="list">
                     <li v-for="todo in todos" @click="jumpDetail(todo.id)" class="li">
                         <div class="top">
-                            <img :src="todo.cFlagsPath" class="flag">
+                            <img :src="todo.cFlagsPath" class="flag" v-show="todo.cFlagsPath">
+                            <img src="/static/icon/zhongguo.png" class="flag" v-show="!todo.cFlagsPath">
                             <div class="drug_factory" v-show="todo.indentType == 0">药厂</div>
                             <div class="its_mine" v-show="todo.isMy==1">我的</div>
                             <div class="breed">{{todo.breedName}}</div>
@@ -250,13 +251,13 @@
                                 <div class="spec one">产品规格: {{todo.spec,4 | filterTxt}}</div>
                                 <div class="spec">产品产地: {{todo.location,4 | filterTxt}}</div>
                                 <div class="spec">需求数量: {{todo.number,5 | filterTxt}}({{todo.unit}})</div>
-                                <div class="spec">交货地址: {{todo.treadAddress,8 | filterTxt}}</div>
+                                <div class="spec">交货地址: {{todo.province,8 | filterTxt}}</div>
                             </div>
                             <div class="right">
-                                <div class="detail" v-show="todo.indentType !== 0 && todo.isMy == 0 && todo.isOffer == 0">
+                                <div class="detail" v-show="todo.especial == 0 && todo.isMy == 0 && todo.isOffer == 0">
                                     我要报价
                                 </div>
-                                <div class="detail" v-show="todo.indentType == 0 && todo.isMy == 0 && todo.isOffer == 0">
+                                <div class="detail" v-show="todo.especial == 1 && todo.isMy == 0 && todo.isOffer == 0">
                                     抢先报价
                                 </div>
                                 <div class="detail mine_color" v-if="todo.isMy == 1 && todo.isOffer == 0">
@@ -310,6 +311,7 @@ export default {
                 myTitle: true,
                 selectType: false
             },
+            address_select:true,
             scrollTop: 0,
             newAdd: '',
             err: {

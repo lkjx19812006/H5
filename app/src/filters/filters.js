@@ -90,7 +90,9 @@ Vue.filter('theUnit', function(due) {
         var pubdateDate = new Date();
         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
-        if (days < 10) {
+        if (days < 0) {
+            days = 0;
+        } else if (days < 10 && days > 0) {
             days = days
         } else if (days > 30) {
             days = 0;
@@ -111,6 +113,7 @@ Vue.filter('decade', function(due) {
         var pubdateDate = new Date();
         var dateValue = duedateDate.getTime() - pubdateDate.getTime();
         days = Math.ceil(dateValue / (24 * 3600 * 1000));
+
         if (days < 10) {
             days = 0;
         } else if (days > 30) {
@@ -229,7 +232,7 @@ Vue.filter('shellStatus', function(val) {
 Vue.filter('myStatus', function(val) {
     switch (val) {
         case 1:
-            val = '审核中';
+            val = '受理中';
             break;
         case 2:
             val = '询价中';
@@ -249,13 +252,13 @@ Vue.filter('myStatus', function(val) {
 Vue.filter('myOfferStatus', function(val) {
     switch (val) {
         case 0:
-            val = '受理中';
+            val = '已报价';
             break;
         case 1:
-            val = '已采纳';
+            val = '已采用';
             break;
         case 2:
-            val = '未采纳';
+            val = '未采用';
             break;
         case 3:
             val = '受理中';

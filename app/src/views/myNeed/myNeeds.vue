@@ -33,9 +33,13 @@
                         color: #C1C1C1;
                     }
                     .left {
+                        flex:1;
+                        text-align: left;
                         font-size: 15px;
                     }
                     .right {
+                        flex:1;
+                        text-align: right;
                         color: #CACACA;
                         font-size: 14px;
                     }
@@ -91,6 +95,10 @@
         }
     }
 }
+.my_needs{
+    height: 100vh;
+    overflow: hidden;
+}
 </style>
 <template>
     <div class="my_needs">
@@ -113,9 +121,9 @@
                         </div>
                             <div class="content">
                                 <div class="left">
-                                    <div class="breed_name">{{todo.breedName}} {{todo.number}}({{todo.unit}})</div>
+                                    <div class="breed_name">{{todo.breedName}}</div>
                                     <div class="spec">{{todo.location,4 | filterTxt}}&nbsp;&nbsp;&nbsp;{{todo.spec,4 | filterTxt}}</div>
-                                    <div class="spec">数量: {{todo.number}}{{todo.unit}}</div>
+                                    <div class="spec">数量: {{todo.number}}({{todo.unit}})</div>
                                 </div>
                                 <div class="right">
                                     <div class="date">
@@ -247,7 +255,7 @@ export default {
                     saveName: '求购状态',
                     class: 'sort_content_detail',
                     sortArr: [{
-                        name: '申请中',
+                        name: '受理中',
                         asc: 'low',
                         show: false,
                         testing: 1,

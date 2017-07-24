@@ -276,7 +276,7 @@
                                 </div>
                                 <div>&nbsp;{{obj.content.duedate | needTimeDay}}</div>
                             </div>
-                            <div class="detail" @click="again()" v-if="obj.newOffer.accept == '2' && sellShow">再次报价</div>
+                            <div class="detail" @click="again(obj.newOffer.accept)" v-if="obj.newOffer.accept !== 1 && sellShow">再次报价</div>
                         </div>
                     </div>
                 </div>
@@ -491,9 +491,13 @@ export default {
             }
 
         },
-        again() {
-            common.$emit('needToReleaseOffer', this.id);
-            this.$router.push('/releaseOffer/' + this.id);
+        again(type) {
+            let _self = this;
+            common.$emit('needToReleaseOffer', {
+                id:_self.id,
+                accept_type:type
+            });
+            this.$router.push('/releaseOffer/' + this.id + '?type='+type);
         },
         popUp(imgArr) {
             let _self = this;
