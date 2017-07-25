@@ -165,7 +165,7 @@ input {
                     <img src="/static/icons/search.png" class="icon">
                     <input type="text" placeholder="输入品种后，点击出现的选项" v-model="value">
                     <img src="/static/icon/cancels.png" class="cancel" v-show="value" @click="clear">
-                    <div class="data" v-if="datas.length > 0">
+                    <div class="data" v-if="datas.length > 0 && value">
                         <div class="search_data" v-for="todo in datas" @click="getSearch(todo)">
                             {{todo.breedName}}
                         </div>
@@ -423,8 +423,8 @@ export default {
                 // checkArr.push(checkLookcompany);
                 // let checkLookcompanyShort = validation.checkLook(_self.upDataInfor.companyShort);
                 // checkArr.push(checkLookcompanyShort);
-                let checkLookbizMain = validation.checkLook(_self.upDataInfor.bizMain);
-                checkArr.push(checkLookbizMain);
+                // let checkLookbizMain = validation.checkLook(_self.upDataInfor.bizMain);
+                // checkArr.push(checkLookbizMain);
                 for (let i = 0; i < checkArr.length; i++) {
                     if (checkArr[i]) {
                         common.$emit('message', checkArr[i]);
@@ -458,6 +458,7 @@ export default {
         watch: {
             value: function(newValue, oldValue) {
                 let _self = this;
+                    
                     window.clearTimeout(this.time);
                     this.time = setTimeout(() => {
                         common.$emit('show-load');
@@ -470,7 +471,6 @@ export default {
                                 pSize: 20
                             }
                         }
-
                         httpService.searchWord(common.urlCommon + common.apiUrl.most, body, function(suc) {
                             common.$emit('close-load');
                             let result = suc.data.biz_result.list;

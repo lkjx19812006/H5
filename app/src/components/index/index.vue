@@ -548,9 +548,9 @@
                 <div class="left_word">购物车</div>
             </div>
             <!--  <div class="right" @click="call">
-                                                                                        <img src="/static/icon/tele.png" class="img">
-                                                                                        <div class="right_word">电话</div>
-                                                                                    </div> -->
+                                                                                                <img src="/static/icon/tele.png" class="img">
+                                                                                                <div class="right_word">电话</div>
+                                                                                            </div> -->
             <div class="center" @click="fromIndex">
                 <div class="inbox">
                     <img src="/static/icon/enlarge.png">
@@ -566,7 +566,7 @@
         <div class="swiper">
             <mt-swipe :auto="4000" :prevent="false">
                 <mt-swipe-item v-for="(item,index) in imgArray">
-                    <img v-bind:src="item.htmlImg" @click="jumpLink(item.htmlUrl,index)">
+                    <img v-bind:src="item.htmlImg" @click="jumpLink(item.htmlUrl,imgArray.length,index)">
                 </mt-swipe-item>
             </mt-swipe>
         </div>
@@ -625,17 +625,17 @@
                                 <div>
                                     <img src="/static/icons/up.png">
                                 </div>
-                                <div> +{{todo.dayMoney,5 | filterTxt}}</div>
+                                <div> +{{todo.dayMoney,5 | filterTxt}}元</div>
                             </div>
                             <div class="spec" v-if="todo.dayDowns == 0">
-                                跌涨价格: {{todo.dayMoney,5 | filterTxt}}
+                                跌涨价格: {{todo.dayMoney,5 | filterTxt}}元
                             </div>
                             <div class="spec" v-if="todo.dayDowns < 0">
                                 <div>跌涨价格:</div>
                                 <div>
                                     <img src="/static/icons/down.png">
                                 </div>
-                                <div> -{{todo.dayMoney,5 | filterTxt}}</div>
+                                <div> -{{todo.dayMoney,5 | filterTxt}}元</div>
                             </div>
                             <div class="spec location" v-if="todo.dayDowns > 0">跌涨幅度: +{{todo.dayDowns | indexFloatType}}%</div>
                             <div class="spec location" v-if="todo.dayDowns == 0">跌涨幅度: {{todo.dayDowns | indexFloatType}}%</div>
@@ -655,9 +655,9 @@
                         <img src="/static/icon/urgent-2.png" class="urgent_img">
                         <div class="left">
                             <!-- <div class="top">
-                                                    <div class="word" v-if="todo.indentType == 0">药厂求购</div>
-                                                    <div class="word" v-if="todo.indentType !== 0">普通求购</div>
-                                                </div> -->
+                                                            <div class="word" v-if="todo.indentType == 0">药厂求购</div>
+                                                            <div class="word" v-if="todo.indentType !== 0">普通求购</div>
+                                                        </div> -->
                             <div class="center">
                                 <div class="breed_name">
                                     <img src="/static/icon/yaochang.png">
@@ -1025,9 +1025,9 @@ export default {
 
             })
         },
-        jumpLink(url, index) {
+        jumpLink(url, myLength, index) {
             let _self = this;
-            if (index == 3) {
+            if (index == myLength - 1) {
                 if (!common.KEY) {
                     function loadApp() {
                         if (common.wxshow) {

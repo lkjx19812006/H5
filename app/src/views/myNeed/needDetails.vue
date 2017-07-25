@@ -103,9 +103,13 @@
             height: 45px;
             padding: 0 15px;
             border-bottom: 1px solid #D8D8D8;
-            line-height: 45px;
             display: flex;
             flex-direction: row;
+            align-items: center;
+            .yaochang{
+                height:16px;
+                margin-right:2px;
+            }
             .left {
                 font-size: 18px;
                 span {
@@ -321,7 +325,7 @@
         <!-- 不发送朋友圈理由 -->
         <opinion :arr="arr" class="opinion" v-on:cancel="cancel" v-on:selectIt="selectIt" v-show="opinion">
         </opinion>
-        <myHeader :param="param">
+        <myHeader :param="param" :obj="obj">
         </myHeader>
         <div :style="{ height: wrapperHeight + 'px' }" class="main" ref="wrapper" v-bind:class="{onscroll:!show || !opinion}">
             <div class="static examine" v-if="obj.onSell == 1 && obj.isMy==1">
@@ -361,6 +365,8 @@
                     </div>
                 </div>
                 <div class="breed_infor">
+                    <img src="/static/icon/yaochang.png" class="yaochang" v-show="obj.indentType==0">
+                    <img src="/static/icon/urgent-radius.png" alt="" class="yaochang" v-show="obj.especial==1">
                     <div class="left">
                         {{obj.breedName}}
                         <span>
@@ -680,7 +686,7 @@ export default {
         jumpDetail(obj){
             let _self = this;
             common.$emit('myOfferToOfferDetail', obj.id);
-            _self.$router.push('/offerDetail/'+obj.id)
+            _self.$router.push('/offerDetail/'+obj.id);
         },
         jump(obj) {
             let _self = this;
@@ -720,7 +726,10 @@ export default {
                     });
                     return;
                 }
-                common.$emit('needToReleaseOffer', obj.id);
+                common.$emit('needToReleaseOffer', {
+                    id:obj.id,
+                    type:undefined
+                });
                 _self.$router.push('/releaseOffer/' + obj.id);
             }
         },

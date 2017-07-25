@@ -214,14 +214,20 @@ Vue.filter('successTime', function(val) {
 
 Vue.filter('shellStatus', function(val) {
     switch (val) {
-        case 0:
-            val = '待审核';
-            break;
         case 1:
-            val = '待审核';
+            val = '上架审核受理中';
+            break;
+        case -2:
+            val = '上架审核未通过';
             break;
         case 2:
             val = '正在匹配买家';
+            break;
+        case 3:
+            val = '已下架';
+            break;
+        case 4:
+            val = '已下架';
             break;
         default:
             val = '';

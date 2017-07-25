@@ -103,7 +103,7 @@
                 align-items: center;
                 height: 42px;
                 .flag {
-                    width: 23px;
+                    margin-right: 3px;
                     height: 16px;
                 }
                 .drug_factory {
@@ -116,13 +116,9 @@
                     margin: 0 0 0 4px;
                 }
                 .its_mine {
-                    background-color: #FF6060;
-                    color: #fff;
-                    font-size: 12px;
                     line-height: 16px;
                     height: 16px;
-                    padding: 0 4px;
-                    margin: 0 0 0 4px;
+                    margin: 0 4px 0 -2px;
                 }
                 .breed {
                     font-size: 17px;
@@ -234,8 +230,8 @@
                         <div class="top">
                             <img :src="todo.cFlagsPath" class="flag" v-show="todo.cFlagsPath">
                             <img src="/static/icon/zhongguo.png" class="flag" v-show="!todo.cFlagsPath">
-                            <div class="drug_factory" v-show="todo.indentType == 0">药厂</div>
-                            <div class="its_mine" v-show="todo.isMy==1">我的</div>
+                            <img src="/static/icon/yaochang.png" class="flag" v-show="todo.indentType == 0">
+                            <img src="/static/icon/its-mines.png" class="its_mine" v-show="todo.isMy==1">
                             <div class="breed">{{todo.breedName}}</div>
                             <div class="emtrys"></div>
                             <div class="date">
@@ -311,7 +307,7 @@ export default {
                 myTitle: true,
                 selectType: false
             },
-            address_select:true,
+            address_select: true,
             scrollTop: 0,
             newAdd: '',
             err: {

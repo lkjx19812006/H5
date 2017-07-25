@@ -260,7 +260,7 @@ export default {
             if (common.SID) _self.salesmanData();
 
             common.$on("toMine", function(obj) {
-                _self.getHttp();
+                if(common.KEY)_self.getHttp();
                 //_self.$store.dispatch('getUserInfor')
             })
             common.$on("clear_Information", function() { //来自资源页面的提示刷新

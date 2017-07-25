@@ -67,6 +67,13 @@
         background-color: #F7F7F7;
         padding: 10px 0;
         .li {
+            position: relative;
+            .sampling{
+                position: absolute;
+                width: 38px;
+                right:0;
+                top:0;
+            }
             padding-left: 10px;
             background-color: #fff;
             .content {
@@ -154,6 +161,7 @@
             <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                 <ul class="list">
                     <li class="li" v-for="(todo,index) in todos" @click="jumpDetail(todo.id)">
+                        <img src="/static/icon/homesample.png" v-show="todo.sampling == 1" class="sampling">
                         <div class="content">
                             <div class="images">
                                 <img :src="todo.image[0]" class="breedImg">

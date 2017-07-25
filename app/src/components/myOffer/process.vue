@@ -92,8 +92,8 @@
         </div>
         <div class="bottom">
             <div class="left"></div>
-            <div class="word red">(努力开发中)</div>
-            <div class="word red">(努力开发中)</div>
+            <div class="word red">(即将上线)</div>
+            <div class="word red">(即将上线)</div>
         </div>
     </div>
 </template>

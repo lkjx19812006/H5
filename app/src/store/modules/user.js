@@ -15,7 +15,8 @@ const state = {
         back: '',
         id: ''
     },
-    isRead: 1
+    isRead: 1,
+    resourceAttention: ''
 }
 
 // getters
@@ -24,13 +25,15 @@ const getters = {
     /*accountHead: state => state.accountHead,*/
     backRouter: state => state.backRouter,
     mainBusiness: state => state.mainBusiness,
-    areaJson: state => state.areaJson
+    areaJson: state => state.areaJson,
+    resourceAttention: state => state.resourceAttention
 }
 
 // actions
 const actions = {
     getUserInfor({ commit, state }) { //初始状态调用接口
-        return new Promise((resolve, reject) => { //
+        return new Promise((resolve, reject) => {
+            //
             common.$emit('show-load');
             let url = common.addSID(common.urlCommon + common.apiUrl.most);
             let body = {
@@ -54,6 +57,9 @@ const actions = {
                     reject(err);
                 })
         })
+    },
+    isAttention({ commit, state }, param) {
+        commit('isAttention', param)
     },
     upDataInfor({ commit, state }, params) {
         return new Promise((resolve, reject) => { //
@@ -241,6 +247,9 @@ const mutations = {
     getMessage(state, isMessage) {
 
         state.isRead = isMessage;
+    },
+    isAttention(state, param) {
+        state.resourceAttention = param;
     }
 
 }

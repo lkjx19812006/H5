@@ -70,11 +70,6 @@ export default {
                     return;
                 } else if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
                     function perfect() {
-                        // _self.$store.dispatch('changeRouter', {
-                        //     index: 4,
-                        //     id: obj.id
-                        // })
-                        //console.log(21321313)
                         _self.$router.push('/perfectObject');
                     }
                     common.$emit('confirm', {
@@ -84,7 +79,6 @@ export default {
                     });
                     return;
                 }
-
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
@@ -104,15 +98,16 @@ export default {
                     if (suc.data.code == '1c01') {
                         common.$emit('message', suc.data.msg);
                         common.$emit("informResAttention", _self.obj.type);
+                        common.$emit('resource',1)//通知资源刷新，更新关注
+                        common.$emit('lowPriceRes',1)//通知低价资源刷新，更新关注
                         if (type) {
                             _self.obj.isAttention = 1;
                         } else {
                             _self.obj.isAttention = 0;
-                        }
+                        }           
                     } else {
                         common.$emit('message', suc.data.msg);
                     }
-
                 }, function(err) {
                     common.$emit('close-load');
                     common.$emit('message', err.data.msg);

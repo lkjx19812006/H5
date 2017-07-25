@@ -70,6 +70,13 @@
         .li {
             padding-left: 10px;
             background-color: #fff;
+            position: relative;
+            .sampling{
+                position: absolute;
+                width: 38px;
+                right:0;
+                top:0;
+            }
             .content {
                 position: relative;
                 display: flex;
@@ -158,11 +165,14 @@
             <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                 <ul class="list">
                     <li class="li" v-for="(todo,index) in todos" @click="jumpDetail(todo.id)">
+                        <img src="/static/icon/homesample.png" v-show="todo.sampling == 1" class="sampling">
                         <div class="content">
                             <div class="images">
                                 <img :src="todo.image[0]" class="breedImg">
                                 <!-- <img src="/static/icon/zheng.png" class="zheng" v-show="todo.especial == 1"> -->
-                                <img :src="todo.cFlagsPath"  class="zheng">
+                                <img :src="todo.cFlagsPath"  class="zheng" v-show="todo.cFlagsPath">
+                                <img src="/static/icon/zhongguo.png"  class="zheng" v-show="!todo.cFlagsPath">
+                               
                             </div>
                             <div class="center">
                                 <div class="breed">
@@ -367,7 +377,7 @@ export default {
             })
         },
         myAttention(type, todo, index) {
-            if (!common.customerId) {
+            if (!common.KEY) {
                 let _self = this;
 
                 function loadApp() {
@@ -404,7 +414,6 @@ export default {
                 if (suc.data.code == '1c01') {
                     common.$emit('message', suc.data.msg);
                     common.$emit("informResAttention", todo.type);
-
                     _self.todos[index].isAttention = type;
 
                 } else {

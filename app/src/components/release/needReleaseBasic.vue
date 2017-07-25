@@ -212,13 +212,22 @@ input {
 <template>
     <div class="basic_need_release">
         <div class="breed_name">
-            <div class="inbox" @click="jumpSearch('/releaseSearch')">
+            <div class="inbox" @click="jumpSearch('/releaseSearch')" v-show="!obj.type_show">
                 <div class="breed_left">品名</div>
                 <div class="breed_center">
-                    <input type="text" placeholder="请选择您的产品名称" disabled="false" v-model="obj.drug_name">
+                    <input type="text" placeholder="请选择您的产品名称" :disabled="false" v-model="obj.drug_name">
                 </div>
                 <div class="img">
                     <img src="/static/icons/rele-right.png">
+                </div>
+            </div>
+            <div class="inbox"  v-show="obj.type_show">
+                <div class="breed_left">品名</div>
+                <div class="breed_center">
+                    <input type="text" placeholder="请选择您的产品名称" :disabled="true" v-model="obj.drug_name">
+                </div>
+                <div class="img">
+                    <!-- <img src="/static/icons/rele-right.png"> -->
                 </div>
             </div>
         </div>

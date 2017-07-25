@@ -56,9 +56,12 @@
                             font-size: 15px;
                             color: #000;
                             text-align: left;
+                            span{
+                                color:#fa6705;
+                            }
                         }
                         .spec {
-                            color: 6D6D6D;
+                            color: #333;
                             font-size: 14px;
                             margin-top: 5px;
                             text-align: left;

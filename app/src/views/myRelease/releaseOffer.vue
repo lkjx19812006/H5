@@ -198,8 +198,8 @@ export default {
             },
             imgArr: [],
             imageArrs: [],
-            accept_type:'',
-            report_id:''
+            accept_type: '',
+            report_id: ''
         }
     },
     methods: {
@@ -265,17 +265,19 @@ export default {
             }
             httpService.myAttention(url, body, function (suc) {
                 common.$emit('close-load');
-                let result = [];
-                if (suc.data.biz_result.list.length > 0) {
-                    result = suc.data.biz_result.list[0];
-                    _self.report_id = result.id;
-                }
+
 
                 //console.log(3, result)
                 if (suc.data.code == '1c01') {
-                    console.log(1111, result);
+                    let result = [];
+                    if (suc.data.biz_result.list.length > 0) {
+                        result = suc.data.biz_result.list[0];
+                        _self.report_id = result.id;
+                    }
+                    
                     if (result !== []) {
                         //处理带过来的图片匹配  
+                        console.log(1111, result);
                         if (result.image[0]) _self.handPhoto = result.image[0];
                         if (result.image[1]) _self.detailsPhoto = result.image[1];
                         if (result.image[2]) _self.cargoPhoto = result.image[2];
@@ -567,7 +569,7 @@ export default {
                     sampleAmount: _self.obj.price
                 }
             };
-            if(_self.accept_type == 0){
+            if (_self.accept_type == 0) {
                 console.log(999999)
                 body.biz_method = 'updateIntentionOffer'
                 body.biz_param.id = _self.report_id;
@@ -608,7 +610,8 @@ export default {
         //let type = _self.$route.params.
         _self.accept_type = _self.$route.query.type;
         _self.getHttp(id);
-        _self.getOffer(id);
+        //console.log(34,_self.$route.query.type)
+        if(_self.accept_type !== undefined)_self.getOffer(id);
         _self.obj.intentionId = id;
         _self.getUnit();
         common.$on('needToReleaseOffer', function (item) {
@@ -632,11 +635,12 @@ export default {
             for (var i = 0; i < _self.obj.sell.length; i++) {
                 _self.obj.sell[i].show = false;
             }
-            console.log(12312123)
+            console.log(22,item)
             _self.obj.intentionId = item.id;
             _self.accept_type = item.accept_type;
+            console.log(item.accept_type)
             _self.getHttp(item.id);
-            _self.getOffer(item.id);
+            if(_self.accept_type !== undefined)_self.getOffer(item.id);
             _self.getUnit();
         });
     },

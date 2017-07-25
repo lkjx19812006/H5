@@ -461,6 +461,7 @@ export default {
         if (type == 'ios') {
             _self.start = new Date("1900/01/01");
             _self.end = new Date();
+            _self.pickerValue = new Date();
         }
     },
     mounted() {
