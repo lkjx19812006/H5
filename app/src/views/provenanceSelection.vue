@@ -128,12 +128,12 @@
             <div class="button" @click="save()">确定</div>
         </div>
 
-        <!-- <div class="select_box">
+         <!-- <div class="select_box">
                 <mt-navbar v-model="selected">
                     <mt-tab-item id="1">国内</mt-tab-item>
                     <mt-tab-item id="2">国外</mt-tab-item>
                 </mt-navbar>
-            </div> -->
+            </div>  -->
         <div class="history_box" v-show="selectArr.length>0">
             <div class="history">
                 <div v-for="(item,index) in selectArr">
@@ -150,13 +150,13 @@
                     </a>
                 </mt-index-section>
             </div>
-            <!-- <div class="list" v-for="todo in outer_list" v-if="selected==2">
+             <!-- <div class="list" v-for="todo in outer_list" v-if="selected==2">
                     <mt-index-section :index="todo.index" class="index_name">
                         <a @click="selectPlace(item)" v-for="item in todo.place_list">
                             <mt-cell :title="item.place"></mt-cell>
                         </a>
                     </mt-index-section>
-                </div> -->
+                </div>  -->
         </mt-index-list>
     </div>
 </template>

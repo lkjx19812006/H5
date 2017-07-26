@@ -159,6 +159,9 @@ const actions = {
             common.$emit('message', err.data.msg);
         })
     },
+    defaultMessage({ commit, state }) {
+        commit('defaultMessage')
+    }
 
 }
 
@@ -247,6 +250,9 @@ const mutations = {
     getMessage(state, isMessage) {
 
         state.isRead = isMessage;
+    },
+    defaultMessage(state) {
+        state.isRead = 1;
     },
     isAttention(state, param) {
         state.resourceAttention = param;

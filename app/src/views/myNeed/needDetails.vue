@@ -523,6 +523,7 @@ export default {
             param: {
                 name: '求购详情',
                 topissue: true,
+                goBack:false,
             },
             id: '',
             wrapperHeight: '',
@@ -744,14 +745,18 @@ export default {
         let type = _self.$route.query.type;
         let value = _self.$route.query.value;
         if (type == 'my') {
+            _self.param.goBack = false;
             this.type = false;
         } else {
+            _self.param.goBack = false;
             this.type = true;
         }
         if (value == 'web') {
+            _self.param.goBack = true;
             _hmt.push(['_setAutoPageview', false]);
             _hmt.push(['_trackPageview', '/needDetails/*?value=web']);
         } else if (value == 'message') {
+            _self.param.goBack = true;
             _hmt.push(['_setAutoPageview', false]);
             _hmt.push(['_trackPageview', '/needDetails/*?value=message']);
         }

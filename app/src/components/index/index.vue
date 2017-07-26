@@ -4,6 +4,7 @@
     padding-bottom: 30px;
     position: relative;
     background-color: #F6F6F6;
+    overflow-x:hidden;
     .search {
         position: fixed;
         z-index: 10000;
@@ -71,6 +72,7 @@
     }
     .swiper {
         height: 206px;
+        width:100%;
         img {
             width: 100%;
             height: 100%;
@@ -1154,6 +1156,7 @@ export default {
         common.$on('getInfo', function (item) {
             if (common.KEY) _self.$store.dispatch('getUserInfor'); //来自登录，调用下个人信息接口
             _self.resourceHttp();
+            _self.$store.dispatch('defaultMessage');      
             if (common.KEY) _self.$store.dispatch('getMessage');
         })
         this.resourceHttp();

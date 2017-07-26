@@ -1,46 +1,42 @@
-import login from './views/login'
+import login from './views/user/login'
 import hello from './components/Hello'
 import menu from './components/menu'
 import home from './views/home'
-import drugResTable from './views/drugResTable'
+import drugResTable from './views/drugResTable/drugResTable'
 import marketQuotation from './views/marketQuotation'
 import provenanceSelection from './views/provenanceSelection'
-import drugResTableDetail from './views/drugResTableDetail'
+import drugResTableDetail from './views/drugResTable/drugResTableDetail'
 import transaction from './views/transaction'
-import search from './views/search'
-import lowPriceRes from './views/lowPriceRes'
-import urgentNeed from './views/urgentNeed'
+import search from './views/search/search'
+import lowPriceRes from './views/myResource/lowPriceRes'
+import urgentNeed from './views/myNeed/urgentNeed'
 import myAttention from './views/myAttention'
-import myResource from './views/myResource'
-import findPassWord from './views/findPassWord'
-import mySet from './views/mySet'
-import revisePassWord from './views/revisePassWord'
-import revisePassWordConfirm from './views/revisePassWordConfirm'
-import addressManage from './views/addressManage'
-import addressRevise from './views/addressRevise'
-import feedBack from './views/feedBack'
-import resourceDetail from './views/resourceDetail'
-import detailsPage from './views/detailsPage'
-import goodDetail from './views/goodDetail'
-import addAddress from './views/addAddress'
-import myPurchase from './views/myPurchase'
-import purchaseDetail from './views/purchaseDetail'
+import myResource from './views/myResource/myResource'
+import findPassWord from './views/user/findPassWord'
+import mySet from './views/user/mySet'
+import revisePassWordConfirm from './views/user/revisePassWordConfirm'
+import addressManage from './views/address/addressManage'
+import addressRevise from './views/address/addressRevise'
+import feedBack from './views/user/feedBack'
+import resourceDetail from './views/myResource/resourceDetail'
+import detailsPage from './views/user/detailsPage'
+import addAddress from './views/address/addAddress'
 import aboutus from './views/staticsView/aboutus'
-import requestCode from './views/requestCode'
-import releaseSearch from './views/releaseSearch'
+import requestCode from './views/user/requestCode'
+import releaseSearch from './views/search/releaseSearch'
 import news from './views/staticsView/news'
-import cart from './views/cart'
-import multipleOrders from './views/multipleOrders'
-import allOrder from './views/allOrder'
-import allOrderDetail from './views/allOrderDetail'
-import drugThat from './views/drugThat'
+import cart from './views/cart/cart'
+import multipleOrders from './views/cart/multipleOrders'
+import allOrder from './views/order/allOrder'
+import allOrderDetail from './views/order/allOrderDetail'
+import drugThat from './views/staticsView/drugThat'
 import account from './views/user/account'
 import accountRevise from './views/user/accountRevise'
-import subCompany from './views/subCompany'
-import oneStopService from './views/oneStopService'
-import fourAdvantages from './views/fourAdvantages'
+import subCompany from './views/staticsView/subCompany'
+import oneStopService from './views/staticsView/oneStopService'
+import fourAdvantages from './views/staticsView/fourAdvantages'
 import protocol from './views/staticsView/protocol'
-import wchatLogin from './views/staticsView/wchatLogin'
+import wchatLogin from './views/user/wchatLogin'
 import releaseNeed from './views/myRelease/releaseNeed'
 import releaseNeeds from './views/myRelease/releaseNeeds'
 import releaseNeedSuccess from './views/myRelease/releaseNeedSuccess'
@@ -107,19 +103,15 @@ module.exports = {
         { name: 'findPassWord', path: '/findPassWord', component: findPassWord },
         { name: 'mySet', path: '/mySet', component: mySet },
         { name: 'detailsPage', path: '/detailsPage', component: detailsPage },
-        { name: 'revisePassWord', path: '/revisePassWord', component: revisePassWord },
         { name: 'revisePassWordConfirm', path: '/revisePassWordConfirm', component: revisePassWordConfirm },
         { name: 'addressManage', path: '/addressManage', component: addressManage },
         { name: 'addressRevise', path: '/addressRevise/:addreId', component: addressRevise },
         { name: 'feedBack', path: '/feedBack', component: feedBack },
-        { name: 'goodDetail', path: '/goodDetail/:odId', component: goodDetail },
         { name: 'addAddress', path: '/addAddress', component: addAddress },
         { name: 'companyAuth', path: '/companyAuth', component: companyAuth },
         { name: 'personalStep1', path: '/personalStep1', component: personalStep1 },
         { name: 'personalStep2', path: '/personalStep2', component: personalStep2 },
         { name: 'authResult', path: '/authResult', component: authResult },
-        { name: 'myPurchase', path: '/myPurchase', component: myPurchase },
-        { name: 'purchaseDetail', path: '/purchaseDetail/:rchaseId', component: purchaseDetail },
         { name: 'resourceDetail', path: '/resourceDetail/:sourceId', component: resourceDetail },
         { name: 'aboutus', path: '/aboutus/:from', component: aboutus },
         { name: 'requestCode', path: '/requestCode', component: requestCode },
