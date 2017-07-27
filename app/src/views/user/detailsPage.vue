@@ -59,21 +59,9 @@ export default {
                     name: '性别',
                     content: '女'
                 }, {
-                    img_src: '/static/images/phone-number.png',
-                    name: '手机号',
-                    content: '15974184216'
-                }, {
                     img_src: '/static/images/office-telephone.png',
                     name: '办公室电话',
                     content: '0212-4550884'
-                }, {
-                    img_src: '/static/images/qq.png',
-                    name: 'QQ',
-                    content: '1109714809'
-                }, {
-                    img_src: '/static/images/wechat.png',
-                    name: '微信',
-                    content: 'bb1109714809'
                 }],
 
                 data: [{
@@ -123,10 +111,10 @@ export default {
                     }
                     _self.todos[0].content = suc.data.biz_result.name;
                     _self.todos[1].content = sex;
-                    _self.todos[2].content = suc.data.biz_result.mobile;
-                    _self.todos[3].content = suc.data.biz_result.extno;
-                    _self.todos[4].content = suc.data.biz_result.qq;
-                    _self.todos[5].content = suc.data.biz_result.wechat;
+                    //_self.todos[2].content = suc.data.biz_result.mobile;
+                   // _self.todos[2].content = suc.data.biz_result.extno;
+                   // _self.todos[4].content = suc.data.biz_result.qq;
+                    //_self.todos[5].content = suc.data.biz_result.wechat;
                     _self.data[0].content = suc.data.biz_result.goodfield
                 }, function(err) {
                     common.$emit('close-load');

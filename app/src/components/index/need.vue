@@ -1,5 +1,6 @@
 <style lang="less" scoped>
 .need{
+    overflow-y: scroll;
     position:relative;
 }
 .need .fixed {
@@ -718,8 +719,9 @@ export default {
         })
     },
     mounted() {
-        let _self = this;
+        let _self = this;   
         this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
+        //if (common.isSafari) _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top;
         this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
     }
 }

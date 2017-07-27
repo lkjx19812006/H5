@@ -2,7 +2,7 @@
     <div class="place_order">
         <p class="title">运输价格待确认</p>
         <div class="button" @click="confirm">提交订单</div>
-        <p class="price">合计:￥{{allPrice}}</p>
+        <p class="price">合计:￥{{allPrice | floatType}}</p>
     </div>
 </template>
 <script>

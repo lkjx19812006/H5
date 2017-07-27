@@ -20,6 +20,8 @@ var _hmt = _hmt || [];
 console.log(1565213516)
 let common = new Vue({
     data: {
+        wx: false,
+        isSafari: false,
         wxrun: false,
         wxshow: false,
         phoneRun: true,
@@ -215,7 +217,7 @@ let common = new Vue({
                 console.log(err);
             });
         },
-        isWeiXin() {
+        WeiXinLogin() {
             //apps.yaocaimaimai.com
             // let _self = this;
             // let url = window.location.href;
@@ -234,6 +236,26 @@ let common = new Vue({
             //     return _self.wxshow = false;
             // }
         },
+        isWeixin() {
+            let _self = this;
+            var ua = window.navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+                _self.wx = true;
+                //alert(1211)
+            } else {
+                _self.wx = false;
+            }
+        },
+        safariSelect() {
+            let _self = this;
+            if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") == -1 && navigator.userAgent.indexOf("MQQBrowser") == -1) {
+                //alert(navigator.userAgent)
+                _self.isSafari = true;
+            } else {
+                _self.isSafari = false;
+            }
+
+        },
         phoneType() {
             let _self = this;
             if (_self.phoneRun) {
@@ -251,8 +273,9 @@ let common = new Vue({
         },
     }
 })
-
-//common.isWeiXin();
+common.safariSelect();
+//common.isWeixin();
+//common.phoneType();
 common.$on('show-load', () => {
     Indicator.open('Loading...');
 })
@@ -288,7 +311,16 @@ common.$on('touch', )
 common.$on('confirm', (obj) => {
     MessageBox.confirm(obj.message, obj.title).then(action => {
         obj.ensure();
-    }, action => {})
+    }, action => {
+
+    })
+})
+common.$on('confirms', (obj) => {
+    MessageBox.confirm(obj.message, obj.title).then(action => {
+        obj.ensure();
+    }, action => {
+        obj.cancel()
+    })
 })
 common.$on('judge', (obj) => {
     MessageBox.confirm(obj.message, obj.title).then(action => {

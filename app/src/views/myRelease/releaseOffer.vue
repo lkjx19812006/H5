@@ -199,7 +199,8 @@ export default {
             imgArr: [],
             imageArrs: [],
             accept_type: '',
-            report_id: ''
+            report_id: '',
+            lastPrice: ''
         }
     },
     methods: {
@@ -274,7 +275,7 @@ export default {
                         result = suc.data.biz_result.list[0];
                         _self.report_id = result.id;
                     }
-                    
+
                     if (result !== []) {
                         //处理带过来的图片匹配  
                         console.log(1111, result);
@@ -312,6 +313,8 @@ export default {
                         _self.obj.place_id = result.locationId;
                         //规格
                         _self.obj.spec = result.spec;
+                        //上一次报价的价格
+                        _self.lastPrice = result.price;
                     }
 
                 } else {
@@ -378,45 +381,60 @@ export default {
                     return;
                 }
             }
+            //console.log(11,_self.obj.sale_price,_self.lastPrice)
+            if (Number(_self.obj.sale_price) > Number(_self.lastPrice)) {
+                common.$emit("confirm", {
+                    message: '您报的价格比上次还高，可能会影响成交概率，是否确认',
+                    title: '提示',
+                    ensure: this.release
+                });
+            } else {
+                common.$emit("confirm", {
+                    message: '确定发布报价？',
+                    title: '提示',
+                    ensure: this.release
+                });
+            }
 
-            common.$emit("confirm", {
-                message: '确定发布报价？',
-                title: '提示',
-                ensure: this.release
-            });
         },
         showAction(param) {
-            this.obj.sheetVisible = true;
-            this.obj.actions = [];
-            let _self = this;
-            if (param == "spec") {
-                for (var i = 0; i < _self.obj.breedSpec.length; i++) {
-                    _self.obj.actions.push({
-                        name: _self.obj.breedSpec[i].name,
-                        id: _self.obj.breedSpec[i].id,
-                        key: 'spec'
-                    });
-                }
-            } else if (param == "unit") {
-                for (var i = 0; i < _self.obj.unit.length; i++) {
-                    _self.obj.actions.push({
-                        name: _self.obj.unit[i].name,
-                        key: 'number_unit',
-                        id: _self.obj.unit[i].id,
-                        id_key: 'number_id'
-                    });
+            console.log(11, this.accept_type)
+            if (this.accept_type == '') {
+                this.obj.sheetVisible = true;
+                this.obj.actions = [];
+                let _self = this;
+                if (param == "spec") {
+                    for (var i = 0; i < _self.obj.breedSpec.length; i++) {
+                        _self.obj.actions.push({
+                            name: _self.obj.breedSpec[i].name,
+                            id: _self.obj.breedSpec[i].id,
+                            key: 'spec'
+                        });
+                    }
+                } else if (param == "unit") {
+                    for (var i = 0; i < _self.obj.unit.length; i++) {
+                        _self.obj.actions.push({
+                            name: _self.obj.unit[i].name,
+                            key: 'number_unit',
+                            id: _self.obj.unit[i].id,
+                            id_key: 'number_id'
+                        });
+                    }
+                } else {
+                    for (var i = 0; i < _self.obj.breedLocation.length; i++) {
+                        _self.obj.actions.push({
+                            name: _self.obj.breedLocation[i].name,
+                            id: _self.obj.breedLocation[i].locationId,
+                            key: 'place',
+                            id_key: 'place_id'
+                        });
+                    }
                 }
             } else {
-                for (var i = 0; i < _self.obj.breedLocation.length; i++) {
-                    _self.obj.actions.push({
-                        name: _self.obj.breedLocation[i].name,
-                        id: _self.obj.breedLocation[i].locationId,
-                        key: 'place',
-                        id_key: 'place_id'
-                    });
-                }
+                common.$emit('message', '再次报价单位不可更改')
             }
-            console.log(this.obj.actions)
+
+            //console.log(this.obj.actions)
         },
         getBreedInformation(name) {
             let _self = this;
@@ -611,7 +629,7 @@ export default {
         _self.accept_type = _self.$route.query.type;
         _self.getHttp(id);
         //console.log(34,_self.$route.query.type)
-        if(_self.accept_type !== undefined)_self.getOffer(id);
+        if (_self.accept_type !== undefined) _self.getOffer(id);
         _self.obj.intentionId = id;
         _self.getUnit();
         common.$on('needToReleaseOffer', function (item) {
@@ -632,15 +650,17 @@ export default {
             _self.obj.weight = '';
             _self.obj.descriptions = '';
             _self.obj.priceDescription = '';
+            _self.lastPrice = '';
             for (var i = 0; i < _self.obj.sell.length; i++) {
                 _self.obj.sell[i].show = false;
             }
-            console.log(22,item)
+            console.log(22, item)
             _self.obj.intentionId = item.id;
             _self.accept_type = item.accept_type;
-            console.log(item.accept_type)
             _self.getHttp(item.id);
-            if(_self.accept_type !== undefined)_self.getOffer(item.id);
+            if (_self.accept_type !== undefined) {
+                _self.getOffer(item.id);
+            }
             _self.getUnit();
         });
     },

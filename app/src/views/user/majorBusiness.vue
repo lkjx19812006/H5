@@ -180,7 +180,8 @@ input {
             </div>
             <div class="hot">
                 <div class="title">
-                    热门药材 <span>(最少一个品种，最多十个品种)</span>
+                    热门药材
+                    <span>(最少一个品种，最多十个品种)</span>
                 </div>
                 <div class="main">
                     <div class="item" v-for="todo in todos" @click="selected(todo)" v-bind:class="{active:todo.show}">
@@ -190,9 +191,9 @@ input {
             </div>
         </div>
         <div class="footer">
-            <div class="back" @click="back"v-if="!mainBusiness.router">返回上一步</div>
+            <div class="back" @click="back" v-if="!mainBusiness.router">返回上一步</div>
             <div class="next" @click="next" v-if="!mainBusiness.router">完成注册</div>
-            <div class="back" @click="back"v-if="mainBusiness.router == '/account'">返回</div>
+            <div class="back" @click="back" v-if="mainBusiness.router == '/account'">返回</div>
             <div class="next" @click="goAccout" v-if="mainBusiness.router == '/account'">保存</div>
         </div>
     </div>
@@ -206,290 +207,309 @@ import {
 } from 'vuex'
 export default {
     data() {
-            return {
-                value: '',
-                todos: [],
-                arr: [],
-                datas: [],
-                upDataInfor: {
-                    gender: '',
-                    fullname: '',
-                    phone: '',
-                    birthday: '',
-                    company: '',
-                    companyShort: '',
-                    bizMain: '',
-                    avatar: '',
-                    companyJob: '',
-                    invoice: '',
-                    userType: '',
-                    manageType: ''
+        return {
+            value: '',
+            todos: [],
+            arr: [],
+            datas: [],
+            upDataInfor: {
+                gender: '',
+                fullname: '',
+                phone: '',
+                birthday: '',
+                company: '',
+                companyShort: '',
+                bizMain: '',
+                avatar: '',
+                companyJob: '',
+                invoice: '',
+                userType: '',
+                manageType: ''
 
-                },
-                register: false
+            },
+            register: false
+        }
+    },
+    components: {
+
+    },
+    created() {
+        let _self = this;
+        if (this.$route.query.value) {
+            _self.$store.dispatch('getMainBusiness', '/account');
+            var str = this.$route.query.value;
+            _self.arr = str.split(',');
+        }
+        common.$on('perfectidToMajorBusiness', function (id) {
+            _self.$store.dispatch('clearRouter');
+            //_self.hotDrug();
+            for (var i = 0; i < _self.todos.length; i++) {
+                _self.todos[i].show = false;
             }
+            _self.arr = [];
+        })
+        common.$on('accountTomajorBusiness', function (item) { //来自个人账户页面主营品种，处理缓存问题
+            _self.$store.dispatch('getMainBusiness', '/account');
+            if (item) {
+                _self.arr = item.split(',');
+                _self.hotDrug();
+            }
+        })
+        _self.hotDrug();
+    },
+    computed: {
+        mainBusiness() {
+            return this.$store.state.user.mainBusiness;
         },
-        components: {
-
+        userInfor() {
+            return this.$store.state.user.userInfor;
         },
-        created() {
+        backRouter() {
+            return this.$store.state.user.backRouter.router;
+        }
+    },
+    methods: {
+        hotDrug() {
             let _self = this;
-            if (this.$route.query.value) {
-                _self.$store.dispatch('getMainBusiness', '/account');
-                var str = this.$route.query.value;
-                _self.arr = str.split(',');
-            }
-            common.$on('perfectidToMajorBusiness', function(id) {
-                _self.$store.dispatch('clearRouter');
-                //_self.hotDrug();
-                for (var i = 0; i < _self.todos.length; i++) {
-                    _self.todos[i].show = false;
+            common.$emit('show-load');
+            httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
+                biz_module: 'searchKeywordService',
+                biz_method: 'queryHotKeyword',
+                biz_param: {
+                    pn: 1,
+                    pSize: 20
                 }
-                _self.arr = [];
-            })
-            common.$on('accountTomajorBusiness', function(item) { //来自个人账户页面主营品种，处理缓存问题
-                _self.$store.dispatch('getMainBusiness', '/account');
-                if (item) {
-                    _self.arr = item.split(',');
-                    _self.hotDrug();
-                }
-            })
-            _self.hotDrug();
-        },
-        computed: {
-            mainBusiness() {
-                return this.$store.state.user.mainBusiness;
-            },
-            userInfor() {
-                return this.$store.state.user.userInfor;
-            },
-            backRouter() {
-                return this.$store.state.user.backRouter.router;
-            }
-        },
-        methods: {
-            hotDrug() {
-                let _self = this;
-                common.$emit('show-load');
-                httpService.hotSearch(common.urlCommon + common.apiUrl.most, {
-                    biz_module: 'searchKeywordService',
-                    biz_method: 'queryHotKeyword',
-                    biz_param: {
-                        pn: 1,
-                        pSize: 20
-                    }
-                }, function(suc) {
-                    common.$emit('close-load');
-                    let result = suc.data.biz_result.list;
-                    if (suc.data.code == '1c01') {
-                        console.log(_self.arr.length)
-                        for (var i = 0; i < result.length; i++) {
-                            result[i].show = false;
-                            if (_self.arr.length > 0) {
-                                for (var j = 0; j < _self.arr.length; j++) {
-                                    if (result[i].keyWord == _self.arr[j]) {
-                                        result[i].show = true;
-                                    }
+            }, function (suc) {
+                common.$emit('close-load');
+                let result = suc.data.biz_result.list;
+                if (suc.data.code == '1c01') {
+                    console.log(_self.arr.length)
+                    for (var i = 0; i < result.length; i++) {
+                        result[i].show = false;
+                        if (_self.arr.length > 0) {
+                            for (var j = 0; j < _self.arr.length; j++) {
+                                if (result[i].keyWord == _self.arr[j]) {
+                                    result[i].show = true;
                                 }
                             }
                         }
-                        _self.todos = result;
-                    } else {
-                        common.$emit('message', suc.data.msg);
                     }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-            },
-            back() {
-                //this.$router.push('/perfectId')
-                window.history.go(-1);
-            },
-            next() {
-                //this.getVal()
-                let _self = this;
-                // if (localStorage.getItem('userType') && localStorage.getItem('manageType')) {
-                this.register = true;
-                var str = '';
+                    _self.todos = result;
+                } else {
+                    common.$emit('message', suc.data.msg);
+                }
+            }, function (err) {
+                common.$emit('close-load');
+                common.$emit('message', err.data.msg);
+            })
+        },
+        back() {
+            //this.$router.push('/perfectId')
+            window.history.go(-1);
+        },
+        next() {
+            //this.getVal()
+            let _self = this;
+            // if (localStorage.getItem('userType') && localStorage.getItem('manageType')) {
+            this.register = true;
+            var str = '';
+            for (var i = 0; i < _self.arr.length; i++) {
+                if (i == 0) str = _self.arr[0];
+                if (i !== 0) str = str + ',' + _self.arr[i];
+            }
+            _self.upDataInfor.bizMain = str;
+            this.getVal()
+            //console.log(55, _self.userInfor);
+            // }
+        },
+        goAccout() {
+            let _self = this;
+            var str = '';
+            if (_self.mainBusiness.router == '/account') {
+                //console.log(33, _self.arr)
                 for (var i = 0; i < _self.arr.length; i++) {
                     if (i == 0) str = _self.arr[0];
                     if (i !== 0) str = str + ',' + _self.arr[i];
                 }
-                _self.upDataInfor.bizMain = str;
-                this.getVal()
-                    //console.log(55, _self.userInfor);
+                _self.getVal(str);
+            }
+        },
+        clear() {
+            let _self = this;
+            _self.value = '';
+            _self.datas = [];
+        },
+        selected(todo) {
+            let _self = this;
+            //todo.show = !todo.show;
+            if (_self.datas.length == 0) {
+                if (_self.arr.length < 10) {
+                    // for (var i = 0; i < _self.arr.length; i++) {
+                    //     if (_self.arr[i] == todo.keyWord) {
+                    //         common.$emit('message', '请不要重复选择同一个品种！')
+                    //         return
+                    //     }
                     // }
-            },
-            goAccout() {
-                let _self = this;
-                var str = '';
-                if (_self.mainBusiness.router == '/account') {
-                    //console.log(33, _self.arr)
-                    for (var i = 0; i < _self.arr.length; i++) {
-                        if (i == 0) str = _self.arr[0];
-                        if (i !== 0) str = str + ',' + _self.arr[i];
-                    }
-                    _self.getVal(str);
-                }
-            },
-            clear() {
-                let _self = this;
-                _self.value = '';
-                _self.datas = [];
-            },
-            selected(todo) {
-                let _self = this;
-                //todo.show = !todo.show;
-                if (_self.datas.length == 0) {
-                    if (_self.arr.length < 10) {
-                        // for (var i = 0; i < _self.arr.length; i++) {
-                        //     if (_self.arr[i] == todo.keyWord) {
-                        //         common.$emit('message', '请不要重复选择同一个品种！')
-                        //         return
-                        //     }
-                        // }
-                        // _self.arr.push(todo.keyWord);
-                        todo.show = !todo.show;
-                        if (todo.show) _self.arr.push(todo.keyWord);
-                        if (!todo.show) {
-                            for (var i = 0; i < _self.arr.length; i++) {
-                                if (_self.arr[i] == todo.keyWord) {
-                                    _self.arr.splice(i, 1);
-                                }
+                    // _self.arr.push(todo.keyWord);
+                    todo.show = !todo.show;
+                    if (todo.show) _self.arr.push(todo.keyWord);
+                    if (!todo.show) {
+                        for (var i = 0; i < _self.arr.length; i++) {
+                            if (_self.arr[i] == todo.keyWord) {
+                                _self.arr.splice(i, 1);
                             }
                         }
-                    } else {
-                        common.$emit('message', '您选择的品种已经超过十个！')
                     }
-                }
-
-            },
-            getSearch(todo) {
-                let _self = this;
-                _self.datas = [];
-                _self.value = '';
-                if (_self.arr.length < 10) {
-                    for (var i = 0; i < _self.arr.length; i++) {
-                        if (_self.arr[i] == todo.breedName) {
-                            common.$emit('message', '请不要重复选择同一个品种！')
-                            return
-                        }
-                    }
-                    _self.arr.push(todo.breedName);
                 } else {
                     common.$emit('message', '您选择的品种已经超过十个！')
                 }
+            }
 
-            },
-            clearArr(todo) {
-                let _self = this;
+        },
+        getSearch(todo) {
+            let _self = this;
+            _self.datas = [];
+            _self.value = '';
+            if (_self.arr.length < 10) {
                 for (var i = 0; i < _self.arr.length; i++) {
-                    if (_self.arr[i] == todo) {
-                        _self.arr.splice(i, 1);
-                    }
-                }
-                for (var j = 0; j < _self.todos.length; j++) {
-                    if (_self.todos[j].keyWord == todo) {
-                        _self.todos[j].show = false;
-                    }
-                }
-
-            },
-            getVal(param) {
-                let _self = this;
-                let obj = {
-                    bizMain: _self.upDataInfor.bizMain,
-                    userType: localStorage.getItem('userType'),
-                    manageType: localStorage.getItem('manageType')
-                }
-                if (!_self.register) {
-                    for (var key in _self.upDataInfor) {
-                        if (key == 'bizMain') {
-                            _self.upDataInfor['bizMain'] = param;
-                        } else {
-                            _self.upDataInfor[key] = _self.userInfor[key];
-                        }
-                    }
-                }
-                console.log(12, _self.upDataInfor, _self.userInfor)
-                    //校验
-                let checkArr = [];
-                let checkBizMain = validation.checkNull(_self.upDataInfor.bizMain, '主营品类不能为空！');
-                checkArr.push(checkBizMain);
-                // let checkName = validation.checkNameTrue(_self.upDataInfor.fullname);
-                // checkArr.push(checkName);
-                // let checkLookcompany = validation.checkLook(_self.upDataInfor.company);
-                // checkArr.push(checkLookcompany);
-                // let checkLookcompanyShort = validation.checkLook(_self.upDataInfor.companyShort);
-                // checkArr.push(checkLookcompanyShort);
-                // let checkLookbizMain = validation.checkLook(_self.upDataInfor.bizMain);
-                // checkArr.push(checkLookbizMain);
-                for (let i = 0; i < checkArr.length; i++) {
-                    if (checkArr[i]) {
-                        common.$emit('message', checkArr[i]);
+                    if (_self.arr[i] == todo.breedName) {
+                        common.$emit('message', '请不要重复选择同一个品种！')
                         return
                     }
                 }
-                if (_self.mainBusiness.router == '/account') {
-                    _self.$store.dispatch('upDataInfor', this.upDataInfor).then(() => {
-                        window.history.go(-1)
-                    }), (() => {
-                        common.$emit('message', '更新失败');
-                    })
-                } else {
-                    _self.$store.dispatch('upDataInfor', obj).then(() => {
-                        common.$emit('perfectOldCustomer', 1);
-                        //console.log(_self.backRouter)
-                        //if(co)
-                        _self.$router.push('/home');
+                _self.arr.push(todo.breedName);
+            } else {
+                common.$emit('message', '您选择的品种已经超过十个！')
+            }
 
-
-                        
-
-                    }), (() => {
-                        common.$emit('message', '更新失败');
-                    })
-                    localStorage.removeItem('userType');
-                    localStorage.removeItem('manageType');
+        },
+        clearArr(todo) {
+            let _self = this;
+            for (var i = 0; i < _self.arr.length; i++) {
+                if (_self.arr[i] == todo) {
+                    _self.arr.splice(i, 1);
                 }
             }
-        },
-        watch: {
-            value: function(newValue, oldValue) {
-                let _self = this;
-                    
-                    window.clearTimeout(this.time);
-                    this.time = setTimeout(() => {
-                        common.$emit('show-load');
-                        let body = {
-                            biz_module: 'searchKeywordService',
-                            biz_method: 'querySearchKeywordBreed',
-                            biz_param: {
-                                keyWord: _self.value,
-                                pn: 1,
-                                pSize: 20
-                            }
-                        }
-                        httpService.searchWord(common.urlCommon + common.apiUrl.most, body, function(suc) {
-                            common.$emit('close-load');
-                            let result = suc.data.biz_result.list;
-                            if (suc.data.code == '1c01') {
-                                _self.datas = result;
-                            } else {
-                            
-                            }
-                        }, function(err) {
-                            common.$emit('close-load');
-                            common.$emit('message', err.data.msg);
-                        })
-                    }, 300)
+            for (var j = 0; j < _self.todos.length; j++) {
+                if (_self.todos[j].keyWord == todo) {
+                    _self.todos[j].show = false;
+                }
             }
+
         },
-        mounted() {
-            // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
-            //this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top;
-            //alert()
+        getVal(param) {
+            let _self = this;
+            let obj = {
+                bizMain: _self.upDataInfor.bizMain,
+                userType: localStorage.getItem('userType'),
+                manageType: localStorage.getItem('manageType')
+            }
+            if (!_self.register) {
+                for (var key in _self.upDataInfor) {
+                    if (key == 'bizMain') {
+                        _self.upDataInfor['bizMain'] = param;
+                    } else {
+                        _self.upDataInfor[key] = _self.userInfor[key];
+                    }
+                }
+            }
+            console.log(12, _self.upDataInfor, _self.userInfor)
+            //校验
+            let checkArr = [];
+            let checkBizMain = validation.checkNull(_self.upDataInfor.bizMain, '主营品类不能为空！');
+            checkArr.push(checkBizMain);
+            // let checkName = validation.checkNameTrue(_self.upDataInfor.fullname);
+            // checkArr.push(checkName);
+            // let checkLookcompany = validation.checkLook(_self.upDataInfor.company);
+            // checkArr.push(checkLookcompany);
+            // let checkLookcompanyShort = validation.checkLook(_self.upDataInfor.companyShort);
+            // checkArr.push(checkLookcompanyShort);
+            // let checkLookbizMain = validation.checkLook(_self.upDataInfor.bizMain);
+            // checkArr.push(checkLookbizMain);
+            for (let i = 0; i < checkArr.length; i++) {
+                if (checkArr[i]) {
+                    common.$emit('message', checkArr[i]);
+                    return
+                }
+            }
+            if (_self.mainBusiness.router == '/account') {
+                _self.$store.dispatch('upDataInfor', this.upDataInfor).then(() => {
+                    window.history.go(-1)
+                }), (() => {
+                    common.$emit('message', '更新失败');
+                })
+            } else {
+                _self.$store.dispatch('upDataInfor', obj).then(() => {
+                    //common.$emit('perfectOldCustomer', 1);
+                    //console.log(_self.backRouter)
+                    //if(co)
+                    //_self.$router.push('/home');
+                    function goLook() {
+                        //common.$emit("setParam", 'Urgentneed', item);
+                        common.$emit("Urgentneed", {});
+                    }
+                    function goHome() {
+                        console.log(2222)
+                    }
+                    if (obj.userType == 2 || obj.userType == 3) {
+                        common.$emit("confirms", {
+                            message: '去看看有多少需要我货源的询价单',
+                            title: '提示',
+                            ensure: goLook,
+                            cancel: goHome
+                        });
+                    }
+
+                    // common.$emit("confirm", {
+                    //     message: '去看看有多少需要我货源的询价单',
+                    //     title: '提示',
+                    //     ensure: this.release
+                    // });
+
+
+                }), (() => {
+                    common.$emit('message', '更新失败');
+                })
+                localStorage.removeItem('userType');
+                localStorage.removeItem('manageType');
+            }
         }
+    },
+    watch: {
+        value: function (newValue, oldValue) {
+            let _self = this;
+
+            window.clearTimeout(this.time);
+            this.time = setTimeout(() => {
+                common.$emit('show-load');
+                let body = {
+                    biz_module: 'searchKeywordService',
+                    biz_method: 'querySearchKeywordBreed',
+                    biz_param: {
+                        keyWord: _self.value,
+                        pn: 1,
+                        pSize: 20
+                    }
+                }
+                httpService.searchWord(common.urlCommon + common.apiUrl.most, body, function (suc) {
+                    common.$emit('close-load');
+                    let result = suc.data.biz_result.list;
+                    if (suc.data.code == '1c01') {
+                        _self.datas = result;
+                    } else {
+
+                    }
+                }, function (err) {
+                    common.$emit('close-load');
+                    common.$emit('message', err.data.msg);
+                })
+            }, 300)
+        }
+    },
+    mounted() {
+        // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        //this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top;
+        //alert()
+    }
 }
 </script>

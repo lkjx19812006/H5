@@ -4,7 +4,7 @@
     padding-bottom: 30px;
     position: relative;
     background-color: #F6F6F6;
-    overflow-x:hidden;
+    overflow-x: hidden;
     .search {
         position: fixed;
         z-index: 10000;
@@ -72,7 +72,7 @@
     }
     .swiper {
         height: 206px;
-        width:100%;
+        width: 100%;
         img {
             width: 100%;
             height: 100%;
@@ -550,9 +550,9 @@
                 <div class="left_word">购物车</div>
             </div>
             <!--  <div class="right" @click="call">
-                                                                                                <img src="/static/icon/tele.png" class="img">
-                                                                                                <div class="right_word">电话</div>
-                                                                                            </div> -->
+                                                                                                        <img src="/static/icon/tele.png" class="img">
+                                                                                                        <div class="right_word">电话</div>
+                                                                                                    </div> -->
             <div class="center" @click="fromIndex">
                 <div class="inbox">
                     <img src="/static/icon/enlarge.png">
@@ -657,9 +657,9 @@
                         <img src="/static/icon/urgent-2.png" class="urgent_img">
                         <div class="left">
                             <!-- <div class="top">
-                                                            <div class="word" v-if="todo.indentType == 0">药厂求购</div>
-                                                            <div class="word" v-if="todo.indentType !== 0">普通求购</div>
-                                                        </div> -->
+                                                                    <div class="word" v-if="todo.indentType == 0">药厂求购</div>
+                                                                    <div class="word" v-if="todo.indentType !== 0">普通求购</div>
+                                                                </div> -->
                             <div class="center">
                                 <div class="breed_name">
                                     <img src="/static/icon/yaochang.png">
@@ -947,6 +947,16 @@ export default {
                             ensure: loadApp
                         });
                         return;
+                    } else if (_self.userInfor.userType == '0' || _self.userInfor.bizMain == '' || _self.userInfor.manageType == '-1') {
+                        function perfect() {
+                            _self.$router.push('/perfectObject');
+                        }
+                        common.$emit('confirm', {
+                            message: '请先完善信息',
+                            title: '提示',
+                            ensure: perfect
+                        });
+                        return;
                     } else {
                         _self.$store.dispatch('getMainBusiness', {
                             router: '/account',
@@ -1156,7 +1166,7 @@ export default {
         common.$on('getInfo', function (item) {
             if (common.KEY) _self.$store.dispatch('getUserInfor'); //来自登录，调用下个人信息接口
             _self.resourceHttp();
-            _self.$store.dispatch('defaultMessage');      
+            _self.$store.dispatch('defaultMessage');
             if (common.KEY) _self.$store.dispatch('getMessage');
         })
         this.resourceHttp();
@@ -1167,9 +1177,9 @@ export default {
     mounted() {
         let _self = this;
         this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
-        this.$nextTick(function () {
-            _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
-        })
+        _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
+        //if (common.isSafari) _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top;
+
     }
 }
 </script>

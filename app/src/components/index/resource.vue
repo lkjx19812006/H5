@@ -5,7 +5,9 @@
     z-index: 2;
     background: #fff;
 }
-
+.resource {
+    overflow-y: scroll;
+}
 .mint-loadmore-top span {
     display: inline-block;
     transition: .2s linear;
@@ -544,7 +546,9 @@ export default {
         })
     },
     mounted() {
+        let _self = this;
         this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
+       // if (common.isSafari) _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top;
         this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
     }
 }

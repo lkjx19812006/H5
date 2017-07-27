@@ -14,6 +14,7 @@
     /*overflow: auto;*/
     height: 100%;
     padding-bottom: 60px;
+    
 }
 .load_apps{
     width:100%;
@@ -60,9 +61,9 @@
                 <img slot="icon" src="/static/icon/mine.png" v-else> 我的
             </mt-tab-item>
         </mt-tabbar>
-        <div class="load_apps">
-            <loadApp :loadApps="loadApps"></loadApp>
-        </div>
+        
+            <loadApp :loadApps="loadApps" class="load_apps"></loadApp>
+        
     </div>
 </template>
 <script>
