@@ -409,7 +409,8 @@ export default {
                 indentType: -1,
                 keyword: '',
                 page: 1,
-                pageSize: 10
+                pageSize: 10,
+                keyWordList: []
             },
             headParam: {
                 title: '紧急求购',
@@ -460,6 +461,7 @@ export default {
                 biz_method: 'queryBegBuyList',
                 biz_param: {
                     keyWord: _self.httpPraram.keyword,
+                    keyWordList: _self.httpPraram.keyWordList,
                     sort: {
                         "shelve_time": _self.httpPraram.time,
                         "offer": _self.httpPraram.offer,
@@ -556,6 +558,7 @@ export default {
             let _self = this;
             this.httpPraram.page = 1;
             this.httpPraram.keyword = '';
+            _self.httpPraram.keyWordList = [];
             this.getHttp();
         },
         jumpDetail(id) {
@@ -643,12 +646,32 @@ export default {
     },
     created() {
         let _self = this;
+        console.log(11, this.$route.query.type);
+        let arr = '';
+        let keyString = '';
+        if (this.$route.query.type  && common.pageParam.majorBusiness == 'urgent') {
+            arr = this.$route.query.type;
+            arr = arr.split(',');
+            _self.httpPraram.keyWordList = arr;
+            for(var i=0;i<arr.length;i++){
+                 if(i==0)keyString = arr[0];
+                 if(i==1)keyString = keyString + ',' + arr[1];
+                 if(i>=2)keyString = keyString + '...';
+            }
+            _self.httpPraram.keyword = keyString;
+            common.pageParam.majorBusiness == '';
+        }
         _self.headParam.keyword = common.pageParam.Urgentneed;
         _self.getHttp();
         if (common.KEY) _self.$store.dispatch('getUserInfor');
         common.$on('Urgentneed', function (item) {
             _self.headParam.keyword = item.keyWord;
             _self.httpPraram.keyword = item.keyWord;
+            if (item.listShow) {
+                _self.httpPraram.keyWordList = item.keyWordList;
+                _self.httpPraram.keyword = item.keyWordString;
+            }
+            console.log(33, item.keyWordList)
             _self.httpPraram.page = 1;
             _self.getHttp();
         });
@@ -656,6 +679,7 @@ export default {
             _self.httpPraram.page = 1;
             _self.headParam.keyword = '';
             _self.httpPraram.keyword = '';
+            _self.httpPraram.keyWordList = [];
             if (common.KEY) _self.$store.dispatch('getUserInfor');
             _self.getHttp();
         })

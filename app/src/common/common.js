@@ -68,7 +68,9 @@ let common = new Vue({
             myInfo: '',
             clickEvent: '',
             postUsers: '',
-            authRouter: ''
+            authRouter: '',
+            majorBusiness: '',
+            backHome: ''
         },
         shareParam: {
             imgUrl: 'http://apps.yaocaimaimai.com/htm5/static/icons/err.png',

@@ -5,11 +5,6 @@
     position: relative;
 }
 
-
-.mine {
-    overflow: auto;
-}
-
 .page-wrap {
     /*overflow: auto;*/
     height: 100%;
@@ -39,7 +34,7 @@
                     <need></need>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="mine">
-                    <mine></mine>
+                    <mine :popshow="popshow"></mine>
                 </mt-tab-container-item>
             </mt-tab-container>
         </div>
@@ -62,8 +57,8 @@
             </mt-tab-item>
         </mt-tabbar>
         
-            <loadApp :loadApps="loadApps" class="load_apps"></loadApp>
-        
+        <loadApp :loadApps="loadApps" class="load_apps"></loadApp>
+        <customPopUp  :popshow="popshow" v-show="selected=='mine' && popshow.show"></customPopUp>
     </div>
 </template>
 <script>
@@ -73,12 +68,16 @@ import need from '../components/index/need'
 import mine from '../components/index/mine'
 import common from '../common/common.js'
 import loadApp from '../components/user/loadApp'
+import customPopUp from '../components/popUpType/customPopUp'
 export default {
     data() {
         return {
             selected: 'index',
             loadApps: {
                 show: true
+            },
+            popshow:{
+                show:false
             }
         }
     },
@@ -87,7 +86,8 @@ export default {
         resource,
         need,
         mine,
-        loadApp
+        loadApp,
+        customPopUp
     },
     watch: {
         selected: function (newValue, oldValue) {

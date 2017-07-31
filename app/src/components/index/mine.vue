@@ -1,284 +1,4 @@
-<template>
-    <div class="mine" id="mine" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-        <accountOverview :param="param"></accountOverview>
-        <myInformation :param="information"></myInformation>
-        <div class="all_order">
-            <p>全部订单</p>
-            <div @click="jumpOrder(-1)">
-                <p>查看全部订单</p>
-                <img src="/static/images/right-arrow.png">
-            </div>
-        </div>
-        <div class="entrance">
-            <div v-for="(todo,index) in entrance" @click="jumpOrder(index)">
-                <img :src="todo.img_src" class="entrance_img">
-                <p>{{todo.name}}</p>
-            </div>
-        </div>
-        <div class="my_list">
-            <ul>
-                <li v-bind:class="[index%3==1 ? disClass : '', listPart,norLast]" v-for="(todo,index) in my_list" @click="jump(todo.router)">
-                    <img :src="todo.img_src" class="my_list_part_img">
-                    <p>{{todo.name}}</p>
-                </li>
-            </ul>
-        </div>
-    </div>
-</template>
-<script>
-import common from '../../common/common.js'
-import httpService from '../../common/httpService.js'
-import imageUpload from '../../components/tools/imageUpload'
-import accountOverview from '../../components/tools/accountOverview'
-import myInformation from '../../components/tools/myInformation'
-
-export default {
-    data() {
-            return {
-                listPart: 'my_list_part',
-                norLast: 'my_list_part_norlast',
-                disClass: 'my_list_part_disClass',
-                url: '',
-                param: {
-                    url: '',
-                    company: '',
-                    normalMoney: 0,
-                    score: 0,
-                    name: ''
-                },
-                information: {
-
-                },
-                entrance: [{
-                    name: '受理中',
-                    router: 'myOrder',
-                    img_src: '/static/images/All-orders.png'
-                }, {
-                    name: '待付款',
-                    router: '',
-                    img_src: '/static/images/Pending-payment.png'
-                }, {
-                    name: '待发货',
-                    router: '',
-                    img_src: '/static/icons/out-goods.png'
-                }, {
-                    name: '待收货',
-                    router: '',
-                    img_src: '/static/icons/receipt.png'
-                }],
-                my_list: [{
-                    name: '我的资源',
-                    router: 'myResource',
-                    img_src: '/static/icons/My-resources.png'
-                }, {
-                    name: '我的求购',
-                    router: 'myNeeds',
-                    img_src: '/static/icons/My-purchase.png'
-                }, {
-                    name: '我的报价',
-                    img_src: '/static/icons/My-offer.png',
-                    router: 'myOffer'
-                }, {
-                    name: '我的收藏',
-                    router: 'myAttention',
-                    img_src: '/static/icons/My-concern.png'
-                }, { //         
-                    name: '药款账单',
-                    img_src: '/static/icons/I-Yaokuan.png',
-                    router: 'app'
-                }, {
-                    name: '设置',
-                    router: 'mySet',
-                    img_src: '/static/icons/Set-up.png'
-                }]
-            }
-        },
-        components: {
-            imageUpload,
-            accountOverview,
-            myInformation
-        },
-        methods: {
-            // isWeiXin() {
-            //     var ua = window.navigator.userAgent.toLowerCase();
-            //     if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-            //         this.show = true;
-            //     } else {
-            //         this.show = false;
-            //     }
-            // },
-            jumpOrder(index) {
-                let _self = this;
-                if (!common.KEY) {
-                    function loadApp() {
-                        common.$emit('setParam', 'backRouter', '/home');
-                        if (common.wxshow) {
-                            common.getWxUrl();
-                        } else {
-                            _self.$router.push('/login');
-                        }
-                    }
-                    common.$emit('confirm', {
-                        message: '请先登录',
-                        title: '提示',
-                        ensure: loadApp
-                    });
-                    return;
-                }
-                var index = index + 1;
-                common.$emit('setParam', 'orderStatus', index);
-                common.$emit('mineToOrder', index);
-                _self.$router.push('/allOrder');
-            },
-            salesmanData() {
-                let _self = this;
-                common.$emit('show-load');
-                let otherurl = common.addSID(common.urlCommon + common.apiUrl.most);
-                let otherbody = {
-                    biz_module: 'userService',
-                    biz_method: 'queryEmployeeInfo',
-                    biz_param: {}
-                };
-                otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
-                otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
-                httpService.queryEmployeeInfo(otherurl, otherbody, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code = "1c01") {} else {
-                        common.$emit('message', suc.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-            },
-            getHttp() {
-                let _self = this;
-                common.$emit('show-load');
-                let url = common.addSID(common.urlCommon + common.apiUrl.most);
-                let body = {
-                    biz_module: 'userService',
-                    biz_method: 'queryUserInfo',
-                    biz_param: {}
-                };
-                body.time = Date.parse(new Date()) + parseInt(common.difTime);
-                body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-                httpService.queryUserInfo(url, body, function(suc) {
-                    common.$emit('close-load');
-                    if (suc.data.code = "1c01") {
-                        _self.information = suc.data.biz_result;
-                        _self.param = suc.data.biz_result;
-                        _self.url = suc.data.biz_result.avatar;
-                        _self.param.url = suc.data.biz_result.avatar;
-                        common.customerId = suc.data.biz_result.customerId;
-                        window.localStorage.ID = suc.data.biz_result.customerId;
-
-                    } else {
-                        common.$emit('message', suc.data.msg);
-                    }
-                }, function(err) {
-                    common.$emit('close-load');
-                    common.$emit('message', err.data.msg);
-                })
-            },
-
-            loadApp() {
-                window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
-            },
-            jump: function(router) {
-                if (router == "app") {
-                    common.$emit("confirm", {
-                        message: '请下载App后，在App内查看',
-                        title: '提示',
-                        ensure: this.loadApp
-                    });
-                } else {
-                    switch (router) {
-                        case 'myResource':
-                            common.$emit("informMyRes", 1);
-                            break;
-                        case 'myNeeds':
-                            common.$emit("informMyPurchase", 1);
-                            break;
-                        case 'myAttention':
-                            common.$emit("informResAttention", 1);
-                            break;
-                        case 'myOffer':
-                            common.$emit("inforMyOffer", 1);
-                            break;
-                        default:
-                            break;
-                    }
-                    let _self = this;
-                    if (!common.KEY) { /*&&router!='mySet'*/
-                        function loadApp() {
-                            common.$emit('setParam', 'backRouter', '/home');
-                            if (common.wxshow) {
-                                common.getWxUrl();
-                            } else {
-                                
-                                _self.$router.push('/login');
-                            }
-                        }
-                        common.$emit('confirm', {
-                            message: '请先登录',
-                            title: '提示',
-                            ensure: loadApp
-                        });
-                        return;
-                    } else {
-                        
-                        this.$router.push(router);
-                    }
-
-                }
-
-            },
-            handleScroll() {
-                let _self = this;
-                _self.scrollTop = this.$refs.wrapper.scrollTop;
-
-            }
-        },
-        watch: {
-
-        },
-        mounted() {
-
-        },
-        created() {
-            let _self = this;
-            
-            common.$on('myInfo', function(myInfo) {
-                if (common.SID) {
-                    _self.information = myInfo;
-                    _self.param = myInfo;
-                    _self.url = myInfo.avatar;
-                    _self.param.url = myInfo.avatar;
-                    _self.$store.dispatch('getUserInfor')
-                }
-            })
-            if (common.SID) _self.salesmanData();
-
-            common.$on("toMine", function(obj) {
-                if(common.KEY)_self.getHttp();
-                //_self.$store.dispatch('getUserInfor')
-            })
-            common.$on("clear_Information", function() { //来自资源页面的提示刷新
-                _self.param = {
-                    url: '',
-                    company: '',
-                    normalMoney: 0,
-                    score: 0,
-                    name: ''
-                };
-                console.log(_self.param);
-
-            });
-
-        }
-}
-</script>
-<style scoped>
+<style lang="less" scoped>
 .mint-tab-container-item {
     background-color: #f0f0f0;
 }
@@ -288,12 +8,12 @@ export default {
     position: relative;
     float: left;
     width: 100%;
-    overflow-y: scroll;
-    padding-bottom: 50px;
+    overflow-y: hidden;
+    height: 100vh;
 }
 
 .mine #box {
-    overflow-y: scroll;
+    overflow-y: hidden;
     width: 100%;
     float: left;
 }
@@ -306,25 +26,6 @@ export default {
     top: 0;
 }
 
-
-/*@keyframes scrollToTop {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-@keyframes scrollToTopNor {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}*/
-
 .mine .my_header_top {
     animation: scrollToTop 0.5s linear forwards;
 }
@@ -332,15 +33,6 @@ export default {
 .mine .my_header_top_nor {
     animation: scrollToTopNor 0.5s linear forwards;
 }
-
-
-/*.mine .pointOut{
-    width:100%;
-    height:15rem;
-    background:red;
-    position: absolute;
-    bottom: -50px;
-}*/
 
 .mine .entrance {
     display: flex;
@@ -523,6 +215,9 @@ export default {
     background: white;
 }
 
+// .mine .my_list{
+//     padding-bottom: 40px;
+// }
 .mine .my_list_part_img {
     position: absolute;
     width: 2.5599rem;
@@ -543,4 +238,306 @@ export default {
     right: 0;
     top: 2.688rem;
 }
+
+.mine {
+    .main {
+        overflow-y: scroll;
+        padding-bottom: 70px;
+    }
+    .main_other{
+        overflow-y: hidden;
+    }
+}
 </style>
+<template>
+    <div class="mine" id="mine">
+        <div v-bind:class="{main:!popshow.show,'main_other':popshow.show}" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <accountOverview :param="param"></accountOverview>
+            <myInformation :param="information" :popshow="popshow"></myInformation>
+            <div class="all_order">
+                <p>全部订单</p>
+                <div @click="jumpOrder(-1)">
+                    <p>查看全部订单</p>
+                    <img src="/static/images/right-arrow.png">
+                </div>
+            </div>
+            <div class="entrance">
+                <div v-for="(todo,index) in entrance" @click="jumpOrder(index)">
+                    <img :src="todo.img_src" class="entrance_img">
+                    <p>{{todo.name}}</p>
+                </div>
+            </div>
+            <div class="my_list">
+                <ul>
+                    <li v-bind:class="[index%3==1 ? disClass : '', listPart,norLast]" v-for="(todo,index) in my_list" @click="jump(todo.router)">
+                        <img :src="todo.img_src" class="my_list_part_img">
+                        <p>{{todo.name}}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <customPopUp v-show="popshow.show" :popshow="popshow"></customPopUp>
+    </div>
+</template>
+<script>
+import common from '../../common/common.js'
+import httpService from '../../common/httpService.js'
+import imageUpload from '../../components/tools/imageUpload'
+import accountOverview from '../../components/tools/accountOverview'
+import myInformation from '../../components/tools/myInformation'
+import customPopUp from '../../components/popUpType/customPopUp'
+export default {
+    data() {
+        return {
+            listPart: 'my_list_part',
+            norLast: 'my_list_part_norlast',
+            disClass: 'my_list_part_disClass',
+            url: '',
+            wrapperHeight: 0,
+            param: {
+                url: '',
+                company: '',
+                normalMoney: 0,
+                score: 0,
+                name: ''
+            },
+
+            information: {
+
+            },
+            entrance: [{
+                name: '受理中',
+                router: 'myOrder',
+                img_src: '/static/images/All-orders.png'
+            }, {
+                name: '待付款',
+                router: '',
+                img_src: '/static/images/Pending-payment.png'
+            }, {
+                name: '待发货',
+                router: '',
+                img_src: '/static/icons/out-goods.png'
+            }, {
+                name: '待收货',
+                router: '',
+                img_src: '/static/icons/receipt.png'
+            }],
+            my_list: [{
+                name: '我的资源',
+                router: 'myResource',
+                img_src: '/static/icons/My-resources.png'
+            }, {
+                name: '我的求购',
+                router: 'myNeeds',
+                img_src: '/static/icons/My-purchase.png'
+            }, {
+                name: '我的报价',
+                img_src: '/static/icons/My-offer.png',
+                router: 'myOffer'
+            }, {
+                name: '我的收藏',
+                router: 'myAttention',
+                img_src: '/static/icons/My-concern.png'
+            }, { //         
+                name: '药款账单',
+                img_src: '/static/icons/I-Yaokuan.png',
+                router: 'app'
+            }, {
+                name: '设置',
+                router: 'mySet',
+                img_src: '/static/icons/Set-up.png'
+            }]
+        }
+    },
+    props: {
+        popshow: {
+            
+        },
+    },
+    components: {
+        imageUpload,
+        accountOverview,
+        myInformation,
+        customPopUp
+    },
+    methods: {
+        // isWeiXin() {
+        //     var ua = window.navigator.userAgent.toLowerCase();
+        //     if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        //         this.show = true;
+        //     } else {
+        //         this.show = false;
+        //     }
+        // },
+        jumpOrder(index) {
+            let _self = this;
+            if (!common.KEY) {
+                function loadApp() {
+                    common.$emit('setParam', 'backRouter', '/home');
+                    if (common.wxshow) {
+                        common.getWxUrl();
+                    } else {
+                        _self.$router.push('/login');
+                    }
+                }
+                common.$emit('confirm', {
+                    message: '请先登录',
+                    title: '提示',
+                    ensure: loadApp
+                });
+                return;
+            }
+            var index = index + 1;
+            common.$emit('setParam', 'orderStatus', index);
+            common.$emit('mineToOrder', index);
+            _self.$router.push('/allOrder');
+        },
+        salesmanData() {
+            let _self = this;
+            common.$emit('show-load');
+            let otherurl = common.addSID(common.urlCommon + common.apiUrl.most);
+            let otherbody = {
+                biz_module: 'userService',
+                biz_method: 'queryEmployeeInfo',
+                biz_param: {}
+            };
+            otherbody.time = Date.parse(new Date()) + parseInt(common.difTime);
+            otherbody.sign = common.getSign('biz_module=' + otherbody.biz_module + '&biz_method=' + otherbody.biz_method + '&time=' + otherbody.time);
+            httpService.queryEmployeeInfo(otherurl, otherbody, function (suc) {
+                common.$emit('close-load');
+                if (suc.data.code = "1c01") { } else {
+                    common.$emit('message', suc.data.msg);
+                }
+            }, function (err) {
+                common.$emit('close-load');
+                common.$emit('message', err.data.msg);
+            })
+        },
+        getHttp() {
+            let _self = this;
+            common.$emit('show-load');
+            let url = common.addSID(common.urlCommon + common.apiUrl.most);
+            let body = {
+                biz_module: 'userService',
+                biz_method: 'queryUserInfo',
+                biz_param: {}
+            };
+            body.time = Date.parse(new Date()) + parseInt(common.difTime);
+            body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+            httpService.queryUserInfo(url, body, function (suc) {
+                common.$emit('close-load');
+                if (suc.data.code = "1c01") {
+                    _self.information = suc.data.biz_result;
+                    _self.param = suc.data.biz_result;
+                    _self.url = suc.data.biz_result.avatar;
+                    _self.param.url = suc.data.biz_result.avatar;
+                    common.customerId = suc.data.biz_result.customerId;
+                    window.localStorage.ID = suc.data.biz_result.customerId;
+
+                } else {
+                    common.$emit('message', suc.data.msg);
+                }
+            }, function (err) {
+                common.$emit('close-load');
+                common.$emit('message', err.data.msg);
+            })
+        },
+
+        loadApp() {
+            window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yaocaimaimai.yaocaimaimai';
+        },
+        jump: function (router) {
+            if (router == "app") {
+                common.$emit("confirm", {
+                    message: '请下载App后，在App内查看',
+                    title: '提示',
+                    ensure: this.loadApp
+                });
+            } else {
+                switch (router) {
+                    case 'myResource':
+                        common.$emit("informMyRes", 1);
+                        break;
+                    case 'myNeeds':
+                        common.$emit("informMyPurchase", 1);
+                        break;
+                    case 'myAttention':
+                        common.$emit("informResAttention", 1);
+                        break;
+                    case 'myOffer':
+                        common.$emit("inforMyOffer", 1);
+                        break;
+                    default:
+                        break;
+                }
+                let _self = this;
+                if (!common.KEY) { /*&&router!='mySet'*/
+                    function loadApp() {
+                        common.$emit('setParam', 'backRouter', '/home');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+
+                            _self.$router.push('/login');
+                        }
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                } else {
+
+                    this.$router.push(router);
+                }
+
+            }
+
+        },
+        handleScroll() {
+            let _self = this;
+            _self.scrollTop = this.$refs.wrapper.scrollTop;
+
+        }
+    },
+    watch: {
+
+    },
+    mounted() {
+        let _self = this;
+        _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top
+    },
+    created() {
+        let _self = this;
+        common.$on('myInfo', function (myInfo) {
+            if (common.SID) {
+                _self.information = myInfo;
+                _self.param = myInfo;
+                _self.url = myInfo.avatar;
+                _self.param.url = myInfo.avatar;
+                _self.$store.dispatch('getUserInfor')
+            }
+        })
+        if (common.SID) _self.salesmanData();
+
+        common.$on("toMine", function (obj) {
+            if (common.KEY) _self.getHttp();
+            //_self.$store.dispatch('getUserInfor')
+        })
+        common.$on("clear_Information", function () { //来自资源页面的提示刷新
+            _self.param = {
+                url: '',
+                company: '',
+                normalMoney: 0,
+                score: 0,
+                name: ''
+            };
+            console.log(_self.param);
+
+        });
+
+    }
+}
+</script>
+

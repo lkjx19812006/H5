@@ -122,7 +122,7 @@
                 <input type="text" v-bind:class="{ search_active: keyword }" placeholder="请输入您想要的货物资源" disabled="true" v-model="keyword">
             </div>
             <!-- 资源 -->
-            <div class="go_back" @click="back()" v-show="param.resource && param.back">
+            <div class="go_back" @click.stop="back()" v-show="param.resource && param.back">
                 <img src="/static/images/go-back.png">
             </div>
             <div class="search_content special" v-bind:class="{ search_active: keyword }" v-if="param.resource">
@@ -176,8 +176,14 @@ export default {
         clearWord() {
             this.$emit("clearSearch");
         },
-        back(){
-            window.history.go(-1)
+        back() {
+            if (common.pageParam.backHome) {
+                common.pageParam.backHome = false;
+                this.$router.push('/home');
+            } else {
+                window.history.go(-1)
+            }
+
         },
         jump(router) {
             if (!common.KEY) {

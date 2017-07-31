@@ -266,8 +266,6 @@ export default {
             }
             httpService.myAttention(url, body, function (suc) {
                 common.$emit('close-load');
-
-
                 //console.log(3, result)
                 if (suc.data.code == '1c01') {
                     let result = [];
@@ -382,12 +380,26 @@ export default {
                 }
             }
             //console.log(11,_self.obj.sale_price,_self.lastPrice)
-            if (Number(_self.obj.sale_price) > Number(_self.lastPrice)) {
-                common.$emit("confirm", {
-                    message: '您报的价格比上次还高，可能会影响成交概率，是否确认',
-                    title: '提示',
-                    ensure: this.release
-                });
+            if (_self.accept_type !== undefined) {
+                if (Number(_self.obj.sale_price) > Number(_self.lastPrice)) {
+                    common.$emit("confirm", {
+                        message: '您报的价格比上次还高，可能会影响成交概率，是否确认',
+                        title: '提示',
+                        ensure: this.release
+                    });
+                } else if (Number(_self.obj.sale_price) == Number(_self.lastPrice)) {
+                    common.$emit("confirm", {
+                        message: '您报的价格与上次相同，可能会影响成交概率，是否确认',
+                        title: '提示',
+                        ensure: this.release
+                    });
+                } else {
+                    common.$emit("confirm", {
+                        message: '确定发布报价？',
+                        title: '提示',
+                        ensure: this.release
+                    });
+                }
             } else {
                 common.$emit("confirm", {
                     message: '确定发布报价？',
@@ -395,6 +407,7 @@ export default {
                     ensure: this.release
                 });
             }
+
 
         },
         showAction(param) {
@@ -588,7 +601,7 @@ export default {
                 }
             };
             if (_self.accept_type == 0) {
-                console.log(999999)
+                //console.log(999999)
                 body.biz_method = 'updateIntentionOffer'
                 body.biz_param.id = _self.report_id;
             }
@@ -597,9 +610,11 @@ export default {
             httpService.needRelease(url, body, function (suc) {
                 common.$emit('close-load');
                 if (suc.data.code == '1c01') {
-                    common.$emit('inforMyOffer', 1);
-
-                    _self.$router.push('/myOffer')
+                    // common.$emit('inforMyOffer', 1);
+                    // _self.$router.push('/myOffer')
+                    console.log(1, suc.data.biz_result.offerId)
+                    common.$emit('inforReleaseOfferSuccess', suc.data.biz_result.offerId);
+                    _self.$router.push('/releaseOfferSuccess?type=' + suc.data.biz_result.offerId);
                     common.$emit('message', suc.data.msg);
                 } else {
                     common.$emit('message', suc.data.msg);

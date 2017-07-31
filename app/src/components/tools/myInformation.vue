@@ -17,111 +17,112 @@ import {
 } from 'vuex'
 export default {
     data() {
-            return {
-                todos: [{
-                    url: '/static/images/custom-service.png',
-                    name: '专属客服',
-                    router: 'detailsPage',
-                }, {
-                    url: '/static/images/address-manage.png',
-                    name: '地址管理',
-                    router: 'addressManage'
-                }, {
-                    url: '/static/images/my-account.png',
-                    name: '我的账户',
-                    router: 'account'
-                }, ],
-                phone: common.servicePhone
+        return {
+            todos: [{
+                url: '/static/images/custom-service.png',
+                name: '专属客服',
+                router: 'detailsPage',
+            }, {
+                url: '/static/images/address-manage.png',
+                name: '地址管理',
+                router: 'addressManage'
+            }, {
+                url: '/static/images/my-account.png',
+                name: '我的账户',
+                router: 'account'
+            },],
+            phone: common.servicePhone
 
-            }
-        },
-        props: {
-            param: {
-                
-            }
-        },
-        computed: {
-            userInfor() {
-                return this.$store.state.user.userInfor;
-            }
-        },
-        created() {
-            // console.log(this.param);
-            if (!common.servicePhone) this.getCustomerPhone();
-        },
-        methods: {
-            getCustomerPhone() {
-                let _self = this;
-                console.log(common.urlCommon + common.apiUrl.getDate);
-                this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
-                    if (response.data.code == '1c01') {
-                        console.log(response.data);
-                        common.servicePhone = response.data.biz_result.serviceMobile;
-                        _self.phone = response.data.biz_result.serviceMobile;
-                    }
-                }, (err) => {
-                    common.$emit('message', err.data.msg);
-                });
-            },
-            call() {
-                window.location.href = "tel:" + this.phone;
-            },
-            jump(router) {
-                let _self = this;
-                //console.log(1,_self.param)
-                if (router == 'detailsPage') {
-                    if (_self.userInfor.employee <= 100000) {
-                        // common.$emit("confirm", {
-                        //     message: '暂无专属客户',
-                        //     title: '提示',
-                        //     ensure:'' 
-                        // });
+        }
+    },
+    props: {
+        param: {
 
-                        common.$emit('message','暂无专属客服')
-                    } else if (_self.userInfor.employee > 100000) {
-                        common.$emit('mineToDetailPage',1)
-                        _self.$router.push('/detailsPage');
-                    } /*else {
-                        common.$emit("confirm", {
-                            message: '未设置专属客户，拨号去设置？',
-                            title: '提示',
-                            ensure: _self.call
-                        });
+        },
+        popshow:{
 
-                    }*/
-
-                } else {
-                    switch (router) {
-                        case 'addressManage':
-                            console.log('ssssss');
-                            common.$emit("informAddress", 1);
-                            break;
-                        case 'accountInfo':
-                            common.$emit("informAccountinfo", 1)
-                            break;
-                        default:
-                            break;
-                    }
-                    if (!common.KEY) {
-                        function loadApp() {
-                            common.$emit('setParam', 'backRouter', '/home');
-                            if (common.wxshow) {
-                                common.getWxUrl();
-                            } else {
-                                _self.$router.push('/login');
-                            }
-                        }
-                        common.$emit('confirm', {
-                            message: '请先登录',
-                            title: '提示',
-                            ensure: loadApp
-                        });
-                        return;
-                    }
-                    this.$router.push(router);
+        }
+    },
+    computed: {
+        userInfor() {
+            return this.$store.state.user.userInfor;
+        }
+    },
+    created() {
+        // console.log(this.param);
+        if (!common.servicePhone) this.getCustomerPhone();
+    },
+    methods: {
+        getCustomerPhone() {
+            let _self = this;
+            console.log(common.urlCommon + common.apiUrl.getDate);
+            this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
+                if (response.data.code == '1c01') {
+                    console.log(response.data);
+                    common.servicePhone = response.data.biz_result.serviceMobile;
+                    _self.phone = response.data.biz_result.serviceMobile;
                 }
+            }, (err) => {
+                common.$emit('message', err.data.msg);
+            });
+        },
+        call() {
+            window.location.href = "tel:" + this.phone;
+        },
+        jump(router) {
+            let _self = this;
+            if (router == 'detailsPage') {
+                if (!common.KEY) {
+                    function loadApp() {
+                        common.$emit('setParam', 'backRouter', '/home');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                } else {
+                   _self.popshow.show = true;
+                   _self.$store.dispatch('getCustom')
+                }
+            } else {
+                switch (router) {
+                    case 'addressManage':
+                        console.log('ssssss');
+                        common.$emit("informAddress", 1);
+                        break;
+                    case 'accountInfo':
+                        common.$emit("informAccountinfo", 1)
+                        break;
+                    default:
+                        break;
+                }
+                if (!common.KEY) {
+                    function loadApp() {
+                        common.$emit('setParam', 'backRouter', '/home');
+                        if (common.wxshow) {
+                            common.getWxUrl();
+                        } else {
+                            _self.$router.push('/login');
+                        }
+                    }
+                    common.$emit('confirm', {
+                        message: '请先登录',
+                        title: '提示',
+                        ensure: loadApp
+                    });
+                    return;
+                }
+                this.$router.push(router);
             }
         }
+    }
 }
 </script>
 <style scoped>

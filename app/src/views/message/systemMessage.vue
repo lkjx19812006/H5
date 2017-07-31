@@ -44,10 +44,10 @@ input {
                         margin: 2px 7px 0 4px;
                     }
                     .word {
-                        width:90%;
+                        width: 90%;
                         font-size: 15px;
                         color: #4c4c4c;
-                        word-wrap:break-word;
+                        word-wrap: break-word;
                     }
                 }
                 .bottom {
@@ -63,6 +63,20 @@ input {
             }
         }
     }
+    .box {
+        .fbox {
+            margin-top: 100px;
+            .no_message {
+                width: 83px;
+            }
+            .words {
+                font-size: 14px;
+                color: #D0D0D0;
+                text-align: center;
+                margin-top: 10px;
+            }
+        }
+    }
 }
 </style>
 <template>
@@ -71,15 +85,15 @@ input {
         <div class="box" v-if="arr.length !== 0">
             <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
                 <div style="min-height:80vh">
-                    <div class="item" v-for="todo in arr" v-bind:class="{word_read:todo.isRead==1}" @click="jump(todo)">
+                    <div class="item" v-for="todo in arr" v-bind:class="{word_read:todo.isRead==1}">
                         <div class="question">
                             <div class="top">
                                 <img src="/static/icon/question.png" alt="">
-                                <div class="word">！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！{{todo.content}}</div>
+                                <div class="word">{{todo.content}}</div>
                             </div>
                             <!-- <div class="bottom">
-                                        提问时间: 2017年7月3号 21:09:08
-                                    </div> -->
+                                            提问时间: 2017年7月3号 21:09:08
+                                        </div> -->
                         </div>
                         <div class="question answer">
                             <div class="top">

@@ -16,17 +16,18 @@ const state = {
         id: ''
     },
     isRead: 1,
-    resourceAttention: ''
+    resourceAttention: '',
+    customInfor: ''
 }
 
 // getters
 const getters = {
     userInfor: state => state.userInfor,
-    /*accountHead: state => state.accountHead,*/
     backRouter: state => state.backRouter,
     mainBusiness: state => state.mainBusiness,
     areaJson: state => state.areaJson,
-    resourceAttention: state => state.resourceAttention
+    resourceAttention: state => state.resourceAttention,
+    customInfor: state => state.customInfor
 }
 
 // actions
@@ -130,7 +131,6 @@ const actions = {
         commit('clearChangeRouter')
     },
     getMessage({ commit, state }) {
-
         let _self = this;
         common.$emit('show-load');
         let url = common.addSID(common.urlCommon + common.apiUrl.most);
@@ -161,6 +161,30 @@ const actions = {
     },
     defaultMessage({ commit, state }) {
         commit('defaultMessage')
+    },
+    getCustom({ commit, state }) {
+        let _self = this;
+        common.$emit('show-load');
+        let url = common.addSID(common.urlCommon + common.apiUrl.most);
+        let body = {
+            biz_module: 'userService',
+            biz_method: 'queryEmployeeInfo',
+            biz_param: {
+
+            }
+        };
+        body.time = Date.parse(new Date()) + parseInt(common.difTime);
+        body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
+        httpService.queryEmployeeInfo(url, body, function(suc) {
+            common.$emit('close-load');
+            if (suc.data.code == '1c01') {
+                let data = suc.data.biz_result;
+                console.log(11, data)
+                commit('getCustom', data)
+            }
+        }, function(err) {
+            common.$emit('close-load');
+        })
     }
 
 }
@@ -256,6 +280,9 @@ const mutations = {
     },
     isAttention(state, param) {
         state.resourceAttention = param;
+    },
+    getCustom(state, param) {
+        state.customInfor = param;
     }
 
 }

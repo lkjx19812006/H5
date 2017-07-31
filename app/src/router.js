@@ -47,6 +47,7 @@ import needDetails from './views/myNeed/needDetails'
 import myNeeds from './views/myNeed/myNeeds'
 import myOffer from './views/myOffer/myOffer'
 import releaseOffer from './views/myRelease/releaseOffer'
+import releaseOfferSuccess from './views/myRelease/releaseOfferSuccess'
 import register from './views/user/register'
 import perfectObject from './views/user/perfectObject'
 import perfectId from './views/user/perfectId'
@@ -138,6 +139,7 @@ module.exports = {
         { name: 'myNeeds', path: '/myNeeds', component: myNeeds },
         { name: 'myOffer', path: '/myOffer', component: myOffer },
         { name: 'releaseOffer', path: '/releaseOffer/:id', component: releaseOffer },
+        { name: 'releaseOfferSuccess', path: '/releaseOfferSuccess', component: releaseOfferSuccess },
         { name: 'register', path: '/register', component: register },
         { name: 'perfectObject', path: '/perfectObject', component: perfectObject },
         { name: 'perfectId', path: '/perfectId', component: perfectId },

@@ -153,6 +153,56 @@ input {
             background-color: #FA6705;
         }
     }
+    .black {
+        width: 100%;
+        height: 100vh;
+        position: absolute;
+        z-index: 200;
+        background-color: #000;
+        top: 0;
+        opacity: 0.6;
+    }
+    .price_popup {
+        position: absolute;
+        margin-left: -137px;
+        margin-top: -140px;
+        top: 40%;
+        left: 50%;
+        z-index: 201;
+        .pop_box {
+            position: relative;
+            height: 275px;
+            .pop_img {
+                width: 274px;
+                height: 275px;
+            }
+            .button_box {
+                position: absolute;
+                bottom: 0px;
+                z-index: 202;
+                width: 250px;
+                padding: 0 20px 15px 20px;
+                display: flex;
+                flex-direction: row;
+                .button {
+                    flex: 1;
+                    color: #fff;
+                    padding: 10px 0;
+                    font-size: 16px;
+                    line-height: 16px;
+                    border-radius: 18px;
+                }
+                .left {
+                    margin-right: 8px;
+                    background-color: #84bf51;
+                }
+                .right {
+                    margin-left: 8px;
+                    background-color: #f29600;
+                }
+            }
+        }
+    }
 }
 </style>
 <template>
@@ -196,12 +246,26 @@ input {
             <div class="back" @click="back" v-if="mainBusiness.router == '/account'">返回</div>
             <div class="next" @click="goAccout" v-if="mainBusiness.router == '/account'">保存</div>
         </div>
+        <perfectSuccess :popup="popup" v-on:goHome="goHome" v-on:goNeed="goNeed" v-show="popup"></perfectSuccess>
+        <!-- <div class="price_popup" v-show="popup">
+                <div class="pop_box">
+                    <img src="/static/icon/pop-up-price.png" alt="" class="pop_img">
+                    <div class="button_box">
+                        <div class="button left" @click="goNeed">立即前往</div>
+                        <div class="button right" @click="goHome">随便逛逛</div>
+                    </div>
+                </div>
+            </div>
+            <div class="black" v-show="popup">
+        
+            </div> -->
     </div>
 </template>
 <script>
 import common from '../../common/common.js'
 import validation from '../../validation/validation.js'
 import httpService from '../../common/httpService.js'
+import perfectSuccess from '../../components/popUpType/perfectSuccess'
 import {
     mapGetters
 } from 'vuex'
@@ -227,11 +291,12 @@ export default {
                 manageType: ''
 
             },
-            register: false
+            register: false,
+            popup: false
         }
     },
     components: {
-
+        perfectSuccess
     },
     created() {
         let _self = this;
@@ -242,7 +307,6 @@ export default {
         }
         common.$on('perfectidToMajorBusiness', function (id) {
             _self.$store.dispatch('clearRouter');
-            //_self.hotDrug();
             for (var i = 0; i < _self.todos.length; i++) {
                 _self.todos[i].show = false;
             }
@@ -304,13 +368,10 @@ export default {
             })
         },
         back() {
-            //this.$router.push('/perfectId')
             window.history.go(-1);
         },
         next() {
-            //this.getVal()
             let _self = this;
-            // if (localStorage.getItem('userType') && localStorage.getItem('manageType')) {
             this.register = true;
             var str = '';
             for (var i = 0; i < _self.arr.length; i++) {
@@ -319,14 +380,11 @@ export default {
             }
             _self.upDataInfor.bizMain = str;
             this.getVal()
-            //console.log(55, _self.userInfor);
-            // }
         },
         goAccout() {
             let _self = this;
             var str = '';
             if (_self.mainBusiness.router == '/account') {
-                //console.log(33, _self.arr)
                 for (var i = 0; i < _self.arr.length; i++) {
                     if (i == 0) str = _self.arr[0];
                     if (i !== 0) str = str + ',' + _self.arr[i];
@@ -341,16 +399,8 @@ export default {
         },
         selected(todo) {
             let _self = this;
-            //todo.show = !todo.show;
             if (_self.datas.length == 0) {
                 if (_self.arr.length < 10) {
-                    // for (var i = 0; i < _self.arr.length; i++) {
-                    //     if (_self.arr[i] == todo.keyWord) {
-                    //         common.$emit('message', '请不要重复选择同一个品种！')
-                    //         return
-                    //     }
-                    // }
-                    // _self.arr.push(todo.keyWord);
                     todo.show = !todo.show;
                     if (todo.show) _self.arr.push(todo.keyWord);
                     if (!todo.show) {
@@ -418,14 +468,6 @@ export default {
             let checkArr = [];
             let checkBizMain = validation.checkNull(_self.upDataInfor.bizMain, '主营品类不能为空！');
             checkArr.push(checkBizMain);
-            // let checkName = validation.checkNameTrue(_self.upDataInfor.fullname);
-            // checkArr.push(checkName);
-            // let checkLookcompany = validation.checkLook(_self.upDataInfor.company);
-            // checkArr.push(checkLookcompany);
-            // let checkLookcompanyShort = validation.checkLook(_self.upDataInfor.companyShort);
-            // checkArr.push(checkLookcompanyShort);
-            // let checkLookbizMain = validation.checkLook(_self.upDataInfor.bizMain);
-            // checkArr.push(checkLookbizMain);
             for (let i = 0; i < checkArr.length; i++) {
                 if (checkArr[i]) {
                     common.$emit('message', checkArr[i]);
@@ -440,39 +482,45 @@ export default {
                 })
             } else {
                 _self.$store.dispatch('upDataInfor', obj).then(() => {
-                    //common.$emit('perfectOldCustomer', 1);
-                    //console.log(_self.backRouter)
-                    //if(co)
-                    //_self.$router.push('/home');
-                    function goLook() {
-                        //common.$emit("setParam", 'Urgentneed', item);
-                        common.$emit("Urgentneed", {});
-                    }
-                    function goHome() {
-                        console.log(2222)
-                    }
                     if (obj.userType == 2 || obj.userType == 3) {
-                        common.$emit("confirms", {
-                            message: '去看看有多少需要我货源的询价单',
-                            title: '提示',
-                            ensure: goLook,
-                            cancel: goHome
-                        });
+                        _self.popup = true;
+                    } else {
+                        _self.popup = false;
                     }
-
-                    // common.$emit("confirm", {
-                    //     message: '去看看有多少需要我货源的询价单',
-                    //     title: '提示',
-                    //     ensure: this.release
-                    // });
-
-
                 }), (() => {
                     common.$emit('message', '更新失败');
                 })
                 localStorage.removeItem('userType');
                 localStorage.removeItem('manageType');
             }
+        },
+        goNeed() {
+            let _self = this;
+            console.log(1, _self.arr)
+            let type = '';
+            let keyString = '';
+            for (var i = 0; i < _self.arr.length; i++) {
+                if (i == 0) type = _self.arr[0];
+                if (i != 0) type = type + ',' + _self.arr[i];
+                if (i == 0) keyString = _self.arr[0];
+                if (i == 1) keyString = keyString + ',' + _self.arr[1];
+                if (i >= 2) keyString = keyString + '...';
+            }
+            common.$emit('setParam', 'majorBusiness', 'urgent');
+            common.$emit('setParam', 'backHome', true);
+            common.$emit('Urgentneed', {
+                keyWord: '',
+                keyWordList: _self.arr,
+                keyWordString: keyString,
+                listShow: true
+            })
+            console.log(11, type);
+            _self.popup = false;
+            _self.$router.push('/urgentNeed?type=' + type);
+        },
+        goHome() {
+            let _self = this;
+            _self.$router.push('/home');
         }
     },
     watch: {

@@ -5,7 +5,7 @@
             <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
                     <div class="main">
-                        <textarea placeholder="请填写您的反馈内容" v-model="param.content"></textarea>
+                        <textarea placeholder="请填写您的反馈内容(200字符以内)" v-model="param.content"></textarea>
                         <p>您的反馈对我们至关重要！</p>
                     </div>
                     <div class="info">
