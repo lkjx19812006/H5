@@ -41,6 +41,11 @@
             font-size: 14px;
             color: #666;
             line-height: 25px;
+            span {
+                span {
+                    color: #fa6705;
+                }
+            }
         }
         .call {
             width: 70%;
@@ -71,17 +76,15 @@
                     客服服务
                 </div>
                 <div class="content">
-                    亲爱的用户, 您好, 我是您的专属客服
-                    <span v-show='userInfor.employee <= 100000'>喵喵喵, </span>
-                    <span v-show='userInfor.employee > 100000'>{{customInfor.name}}</span>
-                    我将全心全意的为您提供满意周到的交易服务！
+                    <span v-show='userInfor.employee <= 100000'>您好，您还没有专属客服人员，可拨打客服电话进行咨询哦</span>
+                    <span v-show='userInfor.employee > 100000'>亲爱的用户, 您好, 我是您的专属客服<span>{{customInfor.name}}</span>, 我将全心全意的为您提供满意周到的交易服务！</span>
                 </div>
                 <div class="call" @click="call">拨打客服电话</div>
                 <div class="call other" @click="goFeedBack">意见反馈</div>
             </div>
     
         </div>
-        <div class="black">
+        <div class="black" @click="cancel">
     
         </div>
     </div>
@@ -96,9 +99,9 @@ export default {
         }
     },
     props: {
-         popshow:{
+        popshow: {
 
-         }
+        }
     },
     computed: {
         customInfor() {
@@ -109,14 +112,17 @@ export default {
         },
     },
     methods: {
-        call() {  
-           this.popshow.show = false;
-           if(this.userInfor.employee <= 100000) window.location.href = "tel:" + this.phone;
-           if(this.userInfor.employee > 100000)window.location.href = "tel:" + this.customInfor.extno;
+        call() {
+            this.popshow.show = false;
+            if (this.userInfor.employee <= 100000) window.location.href = "tel:" + this.phone;
+            if (this.userInfor.employee > 100000) window.location.href = "tel:" + this.customInfor.extno;
         },
-        goFeedBack(){
+        goFeedBack() {
             this.popshow.show = false;
             this.$router.push('/feedBack')
+        },
+        cancel() {
+            this.popshow.show = false;
         },
         getCustomerPhone() {
             let _self = this;

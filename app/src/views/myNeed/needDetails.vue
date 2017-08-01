@@ -152,10 +152,10 @@
                 width: 225px;
             }
             .cancel {
-                width: 26px;
+                width: 24px;
                 position: absolute;
-                right: -13px;
-                top: -13px;
+                right: -8px;
+                top: 10px;
             }
             .my_title {
                 position: absolute;
@@ -462,7 +462,7 @@
             <img alt="" class="cat" src="/static/icon/mascot.png">
             <div class="circle_box">
                 <img alt="" class="circle" src="/static/icon/circle.png" />
-                <!-- <img src="/static/icons/upload-delete.png" alt="" class="cancel"> -->
+                <img src="/static/icons/upload-delete.png" alt="" class="cancel" @click="cancelMascot"> 
                 <div class="my_title">
                     本条求购已有
                     <span>
@@ -675,6 +675,9 @@ export default {
         cancel() {
             this.show = false;
             this.opinion = false;
+        },
+        cancelMascot(){
+            this.mascot = false;
         },
         selectIt(todo) {
             let _self = this;

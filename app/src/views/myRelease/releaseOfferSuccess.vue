@@ -197,7 +197,7 @@ textarea {
                 <div class="item" v-for="todo in todos">
                     <div class="breedname">
                         {{todo.breedName}}
-                        <span>({{todo.number}}{{todo.unit}})</span>
+                        <span>{{todo.number}}({{todo.unit}})</span>
                     </div>
                     <div class="spec">
                         {{todo.spec,4 | filterTxt}}

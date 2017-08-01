@@ -16,8 +16,12 @@ textarea {
 
 .release_offer {
     position: relative;
+    height: 100vh;
     .main {
         padding-bottom: 100px;
+    }
+    .killScroll {
+        overflow: hidden;
     }
     .box {
         padding: 20px 15px;
@@ -57,7 +61,7 @@ textarea {
         }
     }
     .confirm {
-        position: fixed;
+        position: absolute;
         bottom: 0;
         height: 50px;
         width: 100%;
@@ -75,7 +79,7 @@ textarea {
 <template>
     <div class="release_offer">
         <myHeader :param="param"></myHeader>
-        <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" v-bind:class="{killScroll:message.show}">
             <titles tab="1"></titles>
             <basicTop :obj="obj" v-on:showAction="showAction"></basicTop>
             <titles tab="2"></titles>
@@ -117,6 +121,7 @@ textarea {
         </div>
         <div class="confirm" @click="confirm">提交报价</div>
         <popSpec :obj="obj"></popSpec>
+        <messageBoxs :message="message" v-show="message.show" v-on:mySure="mySure" v-on:myCancel="myCancel"></messageBoxs>
     </div>
 </template>
 <script>
@@ -131,10 +136,18 @@ import specialImgs from '../../components/release/specialImgs'
 import priceOrNumber from '../../components/release/priceOrNumber'
 import selectQuality from '../../components/release/selectQuality'
 import releaseBasic from '../../components/release/resourceReleaseBasic'
+import messageBoxs from '../../components/popUpType/messageBoxs'
 import httpService from '../../common/httpService.js'
 export default {
     data() {
         return {
+            message: {
+                title: '修改报价',
+                content: '确定修改报价信息后将等待审核！',
+                canceltext: '再想想',
+                confirmtext: '确认',
+                show: false
+            },
             param: {
                 name: '正在报价',
                 router: 'home'
@@ -204,6 +217,14 @@ export default {
         }
     },
     methods: {
+        mySure() {
+            this.message.show = false;
+            console.log(999)
+            this.release()
+        },
+        myCancel() {
+            this.message.show = false;
+        },
         getHttp(id) {
             let _self = this;
             common.$emit('show-load');
@@ -382,23 +403,15 @@ export default {
             //console.log(11,_self.obj.sale_price,_self.lastPrice)
             if (_self.accept_type !== undefined) {
                 if (Number(_self.obj.sale_price) > Number(_self.lastPrice)) {
-                    common.$emit("confirm", {
-                        message: '您报的价格比上次还高，可能会影响成交概率，是否确认',
-                        title: '提示',
-                        ensure: this.release
-                    });
+                    _self.message.content = '您报的价格比上次还高，可能会影响成交概率，是否确认'
+                    _self.message.show = true;
                 } else if (Number(_self.obj.sale_price) == Number(_self.lastPrice)) {
-                    common.$emit("confirm", {
-                        message: '您报的价格与上次相同，可能会影响成交概率，是否确认',
-                        title: '提示',
-                        ensure: this.release
-                    });
+                    _self.message.content = '您报的价格与上次相同，可能会影响成交概率，是否确认';
+                    _self.message.show = true;
                 } else {
-                    common.$emit("confirm", {
-                        message: '确定发布报价？',
-                        title: '提示',
-                        ensure: this.release
-                    });
+                    _self.message.content = '确定修改报价信息后将等待审核！'
+                    _self.message.title = '发布报价';
+                    _self.message.show = true;
                 }
             } else {
                 common.$emit("confirm", {
@@ -412,40 +425,44 @@ export default {
         },
         showAction(param) {
             console.log(11, this.accept_type)
-            if (this.accept_type == '') {
+            if (this.accept_type !== undefined && param == "unit") {
+                common.$emit('message', '再次报价单位不可更改')
+                this.obj.sheetVisible = false;
+            } else {
                 this.obj.sheetVisible = true;
-                this.obj.actions = [];
-                let _self = this;
-                if (param == "spec") {
-                    for (var i = 0; i < _self.obj.breedSpec.length; i++) {
-                        _self.obj.actions.push({
-                            name: _self.obj.breedSpec[i].name,
-                            id: _self.obj.breedSpec[i].id,
-                            key: 'spec'
-                        });
-                    }
-                } else if (param == "unit") {
-                    for (var i = 0; i < _self.obj.unit.length; i++) {
-                        _self.obj.actions.push({
-                            name: _self.obj.unit[i].name,
-                            key: 'number_unit',
-                            id: _self.obj.unit[i].id,
-                            id_key: 'number_id'
-                        });
-                    }
-                } else {
-                    for (var i = 0; i < _self.obj.breedLocation.length; i++) {
-                        _self.obj.actions.push({
-                            name: _self.obj.breedLocation[i].name,
-                            id: _self.obj.breedLocation[i].locationId,
-                            key: 'place',
-                            id_key: 'place_id'
-                        });
-                    }
+            }
+            this.obj.actions = [];
+            let _self = this;
+            if (param == "unit") {
+                for (var i = 0; i < _self.obj.unit.length; i++) {
+                    _self.obj.actions.push({
+                        name: _self.obj.unit[i].name,
+                        key: 'number_unit',
+                        id: _self.obj.unit[i].id,
+                        id_key: 'number_id'
+                    });
+                }
+            } else if (param == "spec") {
+                for (var i = 0; i < _self.obj.breedSpec.length; i++) {
+                    _self.obj.actions.push({
+                        name: _self.obj.breedSpec[i].name,
+                        id: _self.obj.breedSpec[i].id,
+                        key: 'spec'
+                    });
                 }
             } else {
-                common.$emit('message', '再次报价单位不可更改')
+                for (var i = 0; i < _self.obj.breedLocation.length; i++) {
+                    _self.obj.actions.push({
+                        name: _self.obj.breedLocation[i].name,
+                        id: _self.obj.breedLocation[i].locationId,
+                        key: 'place',
+                        id_key: 'place_id'
+                    });
+                }
             }
+            // } else {
+            //     common.$emit('message', '再次报价单位不可更改')
+            // }
 
             //console.log(this.obj.actions)
         },
@@ -635,7 +652,8 @@ export default {
         priceOrNumber,
         selectQuality,
         specialImgs,
-        releaseBasic
+        releaseBasic,
+        messageBoxs
     },
     created() {
         let _self = this;

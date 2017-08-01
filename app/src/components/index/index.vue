@@ -1178,7 +1178,8 @@ export default {
         let _self = this;
         this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
         _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
-        //if (common.isSafari) _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top;
+       //_self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top;
+        // if (common.isSafari)
 
     }
 }

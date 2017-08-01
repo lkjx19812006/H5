@@ -153,56 +153,6 @@ input {
             background-color: #FA6705;
         }
     }
-    .black {
-        width: 100%;
-        height: 100vh;
-        position: absolute;
-        z-index: 200;
-        background-color: #000;
-        top: 0;
-        opacity: 0.6;
-    }
-    .price_popup {
-        position: absolute;
-        margin-left: -137px;
-        margin-top: -140px;
-        top: 40%;
-        left: 50%;
-        z-index: 201;
-        .pop_box {
-            position: relative;
-            height: 275px;
-            .pop_img {
-                width: 274px;
-                height: 275px;
-            }
-            .button_box {
-                position: absolute;
-                bottom: 0px;
-                z-index: 202;
-                width: 250px;
-                padding: 0 20px 15px 20px;
-                display: flex;
-                flex-direction: row;
-                .button {
-                    flex: 1;
-                    color: #fff;
-                    padding: 10px 0;
-                    font-size: 16px;
-                    line-height: 16px;
-                    border-radius: 18px;
-                }
-                .left {
-                    margin-right: 8px;
-                    background-color: #84bf51;
-                }
-                .right {
-                    margin-left: 8px;
-                    background-color: #f29600;
-                }
-            }
-        }
-    }
 }
 </style>
 <template>
@@ -246,19 +196,19 @@ input {
             <div class="back" @click="back" v-if="mainBusiness.router == '/account'">返回</div>
             <div class="next" @click="goAccout" v-if="mainBusiness.router == '/account'">保存</div>
         </div>
-        <perfectSuccess :popup="popup" v-on:goHome="goHome" v-on:goNeed="goNeed" v-show="popup"></perfectSuccess>
+        <perfectSuccess :popup="popup" v-on:goHome="goHome" v-on:goNeed="goNeed" v-if="popup"></perfectSuccess>
         <!-- <div class="price_popup" v-show="popup">
-                <div class="pop_box">
-                    <img src="/static/icon/pop-up-price.png" alt="" class="pop_img">
-                    <div class="button_box">
-                        <div class="button left" @click="goNeed">立即前往</div>
-                        <div class="button right" @click="goHome">随便逛逛</div>
+                    <div class="pop_box">
+                        <img src="/static/icon/pop-up-price.png" alt="" class="pop_img">
+                        <div class="button_box">
+                            <div class="button left" @click="goNeed">立即前往</div>
+                            <div class="button right" @click="goHome">随便逛逛</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="black" v-show="popup">
-        
-            </div> -->
+                <div class="black" v-show="popup">
+            
+                </div> -->
     </div>
 </template>
 <script>
@@ -486,7 +436,10 @@ export default {
                         _self.popup = true;
                     } else {
                         _self.popup = false;
+                        _self.$router.push('/home')
                     }
+
+
                 }), (() => {
                     common.$emit('message', '更新失败');
                 })

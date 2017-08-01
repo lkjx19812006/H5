@@ -317,6 +317,21 @@ common.$on('confirm', (obj) => {
 
     })
 })
+
+
+common.$on('reportPopUp', (obj) => {
+    MessageBox({
+        title: obj.title,
+        message: obj.message,
+        showCancelButton: true,
+        cancelButtonText: obj.cancelButtonText,
+    }).then(() => {
+        // obj.ensure();
+        console.log(122)
+    }, () => {
+        console.log(111)
+    })
+})
 common.$on('confirms', (obj) => {
     MessageBox.confirm(obj.message, obj.title).then(action => {
         obj.ensure();

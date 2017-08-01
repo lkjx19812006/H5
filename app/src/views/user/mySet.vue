@@ -14,106 +14,138 @@
                     </ul>
                 </mt-loadmore>
             </div>
-            <div class="quit" @click="quit">退出当前账号</div>
+            <div class="quit" @click="quit" v-show="userInfor.phone">退出当前账号</div>
         </div>
     </div>
 </template>
 <script>
 import common from '../../common/common.js'
 import myHeader from '../../components/tools/myHeader'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
-            return {
-                wxshow:true,
-                wrapperHeight: '',
-                my_header: {
-                    name: '我的设置',
-                    router: 'home'
-                },
-                todos: [{
-                    first_img: '/static/images/password-modification.png',
-                    left_word: '修改密码',
-                    router: 'revisePassWordConfirm',
-                    second_img: '/static/images/right-arrow.png'
-                }, {
-                    first_img: '/static/images/address_administration.png',
-                    left_word: '地址管理',
-                    router: 'addressManage',
-                    second_img: '/static/images/right-arrow.png'
-                }, {
-                    first_img: '/static/images/about.png',
-                    left_word: '关于我们',
-                    router: 'aboutus/us',
-                    second_img: '/static/images/right-arrow.png'
-                }, {
-                    first_img: '/static/images/ider.png',
-                    left_word: '意见反馈',
-                    router: 'feedBack',
-                    second_img: '/static/images/right-arrow.png'
-                }, {
-                    first_img: '/static/images/customer-service.png',
-                    left_word: '联系客服',
-                    right_word: common.servicePhone,
-                    func: function() {
-                        window.location.href = "tel:" + common.servicePhone;
-                    }
-                }]
-
-            }
-        },
-        components: {
-            myHeader
-        },
-        methods: {
-            quit() {
-                common.customerId = '';
-                common.KEY = '';
-                common.SID = '';
-                window.localStorage.ID = '';
-                window.localStorage.KEY = '';
-                window.localStorage.SID = '';
-                common.$emit('clear_Information');
-                common.$emit('setParam', 'backRouter', 'mySet');
-                common.$emit('informBackMyself', 'mySet');
-                common.$emit('getInfo', 2);
-                this.$router.replace('/login');
+        return {
+            wxshow: true,
+            wrapperHeight: '',
+            my_header: {
+                name: '我的设置',
+                router: 'home'
             },
-            getCustomerPhone() {
-                let _self = this;
-                this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
-                    if (response.data.code == '1c01') {
-                        console.log(response.data);
-                        common.servicePhone = response.data.biz_result.serviceMobile;
-                        _self.todos[4].right_word = response.data.biz_result.serviceMobile;
+            todos: [{
+                first_img: '/static/images/password-modification.png',
+                left_word: '修改密码',
+                router: 'revisePassWordConfirm',
+                second_img: '/static/images/right-arrow.png'
+            }, {
+                first_img: '/static/images/address_administration.png',
+                left_word: '地址管理',
+                router: 'addressManage',
+                second_img: '/static/images/right-arrow.png'
+            }, {
+                first_img: '/static/images/about.png',
+                left_word: '关于我们',
+                router: 'aboutus/us',
+                second_img: '/static/images/right-arrow.png'
+            }, {
+                first_img: '/static/images/ider.png',
+                left_word: '意见反馈',
+                router: 'feedBack',
+                second_img: '/static/images/right-arrow.png'
+            }, {
+                first_img: '/static/images/customer-service.png',
+                left_word: '联系客服',
+                right_word: common.servicePhone,
+                func: function () {
+                    window.location.href = "tel:" + common.servicePhone;
+                }
+            }],
+        }
+    },
+    computed: {
+        userInfor() {
+            return this.$store.state.user.userInfor;
+        }
+    },
+    components: {
+        myHeader
+    },
+    methods: {
+        quit() {
+            common.customerId = '';
+            common.KEY = '';
+            common.SID = '';
+            window.localStorage.ID = '';
+            window.localStorage.KEY = '';
+            window.localStorage.SID = '';
+            common.$emit('clear_Information');
+            common.$emit('setParam', 'backRouter', 'mySet');
+            common.$emit('informBackMyself', 'mySet');
+            common.$emit('getInfo', 2);
+            this.$router.replace('/login');
+        },
+        getCustomerPhone() {
+            let _self = this;
+            this.$http.get(common.urlCommon + common.apiUrl.getDate).then((response) => {
+                if (response.data.code == '1c01') {
+                    console.log(response.data);
+                    common.servicePhone = response.data.biz_result.serviceMobile;
+                    _self.todos[4].right_word = response.data.biz_result.serviceMobile;
+                }
+            }, (err) => {
+                common.$emit('message', err.data.msg);
+            });
+        },
+        jump: function (item) {
+            let _self = this;
+            console.log(item)
+            if (item.func) {
+                item.func();
+            } else {
+                if (item.router == 'addressManage') {
+                    common.$emit("informAddress", 1);
+                } else if (item.router == 'feedBack') {
+                    common.$emit('informFeedBack', 1);
+                } else if (item.router == 'revisePassWordConfirm') {
+                    common.$emit('reviseMyPass', 1)
+                }
+                if (item.router !== 'aboutus/us') {
+                    if (!common.KEY) {
+                        function loadApp() {
+                            common.$emit('setParam', 'backRouter', '/home');
+                            if (common.wxshow) {
+                                common.getWxUrl();
+                            } else {
+                                _self.$router.push('/login');
+                            }
+                        }
+                        common.$emit('confirm', {
+                            message: '请先登录',
+                            title: '提示',
+                            ensure: loadApp
+                        });
+                        return;
+                    } else {
+                        this.$router.push(item.router);
                     }
-                }, (err) => {
-                    common.$emit('message', err.data.msg);
-                });
-            },
-            jump: function(item) {
-                console.log(item)
-                if (item.func) {
-                    item.func();
-                } else {
-                    if (item.router == 'addressManage') {
-                        common.$emit("informAddress", 1);
-                    } else if (item.router == 'feedBack') {
-                        common.$emit('informFeedBack', 1);
-                    } else if (item.router == 'revisePassWordConfirm') {
-                        common.$emit('reviseMyPass', 1)
-                    }
+                }else{
                     this.$router.push(item.router);
                 }
+
+
             }
-        },
-        created() {
-            //console.log(common.wxshow);
-            if(common.wxshow)this.wxshow = false;
-            if (!common.servicePhone) this.getCustomerPhone();
-        },
-        mounted() {
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         }
+    },
+    created() {
+        //console.log(common.wxshow);
+        //if (common.wxshow) this.wxshow = false;
+        if (!common.servicePhone) this.getCustomerPhone();
+
+    },
+    mounted() {
+        this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+    }
 
 }
 </script>

@@ -84,7 +84,7 @@ export default {
                 let checkArr = [];
                 let checkName = validation.checkNull(_self.param.fullname,'请输入姓名');
                 checkArr.push(checkName);
-                let checkId = validation.checkIdCard(_self.param.idnumber);
+                let checkId = validation.checkNull(_self.param.idnumber,'请输入身份证号');
                 checkArr.push(checkId);
                 for(var i=0;i<checkArr.length;i++){
                     if(checkArr[i]){

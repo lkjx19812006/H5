@@ -66,7 +66,7 @@ input {
 }
 </style>
 <template>
-    <div class="box">
+    <div>
         <div class="price_popup">
             <div class="pop_box">
                 <img src="/static/icon/pop-up-price.png" alt="" class="pop_img">

@@ -244,7 +244,7 @@
         overflow-y: scroll;
         padding-bottom: 70px;
     }
-    .main_other{
+    .main_other {
         overflow-y: hidden;
     }
 }
@@ -351,7 +351,7 @@ export default {
     },
     props: {
         popshow: {
-            
+
         },
     },
     components: {
@@ -471,7 +471,10 @@ export default {
                         break;
                 }
                 let _self = this;
-                if (!common.KEY) { /*&&router!='mySet'*/
+                if (router == 'mySet') {
+                    //common.$emit('inforMySet',1)
+                    this.$router.push(router);
+                } else if (!common.KEY) {
                     function loadApp() {
                         common.$emit('setParam', 'backRouter', '/home');
                         if (common.wxshow) {
@@ -488,7 +491,6 @@ export default {
                     });
                     return;
                 } else {
-
                     this.$router.push(router);
                 }
 

@@ -55,6 +55,12 @@ input {
                     font-size: 12px;
                     color: #999;
                     margin-top: 8px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    .delet{
+                        color:red;
+                    }
                 }
             }
             .answer {
@@ -92,8 +98,8 @@ input {
                                 <div class="word">{{todo.content}}</div>
                             </div>
                             <!-- <div class="bottom">
-                                            提问时间: 2017年7月3号 21:09:08
-                                        </div> -->
+                                                提问时间: 2017年7月3号 21:09:08
+                                            </div> -->
                         </div>
                         <div class="question answer">
                             <div class="top">
@@ -101,7 +107,10 @@ input {
                                 <div class="word">{{todo.response}}</div>
                             </div>
                             <div class="bottom">
-                                回复时间: {{todo.utime | successTimeFormats}}
+                                <div class="time">
+                                    回复时间: {{todo.utime | successTimeFormats}}
+                                </div>
+                                <div class="delet" v-if="paramHead.show" @click.stop="delet(todo)">删除</div>
                             </div>
                         </div>
                     </div>
@@ -129,9 +138,9 @@ export default {
         return {
             paramHead: {
                 name: '系统消息',
-                // revise: true,
-                // show: false,
-                // message: true
+                revise: true,
+                show: false,
+                message: true
             },
             arr: [],
             topStatus: '',
