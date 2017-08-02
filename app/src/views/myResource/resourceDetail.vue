@@ -2,7 +2,7 @@
 .resource_detail {
     width: 100%;
     height: 100vh;
-    overflow-y: scroll;
+    overflow-y: hidden;
     position: relative;
 }
 
@@ -67,7 +67,7 @@
     height: 1.6rem;
     background: black;
     z-index: 9000000000;
-    position: fixed;
+    position: absolute;
     right: 2rem;
     opacity: 0.5;
     border-radius: 0.8rem;
@@ -135,11 +135,12 @@
 }
 
 .resource_detail .fix_bottom {
-    /* position: absolute;
+    position: absolute;
     bottom: 0px;
-    z-index: 2;*/
+    z-index: 2;
     width: 100%;
-    float: left;
+    display: flex;
+    flex-direction: row;
 }
 
 .resource_detail .choose {
@@ -152,8 +153,7 @@
 }
 
 .resource_detail .fix_bottom .attention {
-    float: left;
-    width: 32%;
+    width: 126px;
 }
 
 .resource_detail .fix_bottom .orange_button {
@@ -175,17 +175,20 @@
 
 
 
+
+
+
 /*购物车修改*/
 
 .resource_detail .center_box {}
 
 .resource_detail .center {
-    padding: 20px;
+    padding: 10px;
     position: relative;
     background: #fff;
     float: left;
     width: 100%;
-    border-bottom: 1px solid #F5F5F5;
+    border-bottom: 1px solid #e6e6e6;
 }
 
 .resource_detail .center_content {
@@ -204,8 +207,8 @@
     border: 1px solid #FA6705;
     border-radius: 5px;
     overflow: hidden;
-    font-size: 1.5rem;
-    line-height: 1.5rem;
+    font-size: 16px;
+    line-height: 16px;
 }
 
 .resource_detail .center .choose_type .large_cargo {
@@ -228,13 +231,11 @@
 .resource_detail .center .choose_type .default {
     background: white;
     color: #FA6705;
-    /*border: 1px solid #ccc;*/
 }
 
 .resource_detail .top .title {
     float: left;
     width: 100%;
-    /*margin-bottom: 20px;*/
 }
 
 .resource_detail .top .title img {
@@ -330,14 +331,71 @@
     color: #333;
 }
 
+//上面都是垃圾css
 .resource_detail {
     .load_apps {
         width: 100%;
         position: absolute;
-        bottom: 39px;
+        bottom: 50px;
     }
     .load_apps_my {
         bottom: 0px;
+    }
+    .footer_box {
+        width: 100%;
+        float: left;
+        padding-left: 12px;
+        background-color: #fff;
+        .list {
+            font-size: 16px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            line-height: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e6e6e6;
+            text-align: left;
+            .left {
+                width: 85px;
+                color: #808080;
+            }
+            .right {
+                flex: 1;
+                color: #333;
+            }
+        }
+        .last {
+            border: none;
+        }
+    }
+    .padd {
+        height: 20px;
+        float: left;
+        width: 100%;
+    }
+    .cart_box {
+        height: 50px;
+        background-color: #fff;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 8px 0;
+        .carts {
+            flex: 1;
+            height: 100%;
+            line-height: 35px;
+            margin-right:8px;
+            border-radius:16px;
+            color:#fff;
+        }
+        .addcart {
+            background-color: #f5c01c;
+            margin-left:8px;
+        }
+        .buyIt {
+            background-color: #ff8201;
+        }
     }
 }
 </style>
@@ -346,7 +404,7 @@
         <div class="shade" v-if="choose.push_num"></div>
         <myHeader :param="param" v-show="!my_param.show"></myHeader>
         <div v-show="!my_param.show" class="box">
-            <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <div class="page-loadmore-wrapper main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
                 <mt-loadmore>
                     <div class="swipe_height" v-if="obj.image">
                         <mt-swipe :auto="4000" :show-indicators="false">
@@ -361,8 +419,8 @@
                     </div>
                     <div class="top">
                         <div class="title">
-                            <img src="/static/icons/zheng.png" v-if="obj.especial == 1 && obj.type == 1">
-                            <img src="/static/icons/sample.png" v-if="obj.sampling == 1 && obj.type == 1">
+                            <img src="/static/icon/square-zheng.png" v-if="obj.especial == 1 && obj.type == 1">
+                            <img src="/static/icon/square-sampling.png" v-if="obj.sampling == 1 && obj.type == 1">
                             <p>{{obj.breedName}}</p>
                             <p class="price_right">
                                 <span>{{obj.price}}</span>元/{{obj.unit}}</p>
@@ -375,97 +433,41 @@
                                 <div class="sample_cargo" :class="{ active: !choose.isRed,'default':choose.isRed }" @click="chooseType()">样品</div>
                             </div>
                         </div>
-                        <div class="center_content" v-if="choose.isRed">
-                            <div class="detail">
-                                <p>产地：
-                                    <span>{{obj.location}}</span>
-                                </p>
-                                <p class="right">规格：
-                                    <span>{{obj.spec}}</span>
-                                </p>
-                            </div>
-                            <div class="detail">
-                                <p>库存：
-                                    <span>{{obj.number}}{{obj.unit}}</span>
-                                </p>
-                                <p class="right">起订量：
-                                    <span>{{obj.moq}}{{obj.unit}}</span>
-                                </p>
-                            </div>
-                            <div class="detail">
-                                <p v-if="obj.sampling == 1">样品：
-                                    <span>提供</span>
-                                </p>
-                                <p v-if="obj.sampling == 0">样品：
-                                    <span>不提供</span>
-                                </p>
-                                <p class="right">上架时间：
-                                    <span>{{obj.shelveTime | timeFormat}}</span>
-                                </p>
-                            </div>
-                            <div class="detail">
-                                <div class="sell_point">卖点：</div>
-                                <div class="point_right">
-                                    <span class="point_content">
-                                        {{obj.quality}}
-                                    </span>
+                        <div class="footer_box">
+                            <div class="list" v-for="(todo,index) in footerArr" v-bind:class="{last:index==6}">
+                                <div class="left">{{todo.title}}</div>
+                                <div class="right" v-show="index==0">{{obj.location}}</div>
+                                <div class="right" v-show="index==1">{{obj.spec}}</div>
+                                <div class="right" v-show="index==2">{{obj.number}}{{obj.unit}}</div>
+                                <div class="right" v-show="index==3">{{obj.moq}}{{obj.unit}}</div>
+                                <div class="right" v-show="index==4">
+                                    <span v-if="obj.sampling == 1">提供</span>
+                                    <span v-if="obj.sampling == 0">不提供</span>
                                 </div>
+                                <div class="right" v-show="index==5">{{obj.shelveTime | timeFormat}}</div>
+                                <div class="right" v-show="index==6">{{obj.quality}}</div>
                             </div>
                         </div>
-                        <div class="center_content" v-if="!choose.isRed">
-                            <div class="detail">
-                                <p>产地：
-                                    <span>{{obj.location}}</span>
-                                </p>
-                                <p class="right">规格：
-                                    <span>{{obj.spec}}</span>
-                                </p>
-                            </div>
-                            <div class="detail">
-                                <p>库存：
-                                    <span>{{obj.sampleNumber}}份</span>
-                                </p>
-                                <p class="right">起订量：
-                                    <span>{{obj.moq}}份</span>
-                                </p>
-                            </div>
-                            <div class="detail">
-                                <p>样品：
-                                    <span>提供</span>
-                                </p>
-                                <p class="right">上架时间：
-                                    <span v-if="obj.shelveTime">{{obj.shelveTime | timeFormat}}</span>
-                                    <span v-if="!obj.shelveTime">近期上架</span>
-                                </p>
-                            </div>
-                            <div class="detail">
-                                <div class="sell_point">卖点：</div>
-                                <span>{{obj.quality}}</span>
-                            </div>
-                        </div>
+                        <div class="padd"></div>
                     </div>
                 </mt-loadmore>
             </div>
         </div>
-        <div class="load_apps" v-bind:class="{load_apps_my:obj.isMy==1}">
+        <div class="load_apps" v-bind:class="{load_apps_my:obj.isMy==1}" v-show="loadApps.show">
             <loadApp :loadApps="loadApps"></loadApp>
         </div>
         <div class="fix_bottom" v-show="!my_param.show && obj.isMy == 0">
             <div class="attention">
                 <telAndAttention :obj='obj'></telAndAttention>
             </div>
-            <button class="mint-button orange_button" @click="pushCart(obj)">加入购物车</button>
-            <button class="mint-button mint-button--primary mint-button--normal disabled_button" @click="jump(obj)">
-                <span v-show="obj.especial !== 1">我要购买</span>
-                <span v-show="obj.especial == 1">立即抢购</span>
-            </button>
+            <div class="cart_box">
+                <div class="carts addcart" @click="pushCart(obj)">加入购物车</div>
+                <div class="carts buyIt" @click="jump(obj)">
+                    <span v-show="obj.especial !== 1">我要购买</span>
+                    <span v-show="obj.especial == 1">立即抢购</span>
+                </div>
+            </div>
         </div>
-        <!-- <div class="fix_bottom" v-show="!my_param.show && obj.isMy == 1">
-                                <button class="mint-button mint-button--primary mint-button--normal tel" v-on:click="call()">
-                                    <img src="/static/icons/tel.png">
-                                    <p>电话</p>
-                                </button>
-                            </div> -->
         <div class="choose" v-show="choose.push_num && obj.isMy == 0" v-bind:class="{swipe_active:choose.push_num,'swipe_default':!choose.push_num  }">
             <chooseNum :param="choose" v-on:addCart="addBuy(obj.id)"></chooseNum>
         </div>
@@ -493,6 +495,21 @@ export default {
     data() {
         let _self = this;
         return {
+            footerArr: [{
+                title: '产品产地'
+            }, {
+                title: '产品规格'
+            }, {
+                title: '产品库存'
+            }, {
+                title: '产品数量'
+            }, {
+                title: '产品供样'
+            }, {
+                title: '上架时间'
+            }, {
+                title: '产品卖点'
+            }],
             loadApps: {
                 show: true
             },
@@ -503,6 +520,8 @@ export default {
                 number: '',
                 sampleNumber: '',
                 push_num: false,
+                especial:'',
+                type:''
             },
             my_param: {
                 url: '',
@@ -512,7 +531,7 @@ export default {
             param: {
                 name: '商品详情',
                 topissue: true,
-                mycart: true
+                resourceCart: true
             },
             imageShow: true,
             number: 0,
@@ -664,8 +683,11 @@ export default {
                     _self.choose.sampleAmount = result.sampleAmount;
                     _self.choose.sampleUnit = result.sampleUnit;
                     _self.choose.value = result.moq;
+                    _self.choose.especial = result.especial;
+                    _self.choose.type = result.type;
                     _self.param.id = result.id;
                     _self.param.isMy = result.isMy;
+                    if(result.isMy == 1)_self.choose.push_num = false;
                     if (result.image && result.image.length > 0) {
                         shareData.imgUrl = result.image[0];
                     }
@@ -854,6 +876,7 @@ export default {
             _self.choose.push_num = true;
         })
         common.$on('getInfo', function (item) {
+            
             _self.refurbish(id);
         })
         common.$on('infor_choose', function (item) {

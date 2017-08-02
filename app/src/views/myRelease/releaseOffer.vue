@@ -146,7 +146,7 @@ export default {
                 content: '确定修改报价信息后将等待审核！',
                 canceltext: '再想想',
                 confirmtext: '确认',
-                show: false
+                show: false,
             },
             param: {
                 name: '正在报价',
@@ -630,8 +630,11 @@ export default {
                     // common.$emit('inforMyOffer', 1);
                     // _self.$router.push('/myOffer')
                     console.log(1, suc.data.biz_result.offerId)
-                    common.$emit('inforReleaseOfferSuccess', suc.data.biz_result.offerId);
-                    _self.$router.push('/releaseOfferSuccess?type=' + suc.data.biz_result.offerId);
+                    common.$emit('inforReleaseOfferSuccess', {
+                        id:suc.data.biz_result.offerId,
+                        back:_self.accept_type
+                    });
+                    _self.$router.replace('/releaseOfferSuccess?type=' + suc.data.biz_result.offerId+';'+_self.accept_type);
                     common.$emit('message', suc.data.msg);
                 } else {
                     common.$emit('message', suc.data.msg);

@@ -223,6 +223,8 @@ export default {
         return {
             param: {
                 name: '完成报价',
+                // backNeed: true,
+                // backRouter: '/urgentNeed'
             },
             id: '',
             todos: []
@@ -238,8 +240,8 @@ export default {
                 biz_method: 'sameTypeIntentionList',
                 biz_param: {
                     offerId: id,
-                    pn:1,
-                    pSize:5
+                    pn: 1,
+                    pSize: 5
                 }
             }
             if (common.KEY) {
@@ -265,14 +267,16 @@ export default {
         lookList() {
             let _self = this;
             common.$emit('inforMyOffer', 1);
-            _self.$router.push('/myOffer');
+            common.$emit('setParam','skipLogin',true);
+            _self.$router.replace('/myOffer');
         },
         goUrgent() {
             let _self = this;
             common.$emit('Urgentneed', {
                 keyWord: ''
             })
-            _self.$router.push('/urgentNeed')
+            common.$emit('setParam','backHome',true);
+            _self.$router.replace('/urgentNeed')
         },
         goNeedDetail(id) {
             let _self = this;
@@ -280,7 +284,7 @@ export default {
                 id: id,
                 type: 'my'
             });
-            this.$router.push('needDetails/' + id + '?type=my');
+            this.$router.replace('needDetails/' + id + '?type=my');
         }
     },
     components: {
@@ -289,11 +293,12 @@ export default {
     },
     created() {
         let _self = this;
-        _self.id = _self.$route.query.type;
+        _self.id = _self.$route.query.type.split(';')[0];
+        let back = _self.$route.query.type.split(';')[1];
         _self.getHttp(_self.id)
-        common.$on('inforReleaseOfferSuccess', function (id) {
-            _self.id = id;
-            _self.getHttp(id)
+        common.$on('inforReleaseOfferSuccess', function (type) {
+            _self.id = type.id;
+            _self.getHttp(type.id);      
         })
     },
     mounted() {

@@ -10,63 +10,76 @@
                     <!--  <mt-cell-swipe :right="rightButtons"> -->
                     <!-- <cartList></cartList> -->
                     <!-- :param="cart_data" -->
-                    <div v-bind:class="test">
-                        <div class="top">
-                            <img src="/static/icons/quan.png" class="fit" @click.prevent="confirm(index)" v-show='!cart[index].show'>
-                            <img src="/static/icons/buy_quan.png" class="fit" @click.prevent="cancel(index)" v-show='cart[index].show'>
-                            <!-- v-show="cart[index].show" -->
-                            <p class="name">{{todo.breedName}}</p>
-                            <img src="/static/icons/sample.png" v-if="todo.cartSample == 1" class="cart_sample">
-                            <div v-show="headParam.show">
-                                <p class="price" v-if="!todo.cartSample">{{todo.price}}元/{{todo.unit}}</p>
-                                <p class="price" v-if="todo.cartSample">{{todo.sampleAmount }}元/份</p>
+                     <mt-cell-swipe :right="[{
+                              content: '删除',
+                              style: { background: 'red', color: '#fff'},
+                              handler:()=> myDelete(todo)}]"> 
+
+ 
+                        <div v-bind:class="test">
+                            <div class="top">
+                                <img src="/static/icons/quan.png" class="fit" @click.prevent="confirm(index)" v-show='!cart[index].show'>
+                                <img src="/static/icons/buy_quan.png" class="fit" @click.prevent="cancel(index)" v-show='cart[index].show'>
+                                <!-- v-show="cart[index].show" -->
+                                <p class="name">{{todo.breedName}}</p>
+                                <img src="/static/icons/sample.png" v-if="todo.cartSample == 1" class="cart_sample">
+                                <div v-show="headParam.show">
+                                    <p class="price" v-if="!todo.cartSample">{{todo.price}}元/{{todo.unit}}</p>
+                                    <p class="price" v-if="todo.cartSample">{{todo.sampleAmount }}元/份</p>
+                                </div>
+                                <div class="price" @click="dete(todo.cartId,index,todo)" v-show="!headParam.show">
+                                    删除
+                                </div>
                             </div>
-                            <div class="price" @click="dete(todo.cartId,index,todo)" v-show="!headParam.show">
-                                删除
-                            </div>
-                        </div>
-                        <div class="bottom">
-                            <img :src="todo.image[0]" class="drug">
-                            <div class="content">
-                                <p class="stock" v-if="!todo.cartSample">库存:<span>{{todo.number}}{{todo.unit}}</span></p>
-                                <p class="stock" v-if="todo.cartSample">库存:<span>{{todo.sampleNumber}}份</span></p>
-                                <p class="location">产地:<span>{{todo.location}}</span></p>
-                                <div class="operate">
-                                    <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:subtraction,index:index}">—</button>
-                                    <!--  -->
-                                    <p class="box" @click.prevent="changeValue(index)">
-                                        <input type="number" v-model="todo.cartNumber" disabled=disabled>
+                            <div class="bottom">
+                                <img :src="todo.image[0]" class="drug">
+                                <div class="content">
+                                    <p class="stock" v-if="!todo.cartSample">库存:
+                                        <span>{{todo.number}}{{todo.unit}}</span>
                                     </p>
-                                    <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:addition,index:index}">+</button>
-                                    <!--  -->
+                                    <p class="stock" v-if="todo.cartSample">库存:
+                                        <span>{{todo.sampleNumber}}份</span>
+                                    </p>
+                                    <p class="location">产地:
+                                        <span>{{todo.location}}</span>
+                                    </p>
+                                    <div class="operate">
+                                        <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:subtraction,index:index}">—</button>
+                                        <!--  -->
+                                        <p class="box" @click.prevent="changeValue(index)">
+                                            <input type="number" v-model="todo.cartNumber" disabled=disabled>
+                                        </p>
+                                        <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:addition,index:index}">+</button>
+                                        <!--  -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- <div class="dete" v-show="param.t_show">删除</div> -->
-                    <!-- </mt-cell-swipe> -->
+                        <!-- <div class="dete" v-show="param.t_show">删除</div> -->
+                        <!-- </mt-cell-swipe> -->
+                     </mt-cell-swipe> 
                 </li>
             </ul>
             <!-- </mt-loadmore> -->
             <settleAccounts class="account" v-if="cart.length !== 0"></settleAccounts>
             <!-- <div class="pop_up">
-                <div class="pop_box">
-                    <div class="title">
-                        请选择商品数量:
-                    </div>
-                    <div class="but">
-                        <button class="mint-button mint-button--primary mint-button--small gray">—</button>
-                        <p class="box">
-                            <input type="number" disabled=disabled>
-                        </p>
-                        <button class="mint-button mint-button--primary mint-button--small gray">+</button>
-                    </div>
-                </div>
-                <div class="foo">
-                    <div class="foo_cancel">取消</div>
-                    <div class="foo_confirm">确定</div>
-                </div>
-            </div> -->
+                                        <div class="pop_box">
+                                            <div class="title">
+                                                请选择商品数量:
+                                            </div>
+                                            <div class="but">
+                                                <button class="mint-button mint-button--primary mint-button--small gray">—</button>
+                                                <p class="box">
+                                                    <input type="number" disabled=disabled>
+                                                </p>
+                                                <button class="mint-button mint-button--primary mint-button--small gray">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="foo">
+                                            <div class="foo_cancel">取消</div>
+                                            <div class="foo_confirm">确定</div>
+                                        </div>
+                                    </div> -->
             <err :param="err" v-if="cart.length == 0"></err>
         </div>
     </div>
@@ -90,183 +103,178 @@ import {
 
 export default {
     data() {
-            return {
-                err: {
-                    url: "/static/icons/no-cart.png",
-                    err: '该购物车暂无商品',
-                    router: 'resource',
-                    next_step: '去采购'
-                },
-                param: {
-                    name: '购物车',
-                    show: true,
-                    t_show: false
-                },
-                cart_data: {
-                    show: true,
-                    t_show: false,
-                    price: '',
-                    value: 1
-                },
-                money: {
-                    price: '0.00'
-                },
-                todos: [],
-                list: [],
-                topStatus: '',
-                wrapperHeight: 0,
-                allLoaded: false,
-                bottomStatus: ''
-
-            }
-        },
-        components: {
-            cartHead,
-            settleAccounts,
-            cartList,
-            err
-        },
-        computed: {
-            cart() {
-                return this.$store.state.cart.cartList;
+        return {
+            err: {
+                url: "/static/icons/no-cart.png",
+                err: '该购物车暂无商品',
+                router: 'resource',
+                next_step: '去采购'
             },
-            headParam() {
-                return this.$store.state.cart.headParam;
+            param: {
+                name: '购物车',
+                show: true,
+                t_show: false
             },
-            httpPraram() {
-                return this.$store.state.cart.http_praram;
-            }
-        },
-        /* watch: {
-             list: function(newValue, oldValue) {
-                 for (var i = 0; i < newValue.length; i++) {
-                     if (newValue[i].cartNumber !== oldValue[i].cartNumber) {
-                         console.log(i);
+            cart_data: {
+                show: true,
+                t_show: false,
+                price: '',
+                value: 1
+            },
+            money: {
+                price: '0.00'
+            },
+            todos: [],
+            list: [],
+            topStatus: '',
+            wrapperHeight: 0,
+            allLoaded: false,
+            bottomStatus: ''
 
-                     }
+        }
+    },
+    components: {
+        cartHead,
+        settleAccounts,
+        cartList,
+        err
+    },
+    computed: {
+        cart() {
+            return this.$store.state.cart.cartList;
+        },
+        headParam() {
+            return this.$store.state.cart.headParam;
+        },
+        httpPraram() {
+            return this.$store.state.cart.http_praram;
+        }
+    },
+    /* watch: {
+         list: function(newValue, oldValue) {
+             for (var i = 0; i < newValue.length; i++) {
+                 if (newValue[i].cartNumber !== oldValue[i].cartNumber) {
+                     console.log(i);
+
                  }
              }
-         },*/
-        methods: {
+         }
+     },*/
+    methods: {
+        myDelete(todo) {
+            console.log(todo.breedName)
+        },
+        handleBottomChange(status) {
+            this.bottomStatus = status;
+        },
+        loadBottom(id) {
+            /*setTimeout(() => {
+                if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
+                    this.allLoaded = true;
+                } else {
+                    this.httpPraram.page++;
+                    this.getHttp(function() {
+                        _self.$refs.loadmore.onBottomLoaded(id);
+                    });
+                }
+            }, 1500);*/
+        },
+        handleTopChange(status) {
+            this.topStatus = status;
+        },
+        loadTop(id) {
+            setTimeout(() => {
+                let firstValue = this.list[0];
+                for (let i = 1; i <= 10; i++) {
+                    this.list.unshift(firstValue - i);
+                }
+                this.$refs.loadmore.onTopLoaded(id);
+            }, 500);
+        },
+        subtraction(index) {
+            let _self = this;
+            //todo.todo.value = Number(todo.todo.value) - 1;
+            //console.log(todo.todo)
+            _self.$store.dispatch('cutOrderNum', index.index);
 
-            handleBottomChange(status) {
-                this.bottomStatus = status;
-            },
-            loadBottom(id) {
-                /*setTimeout(() => {
-                    if (this.todos.length < this.httpPraram.page * this.httpPraram.pageSize) {
-                        this.allLoaded = true;
-                    } else {
-                        this.httpPraram.page++;
-                        this.getHttp(function() {
-                            _self.$refs.loadmore.onBottomLoaded(id);
-                        });
-                    }
-                }, 1500);*/
-            },
-            handleTopChange(status) {
-                this.topStatus = status;
-            },
-            loadTop(id) {
-                setTimeout(() => {
-                    let firstValue = this.list[0];
-                    for (let i = 1; i <= 10; i++) {
-                        this.list.unshift(firstValue - i);
-                    }
-                    this.$refs.loadmore.onTopLoaded(id);
-                }, 500);
-            },
-            subtraction(index) {
-                let _self = this;
-                //todo.todo.value = Number(todo.todo.value) - 1;
-                //console.log(todo.todo)
-                _self.$store.dispatch('cutOrderNum', index.index);
-
-            },
-            addition(index) {
-                let _self = this;
-                //todo.todo.value = Number(todo.todo.value) + 1;
-                _self.$store.dispatch('addOrderNum', index.index);
-            },
-            confirm(index) {
-                let _self = this;
-                _self.$store.dispatch('showOrder', index);
-                /*_self.cart.show = !_self.cart.show;*/
-            },
-            cancel(index) {
-                let _self = this;
-                _self.$store.dispatch('hideOrder', index);
-            },
-            changeValue(index) {
-                common.$emit('prompt', {
-                    index: index,
-                    text: '请输入数量',
-                    title: '您输入的数量是'
-                })
-                let _self = this;
-                MessageBox.prompt(' ', '请输入数量').then(({
+        },
+        addition(index) {
+            let _self = this;
+            //todo.todo.value = Number(todo.todo.value) + 1;
+            _self.$store.dispatch('addOrderNum', index.index);
+        },
+        confirm(index) {
+            let _self = this;
+            _self.$store.dispatch('showOrder', index);
+            /*_self.cart.show = !_self.cart.show;*/
+        },
+        cancel(index) {
+            let _self = this;
+            _self.$store.dispatch('hideOrder', index);
+        },
+        changeValue(index) {
+            common.$emit('prompt', {
+                index: index,
+                text: '请输入数量',
+                title: '您输入的数量是'
+            })
+            let _self = this;
+            MessageBox.prompt(' ', '请输入数量').then(({
                     value
                 }) => {
-                    if (value) {
-                        _self.$store.dispatch('changeValue', {
-                            value: value,
-                            index: index
-                        });
-                    }
-                }, () => {
-                    console.log()
-                });
-            },
-            leftButtonHandler(evt) {
-                console.log(123);
-            },
-            dete(id, index, todo) {
-
-                if (todo.show) {
-                    this.$store.dispatch('deteCart', {
-                        id: id,
+                if (value) {
+                    _self.$store.dispatch('changeValue', {
+                        value: value,
                         index: index
                     });
                 }
+            }, () => {
+                console.log()
+            });
+        },
+        leftButtonHandler(evt) {
+            console.log(123);
+        },
+        dete(id, index, todo) {
 
-
-
-                /*if (todo.show) {
-                    this.$store.dispatch('deteCart', {
-                        id: id,
-                        index: index
-                    });
-                }*/
-                /*this.$store.dispatch('getHttp');*/
+            if (todo.show) {
+                this.$store.dispatch('deteCart', {
+                    id: id,
+                    index: index
+                });
             }
-        },
 
-        mounted() {
-            let _self = this;
-            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
-            /*this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top;*/
-        },
-        created() {
-            /*for (let i = 1; i <= 10; i++) {
-                this.list.push(i);
+
+
+            /*if (todo.show) {
+                this.$store.dispatch('deteCart', {
+                    id: id,
+                    index: index
+                });
             }*/
-            /*this.$http.get('/static/data/list.json').then((response) => {
-                this.todos = response.data;
-                console.log(response.data)
-            }, (response) => {
-                console.log(response.data)
-            });*/
-            let _self = this;
-            this.$store.dispatch('getHttp');
-            this.rightButtons = [{
-                content: '删除',
-                style: {
-                    background: 'red',
-                    color: '#fff'
-                },
-                handler: () => console.log(1111)
-            }];
-        },
+            /*this.$store.dispatch('getHttp');*/
+        }
+    },
+
+    mounted() {
+        let _self = this;
+        this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        /*this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top;*/
+    },
+    created() {
+        /*for (let i = 1; i <= 10; i++) {
+            this.list.push(i);
+        }*/
+        /*this.$http.get('/static/data/list.json').then((response) => {
+            this.todos = response.data;
+            console.log(response.data)
+        }, (response) => {
+            console.log(response.data)
+        });*/
+        let _self = this;
+        this.$store.dispatch('getHttp');
+        
+    },
 
 
 

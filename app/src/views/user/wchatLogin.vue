@@ -69,7 +69,7 @@ export default {
             let state = behind.split('&state=')[1];
             this.code = behind.split('&')[0];
             this.getOpenId();
-        }else{
+        } else {
             this.wxShow = true;
         }
     },

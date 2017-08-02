@@ -497,7 +497,7 @@ export default {
                 id:_self.id,
                 accept_type:type
             });
-            this.$router.push('/releaseOffer/' + this.id + '?type='+type);
+            this.$router.replace('/releaseOffer/' + this.id + '?type='+type);
         },
         popUp(imgArr) {
             let _self = this;

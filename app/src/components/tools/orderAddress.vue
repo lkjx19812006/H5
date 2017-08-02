@@ -1,15 +1,66 @@
+<style lang="less" scoped>
+.address_confirm {
+    background-color: #fff;
+    font-size: 15px;
+    color: #333;
+    padding: 15px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .box{
+        flex:1;
+    }
+    .person {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .image {
+            width: 35px;
+            img {
+                width: 14px;
+            }
+        }
+        .word {
+            line-height: 24px;
+            text-align: left;
+            flex: 1;
+        }
+    }
+    .my_address {
+        margin-top: 10px;
+    }
+    .right_arrow{
+        height:18px;
+        padding: 0px 9px 0 20px;
+    }
+}
+</style>
 <template>
-    <div class=" address_confirm">
-        <div class="left_district">
-            <div class="content">
-                <div class="left_content"><img src="/static/icons/consignee.png">收货人：</div>
-                <div v-show="param.contactName"><span>{{param.contactName}}</span>{{param.contactPhone}}</div>
-                <div v-show="!param.contactName"><span>未填写</span>未填写</div>
+    <div class="address_confirm">
+        <div class="box">
+            <div class="person">
+                <div class="image">
+                    <img src="/static/images/person-icon.png" alt="">
+                </div>
+                <div class="word">
+                    收件人:&nbsp;&nbsp;
+                    <span v-show="param.contactName">{{param.contactName}}</span>
+                    <span v-show="!param.contactName">未填写</span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span v-show="param.contactPhone">{{param.contactPhone}}</span>
+                    <span v-show="!param.contactPhone">未填写</span>
+                </div>
             </div>
-            <div class="content address">
-                <div class="left_content"><img src="/static/icons/receipt_address.png">收货地址：</div>
-                <div class="address_detail" v-show="param.contactName">{{param.address}}</div>
-                <div class="address_detail" v-show="!param.contactName">未填写</div>
+            <div class="person my_address">
+                <div class="image">
+                    <img src="/static/images/address-icon.png" alt="">
+                </div>
+                <div class="word">
+                    地址:&nbsp;&nbsp;
+                    <span v-show="param.contactName">{{param.address}}</span>
+                    <span v-show="!param.contactName">未填写</span>
+                </div>
             </div>
         </div>
         <img src="/static/images/right.png" class="right_arrow">
@@ -26,14 +77,14 @@ export default {
     },
     created() {
         let _self = this;
-        common.$on('backAddress', function(todo) {
+        common.$on('backAddress', function (todo) {
             _self.param.id = todo.id;
             _self.param.address = todo.address;
             _self.param.contactPhone = todo.contactPhone;
             _self.param.contactName = todo.contactName;
         })
 
-        common.$on('edit-Address', function(todo) {
+        common.$on('edit-Address', function (todo) {
             if (_self.param.id == todo.id) {
                 _self.param.address = todo.address;
                 _self.param.contactPhone = todo.contactPhone;
@@ -45,62 +96,4 @@ export default {
     methods: {}
 }
 </script>
-<style scoped>
-.address_confirm {
-    background: #fff;
-    float: left;
-    width: 100%;
-    padding: 10px;
-    position: relative;
-}
 
-.address_confirm .left_district {
-    float: left;
-    width: 100%;
-    padding-right: 20px;
-}
-
-.address_confirm .left_district .content {
-    float: left;
-    width: 100%;
-    font-size: 14px;
-    line-height: 23px;
-    color: #333;
-}
-
-.address_confirm .left_district .content span {
-    border-right: 1px solid #666;
-    padding-right: 3px;
-    margin-right: 3px;
-}
-
-.address_confirm .left_district .address {
-    margin-top: 5px;
-}
-
-.address_confirm .left_district .content .left_content {
-    float: left;
-    text-align: right;
-    min-width: 90px;
-}
-
-.address_confirm .left_district .content div {
-    text-align: left;
-}
-
-.address_confirm .left_district .content img {
-    float: left;
-    max-height: 20px;
-}
-
-.address_confirm .right_arrow {
-    position: absolute;
-    right: 10px;
-    max-height: 20px;
-    margin-top: 15px;
-}
-
-.address_confirm .left_district .address .address_detail {
-    padding-left: 90px;
-}
-</style>

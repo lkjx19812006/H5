@@ -3,11 +3,11 @@
     width: 100%;
     height: 50px;
     background: #EC6817;
-    position:relative;
-    .follow{
-        height:20px;
+    position: relative;
+    .follow {
+        height: 20px;
         position: absolute;
-        top:15px;
+        top: 15px;
     }
 }
 
@@ -75,6 +75,18 @@
 .my-header .active {
     color: #FA6705;
 }
+
+.my-header {
+    .header_contentt {
+        .mycart {
+            .resource_cart{
+                margin-top:14px;
+            }
+        }
+    }
+}
+
+
 </style>
 <template>
     <div class="my-header">
@@ -89,6 +101,9 @@
             <p v-show="param.t_show" @click="jumpRevise">完成</p>
             <div class="mycart" v-show="param.mycart" @click="jump(param)">
                 <img src="/static/icons/cart.png">
+            </div>
+            <div class="mycart" v-show="param.resourceCart" @click="jump(param)">
+                <img src="/static/images/resource-detail-cart.png" class="resource_cart">
             </div>
             <img src="/static/icon/follow.png" class="follow" v-on:click="myAttention(0)" v-if="obj && obj.isAttention">
             <img src="/static/icon/unfollow.png" class="follow" v-on:click="myAttention(1)" v-if="obj && !obj.isAttention">
@@ -107,7 +122,7 @@ export default {
     },
     props: {
         param: {},
-        obj:{
+        obj: {
 
         }
     },

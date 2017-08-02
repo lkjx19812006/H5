@@ -52,7 +52,7 @@
 }
 </style>
 <template>
-    <div class="load_app" v-show="loadApps.show">
+    <div class="load_app">
         <img src="/static/icon/load-app-logo.png" class="logo">
         <div class="title">
             <div>

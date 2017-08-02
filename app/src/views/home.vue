@@ -57,7 +57,7 @@
             </mt-tab-item>
         </mt-tabbar>
         
-        <loadApp :loadApps="loadApps" class="load_apps"></loadApp>
+        <loadApp :loadApps="loadApps" class="load_apps" v-show="loadApps.show"></loadApp>
         <customPopUp  :popshow="popshow" v-show="selected=='mine' && popshow.show"></customPopUp>
     </div>
 </template>
