@@ -151,6 +151,7 @@ module.exports = {
         { name: 'intentionNotice', path: '/intentionNotice', component: intentionNotice },
         { name: 'systemMessage', path: '/systemMessage', component: systemMessage },
         { name: 'authPhoto', path: '/authPhoto', component: authPhoto },
+        { path: '/needDetail/:id', redirect: '/needDetails/:id' },
         { path: '*', redirect: '/home' }
     ]
 }

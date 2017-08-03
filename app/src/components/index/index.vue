@@ -900,7 +900,7 @@ export default {
         },
         jump(path) {
             let _self = this;
-            if (!common.KEY) {
+            if (!common.KEY || !this.userInfor.phone) {
                 function loadApp() {
                     if (common.wxshow) {
                         common.getWxUrl();
@@ -933,7 +933,7 @@ export default {
             if (path) {
                 console.log(321321)
                 if (path == '/majorBusiness') {
-                    if (!common.KEY) {
+                    if (!common.KEY  || !this.userInfor.phone) {
                         function loadApp() {
                             if (common.wxshow) {
                                 common.getWxUrl();
@@ -1001,7 +1001,7 @@ export default {
         },
         message() {
             let _self = this;
-            if (!common.KEY) {
+            if (!common.KEY || !this.userInfor.phone) {
                 function loadApp() {
                     common.$emit('setParam', 'backRouter', 'message');
                     if (common.wxshow) {
@@ -1040,7 +1040,7 @@ export default {
         jumpLink(url, myLength, index) {
             let _self = this;
             if (index == myLength - 1) {
-                if (!common.KEY) {
+                if (!common.KEY  || !this.userInfor.phone) {
                     function loadApp() {
                         if (common.wxshow) {
                             common.getWxUrl();
@@ -1071,7 +1071,7 @@ export default {
         },
         loginJump(router) {
             let _self = this;
-            if (!common.KEY) {
+            if (!common.KEY  || !this.userInfor.phone) {
                 function loadApp() {
                     if (common.wxshow) {
                         common.getWxUrl();
@@ -1128,7 +1128,7 @@ export default {
                 _self.drugGuidePrice();
                 _self.resourceHttp();
                 _self.getImgArr();
-                if (common.KEY) _self.$store.dispatch('getMessage');
+                if (common.KEY && this.userInfor.phone) _self.$store.dispatch('getMessage');
                 _self.$refs.loadmore.onTopLoaded(id);
             }, 500);
         },
@@ -1164,7 +1164,7 @@ export default {
             if (common.KEY) _self.$store.dispatch('getUserInfor');
         })
         common.$on('getInfo', function (item) {
-            if (common.KEY) _self.$store.dispatch('getUserInfor'); //来自登录，调用下个人信息接口
+            //if (common.KEY) _self.$store.dispatch('getUserInfor'); //来自登录，调用下个人信息接口
             _self.resourceHttp();
             _self.$store.dispatch('defaultMessage');
             if (common.KEY) _self.$store.dispatch('getMessage');

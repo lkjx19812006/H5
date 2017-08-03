@@ -125,6 +125,7 @@ export default {
                         common.SID = window.localStorage.SID;
                         common.getDate();
                         common.$emit('getInfo', 1);
+                        _self.$store.dispatch('getUserInfor');
                         if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {
                             if (_self.id) {
                                 common.$emit('resourceDetail', _self.id); //点击购买时未登录，登陆成功之后提醒商品那个详情页面刷新
@@ -180,7 +181,7 @@ export default {
                         common.getDate();
                         /*_self.$router.push('/home');*/
                         // _self.$router.replace(common.pageParam.backRouter);
-
+                        _self.$store.dispatch('getUserInfor');
                         common.$emit('getInfo', 1);
 
                         if (common.pageParam.backRouter.split('/')[0] == 'resourceDetail') {

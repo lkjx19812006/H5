@@ -311,7 +311,7 @@ const mutations = {
                 }
             }
         }
-        console.log(index)
+        console.log(index);
     },
     HIDE_ORDER(state, index) {
         state.cartList[index].show = false;
@@ -400,7 +400,7 @@ const mutations = {
             }
         }
         state.all_price = (big_price + sample_price).toFixed(2);
-        console.log(22,state.all_price);
+        console.log(22, state.all_price);
     },
     ALL_ORDER_SHOW(state) {
         state.all_show = true;

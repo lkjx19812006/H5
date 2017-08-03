@@ -1,172 +1,25 @@
 <style lang="less" scoped>
-// .multiple {
-//     position: relative;
-//     /*padding-top: 50px;*/
-//     overflow: hidden;
-//     float: left;
-// }
-// .multiple .head {
-//     /* position: fixed;
-//     top: 0;*/
-//     width: 100%;
-//     z-index: 2000;
-// }
-// .multiple .page-loadmore-wrapper {
-//     width: 100%;
-//     -webkit-overflow-scrolling: touch;
-//     overflow: scroll;
-//     float: left;
-//     padding-bottom: 50px;
-// }
-// .multiple .test {
-//     width: 100%;
-//     float: left;
-// }
-// .multiple .test_nor {
-//     width: 100%;
-//     float: left;
-//     margin-left: -20%;
-// }
-// .multiple .dete {
-//     width: 20%;
-//     background: green;
-//     float: left;
-//     height: 147px;
-//     line-height: 147px;
-// }
-// .multiple ul {
-//     width: 100%;
-//     float: left;
-//     padding-top: 10px;
-//     background: #F2F2F2;
-//     /*padding-bottom: 50px;*/
-// }
-// .multiple ul li {
-//     width: 100%;
-//     float: left;
-//     margin-bottom: 10px;
-// }
-// .multiple ul li .top {
-//     padding: 10px 15px;
-//     position: relative;
-//     float: left;
-//     background: white;
-//     width: 100%;
-//     border-top: 1px solid #ccc;
-// }
-// .multiple ul li .top .fit {
-//     position: absolute;
-//     left: 15px;
-//     top: 10px;
-//     width: 20px;
-// }
-// .multiple ul li .top .name {
-//     float: left;
-//     margin-left: 0px;
-//     font-size: 14px;
-//     color: #4c4c4c;
-// }
-// .multiple ul li .top .price {
-//     float: right;
-//     font-size: 12px;
-// }
-// .multiple ul li .top .price span {
-//     color: #FA6705;
-// }
-// .multiple ul li .bottom {
-//     float: left;
-//     width: 100%;
-//     background: white;
-//     padding: 15px;
-// }
-// .multiple ul li .bottom img {
-//     width: 30%;
-//     height: 89px;
-//     float: left;
-// }
-// .multiple ul li .content {
-//     float: left;
-//     text-align: left;
-//     padding-left: 15px;
-//     width: 70%;
-//     position: relative;
-// }
-// .multiple ul li .content img {
-//     width: 15px;
-//     height: 1.7rem;
-//     float: left;
-// }
-// .multiple ul li .content .breedname {
-//     font-size: 15px;
-//     line-height: 15px;
-//     margin-bottom: 13px;
-//     float: left;
-//     margin-right: 3px;
-// }
-// .multiple ul li .content .num {
-//     position: absolute;
-//     right: 15px;
-//     bottom: 0;
-//     font-size: 15px;
-// }
-// .multiple ul li .content .unit_price {
-//     font-size: 15px;
-//     line-height: 15px;
-//     text-align: left;
-//     margin-left: -2px;
-//     width: 100%;
-//     float: left;
-// }
-// .multiple ul li .content .stock {
-//     font-size: 13px;
-//     line-height: 13px;
-//     margin-bottom: 8px;
-//     float: left;
-//     width: 100%;
-// }
-// .multiple ul li .content .location {
-//     font-size: 13px;
-//     line-height: 13px;
-//     margin-bottom: 12px;
-//     float: left;
-//     width: 100%;
-// }
-// .multiple ul li .content .operate {
-//     float: right;
-// }
-// .multiple ul li .content .operate button {
-//     width: 38px;
-//     height: 34px;
-//     background: #F5F5F5;
-//     margin: 0;
-//     color: black;
-// }
-// .multiple ul li .content .operate>input {
-//     width: 45px;
-//     height: 34px;
-//     color: black;
-//     text-align: center;
-// }
-// .multiple .account {
-//     position: fixed;
-//     bottom: 0px;
-// }
 .multiple {
     overflow: hidden;
     position: relative;
     height: 100vh;
-    .head {
-        margin-bottom: 10px;
-    }
+    .head {}
     .main {
         overflow-y: scroll;
+        padding-bottom: 60px;
+        .content_box{
+
+        }
         .content {
+            margin-top: 10px;
             background-color: #fff;
-            padding: 15px 0 10px 12px;
+            padding: 15px 0 0px 12px;
             .top {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #e6e6e6;
                 .image {
                     width: 75px;
                     height: 75px;
@@ -177,7 +30,7 @@
                     }
                 }
                 .breed {
-                    flex:1;
+                    flex: 1;
                     text-align: left;
                     margin-left: 12px;
                     .breed_name {
@@ -194,14 +47,66 @@
                         font-size: 17px;
                     }
                 }
-                .number{
-                    height:20px;
-                    margin-top:55px;
-                    font-size:13px;
+                .number {
+                    height: 20px;
+                    margin-top: 55px;
+                    font-size: 13px;
                     line-height: 20px;
-                    margin-right:12px;
+                    margin-right: 12px;
                 }
             }
+            .center {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                font-size: 16px;
+                line-height: 16px;
+                justify-content: space-between;
+                padding: 13px 15px 13px 3px;
+                border-bottom: 1px solid #e6e6e6;
+                color: #333;
+                .left {
+                    color: #333;
+                }
+                .right {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    img {
+                        width: 27px;
+                    }
+                    .values {
+                        border: none;
+                        width: 50px;
+                        text-align: center;
+                    }
+                }
+                .freight {
+                    color: #666;
+                }
+            }
+            .subtotal {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 18px 0;
+                .title {
+                    font-size: 16px;
+                    color: #999;
+                    padding-left: 3px;
+                }
+                .price {
+                    padding-right: 15px;
+                    font-size: 16px;
+                    color: #fa6705;
+                }
+            }
+        }
+        .account {
+            position: absolute;
+            bottom: 0px;
+            width:100%;
         }
     }
 }
@@ -213,50 +118,41 @@
             <orderAddress :param="person"></orderAddress>
         </div>
         <div class="main" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <div class="content" v-for="todo in cart">
-                <div class="top">
-                    <div class="image">
-                        <img :src="todo.image[0]">
+            <div class="content_box">
+                <div class="content" v-for="todo in cart">
+                    <div class="top">
+                        <div class="image">
+                            <img :src="todo.image[0]">
+                        </div>
+                        <div class="breed">
+                            <div class="breed_name">{{todo.breedName}}</div>
+                            <div class="spec">规格: {{todo.spec}}</div>
+                            <div class="spec">产地: {{todo.location}}</div>
+                            <div class="price">￥{{todo.price}}/{{todo.unit}}</div>
+                        </div>
+                        <div class="number">x{{todo.cartNumber}}</div>
                     </div>
-                    <div class="breed">
-                        <div class="breed_name">{{todo.breedName}}</div>
-                        <div class="spec">规格: {{todo.spec}}</div>
-                        <div class="spec">产地: {{todo.location}}</div>
-                        <div class="price">￥{{todo.price}}/{{todo.unit}}</div>
+                    <div class="center" v-for="(item,index) in centerArr">
+                        <div class="left">{{item.title}}</div>
+                        <!-- <div class="right" v-show="index == 0">
+                                    <img src="/static/images/subtraction.png" class="subtraction" v-tap="{methods:subtraction,todo:todo}">
+                                    <input type="number" v-model="todo.cartNumber" class="values">
+                                    <img src="/static/images/addition.png" class="addition" v-tap="{methods:addition}">
+                                </div> -->
+                        <div class="right freight" v-show="index == 0">
+                            待定
+                        </div>
                     </div>
-                    <div class="number">x{{todo.cartNumber}}</div>
+                    <div class="subtotal">
+                        <div class="title" v-if="todo.cartSample == 0">大货订单</div>
+                        <div class="title" v-if="todo.cartSample == 1">样品订单</div>
+                        <div class="price" v-if="todo.cartSample == 0">小计: ￥{{Number(todo.price)*Number(todo.cartNumber) | floatType}}元</div>
+                        <div class="price" v-if="todo.cartSample == 1">小计: ￥{{Number(todo.sampleAmount)*Number(todo.cartNumber) | floatType}}元</div>
+                    </div>
                 </div>
             </div>
+            <placeOrder class="account" v-on:submitCartOrder="confirm"></placeOrder>
         </div>
-        <!-- <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                        <mt-loadmore>
-                            <ul id="list">
-                                <li v-for="todo in cart">
-                                    <div v-bind:class="test">
-                                        <div class="bottom">
-                                            <img :src="todo.image[0]" class="drug">
-                                            <div class="content">
-                                                <p class="breedname">{{todo.breedName}}</p>
-                                                <img src="/static/icons/sample.png" v-if="todo.cartSample == 1">
-                                                <p class="stock">规格:<span>统货</span></p>
-                                                <p class="location">产地:<span>{{todo.location}}</span></p>
-                                                <p class="unit_price" v-if="todo.cartSample == 0">{{todo.price}}元/{{todo.unit}}</p>
-                                                <p class="unit_price" v-if="todo.cartSample == 1">{{todo.sampleAmount}}元/份</p>
-                                                <div class="num">x{{todo.cartNumber}}</div>
-                                            </div>
-                                        </div>
-                                        <div class="top">
-                                            <p class="name" v-if="todo.cartSample == 0">大货订单</p>
-                                            <p class="name" v-if="todo.cartSample == 1">样品订单</p>
-                                            <p class="price" v-if="todo.cartSample == 0">小计: <span>￥{{Number(todo.price)*Number(todo.cartNumber) | floatType}}元</span></p>
-                                            <p class="price" v-if="todo.cartSample == 1">小计: <span>￥{{Number(todo.sampleAmount)*Number(todo.cartNumber) | floatType}}元</span></p>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </mt-loadmore>
-                        <placeOrder class="account" v-on:submitCartOrder="confirm"></placeOrder>
-                    </div> -->
     </div>
 </template>
 <script>
@@ -275,6 +171,12 @@ export default {
         return {
             addressId: '',
             cart: [],
+            // {
+            //     title: '购买数量'
+            // }, 
+            centerArr: [{
+                title: '运输费用'
+            }],
             param: {
                 name: '订单确认'
 
@@ -292,11 +194,6 @@ export default {
             wrapperHeight: 0,
             allLoaded: false,
             bottomStatus: '',
-            perfect: {
-                name: '',
-                bizMain: ''
-            }
-
         }
     },
     components: {
@@ -305,41 +202,20 @@ export default {
         orderAddress
     },
     computed: {
-        /*cart() {
-            console.log(this.$store.state.cart.cartList)
-            return this.$store.state.cart.cartList;
-        }*/
+        userInfor() {
+            return this.$store.state.user.userInfor;
+        },
+
     },
     methods: {
-        getInfo() {
+        subtraction(todo) {
             let _self = this;
-            common.$emit('show-load');
-            let url = common.addSID(common.urlCommon + common.apiUrl.most);
-            let body = {
-                biz_module: 'userService',
-                biz_method: 'queryUserInfo',
-                biz_param: {}
-            };
-
-            body.time = Date.parse(new Date()) + parseInt(common.difTime);
-            console.log(common.difTime);
-            console.log(body.time);
-            console.log('sssss');
-            body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
-            httpService.queryUserInfo(url, body, function (suc) {
-                common.$emit('close-load');
-                if (suc.data.code == "1c01") {
-                    _self.perfect.name = suc.data.biz_result.fullname;
-                    _self.perfect.bizMain = suc.data.biz_result.bizMain;
-
-                } else {
-                    console.log('cuowusasdada')
-                }
+            //if()
+        },
+        addition() {
+            let _self = this;
 
 
-            }, function (err) {
-                common.$emit('close-load');
-            })
         },
         handleBottomChange(status) {
             this.bottomStatus = status;
@@ -347,11 +223,8 @@ export default {
         cartContent() {
             let _self = this;
             var cart = localStorage.getItem('cartContent');
-            //console.log(_self.cart)
             _self.cart = JSON.parse(cart);
             console.log(_self.cart)
-
-            /*localStorage.removeItem('cartContent');*/
         },
         loadBottom(id) {
             setTimeout(() => {
@@ -393,9 +266,7 @@ export default {
                 common.$emit('close-load');
                 let result = suc.data.biz_result;
                 if (suc.data.code == "1c01") {
-                    /* _self.id = result.id;*/
                     _self.person = result;
-                    //_self.addressId = result.addressId;
                 } else {
                     common.$emit('message', suc.data.msg);
                 }
@@ -411,10 +282,7 @@ export default {
             let sampleArr = [];
             let sampleObj = {};
             console.log(_self.cart)
-            //goodsSample
             for (var i = 0; i < _self.cart.length; i++) {
-                /*if (_self.cart[i].cartSample == 0) obj.number = _self.cart[i].number;
-                if (_self.cart[i].cartSample == 1) obj.number = _self.cart[i].sampleNumber;*/
                 if (_self.cart[i].cartSample == 0) {
                     obj.number = _self.cart[i].cartNumber;
                     obj.intentionId = _self.cart[i].id;
@@ -460,7 +328,7 @@ export default {
                             common.$emit('setParam', 'router', 'orderSuccess');
                         }
                         _self.$store.dispatch('getHttp');
-                        _self.$store.dispatch('')
+                        //_self.$store.dispatch('')
                         _self.$store.dispatch('hideAllShow')
                     } else {
                         common.$emit('message', res.data.msg);
@@ -495,7 +363,6 @@ export default {
     mounted() {
         let _self = this;
         this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
-        /*this.wrapperHeight = window.screen.height - this.$refs.wrapper.getBoundingClientRect().top;*/
     },
     created() {
         let _self = this;
@@ -504,19 +371,12 @@ export default {
         }
         _self.getAddress();
         _self.cartContent();
-        if (common.KEY) _self.getInfo();
-        common.$on('getInfo', function (item) {
-
-            _self.getInfo();
-        })
         common.$on('cartContent', function (item) {
             console.log(1111)
             _self.getAddress();
             _self.cartContent();
-            //_self.cart = item;
         })
         common.$on('backAddress', function (todo) {
-            //_self.getAddress();
             _self.person.id = todo.id;
             _self.person.address = todo.address;
             _self.person.contactPhone = todo.contactPhone;

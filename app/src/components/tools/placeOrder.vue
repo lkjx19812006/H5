@@ -1,8 +1,34 @@
+<style lang="less" scoped>
+.place_order{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height:50px;
+    background-color: #fff;
+    .all_price{
+        flex:1;
+        text-align: right;
+        font-size:16px;
+        color:#fa6705;
+        padding-right:10px;
+    }
+    .confirm{
+        width:135px;
+        font-size:18px;
+        color:#fff;
+        background-color: #fa6705;
+        display:flex;
+        flex-direction:row;
+        align-items: center;
+        justify-content: center;
+        height:50px;
+    }
+}
+</style>
 <template>
     <div class="place_order">
-        <p class="title">运输价格待确认</p>
-        <div class="button" @click="confirm">提交订单</div>
-        <p class="price">合计:￥{{allPrice | floatType}}</p>
+        <div class="all_price">合计: ￥{{allPrice | floatType}}</div>
+        <div class="confirm" @click="confirm">提交订单</div>
     </div>
 </template>
 <script>
@@ -46,41 +72,4 @@ export default {
         }
 }
 </script>
-<style scoped>
-.place_order {
-    background: white;
-    float: left;
-    width: 100%;
-    padding-left: 10px;
-}
 
-.place_order .title {
-    float: left;
-    margin-top: 10px;
-}
-
-.place_order .button {
-    float: right;
-    padding: 10px 20px;
-    background: #FA6705;
-    border-radius: 5px;
-    margin-left: 10px;
-}
-
-.place_order .price {
-    float: right;
-    margin-top: 10px;
-}
-
-@media screen and (max-width: 320px) {
-    .place_order .price {
-        float: right;
-        margin-top: 10px;
-        width: 105px;
-        word-break: keep-all;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
-</style>

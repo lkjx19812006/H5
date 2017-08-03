@@ -286,6 +286,9 @@ import imageUpload from '../../components/tools/imageUpload'
 import accountOverview from '../../components/tools/accountOverview'
 import myInformation from '../../components/tools/myInformation'
 import customPopUp from '../../components/popUpType/customPopUp'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
         return {
@@ -360,6 +363,11 @@ export default {
         myInformation,
         customPopUp
     },
+    computed: {
+        userInfor() {
+            return this.$store.state.user.userInfor;
+        }
+    },
     methods: {
         // isWeiXin() {
         //     var ua = window.navigator.userAgent.toLowerCase();
@@ -371,7 +379,7 @@ export default {
         // },
         jumpOrder(index) {
             let _self = this;
-            if (!common.KEY) {
+            if (!common.KEY  || !this.userInfor.phone) {
                 function loadApp() {
                     common.$emit('setParam', 'backRouter', '/home');
                     if (common.wxshow) {
@@ -474,7 +482,7 @@ export default {
                 if (router == 'mySet') {
                     //common.$emit('inforMySet',1)
                     this.$router.push(router);
-                } else if (!common.KEY) {
+                } else if (!common.KEY   || !this.userInfor.phone) {
                     function loadApp() {
                         common.$emit('setParam', 'backRouter', '/home');
                         if (common.wxshow) {
