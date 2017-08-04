@@ -1,17 +1,36 @@
 <style lang="less" scoped>
 .home {
-    overflow-y: scroll;
-    padding-bottom: 30px;
     position: relative;
     background-color: #F6F6F6;
     overflow-x: hidden;
+    .big_box {
+        overflow-y: scroll;
+    }
+    @keyframes goup {
+        0% {
+            background-color: rgba(255, 117, 0, 0);
+        }
+        100% {
+            background-color: rgba(255, 117, 0, 1);
+        }
+    }
+
+    @keyframes godown {
+        0% {
+            background-color: rgba(255, 117, 0, 1);
+        }
+        100% {
+            background-color: rgba(255, 117, 0, 0);
+        }
+    }
     .search {
         position: fixed;
         z-index: 10000;
         top: 0px;
         width: 100%;
         height: 48px;
-        background-color: rgba(255, 117, 0, 1);
+        //background-color: rgba(255, 117, 0, 1);
+        animation: goup 0.5s linear forwards;
         display: flex;
         flex-direction: row;
         .left {
@@ -68,7 +87,8 @@
         }
     }
     .searchs {
-        background-color: rgba(255, 117, 0, 0);
+        //background-color: rgba(255, 117, 0, 0);
+        animation: godown 0.5s linear forwards;
     }
     .swiper {
         height: 206px;
@@ -543,16 +563,12 @@
 }
 </style>
 <template>
-    <div class="home" id="home" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-        <div class="search" v-bind:class="{searchs:show}">
+    <div class="home" id="home">
+        <div class="search" v-bind:class="{searchs:scrollTop<=200}">
             <div class="left" @click="jump('/cart')">
                 <img src="/static/icon/shopping.png">
                 <div class="left_word">购物车</div>
             </div>
-            <!--  <div class="right" @click="call">
-                                                                                                        <img src="/static/icon/tele.png" class="img">
-                                                                                                        <div class="right_word">电话</div>
-                                                                                                    </div> -->
             <div class="center" @click="fromIndex">
                 <div class="inbox">
                     <img src="/static/icon/enlarge.png">
@@ -565,182 +581,184 @@
                 <div class="right_word">消息</div>
             </div>
         </div>
-        <div class="swiper">
-            <mt-swipe :auto="4000" :prevent="false">
-                <mt-swipe-item v-for="(item,index) in imgArray">
-                    <img v-bind:src="item.htmlImg" @click="jumpLink(item.htmlUrl,imgArray.length,index)">
-                </mt-swipe-item>
-            </mt-swipe>
+        <div class="big_box" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <div class="swiper">
+                <mt-swipe :auto="4000" :prevent="false">
+                    <mt-swipe-item v-for="(item,index) in imgArray">
+                        <img v-bind:src="item.htmlImg" @click="jumpLink(item.htmlUrl,imgArray.length,index)">
+                    </mt-swipe-item>
+                </mt-swipe>
+            </div>
+            <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
+                <div class="release">
+                    <div class="left" @click="loginJump('/releaseNeeds/1')">
+                        <img src="/static/icon/home-buy.png">
+                        <div class="word">
+                            <div class="word_top">发布求购</div>
+                            <div class="word_bottom orgrance">为您要买的货全网比价</div>
+                        </div>
+                        <img src="/static/icon/buy.png" class="buy">
+                    </div>
+                    <div class="left" @click="loginJump('/releaseResource/1')">
+                        <img src="/static/icon/home-sell.png" class="sell_img">
+                        <div class="word">
+                            <div class="word_top">发布供应</div>
+                            <div class="word_bottom green">为您扩张更多销售渠道</div>
+                        </div>
+                        <img src="/static/icon/sell.png" class="buy">
+                    </div>
+                </div>
+                <div class="entrance">
+                    <div class="box" v-for="(todo,index) in entrance" v-bind:class="{tbox:index == 3}" @click="jumpEntrance(todo.router)">
+                        <img :src="todo.url">
+                        <div class="title">{{todo.text}}</div>
+                    </div>
+                </div>
+                <div class="pre_sell" @click="jumpEntrance('')">
+                    <img src="/static/icon/presell.png">
+                </div>
+                <div class="guide_price">
+                    <div class="top" @click="jumpEntrance('/marketQuotation')">
+                        <div class='left'>药材指导价</div>
+                        <div class="center"></div>
+                        <img src="/static/icon/right-arrow.png">
+                    </div>
+                    <div class="content" @click="jumpEntrance('/marketQuotation')">
+                        <div v-for="(todo,index) in drugGuidePrices" class="item" v-bind:class="{first:index !== 1}">
+                            <div class="left">
+                                <div class="image">
+                                    <img :src="todo.image">
+                                </div>
+                                <div class="center">
+                                    <div class="center_top">{{todo.name}}</div>
+                                    <div class="spec">规格:{{todo.spec,2 | filterTxt}}</div>
+                                    <div class="spec location">产地:{{todo.location,2 | filterTxt}}</div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class='red' v-if="todo.dayDowns > 0">{{todo.unitprice}}元/公斤</div>
+                                <div class='black' v-if="todo.dayDowns == 0">{{todo.unitprice}}元/公斤</div>
+                                <div class='green' v-if="todo.dayDowns < 0">{{todo.unitprice}}元/公斤</div>
+                                <div class="spec" v-if="todo.dayDowns > 0">
+                                    <div>跌涨价格:</div>
+                                    <div>
+                                        <img src="/static/icons/up.png">
+                                    </div>
+                                    <div> +{{todo.dayMoney,5 | filterTxt}}元</div>
+                                </div>
+                                <div class="spec" v-if="todo.dayDowns == 0">
+                                    跌涨价格: {{todo.dayMoney,5 | filterTxt}}元
+                                </div>
+                                <div class="spec" v-if="todo.dayDowns < 0">
+                                    <div>跌涨价格:</div>
+                                    <div>
+                                        <img src="/static/icons/down.png">
+                                    </div>
+                                    <div> -{{todo.dayMoney,5 | filterTxt}}元</div>
+                                </div>
+                                <div class="spec location" v-if="todo.dayDowns > 0">跌涨幅度: +{{todo.dayDowns | indexFloatType}}%</div>
+                                <div class="spec location" v-if="todo.dayDowns == 0">跌涨幅度: {{todo.dayDowns | indexFloatType}}%</div>
+                                <div class="spec location" v-if="todo.dayDowns < 0">跌涨幅度: -{{todo.dayDowns | indexFloatType}}%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="urgent">
+                    <div class="top" @click="jumpEntrance('/urgentNeed')">
+                        <div class='left'>紧急求购</div>
+                        <div class="center"></div>
+                        <img src="/static/icon/right-arrow.png">
+                    </div>
+                    <div class="content">
+                        <div class="item" v-for="(todo,index) in urgentArr" v-bind:class="{first: index !== 2}" @click="jumpNeed(todo)">
+                            <img src="/static/icon/urgent-2.png" class="urgent_img">
+                            <div class="left">
+                                <!-- <div class="top">
+                                                                            <div class="word" v-if="todo.indentType == 0">药厂求购</div>
+                                                                            <div class="word" v-if="todo.indentType !== 0">普通求购</div>
+                                                                        </div> -->
+                                <div class="center">
+                                    <div class="breed_name">
+                                        <img src="/static/icon/yaochang.png">
+                                        <div>{{todo.breedName}}</div>
+                                    </div>
+                                    <div class="box">
+                                        <div class="left">规格:{{todo.spec,2 | filterTxt}}</div>
+                                        <div class="right">{{todo.location,4 | filterTxt}}</div>
+                                        <!-- 发布时间:{{todo.pubdate | timeFormat}} -->
+                                    </div>
+                                </div>
+                                <div class="footer">
+                                    <div class="word">剩余</div>
+                                    <div class="date">
+                                        <div class="num">{{todo.duedate | decade}}</div>
+                                        <img src="/static/icon/date.png">
+                                    </div>
+                                    <div class="date">
+                                        <div class="num">{{todo.duedate | theUnit}}</div>
+                                        <img src="/static/icon/date.png">
+                                    </div>
+                                    <div class="word">天</div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <!-- <div class="reported dates">发布日期:{{todo.pubdate | timeFormat}}</div> -->
+                                <div class="report_pri" v-if="todo.especial == 0 && todo.isMy == 0 && todo.isOffer == 0">
+                                    我要报价
+                                </div>
+                                <div class="report_pri" v-if="todo.especial == 1 && todo.isMy == 0 && todo.isOffer == 0">
+                                    抢先报价
+                                </div>
+                                <div class="report_pri mine_color" v-if="todo.isMy == 1 && todo.isOffer == 0">
+                                    我的求购
+                                </div>
+                                <div class="report_pri report" v-if="todo.isOffer == 1">
+                                    已报价
+                                </div>
+                                <div class="reported">已报价
+                                    <span>{{todo.offer}}</span>人</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="recommend">
+                    <div class="top" @click="jumpEntrance('/lowPriceRes')">
+                        <div class='left'>推荐资源</div>
+                        <div class="center"></div>
+                        <img src="/static/icon/right-arrow.png">
+                    </div>
+                    <div class="content">
+                        <div class="items" v-for="(todo,index) in resourceArr" v-bind:class="{firsts: index !== 2}" @click="jumpRes('resourceDetail/',todo.id)">
+                            <div class="left">
+                                <div class="image">
+                                    <img :src="todo.image[0]" class="left_img">
+                                    <img :src="todo.cFlagsPath" class="flag" v-show="todo.cFlagsPath">
+                                    <img src="/static/icon/zhongguo.png" class="flag" v-show="!todo.cFlagsPath">
+                                </div>
+                                <div class="center">
+                                    <div class="center_top">
+                                        <img src="/static/icon/auth-icon.png" class="its_mine" v-show="todo.especial == 1">
+                                        <div>{{todo.breedName}}</div>
+                                    </div>
+                                    <div class="center_box">
+                                        <div class="spec specail_spec">规格:{{todo.spec,2 | filterTxt}}</div>&nbsp;&nbsp;
+                                        <div class="spec">产地:{{todo.location,3 | filterTxt}}</div>
+                                    </div>
+                                    <div class="center_bottom">
+                                        {{todo.price}}元/{{todo.unit}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <img src="/static/icon/homesample.png" v-show="todo.sampling == 1">
+                                <div class="report_pri" v-if="todo.especial !== 1">我要购买</div>
+                                <div class="report_pri" v-if="todo.especial == 1">立即抢购</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mt-loadmore>
         </div>
-        <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
-            <div class="release">
-                <div class="left" @click="loginJump('/releaseNeeds/1')">
-                    <img src="/static/icon/home-buy.png">
-                    <div class="word">
-                        <div class="word_top">发布求购</div>
-                        <div class="word_bottom orgrance">为您要买的货全网比价</div>
-                    </div>
-                    <img src="/static/icon/buy.png" class="buy">
-                </div>
-                <div class="left" @click="loginJump('/releaseResource/1')">
-                    <img src="/static/icon/home-sell.png" class="sell_img">
-                    <div class="word">
-                        <div class="word_top">发布供应</div>
-                        <div class="word_bottom green">为您扩张更多销售渠道</div>
-                    </div>
-                    <img src="/static/icon/sell.png" class="buy">
-                </div>
-            </div>
-            <div class="entrance">
-                <div class="box" v-for="(todo,index) in entrance" v-bind:class="{tbox:index == 3}" @click="jumpEntrance(todo.router)">
-                    <img :src="todo.url">
-                    <div class="title">{{todo.text}}</div>
-                </div>
-            </div>
-            <div class="pre_sell" @click="jumpEntrance('')">
-                <img src="/static/icon/presell.png">
-            </div>
-            <div class="guide_price">
-                <div class="top" @click="jumpEntrance('/marketQuotation')">
-                    <div class='left'>药材指导价</div>
-                    <div class="center"></div>
-                    <img src="/static/icon/right-arrow.png">
-                </div>
-                <div class="content" @click="jumpEntrance('/marketQuotation')">
-                    <div v-for="(todo,index) in drugGuidePrices" class="item" v-bind:class="{first:index !== 1}">
-                        <div class="left">
-                            <div class="image">
-                                <img :src="todo.image">
-                            </div>
-                            <div class="center">
-                                <div class="center_top">{{todo.name}}</div>
-                                <div class="spec">规格:{{todo.spec,2 | filterTxt}}</div>
-                                <div class="spec location">产地:{{todo.location,2 | filterTxt}}</div>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <div class='red' v-if="todo.dayDowns > 0">{{todo.unitprice}}元/公斤</div>
-                            <div class='black' v-if="todo.dayDowns == 0">{{todo.unitprice}}元/公斤</div>
-                            <div class='green' v-if="todo.dayDowns < 0">{{todo.unitprice}}元/公斤</div>
-                            <div class="spec" v-if="todo.dayDowns > 0">
-                                <div>跌涨价格:</div>
-                                <div>
-                                    <img src="/static/icons/up.png">
-                                </div>
-                                <div> +{{todo.dayMoney,5 | filterTxt}}元</div>
-                            </div>
-                            <div class="spec" v-if="todo.dayDowns == 0">
-                                跌涨价格: {{todo.dayMoney,5 | filterTxt}}元
-                            </div>
-                            <div class="spec" v-if="todo.dayDowns < 0">
-                                <div>跌涨价格:</div>
-                                <div>
-                                    <img src="/static/icons/down.png">
-                                </div>
-                                <div> -{{todo.dayMoney,5 | filterTxt}}元</div>
-                            </div>
-                            <div class="spec location" v-if="todo.dayDowns > 0">跌涨幅度: +{{todo.dayDowns | indexFloatType}}%</div>
-                            <div class="spec location" v-if="todo.dayDowns == 0">跌涨幅度: {{todo.dayDowns | indexFloatType}}%</div>
-                            <div class="spec location" v-if="todo.dayDowns < 0">跌涨幅度: -{{todo.dayDowns | indexFloatType}}%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="urgent">
-                <div class="top" @click="jumpEntrance('/urgentNeed')">
-                    <div class='left'>紧急求购</div>
-                    <div class="center"></div>
-                    <img src="/static/icon/right-arrow.png">
-                </div>
-                <div class="content">
-                    <div class="item" v-for="(todo,index) in urgentArr" v-bind:class="{first: index !== 2}" @click="jumpNeed(todo)">
-                        <img src="/static/icon/urgent-2.png" class="urgent_img">
-                        <div class="left">
-                            <!-- <div class="top">
-                                                                    <div class="word" v-if="todo.indentType == 0">药厂求购</div>
-                                                                    <div class="word" v-if="todo.indentType !== 0">普通求购</div>
-                                                                </div> -->
-                            <div class="center">
-                                <div class="breed_name">
-                                    <img src="/static/icon/yaochang.png">
-                                    <div>{{todo.breedName}}</div>
-                                </div>
-                                <div class="box">
-                                    <div class="left">规格:{{todo.spec,2 | filterTxt}}</div>
-                                    <div class="right">{{todo.location,4 | filterTxt}}</div>
-                                    <!-- 发布时间:{{todo.pubdate | timeFormat}} -->
-                                </div>
-                            </div>
-                            <div class="footer">
-                                <div class="word">剩余</div>
-                                <div class="date">
-                                    <div class="num">{{todo.duedate | decade}}</div>
-                                    <img src="/static/icon/date.png">
-                                </div>
-                                <div class="date">
-                                    <div class="num">{{todo.duedate | theUnit}}</div>
-                                    <img src="/static/icon/date.png">
-                                </div>
-                                <div class="word">天</div>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <!-- <div class="reported dates">发布日期:{{todo.pubdate | timeFormat}}</div> -->
-                            <div class="report_pri" v-if="todo.especial == 0 && todo.isMy == 0 && todo.isOffer == 0">
-                                我要报价
-                            </div>
-                            <div class="report_pri" v-if="todo.especial == 1 && todo.isMy == 0 && todo.isOffer == 0">
-                                抢先报价
-                            </div>
-                            <div class="report_pri mine_color" v-if="todo.isMy == 1 && todo.isOffer == 0">
-                                我的求购
-                            </div>
-                            <div class="report_pri report" v-if="todo.isOffer == 1">
-                                已报价
-                            </div>
-                            <div class="reported">已报价
-                                <span>{{todo.offer}}</span>人</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="recommend">
-                <div class="top" @click="jumpEntrance('/lowPriceRes')">
-                    <div class='left'>推荐资源</div>
-                    <div class="center"></div>
-                    <img src="/static/icon/right-arrow.png">
-                </div>
-                <div class="content">
-                    <div class="items" v-for="(todo,index) in resourceArr" v-bind:class="{firsts: index !== 2}" @click="jumpRes('resourceDetail/',todo.id)">
-                        <div class="left">
-                            <div class="image">
-                                <img :src="todo.image[0]" class="left_img">
-                                <img :src="todo.cFlagsPath" class="flag" v-show="todo.cFlagsPath">
-                                <img src="/static/icon/zhongguo.png" class="flag" v-show="!todo.cFlagsPath">
-                            </div>
-                            <div class="center">
-                                <div class="center_top">
-                                    <img src="/static/icon/auth-icon.png" class="its_mine" v-show="todo.especial == 1">
-                                    <div>{{todo.breedName}}</div>
-                                </div>
-                                <div class="center_box">
-                                    <div class="spec specail_spec">规格:{{todo.spec,2 | filterTxt}}</div>&nbsp;&nbsp;
-                                    <div class="spec">产地:{{todo.location,3 | filterTxt}}</div>
-                                </div>
-                                <div class="center_bottom">
-                                    {{todo.price}}元/{{todo.unit}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <img src="/static/icon/homesample.png" v-show="todo.sampling == 1">
-                            <div class="report_pri" v-if="todo.especial !== 1">我要购买</div>
-                            <div class="report_pri" v-if="todo.especial == 1">立即抢购</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </mt-loadmore>
     </div>
 </template>
 <script>
@@ -854,8 +872,6 @@ export default {
                 }
             }, function (suc) {
                 let result = suc.data.biz_result.list;
-                //console.log(result)
-                // _self.drugGuidePrice = [];
                 _self.drugGuidePrices = result;
             }, function (err) {
                 common.$emit('message', err.data.msg);
@@ -933,7 +949,7 @@ export default {
             if (path) {
                 console.log(321321)
                 if (path == '/majorBusiness') {
-                    if (!common.KEY  || !this.userInfor.phone) {
+                    if (!common.KEY || !this.userInfor.phone) {
                         function loadApp() {
                             if (common.wxshow) {
                                 common.getWxUrl();
@@ -1040,7 +1056,7 @@ export default {
         jumpLink(url, myLength, index) {
             let _self = this;
             if (index == myLength - 1) {
-                if (!common.KEY  || !this.userInfor.phone) {
+                if (!common.KEY || !this.userInfor.phone) {
                     function loadApp() {
                         if (common.wxshow) {
                             common.getWxUrl();
@@ -1071,7 +1087,7 @@ export default {
         },
         loginJump(router) {
             let _self = this;
-            if (!common.KEY  || !this.userInfor.phone) {
+            if (!common.KEY || !this.userInfor.phone) {
                 function loadApp() {
                     if (common.wxshow) {
                         common.getWxUrl();
@@ -1177,9 +1193,9 @@ export default {
     mounted() {
         let _self = this;
         this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
-        _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top - 73;
-       //_self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top;
-        // if (common.isSafari)
+        // if (!common.isSafari)_self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top-55;
+        //_self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top;
+        _self.wrapperHeight = document.body.offsetHeight - _self.$refs.wrapper.getBoundingClientRect().top - 55;
 
     }
 }

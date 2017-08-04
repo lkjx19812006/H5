@@ -14,64 +14,59 @@ textarea {
     background-color: #fff;
 }
 
-.release_offer {
-    position: relative;
-    height: 100vh;
-    .main {
-        padding-bottom: 100px;
+
+
+.message_box {
+    position: absolute;
+    width: 76%;
+    margin-left: -38%;
+    margin-top: -140px;
+    top: 50%;
+    left: 50%;
+    z-index: 3001;
+    border-radius: 6px;
+    overflow: hidden;
+    .top {
+        font-size: 18px;
+        line-height: 18px;
+        padding: 11px 0;
+        color: #FA6705;
+        background-color: #E6E6E6;
     }
-    .box {
-        padding: 20px 15px;
-        background-color: #fff;
-        .images {
-            width: 80px;
-        }
-    }
-    .img {
-        width: 100%;
-        background-color: #fff;
-        padding: 20px 15px;
+    .center {
+        padding: 10px;
+        min-height: 60px;
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        .img_box {
-            position: relative;
-            margin-right: 30px;
-            .my_img {
-                width: 80px;
-                height: 80px;
-            }
-            .delete {
-                position: absolute;
-                width: 20px;
-                height: 20px;
-                top: -10px;
-                left: -10px;
-            }
-            margin-bottom:15px;
-        }
-        .up_load {
-            width: 80px;
-            height: 80px;
-            margin-right: 30px;
-            margin-bottom: 15px;
-        }
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: #000;
+        background-color: #fff;
     }
-    .confirm {
-        position: absolute;
-        bottom: 0;
-        height: 50px;
+    .bottom {
+        display: flex;
         width: 100%;
-        background-color: #FA6705;
-        font-size: 17px;
-        line-height: 50px;
-        text-align: center;
-        color: #fff;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        .button {
+            flex: 1;
+            line-height: 40px;
+            border-top: 1px solid #E6E6E6;
+            height: 40px;
+        }
+        .left {
+            color: #000;
+            background-color: #fff;
+        }
+        .right {
+            color: #fff;
+            border-top: 1px solid #FA6705;
+            background-color: #FA6705;
+        }
     }
-    .sample_offer {
-        margin-bottom: 10px;
-    }
-    .black {
+}
+.black {
         width: 100%;
         height: 100vh;
         position: absolute;
@@ -80,57 +75,6 @@ textarea {
         top: 0;
         opacity: 0.6;
     }
-    .message_box {
-        position: absolute;
-        width: 76%;
-        margin-left: -38%;
-        margin-top: -140px;
-        top: 50%;
-        left: 50%;
-        z-index: 3001;
-        border-radius: 6px;
-        overflow: hidden;
-        .top {
-            font-size: 18px;
-            line-height: 18px;
-            padding: 11px 0;
-            color: #FA6705;
-            background-color: #E6E6E6;
-        }
-        .center {
-            padding: 10px;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: #000;
-            background-color: #fff;
-        }
-        .bottom {
-            display: flex;
-            width: 100%;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            .button {
-                flex: 1;
-                line-height: 40px;
-                border-top: 1px solid #E6E6E6;
-                height: 40px;
-            }
-            .left {
-                color: #000;
-                background-color: #fff;
-            }
-            .right {
-                color: #fff;
-                border-top: 1px solid #FA6705;
-                background-color: #FA6705;
-            }
-        }
-    }
-}
 </style>
 <template>
     <div>
@@ -174,7 +118,7 @@ export default {
         ensure() {
             this.$emit('mySure');
         },
-        encancel(){
+        encancel() {
             this.$emit('myCancel');
         }
     },
@@ -182,7 +126,7 @@ export default {
 
     },
     mounted() {
-        
+
     }
 }
 </script>

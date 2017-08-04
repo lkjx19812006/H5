@@ -1,221 +1,4 @@
 <style lang="less" scoped>
-/* .cart {
-    position: relative;
-    overflow: hidden;
-    float: left;
-    width: 100%;
-}
-
-.cart .pop_up {
-    width: 80%;
-    height: 150px;
-    position: relative;
-    flex-direction: column;
-    display: flex;
-    position: absolute;
-    margin-left: -40%;
-    margin-top: -75px;
-    top: 50%;
-    left: 50%;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.cart .pop_up .pop_box {
-    margin-left: -50%;
-    height: 110px;
-    width: 100%;
-    display: flex;
-    margin: 0px auto;
-    padding-top: 30px;
-}
-
-.cart .pop_up .title {
-    line-height: 34px;
-    margin-right: 10px;
-    margin-left: 10px;
-    float: left;
-}
-
-.cart .pop_up .but {
-    display: flex;
-    position: absolute;
-    right: 10px;
-}
-
-.cart .pop_up .foo {
-    width: 100%;
-    height: 40px;
-    border-top: 1px solid #ccc;
-    line-height:
-}
-
-.cart .pop_up .foo .foo_cancel {
-    width: 50%;
-    float: left;
-}
-
-.cart .pop_up .foo .foo_confirm {
-    width: 50%;
-    float: right;
-}
-
-.cart .pop_up {
-    float: right;
-    display: flex;
-}
-
-.cart .pop_up button {
-    width: 38px;
-    height: 34px;
-    background: #F5F5F5;
-    margin: 0;
-    color: black;
-}
-
-.cart .pop_up input {
-    width: 45px;
-    height: 34px;
-    color: black;
-    text-align: center;
-}
-
-input {
-    opacity: 1;
-}
-
-.mint-cell-wrapper {
-    padding: 0px;
-    width: 100%;
-}
-
-.cart .head {
-    float: left;
-    width: 100%;
-    z-index: 2000;
-}
-
-.cart .page-loadmore-wrapper {
-    width: 100%;
-    -webkit-overflow-scrolling: touch;
-    overflow: scroll;
-    float: left;
-    margin-top: 20px;
-    padding-bottom: 50px;
-}
-
-.cart .test {
-    width: 100%;
-    float: left;
-}
-
-.cart .test_nor {
-    width: 100%;
-    float: left;
-    margin-left: -20%;
-}
-
-.cart .dete {
-    width: 20%;
-    background: green;
-    float: left;
-    height: 147px;
-    line-height: 147px;
-}
-
-.cart ul {
-    width: 100%;
-    float: left;
-    background: #F2F2F2;
-}
-
-.cart ul li {
-    width: 100%;
-    float: left;
-    margin-bottom: 10px;
-}
-
-.cart ul li .top {
-    padding: 10px 15px;
-    position: relative;
-    float: left;
-    background: white;
-    width: 100%;
-    border-bottom: 1px solid #ccc;
-}
-
-.cart ul li .top .fit {
-    position: absolute;
-    left: 15px;
-    top: 8px;
-    width: 20px;
-}
-
-.cart ul li .top .cart_sample {
-    height: 20px;
-    float: left;
-    margin-left: 4px;
-}
-
-.cart ul li .top .name {
-    float: left;
-    margin-left: 35px;
-}
-
-.cart ul li .top .price {
-    float: right;
-}
-
-.cart ul li .bottom {
-    float: left;
-    width: 100%;
-    background: white;
-    padding: 15px;
-}
-
-.cart ul li .bottom img {
-    width: 30%;
-    height: 75px;
-    float: left;
-}
-
-.cart ul li .content {
-    float: left;
-    text-align: left;
-    padding-left: 15px;
-    width: 70%;
-}
-
-.cart ul li .content .stock {
-    margin-bottom: 5px;
-}
-
-.cart ul li .content .operate {
-    float: right;
-    display: flex;
-}
-
-.cart ul li .content .operate button {
-    width: 38px;
-    height: 34px;
-    background: #F5F5F5;
-    margin: 0;
-    color: black;
-}
-
-.cart ul li .content .operate input {
-    width: 45px;
-    height: 34px;
-    color: black;
-    text-align: center;
-}
-
-.cart .account {
-    position: fixed;
-    bottom: 0px;
-} */
-
 .cart {
     width: 100%;
     height: 100vh;
@@ -225,7 +8,7 @@ input {
         bottom: 0px;
         box-shadow: 0 0 5px #888888;
     }
-    .mains{
+    .mains {
         padding-bottom: 60px;
     }
     .list {
@@ -269,12 +52,18 @@ input {
                         }
                         margin-right:15px;
                     }
+                    .image_opacity {
+                        opacity: 0.5;
+                    }
                     .center {
                         text-align: left;
                         .breed {
                             font-size: 17px;
                             line-height: 17px;
                             color: #333;
+                        }
+                        .emtry_breed {
+                            color: #999;
                         }
                         .spec {
                             font-size: 13px;
@@ -302,12 +91,27 @@ input {
                                 color: #999;
                             }
                         }
+                        .emtry {
+                            color: #000;
+                            font-size: 13px;
+                            margin-top: 15px;
+                        }
                     }
                     .right {
                         position: absolute;
                         top: 0px;
                         right: 15px;
                         color: #fa6705;
+                    }
+                    .similarity {
+                        font-size: 14px;
+                        color: #ff8201;
+                        padding: 5px 10px;
+                        line-height: 14px;
+                        border: 1px solid #ff8201;
+                        border-radius: 12px;
+                        right: 10px;
+                        top: 45px;
                     }
                 }
             }
@@ -324,9 +128,9 @@ input {
             <div class="list" v-if="cart.length !== 0">
                 <div class="li" v-for="(todo,index) in cart">
                     <mt-cell-swipe :right="[{
-                                                                                              content: '删除',
-                                                                                              style: { background: 'red', color: '#fff'},
-                                                                                              handler:()=> myDelete(todo)}]">
+                                                                                                              content: '删除',
+                                                                                                              style: { background: 'red', color: '#fff'},
+                                                                                                              handler:()=> myDelete(todo.cartId,index,todo)}]">
                         <div class="box">
                             <div class="selects" v-show="todo.onSell == 2">
                                 <img src="/static/icons/quan.png" class="fit" @click.prevent="confirm(index)" v-show='!cart[index].show'>
@@ -336,77 +140,36 @@ input {
                                 <img src="/static/images/lose-efficacy.png" class="lose_efficacy">
                             </div>
                             <div class="main">
-                                <div class="image">
+                                <div class="image" v-bind:class="{image_opacity:todo.onSell !== 2}">
                                     <img :src="todo.image[0]">
                                 </div>
                                 <div class="center">
-                                    <div class="breed">{{todo.breedName}}</div>
+                                    <div class="breed" v-bind:class="{emtry_breed:todo.onSell !== 2}">{{todo.breedName}}</div>
                                     <div class="spec">库存:{{todo.number+'('+todo.unit+')',7 | filterTxt}}&nbsp;&nbsp;产地:{{todo.location,3 | filterTxt}}</div>
-                                    <div class="revise_num" v-show="headParam.show">
+                                    <div class="revise_num" v-show="headParam.show && todo.onSell == 2">
                                         <div class="num">购买数量: X{{todo.cartNumber}}</div>
                                     </div>
-                                    <div class="revise_num" v-show="!headParam.show">
+                                    <div class="revise_num" v-show="!headParam.show && todo.onSell == 2">
                                         <div class="num">购买数量:&nbsp;</div>
                                         <img src="/static/images/subtraction.png" class="subtraction" v-tap="{methods:subtraction,index:index}">
                                         <input type="number" v-model="todo.cartNumber" class="values">
                                         <img src="/static/images/addition.png" class="addition" v-tap="{methods:addition,index:index}">
                                     </div>
+                                    <div class="revise_num emtry" v-show="todo.onSell !== 2">
+                                        资源已售空
+                                    </div>
                                 </div>
-                                <div class="right">
+                                <div class="right" v-show="todo.onSell == 2">
                                     ￥{{todo.price}}
                                 </div>
+                                <div class="right similarity" v-show="todo.onSell !== 2" @click="lookResource(todo.breedName)">看相似</div>
                             </div>
                         </div>
-    
                     </mt-cell-swipe>
                 </div>
             </div>
-            <!-- <ul id="list" v-if="cart.length !== 0">
-                                                                                <li v-for="(todo,index) in cart">
-                                                                                     <mt-cell-swipe :right="[{
-                                                                                              content: '删除',
-                                                                                              style: { background: 'red', color: '#fff'},
-                                                                                              handler:()=> myDelete(todo)}]"> 
-                                                                                        <div v-bind:class="test">
-                                                                                            <div class="top">
-                                                                                                <img src="/static/icons/quan.png" class="fit" @click.prevent="confirm(index)" v-show='!cart[index].show'>
-                                                                                                <img src="/static/icons/buy_quan.png" class="fit" @click.prevent="cancel(index)" v-show='cart[index].show'>
-                                                                                                <p class="name">{{todo.breedName}}</p>
-                                                                                                <img src="/static/icons/sample.png" v-if="todo.cartSample == 1" class="cart_sample">
-                                                                                                <div v-show="headParam.show">
-                                                                                                    <p class="price" v-if="!todo.cartSample">{{todo.price}}元/{{todo.unit}}</p>
-                                                                                                    <p class="price" v-if="todo.cartSample">{{todo.sampleAmount }}元/份</p>
-                                                                                                </div>
-                                                                                                <div class="price" @click="dete(todo.cartId,index,todo)" v-show="!headParam.show">
-                                                                                                    删除
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="bottom">
-                                                                                                <img :src="todo.image[0]" class="drug">
-                                                                                                <div class="content">
-                                                                                                    <p class="stock" v-if="!todo.cartSample">库存:
-                                                                                                        <span>{{todo.number}}{{todo.unit}}</span>
-                                                                                                    </p>
-                                                                                                    <p class="stock" v-if="todo.cartSample">库存:
-                                                                                                        <span>{{todo.sampleNumber}}份</span>
-                                                                                                    </p>
-                                                                                                    <p class="location">产地:
-                                                                                                        <span>{{todo.location}}</span>
-                                                                                                    </p>
-                                                                                                    <div class="operate">
-                                                                                                        <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:subtraction,index:index}">—</button>
-                                                                                                        <p class="box" @click.prevent="changeValue(index)">
-                                                                                                            <input type="number" v-model="todo.cartNumber" disabled=disabled>
-                                                                                                        </p>
-                                                                                                        <button class="mint-button mint-button--primary mint-button--small gray" v-tap="{methods:addition,index:index}">+</button>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                     </mt-cell-swipe> 
-                                                                                </li>
-                                                                            </ul> -->
-            <settleAccounts class="account" v-if="cart.length !== 0"></settleAccounts>
+            <messageBoxs :message="message" v-show="message.show" v-on:mySure="mySure" v-on:myCancel="myCancel"></messageBoxs>
+            <settleAccounts class="account" v-if="cart.length !== 0" v-on:deteSelect="deteSelect"></settleAccounts>
             <cartErr :param="err" v-if="cart.length == 0"></cartErr>
         </div>
     </div>
@@ -422,13 +185,11 @@ import settleAccounts from '../../components/tools/settleAccounts'
 import cartList from '../../components/tools/cartList'
 import validation from '../../validation/validation.js'
 import cartErr from '../../components/cart/cartErr'
+import messageBoxs from '../../components/popUpType/messageBoxs'
 import filters from '../../filters/filters'
 import {
     MessageBox
 } from 'mint-ui'
-
-
-
 export default {
     data() {
         return {
@@ -437,6 +198,13 @@ export default {
                 err: '您的购物车是空的哦~',
                 router: 'resource',
                 next_step: '去采购'
+            },
+            message: {
+                title: '温馨提示',
+                content: '您确定',
+                canceltext: '取消',
+                confirmtext: '确认',
+                show: false,
             },
             param: {
                 name: '购物车',
@@ -457,7 +225,13 @@ export default {
             topStatus: '',
             wrapperHeight: 0,
             allLoaded: false,
-            bottomStatus: ''
+            bottomStatus: '',
+            deteSingle: {
+                id: '',
+                index: '',
+                todo: '',
+                show: false
+            }
 
         }
     },
@@ -465,7 +239,8 @@ export default {
         cartHead,
         settleAccounts,
         cartList,
-        cartErr
+        cartErr,
+        messageBoxs
     },
     computed: {
         cart() {
@@ -476,16 +251,48 @@ export default {
         },
         httpPraram() {
             return this.$store.state.cart.http_praram;
+        },
+        orderNum() {
+            return this.$store.state.cart.order_num;
         }
     },
     methods: {
-        myDelete(todo) {
-            console.log(todo.breedName)
+        myDelete(id, index, todo) {
+            this.deteSingle.id = id;
+            this.deteSingle.index = index;
+            this.deteSingle.todo = todo;
+            this.deteSingle.show = true;//区别是不是滑动删除
+            this.message.content = '您确定要删除' + todo.breedName + '!';
+            this.message.show = true;
+        },
+        deteSelect() {
+            this.message.content = '您确定要删除这' + this.orderNum + '件商品!';
+            this.message.show = true;
+        },
+        mySure() {
+            let _self = this;
+            if (this.deteSingle.show) {
+                this.$store.dispatch('deteCart', {
+                    id: _self.deteSingle.id,
+                    index: _self.deteSingle.index
+                });
+                this.myCancel();
+            }else{
+                this.$store.dispatch('deteAllCart');
+                this.message.show = false;
+            }
+        },
+        myCancel() {
+            this.deteSingle.id = '';
+            this.deteSingle.index = '';
+            this.deteSingle.todo = '';
+            this.message.content = '';
+            this.deteSingle.show = false;
+            this.message.show = false;
         },
         subtraction(index) {
             let _self = this;
             _self.$store.dispatch('cutOrderNum', index.index);
-
         },
         addition(index) {
             let _self = this;
@@ -498,6 +305,15 @@ export default {
         cancel(index) {
             let _self = this;
             _self.$store.dispatch('hideOrder', index);
+        },
+        lookResource(name){
+            common.$emit('lowPriceRes',{
+                keyWord:name
+            })
+            common.$emit("setParam", 'lowPrice', {
+                keyWord:name
+            });
+            this.$router.push('lowPriceRes');
         },
         changeValue(index) {
             common.$emit('prompt', {
@@ -523,7 +339,6 @@ export default {
             console.log(123);
         },
         dete(id, index, todo) {
-
             if (todo.show) {
                 this.$store.dispatch('deteCart', {
                     id: id,
@@ -541,9 +356,6 @@ export default {
         let _self = this;
         this.$store.dispatch('getHttp');
     },
-
-
-
 }
 </script>
 

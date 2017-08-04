@@ -544,6 +544,7 @@ export default {
         _self.httpPraram.keyword = common.pageParam.lowPrice.keyWord;
         _self.getHttp();
         common.$on('lowPriceRes', function (item) {
+            console.log(22,item)
             _self.headParam.keyword = item.keyWord;
             _self.httpPraram.keyword = item.keyWord;
             _self.httpPraram.page = 1;

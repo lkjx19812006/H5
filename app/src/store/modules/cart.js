@@ -253,7 +253,7 @@ const actions = {
             for (var i = 0; i < state.cartList.length; i++) {
                 //console.log(state.cartList[i].show)
 
-                if (state.cartList[i].show) {
+                if (state.cartList[i].show && state.cartList[i].onSell == 2) {
                     arr.unshift(state.cartList[i].cartId)
                 }
             }
@@ -378,7 +378,7 @@ const mutations = {
         console.log(state.cartList)
         let Arr = [];
         for (var i = 0; i < state.cartList.length; i++) {
-            if (!state.cartList[i].show) {
+            if (!state.cartList[i].show || state.cartList[i].onSell !== 2) {
                 Arr.unshift(state.cartList[i]);
             }
         }
@@ -390,9 +390,11 @@ const mutations = {
         state.order_num = 0;
         let sample_price = 0;
         let big_price = 0;
+        console.log(11, state.cartList)
         for (var i = 0; i < state.cartList.length; i++) {
             console.log(state.cartList[i].show)
-            if (state.cartList[i].show) {
+            if (state.cartList[i].show && state.cartList[i].onSell == 2) {
+
                 state.order_num += 1;
                 if (state.cartList[i].cartSample == 0) big_price += Number(state.cartList[i].cartNumber) * Number(state.cartList[i].price);
                 if (state.cartList[i].cartSample == 1) sample_price += Number(state.cartList[i].cartNumber) * Number(state.cartList[i].sampleAmount);

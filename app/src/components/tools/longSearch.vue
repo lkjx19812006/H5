@@ -170,7 +170,10 @@ export default {
     computed: {
         isRead() {
             return this.$store.state.user.isRead;
-        }
+        },
+        userInfor() {
+            return this.$store.state.user.userInfor;
+        },
     },
     methods: {
         clearWord() {
@@ -186,9 +189,8 @@ export default {
 
         },
         jump(router) {
-            if (!common.KEY) {
+            if (!common.KEY || !this.userInfor.phone) {
                 let _self = this;
-
                 function loadApp() {
                     if (router == '/cart') common.$emit('setParam', 'backRouter', 'lowPriceRes');
                     if (router == '/message') common.$emit('setParam', 'backRouter', 'message');

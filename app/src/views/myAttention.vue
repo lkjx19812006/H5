@@ -149,15 +149,11 @@ export default {
             },
             resorceHttp(back) {
                 let _self = this;
-
                 common.$emit('show-load');
                 let url = common.addSID(common.urlCommon + common.apiUrl.most);
                 let body = {
                     biz_module: 'intentionService',
                     biz_method: 'attentionIntentionList',
-                    version: 1,
-                    time: 0,
-                    sign: '',
                     biz_param: {
                         breedName: _self.httpPraram.keyword,
                         pn: _self.httpPraram.page,
@@ -165,7 +161,6 @@ export default {
                         intentionType: _self.httpPraram.intentionType
                     }
                 };
-
                 body.time = Date.parse(new Date()) + parseInt(common.difTime);
                 body.sign = common.getSign('biz_module=' + body.biz_module + '&biz_method=' + body.biz_method + '&time=' + body.time);
                 httpService.myAttention(url, body, function(suc) {

@@ -8,7 +8,7 @@
 .page-wrap {
     /*overflow: auto;*/
     height: 100%;
-    padding-bottom: 60px;
+    //padding-bottom: 60px;
     
 }
 .load_apps{

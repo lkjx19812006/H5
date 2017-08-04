@@ -250,15 +250,57 @@ let common = new Vue({
             },
             safariSelect() {
                 let _self = this;
-                if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") == -1 && navigator.userAgent.indexOf("MQQBrowser") == -1) {
-                    //alert(navigator.userAgent)
+                // alert(navigator.userAgent)
+                // if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") == -1 &&
+                //     navigator.userAgent.indexOf("MQQBrowser") == -1 && navigator.userAgent.indexOf("baidubrowser") == -1) {
+                //     console.log(1, navigator);
+
+                //     _self.isSafari = true;
+                // } else {
+                //     _self.isSafari = false;
+                // }
+                var agent = navigator.userAgent.toLowerCase();
+                console.log(11, agent)
+                var regStr_ie = /msie [\d.]+;/gi;
+                var regStr_ff = /firefox\/[\d.]+/gi
+                var regStr_chrome = /chrome\/[\d.]+/gi;
+                var regStr_saf = /safari\/[\d.]+/gi;
+                let verInfo = {};
+                //IE
+                if (agent.indexOf("msie") > 0) {
+                    verInfo = {
+                        type: "IE",
+                        ver: (agent.match(regStr_ie) + "").replace(/[^0-9.]/ig, "")
+                    };
+                } else if (agent.indexOf("firefox") > 0) {
+                    verInfo = {
+                        type: "firefox",
+                        ver: (agent.match(regStr_ff) + "").replace(/[^0-9.]/ig, "")
+                    };
+                } else if (agent.indexOf("chrome") > 0) {
+                    verInfo = {
+                        type: "chrome",
+                        ver: (agent.match(regStr_chrome) + "").replace(/[^0-9.]/ig, "")
+                    };
+                } else if (agent.indexOf("safari") > 0 && agent.indexOf("chrome") < 0) {
+                    verInfo = {
+                        type: "safari",
+                        ver: (agent.match(regStr_saf) + "").replace(/[^0-9.]/ig, "")
+                    };
+                }
+                //alert(agent)
+                //alert(3, verInfo.type)
+                //return verInfo;
+                if (verInfo.type == 'safari') {
+                    // alert(1, verInfo)
                     _self.isSafari = true;
                 } else {
+                    //alert(2, verInfo)
                     _self.isSafari = false;
                 }
 
             },
-            phoneType() {
+            phoneTypes() {
                 let _self = this;
                 if (_self.phoneRun) {
                     var u = navigator.userAgent;

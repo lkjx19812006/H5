@@ -112,7 +112,7 @@
     }
     .main {
         width: 100%;
-        padding-bottom: 142px;
+        padding-bottom: 132px;
         overflow-y: scroll;
         position: relative;
         width: 100%;
@@ -123,7 +123,7 @@
         }
     }
     .have_title {
-        padding-bottom: 166px;
+        padding-bottom: 156px;
     }
     .factory {
         background-color: #fff;
@@ -720,7 +720,7 @@ export default {
     },
     mounted() {
         let _self = this;   
-        this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
+        this.wrapperHeight = document.body.offsetHeight - this.$refs.wrapper.getBoundingClientRect().top - 55;
         //if (common.isSafari) _self.wrapperHeight = document.documentElement.clientHeight - _self.$refs.wrapper.getBoundingClientRect().top;
         this.$refs.wrapper.addEventListener('scroll', this.handleScroll);
     }
